@@ -1,4 +1,4 @@
-package lu.uni.serval.robotframework;
+package lu.uni.serval.robotframework.model;
 
 import java.util.ArrayList;
 import java.util.Iterator;

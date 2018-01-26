@@ -1,4 +1,4 @@
-package lu.uni.serval.robotframework;
+package lu.uni.serval.robotframework.model;
 
 public class TestCaseFile {
     private String directory;
@@ -10,6 +10,7 @@ public class TestCaseFile {
 
     public TestCaseFile(String directory, String name, Settings settings, TestCaseTable testCaseTable,
                         KeywordTable keywordTable, VariableTable variableTable) {
+        this.directory = directory;
         this.name = name;
         this.settings = settings;
         this.testCaseTable = testCaseTable;

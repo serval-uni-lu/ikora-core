@@ -1,4 +1,4 @@
-package lu.uni.serval.robotframework;
+package lu.uni.serval.robotframework.model;
 
 public class Settings {
     private ResourcesTable resourcesTable;

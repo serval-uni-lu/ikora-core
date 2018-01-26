@@ -1,4 +1,4 @@
-package lu.uni.serval.robotframework;
+package lu.uni.serval.robotframework.model;
 
 import org.python.core.PyObject;
 import org.python.core.PyString;
