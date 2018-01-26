@@ -62,8 +62,7 @@ public class TreeNode<T> implements Iterable<TreeNode<T>> {
     }
 
     public Iterator<TreeNode<T>> iterator() {
-        TreeNodeIterator<T> iter = new TreeNodeIterator<T>(this);
-        return iter;
+        return new TreeNodeIterator<T>(this);
     }
 
     private void registerChildForSearch(TreeNode<T> node) {

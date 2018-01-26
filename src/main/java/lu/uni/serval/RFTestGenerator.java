@@ -1,7 +1,12 @@
 package lu.uni.serval;
 
+import lu.uni.serval.robotframework.model.KeywordTreeFactory;
 import lu.uni.serval.robotframework.model.TestCaseFile;
 import lu.uni.serval.robotframework.model.TestCaseFileFactory;
+import lu.uni.serval.utils.KeywordData;
+import lu.uni.serval.utils.TreeNode;
+
+import java.util.List;
 
 public class RFTestGenerator {
     public static void main(String[] args) {
@@ -9,6 +14,9 @@ public class RFTestGenerator {
 
         TestCaseFileFactory factory = new TestCaseFileFactory();
         TestCaseFile testCaseFile = factory.create(filePath);
-        System.out.println(testCaseFile.toString());
+
+        List<TreeNode<KeywordData>> forest = KeywordTreeFactory.create(testCaseFile);
+
+        System.out.println(forest.toString());
     }
 }

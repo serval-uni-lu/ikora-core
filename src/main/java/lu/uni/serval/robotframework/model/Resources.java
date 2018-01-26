@@ -11,7 +11,7 @@ public class Resources {
     private String name;
     private List<String> arguments;
     private String comment;
-    private TestCaseFile resourcesFile;
+    private TestCaseFile file;
 
     public Resources(Type type, String name, List<String> arguments, String comment) {
         this.type = type;
@@ -25,10 +25,14 @@ public class Resources {
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
-    public void setResourcesFile(TestCaseFile resourcesFile) {
-        this.resourcesFile = resourcesFile;
+    public TestCaseFile getFile() {
+        return this.file;
+    }
+
+    public void setFile(TestCaseFile file) {
+        this.file = file;
     }
 }

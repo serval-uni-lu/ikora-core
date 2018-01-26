@@ -10,6 +10,7 @@ import java.util.List;
 
 public class TestCaseFileFactory {
     protected PyObject testCaseFileClass;
+    protected String directory;
 
     public TestCaseFileFactory() {
         PythonInterpreter interpreter = new PythonInterpreter();
@@ -22,14 +23,15 @@ public class TestCaseFileFactory {
         PyObject testCaseFileObject = testCaseFileClass.__call__(new PyString(""), new PyString(filePath));
         testCaseFileObject.__findattr__("populate").__call__();
 
-        String directory = getStringValue(testCaseFileObject, "directory");
+        this.directory = getStringValue(testCaseFileObject, "directory");
+
         String name = getStringValue(testCaseFileObject, "name");
         Settings settings = createSettingsTable(testCaseFileObject.__findattr__("setting_table"));
         TestCaseTable testCaseTable = createTestCaseTable(testCaseFileObject);
         KeywordTable keywordTable = createKeywordTable(testCaseFileObject.__findattr__("keyword_table"));
         VariableTable variableTable = createVariableTable(testCaseFileObject.__findattr__("variable_table"));
 
-        loadResources(directory, settings);
+        loadResources(settings);
 
         return new TestCaseFile(directory, name, settings, testCaseTable, keywordTable, variableTable);
     }
@@ -51,7 +53,7 @@ public class TestCaseFileFactory {
         String documentation = getStringValue(pyTestCase, "doc");
         List<Step> steps = createSteps(pyTestCase.__findattr__("steps"));
 
-        return new TestCase(name, documentation, steps);
+        return new TestCase(this.directory, name, documentation, steps);
     }
 
     protected VariableTable createVariableTable(PyObject pyVariableTable) {
@@ -111,7 +113,7 @@ public class TestCaseFileFactory {
         List<String> arguments = createArguments(pyUserKeyword.__findattr__("args"));
         List<Step> steps = createSteps(pyUserKeyword.__findattr__("steps"));
 
-        return new UserKeyword(name, arguments, documentation, steps);
+        return new UserKeyword(this.directory, name, arguments, documentation, steps);
     }
 
     private List<String> createArguments(PyObject pyArguments) {
@@ -131,7 +133,7 @@ public class TestCaseFileFactory {
             String name = getStringValue(pyStep, "name");
             List<String> arguments = createArguments(pyStep.__findattr__("args"));
 
-            steps.add(new Step(name, arguments));
+            steps.add(new Step(this.directory, name, arguments));
         }
 
         return steps;
@@ -152,7 +154,7 @@ public class TestCaseFileFactory {
         return list;
     }
 
-    protected void loadResources(String directory, Settings settings) {
+    protected void loadResources(Settings settings) {
         ResourcesTable resourcesTable = settings.getResources();
 
         for(Resources resources : resourcesTable) {
@@ -161,9 +163,9 @@ public class TestCaseFileFactory {
             }
 
             ResourcesFileFactory factory = new ResourcesFileFactory();
-            TestCaseFile resourcesFile = factory.create(directory + File.separator + resources.getName());
+            TestCaseFile resourcesFile = factory.create(this.directory + File.separator + resources.getName());
 
-            resources.setResourcesFile(resourcesFile);
+            resources.setFile(resourcesFile);
         }
     }
 }
