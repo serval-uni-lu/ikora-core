@@ -9,19 +9,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TestCaseFileFactory {
-    public enum FileType {
-        TestCaseFile, ResourceFile
-    }
+    protected PyObject testCaseFileClass;
 
-    private PyObject testCaseFileClass;
-    private FileType fileType;
-
-    public TestCaseFileFactory(FileType fileType) {
+    public TestCaseFileFactory() {
         PythonInterpreter interpreter = new PythonInterpreter();
-        interpreter.exec("from robot.api import TestCaseFile");
+        interpreter.exec( "from robot.api import TestCaseFile");
 
-        this.fileType = fileType;
-        this.testCaseFileClass = interpreter.get(fileType == FileType.TestCaseFile ? "TestCaseFile" : "ResourceFile");
+        this.testCaseFileClass = interpreter.get("TestCaseFile");
     }
 
     public TestCaseFile create(String filePath) {
@@ -43,12 +37,10 @@ public class TestCaseFileFactory {
     private TestCaseTable createTestCaseTable(PyObject testCaseFileObject) {
         TestCaseTable testCaseTable = new TestCaseTable();
 
-        if(fileType == FileType.TestCaseFile) {
-            PyObject pyTestCaseTable = testCaseFileObject.__findattr__("testcase_table");
+        PyObject pyTestCaseTable = testCaseFileObject.__findattr__("testcase_table");
 
-            for (PyObject pyTestCase : pyTestCaseTable.asIterable()){
-                testCaseTable.add(createTestCase(pyTestCase));
-            }
+        for (PyObject pyTestCase : pyTestCaseTable.asIterable()){
+            testCaseTable.add(createTestCase(pyTestCase));
         }
 
         return testCaseTable;
@@ -62,18 +54,18 @@ public class TestCaseFileFactory {
         return new TestCase(name, documentation, steps);
     }
 
-    private VariableTable createVariableTable(PyObject pyVariableTable) {
+    protected VariableTable createVariableTable(PyObject pyVariableTable) {
 
         return new VariableTable();
     }
 
-    private Settings createSettingsTable(PyObject pySettings) {
+    protected Settings createSettingsTable(PyObject pySettings) {
         ResourcesTable resourcesTable = createImportTable(pySettings.__findattr__("imports"));
 
         return new Settings(resourcesTable);
     }
 
-    private ResourcesTable createImportTable(PyObject pyImports) {
+    protected ResourcesTable createImportTable(PyObject pyImports) {
         ResourcesTable resourcesTable = new ResourcesTable();
 
         for (PyObject pyResource : pyImports.__findattr__("data").asIterable()) {
@@ -81,13 +73,29 @@ public class TestCaseFileFactory {
             List<String> arguments = getStringListValue(pyResource.__findattr__("args"), "args");
             String comment = getStringValue(pyResource,"comment");
 
-            resourcesTable.add(new Resources(name, arguments, comment));
+            Resources.Type type = getResourceType(pyResource);
+
+            resourcesTable.add(new Resources(type, name, arguments, comment));
         }
 
         return resourcesTable;
     }
 
-    private KeywordTable createKeywordTable(PyObject pyKeywordTable){
+    private Resources.Type getResourceType(PyObject pyResource) {
+        Resources.Type type = Resources.Type.Unknown;
+        String objectType = pyResource.getType().toString();
+
+        if(objectType.equals("<class 'robot.parsing.settings.Library'>")){
+            type = Resources.Type.Library;
+        }
+        else if (objectType.equals("<class 'robot.parsing.settings.Resource'>")) {
+            type = Resources.Type.Resource;
+        }
+
+        return type;
+    }
+
+    protected KeywordTable createKeywordTable(PyObject pyKeywordTable){
         KeywordTable keywordTable = new KeywordTable();
 
         for (PyObject pyUserKeyword : pyKeywordTable.asIterable()){
@@ -100,10 +108,20 @@ public class TestCaseFileFactory {
     private UserKeyword createUserKeyword(PyObject pyUserKeyword){
         String name = getStringValue(pyUserKeyword, "name");
         String documentation = getStringValue(pyUserKeyword, "doc");
-        List<String> arguments = getStringListValue(pyUserKeyword.__findattr__("args"), "name");
+        List<String> arguments = createArguments(pyUserKeyword.__findattr__("args"));
         List<Step> steps = createSteps(pyUserKeyword.__findattr__("steps"));
 
         return new UserKeyword(name, arguments, documentation, steps);
+    }
+
+    private List<String> createArguments(PyObject pyArguments) {
+        List<String> arguments = new ArrayList<String>();
+
+        for (PyObject pyArgument : pyArguments.asIterable()){
+            arguments.add(pyArgument.toString());
+        }
+
+        return arguments;
     }
 
     private List<Step> createSteps(PyObject pySteps) {
@@ -111,11 +129,7 @@ public class TestCaseFileFactory {
 
         for (PyObject pyStep : pySteps.asIterable()){
             String name = getStringValue(pyStep, "name");
-
-            List<String> arguments = new ArrayList<String>();
-            for (PyObject pyArgument : pyStep.__findattr__("args").asIterable()){
-                arguments.add(pyArgument.toString());
-            }
+            List<String> arguments = createArguments(pyStep.__findattr__("args"));
 
             steps.add(new Step(name, arguments));
         }
@@ -123,11 +137,11 @@ public class TestCaseFileFactory {
         return steps;
     }
 
-    private String getStringValue(PyObject pyObject, String attribute) {
+    protected String getStringValue(PyObject pyObject, String attribute) {
         return pyObject.__findattr__(attribute).toString();
     }
 
-    private List<String> getStringListValue(PyObject pyObject, String attribute) {
+    protected List<String> getStringListValue(PyObject pyObject, String attribute) {
         List<String> list = new ArrayList<String>();
 
         for (PyObject pyItem : pyObject.asIterable()){
@@ -138,11 +152,15 @@ public class TestCaseFileFactory {
         return list;
     }
 
-    private void loadResources(String directory, Settings settings) {
+    protected void loadResources(String directory, Settings settings) {
         ResourcesTable resourcesTable = settings.getResources();
 
         for(Resources resources : resourcesTable) {
-            TestCaseFileFactory factory = new TestCaseFileFactory(FileType.ResourceFile);
+            if(resources.getType() != Resources.Type.Resource) {
+                continue;
+            }
+
+            ResourcesFileFactory factory = new ResourcesFileFactory();
             TestCaseFile resourcesFile = factory.create(directory + File.separator + resources.getName());
 
             resources.setResourcesFile(resourcesFile);
