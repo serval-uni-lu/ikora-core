@@ -58,7 +58,15 @@ public class TestCaseFileFactory {
 
     protected VariableTable createVariableTable(PyObject pyVariableTable) {
 
-        return new VariableTable();
+        VariableTable variableTable = new VariableTable();
+
+        for (PyObject pyVariable : pyVariableTable.__findattr__("variables").asIterable()){
+            String name = pyVariable.__findattr__("name").toString();
+            List<String> value = getStringListValue(pyVariable.__findattr__("value"));
+            variableTable.put(name, value);
+        }
+
+        return variableTable;
     }
 
     protected Settings createSettingsTable(PyObject pySettings) {
@@ -143,11 +151,15 @@ public class TestCaseFileFactory {
         return pyObject.__findattr__(attribute).toString();
     }
 
+    protected List<String> getStringListValue(PyObject pyObject) {
+        return getStringListValue(pyObject, "");
+    }
+
     protected List<String> getStringListValue(PyObject pyObject, String attribute) {
         List<String> list = new ArrayList<String>();
 
         for (PyObject pyItem : pyObject.asIterable()){
-            String value = pyItem.__findattr__(attribute).toString();
+            String value = attribute.length() == 0 ? pyItem.toString() : pyItem.__findattr__(attribute).toString();
             list.add(value);
         }
 

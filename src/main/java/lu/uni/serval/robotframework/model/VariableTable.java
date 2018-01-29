@@ -1,4 +1,8 @@
 package lu.uni.serval.robotframework.model;
 
-public class VariableTable {
+import java.util.HashMap;
+import java.util.List;
+
+public class VariableTable extends HashMap<String, List<String>> {
+
 }

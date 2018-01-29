@@ -1,6 +1,10 @@
 package lu.uni.serval.robotframework.model;
 
+import javax.naming.directory.NoSuchAttributeException;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
 
 public class TestCaseFile implements Iterable<TestCase> {
     private String directory;
@@ -56,5 +60,28 @@ public class TestCaseFile implements Iterable<TestCase> {
         }
 
         return new UserKeyword(step);
+    }
+
+    public List<String> getVariableValue(String name) throws NoSuchAttributeException {
+        return getVariableValue(name, new LinkedList<TestCaseFile>());
+    }
+
+    protected List<String> getVariableValue(String name, Queue<TestCaseFile> fileQueue) throws NoSuchAttributeException {
+        if (this.variableTable.containsKey(name)) {
+            return this.variableTable.get(name);
+        }
+
+        for (Resources resources : this.settings.getResources()) {
+            if(resources.getType() == Resources.Type.Resource) {
+                fileQueue.add(resources.getFile());
+            }
+        }
+
+        if(!fileQueue.isEmpty()) {
+            TestCaseFile currentFile = fileQueue.poll();
+            return currentFile.getVariableValue(name, fileQueue);
+        }
+
+        throw new NoSuchAttributeException();
     }
 }
