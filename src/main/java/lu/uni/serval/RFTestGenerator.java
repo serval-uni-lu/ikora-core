@@ -6,17 +6,31 @@ import lu.uni.serval.robotframework.model.TestCaseFileFactory;
 import lu.uni.serval.utils.KeywordData;
 import lu.uni.serval.utils.TreeNode;
 
+import org.apache.commons.cli.*;
+
 import java.util.List;
 
 public class RFTestGenerator {
     public static void main(String[] args) {
-        String filePath = "C:\\Users\\renaud.rwemalika\\Documents\\PhD\\robotframework\\webdemo\\login_tests\\gherkin_login.robot";
+        try {
+            Options options = new Options();
+            options.addOption("file", true, "path to RobotFramework testcase file");
 
-        TestCaseFileFactory factory = new TestCaseFileFactory();
-        TestCaseFile testCaseFile = factory.create(filePath);
+            CommandLineParser parser = new DefaultParser();
+            CommandLine cmd = parser.parse(options, args);
 
-        List<TreeNode<KeywordData>> forest = KeywordTreeFactory.create(testCaseFile);
+            if (!cmd.hasOption("file")) {
+                throw new MissingArgumentException("file");
+            }
 
-        System.out.println(forest.toString());
+            TestCaseFileFactory factory = new TestCaseFileFactory();
+            TestCaseFile testCaseFile = factory.create(cmd.getOptionValue("file"));
+
+            List<TreeNode<KeywordData>> forest = KeywordTreeFactory.create(testCaseFile);
+
+            System.out.println(forest.toString());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 }
