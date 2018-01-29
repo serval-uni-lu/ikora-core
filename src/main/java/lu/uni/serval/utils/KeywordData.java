@@ -16,4 +16,17 @@ public class KeywordData {
         this.arguments = new  ArrayList<List<String>>();
         this.variables =  new HashMap<List<String>, String>();
     }
+
+    @Override
+    public String toString() {
+        String argumentString = new String();
+
+        for(List<String> argument : arguments) {
+            for (String token : argument) {
+                argumentString += "\t" + token;
+            }
+        }
+
+        return this.name + argumentString;
+    }
 }

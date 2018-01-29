@@ -58,7 +58,25 @@ public class TreeNode<T> implements Iterable<TreeNode<T>> {
 
     @Override
     public String toString() {
-        return data != null ? data.toString() : "[null]";
+        return toString("",0);
+    }
+
+    public String toString(String current, int level) {
+        String indent = new String();
+
+        if(level > 0) {
+            indent  = new String(new char[level]).replace("\0", "\t");
+            current += "\n";
+        }
+
+        current += indent;
+        current += data != null ? data.toString() : "[null]";
+
+        for(TreeNode<T> child: this.children) {
+            current = child.toString(current, level + 1);
+        }
+
+        return current;
     }
 
     public Iterator<TreeNode<T>> iterator() {
