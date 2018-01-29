@@ -10,7 +10,7 @@ import java.util.List;
 
 public class TestCaseFileFactory {
     protected PyObject testCaseFileClass;
-    protected String directory;
+    protected String file;
 
     public TestCaseFileFactory() {
         PythonInterpreter interpreter = new PythonInterpreter();
@@ -20,11 +20,11 @@ public class TestCaseFileFactory {
     }
 
     public TestCaseFile create(String filePath) {
-        PyObject testCaseFileObject = testCaseFileClass.__call__(new PyString(""), new PyString(filePath));
+        this.file = filePath;
+        PyObject testCaseFileObject = testCaseFileClass.__call__(new PyString(""), new PyString(this.file));
         testCaseFileObject.__findattr__("populate").__call__();
 
-        this.directory = getStringValue(testCaseFileObject, "directory");
-
+        String directory = getStringValue(testCaseFileObject, "directory");
         String name = getStringValue(testCaseFileObject, "name");
         Settings settings = createSettingsTable(testCaseFileObject.__findattr__("setting_table"));
         TestCaseTable testCaseTable = createTestCaseTable(testCaseFileObject);
@@ -53,7 +53,7 @@ public class TestCaseFileFactory {
         String documentation = getStringValue(pyTestCase, "doc");
         List<Step> steps = createSteps(pyTestCase.__findattr__("steps"));
 
-        return new TestCase(this.directory, name, documentation, steps);
+        return new TestCase(this.file, name, documentation, steps);
     }
 
     protected VariableTable createVariableTable(PyObject pyVariableTable) {
@@ -113,7 +113,7 @@ public class TestCaseFileFactory {
         List<String> arguments = createArguments(pyUserKeyword.__findattr__("args"));
         List<Step> steps = createSteps(pyUserKeyword.__findattr__("steps"));
 
-        return new UserKeyword(this.directory, name, arguments, documentation, steps);
+        return new UserKeyword(this.file, name, arguments, documentation, steps);
     }
 
     private List<String> createArguments(PyObject pyArguments) {
@@ -133,7 +133,7 @@ public class TestCaseFileFactory {
             String name = getStringValue(pyStep, "name");
             List<String> arguments = createArguments(pyStep.__findattr__("args"));
 
-            steps.add(new Step(this.directory, name, arguments));
+            steps.add(new Step(this.file, name, arguments));
         }
 
         return steps;
@@ -162,8 +162,10 @@ public class TestCaseFileFactory {
                 continue;
             }
 
+            File file = new File(this.file);
+
             ResourcesFileFactory factory = new ResourcesFileFactory();
-            TestCaseFile resourcesFile = factory.create(this.directory + File.separator + resources.getName());
+            TestCaseFile resourcesFile = factory.create(file.getParent() + File.separator + resources.getName());
 
             resources.setFile(resourcesFile);
         }
