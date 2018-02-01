@@ -1,5 +1,6 @@
 package lu.uni.serval.robotframework.model;
 
+import javax.annotation.Nonnull;
 import java.util.*;
 
 public class TestCaseFile implements Iterable<TestCase> {
@@ -34,7 +35,7 @@ public class TestCaseFile implements Iterable<TestCase> {
         return this.settings;
     }
 
-    public Map<String, List<String>> getVariableDictionary() {
+    private Map<String, List<String>> getVariableDictionary() {
         if (this.variableDictionary != null) {
             return this.variableDictionary;
         }
@@ -45,6 +46,7 @@ public class TestCaseFile implements Iterable<TestCase> {
         return this.variableDictionary;
     }
 
+    @Nonnull
     public Iterator<TestCase> iterator() {
         return testCaseTable.iterator();
     }

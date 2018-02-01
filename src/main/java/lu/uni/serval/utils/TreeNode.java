@@ -1,7 +1,6 @@
 package lu.uni.serval.utils;
 
-import com.sun.istack.internal.NotNull;
-
+import javax.annotation.Nonnull;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -81,6 +80,7 @@ public class TreeNode<T> implements Iterable<TreeNode<T>> {
         return stringBuilder;
     }
 
+    @Nonnull
     public Iterator<TreeNode<T>> iterator() {
         return new TreeNodeIterator<T>(this);
     }
