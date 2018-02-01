@@ -29,7 +29,7 @@ public class UserKeyword extends TestCase {
         stepName = stepName.replaceAll("^(given|when|then) ", "").trim();
         stepName = stepName.replaceAll("\"[^\"]+\"", "");
 
-        String keyword = this.getName().trim();
+        String keyword = this.getName().toString().trim();
         keyword = keyword.replaceAll("\"[^\"]+\"", "");
 
         return keyword.equalsIgnoreCase(stepName);

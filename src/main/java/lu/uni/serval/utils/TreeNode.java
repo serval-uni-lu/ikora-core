@@ -1,5 +1,7 @@
 package lu.uni.serval.utils;
 
+import com.sun.istack.internal.NotNull;
+
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -58,25 +60,25 @@ public class TreeNode<T> implements Iterable<TreeNode<T>> {
 
     @Override
     public String toString() {
-        return toString("",0);
+        return buildString(new StringBuilder(),0).toString();
     }
 
-    public String toString(String current, int level) {
-        String indent = new String();
+    private StringBuilder buildString(StringBuilder stringBuilder, int level) {
+        String indent = "";
 
         if(level > 0) {
             indent  = new String(new char[level]).replace("\0", "\t");
-            current += "\n";
+            stringBuilder.append("\n");
         }
 
-        current += indent;
-        current += data != null ? data.toString() : "[null]";
+        stringBuilder.append(indent);
+        stringBuilder.append(data != null ? data.toString() : "[null]");
 
         for(TreeNode<T> child: this.children) {
-            current = child.toString(current, level + 1);
+            child.buildString(stringBuilder, level + 1);
         }
 
-        return current;
+        return stringBuilder;
     }
 
     public Iterator<TreeNode<T>> iterator() {

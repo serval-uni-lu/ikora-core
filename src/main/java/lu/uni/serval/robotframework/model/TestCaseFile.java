@@ -1,10 +1,6 @@
 package lu.uni.serval.robotframework.model;
 
-import javax.naming.directory.NoSuchAttributeException;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 public class TestCaseFile implements Iterable<TestCase> {
     private String directory;
@@ -13,6 +9,7 @@ public class TestCaseFile implements Iterable<TestCase> {
     private TestCaseTable testCaseTable;
     private KeywordTable keywordTable;
     private VariableTable variableTable;
+    private Map<String, List<String>> variableDictionary;
 
     public TestCaseFile(String directory, String name, Settings settings, TestCaseTable testCaseTable,
                         KeywordTable keywordTable, VariableTable variableTable) {
@@ -22,6 +19,7 @@ public class TestCaseFile implements Iterable<TestCase> {
         this.testCaseTable = testCaseTable;
         this.keywordTable = keywordTable;
         this.variableTable = variableTable;
+        this.variableDictionary = null;
     }
 
     public String getDirectory(){
@@ -34,6 +32,17 @@ public class TestCaseFile implements Iterable<TestCase> {
 
     public Settings getSettings() {
         return this.settings;
+    }
+
+    public Map<String, List<String>> getVariableDictionary() {
+        if (this.variableDictionary != null) {
+            return this.variableDictionary;
+        }
+
+        this.variableDictionary = new HashMap<String, List<String>>();
+        buildVariableDictionary(this.variableDictionary, new LinkedList<TestCaseFile>());
+
+        return this.variableDictionary;
     }
 
     public Iterator<TestCase> iterator() {
@@ -62,26 +71,55 @@ public class TestCaseFile implements Iterable<TestCase> {
         return new UserKeyword(step);
     }
 
-    public List<String> getVariableValue(String name) throws NoSuchAttributeException {
-        return getVariableValue(name, new LinkedList<TestCaseFile>());
+    public Map<String, List<String>> getVariableValues(Argument argument) {
+        Map<String, List<String>> returnValues = new HashMap<String, List<String>>();
+
+        List<String> variables = argument.findVariables();
+        updateValues(returnValues, variables);
+
+        return returnValues;
     }
 
-    protected List<String> getVariableValue(String name, Queue<TestCaseFile> fileQueue) throws NoSuchAttributeException {
-        if (this.variableTable.containsKey(name)) {
-            return this.variableTable.get(name);
+    private void updateValues(Map<String, List<String>> returnValues, List<String> variables) {
+        Map<String, List<String>> references = getVariableDictionary();
+
+        for(String variable: variables) {
+            if(returnValues.containsKey(variable)) {
+                continue;
+            }
+
+            if(!references.containsKey(variable)) {
+                continue;
+            }
+
+            List<String> currentValues = references.get(variable);
+            List<String> currentVariables = new ArrayList<String>();
+
+            for(String currentValue : currentValues) {
+                currentVariables.addAll(Argument.findVariables(currentValue));
+            }
+
+            returnValues.put(variable, currentValues);
+            updateValues(returnValues, currentVariables);
+        }
+    }
+
+    private void buildVariableDictionary(Map<String, List<String>> variables, Queue<TestCaseFile> fileQueue) {
+        for (Map.Entry<String, List<String>> cursor : this.variableTable.entrySet()) {
+            if(!variables.containsKey(cursor.getKey())) {
+                variables.put(cursor.getKey(), cursor.getValue());
+            }
         }
 
         for (Resources resources : this.settings.getResources()) {
-            if(resources.getType() == Resources.Type.Resource) {
+            if (resources.getType() == Resources.Type.Resource) {
                 fileQueue.add(resources.getFile());
             }
         }
 
         if(!fileQueue.isEmpty()) {
-            TestCaseFile currentFile = fileQueue.poll();
-            return currentFile.getVariableValue(name, fileQueue);
+            TestCaseFile nextFile = fileQueue.poll();
+            nextFile.buildVariableDictionary(variables, fileQueue);
         }
-
-        throw new NoSuchAttributeException();
     }
 }
