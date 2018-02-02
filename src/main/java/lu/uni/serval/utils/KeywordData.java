@@ -22,13 +22,14 @@ public class KeywordData {
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-
+        stringBuilder.append(cleanArgument(this.name));
+        
         for(String argument : arguments) {
             stringBuilder.append("\t");
             stringBuilder.append(cleanArgument(argument));
         }
 
-        return this.name + stringBuilder.toString();
+        return stringBuilder.toString();
     }
 
     private String cleanArgument(String argument) {
