@@ -26,7 +26,8 @@ public class RFTestGenerator {
             TestCaseFileFactory factory = new TestCaseFileFactory();
             TestCaseFile testCaseFile = factory.create(cmd.getOptionValue("file"));
 
-            List<TreeNode<KeywordData>> forest = KeywordTreeFactory.create(testCaseFile);
+            KeywordTreeFactory keywordTreeFactory = new KeywordTreeFactory(testCaseFile);
+            List<TreeNode<KeywordData>> forest = keywordTreeFactory.create();
 
             System.out.println(forest.toString());
         } catch (ParseException e) {

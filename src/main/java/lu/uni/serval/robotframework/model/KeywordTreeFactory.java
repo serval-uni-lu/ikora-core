@@ -3,19 +3,26 @@ package lu.uni.serval.robotframework.model;
 import lu.uni.serval.utils.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class KeywordTreeFactory {
 
-    static public List<TreeNode<KeywordData>> create(TestCaseFile testCaseFile){
+    private TestCaseFile testCaseFile;
+
+    public KeywordTreeFactory(TestCaseFile testCaseFile) {
+        this.testCaseFile = testCaseFile;
+    }
+
+    public List<TreeNode<KeywordData>> create(){
         List<TreeNode<KeywordData>> keywordForest = new ArrayList< TreeNode<KeywordData>>();
 
         for(TestCase testCase : testCaseFile) {
-            KeywordData keywordData = createKeywordData(testCaseFile, testCase);
+            KeywordData keywordData = createKeywordData(testCase, null, null);
             TreeNode<KeywordData> root = new TreeNode<KeywordData>(keywordData);
 
-            visitSteps(testCaseFile, root, testCase);
+            visitSteps(root, testCase, new HashMap<String, List<String>>());
 
             keywordForest.add(root);
         }
@@ -23,17 +30,17 @@ public class KeywordTreeFactory {
         return keywordForest;
     }
 
-    static private void visitSteps(TestCaseFile testCaseFile, TreeNode<KeywordData> current, TestCase testCase) {
+    private void visitSteps(TreeNode<KeywordData> current, TestCase testCase, HashMap<String, List<String>> locals) {
         for(Step step : testCase) {
             UserKeyword keyword = testCaseFile.findUserKeyword(step);
-            KeywordData keywordData = createKeywordData(testCaseFile, keyword);
+            KeywordData keywordData = createKeywordData(keyword, step, locals);
 
             TreeNode<KeywordData> child =  current.addChild(keywordData);
-            visitSteps(testCaseFile, child, keyword);
+            visitSteps(child, keyword, (HashMap)locals.clone());
         }
     }
 
-    static private void setArguments(TestCaseFile testCaseFile, UserKeyword keyword, KeywordData keywordData){
+    private void setArguments(UserKeyword keyword, KeywordData keywordData, Step step, Map<String, List<String>> locals){
         for (Argument argument : keyword.getArguments()) {
 
             if(argument.hasVariable()) {
@@ -43,9 +50,17 @@ public class KeywordTreeFactory {
 
             keywordData.arguments.add(argument.toString());
         }
+
+        if(locals != null) {
+            if(step != null) {
+                locals.putAll(step.fetchVariables(keyword));
+            }
+
+            keywordData.variables.putAll(locals);
+        }
     }
 
-    static private void setName(TestCaseFile testCaseFile, TestCase testCase, KeywordData keywordData) {
+    private void setName(TestCase testCase, KeywordData keywordData) {
         Argument name = testCase.getName();
 
         if(name.hasVariable()) {
@@ -56,14 +71,14 @@ public class KeywordTreeFactory {
         keywordData.name  = name.toString();
     }
 
-    static private KeywordData createKeywordData(TestCaseFile testCaseFile, TestCase testCase) {
+    private KeywordData createKeywordData(TestCase testCase, Step step, Map<String, List<String>> locals) {
         KeywordData keywordData = new KeywordData();
         keywordData.file = testCase.getFile();
         keywordData.documentation = testCase.getDocumentation();
-        setName(testCaseFile, testCase, keywordData);
+        setName(testCase, keywordData);
 
         if(testCase instanceof UserKeyword) {
-            setArguments(testCaseFile, (UserKeyword)testCase, keywordData);
+            setArguments((UserKeyword)testCase, keywordData, step, locals);
         }
 
         return keywordData;

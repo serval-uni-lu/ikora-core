@@ -25,8 +25,7 @@ public class UserKeyword extends TestCase {
     }
 
     public boolean isEqual(Step step) {
-        String stepName = step.getName().trim().toLowerCase();
-        stepName = stepName.replaceAll("^(given|when|then) ", "").trim();
+        String stepName = step.getCleanName();
         stepName = stepName.replaceAll("\"[^\"]+\"", "");
 
         String keyword = this.getName().toString().trim();
