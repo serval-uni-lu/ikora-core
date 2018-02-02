@@ -30,6 +30,15 @@ public class RFTestGenerator {
             List<TreeNode<KeywordData>> forest = keywordTreeFactory.create();
 
             System.out.println(forest.toString());
+            System.out.println("----------------------------------------");
+
+            for(TreeNode<KeywordData> root : forest){
+                System.out.println(root.data.toString());
+                for(TreeNode<KeywordData> leaf : root.getLeaves()) {
+                    System.out.println("\t" + leaf.toString());
+                }
+            }
+
         } catch (ParseException e) {
             e.printStackTrace();
         }

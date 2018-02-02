@@ -23,7 +23,7 @@ public class KeywordData {
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(cleanArgument(this.name));
-        
+
         for(String argument : arguments) {
             stringBuilder.append("\t");
             stringBuilder.append(cleanArgument(argument));

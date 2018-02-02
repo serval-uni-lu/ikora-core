@@ -1,6 +1,7 @@
 package lu.uni.serval.utils;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -35,6 +36,13 @@ public class TreeNode<T> implements Iterable<TreeNode<T>> {
         else {
             return this.parent.getLevel() + 1;
         }
+    }
+
+    public List<TreeNode<T>> getLeaves(){
+        List<TreeNode<T>> leaves = new ArrayList<TreeNode<T>>();
+        getLeaves(leaves);
+
+        return leaves;
     }
 
     public TreeNode<T> addChild(T child){
@@ -89,6 +97,17 @@ public class TreeNode<T> implements Iterable<TreeNode<T>> {
         elementIndexes.add(node);
         if (parent != null) {
             parent.registerChildForSearch(node);
+        }
+    }
+
+    private void getLeaves(List<TreeNode<T>> leaves) {
+        if(this.isLeaf()) {
+            leaves.add(this);
+        }
+        else {
+            for(TreeNode<T> child : children) {
+                child.getLeaves(leaves);
+            }
         }
     }
 }
