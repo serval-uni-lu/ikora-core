@@ -45,11 +45,9 @@ public class RFTestGenerator {
 
             Runner runner = new Runner();
 
-            ArrayList<String> arguments = new ArrayList<String>();
-            arguments.add("http://localhost:7272/");
-            arguments.add("Firefox");
-
-            runner.execute("Open Browser", arguments);
+            for(TreeNode<KeywordData> root : forest) {
+                runner.executeKeyword(root);
+            }
 
         } catch (ParseException e) {
             e.printStackTrace();

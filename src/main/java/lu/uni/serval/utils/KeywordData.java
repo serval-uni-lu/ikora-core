@@ -32,6 +32,20 @@ public class KeywordData {
         return stringBuilder.toString();
     }
 
+    public String getCleanName() {
+        return cleanArgument(this.name);
+    }
+
+    public List<String> getCleanArguments() {
+        List<String> cleanArguments = new ArrayList<String>();
+
+        for(String argument : arguments) {
+            cleanArguments.add(cleanArgument(argument));
+        }
+
+        return cleanArguments;
+    }
+
     private String cleanArgument(String argument) {
         if (!Argument.hasVariable(argument)) {
             return argument;

@@ -1,5 +1,7 @@
 package lu.uni.serval.robotframework.selenium;
 
+import lu.uni.serval.utils.KeywordData;
+import lu.uni.serval.utils.TreeNode;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import java.lang.reflect.InvocationTargetException;
@@ -19,15 +21,22 @@ public class Runner {
         if(method == null){
             System.out.println("Method '" + keyword + "' not found");
         }
+        else  {
+            try {
+                method.getRight().invoke(method.getLeft(), arguments);
+            }
+            catch (IllegalAccessException e){
+                e.getStackTrace();
+            }
+            catch (InvocationTargetException e) {
+                e.getStackTrace();
+            }
+        }
+    }
 
-        try {
-            method.getRight().invoke(method.getLeft(), arguments);
-        }
-        catch (IllegalAccessException e){
-            e.getStackTrace();
-        }
-        catch (InvocationTargetException e) {
-            e.getStackTrace();
+    public void executeKeyword(TreeNode<KeywordData> root) {
+        for(TreeNode<KeywordData> leaf : root.getLeaves()) {
+            this.execute(leaf.data.getCleanName(), leaf.data.getCleanArguments());
         }
     }
 }
