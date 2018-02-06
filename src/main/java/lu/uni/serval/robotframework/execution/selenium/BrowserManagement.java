@@ -1,5 +1,6 @@
 package lu.uni.serval.robotframework.execution.selenium;
 
+import lu.uni.serval.robotframework.report.Result;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
@@ -14,7 +15,7 @@ public class BrowserManagement {
     }
 
     @Keyword
-    public void LocationShouldBe(List<String> arguments) {
+    public Result LocationShouldBe(List<String> arguments) {
         String url = arguments.get(0);
 
         if(url.equalsIgnoreCase(getUrl())){
@@ -22,32 +23,40 @@ public class BrowserManagement {
         } else {
             System.err.println("Page url should be '" + getUrl() + "' got '" + url + "' instead.");
         }
+
+        return new Result();
     }
 
     @Keyword
-    public void MaximizeBrowserWindow(List<String> arguments) {
+    public Result MaximizeBrowserWindow(List<String> arguments) {
         getDriver().manage().window().maximize();
+
+        return new Result();
     }
 
     @Keyword
-    public void OpenBrowser(List<String> arguments){
+    public Result OpenBrowser(List<String> arguments){
         String url = arguments.get(0);
         String browser = arguments.get(1);
 
         initializeDriver(browser);
 
         getDriver().get(url);
+
+        return new Result();
     }
 
     @Keyword
-    public void SetSeleniumSpeed(List<String> arguments) {
+    public Result SetSeleniumSpeed(List<String> arguments) {
         //TODO: properly convert time
         int time = Integer.parseInt(arguments.get(0));
         getDriver().manage().timeouts().implicitlyWait(time, TimeUnit.SECONDS);
+
+        return new Result();
     }
 
     @Keyword
-    public void TitleShouldBe(List<String> arguments) {
+    public Result TitleShouldBe(List<String> arguments) {
         String title = arguments.get(0);
 
         if(title.equals(getTitle())) {
@@ -55,6 +64,8 @@ public class BrowserManagement {
         } else {
             System.err.println("Page title should be '" + getTitle() + "' got '" + title + "' instead.");
         }
+
+        return new Result();
     }
 
     private WebDriver getDriver() {

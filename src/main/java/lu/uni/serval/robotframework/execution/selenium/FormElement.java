@@ -1,5 +1,6 @@
 package lu.uni.serval.robotframework.execution.selenium;
 
+import lu.uni.serval.robotframework.report.Result;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
@@ -21,20 +22,26 @@ public class FormElement {
     }
 
     @Keyword
-    public void InputPassword(List<String> arguments) {
-        inputTextIntoTextField(arguments);
+    public Result InputPassword(List<String> arguments) {
+        Result result = new Result();
+        inputTextIntoTextField(result, arguments);
+
+        return result;
     }
 
     @Keyword
-    public void InputText(List<String> arguments) {
-        inputTextIntoTextField(arguments);
+    public Result InputText(List<String> arguments) {
+        Result result = new Result();
+        inputTextIntoTextField(result, arguments);
+
+        return result;
     }
 
     private WebElement findElement(String locator) {
         return elementFinder.find(locator);
     }
 
-    private void inputTextIntoTextField(List<String> arguments) {
+    private void inputTextIntoTextField(Result result, List<String> arguments) {
         String locator = arguments.get(0);
         String input = arguments.get(1);
 

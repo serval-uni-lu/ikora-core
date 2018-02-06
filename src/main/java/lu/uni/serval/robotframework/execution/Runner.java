@@ -1,5 +1,7 @@
 package lu.uni.serval.robotframework.execution;
 
+import lu.uni.serval.robotframework.report.Report;
+import lu.uni.serval.robotframework.report.Result;
 import lu.uni.serval.utils.KeywordData;
 import lu.uni.serval.utils.TreeNode;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -15,15 +17,16 @@ public class Runner {
         this.dispatcher = new Dispatcher();
     }
 
-    public void execute(String keyword, List<String> arguments) {
+    public Result execute(String keyword, List<String> arguments) {
         ImmutablePair<Object, Method> method = this.dispatcher.callMethod(keyword);
+        Result result = null;
 
         if(method == null){
             System.err.println("Method '" + keyword + "' not found");
         }
         else  {
             try {
-                method.getRight().invoke(method.getLeft(), arguments);
+                result = (Result)method.getRight().invoke(method.getLeft(), arguments);
             }
             catch (IllegalAccessException e){
                 e.getStackTrace();
@@ -32,11 +35,19 @@ public class Runner {
                 e.getStackTrace();
             }
         }
+
+        return result;
     }
 
-    public void executeKeyword(TreeNode<KeywordData> root) {
+    public Report executeKeyword(TreeNode<KeywordData> root) {
+        Report report = new Report();
+
         for(TreeNode<KeywordData> leaf : root.getLeaves()) {
-            this.execute(leaf.data.getCleanName(), leaf.data.getCleanArguments());
+            Result result = this.execute(leaf.data.getCleanName(), leaf.data.getCleanArguments());
+
+            report.addResult(result);
         }
+
+        return report;
     }
 }
