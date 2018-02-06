@@ -19,7 +19,7 @@ public class Runner {
         ImmutablePair<Object, Method> method = this.dispatcher.callMethod(keyword);
 
         if(method == null){
-            System.out.println("Method '" + keyword + "' not found");
+            System.err.println("Method '" + keyword + "' not found");
         }
         else  {
             try {
