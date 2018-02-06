@@ -3,15 +3,12 @@ package lu.uni.serval;
 import lu.uni.serval.robotframework.model.KeywordTreeFactory;
 import lu.uni.serval.robotframework.model.TestCaseFile;
 import lu.uni.serval.robotframework.model.TestCaseFileFactory;
-import lu.uni.serval.robotframework.selenium.Runner;
+import lu.uni.serval.robotframework.execution.Runner;
 import lu.uni.serval.utils.KeywordData;
 import lu.uni.serval.utils.TreeNode;
 
 import org.apache.commons.cli.*;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class RFTestGenerator {

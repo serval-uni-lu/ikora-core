@@ -1,7 +1,7 @@
-package lu.uni.serval.robotframework.selenium;
+package lu.uni.serval.robotframework.execution;
 
-import lu.uni.serval.robotframework.selenium.keyword.BrowserManagement;
-import lu.uni.serval.robotframework.selenium.keyword.Keyword;
+import lu.uni.serval.robotframework.execution.selenium.BrowserManagement;
+import lu.uni.serval.robotframework.execution.selenium.Keyword;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import java.lang.reflect.Method;

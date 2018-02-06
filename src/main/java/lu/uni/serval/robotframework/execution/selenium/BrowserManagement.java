@@ -1,4 +1,4 @@
-package lu.uni.serval.robotframework.selenium.keyword;
+package lu.uni.serval.robotframework.execution.selenium;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -30,7 +30,20 @@ public class BrowserManagement {
         driver.manage().timeouts().implicitlyWait(time, TimeUnit.SECONDS);
     }
 
-    void NonKeyword(){
+    @Keyword
+    public void TitleShouldBe(List<String> arguments) {
+        String title = arguments.get(0);
 
+        if(title.equals(GetTitle())) {
+            System.out.println("Page name has right title: " + title);
+        } else {
+            System.err.println("Page title should be '" + GetTitle() + "' got '" + title + "' instead.");
+        }
     }
+
+    private String GetTitle() {
+        return driver.getTitle();
+    }
+
+
 }

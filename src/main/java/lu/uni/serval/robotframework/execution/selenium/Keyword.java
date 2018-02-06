@@ -1,4 +1,4 @@
-package lu.uni.serval.robotframework.selenium.keyword;
+package lu.uni.serval.robotframework.execution.selenium;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

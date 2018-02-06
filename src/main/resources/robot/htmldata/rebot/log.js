@@ -1,15 +1,15 @@
 var LEVELS = {TRACE: 0, DEBUG: 1, INFO: 2, WARN: 3, FAIL: 4, NONE: 5};
 
 function toggleSuite(suiteId) {
-    toggleElement(suiteId, ['keyword', 'suite', 'test']);
+    toggleElement(suiteId, ['selenium', 'suite', 'test']);
 }
 
 function toggleTest(testId) {
-    toggleElement(testId, ['keyword']);
+    toggleElement(testId, ['selenium']);
 }
 
 function toggleKeyword(kwId) {
-    toggleElement(kwId, ['keyword', 'message']);
+    toggleElement(kwId, ['selenium', 'message']);
 }
 
 function toggleElement(elementId, childrenNames) {
