@@ -1,10 +1,9 @@
 package lu.uni.serval.robotframework.execution.selenium;
 
 import lu.uni.serval.robotframework.report.Result;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
 
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class BrowserManagement {
@@ -15,57 +14,65 @@ public class BrowserManagement {
     }
 
     @Keyword
-    public Result LocationShouldBe(List<String> arguments) {
-        String url = arguments.get(0);
+    public Result LocationShouldBe(String url) {
+        Result result = new Result(Result.Type.Assert);
 
         if(url.equalsIgnoreCase(getUrl())){
-            System.out.println("Page has correct url: " + url);
+            result.setMessage("Page has correct url: " + url);
         } else {
-            System.err.println("Page url should be '" + getUrl() + "' got '" + url + "' instead.");
+            result.setAssertionFailedError("Page url should be '" + getUrl() + "' got '" + url + "' instead.");
         }
 
-        return new Result();
+        return result;
     }
 
     @Keyword
-    public Result MaximizeBrowserWindow(List<String> arguments) {
-        getDriver().manage().window().maximize();
+    public Result MaximizeBrowserWindow() {
+        java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
+        int width = (int)Math.round(screenSize.getWidth());
+        int height = (int)Math.round(screenSize.getHeight());
 
-        return new Result();
+        Result result = new Result(Result.Type.Execute);
+        getDriver().manage().window().setSize(new Dimension(width, height));
+        result.setMessage("Browser Window Maximized");
+
+        return result;
     }
 
     @Keyword
-    public Result OpenBrowser(List<String> arguments){
-        String url = arguments.get(0);
-        String browser = arguments.get(1);
+    public Result OpenBrowser(String url, String browser){
+        Result result = new Result(Result.Type.Execute);
 
         initializeDriver(browser);
-
         getDriver().get(url);
+        result.setMessage(browser + " browser open at page " + url);
 
-        return new Result();
+        return result;
     }
 
     @Keyword
-    public Result SetSeleniumSpeed(List<String> arguments) {
+    public Result SetSeleniumSpeed(String time) {
+        Result result = new Result(Result.Type.Execute);
+
         //TODO: properly convert time
-        int time = Integer.parseInt(arguments.get(0));
-        getDriver().manage().timeouts().implicitlyWait(time, TimeUnit.SECONDS);
+        int sec = Integer.parseInt(time);
+        getDriver().manage().timeouts().implicitlyWait(sec, TimeUnit.SECONDS);
+        result.setMessage("Selenium speed set to " + time);
 
-        return new Result();
+        return result;
     }
 
     @Keyword
-    public Result TitleShouldBe(List<String> arguments) {
-        String title = arguments.get(0);
+    public Result TitleShouldBe(String title) {
+        Result result = new Result(Result.Type.Assert);
 
         if(title.equals(getTitle())) {
-            System.out.println("Page has correct title: " + title);
+            result.setMessage("Page has correct title: " + title);
         } else {
-            System.err.println("Page title should be '" + getTitle() + "' got '" + title + "' instead.");
+            result.setAssertionFailedError("Page title should be '" + getTitle() + "' got '" + title + "' instead.");
         }
 
-        return new Result();
+        return result;
     }
 
     private WebDriver getDriver() {
@@ -82,7 +89,10 @@ public class BrowserManagement {
 
     private void initializeDriver(String browser) {
         if(browser.equalsIgnoreCase("FireFox")) {
-            context.setDriver(new FirefoxDriver());
+            context.initializeDriver(Context.Drivers.Firefox);
+        }
+        else if(browser.equalsIgnoreCase("Chrome")) {
+            context.initializeDriver(Context.Drivers.Chrome);
         }
     }
 }

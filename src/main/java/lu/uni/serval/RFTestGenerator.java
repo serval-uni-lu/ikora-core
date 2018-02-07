@@ -4,11 +4,13 @@ import lu.uni.serval.robotframework.model.KeywordTreeFactory;
 import lu.uni.serval.robotframework.model.TestCaseFile;
 import lu.uni.serval.robotframework.model.TestCaseFileFactory;
 import lu.uni.serval.robotframework.execution.Runner;
+import lu.uni.serval.robotframework.report.Report;
 import lu.uni.serval.utils.KeywordData;
 import lu.uni.serval.utils.TreeNode;
 
 import org.apache.commons.cli.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RFTestGenerator {
@@ -42,10 +44,17 @@ public class RFTestGenerator {
 
             Runner runner = new Runner();
 
+            List<Report> reports = new ArrayList<Report>();
+
             for(TreeNode<KeywordData> root : forest) {
-                runner.executeKeyword(root);
+                Report report = runner.executeKeyword(root);
+                report.setName(root.data.getCleanName());
+                reports.add(report);
             }
 
+            for(Report report: reports) {
+                report.print();
+            }
         } catch (ParseException e) {
             e.printStackTrace();
         }

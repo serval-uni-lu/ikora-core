@@ -4,6 +4,8 @@ import lu.uni.serval.robotframework.report.Report;
 import lu.uni.serval.robotframework.report.Result;
 import lu.uni.serval.utils.KeywordData;
 import lu.uni.serval.utils.TreeNode;
+import lu.uni.serval.utils.exception.InvalidNumberArgumentException;
+
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import java.lang.reflect.InvocationTargetException;
@@ -26,13 +28,35 @@ public class Runner {
         }
         else  {
             try {
-                result = (Result)method.getRight().invoke(method.getLeft(), arguments);
+                int expect = method.getRight().getParameterTypes().length;
+                int actual = arguments.size();
+
+                if(expect > actual){
+                    throw new InvalidNumberArgumentException(expect, actual);
+                }
+                else if(expect < actual) {
+                    arguments = arguments.subList(0, expect);
+                }
+
+                result = (Result)method.getRight().invoke(method.getLeft(), arguments.toArray());
             }
             catch (IllegalAccessException e){
-                e.getStackTrace();
+                result = new Result(Result.Type.Aborted);
+                result.setError(Result.Error.IllegalAccess);
+                result.setMessage(e.getMessage());
             }
             catch (InvocationTargetException e) {
-                e.getStackTrace();
+                result = new Result(Result.Type.Aborted);
+                result.setError(Result.Error.InvocationTarget);
+                try {
+                    throw e.getTargetException();
+                } catch (Throwable throwable) {
+                    System.out.println(throwable.getMessage());
+                }
+            }
+            catch (InvalidNumberArgumentException e) {
+                result = new Result(Result.Type.Aborted);
+                result.setWrongNumberArugmentError(e.expected, e.actual);
             }
         }
 
@@ -44,7 +68,6 @@ public class Runner {
 
         for(TreeNode<KeywordData> leaf : root.getLeaves()) {
             Result result = this.execute(leaf.data.getCleanName(), leaf.data.getCleanArguments());
-
             report.addResult(result);
         }
 
