@@ -26,6 +26,10 @@ public class Result {
         return this.error != Error.None;
     }
 
+    public boolean isAborted() {
+        return this.type == Type.Aborted;
+    }
+
     public void setMessage(String message){
         this.message = message;
     }
