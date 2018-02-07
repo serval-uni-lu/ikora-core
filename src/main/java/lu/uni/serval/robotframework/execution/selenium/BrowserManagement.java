@@ -20,7 +20,7 @@ public class BrowserManagement {
         if(url.equalsIgnoreCase(getUrl())){
             result.setMessage("Page has correct url: " + url);
         } else {
-            result.setAssertionFailedError("Page url should be '" + getUrl() + "' got '" + url + "' instead.");
+            result.setAssertionFailedError("Page url should be '" + url + "' got '" + getUrl() + "' instead.");
         }
 
         return result;
@@ -69,7 +69,7 @@ public class BrowserManagement {
         if(title.equals(getTitle())) {
             result.setMessage("Page has correct title: " + title);
         } else {
-            result.setAssertionFailedError("Page title should be '" + getTitle() + "' got '" + title + "' instead.");
+            result.setAssertionFailedError("Page title should be '" + title + "' got '" + getTitle() + "' instead.");
         }
 
         return result;
