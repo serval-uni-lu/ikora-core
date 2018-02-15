@@ -4,6 +4,7 @@ import lu.uni.serval.robotframework.report.Result;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 
+import java.net.UnknownHostException;
 import java.util.concurrent.TimeUnit;
 
 public class BrowserManagement {
@@ -40,11 +41,10 @@ public class BrowserManagement {
     }
 
     @Keyword
-    public Result OpenBrowser(String url, String browser){
+    public Result OpenBrowser(String url, String browser) throws UnknownHostException {
         Result result = new Result(Result.Type.Execute);
 
-        initializeDriver(browser);
-        getDriver().get(url);
+        initializeDriver(browser, url);
         result.setMessage(browser + " browser open at page " + url);
 
         return result;
@@ -87,12 +87,12 @@ public class BrowserManagement {
         return getDriver().getCurrentUrl();
     }
 
-    private void initializeDriver(String browser) {
+    private void initializeDriver(String browser, String url) throws UnknownHostException {
         if(browser.equalsIgnoreCase("FireFox")) {
-            context.initializeDriver(Context.Drivers.Firefox);
+            context.initializeDriver(Context.Drivers.Firefox, url);
         }
         else if(browser.equalsIgnoreCase("Chrome")) {
-            context.initializeDriver(Context.Drivers.Chrome);
+            context.initializeDriver(Context.Drivers.Chrome, url);
         }
     }
 }

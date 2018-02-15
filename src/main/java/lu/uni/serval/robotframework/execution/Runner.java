@@ -7,6 +7,7 @@ import lu.uni.serval.utils.TreeNode;
 import lu.uni.serval.utils.exception.InvalidNumberArgumentException;
 
 import java.lang.reflect.InvocationTargetException;
+import java.net.UnknownHostException;
 import java.util.List;
 
 public class Runner {
@@ -21,6 +22,9 @@ public class Runner {
 
         try {
             result = dispatcher.call(keyword, arguments);
+            if(result.isExecution()) {
+                dispatcher.checkRequests();
+            }
         }
         catch (IllegalAccessException e){
             result = new Result(Result.Type.Aborted);
@@ -31,10 +35,20 @@ public class Runner {
             result = new Result(Result.Type.Aborted);
             result.setError(Result.Error.InvocationTarget);
             result.setMessage("Unhandled Error");
+
+            try {
+                throw e.getTargetException();
+            } catch (Throwable throwable) {
+                System.out.println(throwable.getMessage());
+            }
         }
         catch (InvalidNumberArgumentException e) {
             result = new Result(Result.Type.Aborted);
             result.setWrongNumberArugmentError(e.expected, e.actual);
+        }
+        catch (Exception e) {
+            result = new Result(Result.Type.Aborted);
+            result.setMessage("Unknown exception occured");
         }
 
         return result;

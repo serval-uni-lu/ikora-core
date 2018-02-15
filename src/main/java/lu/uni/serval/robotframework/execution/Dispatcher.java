@@ -55,4 +55,8 @@ public class Dispatcher {
 
         return (Result)method.getRight().invoke(method.getLeft(), arguments.toArray());
     }
+
+    public void checkRequests() {
+        this.context.checkRequests();
+    }
 }

@@ -30,6 +30,10 @@ public class Result {
         return this.type == Type.Aborted;
     }
 
+    public boolean isExecution() {
+        return this.type == Type.Execute;
+    }
+
     public void setMessage(String message){
         this.message = message;
     }
