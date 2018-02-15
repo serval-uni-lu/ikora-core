@@ -5,9 +5,9 @@ import lu.uni.serval.robotframework.report.Result;
 import lu.uni.serval.utils.KeywordData;
 import lu.uni.serval.utils.TreeNode;
 import lu.uni.serval.utils.exception.InvalidNumberArgumentException;
+import lu.uni.serval.utils.exception.WrongClassException;
 
 import java.lang.reflect.InvocationTargetException;
-import java.net.UnknownHostException;
 import java.util.List;
 
 public class Runner {
@@ -34,17 +34,17 @@ public class Runner {
         catch (InvocationTargetException e) {
             result = new Result(Result.Type.Aborted);
             result.setError(Result.Error.InvocationTarget);
-            result.setMessage("Unhandled Error");
+            result.setMessage("Invocation Target Error");
 
             try {
                 throw e.getTargetException();
             } catch (Throwable throwable) {
-                System.out.println(throwable.getMessage());
+                result.setMessage(throwable.getMessage());
             }
         }
         catch (InvalidNumberArgumentException e) {
             result = new Result(Result.Type.Aborted);
-            result.setWrongNumberArugmentError(e.expected, e.actual);
+            result.setWrongNumberArugmentError(e.expected, e.received);
         }
         catch (Exception e) {
             result = new Result(Result.Type.Aborted);
@@ -54,16 +54,29 @@ public class Runner {
         return result;
     }
 
-    public Report executeKeyword(TreeNode<KeywordData> root) {
+    public Report executeKeyword(TreeNode root) {
         Report report = new Report();
 
-        for(TreeNode<KeywordData> leaf : root.getLeaves()) {
-            Result result = this.execute(leaf.data.getCleanName(), leaf.data.getCleanArguments());
-            report.addResult(result);
+        try{
+            for(TreeNode leaf : root.getLeaves()) {
+                if(!(leaf.data instanceof KeywordData)){
+                    throw new WrongClassException(KeywordData.class, leaf.data.getClass());
+                }
 
-            if(result.isAborted()) {
-                break;
+                KeywordData keyword = (KeywordData)leaf.data;
+
+                Result result = this.execute(keyword.getCleanName(), keyword.getCleanArguments());
+                report.addResult(result);
+
+                if(result.isAborted()) {
+                    break;
+                }
             }
+        }
+        catch (WrongClassException e){
+            Result result = new Result(Result.Type.Aborted);
+            result.setError(Result.Error.Implementation);
+            result.setMessage(e.getMessage());
         }
 
         return report;

@@ -30,14 +30,14 @@ public class RFTestGenerator {
             TestCaseFile testCaseFile = factory.create(cmd.getOptionValue("file"));
 
             KeywordTreeFactory keywordTreeFactory = new KeywordTreeFactory(testCaseFile);
-            List<TreeNode<KeywordData>> forest = keywordTreeFactory.create();
+            List<TreeNode> forest = keywordTreeFactory.create();
 
             System.out.println(forest.toString());
             System.out.println("----------------------------------------");
 
-            for(TreeNode<KeywordData> root : forest){
+            for(TreeNode root : forest){
                 System.out.println(root.data.toString());
-                for(TreeNode<KeywordData> leaf : root.getLeaves()) {
+                for(TreeNode leaf : root.getLeaves()) {
                     System.out.println("\t" + leaf.toString());
                 }
             }
@@ -46,9 +46,9 @@ public class RFTestGenerator {
 
             List<Report> reports = new ArrayList<Report>();
 
-            for(TreeNode<KeywordData> root : forest) {
+            for(TreeNode root : forest) {
                 Report report = runner.executeKeyword(root);
-                report.setName(root.data.getCleanName());
+                report.setName(root.data.getLabel());
                 reports.add(report);
             }
 

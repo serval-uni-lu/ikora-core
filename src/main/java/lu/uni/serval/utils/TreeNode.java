@@ -6,18 +6,18 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-public class TreeNode<T> implements Iterable<TreeNode<T>> {
+public class TreeNode implements Iterable<TreeNode> {
 
-    public T data;
-    public TreeNode<T> parent;
-    public List<TreeNode<T>> children;
+    public TreeNodeData data;
+    public TreeNode parent;
+    public List<TreeNode> children;
 
-    private List<TreeNode<T>> elementIndexes;
+    private List<TreeNode> elementIndexes;
 
-    public TreeNode(T data) {
+    public TreeNode(TreeNodeData data) {
         this.data = data;
-        this.children = new LinkedList<TreeNode<T>>();
-        this.elementIndexes = new LinkedList<TreeNode<T>>();
+        this.children = new LinkedList<TreeNode>();
+        this.elementIndexes = new LinkedList<TreeNode>();
         this.elementIndexes.add(this);
     }
 
@@ -38,15 +38,15 @@ public class TreeNode<T> implements Iterable<TreeNode<T>> {
         }
     }
 
-    public List<TreeNode<T>> getLeaves(){
-        List<TreeNode<T>> leaves = new ArrayList<TreeNode<T>>();
+    public List<TreeNode> getLeaves(){
+        List<TreeNode> leaves = new ArrayList<TreeNode>();
         getLeaves(leaves);
 
         return leaves;
     }
 
-    public TreeNode<T> addChild(T child){
-        TreeNode<T> childNode = new TreeNode<T>(child);
+    public TreeNode addChild(TreeNodeData child){
+        TreeNode childNode = new TreeNode(child);
         childNode.parent = this;
         this.children.add(childNode);
         this.registerChildForSearch(childNode);
@@ -54,9 +54,9 @@ public class TreeNode<T> implements Iterable<TreeNode<T>> {
         return childNode;
     }
 
-    public TreeNode<T> findTreeNode(Comparable<T> comparable) {
-        for (TreeNode<T> element : this.elementIndexes) {
-            T elementData = element.data;
+    public TreeNode findTreeNode(Comparable comparable) {
+        for (TreeNode element : this.elementIndexes) {
+            TreeNodeData elementData = element.data;
             if (comparable.compareTo(elementData) == 0) {
                 return element;
             }
@@ -81,7 +81,7 @@ public class TreeNode<T> implements Iterable<TreeNode<T>> {
         stringBuilder.append(indent);
         stringBuilder.append(data != null ? data.toString() : "[null]");
 
-        for(TreeNode<T> child: this.children) {
+        for(TreeNode child: this.children) {
             child.buildString(stringBuilder, level + 1);
         }
 
@@ -89,23 +89,23 @@ public class TreeNode<T> implements Iterable<TreeNode<T>> {
     }
 
     @Nonnull
-    public Iterator<TreeNode<T>> iterator() {
-        return new TreeNodeIterator<T>(this);
+    public Iterator<TreeNode> iterator() {
+        return new TreeNodeIterator(this);
     }
 
-    private void registerChildForSearch(TreeNode<T> node) {
+    private void registerChildForSearch(TreeNode node) {
         elementIndexes.add(node);
         if (parent != null) {
             parent.registerChildForSearch(node);
         }
     }
 
-    private void getLeaves(List<TreeNode<T>> leaves) {
+    private void getLeaves(List<TreeNode> leaves) {
         if(this.isLeaf()) {
             leaves.add(this);
         }
         else {
-            for(TreeNode<T> child : children) {
+            for(TreeNode child : children) {
                 child.getLeaves(leaves);
             }
         }

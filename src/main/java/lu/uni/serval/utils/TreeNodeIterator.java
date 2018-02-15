@@ -2,19 +2,19 @@ package lu.uni.serval.utils;
 
 import java.util.Iterator;
 
-public class TreeNodeIterator<T> implements Iterator<TreeNode<T>> {
+public class TreeNodeIterator implements Iterator<TreeNode> {
     enum ProcessStages {
         ProcessParents, ProcessChildCurNode, ProcessChildSubNode
     }
 
-    private TreeNode<T> treeNode;
-    private TreeNode<T> next;
-    private Iterator<TreeNode<T>> childrenCurNodeIterator;
-    private Iterator<TreeNode<T>> childrenSubNodeIterator;
+    private TreeNode treeNode;
+    private TreeNode next;
+    private Iterator<TreeNode> childrenCurNodeIterator;
+    private Iterator<TreeNode> childrenSubNodeIterator;
 
     private ProcessStages doNext;
 
-    public TreeNodeIterator(TreeNode<T> treeNode) {
+    public TreeNodeIterator(TreeNode treeNode) {
         this.treeNode = treeNode;
         this.doNext = ProcessStages.ProcessParents;
         this.childrenCurNodeIterator = treeNode.children.iterator();
@@ -30,7 +30,7 @@ public class TreeNodeIterator<T> implements Iterator<TreeNode<T>> {
 
         if (this.doNext == ProcessStages.ProcessChildCurNode) {
             if(childrenCurNodeIterator.hasNext()){
-                TreeNode<T> childDirect = childrenCurNodeIterator.next();
+                TreeNode childDirect = childrenCurNodeIterator.next();
                 childrenSubNodeIterator = childDirect.iterator();
                 this.doNext = ProcessStages.ProcessChildSubNode;
 
@@ -60,7 +60,7 @@ public class TreeNodeIterator<T> implements Iterator<TreeNode<T>> {
         return false;
     }
 
-    public TreeNode<T> next(){
+    public TreeNode next(){
         return this.next;
     }
 

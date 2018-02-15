@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class KeywordData {
+public class KeywordData implements TreeNodeData {
     public String name;
     public List<String> arguments;
     public Map<String, List<String>> variables;
@@ -96,5 +96,9 @@ public class KeywordData {
         }
 
         return returnValue;
+    }
+
+    public String getLabel() {
+        return toString();
     }
 }

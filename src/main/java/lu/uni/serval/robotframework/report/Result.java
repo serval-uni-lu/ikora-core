@@ -6,7 +6,8 @@ public class Result {
     }
 
     public enum Error {
-        None, WrongNumberArgument, AssertFailed, ElementNotFound, IllegalAccess, InvocationTarget
+        None, WrongNumberArgument, AssertFailed, ElementNotFound,
+        IllegalAccess, InvocationTarget, Implementation
     }
 
     private Type type;

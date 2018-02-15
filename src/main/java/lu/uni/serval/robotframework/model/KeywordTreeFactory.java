@@ -15,12 +15,12 @@ public class KeywordTreeFactory {
         this.testCaseFile = testCaseFile;
     }
 
-    public List<TreeNode<KeywordData>> create(){
-        List<TreeNode<KeywordData>> keywordForest = new ArrayList< TreeNode<KeywordData>>();
+    public List<TreeNode> create(){
+        List<TreeNode> keywordForest = new ArrayList<TreeNode>();
 
         for(TestCase testCase : testCaseFile) {
             KeywordData keywordData = createKeywordData(testCase, null, null);
-            TreeNode<KeywordData> root = new TreeNode<KeywordData>(keywordData);
+            TreeNode root = new TreeNode(keywordData);
 
             visitSteps(root, testCase, new HashMap<String, List<String>>());
 
@@ -30,12 +30,12 @@ public class KeywordTreeFactory {
         return keywordForest;
     }
 
-    private void visitSteps(TreeNode<KeywordData> current, TestCase testCase, HashMap<String, List<String>> locals) {
+    private void visitSteps(TreeNode current, TestCase testCase, HashMap<String, List<String>> locals) {
         for(Step step : testCase) {
             UserKeyword keyword = testCaseFile.findUserKeyword(step);
             KeywordData keywordData = createKeywordData(keyword, step, locals);
 
-            TreeNode<KeywordData> child =  current.addChild(keywordData);
+            TreeNode child =  current.addChild(keywordData);
             visitSteps(child, keyword, (HashMap)locals.clone());
         }
     }
