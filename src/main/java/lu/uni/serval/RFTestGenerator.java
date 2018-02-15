@@ -7,7 +7,12 @@ import lu.uni.serval.robotframework.execution.Runner;
 import lu.uni.serval.robotframework.report.Report;
 import lu.uni.serval.utils.TreeNode;
 
-import org.apache.commons.cli.*;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.MissingArgumentException;
+import org.apache.commons.cli.ParseException;
 
 import java.util.ArrayList;
 import java.util.List;
