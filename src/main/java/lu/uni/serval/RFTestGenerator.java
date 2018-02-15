@@ -5,7 +5,7 @@ import lu.uni.serval.robotframework.model.TestCaseFile;
 import lu.uni.serval.robotframework.model.TestCaseFileFactory;
 import lu.uni.serval.robotframework.execution.Runner;
 import lu.uni.serval.robotframework.report.Report;
-import lu.uni.serval.utils.TreeNode;
+import lu.uni.serval.utils.tree.TreeNode;
 
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.CommandLineParser;

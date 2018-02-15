@@ -1,4 +1,6 @@
-package lu.uni.serval.utils;
+package lu.uni.serval.utils.tree;
+
+import lu.uni.serval.utils.tree.TreeNode;
 
 import java.util.Iterator;
 

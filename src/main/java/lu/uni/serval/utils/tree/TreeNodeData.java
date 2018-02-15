@@ -1,4 +1,4 @@
-package lu.uni.serval.utils;
+package lu.uni.serval.utils.tree;
 
 public interface TreeNodeData {
     String getLabel();

@@ -3,7 +3,7 @@ package lu.uni.serval.robotframework.execution;
 import lu.uni.serval.robotframework.report.Report;
 import lu.uni.serval.robotframework.report.Result;
 import lu.uni.serval.utils.KeywordData;
-import lu.uni.serval.utils.TreeNode;
+import lu.uni.serval.utils.tree.TreeNode;
 import lu.uni.serval.utils.exception.InvalidNumberArgumentException;
 import lu.uni.serval.utils.exception.WrongClassException;
 

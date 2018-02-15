@@ -1,6 +1,7 @@
 package lu.uni.serval.robotframework.model;
 
 import lu.uni.serval.utils.*;
+import lu.uni.serval.utils.tree.TreeNode;
 
 import java.util.ArrayList;
 import java.util.HashMap;
