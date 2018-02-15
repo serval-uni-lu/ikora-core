@@ -70,6 +70,10 @@ public class TreeNode implements Iterable<TreeNode> {
         return buildString(new StringBuilder(),0).toString();
     }
 
+    public String getLabel() {
+        return data.getLabel();
+    }
+
     private StringBuilder buildString(StringBuilder stringBuilder, int level) {
         String indent = "";
 

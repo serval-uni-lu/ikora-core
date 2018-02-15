@@ -5,7 +5,6 @@ import lu.uni.serval.robotframework.model.TestCaseFile;
 import lu.uni.serval.robotframework.model.TestCaseFileFactory;
 import lu.uni.serval.robotframework.execution.Runner;
 import lu.uni.serval.robotframework.report.Report;
-import lu.uni.serval.utils.KeywordData;
 import lu.uni.serval.utils.TreeNode;
 
 import org.apache.commons.cli.*;
@@ -36,9 +35,9 @@ public class RFTestGenerator {
             System.out.println("----------------------------------------");
 
             for(TreeNode root : forest){
-                System.out.println(root.data.toString());
+                System.out.println(root.getLabel());
                 for(TreeNode leaf : root.getLeaves()) {
-                    System.out.println("\t" + leaf.toString());
+                    System.out.println("\t" + leaf.getLabel());
                 }
             }
 
@@ -48,7 +47,7 @@ public class RFTestGenerator {
 
             for(TreeNode root : forest) {
                 Report report = runner.executeKeyword(root);
-                report.setName(root.data.getLabel());
+                report.setName(root.data.toString());
                 reports.add(report);
             }
 
