@@ -1,7 +1,5 @@
 package lu.uni.serval.utils.tree;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 public class TreeEditDistance implements TreeDistance {
     private final EditScore score;
 
@@ -65,14 +63,46 @@ public class TreeEditDistance implements TreeDistance {
     }
 
     private double calculateReplaceScore(EditMemory memory, TreeNode tree1, TreeNode tree2) {
-        throw new NotImplementedException();
+        double s1 = calculate(memory, getInside(tree1), getInside(tree2));
+        double s2 = calculate(memory, getOutside(tree1), getOutside(tree2));
+        return s1 + s2 + score.replace(tree1, tree2);
     }
 
     private double calculateInsertScore(EditMemory memory, TreeNode tree1, TreeNode tree2) {
-        throw new NotImplementedException();
+        TreeNode newTree = deleteHead(tree2);
+        return calculate(memory, tree1, newTree) + score.insert(newTree);
     }
 
     private double calculateDeleteScore(EditMemory memory, TreeNode tree1, TreeNode tree2) {
-        throw new NotImplementedException();
+        TreeNode newTree = deleteHead(tree1);
+        return calculate(memory, newTree, tree2) + score.delete(newTree);
+    }
+
+    private TreeNode getInside(TreeNode node) {
+        return node.getFirstChild();
+    }
+
+    private TreeNode getOutside(TreeNode node) {
+        while(!node.isRoot()){
+            TreeNode sibling = node.getNextSibling();
+
+            if(sibling != null) {
+                return sibling;
+            }
+
+            node = node.getParent();
+        }
+
+        return null;
+    }
+
+    private TreeNode deleteHead(TreeNode node) {
+         TreeNode child = node.getFirstChild();
+
+         if(child == null){
+             return getOutside(node);
+         }
+
+         return child;
     }
 }

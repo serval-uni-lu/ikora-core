@@ -15,6 +15,7 @@ public class TreeNode implements Iterable<TreeNode> {
     private List<TreeNode> elementIndexes;
 
     public TreeNode(TreeNodeData data) {
+        this.parent = null;
         this.data = data;
         this.children = new LinkedList<TreeNode>();
         this.elementIndexes = new LinkedList<TreeNode>();
@@ -27,6 +28,18 @@ public class TreeNode implements Iterable<TreeNode> {
 
     public boolean isLeaf() {
         return children.isEmpty();
+    }
+
+    public TreeNode getParent() {
+        return parent;
+    }
+
+    public TreeNode getRoot() {
+        if(parent == null) {
+            return this;
+        }
+
+        return parent.getRoot();
     }
 
     public int getLevel() {
@@ -43,6 +56,22 @@ public class TreeNode implements Iterable<TreeNode> {
         getLeaves(leaves);
 
         return leaves;
+    }
+
+    public TreeNode getFirstChild() {
+        if(children.size() > 0){
+            return children.get(0);
+        }
+
+        return null;
+    }
+
+    public TreeNode getNextSibling(){
+        if(this.isRoot()){
+            return null;
+        }
+
+        return parent.getChildNextSibling(this);
     }
 
     public TreeNode addChild(TreeNodeData child){
@@ -113,5 +142,15 @@ public class TreeNode implements Iterable<TreeNode> {
                 child.getLeaves(leaves);
             }
         }
+    }
+
+    private TreeNode getChildNextSibling(TreeNode treeNode) {
+        int index = children.indexOf(treeNode);
+
+        if(index == -1 || index == children.size() - 1){
+            return null;
+        }
+
+        return children.get(index + 1);
     }
 }
