@@ -17,7 +17,7 @@ public class TreeEditDistanceTest {
 
         TreeEditDistance editDistance = new TreeEditDistance(new SimpleEditScore());
 
-        double distance = editDistance.calculate(tree1, tree2);
+        double distance = editDistance.distance(tree1, tree2);
 
         assertEquals(1.0, distance, delta);
     }
@@ -33,7 +33,7 @@ public class TreeEditDistanceTest {
 
         TreeEditDistance editDistance = new TreeEditDistance(new SimpleEditScore());
 
-        double distance = editDistance.calculate(tree1, tree2);
+        double distance = editDistance.distance(tree1, tree2);
 
         assertEquals(1.0, distance, delta);
     }
@@ -50,7 +50,7 @@ public class TreeEditDistanceTest {
 
         TreeEditDistance editDistance = new TreeEditDistance(new SimpleEditScore());
 
-        double distance = editDistance.calculate(tree1, tree2);
+        double distance = editDistance.distance(tree1, tree2);
 
         assertEquals(1.0, distance, delta);
     }

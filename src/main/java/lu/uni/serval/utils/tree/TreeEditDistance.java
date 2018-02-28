@@ -11,16 +11,27 @@ public class TreeEditDistance implements TreeDistance {
         this.score = score;
     }
 
-    public double calculate(TreeNode tree1, TreeNode tree2) {
+    public double distance(TreeNode tree1, TreeNode tree2) {
         if (tree1 == null || tree2 == null) {
             throw new NullPointerException();
         }
 
         EditMemory memory = new EditMemory();
-        return calculate(memory, tree1, tree2);
+        return distance(memory, tree1, tree2);
     }
 
-    private double calculate(EditMemory memory, TreeNode tree1, TreeNode tree2) {
+    public double index(TreeNode tree1, TreeNode tree2) {
+        if(tree1.getSize() == 0 && tree2.getSize() == 0) {
+            return 0;
+        }
+
+        double distance = distance(tree1, tree2);
+        double size = tree1.getSize() > tree2.getSize() ? tree1.getSize() : tree2.getSize();
+
+        return distance / size;
+    }
+
+    private double distance(EditMemory memory, TreeNode tree1, TreeNode tree2) {
         if(memory.cached(tree1, tree2)) {
             return memory.getScore(tree1, tree2);
         }
@@ -63,19 +74,19 @@ public class TreeEditDistance implements TreeDistance {
     }
 
     private double calculateReplaceScore(EditMemory memory, TreeNode tree1, TreeNode tree2) {
-        double s1 = calculate(memory, getInside(tree1), getInside(tree2));
-        double s2 = calculate(memory, getOutside(tree1), getOutside(tree2));
+        double s1 = distance(memory, getInside(tree1), getInside(tree2));
+        double s2 = distance(memory, getOutside(tree1), getOutside(tree2));
         return s1 + s2 + score.replace(tree1, tree2);
     }
 
     private double calculateInsertScore(EditMemory memory, TreeNode tree1, TreeNode tree2) {
         TreeNode newTree = deleteHead(tree2);
-        return calculate(memory, tree1, newTree) + score.insert(newTree);
+        return distance(memory, tree1, newTree) + score.insert(newTree);
     }
 
     private double calculateDeleteScore(EditMemory memory, TreeNode tree1, TreeNode tree2) {
         TreeNode newTree = deleteHead(tree1);
-        return calculate(memory, newTree, tree2) + score.delete(newTree);
+        return distance(memory, newTree, tree2) + score.delete(newTree);
     }
 
     private TreeNode getInside(TreeNode node) {
