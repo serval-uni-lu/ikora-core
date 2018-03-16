@@ -59,11 +59,7 @@ public class TreeNode implements Iterable<TreeNode> {
     }
 
     public int getSize() {
-        if(isLeaf()){
-            return 1;
-        }
-
-        int size = children.size();
+        int size = 1;
 
         for(TreeNode child: children) {
             size += child.getSize();
