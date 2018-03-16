@@ -1,10 +1,11 @@
 package lu.uni.serval.utils.tree;
 
 import static org.junit.Assert.*;
+
+import lu.uni.serval.Globals;
 import org.junit.Test;
 
 public class TreeEditDistanceTest {
-    private final static double delta = 0.0001;
 
     @Test
     public void checkSimpleDeletionEdit() {
@@ -19,7 +20,7 @@ public class TreeEditDistanceTest {
 
         double distance = editDistance.distance(tree1, tree2);
 
-        assertEquals(1.0, distance, delta);
+        assertEquals(1.0, distance, Globals.delta);
     }
 
     @Test
@@ -35,7 +36,7 @@ public class TreeEditDistanceTest {
 
         double distance = editDistance.distance(tree1, tree2);
 
-        assertEquals(1.0, distance, delta);
+        assertEquals(1.0, distance, Globals.delta);
     }
 
     @Test
@@ -52,6 +53,6 @@ public class TreeEditDistanceTest {
 
         double distance = editDistance.distance(tree1, tree2);
 
-        assertEquals(1.0, distance, delta);
+        assertEquals(1.0, distance, Globals.delta);
     }
 }

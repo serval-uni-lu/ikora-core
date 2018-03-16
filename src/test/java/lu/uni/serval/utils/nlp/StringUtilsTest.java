@@ -1,10 +1,10 @@
 package lu.uni.serval.utils.nlp;
 
+import lu.uni.serval.Globals;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class StringUtilsTest {
-    private final static double delta = 0.0001;
 
     @Test
     public void checkLevenshteinDistanceDifferentString() {
@@ -23,6 +23,6 @@ public class StringUtilsTest {
 
         double index = StringUtils.levenshteinIndex(string1, string2);
 
-        assertEquals(0.461538461538, index, delta);
+        assertEquals(0.461538461538, index, Globals.delta);
     }
 }

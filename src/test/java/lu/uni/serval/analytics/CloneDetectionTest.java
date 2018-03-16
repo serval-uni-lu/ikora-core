@@ -1,14 +1,13 @@
 package lu.uni.serval.analytics;
 
-import static lu.uni.serval.analytics.CloneDetection.calculateRatio;
 import static org.junit.Assert.assertEquals;
 
+import lu.uni.serval.Globals;
 import lu.uni.serval.utils.tree.TreeNode;
 import lu.uni.serval.utils.tree.TreeNodeDataTest;
 import org.junit.Test;
 
 public class CloneDetectionTest {
-    private final static double delta = 0.0001;
 
     @Test
     public void checkSameTreeDifferentKeywordIsZero(){
@@ -20,9 +19,10 @@ public class CloneDetectionTest {
         tree2.addChild(new TreeNodeDataTest("1"));
         tree2.addChild(new TreeNodeDataTest("2"));
 
-        double ratio = calculateRatio(tree1, tree2);
+        CloneDetection cloneDetection = new CloneDetection();
+        CloneIndex index = cloneDetection.computeCloneIndex(tree1, tree2);
 
-        assertEquals(0.0, ratio, delta);
+        assertEquals(0.0, index.getTreeRatio(), Globals.delta);
     }
 
     @Test
@@ -35,8 +35,9 @@ public class CloneDetectionTest {
         tree2.addChild(new TreeNodeDataTest("1"));
         tree2.addChild(new TreeNodeDataTest("2"));
 
-        double ratio = calculateRatio(tree1, tree2);
+        CloneDetection cloneDetection = new CloneDetection();
+        CloneIndex index = cloneDetection.computeCloneIndex(tree1, tree2);
 
-        assertEquals(0.0, ratio, delta);
+        assertEquals(0.0, index.getTreeRatio(), Globals.delta);
     }
 }
