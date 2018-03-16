@@ -20,10 +20,14 @@ public class CloneEditScore implements EditScore {
     }
 
     public double delete(TreeNode node) {
-        return 0;
+        return 1;
     }
 
     public double insert(TreeNode node) {
-        return 0;
+        return 1;
+    }
+
+    public double size(TreeNode tree1, TreeNode tree2) {
+        return tree1.getSize() > tree2.getSize() ? tree1.getSize() - 1 : tree2.getSize() - 1;
     }
 }

@@ -21,4 +21,8 @@ public class LevenshteinEditScore implements EditScore {
     public double insert(TreeNode node) {
         return 1;
     }
+
+    public double size(TreeNode tree1, TreeNode tree2) {
+        return tree1.getSize() > tree2.getSize() ? tree1.getSize() : tree2.getSize();
+    }
 }

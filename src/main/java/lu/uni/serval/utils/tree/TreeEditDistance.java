@@ -26,7 +26,7 @@ public class TreeEditDistance implements TreeDistance {
         }
 
         double distance = distance(tree1, tree2);
-        double size = tree1.getSize() > tree2.getSize() ? tree1.getSize() : tree2.getSize();
+        double size = score.size(tree1, tree2);
 
         return distance / size;
     }
