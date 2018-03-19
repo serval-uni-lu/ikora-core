@@ -27,15 +27,15 @@ public class CloneIndex {
     }
 
     public boolean isHomonym(){
-        return keywordRatio > keywordThreshold;
+        return !isClone() && keywordRatio > keywordThreshold;
     }
 
     public boolean isSynonym(){
-        return isClone() && !isHomonym();
+        return isClone() && keywordRatio < keywordThreshold;
     }
 
     public boolean isSame(){
-        return isClone() && isHomonym();
+        return isClone() && keywordRatio > keywordThreshold;
     }
 
     public double getTreeRatio(){
