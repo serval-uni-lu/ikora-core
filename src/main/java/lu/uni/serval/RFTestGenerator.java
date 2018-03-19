@@ -1,5 +1,7 @@
 package lu.uni.serval;
 
+import lu.uni.serval.analytics.CloneDetection;
+import lu.uni.serval.analytics.CloneResults;
 import lu.uni.serval.robotframework.model.KeywordTreeFactory;
 import lu.uni.serval.robotframework.model.TestCaseFile;
 import lu.uni.serval.robotframework.model.TestCaseFileFactory;
@@ -16,6 +18,7 @@ import org.apache.commons.cli.ParseException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class RFTestGenerator {
     public static void main(String[] args) {
@@ -36,29 +39,26 @@ public class RFTestGenerator {
             KeywordTreeFactory keywordTreeFactory = new KeywordTreeFactory(testCaseFile);
             List<TreeNode> forest = keywordTreeFactory.create();
 
-            System.out.println(forest.toString());
             System.out.println("----------------------------------------");
+            System.out.println("KEYWORD LIST");
+            System.out.println("----------------------------------------");
+            for(TreeNode tree: forest){
+                System.out.println(tree.toString());
+            }
 
-            for(TreeNode root : forest){
-                System.out.println(root.getLabel());
-                for(TreeNode leaf : root.getLeaves()) {
-                    System.out.println("\t" + leaf.getLabel());
+            System.out.println("----------------------------------------");
+            System.out.println("SYNONYMS");
+            System.out.println("----------------------------------------");
+            CloneDetection cloneDetection = new CloneDetection();
+            CloneResults clones = cloneDetection.findClones(forest);
+
+            for(Map.Entry<TreeNode, List<TreeNode>> synonyms : clones.getSynonym().entrySet()){
+                System.out.println(synonyms.getKey().getLabel());
+                for (TreeNode synonym: synonyms.getValue()){
+                    System.out.println("\t" + synonym.getLabel());
                 }
             }
 
-            Runner runner = new Runner();
-
-            List<Report> reports = new ArrayList<Report>();
-
-            for(TreeNode root : forest) {
-                Report report = runner.executeKeyword(root);
-                report.setName(root.data.toString());
-                reports.add(report);
-            }
-
-            for(Report report: reports) {
-                report.print();
-            }
         } catch (ParseException e) {
             e.printStackTrace();
         }

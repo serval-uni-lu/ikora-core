@@ -35,6 +35,32 @@ public class TestCaseFile implements Iterable<TestCase> {
         return this.settings;
     }
 
+    public List<TestCase> getTestCases(){
+        return testCaseTable.getTestCases();
+    }
+
+    public List<UserKeyword> getUserKeywords() {
+        List<UserKeyword> userKeywords = new ArrayList<UserKeyword>(keywordTable.getUserKeywords());
+
+        for(Resources resources: settings.getResources()){
+            if(resources.getType() == Resources.Type.Resource){
+                resources.getFile().getUserKeywords(userKeywords);
+            }
+        }
+
+        return userKeywords;
+    }
+
+    private void getUserKeywords(List<UserKeyword> parentUserKeywords){
+        List<UserKeyword> userKeywords = getUserKeywords();
+
+        for(UserKeyword userKeyword : userKeywords){
+            if(!parentUserKeywords.contains(userKeyword)){
+                parentUserKeywords.add(userKeyword);
+            }
+        }
+    }
+
     private Map<String, List<String>> getVariableDictionary() {
         if (this.variableDictionary != null) {
             return this.variableDictionary;

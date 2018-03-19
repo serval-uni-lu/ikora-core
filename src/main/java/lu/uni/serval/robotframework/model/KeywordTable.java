@@ -6,7 +6,15 @@ import java.util.Iterator;
 import java.util.List;
 
 public class KeywordTable implements Iterable<UserKeyword> {
-    private final List<UserKeyword> userKeywordList = new ArrayList<UserKeyword>();
+    private List<UserKeyword> userKeywordList;
+
+    public KeywordTable(){
+        userKeywordList = new ArrayList<UserKeyword>();
+    }
+
+    public List<UserKeyword> getUserKeywords(){
+        return userKeywordList;
+    }
 
     @Nonnull
     public Iterator<UserKeyword> iterator() {

@@ -19,11 +19,15 @@ public class KeywordTreeFactory {
     public List<TreeNode> create(){
         List<TreeNode> keywordForest = new ArrayList<TreeNode>();
 
-        for(TestCase testCase : testCaseFile) {
-            KeywordData keywordData = createKeywordData(testCase, null, null);
+        ArrayList<TestCase> keywords = new ArrayList<TestCase>();
+        keywords.addAll(testCaseFile.getTestCases());
+        keywords.addAll(testCaseFile.getUserKeywords());
+
+        for(TestCase keyword : keywords){
+            KeywordData keywordData = createKeywordData(keyword, null, null);
             TreeNode root = new TreeNode(keywordData);
 
-            visitSteps(root, testCase, new HashMap<String, List<String>>());
+            visitSteps(root, keyword, new HashMap<String, List<String>>());
 
             keywordForest.add(root);
         }
