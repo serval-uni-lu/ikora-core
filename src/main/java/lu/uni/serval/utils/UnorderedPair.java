@@ -1,6 +1,7 @@
 package lu.uni.serval.utils;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class UnorderedPair<T> {
@@ -20,5 +21,14 @@ public class UnorderedPair<T> {
     @Override
     public int hashCode() {
         return set.hashCode();
+    }
+
+    public T first(){
+        return set.iterator().next();
+    }
+
+    public T second(){
+        set.iterator().next();
+        return set.iterator().next();
     }
 }

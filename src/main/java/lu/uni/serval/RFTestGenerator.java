@@ -43,19 +43,6 @@ public class RFTestGenerator {
                 System.out.println(tree.toString());
             }
 
-            System.out.println("----------------------------------------");
-            System.out.println("SYNONYMS");
-            System.out.println("----------------------------------------");
-            CloneDetection cloneDetection = new CloneDetection();
-            CloneResults clones = cloneDetection.findClones(forest);
-
-            for(Map.Entry<TreeNode, List<TreeNode>> synonyms : clones.getSynonym().entrySet()){
-                System.out.println(synonyms.getKey().getLabel());
-                for (TreeNode synonym: synonyms.getValue()){
-                    System.out.println("\t" + synonym.getLabel());
-                }
-            }
-
         } catch (ParseException e) {
             e.printStackTrace();
         }

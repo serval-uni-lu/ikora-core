@@ -82,8 +82,8 @@ public class CloneDetectionTest {
         CloneDetection cloneDetection = new CloneDetection();
         CloneResults results = cloneDetection.findClones(getTrees());
 
-        assertEquals(2, results.getSame().size());
-        assertEquals(3, results.getHomonym().size());
-        assertEquals(3, results.getSynonym().size());
+        assertEquals(1, results.getSame().size());
+        assertEquals(2, results.getHomonym().size());
+        assertEquals(2, results.getSynonym().size());
     }
 }
