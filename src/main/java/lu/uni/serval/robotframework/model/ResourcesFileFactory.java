@@ -4,8 +4,6 @@ import org.python.core.PyObject;
 import org.python.core.PyString;
 import org.python.util.PythonInterpreter;
 
-import java.io.File;
-
 public class ResourcesFileFactory extends TestCaseFileFactory {
 
     public ResourcesFileFactory() {

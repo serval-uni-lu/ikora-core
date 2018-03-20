@@ -5,8 +5,6 @@ import lu.uni.serval.analytics.CloneResults;
 import lu.uni.serval.robotframework.model.KeywordTreeFactory;
 import lu.uni.serval.robotframework.model.TestCaseFile;
 import lu.uni.serval.robotframework.model.TestCaseFileFactory;
-import lu.uni.serval.robotframework.execution.Runner;
-import lu.uni.serval.robotframework.report.Report;
 import lu.uni.serval.utils.tree.TreeNode;
 
 import org.apache.commons.cli.Options;
@@ -16,7 +14,6 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.MissingArgumentException;
 import org.apache.commons.cli.ParseException;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 

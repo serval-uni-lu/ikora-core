@@ -3,8 +3,6 @@ package lu.uni.serval.robotframework.execution.selenium;
 import lu.uni.serval.robotframework.report.Result;
 import org.openqa.selenium.WebElement;
 
-import java.util.List;
-
 public class FormElement {
     private Context context;
     private ElementFinder elementFinder;
