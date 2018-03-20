@@ -5,15 +5,15 @@ import lu.uni.serval.utils.ConsoleColors;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Report {
-    private List<Result> results;
+public class ExecutionReport {
+    private List<ExecutionResult> results;
     private String name;
 
-    public Report() {
-        results = new ArrayList<Result>();
+    public ExecutionReport() {
+        results = new ArrayList<ExecutionResult>();
     }
 
-    public void addResult(Result result) {
+    public void addResult(ExecutionResult result) {
         results.add(result);
     }
 
@@ -24,7 +24,7 @@ public class Report {
     public void print() {
         System.out.println(name);
 
-        for(Result result : results) {
+        for(ExecutionResult result : results) {
             String color = result.isError() ? ConsoleColors.RED : ConsoleColors.GREEN;
             String message = color + "\t" + result.getMessage() + ConsoleColors.RESET;
 

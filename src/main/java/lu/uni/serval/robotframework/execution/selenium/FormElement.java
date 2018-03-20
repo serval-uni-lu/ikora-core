@@ -1,6 +1,6 @@
 package lu.uni.serval.robotframework.execution.selenium;
 
-import lu.uni.serval.robotframework.report.Result;
+import lu.uni.serval.robotframework.report.ExecutionResult;
 import org.openqa.selenium.WebElement;
 
 public class FormElement {
@@ -13,8 +13,8 @@ public class FormElement {
     }
 
     @Keyword
-    public Result ClickButton(String locator) {
-        Result result = new Result(Result.Type.Execute);
+    public ExecutionResult ClickButton(String locator) {
+        ExecutionResult result = new ExecutionResult(ExecutionResult.Type.Execute);
         findElement(locator).click();
 
         if(!result.isError()) {
@@ -25,8 +25,8 @@ public class FormElement {
     }
 
     @Keyword
-    public Result InputPassword(String locator, String input) {
-        Result result = new Result(Result.Type.Execute);
+    public ExecutionResult InputPassword(String locator, String input) {
+        ExecutionResult result = new ExecutionResult(ExecutionResult.Type.Execute);
         inputTextIntoTextField(result, locator, input);
 
         if (!result.isError()) {
@@ -37,8 +37,8 @@ public class FormElement {
     }
 
     @Keyword
-    public Result InputText(String locator, String input) {
-        Result result = new Result(Result.Type.Execute);
+    public ExecutionResult InputText(String locator, String input) {
+        ExecutionResult result = new ExecutionResult(ExecutionResult.Type.Execute);
         inputTextIntoTextField(result, locator, input);
 
         if (!result.isError()) {
@@ -52,7 +52,7 @@ public class FormElement {
         return elementFinder.find(locator);
     }
 
-    private void inputTextIntoTextField(Result result, String locator, String input) {
+    private void inputTextIntoTextField(ExecutionResult result, String locator, String input) {
         WebElement element = findElement(locator);
 
         if(element != null) {

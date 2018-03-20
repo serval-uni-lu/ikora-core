@@ -4,7 +4,7 @@ import lu.uni.serval.robotframework.execution.selenium.BrowserManagement;
 import lu.uni.serval.robotframework.execution.selenium.Context;
 import lu.uni.serval.robotframework.execution.selenium.FormElement;
 import lu.uni.serval.robotframework.execution.selenium.Keyword;
-import lu.uni.serval.robotframework.report.Result;
+import lu.uni.serval.robotframework.report.ExecutionResult;
 import lu.uni.serval.utils.exception.InvalidNumberArgumentException;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
@@ -38,7 +38,7 @@ public class Dispatcher {
         return method.replaceAll("([A-Z])", " $1").trim().toLowerCase();
     }
 
-    public Result call(String keyword, List<String> arguments)
+    public ExecutionResult call(String keyword, List<String> arguments)
             throws InvocationTargetException, IllegalAccessException, InvalidNumberArgumentException {
 
         ImmutablePair<Object, Method> method = operations.get(keyword.trim().toLowerCase());
@@ -53,7 +53,7 @@ public class Dispatcher {
             arguments = arguments.subList(0, expect);
         }
 
-        return (Result)method.getRight().invoke(method.getLeft(), arguments.toArray());
+        return (ExecutionResult)method.getRight().invoke(method.getLeft(), arguments.toArray());
     }
 
     public void checkRequests() {

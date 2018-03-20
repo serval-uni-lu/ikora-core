@@ -1,6 +1,6 @@
 package lu.uni.serval.robotframework.execution.selenium;
 
-import lu.uni.serval.robotframework.report.Result;
+import lu.uni.serval.robotframework.report.ExecutionResult;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 
@@ -15,8 +15,8 @@ public class BrowserManagement {
     }
 
     @Keyword
-    public Result LocationShouldBe(String url) {
-        Result result = new Result(Result.Type.Assert);
+    public ExecutionResult LocationShouldBe(String url) {
+        ExecutionResult result = new ExecutionResult(ExecutionResult.Type.Assert);
 
         if(url.equalsIgnoreCase(getUrl())){
             result.setMessage("Page has correct url: " + url);
@@ -28,12 +28,12 @@ public class BrowserManagement {
     }
 
     @Keyword
-    public Result MaximizeBrowserWindow() {
+    public ExecutionResult MaximizeBrowserWindow() {
         java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
         int width = (int)Math.round(screenSize.getWidth());
         int height = (int)Math.round(screenSize.getHeight());
 
-        Result result = new Result(Result.Type.Execute);
+        ExecutionResult result = new ExecutionResult(ExecutionResult.Type.Execute);
         getDriver().manage().window().setSize(new Dimension(width, height));
         result.setMessage("Browser Window Maximized");
 
@@ -41,8 +41,8 @@ public class BrowserManagement {
     }
 
     @Keyword
-    public Result OpenBrowser(String url, String browser) throws UnknownHostException {
-        Result result = new Result(Result.Type.Execute);
+    public ExecutionResult OpenBrowser(String url, String browser) throws UnknownHostException {
+        ExecutionResult result = new ExecutionResult(ExecutionResult.Type.Execute);
 
         initializeDriver(browser, url);
         result.setMessage(browser + " browser open at page " + url);
@@ -51,8 +51,8 @@ public class BrowserManagement {
     }
 
     @Keyword
-    public Result SetSeleniumSpeed(String time) {
-        Result result = new Result(Result.Type.Execute);
+    public ExecutionResult SetSeleniumSpeed(String time) {
+        ExecutionResult result = new ExecutionResult(ExecutionResult.Type.Execute);
 
         //TODO: properly convert time
         int sec = Integer.parseInt(time);
@@ -63,8 +63,8 @@ public class BrowserManagement {
     }
 
     @Keyword
-    public Result TitleShouldBe(String title) {
-        Result result = new Result(Result.Type.Assert);
+    public ExecutionResult TitleShouldBe(String title) {
+        ExecutionResult result = new ExecutionResult(ExecutionResult.Type.Assert);
 
         if(title.equals(getTitle())) {
             result.setMessage("Page has correct title: " + title);

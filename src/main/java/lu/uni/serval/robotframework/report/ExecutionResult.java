@@ -1,6 +1,6 @@
 package lu.uni.serval.robotframework.report;
 
-public class Result {
+public class ExecutionResult {
     public enum Type {
         Assert, Execute, Unknown, Aborted
     }
@@ -14,7 +14,7 @@ public class Result {
     private Error error;
     private String message;
 
-    public Result(Type type) {
+    public ExecutionResult(Type type) {
         this.type = type;
         this.error = Error.None;
     }

@@ -1,7 +1,7 @@
 package lu.uni.serval.robotframework.execution;
 
-import lu.uni.serval.robotframework.report.Report;
-import lu.uni.serval.robotframework.report.Result;
+import lu.uni.serval.robotframework.report.ExecutionReport;
+import lu.uni.serval.robotframework.report.ExecutionResult;
 import lu.uni.serval.utils.KeywordData;
 import lu.uni.serval.utils.tree.TreeNode;
 import lu.uni.serval.utils.exception.InvalidNumberArgumentException;
@@ -17,8 +17,8 @@ public class Runner {
         this.dispatcher = new Dispatcher();
     }
 
-    public Result execute(String keyword, List<String> arguments) {
-        Result result;
+    public ExecutionResult execute(String keyword, List<String> arguments) {
+        ExecutionResult result;
 
         try {
             result = dispatcher.call(keyword, arguments);
@@ -27,13 +27,13 @@ public class Runner {
             }
         }
         catch (IllegalAccessException e){
-            result = new Result(Result.Type.Aborted);
-            result.setError(Result.Error.IllegalAccess);
+            result = new ExecutionResult(ExecutionResult.Type.Aborted);
+            result.setError(ExecutionResult.Error.IllegalAccess);
             result.setMessage(e.getMessage());
         }
         catch (InvocationTargetException e) {
-            result = new Result(Result.Type.Aborted);
-            result.setError(Result.Error.InvocationTarget);
+            result = new ExecutionResult(ExecutionResult.Type.Aborted);
+            result.setError(ExecutionResult.Error.InvocationTarget);
             result.setMessage("Invocation Target Error");
 
             try {
@@ -43,19 +43,19 @@ public class Runner {
             }
         }
         catch (InvalidNumberArgumentException e) {
-            result = new Result(Result.Type.Aborted);
+            result = new ExecutionResult(ExecutionResult.Type.Aborted);
             result.setWrongNumberArugmentError(e.expected, e.received);
         }
         catch (Exception e) {
-            result = new Result(Result.Type.Aborted);
+            result = new ExecutionResult(ExecutionResult.Type.Aborted);
             result.setMessage("Unknown exception occured");
         }
 
         return result;
     }
 
-    public Report executeKeyword(TreeNode root) {
-        Report report = new Report();
+    public ExecutionReport executeKeyword(TreeNode root) {
+        ExecutionReport report = new ExecutionReport();
 
         try{
             for(TreeNode leaf : root.getLeaves()) {
@@ -65,7 +65,7 @@ public class Runner {
 
                 KeywordData keyword = (KeywordData)leaf.data;
 
-                Result result = this.execute(keyword.getCleanName(), keyword.getCleanArguments());
+                ExecutionResult result = this.execute(keyword.getCleanName(), keyword.getCleanArguments());
                 report.addResult(result);
 
                 if(result.isAborted()) {
@@ -74,8 +74,8 @@ public class Runner {
             }
         }
         catch (WrongClassException e){
-            Result result = new Result(Result.Type.Aborted);
-            result.setError(Result.Error.Implementation);
+            ExecutionResult result = new ExecutionResult(ExecutionResult.Type.Aborted);
+            result.setError(ExecutionResult.Error.Implementation);
             result.setMessage(e.getMessage());
         }
 
