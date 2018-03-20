@@ -1,5 +1,7 @@
 package lu.uni.serval.utils.tree;
 
+import lu.uni.serval.utils.CompareCache;
+
 public class TreeEditDistance implements TreeDistance {
     private final EditScore score;
 
@@ -16,7 +18,7 @@ public class TreeEditDistance implements TreeDistance {
             throw new NullPointerException();
         }
 
-        EditMemory memory = new EditMemory();
+        CompareCache<TreeNode, ScoreElement> memory = new CompareCache<TreeNode, ScoreElement>();
         return distance(memory, tree1, tree2);
     }
 
@@ -31,9 +33,9 @@ public class TreeEditDistance implements TreeDistance {
         return distance / size;
     }
 
-    private double distance(EditMemory memory, TreeNode tree1, TreeNode tree2) {
-        if(memory.cached(tree1, tree2)) {
-            return memory.getScore(tree1, tree2);
+    private double distance(CompareCache<TreeNode, ScoreElement> memory, TreeNode tree1, TreeNode tree2) {
+        if(memory.isCached(tree1, tree2)) {
+            return memory.getScore(tree1, tree2).score;
         }
 
         double score;
@@ -69,22 +71,22 @@ public class TreeEditDistance implements TreeDistance {
             }
         }
 
-        memory.set(tree1, tree2, score, operation);
+        memory.set(tree1, tree2, new ScoreElement(score, operation));
         return score;
     }
 
-    private double calculateReplaceScore(EditMemory memory, TreeNode tree1, TreeNode tree2) {
+    private double calculateReplaceScore(CompareCache<TreeNode, ScoreElement> memory, TreeNode tree1, TreeNode tree2) {
         double s1 = distance(memory, getInside(tree1), getInside(tree2));
         double s2 = distance(memory, getOutside(tree1), getOutside(tree2));
         return s1 + s2 + score.replace(tree1, tree2);
     }
 
-    private double calculateInsertScore(EditMemory memory, TreeNode tree1, TreeNode tree2) {
+    private double calculateInsertScore(CompareCache<TreeNode, ScoreElement> memory, TreeNode tree1, TreeNode tree2) {
         TreeNode newTree = deleteHead(tree2);
         return distance(memory, tree1, newTree) + score.insert(newTree);
     }
 
-    private double calculateDeleteScore(EditMemory memory, TreeNode tree1, TreeNode tree2) {
+    private double calculateDeleteScore(CompareCache<TreeNode, ScoreElement> memory, TreeNode tree1, TreeNode tree2) {
         TreeNode newTree = deleteHead(tree1);
         return distance(memory, newTree, tree2) + score.delete(newTree);
     }
