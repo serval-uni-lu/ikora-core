@@ -20,6 +20,7 @@ public class CloneDetection {
 
         for (int i = 0; i < forest.size(); ++i){
             for (int j = i + 1; j < forest.size(); ++j){
+                System.out.println("Compare: " + forest.get(i).getLabel() + " -- " + forest.get(j).getLabel());
                 CloneIndex cloneIndex = computeCloneIndex(forest.get(i), forest.get(j));
                 results.update(cloneIndex, forest.get(i), forest.get(j));
             }
