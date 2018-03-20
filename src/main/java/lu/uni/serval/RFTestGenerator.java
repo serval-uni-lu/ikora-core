@@ -2,6 +2,7 @@ package lu.uni.serval;
 
 import lu.uni.serval.analytics.CloneDetection;
 import lu.uni.serval.analytics.CloneResults;
+import lu.uni.serval.analytics.XmlExport;
 import lu.uni.serval.robotframework.model.KeywordTreeFactory;
 import lu.uni.serval.robotframework.model.TestCaseFile;
 import lu.uni.serval.robotframework.model.TestCaseFileFactory;
@@ -14,14 +15,15 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.MissingArgumentException;
 import org.apache.commons.cli.ParseException;
 
+import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 public class RFTestGenerator {
     public static void main(String[] args) {
         try {
             Options options = new Options();
             options.addOption("file", true, "path to RobotFramework testcase file");
+            options.addOption("output", true, "path to output file. type depends on the action");
 
             CommandLineParser parser = new DefaultParser();
             CommandLine cmd = parser.parse(options, args);
@@ -43,7 +45,14 @@ public class RFTestGenerator {
                 System.out.println(tree.toString());
             }
 
+            CloneDetection cloneDetection = new CloneDetection();
+            final CloneResults results = cloneDetection.findClones(forest);
+
+            XmlExport.write(results, cmd.getOptionValue("output"));
+
         } catch (ParseException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

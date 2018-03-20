@@ -16,13 +16,25 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.InvalidPathException;
 import java.util.Map;
 
 public class XmlExport {
-    public static void write(CloneResults results, String path){
+    public static void write(CloneResults results, String filePath) throws IOException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+
+        File file = new File(filePath);
+
+        if(!file.exists()){
+            file.createNewFile();
+        }
+
+        if(!file.canWrite()){
+            throw new InvalidPathException(filePath, "not a valid file path");
+        }
 
         try {
             DocumentBuilder builder = factory.newDocumentBuilder();
@@ -44,7 +56,7 @@ public class XmlExport {
 
                 // send DOM to file
                 tr.transform(new DOMSource(dom),
-                        new StreamResult(new FileOutputStream(path)));
+                        new StreamResult(new FileOutputStream(filePath)));
 
             } catch (TransformerException te) {
                 System.out.println(te.getMessage());
