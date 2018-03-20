@@ -1,6 +1,7 @@
 package lu.uni.serval.utils;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -28,7 +29,9 @@ public class UnorderedPair<T> {
     }
 
     public T second(){
-        set.iterator().next();
-        return set.iterator().next();
+        Iterator<T> iterator = set.iterator();
+        iterator.next();
+
+        return iterator.next();
     }
 }
