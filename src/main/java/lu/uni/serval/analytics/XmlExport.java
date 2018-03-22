@@ -6,6 +6,7 @@ import lu.uni.serval.utils.UnorderedPair;
 import lu.uni.serval.utils.tree.TreeNode;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -29,7 +30,9 @@ public class XmlExport {
         File file = new File(filePath);
 
         if(!file.exists()){
-            file.createNewFile();
+            if(!file.createNewFile()){
+                throw new InvalidPathException(filePath, "failed to create file for this path");
+            }
         }
 
         if(!file.canWrite()){
@@ -42,8 +45,14 @@ public class XmlExport {
 
             Element root = dom.createElement("analytics");
 
-            Element synonyms = writeSynonyms(dom, results);
+            Element same = writeClones(dom, results, CloneResults.CloneType.Same);
+            root.appendChild(same);
+
+            Element synonyms = writeClones(dom, results, CloneResults.CloneType.Synonym);
             root.appendChild(synonyms);
+
+            Element homonyms = writeClones(dom, results, CloneResults.CloneType.Homonym);
+            root.appendChild(homonyms);
 
             dom.appendChild(root);
 
@@ -68,25 +77,45 @@ public class XmlExport {
         }
     }
 
-    private static Element writeSynonyms(Document dom, CloneResults results){
-        Element synonymsNode = dom.createElement("synonyms");
+    private static Element writeClones(Document dom, CloneResults results, CloneResults.CloneType type){
+        Element synonymsNode = dom.createElement(getParentTag(type));
 
-        final CompareCache<TreeNode, CloneIndex> synonyms = results.getSynonym();
-        for(Map.Entry<UnorderedPair<TreeNode>, CloneIndex> synonym: synonyms){
-            Element synonymNode = dom.createElement("synonym");
-            synonymNode.setAttribute("keywordIndex", String.valueOf(synonym.getValue().getKeywordRatio()));
-            synonymNode.setAttribute("treeIndex", String.valueOf(synonym.getValue().getTreeRatio()));
+        final CompareCache<TreeNode, CloneIndex> clones = results.getByType(type);
+        for(Map.Entry<UnorderedPair<TreeNode>, CloneIndex> clone: clones){
+            Element synonymNode = dom.createElement(getElementTag(type));
+            synonymNode.setAttribute("keywordIndex", String.valueOf(clone.getValue().getKeywordRatio()));
+            synonymNode.setAttribute("treeIndex", String.valueOf(clone.getValue().getTreeRatio()));
 
-            Element keyword1Node = writeKeyword(dom, synonym.getKey().first());
+            Element keyword1Node = writeKeyword(dom, clone.getKey().first());
             synonymNode.appendChild(keyword1Node);
 
-            Element keyword2Node = writeKeyword(dom, synonym.getKey().second());
+            Element keyword2Node = writeKeyword(dom, clone.getKey().second());
             synonymNode.appendChild(keyword2Node);
 
             synonymsNode.appendChild(synonymNode);
         }
 
         return synonymsNode;
+    }
+
+    private static String getParentTag(CloneResults.CloneType type){
+        switch (type){
+            case Same: return "sames";
+            case Homonym: return "homonyms";
+            case Synonym: return "synonyms";
+        }
+
+        throw new NotImplementedException();
+    }
+
+    private static String getElementTag(CloneResults.CloneType type){
+        switch (type){
+            case Same: return "same";
+            case Homonym: return "homonym";
+            case Synonym: return "synonym";
+        }
+
+        throw new NotImplementedException();
     }
 
     private static Element writeKeyword(Document dom, TreeNode keyword){

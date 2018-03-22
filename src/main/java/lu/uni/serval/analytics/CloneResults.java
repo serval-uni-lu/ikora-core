@@ -12,7 +12,7 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 public class CloneResults {
-    private enum CloneType{
+    public enum CloneType{
         None, Same, Synonym, Homonym
     }
 
@@ -36,6 +36,10 @@ public class CloneResults {
 
     public CompareCache<TreeNode, CloneIndex> getHomonym(){
         return results.get(CloneType.Homonym);
+    }
+
+    public CompareCache<TreeNode, CloneIndex> getByType(CloneType type){
+        return results.get(type);
     }
 
     public void update(CloneIndex cloneIndex, TreeNode tree1, TreeNode tree2) {
