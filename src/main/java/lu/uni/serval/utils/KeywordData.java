@@ -34,15 +34,7 @@ public class KeywordData implements TreeNodeData {
     }
 
     public String getLabel() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(cleanArgument(this.name));
-
-        for(int i = 0; i < arguments.size(); ++i) {
-            String argument = "\t ${" + i + "}";
-            stringBuilder.append(argument);
-        }
-
-        return stringBuilder.toString();
+        return toString();
     }
 
     public String getCleanName() {
