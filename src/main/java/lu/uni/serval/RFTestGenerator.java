@@ -1,8 +1,6 @@
 package lu.uni.serval;
 
-import lu.uni.serval.analytics.CloneDetection;
-import lu.uni.serval.analytics.CloneResults;
-import lu.uni.serval.analytics.XmlExport;
+import lu.uni.serval.analytics.*;
 import lu.uni.serval.robotframework.model.KeywordTreeFactory;
 import lu.uni.serval.robotframework.model.TestCaseFile;
 import lu.uni.serval.robotframework.model.TestCaseFileFactory;
@@ -46,9 +44,12 @@ public class RFTestGenerator {
             }
 
             CloneDetection cloneDetection = new CloneDetection();
-            final CloneResults results = cloneDetection.findClones(forest);
+            final CloneResults cloneResults = cloneDetection.findClones(forest);
 
-            XmlExport.write(results, cmd.getOptionValue("output"));
+            Statistics statistics = new Statistics();
+            final StatisticsResults statisticsResults = statistics.computeStatistics(forest);
+
+            XmlExport.write(statisticsResults, cloneResults, cmd.getOptionValue("output"));
 
         } catch (ParseException e) {
             e.printStackTrace();

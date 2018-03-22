@@ -24,7 +24,7 @@ import java.nio.file.InvalidPathException;
 import java.util.Map;
 
 public class XmlExport {
-    public static void write(CloneResults results, String filePath) throws IOException {
+    public static void write(StatisticsResults statisticsResults, CloneResults cloneResults, String filePath) throws IOException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
         File file = new File(filePath);
@@ -45,14 +45,15 @@ public class XmlExport {
 
             Element root = dom.createElement("analytics");
 
-            Element same = writeClones(dom, results, CloneResults.CloneType.Same);
-            root.appendChild(same);
+            if(statisticsResults != null){
+                Element statistics = createStatistics(statisticsResults, dom);
+                root.appendChild(statistics);
+            }
 
-            Element synonyms = writeClones(dom, results, CloneResults.CloneType.Synonym);
-            root.appendChild(synonyms);
-
-            Element homonyms = writeClones(dom, results, CloneResults.CloneType.Homonym);
-            root.appendChild(homonyms);
+            if(cloneResults != null){
+                Element clones = createClones(cloneResults, dom);
+                root.appendChild(clones);
+            }
 
             dom.appendChild(root);
 
@@ -75,6 +76,37 @@ public class XmlExport {
         } catch (ParserConfigurationException pce) {
             System.out.println("UsersXML: Error trying to instantiate DocumentBuilder " + pce);
         }
+    }
+
+    private static Element createStatistics(StatisticsResults statisticsResults, Document dom){
+        Element statistics = dom.createElement("statistics");
+
+        for(Map.Entry<String, Integer> integerStatistic: statisticsResults.getIntegerStatistics().entrySet()){
+            Element statistic = dom.createElement(integerStatistic.getKey());
+            statistic.setNodeValue(String.valueOf(integerStatistic.getValue()));
+        }
+
+        for(Map.Entry<String, Double> doubleStatistic: statisticsResults.getDoubleStatistics().entrySet()){
+            Element statistic = dom.createElement(doubleStatistic.getKey());
+            statistic.setNodeValue(String.valueOf(doubleStatistic.getValue()));
+        }
+
+        return statistics;
+    }
+
+    private static Element createClones(CloneResults cloneResults, Document dom) {
+        Element clones = dom.createElement("clones");
+
+        Element same = writeClones(dom, cloneResults, CloneResults.CloneType.Same);
+        clones.appendChild(same);
+
+        Element synonyms = writeClones(dom, cloneResults, CloneResults.CloneType.Synonym);
+        clones.appendChild(synonyms);
+
+        Element homonyms = writeClones(dom, cloneResults, CloneResults.CloneType.Homonym);
+        clones.appendChild(homonyms);
+
+        return clones;
     }
 
     private static Element writeClones(Document dom, CloneResults results, CloneResults.CloneType type){
