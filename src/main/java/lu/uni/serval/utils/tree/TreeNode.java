@@ -1,10 +1,7 @@
 package lu.uni.serval.utils.tree;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class TreeNode implements Iterable<TreeNode> {
 
@@ -46,9 +43,21 @@ public class TreeNode implements Iterable<TreeNode> {
         if (this.isRoot()) {
             return 0;
         }
-        else {
-            return this.parent.getLevel() + 1;
+
+        return this.parent.getLevel() + 1;
+    }
+
+    public int getDepth(){
+        if(this.isLeaf()){
+            return 0;
         }
+
+        int depth = 0;
+        for(TreeNode child: children){
+            depth = Math.max(depth, child.getDepth());
+        }
+
+        return depth + 1;
     }
 
     public List<TreeNode> getLeaves(){

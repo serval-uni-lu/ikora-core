@@ -41,7 +41,7 @@ public class Statistics {
 
         for(TreeNode tree: forest){
             updateStatistic(Type.Size, tree.getSize());
-            updateStatistic(Type.Depth, tree.getLevel());
+            updateStatistic(Type.Depth, tree.getDepth());
             updateStatistic(Type.Steps, tree.getLeaves().size());
         }
 
@@ -55,9 +55,9 @@ public class Statistics {
         results.setIntegerStatistics("MinimumDepth", statistics.get(Type.Depth).minimum );
         results.setDoubleStatistics("AverageDepth", statistics.get(Type.Depth).sum / numberOfKeywords);
 
-        results.setIntegerStatistics("MaximumSteps", statistics.get(Type.Size).maximum );
-        results.setIntegerStatistics("MinimumSteps", statistics.get(Type.Size).minimum );
-        results.setDoubleStatistics("AverageSteps", statistics.get(Type.Size).sum / numberOfKeywords);
+        results.setIntegerStatistics("MaximumSteps", statistics.get(Type.Steps).maximum );
+        results.setIntegerStatistics("MinimumSteps", statistics.get(Type.Steps).minimum );
+        results.setDoubleStatistics("AverageSteps", statistics.get(Type.Steps).sum / numberOfKeywords);
 
         return results;
     }
