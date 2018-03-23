@@ -83,12 +83,14 @@ public class XmlExport {
 
         for(Map.Entry<String, Integer> integerStatistic: statisticsResults.getIntegerStatistics().entrySet()){
             Element statistic = dom.createElement(integerStatistic.getKey());
-            statistic.setNodeValue(String.valueOf(integerStatistic.getValue()));
+            statistic.setAttribute("value", String.valueOf(integerStatistic.getValue()));
+            statistics.appendChild(statistic);
         }
 
         for(Map.Entry<String, Double> doubleStatistic: statisticsResults.getDoubleStatistics().entrySet()){
             Element statistic = dom.createElement(doubleStatistic.getKey());
-            statistic.setNodeValue(String.valueOf(doubleStatistic.getValue()));
+            statistic.setAttribute("value", String.valueOf(doubleStatistic.getValue()));
+            statistics.appendChild(statistic);
         }
 
         return statistics;
