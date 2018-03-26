@@ -34,8 +34,8 @@ public class CloneDetection {
 
     public CloneIndex computeCloneIndex(final TreeNode tree1, final TreeNode tree2){
         List<TreeNode> forest = new ArrayList<TreeNode>(2);
-        forest.set(0, tree1);
-        forest.set(0, tree1);
+        forest.add(tree1);
+        forest.add(tree2);
 
         Map<TreeNode, TreeNode> semanticMap = createSemanticMap(forest);
 
