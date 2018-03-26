@@ -119,6 +119,7 @@ public class XmlExport {
             Element synonymNode = dom.createElement(getElementTag(type));
             synonymNode.setAttribute("keywordIndex", String.valueOf(clone.getValue().getKeywordRatio()));
             synonymNode.setAttribute("treeIndex", String.valueOf(clone.getValue().getTreeRatio()));
+            synonymNode.setAttribute("semanticIndex", String.valueOf(clone.getValue().getSemanticRatio()));
 
             Element keyword1Node = writeKeyword(dom, clone.getKey().first());
             synonymNode.appendChild(keyword1Node);

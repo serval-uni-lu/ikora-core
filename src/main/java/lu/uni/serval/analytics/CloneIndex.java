@@ -3,20 +3,24 @@ package lu.uni.serval.analytics;
 public class CloneIndex {
     private final double treeThreshold;
     private final double keywordThreshold;
+
     private final double treeRatio;
     private final double keywordRatio;
+    private final double semanticRatio;
 
-    public CloneIndex(double keywordRatio, double treeRatio) {
+    public CloneIndex(double keywordRatio, double treeRatio, double semanticRatio) {
         this.treeRatio = treeRatio;
         this.keywordRatio = keywordRatio;
+        this.semanticRatio = semanticRatio;
 
         this.treeThreshold = 0.7;
         this.keywordThreshold = 0.7;
     }
 
-    public CloneIndex(double keywordRatio, double treeRatio, double keywordThreshold, double treeThreshold) {
+    public CloneIndex(double keywordRatio, double treeRatio, double semanticRatio, double keywordThreshold, double treeThreshold) {
         this.treeRatio = treeRatio;
         this.keywordRatio = keywordRatio;
+        this.semanticRatio = semanticRatio;
 
         this.treeThreshold = treeThreshold;
         this.keywordThreshold = keywordThreshold;
@@ -44,5 +48,9 @@ public class CloneIndex {
 
     public double getKeywordRatio(){
         return keywordRatio;
+    }
+
+    public double getSemanticRatio(){
+        return semanticRatio;
     }
 }
