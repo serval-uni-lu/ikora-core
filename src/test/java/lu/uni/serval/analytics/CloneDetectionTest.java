@@ -19,7 +19,7 @@ public class CloneDetectionTest {
             return trees;
         }
 
-        trees = new ArrayList<TreeNode>();
+        trees = new ArrayList<>();
 
         TreeNode tree0 = new TreeNode(new TreeNodeDataTest("a keyword"));
         tree0.addChild(new TreeNodeDataTest("1"));
