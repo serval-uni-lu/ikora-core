@@ -36,7 +36,7 @@ public class RFTestGenerator {
             String message = "argument '" + e.getMessage() + "' is missing";
             System.out.println(ConsoleColors.RED + "\t" + message + ConsoleColors.RESET);
         } catch (DuplicateNodeException e) {
-            e.printStackTrace();
+            System.out.println(ConsoleColors.RED + "\t" + e.getMessage() + ConsoleColors.RESET);
         }
     }
 }

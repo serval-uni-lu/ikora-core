@@ -99,7 +99,7 @@ public class TreeNode implements Iterable<TreeNode> {
 
     public TreeNode addChild(TreeNodeData child) throws DuplicateNodeException {
         if(isDataUnique && isAncestor(child)){
-            throw new DuplicateNodeException();
+            throw new DuplicateNodeException(child.toString());
         }
 
         TreeNode childNode = new TreeNode(child, isDataUnique);
