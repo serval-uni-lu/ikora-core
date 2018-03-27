@@ -1,5 +1,7 @@
 package lu.uni.serval.utils.tree;
 
+import lu.uni.serval.utils.exception.DuplicateNodeException;
+
 import javax.annotation.Nonnull;
 import java.util.*;
 
@@ -8,15 +10,17 @@ public class TreeNode implements Iterable<TreeNode> {
     public TreeNodeData data;
     public TreeNode parent;
     public List<TreeNode> children;
+    public boolean isDataUnique;
 
     private List<TreeNode> elementIndexes;
 
-    public TreeNode(TreeNodeData data) {
+    public TreeNode(TreeNodeData data, boolean isDataUnique) {
         this.parent = null;
         this.data = data;
-        this.children = new LinkedList<TreeNode>();
-        this.elementIndexes = new LinkedList<TreeNode>();
+        this.children = new LinkedList<>();
+        this.elementIndexes = new LinkedList<>();
         this.elementIndexes.add(this);
+        this.isDataUnique = isDataUnique;
     }
 
     public boolean isRoot(){
@@ -61,7 +65,7 @@ public class TreeNode implements Iterable<TreeNode> {
     }
 
     public List<TreeNode> getLeaves(){
-        List<TreeNode> leaves = new ArrayList<TreeNode>();
+        List<TreeNode> leaves = new ArrayList<>();
         getLeaves(leaves);
 
         return leaves;
@@ -93,37 +97,27 @@ public class TreeNode implements Iterable<TreeNode> {
         return parent.getChildNextSibling(this);
     }
 
-    public TreeNode addChild(TreeNodeData child){
-        TreeNode childNode = new TreeNode(child);
+    public TreeNode addChild(TreeNodeData child) throws DuplicateNodeException {
+        if(isDataUnique && isAncestor(child)){
+            throw new DuplicateNodeException();
+        }
+
+        TreeNode childNode = new TreeNode(child, isDataUnique);
         childNode.parent = this;
+
         this.children.add(childNode);
         this.registerChildForSearch(childNode);
 
         return childNode;
     }
 
-    public TreeNode findTreeNode(Comparable comparable) {
-        for (TreeNode element : this.elementIndexes) {
-            TreeNodeData elementData = element.data;
-            if (comparable.compareTo(elementData) == 0) {
-                return element;
-            }
-        }
-
-        return null;
-    }
-
-    public boolean isSubtree(TreeNode tree){
-        if(tree.data.isSame(data) && tree.getDepth() == getDepth()){
-            return true;
-        }
-
-        if(tree.getDepth() >= getDepth()){
+    public boolean isAncestor(TreeNodeData data){
+        if(parent == null){
             return false;
         }
 
-        for(TreeNode child: children){
-            if(child.isSubtree(tree)){
+        for(TreeNode node: parent){
+            if(node.data.isSame(data)){
                 return true;
             }
         }

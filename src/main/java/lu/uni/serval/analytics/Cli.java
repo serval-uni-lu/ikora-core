@@ -1,6 +1,7 @@
 package lu.uni.serval.analytics;
 
 import lu.uni.serval.utils.CommandRunner;
+import lu.uni.serval.utils.exception.DuplicateNodeException;
 import lu.uni.serval.utils.tree.TreeNode;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.MissingArgumentException;
@@ -18,7 +19,7 @@ public class Cli implements CommandRunner{
     }
 
     @Override
-    public void run(CommandLine cmd) throws MissingArgumentException {
+    public void run(CommandLine cmd) throws MissingArgumentException, DuplicateNodeException {
         if(!cmd.hasOption("output")){
             throw new MissingArgumentException("output");
         }

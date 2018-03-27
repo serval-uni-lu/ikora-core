@@ -1,6 +1,7 @@
 package lu.uni.serval.robotframework.model;
 
 import lu.uni.serval.utils.*;
+import lu.uni.serval.utils.exception.DuplicateNodeException;
 import lu.uni.serval.utils.tree.TreeNode;
 
 import java.util.ArrayList;
@@ -16,18 +17,18 @@ public class KeywordTreeFactory {
         this.testCaseFile = testCaseFile;
     }
 
-    public List<TreeNode> create(){
-        List<TreeNode> keywordForest = new ArrayList<TreeNode>();
+    public List<TreeNode> create() throws DuplicateNodeException {
+        List<TreeNode> keywordForest = new ArrayList<>();
 
-        ArrayList<TestCase> keywords = new ArrayList<TestCase>();
+        ArrayList<TestCase> keywords = new ArrayList<>();
         keywords.addAll(testCaseFile.getTestCases());
         keywords.addAll(testCaseFile.getUserKeywords());
 
         for(TestCase keyword : keywords){
             KeywordData keywordData = createKeywordData(keyword, null, null);
-            TreeNode root = new TreeNode(keywordData);
+            TreeNode root = new TreeNode(keywordData, true);
 
-            visitSteps(root, keyword, new HashMap<String, List<String>>());
+            visitSteps(root, keyword, new HashMap<>());
 
             keywordForest.add(root);
         }
@@ -35,7 +36,7 @@ public class KeywordTreeFactory {
         return keywordForest;
     }
 
-    private void visitSteps(TreeNode current, TestCase testCase, HashMap<String, List<String>> locals) {
+    private void visitSteps(TreeNode current, TestCase testCase, HashMap<String, List<String>> locals) throws DuplicateNodeException {
         for(Step step : testCase) {
             UserKeyword keyword = testCaseFile.findUserKeyword(step);
             KeywordData keywordData = createKeywordData(keyword, step, locals);

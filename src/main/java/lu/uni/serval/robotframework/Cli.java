@@ -4,6 +4,7 @@ import lu.uni.serval.robotframework.model.KeywordTreeFactory;
 import lu.uni.serval.robotframework.model.TestCaseFile;
 import lu.uni.serval.robotframework.model.TestCaseFileFactory;
 import lu.uni.serval.utils.CommandRunner;
+import lu.uni.serval.utils.exception.DuplicateNodeException;
 import lu.uni.serval.utils.tree.TreeNode;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.MissingArgumentException;
@@ -20,7 +21,7 @@ public class Cli implements CommandRunner{
     }
 
     @Override
-    public void run(CommandLine cmd) throws MissingArgumentException {
+    public void run(CommandLine cmd) throws MissingArgumentException, DuplicateNodeException {
         if (!cmd.hasOption("file")) {
             throw new MissingArgumentException("file");
         }

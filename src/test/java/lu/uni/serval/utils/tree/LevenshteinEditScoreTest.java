@@ -9,8 +9,8 @@ public class LevenshteinEditScoreTest {
 
     @Test
     public void checkReplaceWithDifferentLabels(){
-        TreeNode node1 = new TreeNode(new TreeNodeDataTest("First String"));
-        TreeNode node2 = new TreeNode(new TreeNodeDataTest("Second String"));
+        TreeNode node1 = new TreeNode(new TreeNodeDataTest("First String"), false);
+        TreeNode node2 = new TreeNode(new TreeNodeDataTest("Second String"), false);
         LevenshteinEditScore editScore = new LevenshteinEditScore();
 
         double score = editScore.replace(node1, node2);

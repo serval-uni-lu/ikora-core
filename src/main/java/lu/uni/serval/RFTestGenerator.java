@@ -1,6 +1,7 @@
 package lu.uni.serval;
 
 import lu.uni.serval.utils.ConsoleColors;
+import lu.uni.serval.utils.exception.DuplicateNodeException;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -34,6 +35,8 @@ public class RFTestGenerator {
         } catch (ParseException e) {
             String message = "argument '" + e.getMessage() + "' is missing";
             System.out.println(ConsoleColors.RED + "\t" + message + ConsoleColors.RESET);
+        } catch (DuplicateNodeException e) {
+            e.printStackTrace();
         }
     }
 }
