@@ -1,60 +1,39 @@
 package lu.uni.serval;
 
-import lu.uni.serval.analytics.*;
-import lu.uni.serval.robotframework.model.KeywordTreeFactory;
-import lu.uni.serval.robotframework.model.TestCaseFile;
-import lu.uni.serval.robotframework.model.TestCaseFileFactory;
-import lu.uni.serval.utils.tree.TreeNode;
-
+import lu.uni.serval.utils.ConsoleColors;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.MissingArgumentException;
 import org.apache.commons.cli.ParseException;
-
-import java.io.IOException;
-import java.util.List;
 
 public class RFTestGenerator {
     public static void main(String[] args) {
         try {
             Options options = new Options();
-            options.addOption("file", true, "path to RobotFramework testcase file");
-            options.addOption("output", true, "path to output file. type depends on the action");
+
+            lu.uni.serval.analytics.Cli analyticsCli = new lu.uni.serval.analytics.Cli();
+            lu.uni.serval.robotframework.Cli rfCli = new lu.uni.serval.robotframework.Cli();
+
+            rfCli.setCmdOptions(options);
+            analyticsCli.setCmdOptions(options);
+
+            options.addOption("verbose", "be extra verbose");
+            options.addOption("analytics", false, "run analytics");
 
             CommandLineParser parser = new DefaultParser();
             CommandLine cmd = parser.parse(options, args);
 
-            if (!cmd.hasOption("file")) {
-                throw new MissingArgumentException("file");
+            rfCli.run(cmd);
+
+            if(options.hasOption("analytics")){
+                analyticsCli.setForest(rfCli.getForest());
+                analyticsCli.run(cmd);
             }
-
-            TestCaseFileFactory factory = new TestCaseFileFactory();
-            TestCaseFile testCaseFile = factory.create(cmd.getOptionValue("file"));
-
-            KeywordTreeFactory keywordTreeFactory = new KeywordTreeFactory(testCaseFile);
-            List<TreeNode> forest = keywordTreeFactory.create();
-
-            System.out.println("----------------------------------------");
-            System.out.println("KEYWORD LIST");
-            System.out.println("----------------------------------------");
-            for(TreeNode tree: forest){
-                System.out.println(tree.toString());
-            }
-
-            CloneDetection cloneDetection = new CloneDetection();
-            final CloneResults cloneResults = cloneDetection.findClones(forest);
-
-            Statistics statistics = new Statistics();
-            final StatisticsResults statisticsResults = statistics.computeStatistics(forest);
-
-            XmlExport.write(statisticsResults, cloneResults, cmd.getOptionValue("output"));
 
         } catch (ParseException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+            String message = "argument '" + e.getMessage() + "' is missing";
+            System.out.println(ConsoleColors.RED + "\t" + message + ConsoleColors.RESET);
         }
     }
 }
