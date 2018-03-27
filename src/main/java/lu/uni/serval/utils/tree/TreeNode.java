@@ -113,6 +113,24 @@ public class TreeNode implements Iterable<TreeNode> {
         return null;
     }
 
+    public boolean isSubtree(TreeNode tree){
+        if(tree.data.isSame(data) && tree.getDepth() == getDepth()){
+            return true;
+        }
+
+        if(tree.getDepth() >= getDepth()){
+            return false;
+        }
+
+        for(TreeNode child: children){
+            if(child.isSubtree(tree)){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     @Override
     public String toString() {
         return buildString(new StringBuilder(),0).toString();
