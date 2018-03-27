@@ -59,11 +59,25 @@ public class CloneDetection {
         return semanticMap;
     }
 
-    private CloneIndex computeCloneIndex(final  TreeNode tree1, final TreeNode tree2, final Map<TreeNode, TreeNode> sementicMap){
-        double treeIndex = 1- treeEditDistance.index(tree1, tree2);
-        double keywordIndex = 1- levenshteinIndex(tree1.getLabel(), tree2.getLabel());
+    private CloneIndex computeCloneIndex(final TreeNode tree1, final TreeNode tree2, final Map<TreeNode, TreeNode> sementicMap){
+        double treeIndex;
+        double keywordIndex;
+
+        if(checkSubtree(tree1, tree2)){
+            treeIndex = -1;
+            keywordIndex = -1;
+        }
+        else{
+            treeIndex = 1- treeEditDistance.index(tree1, tree2);
+            keywordIndex = 1- levenshteinIndex(tree1.getLabel(), tree2.getLabel());
+        }
+
         double semanticIndex = 1 - treeEditDistance.index(sementicMap.get(tree1), sementicMap.get(tree2));
 
         return new CloneIndex(keywordIndex, treeIndex, semanticIndex);
+    }
+
+    private boolean checkSubtree(final TreeNode tree1, final TreeNode tree2){
+        return tree1.isSubtree(tree2) || tree2.isSubtree(tree1);
     }
 }
