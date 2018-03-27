@@ -10,4 +10,13 @@ public class TreeNodeDataTest implements TreeNodeData{
     public String getLabel() {
         return label;
     }
+
+    @Override
+    public boolean isSame(TreeNodeData other) {
+        if(! this.getClass().equals(other.getClass())){
+            return false;
+        }
+
+        return this.label.compareTo(((TreeNodeDataTest)other).label) == 0;
+    }
 }

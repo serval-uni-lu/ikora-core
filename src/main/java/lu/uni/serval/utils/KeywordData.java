@@ -37,6 +37,14 @@ public class KeywordData implements TreeNodeData {
         return toString();
     }
 
+    public boolean isSame(TreeNodeData other) {
+        if(! this.getClass().equals(other.getClass())){
+            return false;
+        }
+
+        return this.file == ((KeywordData)other).file && this.name == ((KeywordData)other).name;
+    }
+
     public String getCleanName() {
         return cleanArgument(this.name);
     }
