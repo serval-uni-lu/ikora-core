@@ -98,7 +98,7 @@ public class TreeNode implements Iterable<TreeNode> {
     }
 
     public TreeNode addChild(TreeNodeData child) throws DuplicateNodeException {
-        if(isDataUnique && isAncestor(child)){
+        if(isDataUnique && child.isValid() && isAncestor(child)){
             throw new DuplicateNodeException(child.toString());
         }
 
@@ -112,14 +112,14 @@ public class TreeNode implements Iterable<TreeNode> {
     }
 
     public boolean isAncestor(TreeNodeData data){
-        if(parent == null){
-            return false;
-        }
+        TreeNode ancestor = parent;
 
-        for(TreeNode node: parent){
-            if(node.data.isSame(data)){
+        while(ancestor != null){
+            if(ancestor.data.isSame(data)){
                 return true;
             }
+
+            ancestor = ancestor.parent;
         }
 
         return false;

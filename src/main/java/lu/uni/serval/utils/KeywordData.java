@@ -16,8 +16,8 @@ public class KeywordData implements TreeNodeData {
     public String documentation;
 
     public KeywordData(){
-        this.arguments = new  ArrayList<String>();
-        this.variables =  new HashMap<String, List<String>>();
+        this.arguments = new  ArrayList<>();
+        this.variables =  new HashMap<>();
     }
 
     @Override
@@ -42,7 +42,14 @@ public class KeywordData implements TreeNodeData {
             return false;
         }
 
-        return this.file == ((KeywordData)other).file && this.name == ((KeywordData)other).name;
+        return this.file.equals(((KeywordData)other).file)
+                && this.name.equals(((KeywordData)other).name)
+                && this.arguments.size() == ((KeywordData)other).arguments.size();
+    }
+
+    public boolean isValid() {
+        //TODO: Create better method to define valid nodes
+        return !this.name.equalsIgnoreCase("None") && !this.name.isEmpty();
     }
 
     public String getCleanName() {

@@ -19,4 +19,9 @@ public class TreeNodeDataTest implements TreeNodeData{
 
         return this.label.compareTo(((TreeNodeDataTest)other).label) == 0;
     }
+
+    @Override
+    public boolean isValid() {
+        return !label.isEmpty();
+    }
 }
