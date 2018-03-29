@@ -64,9 +64,13 @@ public class CloneDetection {
         double treeIndex;
         double keywordIndex;
 
-        if(checkSubtree(tree1, tree2)){
-            treeIndex = -1;
-            keywordIndex = -1;
+        if(checkSubtree(tree1, tree2)) {
+            treeIndex = CloneIndex.Ignore.Subtree.getValue();
+            keywordIndex = CloneIndex.Ignore.Subtree.getValue();
+        }
+        else if(tree1.children.size() == 1 && tree2.children.size() == 1) {
+            treeIndex = CloneIndex.Ignore.OneStep.getValue();
+            keywordIndex = CloneIndex.Ignore.OneStep.getValue();
         }
         else{
             treeIndex = 1- treeEditDistance.index(tree1, tree2);
@@ -83,7 +87,6 @@ public class CloneDetection {
     }
 
     private boolean isSubtree(TreeNode tree1, TreeNode tree2){
-        //TODO: Create a proper subtree algorithm
         if(!tree1.isDataUnique){
             return false;
         }

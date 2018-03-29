@@ -1,6 +1,21 @@
 package lu.uni.serval.analytics;
 
 public class CloneIndex {
+    public enum Ignore{
+        Subtree(-1.0),
+        OneStep(-2.0);
+
+        private final double ignore;
+
+        Ignore(double ignore) {
+            this.ignore = ignore;
+        }
+
+        public double getValue(){
+            return ignore;
+        }
+    }
+    
     private final double treeThreshold;
     private final double keywordThreshold;
 
