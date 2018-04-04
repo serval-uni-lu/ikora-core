@@ -27,7 +27,7 @@ public class Statistics {
     private Map<Type, StaticitcsElement> statistics;
 
     public Statistics(){
-        statistics = new HashMap<Type, StaticitcsElement>();
+        statistics = new HashMap<>();
         statistics.put(Type.Size, new StaticitcsElement());
         statistics.put(Type.Depth, new StaticitcsElement());
         statistics.put(Type.Steps, new StaticitcsElement());

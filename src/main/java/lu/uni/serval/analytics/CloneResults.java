@@ -3,13 +3,8 @@ package lu.uni.serval.analytics;
 import lu.uni.serval.utils.CompareCache;
 import lu.uni.serval.utils.tree.TreeNode;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
 
 public class CloneResults {
     public enum CloneType{
@@ -19,11 +14,11 @@ public class CloneResults {
     private Map<CloneType, CompareCache<TreeNode, CloneIndex>> results;
 
     public CloneResults(){
-        results = new HashMap<CloneType, CompareCache<TreeNode, CloneIndex>>();
+        results = new HashMap<>();
 
-        results.put(CloneType.Same, new CompareCache<TreeNode, CloneIndex>());
-        results.put(CloneType.Synonym, new CompareCache<TreeNode, CloneIndex>());
-        results.put(CloneType.Homonym, new CompareCache<TreeNode, CloneIndex>());
+        results.put(CloneType.Same, new CompareCache<>());
+        results.put(CloneType.Synonym, new CompareCache<>());
+        results.put(CloneType.Homonym, new CompareCache<>());
     }
 
     public CompareCache<TreeNode, CloneIndex> getSame(){

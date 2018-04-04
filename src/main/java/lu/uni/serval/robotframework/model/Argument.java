@@ -27,7 +27,7 @@ public class Argument {
     }
 
     public List<String> findVariables() {
-        List<String> variables = new ArrayList<String>();
+        List<String> variables = new ArrayList<>();
 
         Pattern pattern = Pattern.compile("\\$\\{(.*?)\\}");
         Matcher matcher = pattern.matcher(this.value);

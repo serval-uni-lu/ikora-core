@@ -5,8 +5,8 @@ import opennlp.tools.util.StringUtil;
 import lu.uni.serval.utils.CompareCache;
 
 public class StringUtils {
-    private static CompareCache<String, Integer> levenshteinDistanceMemory = new CompareCache<String, Integer>();
-    private static CompareCache<String, Double> levenshteinIndexMemory = new CompareCache<String, Double>();
+    private static CompareCache<String, Integer> levenshteinDistanceMemory = new CompareCache<>();
+    private static CompareCache<String, Double> levenshteinIndexMemory = new CompareCache<>();
 
     public static int levenshteinDistance(String string1, String string2){
         if(levenshteinDistanceMemory.isCached(string1, string2)){

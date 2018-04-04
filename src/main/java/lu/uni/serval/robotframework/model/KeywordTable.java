@@ -9,7 +9,7 @@ public class KeywordTable implements Iterable<UserKeyword> {
     private List<UserKeyword> userKeywordList;
 
     public KeywordTable(){
-        userKeywordList = new ArrayList<UserKeyword>();
+        userKeywordList = new ArrayList<>();
     }
 
     public List<UserKeyword> getUserKeywords(){

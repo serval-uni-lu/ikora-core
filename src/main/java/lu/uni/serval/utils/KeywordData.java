@@ -57,7 +57,7 @@ public class KeywordData implements TreeNodeData {
     }
 
     public List<String> getCleanArguments() {
-        List<String> cleanArguments = new ArrayList<String>();
+        List<String> cleanArguments = new ArrayList<>();
 
         for(String argument : arguments) {
             cleanArguments.add(cleanArgument(argument));

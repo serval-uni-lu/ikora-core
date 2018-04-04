@@ -4,12 +4,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class StatisticsResults {
-    Map<String, Integer> integerStatistics;
-    Map<String, Double> doubleStatistics;
+    private Map<String, Integer> integerStatistics;
+    private Map<String, Double> doubleStatistics;
 
     StatisticsResults(){
-        integerStatistics = new HashMap<String, Integer>();
-        doubleStatistics = new HashMap<String, Double>();
+        integerStatistics = new HashMap<>();
+        doubleStatistics = new HashMap<>();
     }
 
     public void setDoubleStatistics(String name, double value) {

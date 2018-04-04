@@ -1,5 +1,6 @@
 package lu.uni.serval.robotframework.model;
 
+import javax.annotation.Nonnull;
 import java.util.Iterator;
 import java.util.List;
 
@@ -32,6 +33,7 @@ public class TestCase implements Iterable<Step> {
         return steps;
     }
 
+    @Nonnull
     public Iterator<Step> iterator() {
         return steps.iterator();
     }

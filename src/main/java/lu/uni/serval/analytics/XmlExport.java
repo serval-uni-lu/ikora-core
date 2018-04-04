@@ -68,10 +68,8 @@ public class XmlExport {
                 tr.transform(new DOMSource(dom),
                         new StreamResult(new FileOutputStream(filePath)));
 
-            } catch (TransformerException te) {
-                System.out.println(te.getMessage());
-            } catch (IOException ioe) {
-                System.out.println(ioe.getMessage());
+            } catch (TransformerException | IOException e) {
+                System.out.println(e.getMessage());
             }
         } catch (ParserConfigurationException pce) {
             System.out.println("UsersXML: Error trying to instantiate DocumentBuilder " + pce);

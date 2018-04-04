@@ -10,7 +10,7 @@ public class ExecutionReport {
     private String name;
 
     public ExecutionReport() {
-        results = new ArrayList<ExecutionResult>();
+        results = new ArrayList<>();
     }
 
     public void addResult(ExecutionResult result) {

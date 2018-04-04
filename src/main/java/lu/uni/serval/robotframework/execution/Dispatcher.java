@@ -17,7 +17,7 @@ public class Dispatcher {
     private Context context;
 
     public Dispatcher(){
-        this.operations = new HashMap<String, ImmutablePair<Object, Method>>();
+        this.operations = new HashMap<>();
         this.context = new Context();
 
         subscribeKeywords(new BrowserManagement(this.context));
@@ -25,7 +25,7 @@ public class Dispatcher {
     }
 
     private void subscribeKeywords(Object object) {
-        final List<Method> allMethods = new ArrayList<Method>(Arrays.asList(object.getClass().getDeclaredMethods()));
+        final List<Method> allMethods = new ArrayList<>(Arrays.asList(object.getClass().getDeclaredMethods()));
 
         for (final Method method : allMethods) {
             if (method.isAnnotationPresent(Keyword.class)) {
