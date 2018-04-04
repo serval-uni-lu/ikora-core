@@ -1,12 +1,11 @@
 package lu.uni.serval;
 
+import lu.uni.serval.utils.Configuration;
 import lu.uni.serval.utils.ConsoleColors;
 import lu.uni.serval.utils.exception.DuplicateNodeException;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.DefaultParser;
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.ParseException;
+import org.apache.commons.cli.*;
+
+import java.io.IOException;
 
 public class RFTestGenerator {
     public static void main(String[] args) {
@@ -19,17 +18,23 @@ public class RFTestGenerator {
             rfCli.setCmdOptions(options);
             analyticsCli.setCmdOptions(options);
 
-            options.addOption("verbose", "be extra verbose");
-            options.addOption("analytics", false, "run analytics");
+            options.addOption("config", true, "path to the json configuration file");
 
             CommandLineParser parser = new DefaultParser();
             CommandLine cmd = parser.parse(options, args);
 
-            rfCli.run(cmd);
+            if(!cmd.hasOption("config")){
+                throw new MissingArgumentException("config");
+            }
 
-            if(options.hasOption("analytics")){
+            Configuration.initialize(cmd.getOptionValue("config"));
+            Configuration config = Configuration.getInstance();
+
+            rfCli.run();
+
+            if(config.hasPlugin("analytics")){
                 analyticsCli.setForest(rfCli.getForest());
-                analyticsCli.run(cmd);
+                analyticsCli.run();
             }
 
         } catch (ParseException e) {
@@ -37,6 +42,8 @@ public class RFTestGenerator {
             System.out.println(ConsoleColors.RED + "\t" + message + ConsoleColors.RESET);
         } catch (DuplicateNodeException e) {
             System.out.println(ConsoleColors.RED + "\t" + e.getMessage() + ConsoleColors.RESET);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

@@ -4,10 +4,9 @@ import lu.uni.serval.robotframework.model.KeywordTreeFactory;
 import lu.uni.serval.robotframework.model.TestCaseFile;
 import lu.uni.serval.robotframework.model.TestCaseFileFactory;
 import lu.uni.serval.utils.CommandRunner;
+import lu.uni.serval.utils.Configuration;
 import lu.uni.serval.utils.exception.DuplicateNodeException;
 import lu.uni.serval.utils.tree.TreeNode;
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.MissingArgumentException;
 import org.apache.commons.cli.Options;
 
 import java.util.ArrayList;
@@ -21,18 +20,15 @@ public class Cli implements CommandRunner{
     }
 
     @Override
-    public void run(CommandLine cmd) throws MissingArgumentException, DuplicateNodeException {
-        if (!cmd.hasOption("file")) {
-            throw new MissingArgumentException("file");
-        }
-
+    public void run() throws DuplicateNodeException {
+        Configuration config = Configuration.getInstance();
         TestCaseFileFactory factory = new TestCaseFileFactory();
-        TestCaseFile testCaseFile = factory.create(cmd.getOptionValue("file"));
+        TestCaseFile testCaseFile = factory.create(config.getTestCaseFile());
 
         KeywordTreeFactory keywordTreeFactory = new KeywordTreeFactory(testCaseFile);
         forest = keywordTreeFactory.create();
 
-        if(cmd.hasOption("verbose")){
+        if(config.isVerbose()){
             System.out.println("----------------------------------------");
             System.out.println("KEYWORD LIST");
             System.out.println("----------------------------------------");
