@@ -113,6 +113,8 @@ public class XmlExport {
         Element synonymsNode = dom.createElement(getParentTag(type));
 
         final CompareCache<TreeNode, CloneIndex> clones = results.getByType(type);
+        synonymsNode.setAttribute("size", String.valueOf(clones.size()));
+
         for(Map.Entry<UnorderedPair<TreeNode>, CloneIndex> clone: clones){
             Element synonymNode = dom.createElement(getElementTag(type));
             synonymNode.setAttribute("keywordIndex", String.valueOf(clone.getValue().getKeywordRatio()));
@@ -155,6 +157,7 @@ public class XmlExport {
         Element keywordNode = dom.createElement("keyword");
         keywordNode.setAttribute("name", ((KeywordData)keyword.data).name);
         keywordNode.setAttribute("file", ((KeywordData)keyword.data).file);
+        keywordNode.setAttribute("steps", String.valueOf(keyword.children.size()));
 
         return keywordNode;
     }
