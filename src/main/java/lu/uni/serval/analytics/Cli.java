@@ -30,7 +30,7 @@ public class Cli implements CommandRunner{
         final StatisticsResults statisticsResults = statistics.computeStatistics(forest);
 
         try {
-            XmlExport.write(statisticsResults, cloneResults, analytics.getOutputFile());
+            XmlExport.write(statisticsResults, cloneResults, (String)analytics.getAddictionalProperty("output file"));
         } catch (IOException e) {
             e.printStackTrace();
         }

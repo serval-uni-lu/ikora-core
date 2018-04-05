@@ -6,17 +6,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-        "name",
-        "outputFile"
-})
 
 public class Plugin {
 
     @JsonProperty("name")
     private String name;
-    @JsonProperty("output file")
-    private String outputFile;
+    @JsonProperty("version")
+    private String version;
 
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<>();
@@ -31,14 +27,14 @@ public class Plugin {
         this.name = name;
     }
 
-    @JsonProperty("outputFile")
-    public String getOutputFile() {
-        return outputFile;
+    @JsonProperty("version")
+    public String getVersion() {
+        return version;
     }
 
-    @JsonProperty("outputFile")
-    public void setOutputFile(String outputFile) {
-        this.outputFile = outputFile;
+    @JsonProperty("version")
+    public void setVersion(String version) {
+        this.version = version;
     }
 
     @JsonAnyGetter
@@ -49,6 +45,10 @@ public class Plugin {
     @JsonAnySetter
     public void setAdditionalProperty(String name, Object value) {
         this.additionalProperties.put(name, value);
+    }
+
+    public Object getAddictionalProperty(String name){
+        return additionalProperties.get(name);
     }
 
 }
