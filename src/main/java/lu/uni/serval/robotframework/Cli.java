@@ -38,11 +38,6 @@ public class Cli implements CommandRunner{
         }
     }
 
-    @Override
-    public void setCmdOptions(Options options) {
-        options.addOption("file", true, "path to RobotFramework testcase file");
-    }
-
     public List<TreeNode> getForest() {
         return forest;
     }

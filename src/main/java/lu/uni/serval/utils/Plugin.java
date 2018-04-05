@@ -51,4 +51,17 @@ public class Plugin {
         return additionalProperties.get(name);
     }
 
+    public Object getAddictionalProperty(String name, Object defaultValue){
+        if(!additionalProperties.containsKey(name)){
+            return defaultValue;
+        }
+
+        Object value = additionalProperties.get(name);
+
+        if(value.getClass() != defaultValue.getClass()){
+            return defaultValue;
+        }
+
+        return value;
+    }
 }

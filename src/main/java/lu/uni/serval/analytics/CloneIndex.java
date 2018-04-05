@@ -16,8 +16,8 @@ public class CloneIndex {
         }
     }
     
-    private final double treeThreshold;
-    private final double keywordThreshold;
+    private static double treeThreshold = 0.9;
+    private static double keywordThreshold = 0.9;
 
     private final double treeRatio;
     private final double keywordRatio;
@@ -27,18 +27,6 @@ public class CloneIndex {
         this.treeRatio = treeRatio;
         this.keywordRatio = keywordRatio;
         this.semanticRatio = semanticRatio;
-
-        this.treeThreshold = 0.7;
-        this.keywordThreshold = 0.7;
-    }
-
-    public CloneIndex(double keywordRatio, double treeRatio, double semanticRatio, double keywordThreshold, double treeThreshold) {
-        this.treeRatio = treeRatio;
-        this.keywordRatio = keywordRatio;
-        this.semanticRatio = semanticRatio;
-
-        this.treeThreshold = treeThreshold;
-        this.keywordThreshold = keywordThreshold;
     }
 
     public boolean isClone(){
@@ -67,5 +55,13 @@ public class CloneIndex {
 
     public double getSemanticRatio(){
         return semanticRatio;
+    }
+
+    public static void setKeywordThreshold(double keywordThreshold) {
+        CloneIndex.keywordThreshold = keywordThreshold;
+    }
+
+    public static void setTreeThreshold(double treeThreshold){
+        CloneIndex.treeThreshold = treeThreshold;
     }
 }

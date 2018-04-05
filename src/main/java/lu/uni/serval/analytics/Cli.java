@@ -5,7 +5,6 @@ import lu.uni.serval.utils.Configuration;
 import lu.uni.serval.utils.Plugin;
 import lu.uni.serval.utils.exception.DuplicateNodeException;
 import lu.uni.serval.utils.tree.TreeNode;
-import org.apache.commons.cli.Options;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,6 +22,9 @@ public class Cli implements CommandRunner{
         Configuration config = Configuration.getInstance();
         Plugin analytics = config.getPlugin("analytics");
 
+        CloneIndex.setKeywordThreshold((double)analytics.getAddictionalProperty("keyword threshold", 0.9));
+        CloneIndex.setTreeThreshold((double)analytics.getAddictionalProperty("tree threshold", 0.9));
+
         CloneDetection cloneDetection = new CloneDetection();
         final CloneResults cloneResults = cloneDetection.findClones(forest);
 
@@ -34,12 +36,6 @@ public class Cli implements CommandRunner{
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public void setCmdOptions(Options options) {
-        options.addOption("output", true, "path to output file. type depends on the action");
-        options.addOption("threshold", true, "threshold value under which two keywords are considered dissimilar");
     }
 
     public void setForest(final List<TreeNode> forest){

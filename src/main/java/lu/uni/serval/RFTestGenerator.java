@@ -15,9 +15,6 @@ public class RFTestGenerator {
             lu.uni.serval.analytics.Cli analyticsCli = new lu.uni.serval.analytics.Cli();
             lu.uni.serval.robotframework.Cli rfCli = new lu.uni.serval.robotframework.Cli();
 
-            rfCli.setCmdOptions(options);
-            analyticsCli.setCmdOptions(options);
-
             options.addOption("config", true, "path to the json configuration file");
 
             CommandLineParser parser = new DefaultParser();
