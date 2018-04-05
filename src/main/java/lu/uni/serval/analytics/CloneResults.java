@@ -1,11 +1,13 @@
 package lu.uni.serval.analytics;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lu.uni.serval.utils.CompareCache;
 import lu.uni.serval.utils.tree.TreeNode;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@JsonSerialize(using = CloneResultSerializer.class)
 public class CloneResults {
     public enum CloneType{
         None, Same, Synonym, Homonym
