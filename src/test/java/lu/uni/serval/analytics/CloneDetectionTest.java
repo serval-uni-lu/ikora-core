@@ -6,6 +6,7 @@ import lu.uni.serval.Globals;
 import lu.uni.serval.utils.exception.DuplicateNodeException;
 import lu.uni.serval.utils.tree.TreeNode;
 import lu.uni.serval.utils.tree.TreeNodeDataTest;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -82,6 +83,12 @@ public class CloneDetectionTest {
 
     private static TreeNode getTree(int index){
         return getTrees().get(index);
+    }
+
+    @BeforeClass
+    public static void prepareCloneIndex(){
+        CloneIndex.setTreeThreshold(0.7);
+        CloneIndex.setKeywordThreshold(0.7);
     }
 
     @Test
