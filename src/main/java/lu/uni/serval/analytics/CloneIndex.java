@@ -57,6 +57,14 @@ public class CloneIndex {
         return semanticRatio;
     }
 
+    public static double getKeywordThreshold(){
+        return CloneIndex.keywordThreshold;
+    }
+
+    public static double getTreeThreshold(){
+        return CloneIndex.treeThreshold;
+    }
+
     public static void setKeywordThreshold(double keywordThreshold) {
         CloneIndex.keywordThreshold = keywordThreshold;
     }

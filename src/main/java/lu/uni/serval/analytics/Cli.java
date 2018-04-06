@@ -1,11 +1,13 @@
 package lu.uni.serval.analytics;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lu.uni.serval.utils.CommandRunner;
 import lu.uni.serval.utils.Configuration;
 import lu.uni.serval.utils.Plugin;
 import lu.uni.serval.utils.exception.DuplicateNodeException;
 import lu.uni.serval.utils.tree.TreeNode;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,8 +33,15 @@ public class Cli implements CommandRunner{
         Statistics statistics = new Statistics();
         final StatisticsResults statisticsResults = statistics.computeStatistics(forest);
 
+        ObjectMapper mapper = new ObjectMapper();
         try {
-            XmlExport.write(statisticsResults, cloneResults, (String)analytics.getAddictionalProperty("output file"));
+            JsonExport export = new JsonExport();
+            export.setClones(cloneResults);
+            export.setGeneralStatistics(statisticsResults);
+
+            File file = new File((String)analytics.getAddictionalProperty("output file", "./analytics.json"));
+
+            mapper.writeValue(file, export);
         } catch (IOException e) {
             e.printStackTrace();
         }

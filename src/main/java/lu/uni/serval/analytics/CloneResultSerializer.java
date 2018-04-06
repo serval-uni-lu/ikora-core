@@ -25,9 +25,14 @@ public class CloneResultSerializer extends StdSerializer<CloneResults> {
     public void serialize(CloneResults cloneResults, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException, JsonGenerationException {
         jsonGenerator.writeStartObject();
 
+        jsonGenerator.writeStringField("keyword threshold", String.valueOf(CloneIndex.getKeywordThreshold()));
+        jsonGenerator.writeStringField("tree threshold", String.valueOf(CloneIndex.getTreeThreshold()));
+
         for (CloneResults.CloneType type : CloneResults.CloneType.values()) {
             writeJsonClones(jsonGenerator, type.name(), cloneResults.getByType(type));
         }
+
+        jsonGenerator.writeEndObject();
     }
 
     private void writeJsonClones(JsonGenerator jsonGenerator, String name, CompareCache<TreeNode, CloneIndex> clones) throws IOException {
