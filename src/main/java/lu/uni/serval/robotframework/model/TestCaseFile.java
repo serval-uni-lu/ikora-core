@@ -5,6 +5,7 @@ import java.util.*;
 
 public class TestCaseFile implements Iterable<TestCase> {
     private String directory;
+    private String path;
     private String name;
     private Settings settings;
     private TestCaseTable testCaseTable;
@@ -12,9 +13,10 @@ public class TestCaseFile implements Iterable<TestCase> {
     private VariableTable variableTable;
     private Map<String, List<String>> variableDictionary;
 
-    public TestCaseFile(String directory, String name, Settings settings, TestCaseTable testCaseTable,
+    public TestCaseFile(String directory, String path, String name, Settings settings, TestCaseTable testCaseTable,
                         KeywordTable keywordTable, VariableTable variableTable) {
         this.directory = directory;
+        this.path = path;
         this.name = name;
         this.settings = settings;
         this.testCaseTable = testCaseTable;
@@ -25,6 +27,10 @@ public class TestCaseFile implements Iterable<TestCase> {
 
     public String getDirectory(){
         return this.directory;
+    }
+
+    public String getPath() {
+        return path;
     }
 
     public String getName() {

@@ -11,42 +11,48 @@ import java.util.Map;
 
 public class KeywordTreeFactory {
 
-    private TestCaseFile testCaseFile;
+    private Project project;
 
-    public KeywordTreeFactory(TestCaseFile testCaseFile) {
-        this.testCaseFile = testCaseFile;
+    public KeywordTreeFactory(Project project) {
+        this.project = project;
     }
 
     public List<TreeNode> create() throws DuplicateNodeException {
         List<TreeNode> keywordForest = new ArrayList<>();
 
-        ArrayList<TestCase> keywords = new ArrayList<>();
-        keywords.addAll(testCaseFile.getTestCases());
-        keywords.addAll(testCaseFile.getUserKeywords());
-
-        for(TestCase keyword : keywords){
-            KeywordData keywordData = createKeywordData(keyword, null, null);
-            TreeNode root = new TreeNode(keywordData, true);
-
-            visitSteps(root, keyword, new HashMap<>());
-
-            keywordForest.add(root);
+        for(TestCaseFile testCaseFile: project.getTestCaseFiles()){
+            readFile(testCaseFile, keywordForest);
         }
 
         return keywordForest;
     }
 
-    private void visitSteps(TreeNode current, TestCase testCase, HashMap<String, List<String>> locals) throws DuplicateNodeException {
-        for(Step step : testCase) {
-            UserKeyword keyword = testCaseFile.findUserKeyword(step);
-            KeywordData keywordData = createKeywordData(keyword, step, locals);
+    void readFile(TestCaseFile testCaseFile, List<TreeNode> keywordForest) throws DuplicateNodeException {
+        ArrayList<TestCase> keywords = new ArrayList<>();
+        keywords.addAll(testCaseFile.getTestCases());
+        keywords.addAll(testCaseFile.getUserKeywords());
 
-            TreeNode child =  current.addChild(keywordData);
-            visitSteps(child, keyword, (HashMap)locals.clone());
+        for(TestCase keyword : keywords){
+            KeywordData keywordData = createKeywordData(testCaseFile, keyword, null, null);
+            TreeNode root = new TreeNode(keywordData, true);
+
+            visitSteps(testCaseFile, root, keyword, new HashMap<>());
+
+            keywordForest.add(root);
         }
     }
 
-    private void setArguments(UserKeyword keyword, KeywordData keywordData, Step step, Map<String, List<String>> locals){
+    private void visitSteps(TestCaseFile testCaseFile, TreeNode current, TestCase testCase, HashMap<String, List<String>> locals) throws DuplicateNodeException {
+        for(Step step : testCase) {
+            UserKeyword keyword = testCaseFile.findUserKeyword(step);
+            KeywordData keywordData = createKeywordData(testCaseFile, keyword, step, locals);
+
+            TreeNode child =  current.addChild(keywordData);
+            visitSteps(testCaseFile, child, keyword, (HashMap)locals.clone());
+        }
+    }
+
+    private void setArguments(TestCaseFile testCaseFile, UserKeyword keyword, KeywordData keywordData, Step step, Map<String, List<String>> locals){
         for (Argument argument : keyword.getArguments()) {
 
             if(argument.hasVariable()) {
@@ -66,7 +72,7 @@ public class KeywordTreeFactory {
         }
     }
 
-    private void setName(TestCase testCase, KeywordData keywordData) {
+    private void setName(TestCaseFile testCaseFile, TestCase testCase, KeywordData keywordData) {
         Argument name = testCase.getName();
 
         if(name.hasVariable()) {
@@ -77,14 +83,14 @@ public class KeywordTreeFactory {
         keywordData.name  = name.toString();
     }
 
-    private KeywordData createKeywordData(TestCase testCase, Step step, Map<String, List<String>> locals) {
+    private KeywordData createKeywordData(TestCaseFile testCaseFile, TestCase testCase, Step step, Map<String, List<String>> locals) {
         KeywordData keywordData = new KeywordData();
         keywordData.file = testCase.getFile();
         keywordData.documentation = testCase.getDocumentation();
-        setName(testCase, keywordData);
+        setName(testCaseFile, testCase, keywordData);
 
         if(testCase instanceof UserKeyword) {
-            setArguments((UserKeyword)testCase, keywordData, step, locals);
+            setArguments(testCaseFile, (UserKeyword)testCase, keywordData, step, locals);
         }
 
         return keywordData;

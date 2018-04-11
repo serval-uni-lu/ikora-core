@@ -49,15 +49,16 @@ public class Statistics {
 
         results.setIntegerStatistics("MaximumSize", statistics.get(Type.Size).maximum );
         results.setIntegerStatistics("MinimumSize", statistics.get(Type.Size).minimum );
-        results.setDoubleStatistics("AverageSize", statistics.get(Type.Size).sum / numberOfKeywords);
+
+        results.setDoubleStatistics("AverageSize", divide(statistics.get(Type.Size).sum, numberOfKeywords));
 
         results.setIntegerStatistics("MaximumDepth", statistics.get(Type.Depth).maximum );
         results.setIntegerStatistics("MinimumDepth", statistics.get(Type.Depth).minimum );
-        results.setDoubleStatistics("AverageDepth", statistics.get(Type.Depth).sum / numberOfKeywords);
+        results.setDoubleStatistics("AverageDepth", divide(statistics.get(Type.Depth).sum, numberOfKeywords));
 
         results.setIntegerStatistics("MaximumSteps", statistics.get(Type.Steps).maximum );
         results.setIntegerStatistics("MinimumSteps", statistics.get(Type.Steps).minimum );
-        results.setDoubleStatistics("AverageSteps", statistics.get(Type.Steps).sum / numberOfKeywords);
+        results.setDoubleStatistics("AverageSteps", divide(statistics.get(Type.Steps).sum, numberOfKeywords));
 
         return results;
     }
@@ -70,6 +71,18 @@ public class Statistics {
         }
     }
 
+    private static double divide(double numerator, double denominator){
+        double result;
+
+        try{
+            result = numerator / denominator;
+        }
+        catch(ArithmeticException e){
+            result = 0.0;
+        }
+
+        return result;
+    }
 
     private void updateStatistic(Type type, int value){
         if(value > statistics.get(type).maximum){

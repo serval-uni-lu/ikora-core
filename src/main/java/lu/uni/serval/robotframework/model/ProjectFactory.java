@@ -1,62 +1,93 @@
 package lu.uni.serval.robotframework.model;
 
+import org.apache.commons.io.FileUtils;
 import org.python.core.PyObject;
 import org.python.core.PyString;
 import org.python.util.PythonInterpreter;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
-public class TestCaseFileFactory {
-    protected PyObject testCaseFileClass;
-    protected String file;
+public class ProjectFactory {
+    static PyObject testCaseFileClass;
 
-    public TestCaseFileFactory() {
+    static{
         PythonInterpreter interpreter = new PythonInterpreter();
         interpreter.exec( "from robot.api import TestCaseFile");
 
-        this.testCaseFileClass = interpreter.get("TestCaseFile");
+        testCaseFileClass = interpreter.get("TestCaseFile");
     }
 
-    public TestCaseFile create(String filePath) {
-        this.file = filePath;
-        PyObject testCaseFileObject = testCaseFileClass.__call__(new PyString(""), new PyString(this.file));
+    static public Project load(String path){
+        Project project = new Project();
+
+        File file = new File(path);
+
+        if(file.isFile()){
+            createFile(path, project);
+        }
+        else if (file.isDirectory()){
+            createFiles(path, project);
+        }
+
+        return project;
+    }
+
+    private static void createFiles(String path, Project project){
+        String extensions[] = {"robot"};
+        Collection<File> robotFiles = FileUtils.listFiles(new File(path), extensions, true);
+
+        for(File robotFile: robotFiles){
+            String filePath = robotFile.getAbsolutePath();
+            if(project.hasFile(filePath)){
+                continue;
+            }
+
+            createFile(robotFile.getAbsolutePath(), project);
+        }
+    }
+
+    static private void createFile(String filePath, Project project) {
+        PyObject testCaseFileObject = testCaseFileClass.__call__(new PyString(""), new PyString(filePath));
         testCaseFileObject.__findattr__("populate").__call__();
 
         String directory = getStringValue(testCaseFileObject, "directory");
         String name = getStringValue(testCaseFileObject, "name");
         Settings settings = createSettingsTable(testCaseFileObject.__findattr__("setting_table"));
-        TestCaseTable testCaseTable = createTestCaseTable(testCaseFileObject);
-        KeywordTable keywordTable = createKeywordTable(testCaseFileObject.__findattr__("keyword_table"));
+        TestCaseTable testCaseTable = createTestCaseTable(testCaseFileObject, filePath);
+        KeywordTable keywordTable = createKeywordTable(testCaseFileObject.__findattr__("keyword_table"), filePath);
         VariableTable variableTable = createVariableTable(testCaseFileObject.__findattr__("variable_table"));
 
-        loadResources(settings);
+        loadResources(project, settings, directory);
 
-        return new TestCaseFile(directory, name, settings, testCaseTable, keywordTable, variableTable);
+        TestCaseFile file = new TestCaseFile(directory, filePath, name, settings, testCaseTable, keywordTable, variableTable);
+
+        project.addTestCaseFile(file);
     }
 
-    private TestCaseTable createTestCaseTable(PyObject testCaseFileObject) {
+    private static TestCaseTable createTestCaseTable(PyObject testCaseFileObject, String filePath) {
         TestCaseTable testCaseTable = new TestCaseTable();
 
         PyObject pyTestCaseTable = testCaseFileObject.__findattr__("testcase_table");
 
         for (PyObject pyTestCase : pyTestCaseTable.asIterable()){
-            testCaseTable.add(createTestCase(pyTestCase));
+            testCaseTable.add(createTestCase(pyTestCase, filePath));
         }
 
         return testCaseTable;
     }
 
-    private TestCase createTestCase(PyObject pyTestCase){
+    private static TestCase createTestCase(PyObject pyTestCase, String filePath){
         String name = getStringValue(pyTestCase, "name");
         String documentation = getStringValue(pyTestCase, "doc");
-        List<Step> steps = createSteps(pyTestCase.__findattr__("steps"));
+        List<Step> steps = createSteps(pyTestCase.__findattr__("steps"), filePath);
 
-        return new TestCase(this.file, name, documentation, steps);
+        return new TestCase(filePath, name, documentation, steps);
     }
 
-    protected VariableTable createVariableTable(PyObject pyVariableTable) {
+    protected static VariableTable createVariableTable(PyObject pyVariableTable) {
 
         VariableTable variableTable = new VariableTable();
 
@@ -69,13 +100,13 @@ public class TestCaseFileFactory {
         return variableTable;
     }
 
-    protected Settings createSettingsTable(PyObject pySettings) {
+    protected static Settings createSettingsTable(PyObject pySettings) {
         ResourcesTable resourcesTable = createImportTable(pySettings.__findattr__("imports"));
 
         return new Settings(resourcesTable);
     }
 
-    protected ResourcesTable createImportTable(PyObject pyImports) {
+    protected static ResourcesTable createImportTable(PyObject pyImports) {
         ResourcesTable resourcesTable = new ResourcesTable();
 
         for (PyObject pyResource : pyImports.__findattr__("data").asIterable()) {
@@ -91,7 +122,7 @@ public class TestCaseFileFactory {
         return resourcesTable;
     }
 
-    private Resources.Type getResourceType(PyObject pyResource) {
+    private static Resources.Type getResourceType(PyObject pyResource) {
         Resources.Type type = Resources.Type.Unknown;
         String objectType = pyResource.getType().toString();
 
@@ -105,27 +136,27 @@ public class TestCaseFileFactory {
         return type;
     }
 
-    protected KeywordTable createKeywordTable(PyObject pyKeywordTable){
+    protected static KeywordTable createKeywordTable(PyObject pyKeywordTable, String filePath){
         KeywordTable keywordTable = new KeywordTable();
 
         for (PyObject pyUserKeyword : pyKeywordTable.asIterable()){
-            keywordTable.add(createUserKeyword(pyUserKeyword));
+            keywordTable.add(createUserKeyword(pyUserKeyword, filePath));
         }
 
         return keywordTable;
     }
 
-    private UserKeyword createUserKeyword(PyObject pyUserKeyword){
+    private static UserKeyword createUserKeyword(PyObject pyUserKeyword, String filePath){
         String name = getStringValue(pyUserKeyword, "name");
         String documentation = getStringValue(pyUserKeyword, "doc");
         List<String> arguments = createArguments(pyUserKeyword.__findattr__("args"));
-        List<Step> steps = createSteps(pyUserKeyword.__findattr__("steps"));
+        List<Step> steps = createSteps(pyUserKeyword.__findattr__("steps"), filePath);
 
-        return new UserKeyword(this.file, name, arguments, documentation, steps);
+        return new UserKeyword(filePath, name, arguments, documentation, steps);
     }
 
-    private List<String> createArguments(PyObject pyArguments) {
-        List<String> arguments = new ArrayList<String>();
+    private static List<String> createArguments(PyObject pyArguments) {
+        List<String> arguments = new ArrayList<>();
 
         for (PyObject pyArgument : pyArguments.asIterable()){
             arguments.add(pyArgument.toString());
@@ -134,29 +165,29 @@ public class TestCaseFileFactory {
         return arguments;
     }
 
-    private List<Step> createSteps(PyObject pySteps) {
-        List<Step> steps = new ArrayList<Step>();
+    private static List<Step> createSteps(PyObject pySteps, String filePath) {
+        List<Step> steps = new ArrayList<>();
 
         for (PyObject pyStep : pySteps.asIterable()){
             String name = getStringValue(pyStep, "name");
             List<String> arguments = createArguments(pyStep.__findattr__("args"));
 
-            steps.add(new Step(this.file, name, arguments));
+            steps.add(new Step(filePath, name, arguments));
         }
 
         return steps;
     }
 
-    protected String getStringValue(PyObject pyObject, String attribute) {
+    protected static String getStringValue(PyObject pyObject, String attribute) {
         return pyObject.__findattr__(attribute).toString();
     }
 
-    protected List<String> getStringListValue(PyObject pyObject) {
+    protected static List<String> getStringListValue(PyObject pyObject) {
         return getStringListValue(pyObject, "");
     }
 
-    protected List<String> getStringListValue(PyObject pyObject, String attribute) {
-        List<String> list = new ArrayList<String>();
+    protected static List<String> getStringListValue(PyObject pyObject, String attribute) {
+        List<String> list = new ArrayList<>();
 
         for (PyObject pyItem : pyObject.asIterable()){
             String value = attribute.length() == 0 ? pyItem.toString() : pyItem.__findattr__(attribute).toString();
@@ -166,7 +197,7 @@ public class TestCaseFileFactory {
         return list;
     }
 
-    protected void loadResources(Settings settings) {
+    protected static void loadResources(Project project, Settings settings, String directory) {
         ResourcesTable resourcesTable = settings.getResources();
 
         for(Resources resources : resourcesTable) {
@@ -174,12 +205,17 @@ public class TestCaseFileFactory {
                 continue;
             }
 
-            File file = new File(this.file);
+            String resourcePath = directory + File.separator + resources.getName();
 
-            ResourcesFileFactory factory = new ResourcesFileFactory();
-            TestCaseFile resourcesFile = factory.create(file.getParent() + File.separator + resources.getName());
+            if(project.hasFile(resourcePath)){
+                resources.setFile(project.getFile(resourcePath));
+            }
+            else{
+                ResourcesFileFactory factory = new ResourcesFileFactory();
+                TestCaseFile resourcesFile = factory.create(project, resourcePath);
 
-            resources.setFile(resourcesFile);
+                resources.setFile(resourcesFile);
+            }
         }
     }
 }
