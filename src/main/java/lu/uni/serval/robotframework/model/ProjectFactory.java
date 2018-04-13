@@ -83,8 +83,9 @@ public class ProjectFactory {
         String name = getStringValue(pyTestCase, "name");
         String documentation = getStringValue(pyTestCase, "doc");
         List<Step> steps = createSteps(pyTestCase.__findattr__("steps"), filePath);
+        List<String> tags = getStringListValue(pyTestCase.__findattr__("tags"));
 
-        return new UserKeyword(filePath, name, new ArrayList<>(), documentation, steps);
+        return new UserKeyword(filePath, name, new ArrayList<>(), documentation, steps, tags);
     }
 
     protected static VariableTable createVariableTable(PyObject pyVariableTable) {
@@ -151,8 +152,9 @@ public class ProjectFactory {
         String documentation = getStringValue(pyUserKeyword, "doc");
         List<String> arguments = createArguments(pyUserKeyword.__findattr__("args"));
         List<Step> steps = createSteps(pyUserKeyword.__findattr__("steps"), filePath);
+        List<String> tags = getStringListValue(pyUserKeyword.__findattr__("tags"));
 
-        return new UserKeyword(filePath, name, arguments, documentation, steps);
+        return new UserKeyword(filePath, name, arguments, documentation, steps, tags);
     }
 
     private static List<String> createArguments(PyObject pyArguments) {

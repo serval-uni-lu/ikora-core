@@ -11,12 +11,14 @@ public class UserKeyword implements Iterable<Step> {
     private Argument name;
     private String documentation;
     private List<Step> steps;
+    private List<String> tags;
 
-    public UserKeyword(String file, String name, List<String> arguments, String documentation, List<Step> steps) {
+    public UserKeyword(String file, String name, List<String> arguments, String documentation, List<Step> steps, List<String> tags) {
         this.file = file;
         this.name = new Argument(name);
         this.documentation = documentation;
         this.steps = steps;
+        this.tags = tags;
 
         this.arguments = new ArrayList<>();
         for(String argument : arguments) {
@@ -25,7 +27,7 @@ public class UserKeyword implements Iterable<Step> {
     }
 
     public UserKeyword(Step step) {
-        this(step.getFile(), step.getName(), step.getArguments(), "", new ArrayList<>());
+        this(step.getFile(), step.getName(), step.getArguments(), "", new ArrayList<>(), new ArrayList<>());
     }
 
     public String getFile() {
@@ -42,6 +44,10 @@ public class UserKeyword implements Iterable<Step> {
 
     public List<Step> getSteps() {
         return steps;
+    }
+
+    public List<String> getTags() {
+        return tags;
     }
 
     @Nonnull
