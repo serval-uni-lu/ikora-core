@@ -9,7 +9,7 @@ import java.util.*;
 public class KeywordTreeFactory {
 
     private Project project;
-    private Set<TestCase> processed;
+    private Set<UserKeyword> processed;
 
     public KeywordTreeFactory(Project project) {
         this.project = project;
@@ -26,12 +26,12 @@ public class KeywordTreeFactory {
         return keywordForest;
     }
 
-    void readFile(TestCaseFile testCaseFile, Set<TreeNode> keywordForest) throws DuplicateNodeException {
-        ArrayList<TestCase> keywords = new ArrayList<>();
+    private void readFile(TestCaseFile testCaseFile, Set<TreeNode> keywordForest) throws DuplicateNodeException {
+        ArrayList<UserKeyword> keywords = new ArrayList<>();
         keywords.addAll(testCaseFile.getTestCases());
         keywords.addAll(testCaseFile.getUserKeywords());
 
-        for(TestCase keyword : keywords){
+        for(UserKeyword keyword : keywords){
             if(processed.contains(keyword)){
                  continue;
             }
@@ -47,8 +47,8 @@ public class KeywordTreeFactory {
         }
     }
 
-    private void visitSteps(TestCaseFile testCaseFile, TreeNode current, TestCase testCase, HashMap<String, List<String>> locals) throws DuplicateNodeException {
-        for(Step step : testCase) {
+    private void visitSteps(TestCaseFile testCaseFile, TreeNode current, UserKeyword userKeyword, HashMap<String, List<String>> locals) throws DuplicateNodeException {
+        for(Step step : userKeyword) {
             UserKeyword keyword = testCaseFile.findUserKeyword(step);
             KeywordData keywordData = createKeywordData(testCaseFile, keyword, step, locals);
 
@@ -77,8 +77,8 @@ public class KeywordTreeFactory {
         }
     }
 
-    private void setName(TestCaseFile testCaseFile, TestCase testCase, KeywordData keywordData) {
-        Argument name = testCase.getName();
+    private void setName(TestCaseFile testCaseFile, UserKeyword keyword, KeywordData keywordData) {
+        Argument name = keyword.getName();
 
         if(name.hasVariable()) {
             Map<String, List<String>> values = testCaseFile.getVariableValues(name);
@@ -88,15 +88,12 @@ public class KeywordTreeFactory {
         keywordData.name  = name.toString();
     }
 
-    private KeywordData createKeywordData(TestCaseFile testCaseFile, TestCase testCase, Step step, Map<String, List<String>> locals) {
+    private KeywordData createKeywordData(TestCaseFile testCaseFile, UserKeyword keyword, Step step, Map<String, List<String>> locals) {
         KeywordData keywordData = new KeywordData();
-        keywordData.file = testCase.getFile();
-        keywordData.documentation = testCase.getDocumentation();
-        setName(testCaseFile, testCase, keywordData);
-
-        if(testCase instanceof UserKeyword) {
-            setArguments(testCaseFile, (UserKeyword)testCase, keywordData, step, locals);
-        }
+        keywordData.file = keyword.getFile();
+        keywordData.documentation = keyword.getDocumentation();
+        setName(testCaseFile, keyword, keywordData);
+        setArguments(testCaseFile, keyword, keywordData, step, locals);
 
         return keywordData;
     }

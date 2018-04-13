@@ -31,7 +31,7 @@ public class Step {
         return this.arguments;
     }
 
-    public Map<String, List<String>> fetchVariables(TestCase keyword) {
+    public Map<String, List<String>> fetchVariables(UserKeyword keyword) {
         Map<String, List<String>> variables = new HashMap<>();
 
         if(!keyword.getName().hasVariable()) {

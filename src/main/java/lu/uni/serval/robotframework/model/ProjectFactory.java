@@ -11,7 +11,7 @@ import java.util.Collection;
 import java.util.List;
 
 public class ProjectFactory {
-    static PyObject testCaseFileClass;
+    private static PyObject testCaseFileClass;
 
     static{
         PythonInterpreter interpreter = new PythonInterpreter();
@@ -79,12 +79,12 @@ public class ProjectFactory {
         return testCaseTable;
     }
 
-    private static TestCase createTestCase(PyObject pyTestCase, String filePath){
+    private static UserKeyword createTestCase(PyObject pyTestCase, String filePath){
         String name = getStringValue(pyTestCase, "name");
         String documentation = getStringValue(pyTestCase, "doc");
         List<Step> steps = createSteps(pyTestCase.__findattr__("steps"), filePath);
 
-        return new TestCase(filePath, name, documentation, steps);
+        return new UserKeyword(filePath, name, new ArrayList<>(), documentation, steps);
     }
 
     protected static VariableTable createVariableTable(PyObject pyVariableTable) {

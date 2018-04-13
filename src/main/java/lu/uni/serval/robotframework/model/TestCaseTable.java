@@ -1,25 +1,27 @@
 package lu.uni.serval.robotframework.model;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class TestCaseTable implements Iterable<TestCase> {
-    private List<TestCase> testCaseList;
+public class TestCaseTable implements Iterable<UserKeyword> {
+    private List<UserKeyword> testCaseList;
 
     public TestCaseTable(){
-        testCaseList = new ArrayList<TestCase>();
+        testCaseList = new ArrayList<>();
     }
 
-    public List<TestCase> getTestCases() {
+    public List<UserKeyword> getTestCases() {
         return testCaseList;
     }
 
-    public Iterator<TestCase> iterator() {
+    @Nonnull
+    public Iterator<UserKeyword> iterator() {
         return testCaseList.iterator();
     }
 
-    public void add(TestCase userKeyword) {
+    public void add(UserKeyword userKeyword) {
         testCaseList.add(userKeyword);
     }
 }

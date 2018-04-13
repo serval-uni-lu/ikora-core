@@ -3,7 +3,7 @@ package lu.uni.serval.robotframework.model;
 import javax.annotation.Nonnull;
 import java.util.*;
 
-public class TestCaseFile implements Iterable<TestCase> {
+public class TestCaseFile implements Iterable<UserKeyword> {
     private String directory;
     private String path;
     private String name;
@@ -41,12 +41,12 @@ public class TestCaseFile implements Iterable<TestCase> {
         return this.settings;
     }
 
-    public List<TestCase> getTestCases(){
+    public List<UserKeyword> getTestCases(){
         return testCaseTable.getTestCases();
     }
 
     public List<UserKeyword> getUserKeywords() {
-        List<UserKeyword> userKeywords = new ArrayList<UserKeyword>(keywordTable.getUserKeywords());
+        List<UserKeyword> userKeywords = new ArrayList<>(keywordTable.getUserKeywords());
 
         for(Resources resources: settings.getResources()){
             if(resources.getType() == Resources.Type.Resource){
@@ -72,14 +72,14 @@ public class TestCaseFile implements Iterable<TestCase> {
             return this.variableDictionary;
         }
 
-        this.variableDictionary = new HashMap<String, List<String>>();
-        buildVariableDictionary(this.variableDictionary, new LinkedList<TestCaseFile>());
+        this.variableDictionary = new HashMap<>();
+        buildVariableDictionary(this.variableDictionary, new LinkedList<>());
 
         return this.variableDictionary;
     }
 
     @Nonnull
-    public Iterator<TestCase> iterator() {
+    public Iterator<UserKeyword> iterator() {
         return testCaseTable.iterator();
     }
 
@@ -106,7 +106,7 @@ public class TestCaseFile implements Iterable<TestCase> {
     }
 
     public Map<String, List<String>> getVariableValues(Argument argument) {
-        Map<String, List<String>> returnValues = new HashMap<String, List<String>>();
+        Map<String, List<String>> returnValues = new HashMap<>();
 
         List<String> variables = argument.findVariables();
         updateValues(returnValues, variables);
@@ -127,7 +127,7 @@ public class TestCaseFile implements Iterable<TestCase> {
             }
 
             List<String> currentValues = references.get(variable);
-            List<String> currentVariables = new ArrayList<String>();
+            List<String> currentVariables = new ArrayList<>();
 
             for(String currentValue : currentValues) {
                 currentVariables.addAll(Argument.findVariables(currentValue));
