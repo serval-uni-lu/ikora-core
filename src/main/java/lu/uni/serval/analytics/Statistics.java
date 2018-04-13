@@ -3,15 +3,15 @@ package lu.uni.serval.analytics;
 import lu.uni.serval.utils.tree.TreeNode;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class Statistics {
     private enum Type{
         Size, Depth, Steps
     }
 
-    private class StaticitcsElement {
+    private class StatisticsElement {
         int maximum;
         int minimum;
         int sum;
@@ -24,16 +24,16 @@ public class Statistics {
     }
 
     private int numberOfKeywords;
-    private Map<Type, StaticitcsElement> statistics;
+    private Map<Type, StatisticsElement> statistics;
 
     public Statistics(){
         statistics = new HashMap<>();
-        statistics.put(Type.Size, new StaticitcsElement());
-        statistics.put(Type.Depth, new StaticitcsElement());
-        statistics.put(Type.Steps, new StaticitcsElement());
+        statistics.put(Type.Size, new StatisticsElement());
+        statistics.put(Type.Depth, new StatisticsElement());
+        statistics.put(Type.Steps, new StatisticsElement());
     }
 
-    public StatisticsResults computeStatistics(List<TreeNode> forest){
+    public StatisticsResults computeStatistics(Set<TreeNode> forest){
         StatisticsResults results = new StatisticsResults();
 
         reset();
@@ -66,7 +66,7 @@ public class Statistics {
     private void reset(){
         numberOfKeywords = 0;
 
-        for(Map.Entry<Type, StaticitcsElement> statistic: statistics.entrySet()){
+        for(Map.Entry<Type, StatisticsElement> statistic: statistics.entrySet()){
             statistic.getValue().reset();
         }
     }

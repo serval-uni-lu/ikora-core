@@ -10,6 +10,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 public class CloneDetectionTest {
@@ -134,7 +135,7 @@ public class CloneDetectionTest {
         CloneDetection cloneDetection = new CloneDetection();
 
         try {
-            CloneResults results = cloneDetection.findClones(getTrees());
+            CloneResults results = cloneDetection.findClones(new HashSet<>(getTrees()));
             assertEquals(1, results.getSame().size());
             assertEquals(2, results.getHomonym().size());
             assertEquals(2, results.getSynonym().size());

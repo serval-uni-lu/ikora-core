@@ -17,6 +17,18 @@ public class TestCase implements Iterable<Step> {
         this.steps = steps;
     }
 
+    @Override
+    public boolean equals(Object other) {
+        if(other instanceof TestCase){
+            return ((TestCase)other).file.equals(this.file)
+                    && ((TestCase)other).name == this.name
+                    && ((TestCase)other).steps == this.steps;
+
+        }
+
+        return super.equals(other);
+    }
+
     public String getFile() {
         return file;
     }

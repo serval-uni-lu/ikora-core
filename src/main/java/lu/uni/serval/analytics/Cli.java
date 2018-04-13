@@ -9,18 +9,21 @@ import lu.uni.serval.utils.tree.TreeNode;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
 public class Cli implements CommandRunner{
-    private List<TreeNode> forest;
+    private Set<TreeNode> forest;
 
     public Cli(){
-        this.forest = new ArrayList<>();
+        this.forest = null;
     }
 
     @Override
     public void run() throws DuplicateNodeException {
+        if(this.forest == null){
+            return;
+        }
+
         Configuration config = Configuration.getInstance();
         Plugin analytics = config.getPlugin("analytics");
 
@@ -47,7 +50,7 @@ public class Cli implements CommandRunner{
         }
     }
 
-    public void setForest(final List<TreeNode> forest){
+    public void setForest(final Set<TreeNode> forest){
         this.forest = forest;
     }
 }

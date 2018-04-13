@@ -4,21 +4,20 @@ import lu.uni.serval.utils.*;
 import lu.uni.serval.utils.exception.DuplicateNodeException;
 import lu.uni.serval.utils.tree.TreeNode;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class KeywordTreeFactory {
 
     private Project project;
+    private Set<TestCase> processed;
 
     public KeywordTreeFactory(Project project) {
         this.project = project;
     }
 
-    public List<TreeNode> create() throws DuplicateNodeException {
-        List<TreeNode> keywordForest = new ArrayList<>();
+    public Set<TreeNode> create() throws DuplicateNodeException {
+        Set<TreeNode> keywordForest = new HashSet<>();
+        this.processed = new HashSet<>();
 
         for(TestCaseFile testCaseFile: project.getTestCaseFiles()){
             readFile(testCaseFile, keywordForest);
@@ -27,12 +26,18 @@ public class KeywordTreeFactory {
         return keywordForest;
     }
 
-    void readFile(TestCaseFile testCaseFile, List<TreeNode> keywordForest) throws DuplicateNodeException {
+    void readFile(TestCaseFile testCaseFile, Set<TreeNode> keywordForest) throws DuplicateNodeException {
         ArrayList<TestCase> keywords = new ArrayList<>();
         keywords.addAll(testCaseFile.getTestCases());
         keywords.addAll(testCaseFile.getUserKeywords());
 
         for(TestCase keyword : keywords){
+            if(processed.contains(keyword)){
+                 continue;
+            }
+
+            processed.add(keyword);
+
             KeywordData keywordData = createKeywordData(testCaseFile, keyword, null, null);
             TreeNode root = new TreeNode(keywordData, true);
 

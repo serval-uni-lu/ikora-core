@@ -7,10 +7,7 @@ import lu.uni.serval.utils.tree.TreeNode;
 
 import static lu.uni.serval.utils.nlp.StringUtils.levenshteinIndex;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class CloneDetection {
     private final TreeEditDistance treeEditDistance;
@@ -19,14 +16,16 @@ public class CloneDetection {
         treeEditDistance = new TreeEditDistance(new CloneEditScore());
     }
 
-    public CloneResults findClones(final List<TreeNode> forest) throws DuplicateNodeException {
+    public CloneResults findClones(final Set<TreeNode> forest) throws DuplicateNodeException {
         CloneResults results = new CloneResults();
-        Map<TreeNode, TreeNode> semanticMap = createSemanticMap(forest);
+        List<TreeNode> forestArray = new ArrayList<>(forest);
+
+        Map<TreeNode, TreeNode> semanticMap = createSemanticMap(forestArray);
 
         for (int i = 0; i < forest.size(); ++i){
             for (int j = i + 1; j < forest.size(); ++j){
-                CloneIndex cloneIndex = computeCloneIndex(forest.get(i), forest.get(j), semanticMap);
-                results.update(cloneIndex, forest.get(i), forest.get(j));
+                CloneIndex cloneIndex = computeCloneIndex(forestArray.get(i), forestArray.get(j), semanticMap);
+                results.update(cloneIndex, forestArray.get(i), forestArray.get(j));
             }
         }
 

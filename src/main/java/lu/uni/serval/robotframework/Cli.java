@@ -8,14 +8,15 @@ import lu.uni.serval.utils.Configuration;
 import lu.uni.serval.utils.exception.DuplicateNodeException;
 import lu.uni.serval.utils.tree.TreeNode;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Cli implements CommandRunner{
-    private List<TreeNode> forest;
+    private Set<TreeNode> forest;
 
     public Cli(){
-        this.forest = new ArrayList<>();
+        this.forest = new HashSet<>();
     }
 
     @Override
@@ -36,7 +37,7 @@ public class Cli implements CommandRunner{
         }
     }
 
-    public List<TreeNode> getForest() {
+    public Set<TreeNode> getForest() {
         return forest;
     }
 }
