@@ -9,7 +9,6 @@ import lu.uni.serval.utils.exception.DuplicateNodeException;
 import lu.uni.serval.utils.tree.TreeNode;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class Cli implements CommandRunner{
