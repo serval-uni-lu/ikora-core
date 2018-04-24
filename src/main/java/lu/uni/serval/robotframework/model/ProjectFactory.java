@@ -1,24 +1,25 @@
 package lu.uni.serval.robotframework.model;
 
 import lu.uni.serval.utils.exception.MissingAttributeException;
-import org.apache.commons.io.FileUtils;
 import org.python.core.PyObject;
 import org.python.core.PyString;
 import org.python.util.PythonInterpreter;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 public class ProjectFactory {
     private static PyObject testCaseFileClass;
+    private static PyObject testDataDirectory;
 
     static{
         PythonInterpreter interpreter = new PythonInterpreter();
         interpreter.exec( "from robot.api import TestCaseFile");
+        interpreter.exec( "from robot.api import TestDataDirectory");
 
         testCaseFileClass = interpreter.get("TestCaseFile");
+        testDataDirectory = interpreter.get("TestDataDirectory");
     }
 
     static public Project load(String path){
@@ -41,16 +42,16 @@ public class ProjectFactory {
     }
 
     private static void createFiles(String path, Project project) throws MissingAttributeException {
-        String extensions[] = {"robot"};
-        Collection<File> robotFiles = FileUtils.listFiles(new File(path), extensions, true);
+        PyObject testDataDirectoryObject = testDataDirectory.__call__(new PyString(""), new PyString(path));
+        testDataDirectoryObject.__findattr__("populate").__call__();
 
-        for(File robotFile: robotFiles){
-            String filePath = robotFile.getAbsolutePath();
-            if(project.hasFile(filePath)){
+
+        for (PyObject file: testDataDirectoryObject.__findattr__("children").asIterable()){
+            if(file.__findattr__("testcase_table") == null){
                 continue;
             }
 
-            createFile(robotFile.getAbsolutePath(), project);
+            processFile(file, project);
         }
     }
 
@@ -58,16 +59,21 @@ public class ProjectFactory {
         PyObject testCaseFileObject = testCaseFileClass.__call__(new PyString(""), new PyString(filePath));
         testCaseFileObject.__findattr__("populate").__call__();
 
+        processFile(testCaseFileObject, project);
+    }
+
+    private static void processFile(PyObject testCaseFileObject, Project project) throws MissingAttributeException {
+        String source = getStringValue(testCaseFileObject, "source");
         String directory = getStringValue(testCaseFileObject, "directory");
         String name = getStringValue(testCaseFileObject, "name");
         Settings settings = createSettingsTable(testCaseFileObject.__findattr__("setting_table"));
-        TestCaseTable testCaseTable = createTestCaseTable(testCaseFileObject, filePath);
-        KeywordTable keywordTable = createKeywordTable(testCaseFileObject.__findattr__("keyword_table"), filePath);
+        TestCaseTable testCaseTable = createTestCaseTable(testCaseFileObject, source);
+        KeywordTable keywordTable = createKeywordTable(testCaseFileObject.__findattr__("keyword_table"), source);
         VariableTable variableTable = createVariableTable(testCaseFileObject.__findattr__("variable_table"));
 
         loadResources(project, settings, directory);
 
-        TestCaseFile file = new TestCaseFile(directory, filePath, name, settings, testCaseTable, keywordTable, variableTable);
+        TestCaseFile file = new TestCaseFile(directory, source, name, settings, testCaseTable, keywordTable, variableTable);
 
         project.addTestCaseFile(file);
     }
