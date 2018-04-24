@@ -5,7 +5,7 @@ import org.python.core.PyString;
 import org.python.util.PythonInterpreter;
 
 public class ResourcesFileFactory extends ProjectFactory {
-    static PyObject resourceFileClass;
+    private static PyObject resourceFileClass;
 
     static {
         PythonInterpreter interpreter = new PythonInterpreter();
@@ -24,7 +24,7 @@ public class ResourcesFileFactory extends ProjectFactory {
         KeywordTable keywordTable = createKeywordTable(testCaseFileObject.__findattr__("keyword_table"), filePath);
         VariableTable variableTable = createVariableTable(testCaseFileObject.__findattr__("variable_table"));
 
-        loadResources(project, settings, filePath);
+        loadResources(project, settings, directory);
 
         return new TestCaseFile(directory, filePath, name, settings, null, keywordTable, variableTable);
     }

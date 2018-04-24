@@ -20,7 +20,7 @@ public class Cli implements CommandRunner{
 
     @Override
     public void run() throws DuplicateNodeException {
-        Configuration config = Configuration.getInstance();
+        final Configuration config = Configuration.getInstance();
         Project project = ProjectFactory.load(config.getTestCaseFile());
 
         KeywordTreeFactory keywordTreeFactory = new KeywordTreeFactory(project);

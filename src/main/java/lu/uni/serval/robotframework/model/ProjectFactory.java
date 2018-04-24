@@ -213,9 +213,7 @@ public class ProjectFactory {
                 resources.setFile(project.getFile(resourcePath));
             }
             else{
-                ResourcesFileFactory factory = new ResourcesFileFactory();
-                TestCaseFile resourcesFile = factory.create(project, resourcePath);
-
+                TestCaseFile resourcesFile = ResourcesFileFactory.create(project, resourcePath);
                 resources.setFile(resourcesFile);
             }
         }
