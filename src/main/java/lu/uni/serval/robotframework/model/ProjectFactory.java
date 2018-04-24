@@ -1,5 +1,6 @@
 package lu.uni.serval.robotframework.model;
 
+import lu.uni.serval.utils.exception.MissingAttributeException;
 import org.apache.commons.io.FileUtils;
 import org.python.core.PyObject;
 import org.python.core.PyString;
@@ -23,19 +24,23 @@ public class ProjectFactory {
     static public Project load(String path){
         Project project = new Project();
 
-        File file = new File(path);
+            try {
+                File file = new File(path);
 
-        if(file.isFile()){
-            createFile(path, project);
-        }
-        else if (file.isDirectory()){
-            createFiles(path, project);
-        }
+                if(file.isFile()){
+                    createFile(path, project);
+                }
+                else if (file.isDirectory()){
+                    createFiles(path, project);
+                }
+            } catch (MissingAttributeException e) {
+                e.printStackTrace();
+            }
 
         return project;
     }
 
-    private static void createFiles(String path, Project project){
+    private static void createFiles(String path, Project project) throws MissingAttributeException {
         String extensions[] = {"robot"};
         Collection<File> robotFiles = FileUtils.listFiles(new File(path), extensions, true);
 
@@ -49,7 +54,7 @@ public class ProjectFactory {
         }
     }
 
-    static private void createFile(String filePath, Project project) {
+    static private void createFile(String filePath, Project project) throws MissingAttributeException {
         PyObject testCaseFileObject = testCaseFileClass.__call__(new PyString(""), new PyString(filePath));
         testCaseFileObject.__findattr__("populate").__call__();
 
@@ -67,7 +72,7 @@ public class ProjectFactory {
         project.addTestCaseFile(file);
     }
 
-    private static TestCaseTable createTestCaseTable(PyObject testCaseFileObject, String filePath) {
+    private static TestCaseTable createTestCaseTable(PyObject testCaseFileObject, String filePath) throws MissingAttributeException {
         TestCaseTable testCaseTable = new TestCaseTable();
 
         PyObject pyTestCaseTable = testCaseFileObject.__findattr__("testcase_table");
@@ -79,7 +84,7 @@ public class ProjectFactory {
         return testCaseTable;
     }
 
-    private static UserKeyword createTestCase(PyObject pyTestCase, String filePath){
+    private static UserKeyword createTestCase(PyObject pyTestCase, String filePath) throws MissingAttributeException {
         String name = getStringValue(pyTestCase, "name");
         String documentation = getStringValue(pyTestCase, "doc");
         List<Step> steps = createSteps(pyTestCase.__findattr__("steps"), filePath);
@@ -101,13 +106,13 @@ public class ProjectFactory {
         return variableTable;
     }
 
-    protected static Settings createSettingsTable(PyObject pySettings) {
+    protected static Settings createSettingsTable(PyObject pySettings) throws MissingAttributeException {
         ResourcesTable resourcesTable = createImportTable(pySettings.__findattr__("imports"));
 
         return new Settings(resourcesTable);
     }
 
-    protected static ResourcesTable createImportTable(PyObject pyImports) {
+    protected static ResourcesTable createImportTable(PyObject pyImports) throws MissingAttributeException {
         ResourcesTable resourcesTable = new ResourcesTable();
 
         for (PyObject pyResource : pyImports.__findattr__("data").asIterable()) {
@@ -141,13 +146,17 @@ public class ProjectFactory {
         KeywordTable keywordTable = new KeywordTable();
 
         for (PyObject pyUserKeyword : pyKeywordTable.asIterable()){
-            keywordTable.add(createUserKeyword(pyUserKeyword, filePath));
+            try {
+                keywordTable.add(createUserKeyword(pyUserKeyword, filePath));
+            } catch (MissingAttributeException e) {
+                System.out.println(e.getMessage());
+            }
         }
 
         return keywordTable;
     }
 
-    private static UserKeyword createUserKeyword(PyObject pyUserKeyword, String filePath){
+    private static UserKeyword createUserKeyword(PyObject pyUserKeyword, String filePath) throws MissingAttributeException {
         String name = getStringValue(pyUserKeyword, "name");
         String documentation = getStringValue(pyUserKeyword, "doc");
         List<String> arguments = createArguments(pyUserKeyword.__findattr__("args"));
@@ -171,7 +180,12 @@ public class ProjectFactory {
         List<Step> steps = new ArrayList<>();
 
         for (PyObject pyStep : pySteps.asIterable()){
-            String name = getStringValue(pyStep, "name");
+            String name = null;
+            try {
+                name = getStringValue(pyStep, "name");
+            } catch (MissingAttributeException e) {
+                continue;
+            }
             List<String> arguments = createArguments(pyStep.__findattr__("args"));
 
             steps.add(new Step(filePath, name, arguments));
@@ -180,8 +194,14 @@ public class ProjectFactory {
         return steps;
     }
 
-    protected static String getStringValue(PyObject pyObject, String attribute) {
-        return pyObject.__findattr__(attribute).toString();
+    protected static String getStringValue(PyObject pyObject, String attribute) throws MissingAttributeException {
+        PyObject pythonAttribute = pyObject.__findattr__(attribute);
+
+        if(pythonAttribute == null){
+            throw new MissingAttributeException();
+        }
+
+        return pythonAttribute.toString();
     }
 
     protected static List<String> getStringListValue(PyObject pyObject) {
