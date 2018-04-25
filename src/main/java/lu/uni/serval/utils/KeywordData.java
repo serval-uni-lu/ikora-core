@@ -9,15 +9,23 @@ import java.util.List;
 import java.util.Map;
 
 public class KeywordData implements TreeNodeData {
+    public enum Status{
+        UNDEFINED, PASS, FAILED
+    }
+
     public String name;
+    public String type;
     public List<String> arguments;
     public Map<String, List<String>> variables;
     public String file;
     public String documentation;
+    public String library;
+    public Status status;
 
     public KeywordData(){
         this.arguments = new  ArrayList<>();
         this.variables =  new HashMap<>();
+        this.status = Status.UNDEFINED;
     }
 
     @Override
@@ -64,6 +72,18 @@ public class KeywordData implements TreeNodeData {
         }
 
         return cleanArguments;
+    }
+
+    public void setStatus(String status) {
+        if(status.equalsIgnoreCase("PASS")){
+            this.status = Status.PASS;
+        }
+        else if(status.equalsIgnoreCase("FAILED")){
+            this.status = Status.FAILED;
+        }
+        else{
+            this.status = Status.UNDEFINED;
+        }
     }
 
     private String cleanArgument(String argument) {

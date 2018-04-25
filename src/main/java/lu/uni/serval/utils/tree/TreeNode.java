@@ -111,6 +111,10 @@ public class TreeNode implements Iterable<TreeNode> {
         return childNode;
     }
 
+    public void addChild(TreeNode child){
+        this.children.add(child);
+    }
+
     public boolean isAncestor(TreeNodeData data){
         TreeNode ancestor = parent;
 

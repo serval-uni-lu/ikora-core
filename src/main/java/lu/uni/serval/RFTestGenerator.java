@@ -1,5 +1,7 @@
 package lu.uni.serval;
 
+import lu.uni.serval.analytics.KeywordsAnalyticsCli;
+import lu.uni.serval.analytics.ReportsAnalyticsCli;
 import lu.uni.serval.utils.Configuration;
 import lu.uni.serval.utils.ConsoleColors;
 import lu.uni.serval.utils.exception.DuplicateNodeException;
@@ -11,9 +13,6 @@ public class RFTestGenerator {
     public static void main(String[] args) {
         try {
             Options options = new Options();
-
-            lu.uni.serval.analytics.Cli analyticsCli = new lu.uni.serval.analytics.Cli();
-            lu.uni.serval.robotframework.Cli rfCli = new lu.uni.serval.robotframework.Cli();
 
             options.addOption("config", true, "path to the json configuration file");
 
@@ -27,11 +26,14 @@ public class RFTestGenerator {
             Configuration.initialize(cmd.getOptionValue("config"));
             Configuration config = Configuration.getInstance();
 
-            rfCli.run();
+            if(config.hasPlugin("report analytics")) {
+                ReportsAnalyticsCli reportsAnalyticsCli = new ReportsAnalyticsCli();
+                reportsAnalyticsCli.run();
+            }
 
-            if(config.hasPlugin("analytics")){
-                analyticsCli.setForest(rfCli.getForest());
-                analyticsCli.run();
+            if(config.hasPlugin("keyword analytics")){
+                KeywordsAnalyticsCli keywordsAnalyticsCli = new KeywordsAnalyticsCli();
+                keywordsAnalyticsCli.run();
             }
 
         } catch (ParseException e) {

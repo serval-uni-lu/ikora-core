@@ -186,15 +186,14 @@ public class ProjectFactory {
         List<Step> steps = new ArrayList<>();
 
         for (PyObject pyStep : pySteps.asIterable()){
-            String name = null;
             try {
-                name = getStringValue(pyStep, "name");
-            } catch (MissingAttributeException e) {
-                continue;
-            }
-            List<String> arguments = createArguments(pyStep.__findattr__("args"));
+                String name = getStringValue(pyStep, "name");
+                List<String> arguments = createArguments(pyStep.__findattr__("args"));
 
-            steps.add(new Step(filePath, name, arguments));
+                steps.add(new Step(filePath, name, arguments));
+            } catch (MissingAttributeException e) {
+                System.out.println("Failed to load step");
+            }
         }
 
         return steps;
