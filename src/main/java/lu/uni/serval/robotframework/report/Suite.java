@@ -1,6 +1,5 @@
 package lu.uni.serval.robotframework.report;
 
-import lu.uni.serval.robotframework.execution.selenium.Keyword;
 import lu.uni.serval.utils.tree.TreeNode;
 
 import java.util.ArrayList;

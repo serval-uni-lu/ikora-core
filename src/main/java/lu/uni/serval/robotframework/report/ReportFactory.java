@@ -8,7 +8,12 @@ import org.w3c.dom.NodeList;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.Collections;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
+import java.util.ArrayList;
+import java.util.HashSet;
 
 public class ReportFactory {
     public static Report create(final Element robotElement){

@@ -1,7 +1,7 @@
 package lu.uni.serval.analytics;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lu.uni.serval.robotframework.KeywordsParser;
+import lu.uni.serval.robotframework.model.KeywordsParser;
 import lu.uni.serval.utils.CommandRunner;
 import lu.uni.serval.utils.Configuration;
 import lu.uni.serval.utils.Plugin;

@@ -7,7 +7,11 @@ import lu.uni.serval.utils.tree.TreeNode;
 
 import static lu.uni.serval.utils.nlp.StringUtils.levenshteinIndex;
 
-import java.util.*;
+import java.util.List;
+import java.util.Set;
+import java.util.Map;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class CloneDetection {
     private final TreeEditDistance treeEditDistance;
