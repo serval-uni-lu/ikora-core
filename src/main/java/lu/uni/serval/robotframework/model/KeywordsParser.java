@@ -1,4 +1,4 @@
-package lu.uni.serval.robotframework;
+package lu.uni.serval.robotframework.model;
 
 import lu.uni.serval.robotframework.model.KeywordTreeFactory;
 import lu.uni.serval.robotframework.model.Project;
