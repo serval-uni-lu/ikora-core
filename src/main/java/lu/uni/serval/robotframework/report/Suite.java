@@ -1,5 +1,6 @@
 package lu.uni.serval.robotframework.report;
 
+import lu.uni.serval.robotframework.execution.selenium.Keyword;
 import lu.uni.serval.utils.tree.TreeNode;
 
 import java.util.ArrayList;
@@ -9,11 +10,11 @@ public class Suite {
     private String source;
     private String id;
     private String name;
-    private List<Suite> children;
+    private List<Suite> suites;
     private List<TreeNode> keywords;
 
     public Suite(){
-        children = new ArrayList<>();
+        suites = new ArrayList<>();
         keywords = new ArrayList<>();
     }
 
@@ -30,15 +31,27 @@ public class Suite {
     }
 
     public List<Suite> getChildren() {
-        return children;
+        return suites;
     }
 
     public List<TreeNode> getKeywords() {
+        List<TreeNode> keywords = new ArrayList<>();
+
+        if(hasSuites()){
+            for(Suite suite: this.suites){
+                keywords.addAll(suite.getKeywords());
+            }
+        }
+
+        if(hasKeywords()){
+            keywords.addAll(this.keywords);
+        }
+
         return keywords;
     }
 
-    public boolean hasChildren(){
-        return children.size() > 0;
+    public boolean hasSuites(){
+        return suites.size() > 0;
     }
 
     public boolean hasKeywords(){
@@ -58,7 +71,7 @@ public class Suite {
     }
 
     public void setChildren(List<Suite> children) {
-        this.children = children;
+        this.suites = children;
     }
 
     public void setKeywords(List<TreeNode> keywords) {
@@ -66,7 +79,7 @@ public class Suite {
     }
 
     public void addSuite(Suite suite) {
-        children.add(suite);
+        suites.add(suite);
     }
 
     public void addKeyword(TreeNode keyword) {
