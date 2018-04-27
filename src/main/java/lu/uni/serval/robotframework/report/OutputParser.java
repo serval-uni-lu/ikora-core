@@ -1,5 +1,6 @@
 package lu.uni.serval.robotframework.report;
 
+import lu.uni.serval.analytics.ReportAnalyzer;
 import org.apache.commons.io.FilenameUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -20,10 +21,10 @@ public class OutputParser {
         factory = DocumentBuilderFactory.newInstance();
     }
 
-    static public List<Report> parse(String folderPath){
+    static public ReportAnalyzer parse(String folderPath){
         List<File> xmlFiles = getXmlPaths(folderPath);
 
-        List<Report> reports = new ArrayList<>();
+        ReportAnalyzer reports = new ReportAnalyzer();
 
         for(File xmlFile: xmlFiles){
             Report report = parseXml(xmlFile);
@@ -32,25 +33,10 @@ public class OutputParser {
                 continue;
             }
 
-            insertReport(reports, report);
+            reports.add(report);
         }
 
         return reports;
-    }
-
-    private static void insertReport(List<Report> reports, Report report){
-        boolean inserted = false;
-        for(int index = 0; index < reports.size(); ++index){
-            if(reports.get(index).getCreationTime().isAfter(report.getCreationTime())){
-                reports.add(index, report);
-                inserted = true;
-                break;
-            }
-        }
-
-        if(!inserted){
-            reports.add(report);
-        }
     }
 
     private static List<File> getXmlPaths(String folderPath){
