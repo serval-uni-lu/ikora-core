@@ -49,11 +49,11 @@ public class ReportFactory {
         suite.setId(suiteElement.getAttribute("id"));
         suite.setSource(suiteElement.getAttribute("source"));
 
-        HashSet<String> types = new HashSet<>(Arrays.asList("suite", "kw"));
+        HashSet<String> types = new HashSet<>(Arrays.asList("suite", "kw", "test"));
 
         for(Element child: getChildren(suiteElement, types)){
-
-            if(child.getTagName().equalsIgnoreCase("suite")){
+            String tagName = child.getTagName();
+            if(tagName.equalsIgnoreCase("suite")){
                 Suite subSuite = parseSuite(child);
 
                 if(subSuite == null){
@@ -62,7 +62,7 @@ public class ReportFactory {
 
                 suite.addSuite(subSuite);
             }
-            else if(child.getTagName().equalsIgnoreCase("kw")){
+            else if(tagName.equalsIgnoreCase("kw") || tagName.equalsIgnoreCase("test")){
                 TreeNode keyword = parseKeyword(child);
 
                 if(keyword == null){
@@ -110,6 +110,9 @@ public class ReportFactory {
             }
             else if(elementName.equalsIgnoreCase("msg")){
                 values = OutputMessageParser.parseArguments(child.getTextContent(), data.name, data.library);
+            }
+            else{
+                System.out.println("Ignored tag '" + elementName + "' while parsing kw");
             }
         }
 
