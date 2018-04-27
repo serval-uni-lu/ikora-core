@@ -85,6 +85,7 @@ public class ReportFactory {
         TreeNode treeNode = new TreeNode(data, true);
 
         HashSet<String> types = new HashSet<>(Arrays.asList("doc", "kw", "arguments", "status", "msg"));
+        List<String> values = new ArrayList<>();
 
         for(Element child: getChildren(keywordElement, types)){
             String elementName = child.getTagName();
@@ -108,8 +109,12 @@ public class ReportFactory {
                 data.setStatus(child.getAttribute("status"));
             }
             else if(elementName.equalsIgnoreCase("msg")){
-                OutputMessageParser.parseArguments(child.getTextContent(), data.name, data.library);
+                values = OutputMessageParser.parseArguments(child.getTextContent(), data.name, data.library);
             }
+        }
+
+        for(int index = 0; index < values.size(); ++index){
+            data.variables.put(data.arguments.get(index), new ArrayList<>(Collections.singletonList(values.get(index))));
         }
 
         return treeNode;
