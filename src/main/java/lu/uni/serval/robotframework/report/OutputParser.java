@@ -32,10 +32,25 @@ public class OutputParser {
                 continue;
             }
 
-            reports.add(report);
+            insertReport(reports, report);
         }
 
         return reports;
+    }
+
+    private static void insertReport(List<Report> reports, Report report){
+        boolean inserted = false;
+        for(int index = 0; index < reports.size(); ++index){
+            if(reports.get(index).getCreationTime().isAfter(report.getCreationTime())){
+                reports.add(index, report);
+                inserted = true;
+                break;
+            }
+        }
+
+        if(!inserted){
+            reports.add(report);
+        }
     }
 
     private static List<File> getXmlPaths(String folderPath){
