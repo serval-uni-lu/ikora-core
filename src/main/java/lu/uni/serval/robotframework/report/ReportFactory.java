@@ -84,14 +84,15 @@ public class ReportFactory {
 
         TreeNode treeNode = new TreeNode(data, true);
 
-        HashSet<String> types = new HashSet<>(Arrays.asList("doc", "kw", "arguments"));
+        HashSet<String> types = new HashSet<>(Arrays.asList("doc", "kw", "arguments", "status", "msg"));
 
         for(Element child: getChildren(keywordElement, types)){
+            String elementName = child.getTagName();
 
-            if(child.getTagName().equalsIgnoreCase("doc")){
+            if(elementName.equalsIgnoreCase("doc")){
                 data.documentation = child.getTextContent();
             }
-            else if(child.getTagName().equalsIgnoreCase("kw")){
+            else if(elementName.equalsIgnoreCase("kw")){
                 TreeNode keyword = parseKeyword(child);
 
                 if(keyword == null){
@@ -100,11 +101,14 @@ public class ReportFactory {
 
                 treeNode.addChild(keyword);
             }
-            else if(child.getTagName().equalsIgnoreCase("arguments")){
+            else if(elementName.equalsIgnoreCase("arguments")){
                 data.arguments = parseArguments(child);
             }
-            else if(child.getTagName().equalsIgnoreCase("status")){
+            else if(elementName.equalsIgnoreCase("status")){
                 data.setStatus(child.getAttribute("status"));
+            }
+            else if(elementName.equalsIgnoreCase("msg")){
+                OutputMessageParser.parseArguments(child.getTextContent(), data.name, data.library);
             }
         }
 
