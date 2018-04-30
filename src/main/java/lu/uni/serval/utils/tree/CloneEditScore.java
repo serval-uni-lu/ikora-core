@@ -5,10 +5,6 @@ import static lu.uni.serval.utils.nlp.StringUtils.levenshteinIndex;
 public class CloneEditScore implements EditScore {
 
     public double replace(TreeNode node1, TreeNode node2) {
-        if(node1.isRoot() && node2.isRoot()) {
-            return 0;
-        }
-
         String label1 = node1.getLabel();
         String label2 = node2.getLabel();
 

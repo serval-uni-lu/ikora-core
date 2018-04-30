@@ -6,6 +6,8 @@ import lu.uni.serval.Globals;
 import lu.uni.serval.utils.exception.DuplicateNodeException;
 import org.junit.Test;
 
+import java.util.List;
+
 public class TreeEditDistanceTest {
 
     @Test

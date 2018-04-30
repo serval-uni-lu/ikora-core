@@ -14,5 +14,7 @@ public class ReportsAnalyticsCli implements CommandRunner {
         String location = (String)analytics.getAddictionalProperty("report location", "");
 
         ReportAnalyzer reports = OutputParser.parse(location);
+
+        reports.findDifferences();
     }
 }
