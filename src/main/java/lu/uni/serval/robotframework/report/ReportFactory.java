@@ -85,7 +85,7 @@ public class ReportFactory {
         TreeNode treeNode = new TreeNode(data, true);
 
         HashSet<String> types = new HashSet<>(Arrays.asList("doc", "kw", "arguments", "status", "msg"));
-        List<String> values = new ArrayList<>();
+        String msg = "";
 
         for(Element child: getChildren(keywordElement, types)){
             String elementName = child.getTagName();
@@ -109,15 +109,19 @@ public class ReportFactory {
                 data.setStatus(child.getAttribute("status"));
             }
             else if(elementName.equalsIgnoreCase("msg")){
-                values = OutputMessageParser.parseArguments(child.getTextContent(), data.name, data.library);
+                msg = child.getTextContent();
             }
             else{
                 System.out.println("Ignored tag '" + elementName + "' while parsing kw");
             }
         }
 
-        for(int index = 0; index < values.size(); ++index){
-            data.variables.put(data.arguments.get(index), new ArrayList<>(Collections.singletonList(values.get(index))));
+        if(msg.length() > 0){
+            List<String> values = OutputMessageParser.parseArguments(msg, data.name, data.library, data.status);
+
+            for(int index = 0; index < values.size(); ++index){
+                data.variables.put(data.arguments.get(index), new ArrayList<>(Collections.singletonList(values.get(index))));
+            }
         }
 
         return treeNode;

@@ -78,7 +78,7 @@ public class KeywordData implements TreeNodeData {
         if(status.equalsIgnoreCase("PASS")){
             this.status = Status.PASS;
         }
-        else if(status.equalsIgnoreCase("FAILED")){
+        else if(status.equalsIgnoreCase("FAIL")){
             this.status = Status.FAILED;
         }
         else{
