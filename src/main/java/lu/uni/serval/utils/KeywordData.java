@@ -3,29 +3,22 @@ package lu.uni.serval.utils;
 import lu.uni.serval.robotframework.model.Argument;
 import lu.uni.serval.utils.tree.TreeNodeData;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class KeywordData implements TreeNodeData {
-    public enum Status{
-        UNDEFINED, PASS, FAILED
-    }
+
 
     public String name;
     public String type;
     public List<String> arguments;
-    public Map<String, List<String>> variables;
+    private Map<String, List<String>> variables;
     public String file;
     public String documentation;
     public String library;
-    public Status status;
 
     public KeywordData(){
         this.arguments = new  ArrayList<>();
         this.variables =  new HashMap<>();
-        this.status = Status.UNDEFINED;
     }
 
     @Override
@@ -74,19 +67,20 @@ public class KeywordData implements TreeNodeData {
         return cleanArguments;
     }
 
-    public void setStatus(String status) {
-        if(status.equalsIgnoreCase("PASS")){
-            this.status = Status.PASS;
-        }
-        else if(status.equalsIgnoreCase("FAIL")){
-            this.status = Status.FAILED;
-        }
-        else{
-            this.status = Status.UNDEFINED;
-        }
+    public void addVariable(String variable, List<String> values){
+        String safeVariable = variable.replace("${", "[");
+        safeVariable = safeVariable.replace("}", "]");
+
+        Collections.replaceAll(values, variable, safeVariable);
+
+        this.variables.put(variable, values);
     }
 
     private String cleanArgument(String argument) {
+        return cleanArgument(argument, 0);
+    }
+
+    private String cleanArgument(String argument, int iteration) {
         if (!Argument.hasVariable(argument)) {
             return argument;
         }
@@ -94,22 +88,21 @@ public class KeywordData implements TreeNodeData {
         List<String> variables;
 
          do {
+
              variables = Argument.findVariables(argument);
 
             for(String variable : variables) {
-                argument = argument.replace(variable, resolveVariable(variable));
+                argument = argument.replace(variable, resolveVariable(variable, ++iteration));
             }
-
          } while (!variables.isEmpty());
 
          return argument;
     }
 
-    private String resolveVariable(String variable) {
+    private String resolveVariable(String variable, int iteration) {
         List<String> values = variables.get(variable);
 
         String returnValue;
-
         if(values == null || values.isEmpty()) {
             returnValue = variable.replace("${", "[");
             returnValue = returnValue.replace("}", "]");
@@ -118,7 +111,7 @@ public class KeywordData implements TreeNodeData {
             String value = values.get(0);
 
             if(Argument.hasVariable(value)) {
-                value = cleanArgument(value);
+                value = cleanArgument(value, iteration);
             }
 
             returnValue = value;
@@ -129,7 +122,7 @@ public class KeywordData implements TreeNodeData {
 
             for(String value : values) {
                 stringBuilder.append("\t");
-                stringBuilder.append(resolveVariable(value));
+                stringBuilder.append(resolveVariable(value, iteration));
             }
 
             returnValue = stringBuilder.toString().trim();
