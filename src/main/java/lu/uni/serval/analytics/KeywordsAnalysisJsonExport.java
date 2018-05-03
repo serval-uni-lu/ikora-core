@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonPropertyOrder({"general statistics", "clones"})
-public class JsonExport {
+public class KeywordsAnalysisJsonExport {
     @JsonProperty("general statistics")
     private StatisticsResults generalStatistics;
     @JsonProperty("clones")

@@ -39,7 +39,7 @@ public class KeywordsAnalyticsCli implements CommandRunner{
 
         ObjectMapper mapper = new ObjectMapper();
         try {
-            JsonExport export = new JsonExport();
+            KeywordsAnalysisJsonExport export = new KeywordsAnalysisJsonExport();
             export.setClones(cloneResults);
             export.setGeneralStatistics(statisticsResults);
 
