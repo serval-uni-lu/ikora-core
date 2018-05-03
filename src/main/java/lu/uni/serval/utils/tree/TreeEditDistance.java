@@ -24,7 +24,7 @@ public class TreeEditDistance implements TreeDistance {
         CompareCache<TreeNode, ScoreElement> memory = new CompareCache<>();
         List<EditAction> actions = new ArrayList<>();
 
-        return distance(memory, actions, tree1, tree2);
+        return execute(memory, actions, tree1, tree2);
     }
 
     public double index(TreeNode tree1, TreeNode tree2) {
@@ -46,12 +46,12 @@ public class TreeEditDistance implements TreeDistance {
         CompareCache<TreeNode, ScoreElement> memory = new CompareCache<>();
         List<EditAction> actions = new ArrayList<>();
 
-        distance(memory, actions, tree1, tree2);
+        execute(memory, actions, tree1, tree2);
 
         return actions;
     }
 
-    private double distance(CompareCache<TreeNode, ScoreElement> memory, List<EditAction> actions, TreeNode tree1, TreeNode tree2) {
+    private double execute(CompareCache<TreeNode, ScoreElement> memory, List<EditAction> actions, TreeNode tree1, TreeNode tree2) {
         if(memory.isCached(tree1, tree2)) {
             actions.addAll(memory.getScore(tree1, tree2).actions);
             return memory.getScore(tree1, tree2).score;
@@ -104,8 +104,8 @@ public class TreeEditDistance implements TreeDistance {
     }
 
     private double calculateReplaceScore(CompareCache<TreeNode, ScoreElement> memory, List<EditAction> actions, TreeNode tree1, TreeNode tree2) {
-        double s1 = distance(memory, actions, getInside(tree1), getInside(tree2));
-        double s2 = distance(memory, actions,  getOutside(tree1), getOutside(tree2));
+        double s1 = execute(memory, actions, getInside(tree1), getInside(tree2));
+        double s2 = execute(memory, actions,  getOutside(tree1), getOutside(tree2));
         double replaceScore = score.replace(tree1, tree2);
 
         if(replaceScore > 0){
@@ -121,7 +121,7 @@ public class TreeEditDistance implements TreeDistance {
         actions.add(action);
 
         TreeNode newTree = deleteHead(tree2);
-        return distance(memory, actions, tree1, newTree) + score.insert(newTree);
+        return execute(memory, actions, tree1, newTree) + score.insert(newTree);
     }
 
     private double calculateDeleteScore(CompareCache<TreeNode, ScoreElement> memory, List<EditAction> actions, TreeNode tree1, TreeNode tree2) {
@@ -129,7 +129,7 @@ public class TreeEditDistance implements TreeDistance {
         actions.add(action);
 
         TreeNode newTree = deleteHead(tree1);
-        return distance(memory, actions, newTree, tree2) + score.delete(newTree);
+        return execute(memory, actions, newTree, tree2) + score.delete(newTree);
     }
 
     private TreeNode getInside(TreeNode node) {
