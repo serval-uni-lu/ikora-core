@@ -1,6 +1,6 @@
 package lu.uni.serval.robotframework.report;
 
-import lu.uni.serval.utils.KeywordData;
+import lu.uni.serval.utils.ReportKeywordData;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import java.util.*;
@@ -18,7 +18,7 @@ public class OutputMessageParser {
         errorDictionary = initializeErrorDictionary();
     }
 
-    public static List<String> parseArguments(String message, String keyword, String library, KeywordData.Status status){
+    public static List<String> parseArguments(String message, String keyword, String library, ReportKeywordData.Status status){
         if(ignoreSet.contains(new ImmutablePair<>(library, keyword))){
             return new ArrayList<>();
         }
@@ -37,8 +37,8 @@ public class OutputMessageParser {
         return extractArguments(message, format.left, format.right);
     }
 
-    private static ImmutablePair<String, Integer> getFormat(String keyword, String library, KeywordData.Status status){
-        if(status == KeywordData.Status.FAILED){
+    private static ImmutablePair<String, Integer> getFormat(String keyword, String library, ReportKeywordData.Status status){
+        if(status == ReportKeywordData.Status.FAILED){
             return errorDictionary.get(new ImmutablePair<>(library.toLowerCase(), keyword.toLowerCase()));
         }
 

@@ -62,7 +62,10 @@ public class KeywordTreeFactory {
 
             if(argument.hasVariable()) {
                 Map<String, List<String>> values = testCaseFile.getVariableValues(argument);
-                keywordData.variables.putAll(values);
+
+                for(Map.Entry<String, List<String>> value: values.entrySet()){
+                    keywordData.addVariable(value.getKey(), value.getValue());
+                }
             }
 
             keywordData.arguments.add(argument.toString());
@@ -73,7 +76,9 @@ public class KeywordTreeFactory {
                 locals.putAll(step.fetchVariables(keyword));
             }
 
-            keywordData.variables.putAll(locals);
+            for(Map.Entry<String, List<String>> value: locals.entrySet()){
+                keywordData.addVariable(value.getKey(), value.getValue());
+            }
         }
     }
 
@@ -82,7 +87,10 @@ public class KeywordTreeFactory {
 
         if(name.hasVariable()) {
             Map<String, List<String>> values = testCaseFile.getVariableValues(name);
-            keywordData.variables.putAll(values);
+
+            for(Map.Entry<String, List<String>> value: values.entrySet()){
+                keywordData.addVariable(value.getKey(), value.getValue());
+            }
         }
 
         keywordData.name  = name.toString();

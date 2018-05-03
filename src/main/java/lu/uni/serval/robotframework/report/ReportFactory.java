@@ -1,6 +1,6 @@
 package lu.uni.serval.robotframework.report;
 
-import lu.uni.serval.utils.KeywordData;
+import lu.uni.serval.utils.ReportKeywordData;
 import lu.uni.serval.utils.tree.TreeNode;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -77,7 +77,7 @@ public class ReportFactory {
     }
 
     private static TreeNode parseKeyword(Element keywordElement) {
-        KeywordData data = new KeywordData();
+        ReportKeywordData data = new ReportKeywordData();
         data.type = keywordElement.getAttribute("type");
         data.name = keywordElement.getAttribute("name");
         data.library = keywordElement.getAttribute("library");
@@ -107,6 +107,10 @@ public class ReportFactory {
             }
             else if(elementName.equalsIgnoreCase("status")){
                 data.setStatus(child.getAttribute("status"));
+
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd HH:mm:ss.SSS");
+                LocalDateTime dateTime = LocalDateTime.parse(child.getAttribute("endtime"), formatter);
+                data.executionDate = dateTime;
             }
             else if(elementName.equalsIgnoreCase("msg")){
                 msg = child.getTextContent();
@@ -120,7 +124,7 @@ public class ReportFactory {
             List<String> values = OutputMessageParser.parseArguments(msg, data.name, data.library, data.status);
 
             for(int index = 0; index < values.size(); ++index){
-                data.variables.put(data.arguments.get(index), new ArrayList<>(Collections.singletonList(values.get(index))));
+                data.addVariable(data.arguments.get(index), new ArrayList<>(Collections.singletonList(values.get(index))));
             }
         }
 

@@ -11,6 +11,14 @@ public class EditAction {
         this.node2 = node2;
     }
 
+    public TreeNode getNode1(){
+        return node1;
+    }
+
+    public TreeNode getNode2(){
+        return node2;
+    }
+
     public String getNodeLabel1() {
         return getSafeLabel(node1);
     }
@@ -22,4 +30,5 @@ public class EditAction {
     private String getSafeLabel(TreeNode node){
         return node == null ? "[NULL]" : node.getLabel();
     }
+
 }

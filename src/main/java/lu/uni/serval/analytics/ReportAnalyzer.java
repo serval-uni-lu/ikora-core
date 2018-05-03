@@ -1,15 +1,12 @@
 package lu.uni.serval.analytics;
 
 import lu.uni.serval.robotframework.report.Report;
-import lu.uni.serval.utils.KeywordData;
+import lu.uni.serval.utils.ReportKeywordData;
 import lu.uni.serval.utils.tree.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-public class ReportAnalyzer {
+public class ReportAnalyzer implements Iterable<Report>{
     private List<Report> reports;
     private KeywordSequence sequences;
 
@@ -52,7 +49,7 @@ public class ReportAnalyzer {
         }
     }
 
-    public Map<KeywordData, KeywordData> findDifferences(){
+    public Map<ReportKeywordData, ReportKeywordData> findDifferences(){
         initKeywordSequence();
 
         TreeEditDistance editDistance = new TreeEditDistance(new CloneEditScore());
@@ -69,14 +66,22 @@ public class ReportAnalyzer {
                 }
 
                 differences.addAll(editDistance.differences(previous, keyword));
-
+                previous = keyword;
             }
         }
 
         for(EditAction difference: differences){
-            System.out.println("[" + difference.operation.toString() + "] From :'" + difference.getNodeLabel1() + "' to '" + difference.getNodeLabel2() + "'");
+            String date1 = difference.getNode1() == null ? "NULL" : ((ReportKeywordData)difference.getNode1().data).executionDate.toLocalDate().toString();
+            String date2 = difference.getNode2() == null ? "NULL" : ((ReportKeywordData)difference.getNode2().data).executionDate.toLocalDate().toString();
+
+            System.out.println("[" + date1 + " -- "+ date2 + "][" + difference.operation.toString() + "] From :'" + difference.getNodeLabel1() + "' to '" + difference.getNodeLabel2() + "'");
         }
 
         return new HashMap<>();
+    }
+
+    @Override
+    public Iterator<Report> iterator() {
+        return reports.iterator();
     }
 }
