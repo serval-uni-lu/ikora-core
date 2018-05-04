@@ -3,6 +3,8 @@ package lu.uni.serval.analytics;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lu.uni.serval.utils.ReportKeywordData;
 import lu.uni.serval.utils.tree.EditAction;
+import lu.uni.serval.utils.tree.EditOperation;
+import lu.uni.serval.utils.tree.TreeNode;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -17,19 +19,13 @@ public class DifferenceResults implements Map<Pair<LocalDateTime, LocalDateTime>
         differences = new HashMap<>();
     }
 
-    public void setDifferences(List<EditAction> differences) {
-        for(EditAction difference: differences){
-            LocalDateTime dateTime1 = difference.getNode1() == null ? null :((ReportKeywordData)difference.getNode1().data).executionDate;
-            LocalDateTime dateTime2 = difference.getNode2() == null ? null : ((ReportKeywordData)difference.getNode2().data).executionDate;
+    public void addDifference(EditAction difference) {
+        LocalDateTime dateTime1 = difference.getNode1() == null ? null :((ReportKeywordData)difference.getNode1().data).executionDate;
+        LocalDateTime dateTime2 = difference.getNode2() == null ? null : ((ReportKeywordData)difference.getNode2().data).executionDate;
 
-            ImmutablePair<LocalDateTime, LocalDateTime> dates = new ImmutablePair<>(dateTime1, dateTime2);
+        ImmutablePair<LocalDateTime, LocalDateTime> dates = new ImmutablePair<>(dateTime1, dateTime2);
 
-            if(!this.differences.containsKey(dates)){
-                this.differences.put(dates, new ArrayList<>());
-            }
-
-            this.differences.get(dates).add(difference);
-        }
+        put(dates, difference);
     }
 
     @Override
@@ -60,6 +56,44 @@ public class DifferenceResults implements Map<Pair<LocalDateTime, LocalDateTime>
     @Override
     public List<EditAction> put(Pair<LocalDateTime, LocalDateTime> key, List<EditAction> value) {
         return differences.put(key, value);
+    }
+
+    public List<EditAction> put(Pair <LocalDateTime, LocalDateTime> key, EditAction value) {
+        if(!this.differences.containsKey(key)){
+            put(key, new ArrayList<>());
+        }
+
+        List<EditAction> differences = this.differences.get(key);
+
+        for(int i = differences.size() - 1; i >= 0; --i){
+            EditAction current = differences.get(i);
+
+            if(current.operation != value.operation){
+                continue;
+            }
+
+            TreeNode currentNode = current.operation != EditOperation.Delete ? current.getNode1() : current.getNode2();
+            TreeNode valueNode = value.operation != EditOperation.Delete ? value.getNode1() : value.getNode2();
+
+            if(currentNode == null || valueNode == null){
+                continue;
+            }
+
+            if(currentNode.isAncestor(valueNode)){
+                value = null;
+                break;
+            }
+
+            if(valueNode.isAncestor(currentNode)){
+                differences.remove(current);
+            }
+        }
+
+        if(value != null){
+            differences.add(value);
+        }
+
+        return differences;
     }
 
     @Override

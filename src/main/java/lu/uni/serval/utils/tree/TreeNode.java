@@ -130,6 +130,20 @@ public class TreeNode implements Iterable<TreeNode> {
         return false;
     }
 
+    public boolean isAncestor(TreeNode node) {
+        TreeNode ancestor = parent;
+
+        while (ancestor != null){
+            if(ancestor == node){
+                return true;
+            }
+
+            ancestor = ancestor.parent;
+        }
+
+        return false;
+    }
+
     @Override
     public String toString() {
         return buildString(new StringBuilder(),0).toString();

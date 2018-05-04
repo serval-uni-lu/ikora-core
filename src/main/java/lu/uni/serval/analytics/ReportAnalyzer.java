@@ -48,12 +48,12 @@ public class ReportAnalyzer implements Iterable<Report>{
         }
     }
 
-    public List<EditAction> findDifferences(){
+    public DifferenceResults findDifferences(){
         initKeywordSequence();
 
         TreeEditDistance editDistance = new TreeEditDistance(new CloneEditScore());
 
-        List<EditAction> differences = new ArrayList<>();
+        DifferenceResults differences = new DifferenceResults();
 
         for(List<TreeNode> sequence: sequences){
 
@@ -64,7 +64,10 @@ public class ReportAnalyzer implements Iterable<Report>{
                     continue;
                 }
 
-                differences.addAll(editDistance.differences(previous, keyword));
+                for(EditAction difference : editDistance.differences(previous, keyword)){
+                    differences.addDifference(difference);
+                }
+
                 previous = keyword;
             }
         }
