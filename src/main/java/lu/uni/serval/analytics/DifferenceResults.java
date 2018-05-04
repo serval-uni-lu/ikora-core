@@ -16,7 +16,7 @@ public class DifferenceResults implements Map<Pair<LocalDateTime, LocalDateTime>
     private Map<Pair<LocalDateTime, LocalDateTime>, List<EditAction>> differences;
 
     DifferenceResults(){
-        differences = new HashMap<>();
+        differences = new LinkedHashMap<>();
     }
 
     public void addDifference(EditAction difference) {
