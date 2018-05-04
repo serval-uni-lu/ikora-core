@@ -14,9 +14,11 @@ import java.util.*;
 @JsonSerialize(using = DifferenceResultSerializer.class)
 public class DifferenceResults implements Map<Pair<LocalDateTime, LocalDateTime>, List<EditAction>>{
     private Map<Pair<LocalDateTime, LocalDateTime>, List<EditAction>> differences;
+    public OperationCounter counter;
 
     DifferenceResults(){
         differences = new LinkedHashMap<>();
+        counter = new OperationCounter();
     }
 
     public void addDifference(EditAction difference) {
@@ -85,15 +87,27 @@ public class DifferenceResults implements Map<Pair<LocalDateTime, LocalDateTime>
             }
 
             if(valueNode.isAncestor(currentNode)){
+                subtract(key, current.operation);
                 differences.remove(current);
             }
         }
 
         if(value != null){
+            add(key, value.operation);
             differences.add(value);
         }
 
         return differences;
+    }
+
+    private void subtract(Pair<LocalDateTime, LocalDateTime> key, EditOperation operation) {
+        counter.substract(new ImmutablePair<>(null, null), operation);
+        counter.substract(key, operation);
+    }
+
+    private void add(Pair<LocalDateTime, LocalDateTime> key, EditOperation operation) {
+        counter.add(new ImmutablePair<>(null, null), operation);
+        counter.add(key, operation);
     }
 
     @Override
@@ -124,5 +138,44 @@ public class DifferenceResults implements Map<Pair<LocalDateTime, LocalDateTime>
     @Override
     public Set<Entry<Pair<LocalDateTime, LocalDateTime>, List<EditAction>>> entrySet() {
         return differences.entrySet();
+    }
+
+    public class OperationCounter{
+        private Map<Pair<LocalDateTime, LocalDateTime>, Map<EditOperation, Integer>> counter;
+
+        public OperationCounter(){
+            counter = new HashMap<>();
+        }
+
+        public void add(Pair<LocalDateTime, LocalDateTime> dates, EditOperation operation){
+            if(!counter.containsKey(dates)){
+                Map<EditOperation, Integer> operations = new HashMap<>();
+                for(EditOperation op: EditOperation.values()){
+                    operations.put(op, 0);
+                }
+
+                counter.put(dates, operations);
+            }
+
+            int value = counter.get(dates).get(operation) + 1;
+            counter.get(dates).put(operation, value);
+        }
+
+        public void substract(Pair<LocalDateTime, LocalDateTime> dates, EditOperation operation){
+            if(!counter.containsKey(dates)){
+                return;
+            }
+
+            int value = counter.get(dates).get(operation) - 1;
+            counter.get(dates).put(operation, value);
+        }
+
+        public Map<EditOperation, Integer> getOperations(){
+            return counter.get(new ImmutablePair<>(null, null));
+        }
+
+        public Map<EditOperation, Integer> getOperations(Pair<LocalDateTime, LocalDateTime> dates){
+            return counter.get(dates);
+        }
     }
 }

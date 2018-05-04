@@ -5,11 +5,13 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import lu.uni.serval.utils.tree.EditAction;
+import lu.uni.serval.utils.tree.EditOperation;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 public class DifferenceResultSerializer extends StdSerializer<DifferenceResults>{
         public DifferenceResultSerializer() {
@@ -26,10 +28,18 @@ public class DifferenceResultSerializer extends StdSerializer<DifferenceResults>
 
         jsonGenerator.writeStringField("generated", LocalDateTime.now().toString());
 
+        for(Map.Entry<EditOperation, Integer> operations: differenceResults.counter.getOperations().entrySet()){
+            jsonGenerator.writeStringField(operations.getKey().name().toLowerCase(), operations.getValue().toString());
+        }
+
         jsonGenerator.writeArrayFieldStart("entries");
         for(DifferenceResults.Entry<Pair<LocalDateTime, LocalDateTime>, List<EditAction>> entry: differenceResults.entrySet()){
             jsonGenerator.writeStartObject();
             Pair<LocalDateTime, LocalDateTime> key = entry.getKey();
+
+            for(Map.Entry<EditOperation, Integer> operations: differenceResults.counter.getOperations(key).entrySet()){
+                jsonGenerator.writeStringField(operations.getKey().name().toLowerCase(), operations.getValue().toString());
+            }
 
             jsonGenerator.writeStringField("from", key.getLeft() == null ? "unknown" : key.getLeft().toString());
             jsonGenerator.writeStringField("to", key.getRight() == null ? "unknown" : key.getRight().toString());
