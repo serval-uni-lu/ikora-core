@@ -37,8 +37,8 @@ public class KeywordsAnalyticsCli implements CommandRunner{
         Statistics statistics = new Statistics();
         final StatisticsResults statisticsResults = statistics.computeStatistics(forest);
 
-        ObjectMapper mapper = new ObjectMapper();
         try {
+            ObjectMapper mapper = new ObjectMapper();
             KeywordsAnalysisJsonExport export = new KeywordsAnalysisJsonExport();
             export.setClones(cloneResults);
             export.setGeneralStatistics(statisticsResults);

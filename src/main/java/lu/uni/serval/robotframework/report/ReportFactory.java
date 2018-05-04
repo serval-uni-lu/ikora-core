@@ -31,7 +31,7 @@ public class ReportFactory {
         HashSet<String> types = new HashSet<>(Collections.singletonList("suite"));
 
         for(Element suiteElement: getChildren(robotElement, types)){
-            Suite suite = parseSuite(suiteElement);
+            Suite suite = parseSuite(suiteElement, dateTime);
 
             if(suite == null){
                 continue;
@@ -43,7 +43,7 @@ public class ReportFactory {
         return report;
     }
 
-    private static Suite parseSuite(final Element suiteElement){
+    private static Suite parseSuite(final Element suiteElement, final LocalDateTime dateTime){
         Suite suite = new Suite();
         suite.setName(suiteElement.getAttribute("name"));
         suite.setId(suiteElement.getAttribute("id"));
@@ -54,7 +54,7 @@ public class ReportFactory {
         for(Element child: getChildren(suiteElement, types)){
             String tagName = child.getTagName();
             if(tagName.equalsIgnoreCase("suite")){
-                Suite subSuite = parseSuite(child);
+                Suite subSuite = parseSuite(child, dateTime);
 
                 if(subSuite == null){
                     continue;
@@ -63,7 +63,7 @@ public class ReportFactory {
                 suite.addSuite(subSuite);
             }
             else if(tagName.equalsIgnoreCase("kw") || tagName.equalsIgnoreCase("test")){
-                TreeNode keyword = parseKeyword(child);
+                TreeNode keyword = parseKeyword(child, dateTime);
 
                 if(keyword == null){
                     continue;
@@ -76,7 +76,7 @@ public class ReportFactory {
         return suite;
     }
 
-    private static TreeNode parseKeyword(Element keywordElement) {
+    private static TreeNode parseKeyword(final Element keywordElement, final LocalDateTime dateTime) {
         ReportKeywordData data = new ReportKeywordData();
         data.type = keywordElement.getAttribute("type");
         data.name = keywordElement.getAttribute("name");
@@ -94,7 +94,7 @@ public class ReportFactory {
                 data.documentation = child.getTextContent();
             }
             else if(elementName.equalsIgnoreCase("kw")){
-                TreeNode keyword = parseKeyword(child);
+                TreeNode keyword = parseKeyword(child, dateTime);
 
                 if(keyword == null){
                     continue;
@@ -107,9 +107,6 @@ public class ReportFactory {
             }
             else if(elementName.equalsIgnoreCase("status")){
                 data.setStatus(child.getAttribute("status"));
-
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd HH:mm:ss.SSS");
-                LocalDateTime dateTime = LocalDateTime.parse(child.getAttribute("endtime"), formatter);
                 data.executionDate = dateTime;
             }
             else if(elementName.equalsIgnoreCase("msg")){

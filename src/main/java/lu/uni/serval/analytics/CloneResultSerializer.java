@@ -1,6 +1,6 @@
 package lu.uni.serval.analytics;
 
-import com.fasterxml.jackson.core.JsonGenerationException;
+
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
@@ -22,7 +22,7 @@ public class CloneResultSerializer extends StdSerializer<CloneResults> {
     }
 
     @Override
-    public void serialize(CloneResults cloneResults, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException, JsonGenerationException {
+    public void serialize(CloneResults cloneResults, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
         jsonGenerator.writeStartObject();
 
         jsonGenerator.writeStringField("keyword threshold", String.valueOf(CloneIndex.getKeywordThreshold()));

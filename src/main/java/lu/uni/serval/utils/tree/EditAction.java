@@ -1,5 +1,8 @@
 package lu.uni.serval.utils.tree;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+@JsonSerialize(using = EditActionSerializer.class)
 public class EditAction {
     public EditOperation operation;
     private TreeNode node1;
