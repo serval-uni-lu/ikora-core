@@ -22,23 +22,23 @@ public class EditActionSerializer extends StdSerializer<EditAction> {
 
         jsonGenerator.writeStringField("operation", editAction.operation.toString());
 
-        String before = "";
-        String after = "";
-        switch (editAction.operation){
-            case Replace:
-                before = editAction.getNodeLabel1();
-                after = editAction.getNodeLabel2();
-                break;
-            case Delete:
-                before = editAction.getNodeLabel1();
-                break;
-            case Insert:
-                after = editAction.getNodeLabel2();
-                break;
+        if(editAction.operation != EditOperation.Insert){
+            writeNodeObject(jsonGenerator, "before", editAction.getNode1());
         }
 
-        jsonGenerator.writeStringField("before", before);
-        jsonGenerator.writeStringField("after", after);
+        if(editAction.operation != EditOperation.Delete){
+            writeNodeObject(jsonGenerator, "after", editAction.getNode1());
+        }
+
+        jsonGenerator.writeEndObject();
+    }
+
+    private void writeNodeObject(JsonGenerator jsonGenerator, String name, TreeNode node) throws IOException {
+        jsonGenerator.writeObjectFieldStart(name);
+
+        jsonGenerator.writeStringField("label", node == null ? "" :node.getLabel());
+        jsonGenerator.writeStringField("parent", node == null || node.getParent() == null ? "null" : node.getParent().getLabel());
+        jsonGenerator.writeStringField("size", node == null ? "0" : String.valueOf(node.getSize()));
 
         jsonGenerator.writeEndObject();
     }

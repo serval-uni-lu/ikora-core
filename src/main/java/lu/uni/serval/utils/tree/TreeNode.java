@@ -131,17 +131,7 @@ public class TreeNode implements Iterable<TreeNode> {
     }
 
     public boolean isAncestor(TreeNode node) {
-        TreeNode ancestor = parent;
-
-        while (ancestor != null){
-            if(ancestor == node){
-                return true;
-            }
-
-            ancestor = ancestor.parent;
-        }
-
-        return false;
+        return isAncestor(node.data);
     }
 
     @Override

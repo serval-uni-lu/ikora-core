@@ -170,6 +170,7 @@ public class OutputMessageParser {
         dictionary.put(new ImmutablePair<>("selenium2library", "textarea value should be"), new ImmutablePair<>("The area '{0}' should have had text '{1}' but it had '(.*)'.", 1));
         dictionary.put(new ImmutablePair<>("selenium2library", "input text"), new ImmutablePair<>("", 0));
         dictionary.put(new ImmutablePair<>("selenium2library", "wait until page contains element"), new ImmutablePair<>("Element '{0}' did not appear in 30 seconds.", 1));
+        dictionary.put(new ImmutablePair<>("selenium2library", "open browser"), new ImmutablePair<>("WebDriverException: Message: Reached error page: (.*)", 0));
 
         return dictionary;
     }

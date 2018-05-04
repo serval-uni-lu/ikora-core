@@ -81,7 +81,7 @@ public class DifferenceResults implements Map<Pair<LocalDateTime, LocalDateTime>
                 continue;
             }
 
-            if(currentNode.isAncestor(valueNode)){
+            if(currentNode.data.isSame(valueNode.data) || currentNode.isAncestor(valueNode)){
                 value = null;
                 break;
             }
@@ -149,16 +149,20 @@ public class DifferenceResults implements Map<Pair<LocalDateTime, LocalDateTime>
 
         public void add(Pair<LocalDateTime, LocalDateTime> dates, EditOperation operation){
             if(!counter.containsKey(dates)){
-                Map<EditOperation, Integer> operations = new HashMap<>();
-                for(EditOperation op: EditOperation.values()){
-                    operations.put(op, 0);
-                }
-
-                counter.put(dates, operations);
+                initializeCounter(dates);
             }
 
             int value = counter.get(dates).get(operation) + 1;
             counter.get(dates).put(operation, value);
+        }
+
+        private void initializeCounter(Pair<LocalDateTime, LocalDateTime> dates) {
+            Map<EditOperation, Integer> operations = new HashMap<>();
+            for(EditOperation op: EditOperation.values()){
+                operations.put(op, 0);
+            }
+
+            counter.put(dates, operations);
         }
 
         public void substract(Pair<LocalDateTime, LocalDateTime> dates, EditOperation operation){
@@ -171,10 +175,19 @@ public class DifferenceResults implements Map<Pair<LocalDateTime, LocalDateTime>
         }
 
         public Map<EditOperation, Integer> getOperations(){
-            return counter.get(new ImmutablePair<>(null, null));
+            Pair<LocalDateTime, LocalDateTime> dates = new ImmutablePair<>(null, null);
+            if(!counter.containsKey(dates)){
+                initializeCounter(dates);
+            }
+
+            return counter.get(dates);
         }
 
         public Map<EditOperation, Integer> getOperations(Pair<LocalDateTime, LocalDateTime> dates){
+            if(!counter.containsKey(dates)){
+                initializeCounter(dates);
+            }
+
             return counter.get(dates);
         }
     }

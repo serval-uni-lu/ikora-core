@@ -25,7 +25,6 @@ public class DifferenceResultSerializer extends StdSerializer<DifferenceResults>
     @Override
     public void serialize(DifferenceResults differenceResults, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException, JsonGenerationException {
         jsonGenerator.writeStartObject();
-
         jsonGenerator.writeStringField("generated", LocalDateTime.now().toString());
 
         for(Map.Entry<EditOperation, Integer> operations: differenceResults.counter.getOperations().entrySet()){

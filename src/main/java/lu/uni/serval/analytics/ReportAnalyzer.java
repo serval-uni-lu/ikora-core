@@ -52,11 +52,9 @@ public class ReportAnalyzer implements Iterable<Report>{
         initKeywordSequence();
 
         TreeEditDistance editDistance = new TreeEditDistance(new CloneEditScore());
-
         DifferenceResults differences = new DifferenceResults();
 
         for(List<TreeNode> sequence: sequences){
-
             TreeNode previous = null;
             for(TreeNode keyword: sequence){
                 if(previous == null){

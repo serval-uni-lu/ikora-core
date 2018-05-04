@@ -7,17 +7,18 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import java.util.*;
 
 public class KeywordSequence implements Iterable<List<TreeNode>>{
-    private Map<ImmutablePair<String, String>, List<TreeNode>> data;
+    private Map<ReportKeywordId, List<TreeNode>> data;
 
     public KeywordSequence(){
         data = new HashMap<>();
     }
 
     public void add(TreeNode keyword){
+        String file = ((KeywordData)keyword.data).file;
         String name = ((KeywordData)keyword.data).name;
         String library = ((KeywordData)keyword.data).library;
 
-        ImmutablePair<String, String> key = new ImmutablePair<>(name, library);
+        ReportKeywordId key = new ReportKeywordId(file, name, library);
 
         if(data.containsKey(key)){
             data.get(key).add(keyword);
@@ -30,9 +31,20 @@ public class KeywordSequence implements Iterable<List<TreeNode>>{
         }
     }
 
-
     @Override
     public Iterator<List<TreeNode>> iterator() {
         return data.values().iterator();
+    }
+
+    public class ReportKeywordId{
+        public String file;
+        public String library;
+        public String name;
+
+        public ReportKeywordId(String file, String library, String name){
+            this.file = file;
+            this.library = library;
+            this.name = name;
+        }
     }
 }

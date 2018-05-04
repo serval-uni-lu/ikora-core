@@ -63,7 +63,9 @@ public class ReportFactory {
                 suite.addSuite(subSuite);
             }
             else if(tagName.equalsIgnoreCase("kw") || tagName.equalsIgnoreCase("test")){
-                TreeNode keyword = parseKeyword(child, dateTime);
+                String id = suiteElement.getAttribute("id");
+
+                TreeNode keyword = parseKeyword(suite.getSource(), child, dateTime);
 
                 if(keyword == null){
                     continue;
@@ -76,9 +78,10 @@ public class ReportFactory {
         return suite;
     }
 
-    private static TreeNode parseKeyword(final Element keywordElement, final LocalDateTime dateTime) {
+    private static TreeNode parseKeyword(String source, final Element keywordElement, final LocalDateTime dateTime) {
         ReportKeywordData data = new ReportKeywordData();
         data.type = keywordElement.getAttribute("type");
+        data.file = source;
         data.name = keywordElement.getAttribute("name");
         data.library = keywordElement.getAttribute("library");
 
@@ -94,7 +97,7 @@ public class ReportFactory {
                 data.documentation = child.getTextContent();
             }
             else if(elementName.equalsIgnoreCase("kw")){
-                TreeNode keyword = parseKeyword(child, dateTime);
+                TreeNode keyword = parseKeyword(source, child, dateTime);
 
                 if(keyword == null){
                     continue;

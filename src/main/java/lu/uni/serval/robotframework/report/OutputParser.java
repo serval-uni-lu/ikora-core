@@ -45,7 +45,7 @@ public class OutputParser {
         File folder = new File(folderPath);
 
         if(!folder.isDirectory()){
-            throw new IllegalArgumentException("Expecting a folder path, got " + folderPath + "instead");
+            throw new IllegalArgumentException("Expecting a folder path, got '" + folderPath + "' instead");
         }
 
         getXmlList(folder, xmlFiles);

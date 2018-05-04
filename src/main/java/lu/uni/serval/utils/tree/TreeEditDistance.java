@@ -84,7 +84,9 @@ public class TreeEditDistance implements TreeDistance {
             if(replace < delete && replace < insert) {
                 score = replace;
                 operation = EditOperation.Replace;
-                subtreeActions = replaceActions;
+                if(replace > 0){
+                    subtreeActions = replaceActions;
+                }
             }
             else if (delete < insert) {
                 score = delete;
