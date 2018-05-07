@@ -27,7 +27,7 @@ public class EditActionSerializer extends StdSerializer<EditAction> {
         }
 
         if(editAction.operation != EditOperation.Delete){
-            writeNodeObject(jsonGenerator, "after", editAction.getNode1());
+            writeNodeObject(jsonGenerator, "after", editAction.getNode2());
         }
 
         jsonGenerator.writeEndObject();

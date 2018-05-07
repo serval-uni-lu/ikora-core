@@ -9,7 +9,6 @@ public class ReportKeywordData extends KeywordData {
         UNDEFINED, PASS, FAILED
     }
 
-    public String id;
     public Status status;
     public LocalDateTime executionDate;
 
@@ -37,7 +36,7 @@ public class ReportKeywordData extends KeywordData {
 
         ReportKeywordData data = (ReportKeywordData)other;
 
-        return this.id.equals(data.id) &&
+        return this.file.equals(data.file) &&
                 this.name.equals(data.name) &&
                 this.library.equals(data.library) &&
                 this.arguments == data.arguments;

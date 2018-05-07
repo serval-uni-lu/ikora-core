@@ -78,10 +78,10 @@ public class ReportFactory {
         return suite;
     }
 
-    private static TreeNode parseKeyword(String source, final Element keywordElement, final LocalDateTime dateTime) {
+    private static TreeNode parseKeyword(String file, final Element keywordElement, final LocalDateTime dateTime) {
         ReportKeywordData data = new ReportKeywordData();
         data.type = keywordElement.getAttribute("type");
-        data.file = source;
+        data.file = file;
         data.name = keywordElement.getAttribute("name");
         data.library = keywordElement.getAttribute("library");
 
@@ -97,7 +97,7 @@ public class ReportFactory {
                 data.documentation = child.getTextContent();
             }
             else if(elementName.equalsIgnoreCase("kw")){
-                TreeNode keyword = parseKeyword(source, child, dateTime);
+                TreeNode keyword = parseKeyword(file, child, dateTime);
 
                 if(keyword == null){
                     continue;
