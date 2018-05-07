@@ -34,4 +34,15 @@ public class EditAction {
         return node == null ? "[NULL]" : node.getLabel();
     }
 
+    public String getRootLabel() {
+        if(node1 != null){
+            return node1.getRoot().getLabel();
+        }
+
+        if(node2 != null){
+            return node2.getRoot().getLabel();
+        }
+
+        return "[NULL]";
+    }
 }

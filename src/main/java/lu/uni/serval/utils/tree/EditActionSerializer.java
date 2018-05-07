@@ -37,7 +37,7 @@ public class EditActionSerializer extends StdSerializer<EditAction> {
         jsonGenerator.writeObjectFieldStart(name);
 
         jsonGenerator.writeStringField("label", node == null ? "" :node.getLabel());
-        jsonGenerator.writeStringField("root", node == null || node.getRoot() == null ? "null" : node.getRoot().getLabel());
+        jsonGenerator.writeStringField("parent", node == null || node.getParent() == null ? "null" : node.getParent().getLabel());
         jsonGenerator.writeStringField("size", node == null ? "0" : String.valueOf(node.getSize()));
 
         jsonGenerator.writeEndObject();

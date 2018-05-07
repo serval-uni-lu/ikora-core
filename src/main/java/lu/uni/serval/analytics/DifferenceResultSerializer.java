@@ -10,6 +10,8 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,7 +25,7 @@ public class DifferenceResultSerializer extends StdSerializer<DifferenceResults>
         }
 
     @Override
-    public void serialize(DifferenceResults differenceResults, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException, JsonGenerationException {
+    public void serialize(DifferenceResults differenceResults, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
         jsonGenerator.writeStartObject();
         jsonGenerator.writeStringField("generated", LocalDateTime.now().toString());
 
@@ -43,6 +45,34 @@ public class DifferenceResultSerializer extends StdSerializer<DifferenceResults>
             jsonGenerator.writeStringField("from", key.getLeft() == null ? "unknown" : key.getLeft().toString());
             jsonGenerator.writeStringField("to", key.getRight() == null ? "unknown" : key.getRight().toString());
 
+            jsonGenerator.writeArrayFieldStart("keywords");
+
+            writeActions(jsonGenerator, entry.getValue());
+
+            jsonGenerator.writeEndArray();
+            jsonGenerator.writeEndObject();
+        }
+        jsonGenerator.writeEndArray();
+        jsonGenerator.writeEndObject();
+    }
+
+    private void writeActions(JsonGenerator jsonGenerator, List<EditAction> actions) throws IOException {
+        Map<String, List<EditAction>> differencesPerKeyword = new HashMap<>();
+
+        for(EditAction difference: actions){
+            String rootLabel = difference.getRootLabel();
+
+            if(!differencesPerKeyword.containsKey(rootLabel)){
+                differencesPerKeyword.put(rootLabel, new ArrayList<>());
+            }
+
+            differencesPerKeyword.get(rootLabel).add(difference);
+        }
+
+        for(Map.Entry<String, List<EditAction>> entry: differencesPerKeyword.entrySet()){
+            jsonGenerator.writeStartObject();
+            jsonGenerator.writeStringField("keyword", entry.getKey());
+
             jsonGenerator.writeArrayFieldStart("differences");
 
             for(EditAction difference: entry.getValue()){
@@ -52,7 +82,5 @@ public class DifferenceResultSerializer extends StdSerializer<DifferenceResults>
             jsonGenerator.writeEndArray();
             jsonGenerator.writeEndObject();
         }
-        jsonGenerator.writeEndArray();
-        jsonGenerator.writeEndObject();
     }
 }
