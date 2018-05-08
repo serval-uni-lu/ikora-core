@@ -21,7 +21,7 @@ public class TreeEditDistance implements TreeDistance {
             throw new NullPointerException();
         }
 
-        CompareCache<TreeNode, ScoreElement> memory = new CompareCache<>();
+        CompareCache<TreeView, ScoreElement> memory = new CompareCache<>();
         List<EditAction> actions = new ArrayList<>();
 
         return execute(memory, actions, new TreeView(tree1), new TreeView(tree2));
@@ -43,7 +43,7 @@ public class TreeEditDistance implements TreeDistance {
             return new ArrayList<>();
         }
 
-        CompareCache<TreeNode, ScoreElement> memory = new CompareCache<>();
+        CompareCache<TreeView, ScoreElement> memory = new CompareCache<>();
         List<EditAction> actions = new ArrayList<>();
 
         execute(memory, actions, new TreeView(tree1), new TreeView(tree2));
@@ -51,20 +51,21 @@ public class TreeEditDistance implements TreeDistance {
         return actions;
     }
 
-    private double execute(CompareCache<TreeNode, ScoreElement> memory, List<EditAction> actions, TreeView tree1, TreeView tree2) {
-        if(memory.isCached(getHead(tree1), getHead(tree2))) {
-            actions.addAll(memory.getScore(getHead(tree1),  getHead(tree2)).actions);
-            return memory.getScore(getHead(tree1),  getHead(tree2)).score;
+    private double execute(CompareCache<TreeView, ScoreElement> memory, List<EditAction> actions, TreeView tree1, TreeView tree2) {
+
+        if (tree1 == null && tree2 == null) {
+            return 0.0;
+        }
+
+        if (checkCache(memory, actions, tree1, tree2)) {
+            return memory.getScore(tree1, tree2).score;
         }
 
         double score;
         EditOperation operation;
         List<EditAction> subtreeActions = new ArrayList<>();
 
-        if (tree1 == null && tree2 == null) {
-            return 0.0;
-        }
-        else if (tree1 == null) {
+        if (tree1 == null) {
             score = calculateInsertScore(memory, subtreeActions, null, tree2);
             operation = EditOperation.Insert;
         }
@@ -73,6 +74,7 @@ public class TreeEditDistance implements TreeDistance {
             operation = EditOperation.Delete;
         }
         else {
+
             List<EditAction> replaceActions = new ArrayList<>();
             List<EditAction> deleteActions = new ArrayList<>();
             List<EditAction> insertActions = new ArrayList<>();
@@ -87,6 +89,7 @@ public class TreeEditDistance implements TreeDistance {
                 if(replace > 0){
                     subtreeActions = replaceActions;
                 }
+
             }
             else if (delete < insert) {
                 score = delete;
@@ -101,11 +104,20 @@ public class TreeEditDistance implements TreeDistance {
         }
 
         actions.addAll(subtreeActions);
-        memory.set(getHead(tree1), getHead(tree2), new ScoreElement(score, operation, subtreeActions));
+        memory.set(tree1, tree2, new ScoreElement(score, operation, subtreeActions));
         return score;
     }
 
-    private double calculateReplaceScore(CompareCache<TreeNode, ScoreElement> memory, List<EditAction> actions, TreeView tree1, TreeView tree2) {
+    private boolean checkCache(CompareCache<TreeView, ScoreElement> memory, List<EditAction> actions, TreeView tree1, TreeView tree2) {
+        if(memory.isCached(tree1, tree2)) {
+            actions.addAll(memory.getScore(tree1, tree2).actions);
+            return true;
+        }
+
+        return false;
+    }
+
+    private double calculateReplaceScore(CompareCache<TreeView, ScoreElement> memory, List<EditAction> actions, TreeView tree1, TreeView tree2) {
         double s1 = execute(memory, actions, tree1.getInside(), tree2.getInside());
         double s2 = execute(memory, actions,  tree1.getOutside(), tree2.getOutside());
         double replaceScore = score.replace(tree1.head(), tree2.head());
@@ -118,18 +130,26 @@ public class TreeEditDistance implements TreeDistance {
         return s1 + s2 + replaceScore;
     }
 
-    private double calculateDeleteScore(CompareCache<TreeNode, ScoreElement> memory, List<EditAction> actions, TreeView tree1, TreeView tree2) {
+    private double calculateDeleteScore(CompareCache<TreeView, ScoreElement> memory, List<EditAction> actions, TreeView tree1, TreeView tree2) {
         EditAction action = new EditAction(EditOperation.Delete, getHead(tree1), getHead(tree2));
         actions.add(action);
 
-        return execute(memory, actions, tree1.deleteHead(), tree2) + score.delete(getHead(tree2));
+        if(tree2 == null){
+            return score.insert(getHead(tree1), getHead(tree2));
+        }
+
+        return execute(memory, actions, tree1.deleteHead(), tree2) + score.delete(getHead(tree2), getHead(tree2));
     }
 
-    private double calculateInsertScore(CompareCache<TreeNode, ScoreElement> memory, List<EditAction> actions, TreeView tree1, TreeView tree2) {
+    private double calculateInsertScore(CompareCache<TreeView, ScoreElement> memory, List<EditAction> actions, TreeView tree1, TreeView tree2) {
         EditAction action = new EditAction(EditOperation.Insert, getHead(tree1), getHead(tree2));
         actions.add(action);
 
-        return execute(memory, actions, tree1, tree2.deleteHead()) + score.insert(getHead(tree1));
+        if(tree1 == null){
+            return score.insert(getHead(tree1), getHead(tree2));
+        }
+
+        return execute(memory, actions, tree1, tree2.deleteHead()) + score.insert(getHead(tree1), getHead(tree2));
     }
 
     private TreeNode getHead(TreeView tree){

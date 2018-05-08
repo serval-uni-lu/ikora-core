@@ -15,11 +15,19 @@ public class CloneEditScore implements EditScore {
         return levenshteinIndex(label1,label2);
     }
 
-    public double delete(TreeNode node) {
+    public double delete(TreeNode node1, TreeNode node2) {
+        if(node2 == null){
+            return node1.getSize();
+        }
+
         return 1;
     }
 
-    public double insert(TreeNode node) {
+    public double insert(TreeNode node1, TreeNode node2) {
+        if(node1 == null){
+            return node2.getSize();
+        }
+
         return 1;
     }
 

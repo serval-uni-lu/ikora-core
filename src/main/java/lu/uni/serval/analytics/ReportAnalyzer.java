@@ -51,8 +51,8 @@ public class ReportAnalyzer implements Iterable<Report>{
     public DifferenceResults findDifferences(){
         initKeywordSequence();
 
-        TreeEditDistance editDistance = new TreeEditDistance(new CloneEditScore());
         DifferenceResults differences = new DifferenceResults();
+        TreeEditDistance editDistance = new TreeEditDistance(new CloneEditScore());
 
         for(List<TreeNode> sequence: sequences){
             TreeNode previous = null;

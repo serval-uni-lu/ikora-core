@@ -1,11 +1,11 @@
 package lu.uni.serval.analytics;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import lu.uni.serval.utils.EasyPair;
 import lu.uni.serval.utils.ReportKeywordData;
 import lu.uni.serval.utils.tree.EditAction;
 import lu.uni.serval.utils.tree.EditOperation;
 import lu.uni.serval.utils.tree.TreeNode;
-import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.time.LocalDateTime;
@@ -25,7 +25,7 @@ public class DifferenceResults implements Map<Pair<LocalDateTime, LocalDateTime>
         LocalDateTime dateTime1 = difference.getNode1() == null ? null :((ReportKeywordData)difference.getNode1().data).executionDate;
         LocalDateTime dateTime2 = difference.getNode2() == null ? null : ((ReportKeywordData)difference.getNode2().data).executionDate;
 
-        ImmutablePair<LocalDateTime, LocalDateTime> dates = new ImmutablePair<>(dateTime1, dateTime2);
+        EasyPair<LocalDateTime, LocalDateTime> dates = new EasyPair<>(dateTime1, dateTime2);
 
         put(dates, difference);
     }
@@ -101,12 +101,12 @@ public class DifferenceResults implements Map<Pair<LocalDateTime, LocalDateTime>
     }
 
     private void subtract(Pair<LocalDateTime, LocalDateTime> key, EditOperation operation) {
-        counter.substract(new ImmutablePair<>(null, null), operation);
+        counter.substract(new EasyPair<>(null, null), operation);
         counter.substract(key, operation);
     }
 
     private void add(Pair<LocalDateTime, LocalDateTime> key, EditOperation operation) {
-        counter.add(new ImmutablePair<>(null, null), operation);
+        counter.add(new EasyPair<>(null, null), operation);
         counter.add(key, operation);
     }
 
@@ -175,7 +175,7 @@ public class DifferenceResults implements Map<Pair<LocalDateTime, LocalDateTime>
         }
 
         public Map<EditOperation, Integer> getOperations(){
-            Pair<LocalDateTime, LocalDateTime> dates = new ImmutablePair<>(null, null);
+            Pair<LocalDateTime, LocalDateTime> dates = new EasyPair<>(null, null);
             if(!counter.containsKey(dates)){
                 initializeCounter(dates);
             }

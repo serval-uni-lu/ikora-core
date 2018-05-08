@@ -7,7 +7,7 @@ import java.util.*;
 
 public class KeywordData implements TreeNodeData {
 
-
+    private String label;
     public String name;
     public String type;
     public List<String> arguments;
@@ -17,6 +17,7 @@ public class KeywordData implements TreeNodeData {
     public String library;
 
     public KeywordData(){
+        this.label = null;
         this.arguments = new  ArrayList<>();
         this.variables =  new HashMap<>();
     }
@@ -35,7 +36,11 @@ public class KeywordData implements TreeNodeData {
     }
 
     public String getLabel() {
-        return toString();
+        if(label == null){
+            label = toString();
+        }
+
+        return label;
     }
 
     public boolean isSame(TreeNodeData other) {
@@ -74,6 +79,8 @@ public class KeywordData implements TreeNodeData {
         Collections.replaceAll(values, variable, safeVariable);
 
         this.variables.put(variable, values);
+
+        label = null;
     }
 
     private String cleanArgument(String argument) {

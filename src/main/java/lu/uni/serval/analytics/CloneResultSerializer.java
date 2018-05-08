@@ -5,8 +5,8 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import lu.uni.serval.utils.CompareCache;
+import lu.uni.serval.utils.EasyPair;
 import lu.uni.serval.utils.KeywordData;
-import lu.uni.serval.utils.UnorderedPair;
 import lu.uni.serval.utils.tree.TreeNode;
 
 import java.io.IOException;
@@ -44,21 +44,21 @@ public class CloneResultSerializer extends StdSerializer<CloneResults> {
         jsonGenerator.writeStringField("size", String.valueOf(clones.size()));
 
         jsonGenerator.writeArrayFieldStart("data");
-        for(Map.Entry<UnorderedPair<TreeNode>, CloneIndex> clone: clones){
+        for(Map.Entry<EasyPair<TreeNode, TreeNode>, CloneIndex> clone: clones){
             writeJsonClone(clone.getKey(), clone.getValue(), jsonGenerator);
         }
         jsonGenerator.writeEndArray();
         jsonGenerator.writeEndObject();
     }
 
-    private void writeJsonClone(UnorderedPair<TreeNode> treePair, CloneIndex index, JsonGenerator jsonGenerator) throws IOException {
+    private void writeJsonClone(EasyPair<TreeNode, TreeNode> treePair, CloneIndex index, JsonGenerator jsonGenerator) throws IOException {
         jsonGenerator.writeStartObject();
         jsonGenerator.writeNumberField("keyword index", index.getKeywordRatio());
         jsonGenerator.writeNumberField("tree index", index.getTreeRatio());
         jsonGenerator.writeNumberField("semantic index", index.getSemanticRatio());
         jsonGenerator.writeArrayFieldStart("tree pair");
-        writeJsonTree(treePair.first(), jsonGenerator);
-        writeJsonTree(treePair.second(), jsonGenerator);
+        writeJsonTree(treePair.left, jsonGenerator);
+        writeJsonTree(treePair.right, jsonGenerator);
         jsonGenerator.writeEndArray();
         jsonGenerator.writeEndObject();
     }

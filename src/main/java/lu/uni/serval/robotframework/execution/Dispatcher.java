@@ -5,15 +5,15 @@ import lu.uni.serval.robotframework.execution.selenium.Context;
 import lu.uni.serval.robotframework.execution.selenium.FormElement;
 import lu.uni.serval.robotframework.execution.selenium.Keyword;
 import lu.uni.serval.robotframework.report.ExecutionResult;
+import lu.uni.serval.utils.EasyPair;
 import lu.uni.serval.utils.exception.InvalidNumberArgumentException;
-import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 
 public class Dispatcher {
-    private Map<String, ImmutablePair<Object, Method>> operations;
+    private Map<String, EasyPair<Object, Method>> operations;
     private Context context;
 
     public Dispatcher(){
@@ -29,7 +29,7 @@ public class Dispatcher {
 
         for (final Method method : allMethods) {
             if (method.isAnnotationPresent(Keyword.class)) {
-                operations.put(toKeyword(method.getName()), ImmutablePair.of(object, method));
+                operations.put(toKeyword(method.getName()), EasyPair.of(object, method));
             }
         }
     }
@@ -41,7 +41,7 @@ public class Dispatcher {
     public ExecutionResult call(String keyword, List<String> arguments)
             throws InvocationTargetException, IllegalAccessException, InvalidNumberArgumentException {
 
-        ImmutablePair<Object, Method> method = operations.get(keyword.trim().toLowerCase());
+        EasyPair<Object, Method> method = operations.get(keyword.trim().toLowerCase());
 
         int expect = method.getRight().getParameterTypes().length;
         int actual = arguments.size();
