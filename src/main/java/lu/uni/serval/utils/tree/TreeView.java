@@ -73,21 +73,10 @@ public class TreeView {
             return getOutside();
         }
 
-        return new TreeView(child, this.root);
-    }
-
-    private TreeNode getRoot(TreeNode child, int maximumDistance){
-        int i = 0;
-        TreeNode localRoot = child;
-
-        while (i++ < maximumDistance){
-            if(localRoot == this.root){
-                break;
-            }
-
-            localRoot = localRoot.parent;
+        if(this.root == null){
+            throw new NullPointerException();
         }
 
-        return localRoot;
+        return new TreeView(child, this.root);
     }
 }

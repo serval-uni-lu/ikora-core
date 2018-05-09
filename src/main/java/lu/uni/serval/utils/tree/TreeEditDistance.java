@@ -57,10 +57,6 @@ public class TreeEditDistance implements TreeDistance {
             return 0.0;
         }
 
-        if (checkCache(memory, actions, tree1, tree2)) {
-            return memory.getScore(tree1, tree2).score;
-        }
-
         double score;
         EditOperation operation;
         List<EditAction> subtreeActions = new ArrayList<>();
@@ -74,6 +70,10 @@ public class TreeEditDistance implements TreeDistance {
             operation = EditOperation.Delete;
         }
         else {
+
+            if (checkCache(memory, actions, tree1, tree2)) {
+                return memory.getScore(tree1, tree2).score;
+            }
 
             List<EditAction> replaceActions = new ArrayList<>();
             List<EditAction> deleteActions = new ArrayList<>();
@@ -105,6 +105,7 @@ public class TreeEditDistance implements TreeDistance {
 
         actions.addAll(subtreeActions);
         memory.set(tree1, tree2, new ScoreElement(score, operation, subtreeActions));
+
         return score;
     }
 

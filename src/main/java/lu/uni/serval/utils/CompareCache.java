@@ -4,12 +4,17 @@ import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Queue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class CompareCache<K, T> implements Iterable<Map.Entry<EasyPair<K, K>, T>> {
     private Map<EasyPair<K, K>, T> map;
+    private Queue<EasyPair<K,K>> queue;
+    private static int maximumSize = 1000000;
 
     public CompareCache(){
         this.map = new HashMap<>();
+        this.queue = new LinkedBlockingQueue<>(maximumSize + 1);
     }
 
     public int size(){
@@ -25,7 +30,15 @@ public class CompareCache<K, T> implements Iterable<Map.Entry<EasyPair<K, K>, T>
     }
 
     public void set(K key1, K key2, T score){
-        this.map.put(new EasyPair<>(key1, key2), score);
+        EasyPair<K, K> pair = new EasyPair<>(key1, key2);
+
+        this.map.put(pair, score);
+
+        if(this.queue.size() >= maximumSize){
+            this.map.remove(this.queue.poll());
+        }
+
+        this.queue.add(pair);
     }
 
     @Nonnull
