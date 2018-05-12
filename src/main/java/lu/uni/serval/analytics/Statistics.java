@@ -1,6 +1,6 @@
 package lu.uni.serval.analytics;
 
-import lu.uni.serval.utils.tree.TreeNode;
+import lu.uni.serval.utils.tree.LabelTreeNode;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,14 +33,14 @@ public class Statistics {
         statistics.put(Type.Steps, new StatisticsElement());
     }
 
-    public StatisticsResults computeStatistics(Set<TreeNode> forest){
+    public StatisticsResults computeStatistics(Set<LabelTreeNode> forest){
         StatisticsResults results = new StatisticsResults();
 
         reset();
         numberOfKeywords = forest.size();
 
-        for(TreeNode tree: forest){
-            updateStatistic(Type.Size, tree.getSize());
+        for(LabelTreeNode tree: forest){
+            updateStatistic(Type.Size, tree.getNodeCount());
             updateStatistic(Type.Depth, tree.getDepth());
             updateStatistic(Type.Steps, tree.getLeaves().size());
         }

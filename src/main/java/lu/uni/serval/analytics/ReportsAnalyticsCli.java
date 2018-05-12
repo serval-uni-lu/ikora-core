@@ -7,7 +7,7 @@ import lu.uni.serval.utils.CommandRunner;
 import lu.uni.serval.utils.Configuration;
 import lu.uni.serval.utils.Plugin;
 import lu.uni.serval.utils.exception.DuplicateNodeException;
-import lu.uni.serval.utils.tree.TreeNode;
+import lu.uni.serval.utils.tree.LabelTreeNode;
 
 import java.io.*;
 
@@ -24,7 +24,7 @@ public class ReportsAnalyticsCli implements CommandRunner {
             PrintWriter writer = null;
             try {
                 writer = new PrintWriter("C:\\Users\\renaud.rwemalika\\Desktop\\report_" + report.getCreationTime().toLocalDate().toString() + ".txt", "UTF-8");
-                for(TreeNode keyword: report.getKeywords()){
+                for(LabelTreeNode keyword: report.getKeywords()){
                     writer.println(keyword);
                 }
 

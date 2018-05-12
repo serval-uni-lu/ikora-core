@@ -9,28 +9,22 @@ public class TreeNodeTest {
 
     @Test
     public void checkWhenAddOneNodeItIsTheRoot(){
-        TreeNode node = new TreeNode(new TreeNodeDataTest("0"), false);
+        LabelTreeNode node = new LabelTreeNode(new TreeNodeDataTest("0"));
 
         assertEquals(node, node.getRoot());
     }
 
     @Test
     public void checkWhenAddOneNodeLevelIsZero(){
-        TreeNode node = new TreeNode(new TreeNodeDataTest("0"), false);
+        LabelTreeNode node = new LabelTreeNode(new TreeNodeDataTest("0"));
 
         assertEquals(0, node.getLevel());
     }
 
     @Test
     public void checkWhenAddChildLevelIsOne(){
-        TreeNode root = new TreeNode(new TreeNodeDataTest("0"), false);
-
-        TreeNode child = null;
-        try {
-            child = root.addChild(new TreeNodeDataTest("1"));
-        } catch (DuplicateNodeException e) {
-            e.printStackTrace();
-        }
+        LabelTreeNode root = new LabelTreeNode(new TreeNodeDataTest("0"));
+        LabelTreeNode child = root.add(new TreeNodeDataTest("1"));
 
         assertEquals(1, child.getLevel());
     }

@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import lu.uni.serval.Globals;
 import lu.uni.serval.utils.exception.DuplicateNodeException;
-import lu.uni.serval.utils.tree.TreeNode;
+import lu.uni.serval.utils.tree.LabelTreeNode;
 import lu.uni.serval.utils.tree.TreeNodeDataTest;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -15,74 +15,49 @@ import java.util.List;
 
 public class CloneDetectionTest {
 
-    private static List<TreeNode> trees;
+    private static List<LabelTreeNode> trees;
 
-    private static List<TreeNode> getTrees(){
+    private static List<LabelTreeNode> getTrees(){
         if(!(trees == null)){
             return trees;
         }
 
         trees = new ArrayList<>();
 
-        TreeNode tree0 = new TreeNode(new TreeNodeDataTest("a keyword"), false);
-
-        try {
-            tree0.addChild(new TreeNodeDataTest("1"));
-            tree0.addChild(new TreeNodeDataTest("2"));
-        } catch (DuplicateNodeException e) {
-            e.printStackTrace();
-        }
+        LabelTreeNode tree0 = new LabelTreeNode(new TreeNodeDataTest("a keyword"));
+        tree0.add(new TreeNodeDataTest("1"));
+        tree0.add(new TreeNodeDataTest("2"));
 
         trees.add(tree0);
 
-        TreeNode tree1 = new TreeNode(new TreeNodeDataTest("another keyword"), false);
-
-        try {
-            tree1.addChild(new TreeNodeDataTest("1"));
-            tree1.addChild(new TreeNodeDataTest("2"));
-        } catch (DuplicateNodeException e) {
-            e.printStackTrace();
-        }
+        LabelTreeNode tree1 = new LabelTreeNode(new TreeNodeDataTest("another keyword"));
+        tree1.add(new TreeNodeDataTest("1"));
+        tree1.add(new TreeNodeDataTest("2"));
 
         trees.add(tree1);
 
-        TreeNode tree2 = new TreeNode(new TreeNodeDataTest("keyword"), false);
-
-        try {
-            tree2.addChild(new TreeNodeDataTest("4"));
-            tree2.addChild(new TreeNodeDataTest("5"));
-        } catch (DuplicateNodeException e) {
-            e.printStackTrace();
-        }
+        LabelTreeNode tree2 = new LabelTreeNode(new TreeNodeDataTest("keyword"));
+        tree2.add(new TreeNodeDataTest("4"));
+        tree2.add(new TreeNodeDataTest("5"));
 
         trees.add(tree2);
 
-        TreeNode tree3 = new TreeNode(new TreeNodeDataTest("keyword"), false);
-
-        try {
-            tree3.addChild(new TreeNodeDataTest("1"));
-            tree3.addChild(new TreeNodeDataTest("2"));
-        } catch (DuplicateNodeException e) {
-            e.printStackTrace();
-        }
+        LabelTreeNode tree3 = new LabelTreeNode(new TreeNodeDataTest("keyword"));
+        tree3.add(new TreeNodeDataTest("1"));
+        tree3.add(new TreeNodeDataTest("2"));
 
         trees.add(tree3);
 
-        TreeNode tree4 = new TreeNode(new TreeNodeDataTest("keyword last"), false);
-
-        try {
-            tree4.addChild(new TreeNodeDataTest("4"));
-            tree4.addChild(new TreeNodeDataTest("2"));
-        } catch (DuplicateNodeException e) {
-            e.printStackTrace();
-        }
+        LabelTreeNode tree4 = new LabelTreeNode(new TreeNodeDataTest("keyword last"));
+        tree4.add(new TreeNodeDataTest("4"));
+        tree4.add(new TreeNodeDataTest("2"));
 
         trees.add(tree4);
 
         return trees;
     }
 
-    private static TreeNode getTree(int index){
+    private static LabelTreeNode getTree(int index){
         return getTrees().get(index);
     }
 

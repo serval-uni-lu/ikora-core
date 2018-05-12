@@ -5,7 +5,7 @@ import lu.uni.serval.utils.EasyPair;
 import lu.uni.serval.utils.ReportKeywordData;
 import lu.uni.serval.utils.tree.EditAction;
 import lu.uni.serval.utils.tree.EditOperation;
-import lu.uni.serval.utils.tree.TreeNode;
+import lu.uni.serval.utils.tree.LabelTreeNode;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.time.LocalDateTime;
@@ -22,8 +22,8 @@ public class DifferenceResults implements Map<Pair<LocalDateTime, LocalDateTime>
     }
 
     public void addDifference(EditAction difference) {
-        LocalDateTime dateTime1 = difference.getNode1() == null ? null :((ReportKeywordData)difference.getNode1().data).executionDate;
-        LocalDateTime dateTime2 = difference.getNode2() == null ? null : ((ReportKeywordData)difference.getNode2().data).executionDate;
+        LocalDateTime dateTime1 = difference.getNode1() == null ? null :((ReportKeywordData)difference.getNode1().getData()).executionDate;
+        LocalDateTime dateTime2 = difference.getNode2() == null ? null : ((ReportKeywordData)difference.getNode2().getData()).executionDate;
 
         EasyPair<LocalDateTime, LocalDateTime> dates = new EasyPair<>(dateTime1, dateTime2);
 
@@ -74,14 +74,14 @@ public class DifferenceResults implements Map<Pair<LocalDateTime, LocalDateTime>
                 continue;
             }
 
-            TreeNode currentNode = current.operation != EditOperation.Delete ? current.getNode1() : current.getNode2();
-            TreeNode valueNode = value.operation != EditOperation.Delete ? value.getNode1() : value.getNode2();
+            LabelTreeNode currentNode = current.operation != EditOperation.Delete ? current.getNode1() : current.getNode2();
+            LabelTreeNode valueNode = value.operation != EditOperation.Delete ? value.getNode1() : value.getNode2();
 
             if(currentNode == null || valueNode == null){
                 continue;
             }
 
-            if(currentNode.data.isSame(valueNode.data) || currentNode.isAncestor(valueNode)){
+            if(currentNode.getData().isSame(valueNode.getData()) || currentNode.isAncestor(valueNode)){
                 value = null;
                 break;
             }

@@ -40,9 +40,9 @@ public class ReportAnalyzer implements Iterable<Report>{
         sequences = new KeywordSequence();
 
         for(Report report: reports){
-            List<TreeNode> keywords = report.getKeywords();
+            List<LabelTreeNode> keywords = report.getKeywords();
 
-            for(TreeNode keyword: keywords){
+            for(LabelTreeNode keyword: keywords){
                 sequences.add(keyword);
             }
         }
@@ -52,11 +52,11 @@ public class ReportAnalyzer implements Iterable<Report>{
         initKeywordSequence();
 
         DifferenceResults differences = new DifferenceResults();
-        TreeEditDistance editDistance = new TreeEditDistance(new CloneEditScore());
+        TreeEditDistance editDistance = new TreeEditDistance(1.0, 1.0, 1.0);
 
-        for(List<TreeNode> sequence: sequences){
-            TreeNode previous = null;
-            for(TreeNode keyword: sequence){
+        for(List<LabelTreeNode> sequence: sequences){
+            LabelTreeNode previous = null;
+            for(LabelTreeNode keyword: sequence){
                 if(previous == null){
                     previous = keyword;
                     continue;

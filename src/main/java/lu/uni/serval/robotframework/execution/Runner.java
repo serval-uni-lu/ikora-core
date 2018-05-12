@@ -3,9 +3,9 @@ package lu.uni.serval.robotframework.execution;
 import lu.uni.serval.robotframework.report.ExecutionReport;
 import lu.uni.serval.robotframework.report.ExecutionResult;
 import lu.uni.serval.utils.KeywordData;
-import lu.uni.serval.utils.tree.TreeNode;
 import lu.uni.serval.utils.exception.InvalidNumberArgumentException;
 import lu.uni.serval.utils.exception.WrongClassException;
+import lu.uni.serval.utils.tree.LabelTreeNode;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
@@ -54,16 +54,16 @@ public class Runner {
         return result;
     }
 
-    public ExecutionReport executeKeyword(TreeNode root) {
+    public ExecutionReport executeKeyword(LabelTreeNode root) {
         ExecutionReport report = new ExecutionReport();
 
         try{
-            for(TreeNode leaf : root.getLeaves()) {
-                if(!(leaf.data instanceof KeywordData)){
-                    throw new WrongClassException(KeywordData.class, leaf.data.getClass());
+            for(LabelTreeNode leaf : root.getLeaves()) {
+                if(!(leaf.getData() instanceof KeywordData)){
+                    throw new WrongClassException(KeywordData.class, leaf.getData().getClass());
                 }
 
-                KeywordData keyword = (KeywordData)leaf.data;
+                KeywordData keyword = (KeywordData)leaf.getData();
 
                 ExecutionResult result = this.execute(keyword.getCleanName(), keyword.getCleanArguments());
                 report.addResult(result);

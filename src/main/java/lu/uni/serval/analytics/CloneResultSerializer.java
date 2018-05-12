@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import lu.uni.serval.utils.CompareCache;
 import lu.uni.serval.utils.EasyPair;
 import lu.uni.serval.utils.KeywordData;
-import lu.uni.serval.utils.tree.TreeNode;
+import lu.uni.serval.utils.tree.LabelTreeNode;
 
 import java.io.IOException;
 import java.util.Map;
@@ -35,7 +35,7 @@ public class CloneResultSerializer extends StdSerializer<CloneResults> {
         jsonGenerator.writeEndObject();
     }
 
-    private void writeJsonClones(JsonGenerator jsonGenerator, String name, CompareCache<TreeNode, CloneIndex> clones) throws IOException {
+    private void writeJsonClones(JsonGenerator jsonGenerator, String name, CompareCache<LabelTreeNode, CloneIndex> clones) throws IOException {
         if(clones == null){
             return;
         }
@@ -44,14 +44,14 @@ public class CloneResultSerializer extends StdSerializer<CloneResults> {
         jsonGenerator.writeStringField("size", String.valueOf(clones.size()));
 
         jsonGenerator.writeArrayFieldStart("data");
-        for(Map.Entry<EasyPair<TreeNode, TreeNode>, CloneIndex> clone: clones){
+        for(Map.Entry<EasyPair<LabelTreeNode, LabelTreeNode>, CloneIndex> clone: clones){
             writeJsonClone(clone.getKey(), clone.getValue(), jsonGenerator);
         }
         jsonGenerator.writeEndArray();
         jsonGenerator.writeEndObject();
     }
 
-    private void writeJsonClone(EasyPair<TreeNode, TreeNode> treePair, CloneIndex index, JsonGenerator jsonGenerator) throws IOException {
+    private void writeJsonClone(EasyPair<LabelTreeNode, LabelTreeNode> treePair, CloneIndex index, JsonGenerator jsonGenerator) throws IOException {
         jsonGenerator.writeStartObject();
         jsonGenerator.writeNumberField("keyword index", index.getKeywordRatio());
         jsonGenerator.writeNumberField("tree index", index.getTreeRatio());
@@ -63,11 +63,11 @@ public class CloneResultSerializer extends StdSerializer<CloneResults> {
         jsonGenerator.writeEndObject();
     }
 
-    private void writeJsonTree(TreeNode tree, JsonGenerator jsonGenerator) throws IOException {
+    private void writeJsonTree(LabelTreeNode tree, JsonGenerator jsonGenerator) throws IOException {
         jsonGenerator.writeStartObject();
-        jsonGenerator.writeStringField("file", ((KeywordData)tree.data).file);
-        jsonGenerator.writeStringField("name", ((KeywordData)tree.data).name);
-        jsonGenerator.writeNumberField("number of steps", tree.children.size());
+        jsonGenerator.writeStringField("file", ((KeywordData)tree.getData()).file);
+        jsonGenerator.writeStringField("name", ((KeywordData)tree.getData()).name);
+        jsonGenerator.writeNumberField("number of steps", tree.getChildCount());
         jsonGenerator.writeEndObject();
     }
 }

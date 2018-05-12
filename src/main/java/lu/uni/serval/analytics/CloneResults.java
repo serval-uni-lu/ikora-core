@@ -2,7 +2,7 @@ package lu.uni.serval.analytics;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lu.uni.serval.utils.CompareCache;
-import lu.uni.serval.utils.tree.TreeNode;
+import lu.uni.serval.utils.tree.LabelTreeNode;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,7 +13,7 @@ public class CloneResults {
         None, Same, Synonym, Homonym
     }
 
-    private Map<CloneType, CompareCache<TreeNode, CloneIndex>> results;
+    private Map<CloneType, CompareCache<LabelTreeNode, CloneIndex>> results;
 
     public CloneResults(){
         results = new HashMap<>();
@@ -23,23 +23,23 @@ public class CloneResults {
         results.put(CloneType.Homonym, new CompareCache<>());
     }
 
-    public CompareCache<TreeNode, CloneIndex> getSame(){
+    public CompareCache<LabelTreeNode, CloneIndex> getSame(){
         return results.get(CloneType.Same);
     }
 
-    public CompareCache<TreeNode, CloneIndex> getSynonym(){
+    public CompareCache<LabelTreeNode, CloneIndex> getSynonym(){
         return results.get(CloneType.Synonym);
     }
 
-    public CompareCache<TreeNode, CloneIndex> getHomonym(){
+    public CompareCache<LabelTreeNode, CloneIndex> getHomonym(){
         return results.get(CloneType.Homonym);
     }
 
-    public CompareCache<TreeNode, CloneIndex> getByType(CloneType type){
+    public CompareCache<LabelTreeNode, CloneIndex> getByType(CloneType type){
         return results.get(type);
     }
 
-    public void update(CloneIndex cloneIndex, TreeNode tree1, TreeNode tree2) {
+    public void update(CloneIndex cloneIndex, LabelTreeNode tree1, LabelTreeNode tree2) {
         CloneType type = CloneType.None;
 
         if(cloneIndex.isSame()){
@@ -55,8 +55,8 @@ public class CloneResults {
         }
     }
 
-    private void update(CompareCache<TreeNode, CloneIndex> clones, CloneIndex cloneIndex,
-                        TreeNode tree1, TreeNode tree2){
+    private void update(CompareCache<LabelTreeNode, CloneIndex> clones, CloneIndex cloneIndex,
+                        LabelTreeNode tree1, LabelTreeNode tree2){
         if(clones == null){
             return;
         }
