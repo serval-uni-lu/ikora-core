@@ -124,6 +124,8 @@ public class TreeEditDistance {
     }
 
     public List<EditAction> differences(LabelTreeNode t1, LabelTreeNode t2){
+        init(t1, t2);
+        LinkedList<int[]> editMapping = computeEditMapping();
         return new ArrayList<>();
     }
 
