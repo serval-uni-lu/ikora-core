@@ -126,12 +126,43 @@ public class TreeEditDistance {
     public List<EditAction> differences(LabelTreeNode t1, LabelTreeNode t2){
         init(t1, t2);
         LinkedList<int[]> editMapping = computeEditMapping();
-        return new ArrayList<>();
+        List<EditAction> differences = new ArrayList<>(editMapping.size());
+
+        int[] labels1 = it1.getInfoArray(POST2_LABEL);
+        int[] labels2 = it2.getInfoArray(POST2_LABEL);
+
+        for(int[] edit: editMapping){
+            if(edit[0] != 0 && edit[1] != 0 && labels1[edit[0] - 1] == labels2[edit[1] - 1]){
+                continue;
+            }
+
+            LabelTreeNode node1 = null;
+            LabelTreeNode node2 = null;
+            EditOperation operation = EditOperation.Replace;
+
+            if(edit[0] == 0){
+                //node1 = it1.getNode(edit[0]);
+                operation = EditOperation.Insert;
+            }
+            else if(edit[1] == 0){
+                //node2 = it1.getNode(edit[1]);
+                operation = EditOperation.Delete;
+            }
+            else{
+                //node1 = it1.getNode(edit[0]);
+                //node2 = it1.getNode(edit[1]);
+            }
+
+            EditAction action = new EditAction(operation, node1, node2);
+            differences.add(action);
+        }
+
+        return differences;
     }
 
 	/**
 	 * Computes the tree edit distance between trees t1 and t2.
-	 * 
+	 *
 	 * @param t1
 	 * @param t2
 	 * @return tree edit distance between trees t1 and t2
@@ -155,7 +186,7 @@ public class TreeEditDistance {
 
 	/**
 	 * Initialization method.
-	 * 
+	 *
 	 * @param t1
 	 * @param t2
 	 */
@@ -314,7 +345,7 @@ public class TreeEditDistance {
 
 	/**
 	 * The recursion step according to the optimal strategy.
-	 * 
+	 *
 	 * @param it1
 	 * @param it2
 	 * @return
@@ -465,7 +496,7 @@ public class TreeEditDistance {
 	/**
 	 * Single-path function for the left-most path based on Zhang and Shasha
 	 * algorithm.
-	 * 
+	 *
 	 * @param it1
 	 * @param it2
 	 * @return distance between subtrees it1 and it2
@@ -548,7 +579,7 @@ public class TreeEditDistance {
 	/**
 	 * Single-path function for right-most path based on symmetric version of
 	 * Zhang and Shasha algorithm.
-	 * 
+	 *
 	 * @param it1
 	 * @param it2
 	 * @return distance between subtrees it1 and it2
@@ -643,7 +674,7 @@ public class TreeEditDistance {
 
 	/**
 	 * Single-path function for heavy path based on Klein/Demaine algorithm.
-	 * 
+	 *
 	 * @param it1
 	 * @param it2
 	 * @param heavyPath
@@ -719,7 +750,7 @@ public class TreeEditDistance {
 
 	/**
 	 * Compute period method.
-	 * 
+	 *
 	 * @param it1
 	 * @param aVp
 	 * @param aNextVp
@@ -1001,7 +1032,7 @@ public class TreeEditDistance {
 	/**
 	 * Computes an array where preorder/rev.preorder of a subforest of given
 	 * subtree is stored and can be accessed for given i and j.
-	 * 
+	 *
 	 * @param it
 	 * @param subtreePreorder
 	 * @param subtreeRevPreorder
@@ -1052,7 +1083,7 @@ public class TreeEditDistance {
 
 	/**
 	 * Returns j for given i, result of j(i) form Demaine's algorithm.
-	 * 
+	 *
 	 * @param it
 	 * @param aI
 	 * @param aSubtreeWeight
@@ -1117,10 +1148,10 @@ public class TreeEditDistance {
 	/**
 	 * Compute the minimal edit mapping between two trees. There might be
 	 * multiple minimal edit mappings. This function computes only one of them.
-	 * 
+	 *
 	 * The first step of this function is to compute the tree edit distance.
 	 * Based on the tree distance matrix the mapping is computed.
-	 * 
+	 *
 	 * @return all pairs (ted1.node,ted2.node) of the minimal edit mapping. Each
 	 *         element in the collection is an integer array A of size 2, where
 	 *         A[0]=ted1.node is the postorderID (starting with 1) of the nodes
@@ -1132,7 +1163,7 @@ public class TreeEditDistance {
 		// initialize tree and forest distance arrays
 		double[][] treedist = new double[size1 + 1][size2 + 1];
 		double[][] forestdist = new double[size1 + 1][size2 + 1];
-		
+
 		boolean rootNodePair = true;
 
 		// treedist was already computed - the result is in delta and deltaBit
@@ -1147,15 +1178,15 @@ public class TreeEditDistance {
 				treedist[i][j] = delta[i-1][j-1] + deltaBit[i-1][j-1];
 			}
 		}
-		
+
 		// forestdist for input trees has to be computed
 		forestDist(it1, it2, size1, size2, treedist, forestdist);
 
 		// empty edit mapping
-		LinkedList<int[]> editMapping = new LinkedList<int[]>();
+		LinkedList<int[]> editMapping = new LinkedList<>();
 
 		// empty stack of tree Pairs
-		LinkedList<int[]> treePairs = new LinkedList<int[]>();
+		LinkedList<int[]> treePairs = new LinkedList<>();
 
 		// push the pair of trees (ted1,ted2) to stack
 		treePairs.push(new int[] { size1, size2 });
