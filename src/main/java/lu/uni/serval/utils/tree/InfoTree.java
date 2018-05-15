@@ -28,6 +28,7 @@ import java.util.List;
 public class InfoTree {
 
     private LabelTreeNode inputTree;
+    private LabelTreeNode[] nodes;
 
     private static final byte LEFT = 0;
     private static final byte RIGHT = 1;
@@ -93,6 +94,7 @@ public class InfoTree {
     public InfoTree(LabelTreeNode aInputTree, LabelDictionary aLd) {
         this.inputTree = aInputTree;
         treeSize = inputTree.getNodeCount();
+        this.nodes = new LabelTreeNode[treeSize];
         this.info = new int[16][treeSize];
         Arrays.fill(info[POST2_PARENT], -1);
         Arrays.fill(info[POST2_MIN_KR], -1);
@@ -167,6 +169,10 @@ public class InfoTree {
      */
     public int[] getPath(int pathType) {
         return paths[pathType];
+    }
+
+    public LabelTreeNode getNode(int nodePostorder){
+        return nodes[nodePostorder];
     }
     
     /**
@@ -282,6 +288,7 @@ public class InfoTree {
 
         // postorder
         aT.setTmpData(postorder);
+        nodes[postorder] = aT;
 
         int currentDescSizes = descSizes + currentSize + 1;
         info[POST2_DESC_SUM][postorder] = (currentSize+1)*(currentSize+1+3)/2-currentDescSizes;

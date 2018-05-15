@@ -140,17 +140,17 @@ public class TreeEditDistance {
             LabelTreeNode node2 = null;
             EditOperation operation = EditOperation.Replace;
 
-            if(edit[0] == 0){
-                //node1 = it1.getNode(edit[0]);
-                operation = EditOperation.Insert;
-            }
-            else if(edit[1] == 0){
-                //node2 = it1.getNode(edit[1]);
+            if(edit[0] != 0 && edit[1] == 0){
+                node1 = it1.getNode(edit[0] - 1);
                 operation = EditOperation.Delete;
             }
+            else if(edit[0] == 0 && edit[1] != 0){
+                node2 = it1.getNode(edit[1] - 1);
+                operation = EditOperation.Insert;
+            }
             else{
-                //node1 = it1.getNode(edit[0]);
-                //node2 = it1.getNode(edit[1]);
+                node1 = it1.getNode(edit[0] - 1);
+                node2 = it1.getNode(edit[1] - 1);
             }
 
             EditAction action = new EditAction(operation, node1, node2);
@@ -1181,6 +1181,13 @@ public class TreeEditDistance {
 
 		// forestdist for input trees has to be computed
 		forestDist(it1, it2, size1, size2, treedist, forestdist);
+
+		for(double[] dd : forestdist){
+		    for (double d : dd){
+		        System.out.print(String.valueOf(d) + "\t");
+            }
+            System.out.print("\n");
+        }
 
 		// empty edit mapping
 		LinkedList<int[]> editMapping = new LinkedList<>();
