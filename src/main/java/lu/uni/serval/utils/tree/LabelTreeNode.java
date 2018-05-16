@@ -15,8 +15,6 @@
 
 package lu.uni.serval.utils.tree;
 
-import org.w3c.dom.Node;
-
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -31,20 +29,6 @@ import java.util.List;
  * @author Nikolaus Augsten from approxlib, available at http://www.inf.unibz.it/~augsten/src/ modified by Mateusz Pawlik
  */
 public class LabelTreeNode extends DefaultMutableTreeNode implements Comparable {
-	
-	public static final String TAB_STRING = "    ";
-	public static final String ROOT_STRING =   "*---+";
-	public static final String BRANCH_STRING = "+---+";
-	
-	public static final String OPEN_BRACKET = "{";
-	public static final String CLOSE_BRACKET = "}";
-	public static final String ID_SEPARATOR = ":";
-	
-	public static final int HIDE_NOTHING = 0;
-	public static final int HIDE_ROOT_LABEL = 1;
-	public static final int RENAME_LABELS_TO_LEVEL = 2;
-	public static final int HIDE_ALL_LABELS = 3;
-	public static final int RANDOM_ROOT_LABEL = 4;
         
 	/**
 	 * no node id
@@ -56,11 +40,9 @@ public class LabelTreeNode extends DefaultMutableTreeNode implements Comparable 
 	 */
 	public final int NO_TREE_ID = -1;
 	
-	int treeID = NO_TREE_ID;
-	String label = null;
-	TreeNodeData data = null;
-	Object tmpData = null;
-	int nodeID = NO_NODE;
+	private int treeID = NO_TREE_ID;
+	private int nodeID = NO_NODE;
+	private TreeNodeData data = null;
 	
 	/**
 	 * Use only this constructor!
@@ -70,15 +52,11 @@ public class LabelTreeNode extends DefaultMutableTreeNode implements Comparable 
 
 		setData(data);
 	}
-		
-	public void setLabel(String label) {
-		this.label = label;
-	}
-	
+
 	public String getLabel() {
-		return label;
+		return data.getLabel();
 	}
-		
+
 	public int getTreeID() {
 		if (isRoot()) {
 			return treeID;
@@ -102,48 +80,10 @@ public class LabelTreeNode extends DefaultMutableTreeNode implements Comparable 
 	 */
 	public void setData(TreeNodeData data) {
 		this.data = data;
-		this.label = data.getLabel();
 	}
 
-	public void setTmpData(Object tmpData){
-	    this.tmpData = tmpData;
-    }
-	
 	public TreeNodeData getData() {
 		return data;
-	}
-
-	public Object getTmpData(){
-	    return tmpData;
-    }
-		
-	public void prettyPrint() {
-		prettyPrint(false);
-	}
-	
-	
-	public void prettyPrint(boolean printTmpData) {
-		for (int i = 0; i < getLevel(); i++) {
-			System.out.print(TAB_STRING);
-		}
-		if (!isRoot()) {
-			System.out.print(BRANCH_STRING);
-		} else {
-			if (getTreeID() != NO_TREE_ID) {
-				System.out.println("treeID: " + getTreeID());
-			}
-			System.out.print(ROOT_STRING);
-		}
-		System.out.print(" '" + this.getLabel() + "' ");
-		if (printTmpData) {
-			System.out.println(getData());
-		} else {
-			System.out.println();
-		}
-		for (Enumeration e = children(); e.hasMoreElements();) {
-			((LabelTreeNode)e.nextElement()).prettyPrint(printTmpData);
-		}
-		
 	}
 	
 	public int getNodeCount() {
@@ -188,13 +128,6 @@ public class LabelTreeNode extends DefaultMutableTreeNode implements Comparable 
     public boolean isAncestor(LabelTreeNode node) {
         return isAncestor(node.getData());
     }
-
-    private static String getNodeName (Node n) {
-		if( n.getNodeType() == Node.TEXT_NODE ){
-			return n.getTextContent().trim();
-		}
-		return n.getNodeName();
-	}
 
     @Override
     public String toString() {

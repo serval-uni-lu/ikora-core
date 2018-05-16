@@ -22,8 +22,8 @@ public class DifferenceResults implements Map<Pair<LocalDateTime, LocalDateTime>
     }
 
     public void addDifference(EditAction difference) {
-        LocalDateTime dateTime1 = difference.getNode1() == null ? null :((ReportKeywordData)difference.getNode1().getData()).executionDate;
-        LocalDateTime dateTime2 = difference.getNode2() == null ? null : ((ReportKeywordData)difference.getNode2().getData()).executionDate;
+        LocalDateTime dateTime1 = difference.getRoot1() == null ? null :((ReportKeywordData)difference.getRoot1().getData()).executionDate;
+        LocalDateTime dateTime2 = difference.getRoot2() == null ? null : ((ReportKeywordData)difference.getRoot2().getData()).executionDate;
 
         EasyPair<LocalDateTime, LocalDateTime> dates = new EasyPair<>(dateTime1, dateTime2);
 

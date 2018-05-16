@@ -1,6 +1,5 @@
 package lu.uni.serval.analytics;
 
-import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
@@ -60,7 +59,7 @@ public class DifferenceResultSerializer extends StdSerializer<DifferenceResults>
         Map<String, List<EditAction>> differencesPerKeyword = new HashMap<>();
 
         for(EditAction difference: actions){
-            String rootLabel = difference.getRootLabel();
+            String rootLabel = difference.getRootLabel1();
 
             if(!differencesPerKeyword.containsKey(rootLabel)){
                 differencesPerKeyword.put(rootLabel, new ArrayList<>());

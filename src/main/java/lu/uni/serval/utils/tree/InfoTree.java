@@ -117,7 +117,11 @@ public class InfoTree {
     public int getSize() {
         return treeSize;
     }
-    
+
+    public LabelTreeNode getInputTree(){
+        return inputTree;
+    }
+
     public boolean ifNodeOfType(int postorder, int type) {
         return nodeType[type][postorder];
     }
@@ -287,7 +291,6 @@ public class InfoTree {
         postorder++;
 
         // postorder
-        aT.setTmpData(postorder);
         nodes[postorder] = aT;
 
         int currentDescSizes = descSizes + currentSize + 1;

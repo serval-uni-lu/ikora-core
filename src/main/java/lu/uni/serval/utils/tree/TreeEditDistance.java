@@ -145,15 +145,15 @@ public class TreeEditDistance {
                 operation = EditOperation.Delete;
             }
             else if(edit[0] == 0 && edit[1] != 0){
-                node2 = it1.getNode(edit[1] - 1);
+                node2 = it2.getNode(edit[1] - 1);
                 operation = EditOperation.Insert;
             }
             else{
                 node1 = it1.getNode(edit[0] - 1);
-                node2 = it1.getNode(edit[1] - 1);
+                node2 = it2.getNode(edit[1] - 1);
             }
 
-            EditAction action = new EditAction(operation, node1, node2);
+            EditAction action = new EditAction(operation, it1.getInputTree(), node1, it2.getInputTree(), node2);
             differences.add(action);
         }
 
