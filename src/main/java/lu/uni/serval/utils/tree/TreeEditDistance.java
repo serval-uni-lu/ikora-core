@@ -1182,13 +1182,6 @@ public class TreeEditDistance {
 		// forestdist for input trees has to be computed
 		forestDist(it1, it2, size1, size2, treedist, forestdist);
 
-		for(double[] dd : forestdist){
-		    for (double d : dd){
-		        System.out.print(String.valueOf(d) + "\t");
-            }
-            System.out.print("\n");
-        }
-
 		// empty edit mapping
 		LinkedList<int[]> editMapping = new LinkedList<>();
 
