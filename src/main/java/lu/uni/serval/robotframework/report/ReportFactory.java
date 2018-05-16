@@ -63,8 +63,6 @@ public class ReportFactory {
                 suite.addSuite(subSuite);
             }
             else if(tagName.equalsIgnoreCase("kw") || tagName.equalsIgnoreCase("test")){
-                String id = suiteElement.getAttribute("id");
-
                 LabelTreeNode keyword = parseKeyword(suite.getSource(), child, dateTime);
 
                 if(keyword == null){
@@ -80,7 +78,8 @@ public class ReportFactory {
 
     private static LabelTreeNode parseKeyword(String file, final Element keywordElement, final LocalDateTime dateTime) {
         ReportKeywordData data = new ReportKeywordData();
-        data.type = keywordElement.getAttribute("type");
+
+        data.type = getType(keywordElement);
         data.file = file;
         data.name = keywordElement.getAttribute("name");
         data.library = keywordElement.getAttribute("library");
@@ -129,6 +128,14 @@ public class ReportFactory {
         }
 
         return treeNode;
+    }
+
+    private static String getType(Element keywordElement) {
+        if(keywordElement.getTagName().equalsIgnoreCase("test")){
+            return "test";
+        }
+
+        return keywordElement.getAttribute("type");
     }
 
     private static List<String> parseArguments(Element argumentsElement) {
