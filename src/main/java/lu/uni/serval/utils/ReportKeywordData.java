@@ -36,8 +36,7 @@ public class ReportKeywordData extends KeywordData {
 
         ReportKeywordData data = (ReportKeywordData)other;
 
-        return this.file.equals(data.file) &&
-                this.name.equals(data.name) &&
+        return this.name.equals(data.name) &&
                 this.library.equals(data.library) &&
                 this.arguments == data.arguments;
     }

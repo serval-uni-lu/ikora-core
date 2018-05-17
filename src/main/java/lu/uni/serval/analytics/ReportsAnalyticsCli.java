@@ -16,10 +16,11 @@ public class ReportsAnalyticsCli implements CommandRunner {
     public void run() throws DuplicateNodeException {
         Configuration config = Configuration.getInstance();
         Plugin analytics = config.getPlugin("report analytics");
-        String location = (String)analytics.getAddictionalProperty("report location", "");
+        String location = (String)analytics.getAdditionalProperty("report location", "");
 
         ReportAnalyzer reports = OutputParser.parse(location);
 
+/*
         for(Report report: reports){
             PrintWriter writer = null;
             try {
@@ -36,12 +37,39 @@ public class ReportsAnalyticsCli implements CommandRunner {
                 }
             }
         }
+*/
+
+        exportDifferences(analytics, reports);
+        exportStatusSequences(analytics, reports);
+    }
+
+    private void exportStatusSequences(Plugin analytics, ReportAnalyzer reports) {
+        if(analytics.getAdditionalProperty("output status file", "").equals("")){
+            return;
+        }
+
+        StatusResults status = reports.getStatus();
+
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            File file = new File((String)analytics.getAdditionalProperty("output status file", "./report-status.json"));
+
+            mapper.writeValue(file, status);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void exportDifferences(Plugin analytics, ReportAnalyzer reports) {
+        if(analytics.getAdditionalProperty("output differences file", "").equals("")){
+            return;
+        }
 
         DifferenceResults results = reports.findDifferences();
 
         try {
             ObjectMapper mapper = new ObjectMapper();
-            File file = new File((String)analytics.getAddictionalProperty("output file", "./report-analytics.json"));
+            File file = new File((String)analytics.getAdditionalProperty("output differences file", "./report-differences.json"));
 
             mapper.writeValue(file, results);
         } catch (IOException e) {

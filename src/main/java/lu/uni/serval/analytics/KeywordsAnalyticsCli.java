@@ -20,10 +20,10 @@ public class KeywordsAnalyticsCli implements CommandRunner{
         Configuration config = Configuration.getInstance();
         Plugin analytics = config.getPlugin("keywords analytics");
 
-        CloneIndex.setKeywordThreshold((double)analytics.getAddictionalProperty("keyword threshold", 0.9));
-        CloneIndex.setTreeThreshold((double)analytics.getAddictionalProperty("tree threshold", 0.9));
+        CloneIndex.setKeywordThreshold((double)analytics.getAdditionalProperty("keyword threshold", 0.9));
+        CloneIndex.setTreeThreshold((double)analytics.getAdditionalProperty("tree threshold", 0.9));
 
-        String location = (String)analytics.getAddictionalProperty("testCase location", "");
+        String location = (String)analytics.getAdditionalProperty("testCase location", "");
 
         Set<LabelTreeNode> forest = KeywordsParser.parse(location);
 
@@ -43,7 +43,7 @@ public class KeywordsAnalyticsCli implements CommandRunner{
             export.setClones(cloneResults);
             export.setGeneralStatistics(statisticsResults);
 
-            File file = new File((String)analytics.getAddictionalProperty("output file", "./analytics.json"));
+            File file = new File((String)analytics.getAdditionalProperty("output file", "./analytics.json"));
 
             mapper.writeValue(file, export);
         } catch (IOException e) {
