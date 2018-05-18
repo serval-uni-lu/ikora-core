@@ -15,7 +15,7 @@ public class CompareCache<K, T> implements Iterable<Map.Entry<UnorderedPair<K>, 
     public CompareCache(){
         this.maximumSize = 10000000;
 
-        this.map = new HashMap<>();
+        this.map = new HashMap<>(maximumSize + 1);
         this.queue = new LinkedBlockingQueue<>(maximumSize + 1);
     }
 
