@@ -150,6 +150,7 @@ public class OutputMessageParser {
         dictionary.put(new EasyPair<>("selenium2library", "click link"), new EasyPair<>("Clicking link '{0}'.", 1));
         dictionary.put(new EasyPair<>("selenium2library", "get text"), new EasyPair<>("(.*) = {0}", 1));
         dictionary.put(new EasyPair<>("selenium2library", "textarea value should be"), new EasyPair<>("Content of text area '{0}' is '{1}'.", 2));
+        dictionary.put(new EasyPair<>("selenium2library", "get matching xpath count"), new EasyPair<>("(.*) = (.*)", 0));
 
         dictionary.put(new EasyPair<>("string", "get regexp matches"), new EasyPair<>("(.*) = {1}.", 2));
         dictionary.put(new EasyPair<>("string", "strip string"), new EasyPair<>("(.*) = {0}.", 1));
@@ -171,7 +172,10 @@ public class OutputMessageParser {
         dictionary.put(new EasyPair<>("selenium2library", "input text"), new EasyPair<>("", 0));
         dictionary.put(new EasyPair<>("selenium2library", "wait until page contains element"), new EasyPair<>("Element '{0}' did not appear in 30 seconds.", 1));
         dictionary.put(new EasyPair<>("selenium2library", "open browser"), new EasyPair<>("WebDriverException: Message: Reached error page: (.*)", 0));
-
+        dictionary.put(new EasyPair<>("selenium2library", "element should be visible"), new EasyPair<>("The element '{0}' should be visible, but it is not.", 1));
+        dictionary.put(new EasyPair<>("selenium2library", "page should contain"), new EasyPair<>("Page should have contained text '{0}' but did not", 1));
+        dictionary.put(new EasyPair<>("selenium2library", "should be equal"), new EasyPair<>("{0} != {1}", 2));
+        dictionary.put(new EasyPair<>("selenium2library", "wait until element is enabled"), new EasyPair<>("Element locator '{0}' did not match any elements after 30 seconds", 1));
         return dictionary;
     }
 }
