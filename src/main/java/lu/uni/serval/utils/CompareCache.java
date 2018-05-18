@@ -22,15 +22,15 @@ public class CompareCache<K, T> implements Iterable<Map.Entry<UnorderedPair<K>, 
     }
 
     public boolean isCached(K key1, K key2){
-        return map.containsKey(new UnorderedPair<>(key1, key2));
+        return map.containsKey(UnorderedPair.of(key1, key2));
     }
 
     public T getScore(K key1, K key2){
-        return map.get(new UnorderedPair<>(key1, key2));
+        return map.get(UnorderedPair.of(key1, key2));
     }
 
     public void set(K key1, K key2, T score){
-        UnorderedPair<K> pair = new UnorderedPair<>(key1, key2);
+        UnorderedPair<K> pair = UnorderedPair.of(key1, key2);
 
         this.map.put(pair, score);
 

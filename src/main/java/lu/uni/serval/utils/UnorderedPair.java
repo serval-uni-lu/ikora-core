@@ -13,6 +13,11 @@ public class UnorderedPair<T> {
         set.add(b);
     }
 
+    public static <T> UnorderedPair<T> of(final T left, final T right) {
+        return new UnorderedPair<>(left, right);
+    }
+
+
     @Override
     public boolean equals(Object other) {
         return other instanceof UnorderedPair && set.equals(((UnorderedPair<T>)other).set);
