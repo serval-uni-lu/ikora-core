@@ -7,9 +7,9 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-public class CompareCache<K, T> implements Iterable<Map.Entry<EasyPair<K, K>, T>> {
-    private Map<EasyPair<K, K>, T> map;
-    private Queue<EasyPair<K,K>> queue;
+public class CompareCache<K, T> implements Iterable<Map.Entry<UnorderedPair<K>, T>> {
+    private Map<UnorderedPair<K>, T> map;
+    private Queue<UnorderedPair<K>> queue;
     private static int maximumSize = 1000000;
 
     public CompareCache(){
@@ -22,15 +22,15 @@ public class CompareCache<K, T> implements Iterable<Map.Entry<EasyPair<K, K>, T>
     }
 
     public boolean isCached(K key1, K key2){
-        return map.containsKey(new EasyPair<>(key1, key2));
+        return map.containsKey(new UnorderedPair<>(key1, key2));
     }
 
     public T getScore(K key1, K key2){
-        return map.get(new EasyPair<>(key1, key2));
+        return map.get(new UnorderedPair<>(key1, key2));
     }
 
     public void set(K key1, K key2, T score){
-        EasyPair<K, K> pair = new EasyPair<>(key1, key2);
+        UnorderedPair<K> pair = new UnorderedPair<>(key1, key2);
 
         this.map.put(pair, score);
 
@@ -42,7 +42,7 @@ public class CompareCache<K, T> implements Iterable<Map.Entry<EasyPair<K, K>, T>
     }
 
     @Nonnull
-    public Iterator<Map.Entry<EasyPair<K,K>, T>> iterator() {
+    public Iterator<Map.Entry<UnorderedPair<K>, T>> iterator() {
         return map.entrySet().iterator();
     }
 }
