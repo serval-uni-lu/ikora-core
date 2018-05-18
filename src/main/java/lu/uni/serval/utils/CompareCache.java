@@ -10,9 +10,18 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class CompareCache<K, T> implements Iterable<Map.Entry<UnorderedPair<K>, T>> {
     private Map<UnorderedPair<K>, T> map;
     private Queue<UnorderedPair<K>> queue;
-    private static int maximumSize = 1000000;
+    private final int maximumSize;
 
     public CompareCache(){
+        this.maximumSize = 10000000;
+
+        this.map = new HashMap<>();
+        this.queue = new LinkedBlockingQueue<>(maximumSize + 1);
+    }
+
+    public CompareCache(int maximumSize){
+        this.maximumSize = maximumSize;
+
         this.map = new HashMap<>();
         this.queue = new LinkedBlockingQueue<>(maximumSize + 1);
     }
