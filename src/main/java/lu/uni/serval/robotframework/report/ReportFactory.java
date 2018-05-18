@@ -1,7 +1,7 @@
 package lu.uni.serval.robotframework.report;
 
 import lu.uni.serval.utils.ReportKeywordData;
-import lu.uni.serval.utils.tree.TreeNode;
+import lu.uni.serval.utils.tree.LabelTreeNode;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -63,9 +63,7 @@ public class ReportFactory {
                 suite.addSuite(subSuite);
             }
             else if(tagName.equalsIgnoreCase("kw") || tagName.equalsIgnoreCase("test")){
-                String id = suiteElement.getAttribute("id");
-
-                TreeNode keyword = parseKeyword(suite.getSource(), child, dateTime);
+                LabelTreeNode keyword = parseKeyword(suite.getSource(), child, dateTime);
 
                 if(keyword == null){
                     continue;
@@ -78,14 +76,15 @@ public class ReportFactory {
         return suite;
     }
 
-    private static TreeNode parseKeyword(String file, final Element keywordElement, final LocalDateTime dateTime) {
+    private static LabelTreeNode parseKeyword(String file, final Element keywordElement, final LocalDateTime dateTime) {
         ReportKeywordData data = new ReportKeywordData();
-        data.type = keywordElement.getAttribute("type");
+
+        data.type = getType(keywordElement);
         data.file = file;
         data.name = keywordElement.getAttribute("name");
         data.library = keywordElement.getAttribute("library");
 
-        TreeNode treeNode = new TreeNode(data, true);
+        LabelTreeNode treeNode = new LabelTreeNode(data);
 
         HashSet<String> types = new HashSet<>(Arrays.asList("doc", "kw", "arguments", "status", "msg"));
         String msg = "";
@@ -97,13 +96,13 @@ public class ReportFactory {
                 data.documentation = child.getTextContent();
             }
             else if(elementName.equalsIgnoreCase("kw")){
-                TreeNode keyword = parseKeyword(file, child, dateTime);
+                LabelTreeNode keyword = parseKeyword(file, child, dateTime);
 
                 if(keyword == null){
                     continue;
                 }
 
-                treeNode.addChild(keyword);
+                treeNode.add(keyword);
             }
             else if(elementName.equalsIgnoreCase("arguments")){
                 data.arguments = parseArguments(child);
@@ -129,6 +128,14 @@ public class ReportFactory {
         }
 
         return treeNode;
+    }
+
+    private static String getType(Element keywordElement) {
+        if(keywordElement.getTagName().equalsIgnoreCase("test")){
+            return "test";
+        }
+
+        return keywordElement.getAttribute("type");
     }
 
     private static List<String> parseArguments(Element argumentsElement) {

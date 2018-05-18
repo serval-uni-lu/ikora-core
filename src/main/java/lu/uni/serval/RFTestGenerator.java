@@ -31,7 +31,7 @@ public class RFTestGenerator {
                 reportsAnalyticsCli.run();
             }
 
-            if(config.hasPlugin("keyword analytics")){
+            if(config.hasPlugin("keywords analytics")){
                 KeywordsAnalyticsCli keywordsAnalyticsCli = new KeywordsAnalyticsCli();
                 keywordsAnalyticsCli.run();
             }

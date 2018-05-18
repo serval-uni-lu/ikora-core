@@ -1,8 +1,8 @@
 package lu.uni.serval.utils.tree;
 
 public interface EditScore {
-    double replace(TreeNode node1, TreeNode node2);
-    double delete(TreeNode node, TreeNode node2);
-    double insert(TreeNode node, TreeNode node2);
-    double size(TreeNode tree1, TreeNode tree2);
+    double replace(LabelTreeNode node1, LabelTreeNode node2);
+    double delete(LabelTreeNode node, LabelTreeNode node2);
+    double insert(LabelTreeNode node, LabelTreeNode node2);
+    double size(LabelTreeNode tree1, LabelTreeNode tree2);
 }

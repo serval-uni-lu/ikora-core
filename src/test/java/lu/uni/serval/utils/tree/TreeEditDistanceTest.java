@@ -6,30 +6,18 @@ import lu.uni.serval.Globals;
 import lu.uni.serval.utils.exception.DuplicateNodeException;
 import org.junit.Test;
 
-import java.util.List;
-
 public class TreeEditDistanceTest {
 
     @Test
     public void checkSimpleDeletionEdit() {
-        TreeNode tree1 = new TreeNode(new TreeNodeDataTest("0"), false);
+        LabelTreeNode tree1 = new LabelTreeNode(new TreeNodeDataTest("0"));
+        tree1.add(new TreeNodeDataTest("1"));
+        tree1.add(new TreeNodeDataTest("2"));
 
-        try {
-            tree1.addChild(new TreeNodeDataTest("1"));
-            tree1.addChild(new TreeNodeDataTest("2"));
-        } catch (DuplicateNodeException e) {
-            e.printStackTrace();
-        }
+        LabelTreeNode tree2 = new LabelTreeNode(new TreeNodeDataTest("0"));
+        tree2.add(new TreeNodeDataTest("1"));
 
-        TreeNode tree2 = new TreeNode(new TreeNodeDataTest("0"), false);
-
-        try {
-            tree2.addChild(new TreeNodeDataTest("1"));
-        } catch (DuplicateNodeException e) {
-            e.printStackTrace();
-        }
-
-        TreeEditDistance editDistance = new TreeEditDistance(new SimpleEditScore());
+        TreeEditDistance editDistance = new TreeEditDistance(1.0, 1.0, 1.0);
 
         double distance = editDistance.distance(tree1, tree2);
 
@@ -38,25 +26,14 @@ public class TreeEditDistanceTest {
 
     @Test
     public void checkSimpleInsertionEdit() {
-        TreeNode tree1 = new TreeNode(new TreeNodeDataTest("0"), false);
+        LabelTreeNode tree1 = new LabelTreeNode(new TreeNodeDataTest("0"));
+        tree1.add(new TreeNodeDataTest("1"));
 
-        try {
-            tree1.addChild(new TreeNodeDataTest("1"));
-        } catch (DuplicateNodeException e) {
-            e.printStackTrace();
-        }
+        LabelTreeNode tree2 = new LabelTreeNode(new TreeNodeDataTest("0"));
+        tree2.add(new TreeNodeDataTest("1"));
+        tree2.add(new TreeNodeDataTest("2"));
 
-        TreeNode tree2 = new TreeNode(new TreeNodeDataTest("0"), false);
-
-
-        try {
-            tree2.addChild(new TreeNodeDataTest("1"));
-            tree2.addChild(new TreeNodeDataTest("2"));
-        } catch (DuplicateNodeException e) {
-            e.printStackTrace();
-        }
-
-        TreeEditDistance editDistance = new TreeEditDistance(new SimpleEditScore());
+        TreeEditDistance editDistance = new TreeEditDistance(1.0, 1.0, 1.0);
 
         double distance = editDistance.distance(tree1, tree2);
 
@@ -65,26 +42,15 @@ public class TreeEditDistanceTest {
 
     @Test
     public void checkSimpleReplaceEdit() {
-        TreeNode tree1 = new TreeNode(new TreeNodeDataTest("0"), false);
+        LabelTreeNode tree1 = new LabelTreeNode(new TreeNodeDataTest("0"));
+        tree1.add(new TreeNodeDataTest("1"));
+        tree1.add(new TreeNodeDataTest("3"));
 
-        try {
-            tree1.addChild(new TreeNodeDataTest("1"));
-            tree1.addChild(new TreeNodeDataTest("3"));
-        } catch (DuplicateNodeException e) {
-            e.printStackTrace();
-        }
+        LabelTreeNode tree2 = new LabelTreeNode(new TreeNodeDataTest("0"));
+        tree2.add(new TreeNodeDataTest("1"));
+        tree2.add(new TreeNodeDataTest("2"));
 
-        TreeNode tree2 = new TreeNode(new TreeNodeDataTest("0"), false);
-
-        try {
-            tree2.addChild(new TreeNodeDataTest("1"));
-            tree2.addChild(new TreeNodeDataTest("2"));
-        } catch (DuplicateNodeException e) {
-            e.printStackTrace();
-        }
-
-
-        TreeEditDistance editDistance = new TreeEditDistance(new SimpleEditScore());
+        TreeEditDistance editDistance = new TreeEditDistance(1.0, 1.0, 1.0);
 
         double distance = editDistance.distance(tree1, tree2);
 

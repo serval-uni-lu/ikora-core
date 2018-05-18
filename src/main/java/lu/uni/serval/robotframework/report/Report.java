@@ -1,10 +1,10 @@
 package lu.uni.serval.robotframework.report;
 
-import lu.uni.serval.utils.tree.TreeNode;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import lu.uni.serval.utils.tree.LabelTreeNode;
 
 public class Report {
     private LocalDateTime creationTime;
@@ -23,8 +23,8 @@ public class Report {
         return generator;
     }
 
-    public List<TreeNode> getKeywords(){
-        List<TreeNode> keywords = new ArrayList<>();
+    public List<LabelTreeNode> getKeywords(){
+        List<LabelTreeNode> keywords = new ArrayList<>();
 
         for(Suite suite: suites){
             keywords.addAll(suite.getKeywords());

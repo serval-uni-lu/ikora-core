@@ -1,16 +1,16 @@
 package lu.uni.serval.robotframework.report;
 
-import lu.uni.serval.utils.tree.TreeNode;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import lu.uni.serval.utils.tree.LabelTreeNode;
 
 public class Suite {
     private String source;
     private String id;
     private String name;
     private List<Suite> suites;
-    private List<TreeNode> keywords;
+    private List<LabelTreeNode> keywords;
 
     public Suite(){
         suites = new ArrayList<>();
@@ -33,8 +33,8 @@ public class Suite {
         return suites;
     }
 
-    public List<TreeNode> getKeywords() {
-        List<TreeNode> keywords = new ArrayList<>();
+    public List<LabelTreeNode> getKeywords() {
+        List<LabelTreeNode> keywords = new ArrayList<>();
 
         if(hasSuites()){
             for(Suite suite: this.suites){
@@ -73,7 +73,7 @@ public class Suite {
         this.suites = children;
     }
 
-    public void setKeywords(List<TreeNode> keywords) {
+    public void setKeywords(List<LabelTreeNode> keywords) {
         this.keywords = keywords;
     }
 
@@ -81,7 +81,7 @@ public class Suite {
         suites.add(suite);
     }
 
-    public void addKeyword(TreeNode keyword) {
+    public void addKeyword(LabelTreeNode keyword) {
         keywords.add(keyword);
     }
 }

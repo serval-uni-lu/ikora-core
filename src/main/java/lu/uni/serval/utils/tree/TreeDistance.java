@@ -1,6 +1,6 @@
 package lu.uni.serval.utils.tree;
 
 public interface TreeDistance {
-    double distance(TreeNode tree1, TreeNode tree2);
-    double index(TreeNode tree1, TreeNode tree2);
+    double distance(LabelTreeNode tree1, LabelTreeNode tree2);
+    double index(LabelTreeNode tree1, LabelTreeNode tree2);
 }

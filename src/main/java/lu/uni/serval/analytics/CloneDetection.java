@@ -1,9 +1,8 @@
 package lu.uni.serval.analytics;
 
 import lu.uni.serval.utils.exception.DuplicateNodeException;
-import lu.uni.serval.utils.tree.CloneEditScore;
+import lu.uni.serval.utils.tree.LabelTreeNode;
 import lu.uni.serval.utils.tree.TreeEditDistance;
-import lu.uni.serval.utils.tree.TreeNode;
 
 import static lu.uni.serval.utils.nlp.StringUtils.levenshteinIndex;
 
@@ -17,14 +16,14 @@ public class CloneDetection {
     private final TreeEditDistance treeEditDistance;
 
     public CloneDetection(){
-        treeEditDistance = new TreeEditDistance(new CloneEditScore());
+        treeEditDistance = new TreeEditDistance(1.0, 1.0, 1.0);
     }
 
-    public CloneResults findClones(final Set<TreeNode> forest) throws DuplicateNodeException {
+    public CloneResults findClones(final Set<LabelTreeNode> forest) throws DuplicateNodeException {
         CloneResults results = new CloneResults();
-        List<TreeNode> forestArray = new ArrayList<>(forest);
+        List<LabelTreeNode> forestArray = new ArrayList<>(forest);
 
-        Map<TreeNode, TreeNode> semanticMap = createSemanticMap(forestArray);
+        Map<LabelTreeNode, LabelTreeNode> semanticMap = createSemanticMap(forestArray);
 
         for (int i = 0; i < forest.size(); ++i){
             for (int j = i + 1; j < forest.size(); ++j){
@@ -36,25 +35,25 @@ public class CloneDetection {
         return results;
     }
 
-    public CloneIndex computeCloneIndex(final TreeNode tree1, final TreeNode tree2) throws DuplicateNodeException {
-        List<TreeNode> forest = new ArrayList<>(2);
+    public CloneIndex computeCloneIndex(final LabelTreeNode tree1, final LabelTreeNode tree2) throws DuplicateNodeException {
+        List<LabelTreeNode> forest = new ArrayList<>(2);
         forest.add(tree1);
         forest.add(tree2);
 
-        Map<TreeNode, TreeNode> semanticMap = createSemanticMap(forest);
+        Map<LabelTreeNode, LabelTreeNode> semanticMap = createSemanticMap(forest);
 
         return computeCloneIndex(tree1, tree2, semanticMap);
     }
 
-    private Map<TreeNode, TreeNode> createSemanticMap(final List<TreeNode> forest) throws DuplicateNodeException {
+    private Map<LabelTreeNode, LabelTreeNode> createSemanticMap(final List<LabelTreeNode> forest) throws DuplicateNodeException {
 
-        Map<TreeNode, TreeNode> semanticMap = new HashMap<>();
+        Map<LabelTreeNode, LabelTreeNode> semanticMap = new HashMap<>();
 
-        for(TreeNode tree: forest){
-            TreeNode actionTree = new TreeNode(tree.data, true);
+        for(LabelTreeNode tree: forest){
+            LabelTreeNode actionTree = new LabelTreeNode(tree.getData());
 
-            for(TreeNode leaf: tree.getLeaves()){
-                actionTree.addChild(leaf.data);
+            for(LabelTreeNode leaf: tree.getLeaves()){
+                actionTree.add(leaf.getData());
             }
 
             semanticMap.put(tree, actionTree);
@@ -63,7 +62,7 @@ public class CloneDetection {
         return semanticMap;
     }
 
-    private CloneIndex computeCloneIndex(final TreeNode tree1, final TreeNode tree2, final Map<TreeNode, TreeNode> sementicMap){
+    private CloneIndex computeCloneIndex(final LabelTreeNode tree1, final LabelTreeNode tree2, final Map<LabelTreeNode, LabelTreeNode> sementicMap){
         double treeIndex;
         double keywordIndex;
 
@@ -71,7 +70,7 @@ public class CloneDetection {
             treeIndex = CloneIndex.Ignore.Subtree.getValue();
             keywordIndex = CloneIndex.Ignore.Subtree.getValue();
         }
-        else if(tree1.children.size() == 1 && tree2.children.size() == 1) {
+        else if(tree1.getChildCount() == 1 && tree2.getChildCount() == 1) {
             treeIndex = CloneIndex.Ignore.OneStep.getValue();
             keywordIndex = CloneIndex.Ignore.OneStep.getValue();
         }
@@ -85,16 +84,12 @@ public class CloneDetection {
         return new CloneIndex(keywordIndex, treeIndex, semanticIndex);
     }
 
-    private boolean checkSubtree(final TreeNode tree1, final TreeNode tree2){
+    private boolean checkSubtree(final LabelTreeNode tree1, final LabelTreeNode tree2){
         return tree1.getDepth() > tree2.getDepth() ? isSubtree(tree1, tree2) : isSubtree(tree2, tree1);
     }
 
-    private boolean isSubtree(TreeNode tree1, TreeNode tree2){
-        if(!tree1.isDataUnique){
-            return false;
-        }
-
-        if(tree1.data.isSame(tree2.data) && tree1.getDepth() == tree2.getDepth()){
+    private boolean isSubtree(LabelTreeNode tree1, LabelTreeNode tree2){
+        if(tree1.getData().isSame(tree2.getData()) && tree1.getDepth() == tree2.getDepth()){
             return true;
         }
 
@@ -102,8 +97,8 @@ public class CloneDetection {
             return false;
         }
 
-        for(TreeNode child: tree1.children){
-            if(isSubtree(child, tree2)){
+        for(int i = 0; i < tree1.getChildCount(); ++i){
+            if(isSubtree((LabelTreeNode)tree1.getChildAt(i), tree2)){
                 return true;
             }
         }

@@ -47,11 +47,11 @@ public class Plugin {
         this.additionalProperties.put(name, value);
     }
 
-    public Object getAddictionalProperty(String name){
+    public Object getAdditionalProperty(String name){
         return additionalProperties.get(name);
     }
 
-    public Object getAddictionalProperty(String name, Object defaultValue){
+    public Object getAdditionalProperty(String name, Object defaultValue){
         if(!additionalProperties.containsKey(name)){
             return defaultValue;
         }

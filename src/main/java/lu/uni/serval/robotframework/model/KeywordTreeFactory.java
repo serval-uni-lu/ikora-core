@@ -2,7 +2,7 @@ package lu.uni.serval.robotframework.model;
 
 import lu.uni.serval.utils.*;
 import lu.uni.serval.utils.exception.DuplicateNodeException;
-import lu.uni.serval.utils.tree.TreeNode;
+import lu.uni.serval.utils.tree.LabelTreeNode;
 
 import java.util.*;
 
@@ -15,8 +15,8 @@ public class KeywordTreeFactory {
         this.project = project;
     }
 
-    public Set<TreeNode> create() throws DuplicateNodeException {
-        Set<TreeNode> keywordForest = new HashSet<>();
+    public Set<LabelTreeNode> create() throws DuplicateNodeException {
+        Set<LabelTreeNode> keywordForest = new HashSet<>();
         this.processed = new HashSet<>();
 
         for(TestCaseFile testCaseFile: project.getTestCaseFiles()){
@@ -26,7 +26,7 @@ public class KeywordTreeFactory {
         return keywordForest;
     }
 
-    private void readFile(TestCaseFile testCaseFile, Set<TreeNode> keywordForest) throws DuplicateNodeException {
+    private void readFile(TestCaseFile testCaseFile, Set<LabelTreeNode> keywordForest) throws DuplicateNodeException {
         ArrayList<UserKeyword> keywords = new ArrayList<>();
         keywords.addAll(testCaseFile.getTestCases());
         keywords.addAll(testCaseFile.getUserKeywords());
@@ -39,7 +39,7 @@ public class KeywordTreeFactory {
             processed.add(keyword);
 
             KeywordData keywordData = createKeywordData(testCaseFile, keyword, null, null);
-            TreeNode root = new TreeNode(keywordData, true);
+            LabelTreeNode root = new LabelTreeNode(keywordData);
 
             visitSteps(testCaseFile, root, keyword, new HashMap<>());
 
@@ -47,12 +47,12 @@ public class KeywordTreeFactory {
         }
     }
 
-    private void visitSteps(TestCaseFile testCaseFile, TreeNode current, UserKeyword userKeyword, HashMap<String, List<String>> locals) throws DuplicateNodeException {
+    private void visitSteps(TestCaseFile testCaseFile, LabelTreeNode current, UserKeyword userKeyword, HashMap<String, List<String>> locals) throws DuplicateNodeException {
         for(Step step : userKeyword) {
             UserKeyword keyword = testCaseFile.findUserKeyword(step);
             KeywordData keywordData = createKeywordData(testCaseFile, keyword, step, locals);
 
-            TreeNode child =  current.addChild(keywordData);
+            LabelTreeNode child =  current.add(keywordData);
             visitSteps(testCaseFile, child, keyword, (HashMap)locals.clone());
         }
     }

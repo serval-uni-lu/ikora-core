@@ -1,30 +1,30 @@
 package lu.uni.serval.analytics;
 
 import lu.uni.serval.utils.KeywordData;
-import lu.uni.serval.utils.tree.TreeNode;
+import lu.uni.serval.utils.tree.LabelTreeNode;
 
 import java.util.*;
 
 
 
-public class KeywordSequence implements Iterable<List<TreeNode>>{
-    private Map<List<String>, List<TreeNode>> data;
+public class KeywordSequence implements Iterable<List<LabelTreeNode>>{
+    private Map<List<String>, List<LabelTreeNode>> data;
 
     public KeywordSequence(){
         data = new HashMap<>();
     }
 
-    public void add(TreeNode keyword){
+    public void add(LabelTreeNode keyword){
         List<String> key = new ArrayList<>();
-        key.add(((KeywordData)keyword.data).file);
-        key.add(((KeywordData)keyword.data).name);
-        key.add(((KeywordData)keyword.data).library);
+        key.add(((KeywordData)keyword.getData()).file);
+        key.add(((KeywordData)keyword.getData()).name);
+        key.add(((KeywordData)keyword.getData()).library);
 
         if(data.containsKey(key)){
             data.get(key).add(keyword);
         }
         else{
-            List<TreeNode> keywords = new ArrayList<>();
+            List<LabelTreeNode> keywords = new ArrayList<>();
             keywords.add(keyword);
 
             data.put(key, keywords);
@@ -32,7 +32,7 @@ public class KeywordSequence implements Iterable<List<TreeNode>>{
     }
 
     @Override
-    public Iterator<List<TreeNode>> iterator() {
+    public Iterator<List<LabelTreeNode>> iterator() {
         return data.values().iterator();
     }
 }
