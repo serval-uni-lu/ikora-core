@@ -151,6 +151,7 @@ public class OutputMessageParser {
         dictionary.put(new EasyPair<>("selenium2library", "get text"), new EasyPair<>("(.*) = {0}", 1));
         dictionary.put(new EasyPair<>("selenium2library", "textarea value should be"), new EasyPair<>("Content of text area '{0}' is '{1}'.", 2));
         dictionary.put(new EasyPair<>("selenium2library", "get matching xpath count"), new EasyPair<>("(.*) = (.*)", 0));
+        dictionary.put(new EasyPair<>("selenium2library", "xpath should match x times"), new EasyPair<>("Current Page contains {1} elements matching '{0}'", 2));
 
         dictionary.put(new EasyPair<>("string", "get regexp matches"), new EasyPair<>("(.*) = {1}.", 2));
         dictionary.put(new EasyPair<>("string", "strip string"), new EasyPair<>("(.*) = {0}.", 1));
@@ -162,6 +163,7 @@ public class OutputMessageParser {
         Map<EasyPair<String, String>, EasyPair<String, Integer>> dictionary = new HashMap<>();
 
         dictionary.put(new EasyPair<>("builtin", "wait until keyword succeeds"), new EasyPair<>("Keyword '{0}' failed after retrying for 5 seconds.%", 1));
+        dictionary.put(new EasyPair<>("builtin", "should be equal"), new EasyPair<>("{0} != {1}", 2));
 
         dictionary.put(new EasyPair<>("selenium2library", "wait until page contains"), new EasyPair<>("Text '{0}' did not appear in 2 seconds", 1));
         dictionary.put(new EasyPair<>("selenium2library", "click element"), new EasyPair<>("Element with locator '{0}' not found.", 1));
@@ -174,8 +176,8 @@ public class OutputMessageParser {
         dictionary.put(new EasyPair<>("selenium2library", "open browser"), new EasyPair<>("WebDriverException: Message: Reached error page: (.*)", 0));
         dictionary.put(new EasyPair<>("selenium2library", "element should be visible"), new EasyPair<>("The element '{0}' should be visible, but it is not.", 1));
         dictionary.put(new EasyPair<>("selenium2library", "page should contain"), new EasyPair<>("Page should have contained text '{0}' but did not", 1));
-        dictionary.put(new EasyPair<>("selenium2library", "should be equal"), new EasyPair<>("{0} != {1}", 2));
         dictionary.put(new EasyPair<>("selenium2library", "wait until element is enabled"), new EasyPair<>("Element locator '{0}' did not match any elements after 30 seconds", 1));
+
         return dictionary;
     }
 }
