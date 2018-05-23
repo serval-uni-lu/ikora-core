@@ -2,6 +2,7 @@ package lu.uni.serval.analytics;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lu.uni.serval.utils.ReportKeywordData;
+import lu.uni.serval.utils.tree.LabelTreeNode;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -14,8 +15,12 @@ public class StatusResults {
 
     public class KeywordInfo {
         private List<String> info;
+        private LabelTreeNode keyword;
 
-        public KeywordInfo(ReportKeywordData data){
+        public KeywordInfo(LabelTreeNode keyword){
+            ReportKeywordData data = StatusResults.getReportData(keyword);
+            this.keyword = keyword;
+
             info = new ArrayList<>(3);
 
             File file = new File(data.file);
@@ -63,17 +68,19 @@ public class StatusResults {
         this.total.put(ReportKeywordData.Status.FAILED, new HashMap<>());
     }
 
-    public void add(ReportKeywordData data){
-        if(data == null){
+    public void add(LabelTreeNode keyword){
+        if(keyword == null){
             return;
         }
 
-        if(!data.type.equalsIgnoreCase("test")){
+
+
+        if(!getReportData(keyword).type.equalsIgnoreCase("test")){
             return;
         }
 
-        updateKeywords(data);
-        updateTotal(data);
+        updateKeywords(keyword);
+        updateTotal(keyword);
     }
 
     public Set<KeywordInfo> getKeywordsInfo() {
@@ -108,19 +115,39 @@ public class StatusResults {
         return array;
     }
 
-    private void updateTotal(ReportKeywordData data) {
+    private void updateTotal(LabelTreeNode keyword) {
+        if(!(keyword.getData() instanceof ReportKeywordData)){
+            throw new IllegalArgumentException("Expected ReportKeywordData type");
+        }
+
+        ReportKeywordData data = (ReportKeywordData) keyword.getData();
+
         Map<LocalDateTime, Integer> entry = total.get(data.status);
         int value = entry.getOrDefault(data.executionDate, 0) + 1;
         entry.put(data.executionDate, value);
     }
 
-    private void updateKeywords(ReportKeywordData data) {
-        KeywordInfo info = new KeywordInfo(data);
+    private void updateKeywords(LabelTreeNode keyword) {
+        KeywordInfo info = new KeywordInfo(keyword);
 
         if(!keywords.containsKey(info)){
             keywords.put(info, new HashMap<>());
         }
 
+        if(!(keyword.getData() instanceof ReportKeywordData)){
+            throw new IllegalArgumentException("Expected ReportKeywordData type");
+        }
+
+        ReportKeywordData data = (ReportKeywordData) keyword.getData();
+
         keywords.get(info).put(data.executionDate, data.status);
+    }
+
+    public static ReportKeywordData getReportData(LabelTreeNode keyword){
+        if(!(keyword.getData() instanceof ReportKeywordData)){
+            throw new IllegalArgumentException("Expected ReportKeywordData type");
+        }
+
+        return (ReportKeywordData)keyword.getData();
     }
 }

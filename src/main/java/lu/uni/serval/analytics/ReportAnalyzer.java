@@ -93,7 +93,7 @@ public class ReportAnalyzer implements Iterable<Report>{
             List<LabelTreeNode> keywords = report.getKeywords();
 
             for(LabelTreeNode keyword: keywords){
-                status.add((ReportKeywordData)keyword.getData());
+                status.add(keyword);
             }
         }
     }
