@@ -42,6 +42,14 @@ public class StatusResults {
             return info.get(2);
         }
 
+        int getSize(){
+            return keyword.getNodeCount();
+        }
+
+        int getNumberLeaves(){
+            return keyword.getLeafCount();
+        }
+
         @Override
         public int hashCode() {
             return info.hashCode();

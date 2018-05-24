@@ -58,6 +58,8 @@ public class StatusResultSerializer extends StdSerializer<StatusResults> {
 
             jsonGenerator.writeStringField("name", info.getName());
             jsonGenerator.writeStringField("file", info.getFile());
+            jsonGenerator.writeNumberField("size", info.getSize());
+            jsonGenerator.writeNumberField("number of actions", info.getNumberLeaves());
 
             jsonGenerator.writeArrayFieldStart("sequence");
             for(Pair<LocalDateTime, ReportKeywordData.Status> pair: results.getKeyword(info)){
