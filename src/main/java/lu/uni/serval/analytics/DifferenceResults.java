@@ -66,7 +66,7 @@ public class DifferenceResults implements Map<Pair<LocalDateTime, LocalDateTime>
         }
 
         List<EditAction> differences = this.differences.get(key);
-        LabelTreeNode valueNode = value.operation != EditOperation.Delete ? value.getNode1() : value.getNode2();
+        LabelTreeNode valueNode = value.operation != EditOperation.Insert ? value.getNode1() : value.getNode2();
 
         for(int i = differences.size() - 1; i >= 0; --i){
             EditAction current = differences.get(i);
@@ -75,7 +75,7 @@ public class DifferenceResults implements Map<Pair<LocalDateTime, LocalDateTime>
                 continue;
             }
 
-            LabelTreeNode currentNode = current.operation != EditOperation.Delete ? current.getNode1() : current.getNode2();
+            LabelTreeNode currentNode = current.operation != EditOperation.Insert ? current.getNode1() : current.getNode2();
 
             if(currentNode == null){
                 continue;
