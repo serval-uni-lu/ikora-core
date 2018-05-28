@@ -1,7 +1,6 @@
 package lu.uni.serval.analytics;
 
 import lu.uni.serval.robotframework.report.Report;
-import lu.uni.serval.utils.ReportKeywordData;
 import lu.uni.serval.utils.tree.*;
 
 import java.util.*;
