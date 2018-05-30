@@ -1,8 +1,10 @@
 package lu.uni.serval.analytics;
 
 import lu.uni.serval.robotframework.report.Report;
+import lu.uni.serval.utils.ReportKeywordData;
 import lu.uni.serval.utils.tree.*;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class ReportAnalyzer implements Iterable<Report>{
@@ -76,7 +78,9 @@ public class ReportAnalyzer implements Iterable<Report>{
             List<LabelTreeNode> keywords = report.getKeywords();
 
             for(LabelTreeNode keyword: keywords){
-                sequences.add(keyword);
+                if(!isServiceDown(keyword)){
+                    sequences.add(keyword);
+                }
             }
         }
     }
@@ -95,6 +99,17 @@ public class ReportAnalyzer implements Iterable<Report>{
                 status.add(keyword);
             }
         }
+    }
+
+    private boolean isServiceDown(LabelTreeNode keyword) {
+        if(keyword.getData() instanceof ReportKeywordData){
+            initStatus();
+
+            LocalDateTime executionDate = ((ReportKeywordData)keyword.getData()).executionDate;
+            return status.getFailureRate(executionDate) > 0.5;
+        }
+
+        return false;
     }
 
     @Override

@@ -1,9 +1,11 @@
 package lu.uni.serval.analytics;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import lu.uni.serval.utils.EasyPair;
 import lu.uni.serval.utils.ReportKeywordData;
 import lu.uni.serval.utils.tree.LabelTreeNode;
 import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.File;
@@ -12,7 +14,6 @@ import java.util.*;
 
 @JsonSerialize(using = StatusResultSerializer.class)
 public class StatusResults {
-
     public class KeywordInfo {
         private List<String> info;
         private LabelTreeNode keyword;
@@ -67,6 +68,7 @@ public class StatusResults {
 
     private Map<KeywordInfo, Map<LocalDateTime, ReportKeywordData.Status>> keywords;
     private Map<ReportKeywordData.Status, Map<LocalDateTime, Integer>> total;
+    private Map<LocalDateTime, MutablePair<Integer, Integer>> failureRate;
 
     public StatusResults(){
         this.keywords = new HashMap<>();
@@ -80,8 +82,6 @@ public class StatusResults {
         if(keyword == null){
             return;
         }
-
-
 
         if(!getReportData(keyword).type.equalsIgnoreCase("test")){
             return;
@@ -123,6 +123,16 @@ public class StatusResults {
         return array;
     }
 
+    public double getFailureRate(LocalDateTime executionDate) {
+        MutablePair<Integer, Integer> pair = failureRate.getOrDefault(executionDate, MutablePair.of(0,0));
+
+        if(pair.left == 0){
+            return 0.0;
+        }
+
+        return (double)pair.left / pair.right;
+    }
+
     private void updateTotal(LabelTreeNode keyword) {
         if(!(keyword.getData() instanceof ReportKeywordData)){
             throw new IllegalArgumentException("Expected ReportKeywordData type");
@@ -133,6 +143,10 @@ public class StatusResults {
         Map<LocalDateTime, Integer> entry = total.get(data.status);
         int value = entry.getOrDefault(data.executionDate, 0) + 1;
         entry.put(data.executionDate, value);
+
+        MutablePair<Integer, Integer> pair = failureRate.getOrDefault(data.executionDate, MutablePair.of(0, 0));
+        pair.setLeft(pair.left + (data.status == ReportKeywordData.Status.FAILED ? 1 : 0));
+        pair.setRight(pair.right + 1);
     }
 
     private void updateKeywords(LabelTreeNode keyword) {
