@@ -94,6 +94,10 @@ public class LabelTreeNode extends DefaultMutableTreeNode implements Comparable 
 		return sum;
 	}
 
+	public int getLeavesSize() {
+	    return getLeaves().size();
+    }
+
 	@Override
 	public LabelTreeNode getParent() {
 		return (LabelTreeNode)super.getParent();

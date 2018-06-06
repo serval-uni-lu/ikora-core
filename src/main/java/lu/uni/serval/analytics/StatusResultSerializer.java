@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import lu.uni.serval.utils.ReportKeywordData;
+import lu.uni.serval.utils.tree.LabelTreeNode;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.IOException;
@@ -58,15 +59,17 @@ public class StatusResultSerializer extends StdSerializer<StatusResults> {
 
             jsonGenerator.writeStringField("name", info.getName());
             jsonGenerator.writeStringField("file", info.getFile());
-            jsonGenerator.writeNumberField("size", info.getSize());
-            jsonGenerator.writeNumberField("number of actions", info.getNumberLeaves());
 
             jsonGenerator.writeArrayFieldStart("sequence");
-            for(Pair<LocalDateTime, ReportKeywordData.Status> pair: results.getKeyword(info)){
+            for(Pair<LocalDateTime, LabelTreeNode> pair: results.getKeyword(info)){
                 jsonGenerator.writeStartObject();
 
-                jsonGenerator.writeStringField("date", pair.getLeft().toString());
-                jsonGenerator.writeStringField("status", pair.getRight().name());
+                ReportKeywordData data = (ReportKeywordData)pair.getValue().getData();
+
+                jsonGenerator.writeStringField("date", pair.getKey().toString());
+                jsonGenerator.writeStringField("status", data.status.name());
+                jsonGenerator.writeNumberField("size", pair.getValue().getNodeCount());
+                jsonGenerator.writeNumberField("number of actions", pair.getValue().getLeavesSize());
 
                 jsonGenerator.writeEndObject();
             }
