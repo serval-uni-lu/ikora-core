@@ -62,6 +62,10 @@ public class StatusResultSerializer extends StdSerializer<StatusResults> {
 
             jsonGenerator.writeArrayFieldStart("sequence");
             for(Pair<LocalDateTime, LabelTreeNode> pair: results.getKeyword(info)){
+                if(results.isServiceDown(pair.getValue())){
+                    continue;
+                }
+
                 jsonGenerator.writeStartObject();
 
                 ReportKeywordData data = (ReportKeywordData)pair.getValue().getData();

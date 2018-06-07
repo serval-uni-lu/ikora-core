@@ -166,4 +166,13 @@ public class StatusResults {
 
         return (ReportKeywordData)keyword.getData();
     }
+
+    public boolean isServiceDown(LabelTreeNode keyword) {
+        if(keyword.getData() instanceof ReportKeywordData){
+            LocalDateTime executionDate = ((ReportKeywordData)keyword.getData()).executionDate;
+            return this.getFailureRate(executionDate) > 0.5;
+        }
+
+        return false;
+    }
 }

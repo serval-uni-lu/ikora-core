@@ -46,7 +46,9 @@ public class ReportAnalyzer implements Iterable<Report>{
         initKeywordSequence();
 
         DifferenceResults differences = new DifferenceResults();
-        TreeEditDistance editDistance = new TreeEditDistance(1.0, 1.0, 1.0);
+        TreeEditDistance editDistance = new TreeEditDistance(1.0, 1.0, 0.8);
+
+        DifferenceMemory memory = new DifferenceMemory();
 
         for(List<LabelTreeNode> sequence: sequences){
             LabelTreeNode previous = null;
@@ -56,8 +58,14 @@ public class ReportAnalyzer implements Iterable<Report>{
                     continue;
                 }
 
+                LocalDateTime dateTime = ((ReportKeywordData)keyword.getData()).executionDate;
+
                 for(EditAction difference : editDistance.differences(previous, keyword)){
-                    differences.addDifference(difference);
+                    // check that the change was not already accounted (keywords are reused)
+                    if(memory.addDifference(dateTime, difference)){
+                        differences.addDifference(difference);
+                    }
+
                 }
 
                 previous = keyword;
@@ -72,13 +80,15 @@ public class ReportAnalyzer implements Iterable<Report>{
             return;
         }
 
+        initStatus();
+
         sequences = new KeywordSequence();
 
         for(Report report: reports){
             List<LabelTreeNode> keywords = report.getKeywords();
 
             for(LabelTreeNode keyword: keywords){
-                if(!isServiceDown(keyword)){
+                if(!status.isServiceDown(keyword)){
                     sequences.add(keyword);
                 }
             }
@@ -99,17 +109,6 @@ public class ReportAnalyzer implements Iterable<Report>{
                 status.add(keyword);
             }
         }
-    }
-
-    private boolean isServiceDown(LabelTreeNode keyword) {
-        if(keyword.getData() instanceof ReportKeywordData){
-            initStatus();
-
-            LocalDateTime executionDate = ((ReportKeywordData)keyword.getData()).executionDate;
-            return status.getFailureRate(executionDate) > 0.5;
-        }
-
-        return false;
     }
 
     @Override
