@@ -2,8 +2,6 @@ package lu.uni.serval.utils.tree;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-import java.awt.*;
-
 @JsonSerialize(using = EditActionSerializer.class)
 public class EditAction {
     public EditOperation operation;
@@ -54,5 +52,38 @@ public class EditAction {
 
     private String getSafeLabel(LabelTreeNode node){
         return node == null ? "[NULL]" : node.getLabel();
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if(this == other){
+            return true;
+        }
+
+        if(other == null){
+            return false;
+        }
+
+        if(this.getClass() != other.getClass()){
+            return false;
+        }
+
+        EditAction action = (EditAction)other;
+
+        return this.operation == action.operation
+                && this.root1 == action.root1
+                && this.root2 == action.root2
+                && this.node1 == action.node1
+                && this.node2 == action.node2;
+    }
+
+    @Override
+    public int hashCode(){
+        int hash = 7;
+        hash = 31 * hash + operation.hashCode();
+        hash = 31 * hash + (node1 == null ? 0 : node1.hashCode());
+        hash = 31 * hash + (node2 == null ? 0 : node2.hashCode());
+
+        return hash;
     }
 }
