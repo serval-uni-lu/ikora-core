@@ -65,6 +65,7 @@ public class StatusResults {
     public StatusResults(){
         this.keywords = new HashMap<>();
         this.total = new HashMap<>();
+        this.failureRate = new HashMap<>();
 
         this.total.put(ReportKeywordData.Status.PASS, new HashMap<>());
         this.total.put(ReportKeywordData.Status.FAILED, new HashMap<>());
