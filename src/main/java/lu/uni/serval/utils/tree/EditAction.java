@@ -81,8 +81,20 @@ public class EditAction {
     public int hashCode(){
         int hash = 7;
         hash = 31 * hash + operation.hashCode();
-        hash = 31 * hash + (node1 == null ? 0 : node1.hashCode());
-        hash = 31 * hash + (node2 == null ? 0 : node2.hashCode());
+        hash = getNodeHash(hash, node1);
+        hash = getNodeHash(hash, node2);
+
+        return hash;
+    }
+
+    private int getNodeHash(int hash, LabelTreeNode node){
+        if(node == null){
+            hash = 31 * hash;
+        }
+        else {
+            hash = 31 * hash + (node.getParent() == null ? 0 : node.getParent().hashCode());
+            hash = 31 * hash + (node.getLabel() == null ? 0 : node.getLabel().hashCode());
+        }
 
         return hash;
     }
