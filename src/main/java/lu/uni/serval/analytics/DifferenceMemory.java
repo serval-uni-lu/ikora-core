@@ -18,7 +18,7 @@ public class DifferenceMemory {
     public boolean addDifference(LocalDateTime date, EditAction difference){
         Set<Integer> differences = this.actions.getOrDefault(date, new HashSet<>());
 
-        if(differences.contains(difference)){
+        if(differences.contains(difference.hashCode())){
             return false;
         }
 
