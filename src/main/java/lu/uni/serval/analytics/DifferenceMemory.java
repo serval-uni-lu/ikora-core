@@ -9,20 +9,20 @@ import java.util.Map;
 import java.util.Set;
 
 public class DifferenceMemory {
-    Map<LocalDateTime, Set<EditAction>> actions;
+    Map<LocalDateTime, Set<Integer>> actions;
 
     DifferenceMemory(){
         actions = new HashMap<>();
     }
 
     public boolean addDifference(LocalDateTime date, EditAction difference){
-        Set<EditAction> differences = this.actions.getOrDefault(date, new HashSet<>());
+        Set<Integer> differences = this.actions.getOrDefault(date, new HashSet<>());
 
         if(differences.contains(difference)){
             return false;
         }
 
-        differences.add(difference);
+        differences.add(difference.hashCode());
         this.actions.put(date, differences);
 
         return true;
