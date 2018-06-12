@@ -59,15 +59,16 @@ public class ReportAnalyzer implements Iterable<Report>{
                     continue;
                 }
 
-                // some steps were not executed, so the report can be ignored in this instance
-                if(previous.getNodeCount() > keyword.getNodeCount()
-                        && ((ReportKeywordData)keyword.getData()).status == ReportKeywordData.Status.FAILED) {
-                    continue;
-                }
-
                 LocalDateTime dateTime = ((ReportKeywordData)keyword.getData()).executionDate;
 
                 for(EditAction difference : editDistance.differences(previous, keyword)){
+                    // some steps were not executed, so the report can be ignored in this instance
+                    if(previous.getNodeCount() > keyword.getNodeCount()
+                            && ((ReportKeywordData)keyword.getData()).status == ReportKeywordData.Status.FAILED
+                            && difference.operation == EditOperation.Delete) {
+                        continue;
+                    }
+
                     // check that the change was not already accounted (keywords are reused)
                     if(memory.addDifference(dateTime, difference)){
                         differences.addDifference(difference);
