@@ -16,11 +16,9 @@ import java.util.*;
 public class StatusResults {
     public class KeywordInfo {
         private List<String> info;
-        private LabelTreeNode keyword;
 
         public KeywordInfo(LabelTreeNode keyword){
             ReportKeywordData data = StatusResults.getReportData(keyword);
-            this.keyword = keyword;
 
             info = new ArrayList<>(3);
 
