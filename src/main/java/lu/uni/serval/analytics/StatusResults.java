@@ -140,6 +140,7 @@ public class StatusResults {
         MutablePair<Integer, Integer> pair = failureRate.getOrDefault(data.executionDate, MutablePair.of(0, 0));
         pair.setLeft(pair.left + (data.status == ReportKeywordData.Status.FAILED ? 1 : 0));
         pair.setRight(pair.right + 1);
+        failureRate.put(data.executionDate, pair);
     }
 
     private void updateKeywords(LabelTreeNode keyword) {
