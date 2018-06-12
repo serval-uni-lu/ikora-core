@@ -4,6 +4,7 @@ import lu.uni.serval.robotframework.report.Report;
 import lu.uni.serval.utils.ReportKeywordData;
 import lu.uni.serval.utils.tree.*;
 
+import javax.annotation.Nonnull;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -118,6 +119,7 @@ public class ReportAnalyzer implements Iterable<Report>{
     }
 
     @Override
+    @Nonnull
     public Iterator<Report> iterator() {
         return reports.iterator();
     }
