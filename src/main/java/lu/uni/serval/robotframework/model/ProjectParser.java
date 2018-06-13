@@ -31,10 +31,13 @@ public class ProjectParser {
             FileReader input = new FileReader(file);
             BufferedReader bufferRead = new BufferedReader(input);
 
+            TestCaseFile testCaseFile = new TestCaseFile();
+
             String line;
             while( (line = bufferRead.readLine()) != null){
                 if(isSetting(line)){
-
+                    Settings settings = SettingParser.parse(bufferRead);
+                    testCaseFile.setSettings(settings);
                 }
                 else if(isTestCases(line)){
 

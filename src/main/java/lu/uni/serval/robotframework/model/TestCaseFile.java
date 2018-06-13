@@ -13,16 +13,8 @@ public class TestCaseFile implements Iterable<UserKeyword> {
     private VariableTable variableTable;
     private Map<String, List<String>> variableDictionary;
 
-    public TestCaseFile(String directory, String path, String name, Settings settings, TestCaseTable testCaseTable,
-                        KeywordTable keywordTable, VariableTable variableTable) {
-        this.directory = directory;
-        this.path = path;
-        this.name = name;
+    public void setSettings(Settings settings) {
         this.settings = settings;
-        this.testCaseTable = testCaseTable;
-        this.keywordTable = keywordTable;
-        this.variableTable = variableTable;
-        this.variableDictionary = null;
     }
 
     public String getDirectory(){
