@@ -1,4 +1,8 @@
-package lu.uni.serval.robotframework.model;
+package lu.uni.serval.robotframework.parser;
+
+import lu.uni.serval.robotframework.model.Resources;
+import lu.uni.serval.robotframework.model.Resources.Type;
+import lu.uni.serval.robotframework.model.Settings;
 
 import java.io.BufferedReader;
 import java.io.IOException;

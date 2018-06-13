@@ -1,5 +1,8 @@
-package lu.uni.serval.robotframework.model;
+package lu.uni.serval.robotframework.parser;
 
+import lu.uni.serval.robotframework.model.Project;
+import lu.uni.serval.robotframework.model.Settings;
+import lu.uni.serval.robotframework.model.TestCaseFile;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.*;

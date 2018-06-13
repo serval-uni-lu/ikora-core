@@ -1,4 +1,4 @@
-package lu.uni.serval.robotframework.model;
+package lu.uni.serval.robotframework.parser;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

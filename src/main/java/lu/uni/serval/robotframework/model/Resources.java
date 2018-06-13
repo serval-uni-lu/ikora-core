@@ -3,7 +3,7 @@ package lu.uni.serval.robotframework.model;
 import java.util.List;
 
 public class Resources {
-    enum Type{
+    public enum Type{
         Resource,Library, Unknown
     }
 
