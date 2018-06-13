@@ -26,6 +26,18 @@ public class Project {
         return files.get(path);
     }
 
+    public Map<String, TestCaseFile> getFiles(){
+        return files;
+    }
+
+    public void addFile(String path){
+        if(hasFile(path)){
+            return;
+        }
+
+        files.put(path, null);
+    }
+
     public void addTestCaseFile(TestCaseFile file){
         testCaseFiles.add(file);
 
@@ -33,6 +45,14 @@ public class Project {
 
         for(Resources resource: file.getSettings().getResources()){
             files.put(resource.getFile().getPath(), resource.getFile());
+        }
+
+        updateFiles(file.getSettings());
+    }
+
+    private void updateFiles(Settings settings){
+        for(Resources resources: settings.getResources()){
+            addFile(resources.getName());
         }
     }
 }

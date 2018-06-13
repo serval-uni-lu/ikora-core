@@ -3,15 +3,23 @@ package lu.uni.serval.robotframework.parser;
 import lu.uni.serval.robotframework.model.Project;
 import lu.uni.serval.robotframework.model.Settings;
 import lu.uni.serval.robotframework.model.TestCaseFile;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.*;
+import java.util.Map;
 
 public class ProjectParser {
     private ProjectParser(){}
 
     static public Project parse(String filePath){
         Project project = new Project();
+
+        return parse(filePath, project);
+    }
+
+    static private Project parse(String filePath, Project project){
+        if(filePath == null){
+            return project;
+        }
 
         try {
             File file = new File(filePath);
@@ -26,7 +34,7 @@ public class ProjectParser {
             e.printStackTrace();
         }
 
-        return project;
+        return parse(getUnparsedFiles(project), project);
     }
 
     static public void readFile(File file, Project project){
@@ -58,10 +66,6 @@ public class ProjectParser {
         }
     }
 
-    static public void readFiles(File directory, Project project){
-        throw new NotImplementedException();
-    }
-
     static private boolean isSetting(String line){
         return isBlock(line, "setting");
     }
@@ -81,5 +85,15 @@ public class ProjectParser {
     static private boolean isBlock(String line, String block){
         String regex = String.format("^\\*\\*\\*(\\s*)%s(\\s*)\\*\\*\\*", block);
         return ParsingUtils.compareNoCase(line, regex);
+    }
+
+    static private String getUnparsedFiles(Project project){
+        for (Map.Entry<String, TestCaseFile> file: project.getFiles().entrySet()){
+            if(file.getValue() == null){
+                return file.getKey();
+            }
+        }
+
+        return null;
     }
 }
