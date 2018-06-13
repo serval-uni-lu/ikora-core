@@ -5,25 +5,18 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class UserKeyword implements Iterable<Step> {
-    private List<Argument> arguments;
+public class UserKeyword extends KeywordDefinition implements Iterable<Step> {
+
     private String file;
-    private Argument name;
-    private String documentation;
     private List<Step> steps;
     private List<String> tags;
 
     public UserKeyword(String file, String name, List<String> arguments, String documentation, List<Step> steps, List<String> tags) {
+        super(name, arguments, documentation);
+
         this.file = file;
-        this.name = new Argument(name);
-        this.documentation = documentation;
         this.steps = steps;
         this.tags = tags;
-
-        this.arguments = new ArrayList<>();
-        for(String argument : arguments) {
-            this.arguments.add(new Argument(argument));
-        }
     }
 
     public UserKeyword(Step step) {
@@ -32,14 +25,6 @@ public class UserKeyword implements Iterable<Step> {
 
     public String getFile() {
         return file;
-    }
-
-    public Argument getName() {
-        return name;
-    }
-
-    public String getDocumentation() {
-        return documentation;
     }
 
     public List<Step> getSteps() {
@@ -53,10 +38,6 @@ public class UserKeyword implements Iterable<Step> {
     @Nonnull
     public Iterator<Step> iterator() {
         return steps.iterator();
-    }
-
-    public List<Argument> getArguments() {
-        return arguments;
     }
 
     public boolean isEqual(Object other) {

@@ -8,11 +8,17 @@ public class Step {
     private String file;
     private String name;
     private List<String> arguments;
+    private KeywordDefinition keyword;
 
     public Step(String file, String name, List<String> arguments) {
         this.file = file;
         this.name = name;
         this.arguments = arguments;
+        this.keyword = null;
+    }
+
+    public void setKeyword(KeywordDefinition keyword){
+        this.keyword = keyword;
     }
 
     public String getFile() {
@@ -29,6 +35,10 @@ public class Step {
 
     public List<String> getArguments() {
         return this.arguments;
+    }
+
+    public boolean isKeywordLinked(){
+        return keyword != null;
     }
 
     public Map<String, List<String>> fetchVariables(UserKeyword keyword) {
