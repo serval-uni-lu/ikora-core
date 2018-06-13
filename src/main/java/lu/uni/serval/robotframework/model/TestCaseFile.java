@@ -94,7 +94,10 @@ public class TestCaseFile implements Iterable<UserKeyword> {
             }
         }
 
-        return new UserKeyword(step);
+        UserKeyword keyword = new UserKeyword();
+
+
+        return null;
     }
 
     public Map<String, List<String>> getVariableValues(Argument argument) {

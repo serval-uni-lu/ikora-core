@@ -11,16 +11,21 @@ public class UserKeyword extends KeywordDefinition implements Iterable<Step> {
     private List<Step> steps;
     private List<String> tags;
 
-    public UserKeyword(String file, String name, List<String> arguments, String documentation, List<Step> steps, List<String> tags) {
-        super(name, arguments, documentation);
-
-        this.file = file;
-        this.steps = steps;
-        this.tags = tags;
+    public UserKeyword() {
+        steps = new ArrayList<>();
+        tags = new ArrayList<>();
     }
 
-    public UserKeyword(Step step) {
-        this(step.getFile(), step.getName(), step.getArguments(), "", new ArrayList<>(), new ArrayList<>());
+    public void setFile(String file){
+        this.file = file;
+    }
+
+    public void addStep(Step step){
+        this.steps.add(step);
+    }
+
+    public void addTag(String tag){
+        this.tags.add(tag);
     }
 
     public String getFile() {

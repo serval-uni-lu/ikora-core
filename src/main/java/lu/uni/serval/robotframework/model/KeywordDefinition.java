@@ -12,17 +12,21 @@ public class KeywordDefinition implements TreeNodeData {
     protected String documentation;
     protected LabelTreeNode node;
 
-    KeywordDefinition(String name, List<String> arguments, String documentation){
-
-        this.name = new Argument(name);
-        this.documentation = documentation;
-
-        this.arguments = new ArrayList<>();
-        for(String argument : arguments) {
-            this.arguments.add(new Argument(argument));
-        }
-
+    KeywordDefinition(){
+        arguments = new ArrayList<>();
         node = new LabelTreeNode(this);
+    }
+
+    public void setName(String name){
+        this.name = new Argument(name);
+    }
+
+    public void addArgument(String argument){
+        arguments.add(new Argument(argument));
+    }
+
+    public void setDocumentation(String documentation){
+        this.documentation = documentation;
     }
 
     public Argument getName() {
