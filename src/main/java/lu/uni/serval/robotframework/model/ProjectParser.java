@@ -3,13 +3,11 @@ package lu.uni.serval.robotframework.model;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class ProjectParser {
     private ProjectParser(){}
 
-    public Project parse(String filePath){
+    static public Project parse(String filePath){
         Project project = new Project();
 
         try {
@@ -28,13 +26,13 @@ public class ProjectParser {
         return project;
     }
 
-    public void readFile(File file, Project project){
+    static public void readFile(File file, Project project){
         try {
             FileReader input = new FileReader(file);
-            BufferedReader bufRead = new BufferedReader(input);
+            BufferedReader bufferRead = new BufferedReader(input);
 
             String line;
-            while( (line = bufRead.readLine()) != null){
+            while( (line = bufferRead.readLine()) != null){
                 if(isSetting(line)){
 
                 }
@@ -54,33 +52,28 @@ public class ProjectParser {
         }
     }
 
-    public void readFiles(File directory, Project project){
+    static public void readFiles(File directory, Project project){
         throw new NotImplementedException();
     }
 
-    private boolean isSetting(String line){
+    static private boolean isSetting(String line){
         return isBlock(line, "setting");
     }
 
-    private boolean isTestCases(String line){
+    static private boolean isTestCases(String line){
         return isBlock(line, "test cases");
     }
 
-    private boolean isKeywords(String line){
+    static private boolean isKeywords(String line){
         return isBlock(line, "keywords");
     }
 
-    private boolean isVariable(String line){
+    static private boolean isVariable(String line){
         return isBlock(line, "variable");
     }
 
-
-
-    private boolean isBlock(String line, String block){
+    static private boolean isBlock(String line, String block){
         String regex = String.format("^\\*\\*\\*(\\s*)%s(\\s*)\\*\\*\\*", block);
-        Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(line);
-
-        return matcher.matches();
+        return ParsingUtils.compareNoCase(line, regex);
     }
 }
