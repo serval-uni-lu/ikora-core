@@ -42,12 +42,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.python</groupId>
-            <artifactId>jython-standalone</artifactId>
-            <version>2.7.1b2</version>
-        </dependency>
-
-        <dependency>
             <groupId>org.apache.opennlp</groupId>
             <artifactId>opennlp-tools</artifactId>
             <version>1.8.4</version>
