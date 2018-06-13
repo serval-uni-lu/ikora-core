@@ -61,6 +61,8 @@ public class ProjectParser {
                 }
             }
 
+            project.addTestCaseFile(testCaseFile);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
