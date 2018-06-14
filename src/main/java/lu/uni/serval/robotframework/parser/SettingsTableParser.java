@@ -7,8 +7,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class SettingParser {
-    private SettingParser(){ }
+public class SettingsTableParser {
+    private SettingsTableParser(){ }
 
     static public String parse(BufferedReader bufferedReader, Settings settings) throws IOException {
         String line = bufferedReader.readLine();

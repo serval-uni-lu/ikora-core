@@ -10,11 +10,12 @@ public class Step {
     private List<String> arguments;
     private KeywordDefinition keyword;
 
-    public Step(String file, String name, List<String> arguments) {
-        this.file = file;
+    public void setName(String name) {
         this.name = name;
+    }
+
+    public void setArguments(List<String> arguments) {
         this.arguments = arguments;
-        this.keyword = null;
     }
 
     public void setKeyword(KeywordDefinition keyword){

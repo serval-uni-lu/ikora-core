@@ -46,12 +46,12 @@ public class ProjectParser {
             while(line != null){
                 if(isSettings(line)){
                     Settings settings = new Settings();
-                    line = SettingParser.parse(bufferRead, settings);
+                    line = SettingsTableParser.parse(bufferRead, settings);
                     testCaseFile.setSettings(settings);
                 }
                 else if(isTestCases(line)){
                     TestCaseTable testCaseTable = new TestCaseTable();
-                    line = TestCasesParser.parse(bufferRead, testCaseTable);
+                    line = TestCaseTableParser.parse(bufferRead, testCaseTable);
                     testCaseFile.setTestCaseTable(testCaseTable);
                 }
                 else if(isKeywords(line)){
