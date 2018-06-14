@@ -1,9 +1,7 @@
 package lu.uni.serval.robotframework.parser;
 
 import lu.uni.serval.robotframework.model.Resources;
-import lu.uni.serval.robotframework.model.Resources.Type;
 import lu.uni.serval.robotframework.model.Settings;
-import org.eclipse.jetty.util.IO;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,8 +10,8 @@ import java.util.ArrayList;
 public class SettingParser {
     private SettingParser(){ }
 
-    static public String parse(BufferedReader bufferRead, Settings settings) throws IOException {
-        String line = bufferRead.readLine();
+    static public String parse(BufferedReader bufferedReader, Settings settings) throws IOException {
+        String line = bufferedReader.readLine();
 
         while(line != null){
             if(ParsingUtils.isBlock(line)){
@@ -30,47 +28,86 @@ public class SettingParser {
 
 
             if(ParsingUtils.compareNoCase(label, "documentation")){
-                line = parseDocumentation(bufferRead, tokens, settings);
+                line = parseDocumentation(bufferedReader, tokens, settings);
             }
             else if(ParsingUtils.compareNoCase(label, "resource")){
-                line = parseResource(bufferRead, tokens, settings, Resources.Type.Resource);
+                line = parseResource(bufferedReader, tokens, settings, Resources.Type.Resource);
             }
             else if(ParsingUtils.compareNoCase(label, "library")){
-                line = parseResource(bufferRead, tokens, settings, Resources.Type.Library);
+                line = parseResource(bufferedReader, tokens, settings, Resources.Type.Library);
             }
             else if(ParsingUtils.compareNoCase(label, "variables")) {
-
+                line = parseVariable(bufferedReader, tokens, settings);
             }
             else if(ParsingUtils.compareNoCase(label, "metadata")) {
-
+                line = parseMetadata(bufferedReader, tokens, settings);
             }
             else if(ParsingUtils.compareNoCase(label, "suite setup")) {
-
+                line = parseSuiteSetup(bufferedReader, tokens, settings);
             }
             else if(ParsingUtils.compareNoCase(label, "suite teardown")) {
-
+                line = parseSuiteTeardown(bufferedReader, tokens, settings);
             }
-            else if(ParsingUtils.compareNoCase(label, "force tages")) {
-
+            else if(ParsingUtils.compareNoCase(label, "force tags")) {
+                line = parseForceTags(bufferedReader, tokens, settings);
             }
             else if(ParsingUtils.compareNoCase(label, "default tags")){
-                line = parseDefaultTags(bufferRead, tokens, settings);
+                line = parseDefaultTags(bufferedReader, tokens, settings);
             }
             else if(ParsingUtils.compareNoCase(label, "test setup")){
-
+                line = parseTestSetup(bufferedReader, tokens, settings);
             }
             else if(ParsingUtils.compareNoCase(label, "test teardown")){
-
+                line = parseTestTeardown(bufferedReader, tokens, settings);
             }
             else if(ParsingUtils.compareNoCase(label, "test template")){
-
+                line = parseTestTemplate(bufferedReader, tokens, settings);
             }
             else if(ParsingUtils.compareNoCase(label, "test timeout")){
-
+                line = parseTestTimeout(bufferedReader, tokens, settings);
+            }
+            else {
+                line = bufferedReader.readLine();
             }
         }
 
         return line;
+    }
+
+    private static String parseTestTimeout(BufferedReader bufferedReader, String[] tokens, Settings settings) throws IOException {
+        return bufferedReader.readLine();
+    }
+
+    private static String parseTestTemplate(BufferedReader bufferedReader, String[] tokens, Settings settings) throws IOException {
+        return bufferedReader.readLine();
+    }
+
+    private static String parseTestTeardown(BufferedReader bufferedReader, String[] tokens, Settings settings) throws IOException {
+        return bufferedReader.readLine();
+    }
+
+    private static String parseTestSetup(BufferedReader bufferedReader, String[] tokens, Settings settings) throws IOException {
+        return bufferedReader.readLine();
+    }
+
+    private static String parseForceTags(BufferedReader bufferedReader, String[] tokens, Settings settings) throws IOException {
+        return bufferedReader.readLine();
+    }
+
+    private static String parseSuiteTeardown(BufferedReader bufferedReader, String[] tokens, Settings settings) throws IOException {
+        return bufferedReader.readLine();
+    }
+
+    private static String parseSuiteSetup(BufferedReader bufferedReader, String[] tokens, Settings settings) throws IOException {
+        return bufferedReader.readLine();
+    }
+
+    private static String parseMetadata(BufferedReader bufferedReader, String[] tokens, Settings settings) throws IOException {
+        return bufferedReader.readLine();
+    }
+
+    private static String parseVariable(BufferedReader bufferedReader, String[] tokens, Settings settings) throws IOException {
+        return bufferedReader.readLine();
     }
 
     private static String parseDocumentation(BufferedReader bufferedReader, String[] tokens, Settings settings) throws IOException {
