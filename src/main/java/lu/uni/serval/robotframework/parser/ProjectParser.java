@@ -3,6 +3,7 @@ package lu.uni.serval.robotframework.parser;
 import lu.uni.serval.robotframework.model.Project;
 import lu.uni.serval.robotframework.model.Settings;
 import lu.uni.serval.robotframework.model.TestCaseFile;
+import lu.uni.serval.robotframework.model.TestCaseTable;
 
 import java.io.*;
 import java.util.Map;
@@ -27,9 +28,6 @@ public class ProjectParser {
             if(file.isFile()){
                 readFile(file, project);
             }
-            else if (file.isDirectory()){
-                readFile(file, project);
-            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -44,20 +42,26 @@ public class ProjectParser {
 
             TestCaseFile testCaseFile = new TestCaseFile();
 
-            String line;
-            while( (line = bufferRead.readLine()) != null){
-                if(isSetting(line)){
-                    Settings settings = SettingParser.parse(bufferRead);
+            String line = bufferRead.readLine();
+            while(line != null){
+                if(isSettings(line)){
+                    Settings settings = new Settings();
+                    line = SettingParser.parse(bufferRead, settings);
                     testCaseFile.setSettings(settings);
                 }
                 else if(isTestCases(line)){
-
+                    TestCaseTable testCaseTable = new TestCaseTable();
+                    line = TestCasesParser.parse(bufferRead, testCaseTable);
+                    testCaseFile.setTestCaseTable(testCaseTable);
                 }
                 else if(isKeywords(line)){
 
                 }
                 else if(isVariable(line)){
 
+                }
+                else {
+                    bufferRead.readLine();
                 }
             }
 
@@ -68,25 +72,20 @@ public class ProjectParser {
         }
     }
 
-    static private boolean isSetting(String line){
-        return isBlock(line, "setting");
+    static private boolean isSettings(String line){
+        return ParsingUtils.isBlock(line, "settings");
     }
 
     static private boolean isTestCases(String line){
-        return isBlock(line, "test cases");
+        return ParsingUtils.isBlock(line, "test cases");
     }
 
     static private boolean isKeywords(String line){
-        return isBlock(line, "keywords");
+        return ParsingUtils.isBlock(line, "keywords");
     }
 
     static private boolean isVariable(String line){
-        return isBlock(line, "variable");
-    }
-
-    static private boolean isBlock(String line, String block){
-        String regex = String.format("^\\*\\*\\*(\\s*)%s(\\s*)\\*\\*\\*", block);
-        return ParsingUtils.compareNoCase(line, regex);
+        return ParsingUtils.isBlock(line, "variable");
     }
 
     static private String getUnparsedFiles(Project project){

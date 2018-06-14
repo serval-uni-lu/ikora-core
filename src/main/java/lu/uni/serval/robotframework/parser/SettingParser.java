@@ -3,6 +3,7 @@ package lu.uni.serval.robotframework.parser;
 import lu.uni.serval.robotframework.model.Resources;
 import lu.uni.serval.robotframework.model.Resources.Type;
 import lu.uni.serval.robotframework.model.Settings;
+import org.eclipse.jetty.util.IO;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,11 +12,14 @@ import java.util.ArrayList;
 public class SettingParser {
     private SettingParser(){ }
 
-    static public Settings parse(BufferedReader bufferRead) throws IOException {
-        Settings settings = new Settings();
+    static public String parse(BufferedReader bufferRead, Settings settings) throws IOException {
+        String line = bufferRead.readLine();
 
-        String line;
-        while((line = bufferRead.readLine()) != null){
+        while(line != null){
+            if(ParsingUtils.isBlock(line)){
+                break;
+            }
+
             String[] tokens = ParsingUtils.tokenizeLine(line);
 
             if(tokens.length == 0){
@@ -25,34 +29,45 @@ public class SettingParser {
             String label = tokens[0];
 
             if(ParsingUtils.compareNoCase(label, "default tags")){
-                parseDefaultTags(tokens, settings);
+                line = parseDefaultTags(bufferRead, tokens, settings);
             }
             else if(ParsingUtils.compareNoCase(label, "documentation")){
-                parseDocument(tokens, settings);
+                line = parseDocumentation(bufferRead, tokens, settings);
             }
             else if(ParsingUtils.compareNoCase(label, "resource")){
-                parseResource(tokens, settings, Resources.Type.Resource);
+                line = parseResource(bufferRead, tokens, settings, Resources.Type.Resource);
             }
             else if(ParsingUtils.compareNoCase(label, "library")){
-                parseResource(tokens, settings, Resources.Type.Library);
+                line = parseResource(bufferRead, tokens, settings, Resources.Type.Library);
             }
         }
 
-        return settings;
+        return line;
     }
 
-    private static void parseResource(String[] tokens, Settings settings, Resources.Type type) {
+    private static String parseDocumentation(BufferedReader bufferedReader, String[] tokens, Settings settings) throws IOException {
+        StringBuilder builder = new StringBuilder();
+        builder.append(tokens[1]);
+
+        String line = ParsingUtils.appendMultiline(bufferedReader, builder);
+
+        settings.setDocumentation(builder.toString());
+
+        return line;
+    }
+
+    private static String parseResource(BufferedReader bufferedReader, String[] tokens, Settings settings, Resources.Type type) throws IOException {
         Resources resources = new Resources(type, tokens[1], new ArrayList<>(), "");
         settings.addResources(resources);
+
+        return bufferedReader.readLine();
     }
 
-    private static void parseDocument(String[] tokens, Settings settings) {
-        settings.setDocumentation(tokens[1]);
-    }
-
-    private static void parseDefaultTags(String[] tokens, Settings settings) {
+    private static String parseDefaultTags(BufferedReader bufferedReader, String[] tokens, Settings settings) throws IOException {
         for(int i = 1; i < tokens.length; ++i){
             settings.addDefaultTag(tokens[i]);
         }
+
+        return bufferedReader.readLine();
     }
 }

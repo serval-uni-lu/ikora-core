@@ -17,6 +17,18 @@ public class TestCaseFile implements Iterable<UserKeyword> {
         this.settings = settings;
     }
 
+    public void setTestCaseTable(TestCaseTable testCaseTable) {
+        this.testCaseTable = testCaseTable;
+    }
+
+    public void setKeywordTable(KeywordTable keywordTable) {
+        this.keywordTable = keywordTable;
+    }
+
+    public void setVariableTable(VariableTable variableTable) {
+        this.variableTable = variableTable;
+    }
+
     public String getDirectory(){
         return this.directory;
     }
