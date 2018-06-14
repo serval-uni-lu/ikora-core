@@ -28,10 +28,8 @@ public class SettingParser {
 
             String label = tokens[0];
 
-            if(ParsingUtils.compareNoCase(label, "default tags")){
-                line = parseDefaultTags(bufferRead, tokens, settings);
-            }
-            else if(ParsingUtils.compareNoCase(label, "documentation")){
+
+            if(ParsingUtils.compareNoCase(label, "documentation")){
                 line = parseDocumentation(bufferRead, tokens, settings);
             }
             else if(ParsingUtils.compareNoCase(label, "resource")){
@@ -39,6 +37,36 @@ public class SettingParser {
             }
             else if(ParsingUtils.compareNoCase(label, "library")){
                 line = parseResource(bufferRead, tokens, settings, Resources.Type.Library);
+            }
+            else if(ParsingUtils.compareNoCase(label, "variables")) {
+
+            }
+            else if(ParsingUtils.compareNoCase(label, "metadata")) {
+
+            }
+            else if(ParsingUtils.compareNoCase(label, "suite setup")) {
+
+            }
+            else if(ParsingUtils.compareNoCase(label, "suite teardown")) {
+
+            }
+            else if(ParsingUtils.compareNoCase(label, "force tages")) {
+
+            }
+            else if(ParsingUtils.compareNoCase(label, "default tags")){
+                line = parseDefaultTags(bufferRead, tokens, settings);
+            }
+            else if(ParsingUtils.compareNoCase(label, "test setup")){
+
+            }
+            else if(ParsingUtils.compareNoCase(label, "test teardown")){
+
+            }
+            else if(ParsingUtils.compareNoCase(label, "test template")){
+
+            }
+            else if(ParsingUtils.compareNoCase(label, "test timeout")){
+
             }
         }
 
