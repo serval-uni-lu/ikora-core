@@ -4,9 +4,8 @@ package lu.uni.serval.analytics;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import lu.uni.serval.robotframework.model.KeywordDefinition;
 import lu.uni.serval.utils.CompareCache;
-import lu.uni.serval.utils.EasyPair;
-import lu.uni.serval.utils.KeywordData;
 import lu.uni.serval.utils.UnorderedPair;
 import lu.uni.serval.utils.tree.LabelTreeNode;
 
@@ -64,11 +63,14 @@ public class CloneResultSerializer extends StdSerializer<CloneResults> {
         jsonGenerator.writeEndObject();
     }
 
-    private void writeJsonTree(LabelTreeNode tree, JsonGenerator jsonGenerator) throws IOException {
+    private void writeJsonTree(LabelTreeNode node, JsonGenerator jsonGenerator) throws IOException {
         jsonGenerator.writeStartObject();
-        jsonGenerator.writeStringField("file", ((KeywordData)tree.getData()).file);
-        jsonGenerator.writeStringField("name", ((KeywordData)tree.getData()).name);
-        jsonGenerator.writeNumberField("number of steps", tree.getChildCount());
+
+        KeywordDefinition keyword = (KeywordDefinition)node.getData();
+
+        jsonGenerator.writeStringField("file", keyword.getFile());
+        jsonGenerator.writeStringField("name", keyword.getName().toString());
+        jsonGenerator.writeNumberField("number of steps", node.getChildCount());
         jsonGenerator.writeEndObject();
     }
 }

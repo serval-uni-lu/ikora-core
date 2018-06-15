@@ -69,17 +69,17 @@ public class KeywordDefinition implements TreeNodeData, Iterable<Step> {
 
     @Override
     public String getLabel() {
-        return null;
+        return getName().toString();
     }
 
     @Override
     public boolean isSame(TreeNodeData other) {
-        return false;
+        return this == other;
     }
 
     @Override
     public boolean isValid() {
-        return false;
+        return true;
     }
 
     @Nonnull
