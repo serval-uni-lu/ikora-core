@@ -23,6 +23,10 @@ public class Project {
         return testCaseFiles;
     }
 
+    public TestCaseFile getTestCaseFile(File file) {
+        return files.get(file);
+    }
+
     public TestCaseFile getFile(String path){
         return files.get(path);
     }

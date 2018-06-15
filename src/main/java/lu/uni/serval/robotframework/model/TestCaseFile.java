@@ -12,6 +12,10 @@ public class TestCaseFile implements Iterable<UserKeyword> {
     private VariableTable variableTable;
 
     public void setFile(File file) {
+        this.settings = new Settings();
+        this.testCaseTable = new TestCaseTable();
+        this.keywordTable = new KeywordTable();
+        this.variableTable = new VariableTable();
         this.file = file;
     }
 
@@ -51,7 +55,7 @@ public class TestCaseFile implements Iterable<UserKeyword> {
         return this.settings;
     }
 
-    public List<UserKeyword> getTestCases(){
+    public List<TestCase> getTestCases(){
         return testCaseTable.getTestCases();
     }
 
@@ -77,26 +81,17 @@ public class TestCaseFile implements Iterable<UserKeyword> {
 
     @Nonnull
     public Iterator<UserKeyword> iterator() {
-        return testCaseTable.iterator();
+        return keywordTable.iterator();
     }
 
-    public UserKeyword findUserKeyword(Step step) {
-        for(UserKeyword userKeyword : keywordTable) {
-            if (userKeyword.isEqual(step)) {
-                return userKeyword;
+    public KeywordDefinition findKeyword(Step step) {
+        String name = step.getName().toString();
+
+        for(KeywordDefinition keyword: getUserKeywords()) {
+            if(keyword.isResolved(name)) {
+                return keyword;
             }
         }
-
-        for (Resources resources : settings.getResources()) {
-            UserKeyword userKeyword = resources.getTestCaseFile().findUserKeyword(step);
-
-            if(userKeyword != null) {
-                return userKeyword;
-            }
-        }
-
-        UserKeyword keyword = new UserKeyword();
-
 
         return null;
     }

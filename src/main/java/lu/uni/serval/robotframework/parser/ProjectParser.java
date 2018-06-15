@@ -15,7 +15,8 @@ public class ProjectParser {
             File file = new File(filePath);
 
             if(file.isFile()){
-                readFile(file, project);
+                process(file, project);
+                postProcess(project);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -24,7 +25,7 @@ public class ProjectParser {
         return project;
     }
 
-    static public void readFile(File file, Project project){
+    static public void process(File file, Project project){
         if(file == null){
             return;
         }
@@ -70,7 +71,26 @@ public class ProjectParser {
             e.printStackTrace();
         }
 
-        readFile(getUnparsedFiles(project), project);
+        process(getUnparsedFiles(project), project);
+    }
+
+    static private void postProcess(Project project) throws Exception {
+        resolveResources(project);
+        KeywordLinker.link(project);
+    }
+
+    private static void resolveResources(Project project) throws Exception {
+        for(TestCaseFile testCaseFile: project.getTestCaseFiles()) {
+            for (Resources resources: testCaseFile.getSettings().getResources()) {
+                TestCaseFile resourceFile = project.getTestCaseFile(resources.getFile());
+
+                if(resourceFile == null) {
+                    throw new Exception();
+                }
+
+                resources.setTestCasefile(resourceFile);
+            }
+        }
     }
 
     static private boolean isSettings(String line){

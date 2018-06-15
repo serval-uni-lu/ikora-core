@@ -5,23 +5,23 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class TestCaseTable implements Iterable<UserKeyword> {
-    private List<UserKeyword> testCaseList;
+public class TestCaseTable implements Iterable<TestCase> {
+    private List<TestCase> testCaseList;
 
     public TestCaseTable(){
         testCaseList = new ArrayList<>();
     }
 
-    public List<UserKeyword> getTestCases() {
+    public List<TestCase> getTestCases() {
         return testCaseList;
     }
 
     @Nonnull
-    public Iterator<UserKeyword> iterator() {
+    public Iterator<TestCase> iterator() {
         return testCaseList.iterator();
     }
 
-    public void add(UserKeyword userKeyword) {
-        testCaseList.add(userKeyword);
+    public void add(TestCase testCase) {
+        testCaseList.add(testCase);
     }
 }

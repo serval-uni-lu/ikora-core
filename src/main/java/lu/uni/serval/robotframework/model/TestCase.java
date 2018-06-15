@@ -1,6 +1,6 @@
 package lu.uni.serval.robotframework.model;
 
-public class TestCase extends UserKeyword {
+public class TestCase extends KeywordDefinition {
     private Step setup;
     private Step tearDown;
 
