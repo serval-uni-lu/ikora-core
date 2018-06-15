@@ -26,8 +26,8 @@ public class Project {
         return files.get(file);
     }
 
-    public TestCaseFile getFile(String path){
-        return files.get(path);
+    public TestCaseFile getFile(File file){
+        return files.get(file);
     }
 
     public Map<File, TestCaseFile> getFiles(){
