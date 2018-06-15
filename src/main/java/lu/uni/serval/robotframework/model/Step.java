@@ -3,9 +3,9 @@ package lu.uni.serval.robotframework.model;
 import java.util.*;
 
 public class Step {
-    private String file;
     private Argument name;
     private List<Argument> arguments;
+    private KeywordDefinition parent;
     private KeywordDefinition keyword;
 
     public Step() {
@@ -20,12 +20,14 @@ public class Step {
         this.arguments.add(new Argument(argument));
     }
 
-    public void setKeyword(KeywordDefinition keyword){
-        this.keyword = keyword;
+    public void setParent(KeywordDefinition parent) {
+        this.parent = parent;
     }
 
-    public String getFile() {
-        return this.file;
+    public void setKeyword(KeywordDefinition keyword){
+        this.keyword = keyword;
+        this.keyword.addDependency(parent);
+        this.parent.node.add(this.keyword);
     }
 
     public Argument getName() {
@@ -36,8 +38,11 @@ public class Step {
         return this.arguments;
     }
 
-    public boolean isKeywordLinked(){
-        return keyword != null;
+    public KeywordDefinition getKeyword() {
+        return keyword;
     }
 
+    public KeywordDefinition getParent() {
+        return parent;
+    }
 }

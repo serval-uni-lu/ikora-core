@@ -9,15 +9,17 @@ import java.util.Iterator;
 import java.util.List;
 
 public class KeywordDefinition implements TreeNodeData, Iterable<Step> {
-    private String file;
+    protected String file;
     protected Argument name;
     protected String documentation;
     protected LabelTreeNode node;
-    private List<Step> steps;
+    protected List<Step> steps;
+    protected List<KeywordDefinition> dependencies;
 
     KeywordDefinition(){
         steps = new ArrayList<>();
         node = new LabelTreeNode(this);
+        dependencies = new ArrayList<>();
     }
 
     public void setFile(String file){
@@ -30,6 +32,11 @@ public class KeywordDefinition implements TreeNodeData, Iterable<Step> {
 
     public void addStep(Step step){
         this.steps.add(step);
+        step.setParent(this);
+    }
+
+    public void addDependency(KeywordDefinition keyword) {
+        this.dependencies.add(keyword);
     }
 
     public String getFile() {

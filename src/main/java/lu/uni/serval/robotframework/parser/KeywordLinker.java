@@ -36,7 +36,7 @@ public class KeywordLinker {
         }
     }
 
-    private static void linkSteps(UserKeyword userKeyword, TestCaseFile testCaseFile) throws Exception {
+    private static void linkSteps(UserKeyword userKeyword, TestCaseFile testCaseFile) {
         for (Step step: userKeyword) {
             String name = step.getName().toString().trim();
 
