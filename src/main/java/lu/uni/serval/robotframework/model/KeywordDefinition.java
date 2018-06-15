@@ -6,7 +6,7 @@ import lu.uni.serval.utils.tree.TreeNodeData;
 import java.util.ArrayList;
 import java.util.List;
 
-public class KeywordDefinition implements TreeNodeData {
+public class KeywordDefinition implements TreeNodeData, KeywordCall {
     protected List<Argument> arguments;
     protected Argument name;
     protected String documentation;

@@ -1,7 +1,11 @@
 package lu.uni.serval.robotframework.parser;
 
+import lu.uni.serval.robotframework.model.KeywordCall;
+import lu.uni.serval.robotframework.model.KeywordDefinition;
+
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -48,5 +52,27 @@ public class ParsingUtils {
         }
 
         return line;
+    }
+
+    static public String[] removeIndent(String[] tokens){
+        while (tokens[0].equals("")){
+            tokens = Arrays.copyOfRange(tokens, 1, tokens.length);
+        }
+
+        return tokens;
+    }
+
+    static public void parseKeywordNameAndArguments(KeywordCall keyword, String[] tokens) {
+        tokens = removeIndent(tokens);
+
+        if(tokens.length > 0) {
+            keyword.setName(tokens[0]);
+        }
+
+        if (tokens.length > 1) {
+            for(int i = 1; i < tokens.length; ++i) {
+                keyword.addArgument(tokens[i]);
+            }
+        }
     }
 }

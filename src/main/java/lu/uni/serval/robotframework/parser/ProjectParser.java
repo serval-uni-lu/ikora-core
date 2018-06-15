@@ -38,30 +38,30 @@ public class ProjectParser {
     static public void readFile(File file, Project project){
         try {
             FileReader input = new FileReader(file);
-            BufferedReader bufferRead = new BufferedReader(input);
+            BufferedReader bufferedReader = new BufferedReader(input);
 
             TestCaseFile testCaseFile = new TestCaseFile();
 
-            String line = bufferRead.readLine();
+            String line = bufferedReader.readLine();
             while(line != null){
                 if(isSettings(line)){
                     Settings settings = new Settings();
-                    line = SettingsTableParser.parse(bufferRead, settings);
+                    line = SettingsTableParser.parse(bufferedReader, settings);
                     testCaseFile.setSettings(settings);
                 }
                 else if(isTestCases(line)){
                     TestCaseTable testCaseTable = new TestCaseTable();
-                    line = TestCaseTableParser.parse(bufferRead, testCaseTable);
+                    line = TestCaseTableParser.parse(bufferedReader, testCaseTable);
                     testCaseFile.setTestCaseTable(testCaseTable);
                 }
                 else if(isKeywords(line)){
-
+                    line = bufferedReader.readLine();
                 }
                 else if(isVariable(line)){
-
+                    line = bufferedReader.readLine();
                 }
                 else {
-                    bufferRead.readLine();
+                    bufferedReader.readLine();
                 }
             }
 

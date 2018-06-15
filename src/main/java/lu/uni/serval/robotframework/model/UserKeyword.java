@@ -53,7 +53,7 @@ public class UserKeyword extends KeywordDefinition implements Iterable<Step> {
 
         }
         else if(other instanceof Step){
-            String stepName = ((Step)other).getCleanName();
+            String stepName = ((Step)other).getName().toString();
             stepName = stepName.replaceAll("\"[^\"]+\"", "");
 
             String keyword = this.getName().toString().trim();

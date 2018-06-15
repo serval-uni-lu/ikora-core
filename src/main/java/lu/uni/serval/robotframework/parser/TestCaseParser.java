@@ -13,6 +13,7 @@ public class TestCaseParser {
 
     public static String parse(BufferedReader bufferedReader, String test, TestCaseTable testCaseTable) throws IOException {
         TestCase testCase = new TestCase();
+        ParsingUtils.parseKeywordNameAndArguments(testCase, ParsingUtils.tokenizeLine(test));
 
         String line = bufferedReader.readLine();
 

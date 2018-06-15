@@ -2,15 +2,19 @@ package lu.uni.serval.robotframework.parser;
 
 import lu.uni.serval.robotframework.model.Step;
 
-import java.util.Arrays;
-
 public class StepParser {
     public static Step parse(String[] tokens) {
-        if(tokens[0].equals("")){
-            tokens = Arrays.copyOfRange(tokens, 1, tokens.length);
-        }
-
         Step step = new Step();
+
+        tokens = ParsingUtils.removeIndent(tokens);
+        String first = tokens[0];
+
+        if(first.equalsIgnoreCase(":FOR")) {
+
+        }
+        else {
+            ParsingUtils.parseKeywordNameAndArguments(step, tokens);
+        }
 
         return step;
     }

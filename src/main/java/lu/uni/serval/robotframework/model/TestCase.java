@@ -2,14 +2,14 @@ package lu.uni.serval.robotframework.model;
 
 public class TestCase extends UserKeyword {
     private Step setup;
-    private Step teadDown;
+    private Step tearDown;
 
     public void setSetup(Step setup){
         this.setup = setup;
     }
 
     public void setTeadDown(Step tearDown){
-        this.teadDown = tearDown;
+        this.tearDown = tearDown;
     }
 
     Step getSetup(){
@@ -17,6 +17,6 @@ public class TestCase extends UserKeyword {
     }
 
     Step getTeadDown(){
-        return teadDown;
+        return tearDown;
     }
 }
