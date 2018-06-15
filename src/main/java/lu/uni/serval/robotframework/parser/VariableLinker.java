@@ -32,9 +32,9 @@ public class VariableLinker {
 
         for(String name: variables){
             if(localVariables.contains(name)){
+                argument.setVariable(name, null);
                 continue;
             }
-
 
             Variable value = testCaseFile.findVariable(name);
 

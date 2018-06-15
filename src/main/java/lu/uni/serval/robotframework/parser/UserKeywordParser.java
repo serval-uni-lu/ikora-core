@@ -72,6 +72,12 @@ public class UserKeywordParser {
     }
 
     private static String parseArguments(BufferedReader bufferedReader, String[] tokens, UserKeyword userKeyword) throws IOException {
+        tokens = ParsingUtils.removeIndent(tokens);
+
+        for(int i = 1; i < tokens.length; ++i){
+            userKeyword.addArgument(tokens[i]);
+        }
+
         return bufferedReader.readLine();
     }
 
