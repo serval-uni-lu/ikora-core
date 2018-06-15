@@ -84,9 +84,7 @@ public class TestCaseFile implements Iterable<UserKeyword> {
         return keywordTable.iterator();
     }
 
-    public KeywordDefinition findKeyword(Step step) {
-        String name = step.getName().toString();
-
+    public KeywordDefinition findKeyword(String name) {
         for(KeywordDefinition keyword: getUserKeywords()) {
             if(keyword.isResolved(name)) {
                 return keyword;

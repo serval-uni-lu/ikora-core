@@ -53,9 +53,9 @@ public class Argument {
 
     private void buildRegex() {
         Matcher matcher = getVariableMatcher(this.value);
-        String pattern = matcher.replaceAll("(.*)");
+        String pattern = matcher.replaceAll("(.*)").trim();
 
-        match = Pattern.compile("^" + pattern + "$");
+        match = Pattern.compile("^" + pattern + "$", Pattern.CASE_INSENSITIVE);
     }
 
     public static Matcher getVariableMatcher(String value) {

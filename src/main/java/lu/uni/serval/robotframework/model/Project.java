@@ -1,17 +1,14 @@
 package lu.uni.serval.robotframework.model;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class Project {
-    private Set<TestCaseFile> testCaseFiles;
+    private List<TestCaseFile> testCaseFiles;
     private Map<File, TestCaseFile> files;
 
     public Project(){
-        testCaseFiles = new HashSet<>();
+        testCaseFiles = new ArrayList<>();
         files = new HashMap<>();
     }
 
@@ -19,7 +16,7 @@ public class Project {
         return files.containsKey(file);
     }
 
-    public Set<TestCaseFile> getTestCaseFiles(){
+    public List<TestCaseFile> getTestCaseFiles(){
         return testCaseFiles;
     }
 

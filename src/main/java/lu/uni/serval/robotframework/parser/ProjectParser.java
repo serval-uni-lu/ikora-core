@@ -2,7 +2,11 @@ package lu.uni.serval.robotframework.parser;
 
 import lu.uni.serval.robotframework.model.*;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileReader;
+import java.io.BufferedReader;
+import java.io.IOException;
+
 import java.util.Map;
 
 public class ProjectParser {
@@ -25,7 +29,7 @@ public class ProjectParser {
         return project;
     }
 
-    static public void process(File file, Project project){
+    static private void process(File file, Project project){
         if(file == null){
             return;
         }
