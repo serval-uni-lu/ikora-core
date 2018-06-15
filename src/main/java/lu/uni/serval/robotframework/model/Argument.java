@@ -1,17 +1,26 @@
 package lu.uni.serval.robotframework.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Argument {
     private String value;
     private Pattern match;
+    private Map<String, Variable> variables;
 
     Argument(String value) {
         this.value = value;
+        this.variables = new HashMap<>();
+
         buildRegex();
+    }
+
+    public void setVariable(String name, Variable value) {
+        this.variables.put(name, value);
     }
 
     @Override

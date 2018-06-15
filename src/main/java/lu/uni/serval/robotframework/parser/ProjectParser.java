@@ -81,6 +81,7 @@ public class ProjectParser {
     static private void postProcess(Project project) throws Exception {
         resolveResources(project);
         KeywordLinker.link(project);
+        VariableLinker.link(project);
     }
 
     private static void resolveResources(Project project) throws Exception {

@@ -69,6 +69,13 @@ public class TestCaseFile implements Iterable<UserKeyword> {
         return userKeywords;
     }
 
+    public VariableTable getVariables() {
+        VariableTable variables = new VariableTable();
+        getVariables(variables);
+
+        return variables;
+    }
+
     private void getUserKeywords(List<UserKeyword> parentUserKeywords){
         List<UserKeyword> userKeywords = getUserKeywords();
 
@@ -76,6 +83,20 @@ public class TestCaseFile implements Iterable<UserKeyword> {
             if(!parentUserKeywords.contains(userKeyword)){
                 parentUserKeywords.add(userKeyword);
             }
+        }
+    }
+
+    private void getVariables(VariableTable variables) {
+        for(VariableTable.Entry<String, Variable> variable: variableTable.entrySet()) {
+            if(variables.containsKey(variable.getKey())) {
+                continue;
+            }
+
+            variables.put(variable.getKey(), variable.getValue());
+        }
+
+        for(Resources resources: settings.getResources()){
+            resources.getTestCaseFile().getVariables(variables);
         }
     }
 
@@ -92,5 +113,9 @@ public class TestCaseFile implements Iterable<UserKeyword> {
         }
 
         return null;
+    }
+
+    public Variable findVariable(String name) {
+        return getVariables().get(name);
     }
 }

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserKeyword extends KeywordDefinition {
-    protected List<Argument> arguments;
+    protected List<String> arguments;
     private List<String> tags;
 
     public UserKeyword() {
@@ -12,15 +12,21 @@ public class UserKeyword extends KeywordDefinition {
         tags = new ArrayList<>();
     }
 
+    @Override
+    public void setName(String name) {
+        super.setName(name);
+        arguments.addAll(Argument.findVariables(name));
+    }
+
     public void addArgument(String argument){
-        arguments.add(new Argument(argument));
+        arguments.add(argument);
     }
 
     public void addTag(String tag){
         this.tags.add(tag);
     }
 
-    public List<Argument> getArguments() {
+    public List<String> getArguments() {
         return arguments;
     }
 

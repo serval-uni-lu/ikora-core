@@ -26,8 +26,11 @@ public class Step {
 
     public void setKeyword(KeywordDefinition keyword){
         this.keyword = keyword;
-        this.keyword.addDependency(parent);
-        this.parent.node.add(this.keyword);
+
+        if(this.keyword != null) {
+            this.keyword.addDependency(parent);
+            this.parent.node.add(this.keyword);
+        }
     }
 
     public Argument getName() {
