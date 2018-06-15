@@ -18,6 +18,11 @@ public class TestCaseParser {
         String line = bufferedReader.readLine();
 
         while(line != null) {
+            if(line.equals("")) {
+                line = bufferedReader.readLine();
+                continue;
+            }
+
             String[] tokens = ParsingUtils.tokenizeLine(line);
 
             if(!tokens[0].equals("")){

@@ -1,5 +1,6 @@
 package lu.uni.serval.robotframework.model;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -7,15 +8,15 @@ import java.util.Set;
 
 public class Project {
     private Set<TestCaseFile> testCaseFiles;
-    private Map<String, TestCaseFile> files;
+    private Map<File, TestCaseFile> files;
 
     public Project(){
         testCaseFiles = new HashSet<>();
         files = new HashMap<>();
     }
 
-    public boolean hasFile(String filePath){
-        return files.containsKey(filePath);
+    public boolean hasFile(File file){
+        return files.containsKey(file);
     }
 
     public Set<TestCaseFile> getTestCaseFiles(){
@@ -26,33 +27,29 @@ public class Project {
         return files.get(path);
     }
 
-    public Map<String, TestCaseFile> getFiles(){
+    public Map<File, TestCaseFile> getFiles(){
         return files;
     }
 
-    public void addFile(String path){
-        if(hasFile(path)){
+    public void addFile(File file){
+        if(hasFile(file)){
             return;
         }
 
-        files.put(path, null);
+        files.put(file, null);
     }
 
-    public void addTestCaseFile(TestCaseFile file){
-        testCaseFiles.add(file);
+    public void addTestCaseFile(TestCaseFile testCaseFile){
+        testCaseFiles.add(testCaseFile);
 
-        files.put(file.getPath(), file);
+        files.put(testCaseFile.getFile(), testCaseFile);
 
-        for(Resources resource: file.getSettings().getResources()){
-            files.put(resource.getFile().getPath(), resource.getFile());
-        }
-
-        updateFiles(file.getSettings());
+        updateFiles(testCaseFile.getSettings());
     }
 
     private void updateFiles(Settings settings){
         for(Resources resources: settings.getResources()){
-            addFile(resources.getName());
+            addFile(resources.getFile());
         }
     }
 }

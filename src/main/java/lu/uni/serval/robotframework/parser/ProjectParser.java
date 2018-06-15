@@ -14,14 +14,6 @@ public class ProjectParser {
     static public Project parse(String filePath){
         Project project = new Project();
 
-        return parse(filePath, project);
-    }
-
-    static private Project parse(String filePath, Project project){
-        if(filePath == null){
-            return project;
-        }
-
         try {
             File file = new File(filePath);
 
@@ -32,20 +24,26 @@ public class ProjectParser {
             e.printStackTrace();
         }
 
-        return parse(getUnparsedFiles(project), project);
+        return project;
     }
 
     static public void readFile(File file, Project project){
+        if(file == null){
+            return;
+        }
+
         try {
             FileReader input = new FileReader(file);
             BufferedReader bufferedReader = new BufferedReader(input);
 
             TestCaseFile testCaseFile = new TestCaseFile();
+            testCaseFile.setFile(file);
 
             String line = bufferedReader.readLine();
             while(line != null){
                 if(isSettings(line)){
                     Settings settings = new Settings();
+                    settings.setFile(testCaseFile.getFile());
                     line = SettingsTableParser.parse(bufferedReader, settings);
                     testCaseFile.setSettings(settings);
                 }
@@ -61,7 +59,7 @@ public class ProjectParser {
                     line = bufferedReader.readLine();
                 }
                 else {
-                    bufferedReader.readLine();
+                    line = bufferedReader.readLine();
                 }
             }
 
@@ -70,6 +68,8 @@ public class ProjectParser {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        readFile(getUnparsedFiles(project), project);
     }
 
     static private boolean isSettings(String line){
@@ -88,8 +88,8 @@ public class ProjectParser {
         return ParsingUtils.isBlock(line, "variable");
     }
 
-    static private String getUnparsedFiles(Project project){
-        for (Map.Entry<String, TestCaseFile> file: project.getFiles().entrySet()){
+    static private File getUnparsedFiles(Project project){
+        for (Map.Entry<File, TestCaseFile> file: project.getFiles().entrySet()){
             if(file.getValue() == null){
                 return file.getKey();
             }

@@ -1,17 +1,20 @@
 package lu.uni.serval.robotframework.model;
 
 import javax.annotation.Nonnull;
+import java.io.File;
 import java.util.*;
 
 public class TestCaseFile implements Iterable<UserKeyword> {
-    private String directory;
-    private String path;
-    private String name;
+    private File file;
     private Settings settings;
     private TestCaseTable testCaseTable;
     private KeywordTable keywordTable;
     private VariableTable variableTable;
     private Map<String, List<String>> variableDictionary;
+
+    public void setFile(File file) {
+        this.file = file;
+    }
 
     public void setSettings(Settings settings) {
         this.settings = settings;
@@ -29,16 +32,20 @@ public class TestCaseFile implements Iterable<UserKeyword> {
         this.variableTable = variableTable;
     }
 
+    public File getFile() {
+        return file;
+    }
+
     public String getDirectory(){
-        return this.directory;
+        return this.file.getParent();
     }
 
     public String getPath() {
-        return path;
+        return this.file.getPath();
     }
 
     public String getName() {
-        return name;
+        return this.getName();
     }
 
     public Settings getSettings() {
@@ -53,9 +60,7 @@ public class TestCaseFile implements Iterable<UserKeyword> {
         List<UserKeyword> userKeywords = new ArrayList<>(keywordTable.getUserKeywords());
 
         for(Resources resources: settings.getResources()){
-            if(resources.getType() == Resources.Type.Resource){
-                resources.getFile().getUserKeywords(userKeywords);
-            }
+            resources.getTestCaseFile().getUserKeywords(userKeywords);
         }
 
         return userKeywords;
@@ -95,11 +100,7 @@ public class TestCaseFile implements Iterable<UserKeyword> {
         }
 
         for (Resources resources : settings.getResources()) {
-            if(resources.getType() != Resources.Type.Resource) {
-                continue;
-            }
-
-            UserKeyword userKeyword = resources.getFile().findUserKeyword(step);
+            UserKeyword userKeyword = resources.getTestCaseFile().findUserKeyword(step);
 
             if(userKeyword != null) {
                 return userKeyword;
@@ -153,9 +154,7 @@ public class TestCaseFile implements Iterable<UserKeyword> {
         }
 
         for (Resources resources : this.settings.getResources()) {
-            if (resources.getType() == Resources.Type.Resource) {
-                fileQueue.add(resources.getFile());
-            }
+                fileQueue.add(resources.getTestCaseFile());
         }
 
         if(!fileQueue.isEmpty()) {

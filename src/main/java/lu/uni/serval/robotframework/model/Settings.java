@@ -1,31 +1,35 @@
 package lu.uni.serval.robotframework.model;
 
-import org.apache.commons.lang3.NotImplementedException;
-
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Settings {
-    private ResourcesTable resourcesTable;
-    private ResourcesTable libraryTable;
+    private List<Resources> resourcesTable;
+    private List<Library> libraryTable;
     private List<String> defaultTags;
     private String documentation;
+    private File file;
 
     public Settings() {
-        this.resourcesTable = new ResourcesTable();
-        this.libraryTable = new ResourcesTable();
+        this.resourcesTable = new ArrayList();
+        this.libraryTable = new ArrayList();
         this.defaultTags = new ArrayList<>();
+    }
+
+    public File getFile() {
+        return file;
     }
 
     public String getDocumentation() {
         return documentation;
     }
 
-    public ResourcesTable getResources() {
+    public List<Resources> getResources() {
         return resourcesTable;
     }
 
-    public ResourcesTable getLibraries() {
+    public List<Library> getLibraries() {
         return libraryTable;
     }
 
@@ -33,24 +37,24 @@ public class Settings {
         return defaultTags;
     }
 
+    public void setFile(File file) {
+        this.file = file;
+    }
+
     public void setDocumentation(String documentation){
         this.documentation = documentation;
     }
 
     public void addResources(Resources resources){
-        if(resources.getType() == Resources.Type.Resource){
-            resourcesTable.add(resources);
-        }
-        else if(resources.getType() == Resources.Type.Library){
-            libraryTable.add(resources);
-        }
-        else{
-            throw new NotImplementedException("Expected Library or Resources got " + resources.getType().name() + " instead");
-        }
+        resourcesTable.add(resources);
+    }
 
+    public void addLibrary(Library library) {
+        libraryTable.add(library);
     }
 
     public void addDefaultTag(String defaultTag){
         defaultTags.add(defaultTag);
     }
+
 }

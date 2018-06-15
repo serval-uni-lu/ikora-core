@@ -1,38 +1,36 @@
 package lu.uni.serval.robotframework.model;
 
+import java.io.File;
 import java.util.List;
 
 public class Resources {
-    public enum Type{
-        Resource,Library, Unknown
-    }
-
-    private Type type;
     private String name;
     private List<String> arguments;
     private String comment;
-    private TestCaseFile file;
+    private File file;
 
-    public Resources(Type type, String name, List<String> arguments, String comment) {
-        this.type = type;
+    private TestCaseFile testCasefile;
+
+    public Resources(String name, File file, List<String> arguments, String comment) {
         this.name = name;
         this.arguments = arguments;
         this.comment = comment;
-    }
-
-    public Type getType() {
-        return this.type;
+        this.file = file;
     }
 
     public String getName() {
         return this.name;
     }
 
-    public TestCaseFile getFile() {
-        return this.file;
+    public File getFile() {
+        return file;
     }
 
-    public void setFile(TestCaseFile file) {
-        this.file = file;
+    public TestCaseFile getTestCaseFile() {
+        return this.testCasefile;
+    }
+
+    public void setTestCasefile(TestCaseFile testCasefile) {
+        this.testCasefile = testCasefile;
     }
 }

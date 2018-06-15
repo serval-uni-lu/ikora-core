@@ -1,9 +1,11 @@
 package lu.uni.serval.robotframework.parser;
 
+import lu.uni.serval.robotframework.model.Library;
 import lu.uni.serval.robotframework.model.Resources;
 import lu.uni.serval.robotframework.model.Settings;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -31,10 +33,10 @@ public class SettingsTableParser {
                 line = parseDocumentation(bufferedReader, tokens, settings);
             }
             else if(ParsingUtils.compareNoCase(label, "resource")){
-                line = parseResource(bufferedReader, tokens, settings, Resources.Type.Resource);
+                line = parseResource(bufferedReader, tokens, settings);
             }
             else if(ParsingUtils.compareNoCase(label, "library")){
-                line = parseResource(bufferedReader, tokens, settings, Resources.Type.Library);
+                line = parseLibrary(bufferedReader, tokens, settings);
             }
             else if(ParsingUtils.compareNoCase(label, "variables")) {
                 line = parseVariable(bufferedReader, tokens, settings);
@@ -121,8 +123,20 @@ public class SettingsTableParser {
         return line;
     }
 
-    private static String parseResource(BufferedReader bufferedReader, String[] tokens, Settings settings, Resources.Type type) throws IOException {
-        Resources resources = new Resources(type, tokens[1], new ArrayList<>(), "");
+    private static String parseLibrary(BufferedReader bufferedReader, String[] tokens, Settings settings) throws IOException {
+        Library library = new Library(tokens[1], new ArrayList<>(), "");
+        settings.addLibrary(library);
+
+        return bufferedReader.readLine();
+    }
+
+    private static String parseResource(BufferedReader bufferedReader, String[] tokens, Settings settings) throws IOException {
+        File filePath = new File(tokens[1]);
+        if(!filePath.isAbsolute()) {
+            filePath = new File(settings.getFile().getParentFile(), filePath.getPath());
+        }
+
+        Resources resources = new Resources(tokens[1], filePath, new ArrayList<>(), "");
         settings.addResources(resources);
 
         return bufferedReader.readLine();
