@@ -7,9 +7,11 @@ import lu.uni.serval.utils.CommandRunner;
 import lu.uni.serval.utils.Configuration;
 import lu.uni.serval.utils.Plugin;
 import lu.uni.serval.utils.exception.DuplicateNodeException;
+import lu.uni.serval.utils.tree.LabelTreeNode;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Set;
 
 public class KeywordsAnalyticsCli implements CommandRunner{
 
@@ -30,17 +32,19 @@ public class KeywordsAnalyticsCli implements CommandRunner{
             return;
         }
 
+        Set<LabelTreeNode> forest = project.getKeywordNodes();
+
         CloneDetection cloneDetection = new CloneDetection();
-        //final CloneResults cloneResults = cloneDetection.findClones(forest);
+        final CloneResults cloneResults = cloneDetection.findClones(forest);
 
         Statistics statistics = new Statistics();
-        //final StatisticsResults statisticsResults = statistics.computeStatistics(forest);
+        final StatisticsResults statisticsResults = statistics.computeStatistics(forest);
 
         try {
             ObjectMapper mapper = new ObjectMapper();
             KeywordsAnalysisJsonExport export = new KeywordsAnalysisJsonExport();
-            //export.setClones(cloneResults);
-            //export.setGeneralStatistics(statisticsResults);
+            export.setClones(cloneResults);
+            export.setGeneralStatistics(statisticsResults);
 
             File file = new File((String)analytics.getAdditionalProperty("output file", "./analytics.json"));
 

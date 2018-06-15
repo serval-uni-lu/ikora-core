@@ -1,5 +1,7 @@
 package lu.uni.serval.robotframework.model;
 
+import lu.uni.serval.utils.tree.LabelTreeNode;
+
 import java.io.File;
 import java.util.*;
 
@@ -30,6 +32,24 @@ public class Project {
 
     public Map<File, TestCaseFile> getFiles(){
         return files;
+    }
+
+    public List<UserKeyword> getKeywords() {
+        if(testCaseFiles.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        return testCaseFiles.get(0).getUserKeywords();
+    }
+
+    public Set<LabelTreeNode> getKeywordNodes() {
+        Set<LabelTreeNode> nodes = new HashSet<>();
+
+        for(UserKeyword keyword: getKeywords()) {
+            nodes.add(keyword.getNode());
+        }
+
+        return nodes;
     }
 
     public void addFile(File file){

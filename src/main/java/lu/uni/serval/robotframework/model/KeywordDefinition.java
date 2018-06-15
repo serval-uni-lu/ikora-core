@@ -59,6 +59,10 @@ public class KeywordDefinition implements TreeNodeData, Iterable<Step> {
         return documentation;
     }
 
+    public LabelTreeNode getNode() {
+        return node;
+    }
+
     public boolean isResolved(String name) {
         return this.name.matches(name);
     }
