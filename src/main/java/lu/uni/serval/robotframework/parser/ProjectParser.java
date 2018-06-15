@@ -55,7 +55,9 @@ public class ProjectParser {
                     testCaseFile.setKeywordTable(keywordTable);
                 }
                 else if(isVariable(line)){
-                    line = bufferedReader.readLine();
+                    VariableTable variableTable = new VariableTable();
+                    line = VariableTableParser.parse(bufferedReader, variableTable);
+                    testCaseFile.setVariableTable(variableTable);
                 }
                 else {
                     line = bufferedReader.readLine();
@@ -84,7 +86,7 @@ public class ProjectParser {
     }
 
     static private boolean isVariable(String line){
-        return ParsingUtils.isBlock(line, "variable");
+        return ParsingUtils.isBlock(line, "variables");
     }
 
     static private File getUnparsedFiles(Project project){

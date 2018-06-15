@@ -10,7 +10,7 @@ public class StepParser {
         tokens = ParsingUtils.removeIndent(tokens);
         String first = tokens[0];
 
-        String line = null;
+        String line;
 
         if(first.equalsIgnoreCase(":FOR")) {
             line = bufferedReader.readLine();
