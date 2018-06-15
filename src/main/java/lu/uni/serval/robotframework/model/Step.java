@@ -2,7 +2,7 @@ package lu.uni.serval.robotframework.model;
 
 import java.util.*;
 
-public class Step implements KeywordCall {
+public class Step {
     private String file;
     private Argument name;
     private List<Argument> arguments;

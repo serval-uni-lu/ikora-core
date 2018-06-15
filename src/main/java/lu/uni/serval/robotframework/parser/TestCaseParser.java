@@ -12,8 +12,10 @@ public class TestCaseParser {
 
 
     public static String parse(BufferedReader bufferedReader, String test, TestCaseTable testCaseTable) throws IOException {
+        String[] tokens = ParsingUtils.tokenizeLine(test);
+
         TestCase testCase = new TestCase();
-        ParsingUtils.parseKeywordNameAndArguments(testCase, ParsingUtils.tokenizeLine(test));
+        testCase.setName(tokens[0]);
 
         String line = bufferedReader.readLine();
 
@@ -23,7 +25,7 @@ public class TestCaseParser {
                 continue;
             }
 
-            String[] tokens = ParsingUtils.tokenizeLine(line);
+            tokens = ParsingUtils.tokenizeLine(line);
 
             if(!tokens[0].equals("")){
                 break;
@@ -88,9 +90,10 @@ public class TestCaseParser {
     }
 
     private static String parseStep(BufferedReader bufferedReader, String[] tokens, TestCase testCase) throws IOException {
-        Step step = StepParser.parse(tokens);
+        Step step = new Step();
+        String line = StepParser.parse(bufferedReader, tokens, step);
         testCase.addStep(step);
 
-        return bufferedReader.readLine();
+        return line;
     }
 }

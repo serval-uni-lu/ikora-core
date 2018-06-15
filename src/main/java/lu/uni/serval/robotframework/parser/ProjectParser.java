@@ -1,9 +1,6 @@
 package lu.uni.serval.robotframework.parser;
 
-import lu.uni.serval.robotframework.model.Project;
-import lu.uni.serval.robotframework.model.Settings;
-import lu.uni.serval.robotframework.model.TestCaseFile;
-import lu.uni.serval.robotframework.model.TestCaseTable;
+import lu.uni.serval.robotframework.model.*;
 
 import java.io.*;
 import java.util.Map;
@@ -53,7 +50,9 @@ public class ProjectParser {
                     testCaseFile.setTestCaseTable(testCaseTable);
                 }
                 else if(isKeywords(line)){
-                    line = bufferedReader.readLine();
+                    KeywordTable keywordTable = new KeywordTable();
+                    line = KeywordTableParser.parse(bufferedReader, keywordTable);
+                    testCaseFile.setKeywordTable(keywordTable);
                 }
                 else if(isVariable(line)){
                     line = bufferedReader.readLine();
