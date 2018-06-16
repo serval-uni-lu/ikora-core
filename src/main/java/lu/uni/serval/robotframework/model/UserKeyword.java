@@ -5,11 +5,9 @@ import java.util.List;
 
 public class UserKeyword extends KeywordDefinition {
     protected List<String> arguments;
-    private List<String> tags;
 
     public UserKeyword() {
         arguments = new ArrayList<>();
-        tags = new ArrayList<>();
     }
 
     @Override
@@ -22,15 +20,7 @@ public class UserKeyword extends KeywordDefinition {
         arguments.add(argument);
     }
 
-    public void addTag(String tag){
-        this.tags.add(tag);
-    }
-
     public List<String> getArguments() {
         return arguments;
-    }
-
-    public List<String> getTags() {
-        return tags;
     }
 }

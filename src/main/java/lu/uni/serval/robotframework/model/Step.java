@@ -29,7 +29,7 @@ public class Step {
 
         if(this.keyword != null) {
             this.keyword.addDependency(parent);
-            this.parent.node.add(this.keyword);
+            this.parent.getNode().add(this.keyword);
         }
     }
 

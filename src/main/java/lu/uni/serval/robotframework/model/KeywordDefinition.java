@@ -9,17 +9,19 @@ import java.util.Iterator;
 import java.util.List;
 
 public class KeywordDefinition implements TreeNodeData, Iterable<Step> {
-    protected String file;
-    protected Argument name;
-    protected String documentation;
-    protected LabelTreeNode node;
-    protected List<Step> steps;
-    protected List<KeywordDefinition> dependencies;
+    private String file;
+    private Argument name;
+    private String documentation;
+    private List<String> tags;
+    private LabelTreeNode node;
+    private List<Step> steps;
+    private List<KeywordDefinition> dependencies;
 
     KeywordDefinition(){
         steps = new ArrayList<>();
         node = new LabelTreeNode(this);
         dependencies = new ArrayList<>();
+        tags = new ArrayList<>();
     }
 
     public void setFile(String file){
@@ -33,6 +35,10 @@ public class KeywordDefinition implements TreeNodeData, Iterable<Step> {
     public void addStep(Step step){
         this.steps.add(step);
         step.setParent(this);
+    }
+
+    public void addTag(String tag){
+        this.tags.add(tag);
     }
 
     public void addDependency(KeywordDefinition keyword) {
@@ -57,6 +63,11 @@ public class KeywordDefinition implements TreeNodeData, Iterable<Step> {
 
     public String getDocumentation() {
         return documentation;
+    }
+
+
+    public List<String> getTags() {
+        return tags;
     }
 
     public LabelTreeNode getNode() {
