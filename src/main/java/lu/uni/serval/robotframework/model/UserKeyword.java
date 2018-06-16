@@ -13,7 +13,7 @@ public class UserKeyword extends KeywordDefinition {
     @Override
     public void setName(String name) {
         super.setName(name);
-        arguments.addAll(Argument.findVariables(name));
+        arguments.addAll(getName().findVariables());
     }
 
     public void addArgument(String argument){
