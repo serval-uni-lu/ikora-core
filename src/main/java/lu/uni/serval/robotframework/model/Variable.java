@@ -15,7 +15,7 @@ public class Variable {
         this.name = name;
     }
 
-    public void addDefinitionElement(String element) {
+    public void addValueElement(String element) {
         this.definition.add(new Argument(element));
     }
 
@@ -23,7 +23,7 @@ public class Variable {
         return name;
     }
 
-    public List<Argument> getDefinition() {
+    public List<Argument> getValue() {
         return definition;
     }
 }

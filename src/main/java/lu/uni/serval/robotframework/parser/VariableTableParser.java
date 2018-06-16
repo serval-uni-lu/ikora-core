@@ -28,7 +28,7 @@ public class VariableTableParser {
             variable.setName(tokens[0]);
 
             for (int i = 1; i < tokens.length; ++i) {
-                variable.addDefinitionElement(tokens[i]);
+                variable.addValueElement(tokens[i]);
             }
 
             variableTable.put(variable.getName(), variable);
