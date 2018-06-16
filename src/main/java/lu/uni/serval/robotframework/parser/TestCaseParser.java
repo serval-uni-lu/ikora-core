@@ -82,6 +82,12 @@ public class TestCaseParser {
     }
 
     private static String parseTags(BufferedReader bufferedReader, String[] tokens, TestCase testCase) throws IOException {
+        tokens = ParsingUtils.removeIndent(tokens);
+
+        for(int i = 1; i < tokens.length; ++i){
+            testCase.addTag(tokens[i]);
+        }
+
         return bufferedReader.readLine();
     }
 
