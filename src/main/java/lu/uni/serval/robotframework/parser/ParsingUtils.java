@@ -58,4 +58,9 @@ public class ParsingUtils {
 
         return tokens;
     }
+
+    static public String parseDocumentation(BufferedReader bufferedReader, String[] tokens, StringBuilder builder) throws IOException {
+        builder.append(tokens[1]);
+        return appendMultiline(bufferedReader, builder);
+    }
 }

@@ -86,7 +86,12 @@ public class TestCaseParser {
     }
 
     private static String parseDocumentation(BufferedReader bufferedReader, String[] tokens, TestCase testCase) throws IOException {
-        return bufferedReader.readLine();
+        StringBuilder builder = new StringBuilder();
+        String line = ParsingUtils.parseDocumentation(bufferedReader, tokens, builder);
+
+        testCase.setDocumentation(builder.toString());
+
+        return line;
     }
 
     private static String parseStep(BufferedReader bufferedReader, String[] tokens, TestCase testCase) throws IOException {

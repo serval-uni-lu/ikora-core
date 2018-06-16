@@ -64,10 +64,21 @@ public class UserKeywordParser {
     }
 
     private static String parseDocumentation(BufferedReader bufferedReader, String[] tokens, UserKeyword userKeyword) throws IOException {
-        return bufferedReader.readLine();
+        StringBuilder builder = new StringBuilder();
+        String line = ParsingUtils.parseDocumentation(bufferedReader, tokens, builder);
+
+        userKeyword.setDocumentation(builder.toString());
+
+        return line;
     }
 
     private static String parseTags(BufferedReader bufferedReader, String[] tokens, UserKeyword userKeyword) throws IOException {
+        tokens = ParsingUtils.removeIndent(tokens);
+
+        for(int i = 1; i < tokens.length; ++i){
+            userKeyword.addTag(tokens[i]);
+        }
+
         return bufferedReader.readLine();
     }
 

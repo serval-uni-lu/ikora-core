@@ -114,9 +114,7 @@ public class SettingsTableParser {
 
     private static String parseDocumentation(BufferedReader bufferedReader, String[] tokens, Settings settings) throws IOException {
         StringBuilder builder = new StringBuilder();
-        builder.append(tokens[1]);
-
-        String line = ParsingUtils.appendMultiline(bufferedReader, builder);
+        String line = ParsingUtils.parseDocumentation(bufferedReader, tokens, builder);
 
         settings.setDocumentation(builder.toString());
 
@@ -143,6 +141,8 @@ public class SettingsTableParser {
     }
 
     private static String parseDefaultTags(BufferedReader bufferedReader, String[] tokens, Settings settings) throws IOException {
+        tokens = ParsingUtils.removeIndent(tokens);
+
         for(int i = 1; i < tokens.length; ++i){
             settings.addDefaultTag(tokens[i]);
         }
