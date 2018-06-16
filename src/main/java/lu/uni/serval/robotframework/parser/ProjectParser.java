@@ -4,7 +4,7 @@ import lu.uni.serval.robotframework.model.*;
 
 import java.io.File;
 import java.io.FileReader;
-import java.io.BufferedReader;
+import java.io.LineNumberReader;
 import java.io.IOException;
 
 import java.util.Map;
@@ -36,36 +36,36 @@ public class ProjectParser {
 
         try {
             FileReader input = new FileReader(file);
-            BufferedReader bufferedReader = new BufferedReader(input);
+            LineNumberReader reader = new LineNumberReader(input);
 
             TestCaseFile testCaseFile = new TestCaseFile();
             testCaseFile.setFile(file);
 
-            String line = bufferedReader.readLine();
+            String line = reader.readLine();
             while(line != null){
                 if(isSettings(line)){
                     Settings settings = new Settings();
                     settings.setFile(testCaseFile.getFile());
-                    line = SettingsTableParser.parse(bufferedReader, settings);
+                    line = SettingsTableParser.parse(reader, settings);
                     testCaseFile.setSettings(settings);
                 }
                 else if(isTestCases(line)){
                     TestCaseTable testCaseTable = new TestCaseTable();
-                    line = TestCaseTableParser.parse(bufferedReader, testCaseTable);
+                    line = TestCaseTableParser.parse(reader, testCaseTable);
                     testCaseFile.setTestCaseTable(testCaseTable);
                 }
                 else if(isKeywords(line)){
                     KeywordTable keywordTable = new KeywordTable();
-                    line = KeywordTableParser.parse(bufferedReader, keywordTable);
+                    line = KeywordTableParser.parse(reader, keywordTable);
                     testCaseFile.setKeywordTable(keywordTable);
                 }
                 else if(isVariable(line)){
                     VariableTable variableTable = new VariableTable();
-                    line = VariableTableParser.parse(bufferedReader, variableTable);
+                    line = VariableTableParser.parse(reader, variableTable);
                     testCaseFile.setVariableTable(variableTable);
                 }
                 else {
-                    line = bufferedReader.readLine();
+                    line = reader.readLine();
                 }
             }
 

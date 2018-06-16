@@ -1,6 +1,6 @@
 package lu.uni.serval.robotframework.parser;
 
-import java.io.BufferedReader;
+import java.io.LineNumberReader;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.regex.Matcher;
@@ -31,10 +31,10 @@ public class ParsingUtils {
         return isBlock(line, "(.+)");
     }
 
-    static public String appendMultiline(BufferedReader bufferedReader, StringBuilder result) throws IOException {
+    static public String appendMultiline(LineNumberReader reader, StringBuilder result) throws IOException {
         String line;
 
-        while((line = bufferedReader.readLine()) != null){
+        while((line = reader.readLine()) != null){
             String[] tokens = tokenizeLine(line);
 
             if(tokens.length == 0 || !tokens[0].equalsIgnoreCase("...")){
@@ -59,8 +59,8 @@ public class ParsingUtils {
         return tokens;
     }
 
-    static public String parseDocumentation(BufferedReader bufferedReader, String[] tokens, StringBuilder builder) throws IOException {
+    static public String parseDocumentation(LineNumberReader reader, String[] tokens, StringBuilder builder) throws IOException {
         builder.append(tokens[1]);
-        return appendMultiline(bufferedReader, builder);
+        return appendMultiline(reader, builder);
     }
 }

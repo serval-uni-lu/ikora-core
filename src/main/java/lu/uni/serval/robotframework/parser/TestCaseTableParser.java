@@ -2,14 +2,14 @@ package lu.uni.serval.robotframework.parser;
 
 import lu.uni.serval.robotframework.model.TestCaseTable;
 
-import java.io.BufferedReader;
+import java.io.LineNumberReader;
 import java.io.IOException;
 
 public class TestCaseTableParser {
     private TestCaseTableParser() {}
 
-    static public String parse(BufferedReader bufferedReader, TestCaseTable testCaseTable) throws IOException {
-        String line = bufferedReader.readLine();
+    static public String parse(LineNumberReader reader, TestCaseTable testCaseTable) throws IOException {
+        String line = reader.readLine();
 
         while(line != null){
             if(ParsingUtils.isBlock(line)){
@@ -20,7 +20,7 @@ public class TestCaseTableParser {
                 continue;
             }
 
-            line = TestCaseParser.parse(bufferedReader, line, testCaseTable);
+            line = TestCaseParser.parse(reader, line, testCaseTable);
         }
 
         return line;

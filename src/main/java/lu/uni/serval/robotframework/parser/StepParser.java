@@ -2,22 +2,22 @@ package lu.uni.serval.robotframework.parser;
 
 import lu.uni.serval.robotframework.model.Step;
 
-import java.io.BufferedReader;
+import java.io.LineNumberReader;
 import java.io.IOException;
 
 public class StepParser {
-    public static String parse(BufferedReader bufferedReader, String[] tokens, Step step) throws IOException {
+    public static String parse(LineNumberReader reader, String[] tokens, Step step) throws IOException {
         tokens = ParsingUtils.removeIndent(tokens);
         String first = tokens[0];
 
         String line;
 
         if(first.equalsIgnoreCase(":FOR")) {
-            line = bufferedReader.readLine();
+            line = reader.readLine();
         }
         else {
             parseKeywordNameAndArguments(step, tokens);
-            line = bufferedReader.readLine();
+            line = reader.readLine();
         }
 
         return line;

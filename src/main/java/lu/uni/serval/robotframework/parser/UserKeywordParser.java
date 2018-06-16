@@ -4,22 +4,22 @@ import lu.uni.serval.robotframework.model.KeywordTable;
 import lu.uni.serval.robotframework.model.Step;
 import lu.uni.serval.robotframework.model.UserKeyword;
 
-import java.io.BufferedReader;
+import java.io.LineNumberReader;
 import java.io.IOException;
 
 public class UserKeywordParser {
 
-    public static String parse(BufferedReader bufferedReader, String test, KeywordTable keywordTable) throws IOException {
+    public static String parse(LineNumberReader reader, String test, KeywordTable keywordTable) throws IOException {
         String[] tokens = ParsingUtils.tokenizeLine(test);
 
         UserKeyword userKeyword = new UserKeyword();
         userKeyword.setName(tokens[0]);
 
-        String line = bufferedReader.readLine();
+        String line = reader.readLine();
 
         while(line != null) {
             if(line.equals("")) {
-                line = bufferedReader.readLine();
+                line = reader.readLine();
                 continue;
             }
 
@@ -36,25 +36,25 @@ public class UserKeywordParser {
             String label = tokens[1];
 
             if (ParsingUtils.compareNoCase(label, "\\[documentation\\]")) {
-                line = parseDocumentation(bufferedReader, tokens, userKeyword);
+                line = parseDocumentation(reader, tokens, userKeyword);
             }
             else if (ParsingUtils.compareNoCase(label, "\\[tags\\]")) {
-                line = parseTags(bufferedReader, tokens, userKeyword);
+                line = parseTags(reader, tokens, userKeyword);
             }
             else if (ParsingUtils.compareNoCase(label, "\\[arguments\\]")) {
-                line = parseArguments(bufferedReader, tokens, userKeyword);
+                line = parseArguments(reader, tokens, userKeyword);
             }
             else if (ParsingUtils.compareNoCase(label, "\\[return\\]")) {
-                line = parseReturn(bufferedReader, tokens, userKeyword);
+                line = parseReturn(reader, tokens, userKeyword);
             }
             else if (ParsingUtils.compareNoCase(label, "\\[teardown\\]")) {
-                line = parseTeardown(bufferedReader, tokens, userKeyword);
+                line = parseTeardown(reader, tokens, userKeyword);
             }
             else if (ParsingUtils.compareNoCase(label, "\\[timeout\\]")) {
-                line = parseTimeout(bufferedReader, tokens, userKeyword);
+                line = parseTimeout(reader, tokens, userKeyword);
             }
             else {
-                line = parseStep(bufferedReader, tokens, userKeyword);
+                line = parseStep(reader, tokens, userKeyword);
             }
         }
 
@@ -63,50 +63,50 @@ public class UserKeywordParser {
         return line;
     }
 
-    private static String parseDocumentation(BufferedReader bufferedReader, String[] tokens, UserKeyword userKeyword) throws IOException {
+    private static String parseDocumentation(LineNumberReader reader, String[] tokens, UserKeyword userKeyword) throws IOException {
         StringBuilder builder = new StringBuilder();
-        String line = ParsingUtils.parseDocumentation(bufferedReader, tokens, builder);
+        String line = ParsingUtils.parseDocumentation(reader, tokens, builder);
 
         userKeyword.setDocumentation(builder.toString());
 
         return line;
     }
 
-    private static String parseTags(BufferedReader bufferedReader, String[] tokens, UserKeyword userKeyword) throws IOException {
+    private static String parseTags(LineNumberReader reader, String[] tokens, UserKeyword userKeyword) throws IOException {
         tokens = ParsingUtils.removeIndent(tokens);
 
         for(int i = 1; i < tokens.length; ++i){
             userKeyword.addTag(tokens[i]);
         }
 
-        return bufferedReader.readLine();
+        return reader.readLine();
     }
 
-    private static String parseArguments(BufferedReader bufferedReader, String[] tokens, UserKeyword userKeyword) throws IOException {
+    private static String parseArguments(LineNumberReader reader, String[] tokens, UserKeyword userKeyword) throws IOException {
         tokens = ParsingUtils.removeIndent(tokens);
 
         for(int i = 1; i < tokens.length; ++i){
             userKeyword.addArgument(tokens[i]);
         }
 
-        return bufferedReader.readLine();
+        return reader.readLine();
     }
 
-    private static String parseReturn(BufferedReader bufferedReader, String[] tokens, UserKeyword userKeyword) throws IOException {
-        return bufferedReader.readLine();
+    private static String parseReturn(LineNumberReader reader, String[] tokens, UserKeyword userKeyword) throws IOException {
+        return reader.readLine();
     }
 
-    private static String parseTeardown(BufferedReader bufferedReader, String[] tokens, UserKeyword userKeyword) throws IOException {
-        return bufferedReader.readLine();
+    private static String parseTeardown(LineNumberReader reader, String[] tokens, UserKeyword userKeyword) throws IOException {
+        return reader.readLine();
     }
 
-    private static String parseTimeout(BufferedReader bufferedReader, String[] tokens, UserKeyword userKeyword) throws IOException {
-        return bufferedReader.readLine();
+    private static String parseTimeout(LineNumberReader reader, String[] tokens, UserKeyword userKeyword) throws IOException {
+        return reader.readLine();
     }
 
-    private static String parseStep(BufferedReader bufferedReader, String[] tokens, UserKeyword userKeyword) throws IOException {
+    private static String parseStep(LineNumberReader reader, String[] tokens, UserKeyword userKeyword) throws IOException {
         Step step = new Step();
-        String line = StepParser.parse(bufferedReader, tokens, step);
+        String line = StepParser.parse(reader, tokens, step);
         userKeyword.addStep(step);
 
         return line;
