@@ -9,20 +9,20 @@ import java.io.IOException;
 public class VariableTableParser {
     private VariableTableParser() {}
 
-    static public String parse(LineNumberReader reader, VariableTable variableTable) throws IOException {
-        String line = reader.readLine();
+    static public Line parse(LineNumberReader reader, VariableTable variableTable) throws IOException {
+        Line line = Line.getNextLine(reader);
 
-        while(line != null){
-            if(ParsingUtils.isBlock(line)){
+        while(line.isValid()){
+            if(ParsingUtils.isBlock(line.getText())){
                 break;
             }
 
             if(line.isEmpty()){
-                line = reader.readLine();
+                line = Line.getNextLine(reader);
                 continue;
             }
 
-            String[] tokens = ParsingUtils.tokenizeLine(line);
+            String[] tokens = line.tokenize();
 
             Variable variable = new Variable();
             variable.setName(tokens[0]);
@@ -32,7 +32,7 @@ public class VariableTableParser {
             }
 
             variableTable.put(variable.getName(), variable);
-            line = reader.readLine();
+            line = Line.getNextLine(reader);
         }
 
         return line;

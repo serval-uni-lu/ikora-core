@@ -41,31 +41,31 @@ public class ProjectParser {
             TestCaseFile testCaseFile = new TestCaseFile();
             testCaseFile.setFile(file);
 
-            String line = reader.readLine();
-            while(line != null){
-                if(isSettings(line)){
+            Line line = Line.getNextLine(reader);
+            while(line.isValid()){
+                if(isSettings(line.getText())){
                     Settings settings = new Settings();
                     settings.setFile(testCaseFile.getFile());
                     line = SettingsTableParser.parse(reader, settings);
                     testCaseFile.setSettings(settings);
                 }
-                else if(isTestCases(line)){
+                else if(isTestCases(line.getText())){
                     TestCaseTable testCaseTable = new TestCaseTable();
                     line = TestCaseTableParser.parse(reader, testCaseTable);
                     testCaseFile.setTestCaseTable(testCaseTable);
                 }
-                else if(isKeywords(line)){
+                else if(isKeywords(line.getText())){
                     KeywordTable keywordTable = new KeywordTable();
                     line = KeywordTableParser.parse(reader, keywordTable);
                     testCaseFile.setKeywordTable(keywordTable);
                 }
-                else if(isVariable(line)){
+                else if(isVariable(line.getText())){
                     VariableTable variableTable = new VariableTable();
                     line = VariableTableParser.parse(reader, variableTable);
                     testCaseFile.setVariableTable(variableTable);
                 }
                 else {
-                    line = reader.readLine();
+                    line = Line.getNextLine(reader);
                 }
             }
 

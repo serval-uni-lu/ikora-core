@@ -6,18 +6,18 @@ import java.io.LineNumberReader;
 import java.io.IOException;
 
 public class StepParser {
-    public static String parse(LineNumberReader reader, String[] tokens, Step step) throws IOException {
+    public static Line parse(LineNumberReader reader, String[] tokens, Step step) throws IOException {
         tokens = ParsingUtils.removeIndent(tokens);
         String first = tokens[0];
 
-        String line;
+        Line line;
 
         if(first.equalsIgnoreCase(":FOR")) {
-            line = reader.readLine();
+            line = Line.getNextLine(reader);
         }
         else {
             parseKeywordNameAndArguments(step, tokens);
-            line = reader.readLine();
+            line = Line.getNextLine(reader);
         }
 
         return line;

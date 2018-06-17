@@ -9,21 +9,21 @@ import java.io.IOException;
 
 public class UserKeywordParser {
 
-    public static String parse(LineNumberReader reader, String test, KeywordTable keywordTable) throws IOException {
-        String[] tokens = ParsingUtils.tokenizeLine(test);
+    public static Line parse(LineNumberReader reader, Line test, KeywordTable keywordTable) throws IOException {
+        String[] tokens = test.tokenize();
 
         UserKeyword userKeyword = new UserKeyword();
         userKeyword.setName(tokens[0]);
 
-        String line = reader.readLine();
+        Line line = Line.getNextLine(reader);
 
-        while(line != null) {
-            if(line.equals("")) {
-                line = reader.readLine();
+        while(line.isValid()) {
+            if(line.isEmpty()) {
+                line = Line.getNextLine(reader);
                 continue;
             }
 
-            tokens = ParsingUtils.tokenizeLine(line);
+            tokens = line.tokenize();
 
             if(!tokens[0].equals("")){
                 break;
@@ -63,50 +63,50 @@ public class UserKeywordParser {
         return line;
     }
 
-    private static String parseDocumentation(LineNumberReader reader, String[] tokens, UserKeyword userKeyword) throws IOException {
+    private static Line parseDocumentation(LineNumberReader reader, String[] tokens, UserKeyword userKeyword) throws IOException {
         StringBuilder builder = new StringBuilder();
-        String line = ParsingUtils.parseDocumentation(reader, tokens, builder);
+         Line line = ParsingUtils.parseDocumentation(reader, tokens, builder);
 
         userKeyword.setDocumentation(builder.toString());
 
         return line;
     }
 
-    private static String parseTags(LineNumberReader reader, String[] tokens, UserKeyword userKeyword) throws IOException {
+    private static Line parseTags(LineNumberReader reader, String[] tokens, UserKeyword userKeyword) throws IOException {
         tokens = ParsingUtils.removeIndent(tokens);
 
         for(int i = 1; i < tokens.length; ++i){
             userKeyword.addTag(tokens[i]);
         }
 
-        return reader.readLine();
+        return Line.getNextLine(reader);
     }
 
-    private static String parseArguments(LineNumberReader reader, String[] tokens, UserKeyword userKeyword) throws IOException {
+    private static Line parseArguments(LineNumberReader reader, String[] tokens, UserKeyword userKeyword) throws IOException {
         tokens = ParsingUtils.removeIndent(tokens);
 
         for(int i = 1; i < tokens.length; ++i){
             userKeyword.addArgument(tokens[i]);
         }
 
-        return reader.readLine();
+        return Line.getNextLine(reader);
     }
 
-    private static String parseReturn(LineNumberReader reader, String[] tokens, UserKeyword userKeyword) throws IOException {
-        return reader.readLine();
+    private static Line parseReturn(LineNumberReader reader, String[] tokens, UserKeyword userKeyword) throws IOException {
+        return Line.getNextLine(reader);
     }
 
-    private static String parseTeardown(LineNumberReader reader, String[] tokens, UserKeyword userKeyword) throws IOException {
-        return reader.readLine();
+    private static Line parseTeardown(LineNumberReader reader, String[] tokens, UserKeyword userKeyword) throws IOException {
+        return Line.getNextLine(reader);
     }
 
-    private static String parseTimeout(LineNumberReader reader, String[] tokens, UserKeyword userKeyword) throws IOException {
-        return reader.readLine();
+    private static Line parseTimeout(LineNumberReader reader, String[] tokens, UserKeyword userKeyword) throws IOException {
+        return Line.getNextLine(reader);
     }
 
-    private static String parseStep(LineNumberReader reader, String[] tokens, UserKeyword userKeyword) throws IOException {
+    private static Line parseStep(LineNumberReader reader, String[] tokens, UserKeyword userKeyword) throws IOException {
         Step step = new Step();
-        String line = StepParser.parse(reader, tokens, step);
+        Line line = StepParser.parse(reader, tokens, step);
         userKeyword.addStep(step);
 
         return line;

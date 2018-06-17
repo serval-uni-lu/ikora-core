@@ -11,21 +11,21 @@ public class TestCaseParser {
     private TestCaseParser() {}
 
 
-    public static String parse(LineNumberReader reader, String test, TestCaseTable testCaseTable) throws IOException {
-        String[] tokens = ParsingUtils.tokenizeLine(test);
+    public static Line parse(LineNumberReader reader, Line test, TestCaseTable testCaseTable) throws IOException {
+        String[] tokens = test.tokenize();
 
         TestCase testCase = new TestCase();
         testCase.setName(tokens[0]);
 
-        String line = reader.readLine();
+        Line line = Line.getNextLine(reader);
 
-        while(line != null) {
-            if(line.equals("")) {
-                line = reader.readLine();
+        while(line.isValid()) {
+            if(line.isEmpty()) {
+                line = Line.getNextLine(reader);
                 continue;
             }
 
-            tokens = ParsingUtils.tokenizeLine(line);
+            tokens = line.tokenize();
 
             if(!tokens[0].equals("")){
                 break;
@@ -65,44 +65,44 @@ public class TestCaseParser {
         return line;
     }
 
-    private static String parseTimeout(LineNumberReader reader, String[] tokens, TestCase testCase) throws IOException {
-        return reader.readLine();
+    private static Line parseTimeout(LineNumberReader reader, String[] tokens, TestCase testCase) throws IOException {
+        return Line.getNextLine(reader);
     }
 
-    private static String parseTemplate(LineNumberReader reader, String[] tokens, TestCase testCase) throws IOException {
-        return reader.readLine();
+    private static Line parseTemplate(LineNumberReader reader, String[] tokens, TestCase testCase) throws IOException {
+        return Line.getNextLine(reader);
     }
 
-    private static String parseTeardown(LineNumberReader reader, String[] tokens, TestCase testCase) throws IOException {
-        return reader.readLine();
+    private static Line parseTeardown(LineNumberReader reader, String[] tokens, TestCase testCase) throws IOException {
+        return Line.getNextLine(reader);
     }
 
-    private static String parseSetup(LineNumberReader reader, String[] tokens, TestCase testCase) throws IOException {
-        return reader.readLine();
+    private static Line parseSetup(LineNumberReader reader, String[] tokens, TestCase testCase) throws IOException {
+        return Line.getNextLine(reader);
     }
 
-    private static String parseTags(LineNumberReader reader, String[] tokens, TestCase testCase) throws IOException {
+    private static Line parseTags(LineNumberReader reader, String[] tokens, TestCase testCase) throws IOException {
         tokens = ParsingUtils.removeIndent(tokens);
 
         for(int i = 1; i < tokens.length; ++i){
             testCase.addTag(tokens[i]);
         }
 
-        return reader.readLine();
+        return Line.getNextLine(reader);
     }
 
-    private static String parseDocumentation(LineNumberReader reader, String[] tokens, TestCase testCase) throws IOException {
+    private static Line parseDocumentation(LineNumberReader reader, String[] tokens, TestCase testCase) throws IOException {
         StringBuilder builder = new StringBuilder();
-        String line = ParsingUtils.parseDocumentation(reader, tokens, builder);
+        Line line = ParsingUtils.parseDocumentation(reader, tokens, builder);
 
         testCase.setDocumentation(builder.toString());
 
         return line;
     }
 
-    private static String parseStep(LineNumberReader reader, String[] tokens, TestCase testCase) throws IOException {
+    private static Line parseStep(LineNumberReader reader, String[] tokens, TestCase testCase) throws IOException {
         Step step = new Step();
-        String line = StepParser.parse(reader, tokens, step);
+        Line line = StepParser.parse(reader, tokens, step);
         testCase.addStep(step);
 
         return line;

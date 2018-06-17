@@ -23,6 +23,15 @@ public class Line {
         return text != null;
     }
 
+    public boolean isEmpty() {
+        return text.isEmpty();
+    }
+
+    public String[] tokenize(){
+        String tokens = this.text.replaceAll("\\s\\s(\\s*)", "\t");
+        return tokens.split("\t");
+    }
+
     public static Line getNextLine(LineNumberReader reader) throws IOException {
         Line line = new Line();
 

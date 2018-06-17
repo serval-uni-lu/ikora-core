@@ -9,12 +9,6 @@ import java.util.regex.Pattern;
 public class ParsingUtils {
     private ParsingUtils(){}
 
-    static String[] tokenizeLine(String line){
-        line = line.replaceAll("\\s\\s(\\s*)", "\t");
-
-        return line.split("\t");
-    }
-
     static boolean compareNoCase(String line, String regex){
         Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(line);
@@ -31,11 +25,11 @@ public class ParsingUtils {
         return isBlock(line, "(.+)");
     }
 
-    static public String appendMultiline(LineNumberReader reader, StringBuilder result) throws IOException {
-        String line;
+    static public Line appendMultiline(LineNumberReader reader, StringBuilder result) throws IOException {
+        Line line;
 
-        while((line = reader.readLine()) != null){
-            String[] tokens = tokenizeLine(line);
+        while((line = Line.getNextLine(reader)) != null){
+            String[] tokens = line.tokenize();
 
             if(tokens.length == 0 || !tokens[0].equalsIgnoreCase("...")){
                 break;
@@ -59,7 +53,7 @@ public class ParsingUtils {
         return tokens;
     }
 
-    static public String parseDocumentation(LineNumberReader reader, String[] tokens, StringBuilder builder) throws IOException {
+    static public Line parseDocumentation(LineNumberReader reader, String[] tokens, StringBuilder builder) throws IOException {
         builder.append(tokens[1]);
         return appendMultiline(reader, builder);
     }

@@ -8,11 +8,11 @@ import java.io.IOException;
 public class TestCaseTableParser {
     private TestCaseTableParser() {}
 
-    static public String parse(LineNumberReader reader, TestCaseTable testCaseTable) throws IOException {
-        String line = reader.readLine();
+    static public Line parse(LineNumberReader reader, TestCaseTable testCaseTable) throws IOException {
+        Line line = Line.getNextLine(reader);
 
-        while(line != null){
-            if(ParsingUtils.isBlock(line)){
+        while(line.isValid()){
+            if(ParsingUtils.isBlock(line.getText())){
                 break;
             }
 

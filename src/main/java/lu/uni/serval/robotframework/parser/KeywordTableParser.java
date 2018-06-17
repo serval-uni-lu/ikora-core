@@ -8,11 +8,11 @@ import java.io.IOException;
 public class KeywordTableParser {
     private KeywordTableParser() {}
 
-    static public String parse(LineNumberReader reader, KeywordTable keywordTable) throws IOException {
-        String line = reader.readLine();
+    static public Line parse(LineNumberReader reader, KeywordTable keywordTable) throws IOException {
+        Line line = Line.getNextLine(reader);
 
-        while(line != null){
-            if(ParsingUtils.isBlock(line)){
+        while(line.isValid()){
+            if(ParsingUtils.isBlock(line.getText())){
                 break;
             }
 
