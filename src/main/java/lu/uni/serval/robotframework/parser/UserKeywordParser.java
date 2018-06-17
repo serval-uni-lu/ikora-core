@@ -25,7 +25,7 @@ public class UserKeywordParser {
 
             tokens = line.tokenize();
 
-            if(!tokens[0].equals("")){
+            if(!tokens[0].isEmpty()){
                 break;
             }
 

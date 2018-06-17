@@ -46,7 +46,7 @@ public class ParsingUtils {
     }
 
     static public String[] removeIndent(String[] tokens){
-        while (tokens[0].equals("")){
+        while (tokens[0].isEmpty()){
             tokens = Arrays.copyOfRange(tokens, 1, tokens.length);
         }
 
