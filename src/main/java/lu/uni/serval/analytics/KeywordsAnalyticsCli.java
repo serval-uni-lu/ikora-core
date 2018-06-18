@@ -2,7 +2,7 @@ package lu.uni.serval.analytics;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lu.uni.serval.robotframework.model.Project;
-import lu.uni.serval.robotframework.parser.ProjectParser;
+import lu.uni.serval.robotframework.compiler.Compiler;
 import lu.uni.serval.utils.CommandRunner;
 import lu.uni.serval.utils.Configuration;
 import lu.uni.serval.utils.Plugin;
@@ -26,7 +26,7 @@ public class KeywordsAnalyticsCli implements CommandRunner{
 
         String location = (String)analytics.getAdditionalProperty("testCase location", "");
 
-        Project project = ProjectParser.parse(location);
+        Project project = Compiler.compile(location);
 
         if(project == null){
             return;

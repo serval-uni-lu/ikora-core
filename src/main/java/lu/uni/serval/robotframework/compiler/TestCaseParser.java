@@ -1,4 +1,4 @@
-package lu.uni.serval.robotframework.parser;
+package lu.uni.serval.robotframework.compiler;
 
 import lu.uni.serval.robotframework.model.Step;
 import lu.uni.serval.robotframework.model.TestCase;

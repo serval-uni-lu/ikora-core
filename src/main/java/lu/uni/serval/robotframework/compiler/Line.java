@@ -1,4 +1,4 @@
-package lu.uni.serval.robotframework.parser;
+package lu.uni.serval.robotframework.compiler;
 
 import java.io.IOException;
 import java.io.LineNumberReader;

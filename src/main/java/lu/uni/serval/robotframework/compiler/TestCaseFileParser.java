@@ -1,44 +1,14 @@
-package lu.uni.serval.robotframework.parser;
+package lu.uni.serval.robotframework.compiler;
 
 import lu.uni.serval.robotframework.model.*;
-import org.reflections.Reflections;
 
 import java.io.File;
 import java.io.FileReader;
-import java.io.LineNumberReader;
 import java.io.IOException;
+import java.io.LineNumberReader;
 
-import java.util.Map;
-import java.util.Set;
-
-public class ProjectParser {
-    private ProjectParser(){}
-
-    static public Project parse(String filePath){
-        Project project = new Project();
-
-        try {
-            File file = new File(filePath);
-
-            if(file.isFile()){
-                process(file, project);
-                postProcess(project);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return project;
-    }
-
-    static private void process(File file, Project project){
-        if(file == null){
-            return;
-        }
-
-        Reflections reflections = new Reflections("lu.uni.serval.robotframework.libraries");
-        Set<Class<? extends LibraryKeyword>> classes = reflections.getSubTypesOf(LibraryKeyword.class);
-
+public class TestCaseFileParser {
+    static public void parse(File file, Project project) {
         try {
             FileReader input = new FileReader(file);
             LineNumberReader reader = new LineNumberReader(input);
@@ -79,28 +49,6 @@ public class ProjectParser {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        process(getUnparsedFiles(project), project);
-    }
-
-    static private void postProcess(Project project) throws Exception {
-        resolveResources(project);
-        KeywordLinker.link(project);
-        VariableLinker.link(project);
-    }
-
-    private static void resolveResources(Project project) throws Exception {
-        for(TestCaseFile testCaseFile: project.getTestCaseFiles()) {
-            for (Resources resources: testCaseFile.getSettings().getResources()) {
-                TestCaseFile resourceFile = project.getTestCaseFile(resources.getFile());
-
-                if(resourceFile == null) {
-                    throw new Exception();
-                }
-
-                resources.setTestCasefile(resourceFile);
-            }
-        }
     }
 
     static private boolean isSettings(String line){
@@ -117,15 +65,5 @@ public class ProjectParser {
 
     static private boolean isVariable(String line){
         return ParsingUtils.isBlock(line, "variables");
-    }
-
-    static private File getUnparsedFiles(Project project){
-        for (Map.Entry<File, TestCaseFile> file: project.getFiles().entrySet()){
-            if(file.getValue() == null){
-                return file.getKey();
-            }
-        }
-
-        return null;
     }
 }

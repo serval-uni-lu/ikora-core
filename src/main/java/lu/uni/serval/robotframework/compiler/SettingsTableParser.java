@@ -1,4 +1,4 @@
-package lu.uni.serval.robotframework.parser;
+package lu.uni.serval.robotframework.compiler;
 
 import lu.uni.serval.robotframework.model.Library;
 import lu.uni.serval.robotframework.model.Resources;
