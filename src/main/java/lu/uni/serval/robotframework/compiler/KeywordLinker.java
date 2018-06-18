@@ -9,24 +9,30 @@ public class KeywordLinker {
     private KeywordLinker() {}
 
     static public void link(Project project) throws Exception {
+        LibraryResources libraries = project.getLibraries();
+
         for (TestCaseFile testCaseFile: project.getTestCaseFiles()) {
             for(TestCase testCase: testCaseFile.getTestCases()) {
-                linkSteps(testCase, testCaseFile);
+                linkSteps(testCase, testCaseFile, libraries);
             }
 
             for(UserKeyword userKeyword: testCaseFile.getUserKeywords()) {
-                linkSteps(userKeyword, testCaseFile);
+                linkSteps(userKeyword, testCaseFile, libraries);
             }
         }
     }
 
-    private static void linkSteps(TestCase testCase, TestCaseFile testCaseFile) throws Exception {
+    private static void linkSteps(TestCase testCase, TestCaseFile testCaseFile, LibraryResources libraries) throws Exception {
         for(Step step: testCase) {
             Pattern pattern = Pattern.compile("^(\\s*)(Given|When|Then)", Pattern.CASE_INSENSITIVE);
             Matcher matcher = pattern.matcher(step.getName().toString());
             String name = matcher.replaceAll("").trim();
 
-            KeywordDefinition keyword = testCaseFile.findKeyword(name);
+            Keyword keyword = testCaseFile.findUserKeyword(name);
+
+            if(keyword == null) {
+                keyword = libraries.findKeyword(name);
+            }
 
             if(keyword == null) {
                 throw new Exception();
@@ -36,11 +42,20 @@ public class KeywordLinker {
         }
     }
 
-    private static void linkSteps(UserKeyword userKeyword, TestCaseFile testCaseFile) {
+    private static void linkSteps(UserKeyword userKeyword, TestCaseFile testCaseFile, LibraryResources libraries) throws Exception {
         for (Step step: userKeyword) {
             String name = step.getName().toString().trim();
 
-            KeywordDefinition keyword = testCaseFile.findKeyword(name);
+            Keyword keyword = testCaseFile.findUserKeyword(name);
+
+            if(keyword == null) {
+                keyword = libraries.findKeyword(name);
+            }
+
+            if(keyword == null) {
+                throw new Exception();
+            }
+
 
             step.setKeyword(keyword);
         }

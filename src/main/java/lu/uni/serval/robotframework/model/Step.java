@@ -5,8 +5,8 @@ import java.util.*;
 public class Step {
     private Argument name;
     private List<Argument> arguments;
-    private KeywordDefinition parent;
-    private KeywordDefinition keyword;
+    private Keyword parent;
+    private Keyword keyword;
 
     public Step() {
         this.arguments = new ArrayList<>();
@@ -24,7 +24,7 @@ public class Step {
         this.parent = parent;
     }
 
-    public void setKeyword(KeywordDefinition keyword){
+    public void setKeyword(Keyword keyword){
         this.keyword = keyword;
 
         if(this.keyword != null) {
@@ -41,11 +41,11 @@ public class Step {
         return this.arguments;
     }
 
-    public KeywordDefinition getKeyword() {
+    public Keyword getKeyword() {
         return keyword;
     }
 
-    public KeywordDefinition getParent() {
+    public Keyword getParent() {
         return parent;
     }
 }

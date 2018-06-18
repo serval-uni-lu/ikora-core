@@ -3,7 +3,6 @@ package lu.uni.serval.robotframework.execution;
 import lu.uni.serval.robotframework.execution.selenium.BrowserManagement;
 import lu.uni.serval.robotframework.execution.selenium.Context;
 import lu.uni.serval.robotframework.execution.selenium.FormElement;
-import lu.uni.serval.robotframework.execution.selenium.Keyword;
 import lu.uni.serval.robotframework.report.ExecutionResult;
 import lu.uni.serval.utils.EasyPair;
 import lu.uni.serval.utils.exception.InvalidNumberArgumentException;
@@ -19,23 +18,6 @@ public class Dispatcher {
     public Dispatcher(){
         this.operations = new HashMap<>();
         this.context = new Context();
-
-        subscribeKeywords(new BrowserManagement(this.context));
-        subscribeKeywords(new FormElement(this.context));
-    }
-
-    private void subscribeKeywords(Object object) {
-        final List<Method> allMethods = new ArrayList<>(Arrays.asList(object.getClass().getDeclaredMethods()));
-
-        for (final Method method : allMethods) {
-            if (method.isAnnotationPresent(Keyword.class)) {
-                operations.put(toKeyword(method.getName()), EasyPair.of(object, method));
-            }
-        }
-    }
-
-    private String toKeyword(String method) {
-        return method.replaceAll("([A-Z])", " $1").trim().toLowerCase();
     }
 
     public ExecutionResult call(String keyword, List<String> arguments)

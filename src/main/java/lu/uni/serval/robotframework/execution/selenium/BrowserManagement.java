@@ -14,7 +14,6 @@ public class BrowserManagement {
         this.context = context;
     }
 
-    @Keyword
     public ExecutionResult LocationShouldBe(String url) {
         ExecutionResult result = new ExecutionResult(ExecutionResult.Type.Assert);
 
@@ -27,7 +26,6 @@ public class BrowserManagement {
         return result;
     }
 
-    @Keyword
     public ExecutionResult MaximizeBrowserWindow() {
         java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
         int width = (int)Math.round(screenSize.getWidth());
@@ -40,7 +38,6 @@ public class BrowserManagement {
         return result;
     }
 
-    @Keyword
     public ExecutionResult OpenBrowser(String url, String browser) throws UnknownHostException {
         ExecutionResult result = new ExecutionResult(ExecutionResult.Type.Execute);
 
@@ -50,7 +47,6 @@ public class BrowserManagement {
         return result;
     }
 
-    @Keyword
     public ExecutionResult SetSeleniumSpeed(String time) {
         ExecutionResult result = new ExecutionResult(ExecutionResult.Type.Execute);
 
@@ -62,7 +58,6 @@ public class BrowserManagement {
         return result;
     }
 
-    @Keyword
     public ExecutionResult TitleShouldBe(String title) {
         ExecutionResult result = new ExecutionResult(ExecutionResult.Type.Assert);
 

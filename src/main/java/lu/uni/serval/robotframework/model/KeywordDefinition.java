@@ -4,23 +4,21 @@ import lu.uni.serval.utils.tree.LabelTreeNode;
 import lu.uni.serval.utils.tree.TreeNodeData;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
-public class KeywordDefinition implements TreeNodeData, Iterable<Step> {
+public class KeywordDefinition implements Keyword, Iterable<Step> {
     private String file;
     private Argument name;
     private String documentation;
     private List<String> tags;
     private LabelTreeNode node;
     private List<Step> steps;
-    private List<KeywordDefinition> dependencies;
+    private Set<Keyword> dependencies;
 
     KeywordDefinition(){
         steps = new ArrayList<>();
         node = new LabelTreeNode(this);
-        dependencies = new ArrayList<>();
+        dependencies = new HashSet<>();
         tags = new ArrayList<>();
     }
 
@@ -70,11 +68,22 @@ public class KeywordDefinition implements TreeNodeData, Iterable<Step> {
         return tags;
     }
 
+    @Override
     public LabelTreeNode getNode() {
         return node;
     }
 
-    public boolean isResolved(String name) {
+    @Override
+    public Set<Keyword> getDependencies() {
+        return dependencies;
+    }
+
+    @Override
+    public void addDependency(Keyword keyword) {
+        this.dependencies.add(keyword);
+    }
+
+    public boolean matches(String name) {
         return this.name.matches(name);
     }
 

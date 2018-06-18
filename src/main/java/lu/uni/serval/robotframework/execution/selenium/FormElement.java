@@ -12,7 +12,6 @@ public class FormElement {
         this.elementFinder = new ElementFinder(this.context);
     }
 
-    @Keyword
     public ExecutionResult ClickButton(String locator) {
         ExecutionResult result = new ExecutionResult(ExecutionResult.Type.Execute);
         findElement(locator).click();
@@ -24,7 +23,6 @@ public class FormElement {
         return result;
     }
 
-    @Keyword
     public ExecutionResult InputPassword(String locator, String input) {
         ExecutionResult result = new ExecutionResult(ExecutionResult.Type.Execute);
         inputTextIntoTextField(result, locator, input);
@@ -36,7 +34,6 @@ public class FormElement {
         return result;
     }
 
-    @Keyword
     public ExecutionResult InputText(String locator, String input) {
         ExecutionResult result = new ExecutionResult(ExecutionResult.Type.Execute);
         inputTextIntoTextField(result, locator, input);

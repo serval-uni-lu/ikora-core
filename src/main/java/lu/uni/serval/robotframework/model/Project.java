@@ -8,6 +8,7 @@ import java.util.*;
 public class Project {
     private List<TestCaseFile> testCaseFiles;
     private Map<File, TestCaseFile> files;
+    private LibraryResources libraries;
 
     public Project(){
         testCaseFiles = new ArrayList<>();
@@ -34,6 +35,10 @@ public class Project {
         return files;
     }
 
+    public LibraryResources getLibraries() {
+        return libraries;
+    }
+
     public List<UserKeyword> getKeywords() {
         if(testCaseFiles.isEmpty()) {
             return new ArrayList<>();
@@ -50,6 +55,10 @@ public class Project {
         }
 
         return nodes;
+    }
+
+    public void setLibraries(LibraryResources libraries) {
+        this.libraries = libraries;
     }
 
     public void addFile(File file){
