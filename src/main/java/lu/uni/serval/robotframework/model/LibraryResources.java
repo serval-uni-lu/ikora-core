@@ -11,14 +11,8 @@ public class LibraryResources {
     }
 
     public void loadClass(Class<? extends LibraryKeyword> libraryClass){
-        String name = libraryClass.getSimpleName();
-        String keyword = toKeyword(name);
-
+        String keyword = LibraryKeyword.toKeyword(libraryClass);
         libraryKeywordsNames.put(keyword, new LibraryElement(libraryClass));
-    }
-
-    private String toKeyword(String method) {
-        return method.replaceAll("([A-Z])", " $1").trim().toLowerCase();
     }
 
     public Keyword findKeyword(String name) throws InstantiationException, IllegalAccessException {

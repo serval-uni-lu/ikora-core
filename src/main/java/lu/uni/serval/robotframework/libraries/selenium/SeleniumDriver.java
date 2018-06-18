@@ -1,4 +1,4 @@
-package lu.uni.serval.robotframework.execution.selenium;
+package lu.uni.serval.robotframework.libraries.selenium;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -6,9 +6,9 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 
-public class Context {
+public class SeleniumDriver {
     public enum Drivers{
-        Firefox, Chrome
+        Firefox, Chrome, Unknown
     }
 
     private WebDriver driver;
@@ -17,7 +17,20 @@ public class Context {
         return driver;
     }
 
-    public void initializeDriver(Drivers driver, String url) {
+    public void initialize(String browser, String url) {
+        Drivers driver = Drivers.Unknown;
+
+        for(Drivers current: Drivers.values()) {
+            if(browser.compareToIgnoreCase(current.name()) == 0) {
+                driver = current;
+                break;
+            }
+        }
+
+        initialize(driver, url);
+    }
+
+    public void initialize(Drivers driver, String url) {
 
         switch (driver){
             case Chrome:
@@ -32,8 +45,5 @@ public class Context {
         }
 
         this.driver.get(url);
-    }
-
-    public void checkRequests() {
     }
 }

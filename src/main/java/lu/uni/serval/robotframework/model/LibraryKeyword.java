@@ -18,17 +18,17 @@ public abstract class LibraryKeyword implements Keyword {
 
     @Override
     public String getLabel() {
-        return null;
+        return toKeyword(this.getClass());
     }
 
     @Override
     public boolean isSame(TreeNodeData other) {
-        return false;
+        return this.equals(other);
     }
 
     @Override
     public boolean isValid() {
-        return false;
+        return true;
     }
 
     @Override
@@ -48,4 +48,8 @@ public abstract class LibraryKeyword implements Keyword {
 
     public abstract void execute();
 
+    public static String toKeyword(Class<? extends LibraryKeyword> libraryClass) {
+        String name = libraryClass.getSimpleName();
+        return name.replaceAll("([A-Z])", " $1").trim().toLowerCase();
+    }
 }
