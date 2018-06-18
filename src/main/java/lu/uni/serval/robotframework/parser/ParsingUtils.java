@@ -25,7 +25,20 @@ public class ParsingUtils {
         return isBlock(line, "(.+)");
     }
 
-    static public Line appendMultiline(LineNumberReader reader, StringBuilder result) throws IOException {
+    static public String[] removeIndent(String[] tokens){
+        while (tokens[0].isEmpty()){
+            tokens = Arrays.copyOfRange(tokens, 1, tokens.length);
+        }
+
+        return tokens;
+    }
+
+    static public Line parseDocumentation(LineNumberReader reader, String[] tokens, StringBuilder builder) throws IOException {
+        builder.append(tokens[1]);
+        return appendMultiline(reader, builder);
+    }
+
+    static private Line appendMultiline(LineNumberReader reader, StringBuilder result) throws IOException {
         Line line;
 
         while((line = Line.getNextLine(reader)) != null){
@@ -43,18 +56,5 @@ public class ParsingUtils {
         }
 
         return line;
-    }
-
-    static public String[] removeIndent(String[] tokens){
-        while (tokens[0].isEmpty()){
-            tokens = Arrays.copyOfRange(tokens, 1, tokens.length);
-        }
-
-        return tokens;
-    }
-
-    static public Line parseDocumentation(LineNumberReader reader, String[] tokens, StringBuilder builder) throws IOException {
-        builder.append(tokens[1]);
-        return appendMultiline(reader, builder);
     }
 }
