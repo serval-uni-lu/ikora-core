@@ -48,4 +48,22 @@ public class Step {
     public Keyword getParent() {
         return parent;
     }
+
+    public boolean isSame(Step step) {
+        if(step == null){
+            return false;
+        }
+
+        if(arguments.size() != step.arguments.size()){
+            return false;
+        }
+
+        boolean same = name.toString().equalsIgnoreCase(step.name.toString());
+
+        for(int i = 0; same && i < arguments.size(); ++i){
+            same &= arguments.get(i).toString().equalsIgnoreCase(step.arguments.get(i).toString());
+        }
+
+        return same;
+    }
 }

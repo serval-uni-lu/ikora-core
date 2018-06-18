@@ -10,7 +10,7 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
     private String file;
     private Argument name;
     private String documentation;
-    private List<String> tags;
+    private Set<String> tags;
     private LabelTreeNode node;
     private List<Step> steps;
     private Set<Keyword> dependencies;
@@ -19,7 +19,8 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
         steps = new ArrayList<>();
         node = new LabelTreeNode(this);
         dependencies = new HashSet<>();
-        tags = new ArrayList<>();
+        tags = new HashSet<>();
+        documentation = "";
     }
 
     public void setFile(String file){
@@ -64,7 +65,7 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
     }
 
 
-    public List<String> getTags() {
+    public Set<String> getTags() {
         return tags;
     }
 
@@ -94,7 +95,30 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
 
     @Override
     public boolean isSame(TreeNodeData other) {
-        return this == other;
+        if(other == null){
+            return false;
+        }
+
+        if(!(other instanceof KeywordDefinition)){
+            return false;
+        }
+
+        KeywordDefinition keyword = (KeywordDefinition)other;
+
+        if(steps.size() != keyword.steps.size()){
+            return false;
+        }
+
+        boolean same = true;
+        same &= name.toString().equalsIgnoreCase(keyword.name.toString());
+        same &= documentation.equalsIgnoreCase(keyword.documentation);
+        same &= tags == keyword.tags;
+
+        for(int i = 0; same && i < steps.size(); ++i) {
+            same &= steps.get(i).isSame(keyword.steps.get(i));
+        }
+
+        return same;
     }
 
     @Override
