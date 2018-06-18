@@ -2,9 +2,8 @@ package lu.uni.serval.robotframework.model;
 
 import lu.uni.serval.utils.tree.TreeNodeData;
 
-public class LibraryKeyword implements TreeNodeData {
 
-
+public abstract class LibraryKeyword implements TreeNodeData {
     @Override
     public String getLabel() {
         return null;
@@ -19,4 +18,6 @@ public class LibraryKeyword implements TreeNodeData {
     public boolean isValid() {
         return false;
     }
+
+    public abstract void execute();
 }

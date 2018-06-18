@@ -1,6 +1,7 @@
 package lu.uni.serval.robotframework.parser;
 
 import lu.uni.serval.robotframework.model.*;
+import org.reflections.Reflections;
 
 import java.io.File;
 import java.io.FileReader;
@@ -8,6 +9,7 @@ import java.io.LineNumberReader;
 import java.io.IOException;
 
 import java.util.Map;
+import java.util.Set;
 
 public class ProjectParser {
     private ProjectParser(){}
@@ -33,6 +35,9 @@ public class ProjectParser {
         if(file == null){
             return;
         }
+
+        Reflections reflections = new Reflections("lu.uni.serval.robotframework.libraries");
+        Set<Class<? extends LibraryKeyword>> classes = reflections.getSubTypesOf(LibraryKeyword.class);
 
         try {
             FileReader input = new FileReader(file);
