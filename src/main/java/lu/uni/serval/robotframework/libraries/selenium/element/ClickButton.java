@@ -1,4 +1,4 @@
-package lu.uni.serval.robotframework.libraries.selenium.formElement;
+package lu.uni.serval.robotframework.libraries.selenium.element;
 
 import lu.uni.serval.robotframework.model.LibraryKeyword;
 
