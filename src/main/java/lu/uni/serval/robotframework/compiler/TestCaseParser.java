@@ -56,7 +56,7 @@ public class TestCaseParser {
                 line = parseTimeout(reader, tokens, testCase);
             }
             else {
-                line = parseStep(reader, tokens, testCase);
+                line = parseStep(reader, line, testCase);
             }
         }
 
@@ -100,9 +100,9 @@ public class TestCaseParser {
         return line;
     }
 
-    private static Line parseStep(LineNumberReader reader, String[] tokens, TestCase testCase) throws IOException {
+    private static Line parseStep(LineNumberReader reader, Line line, TestCase testCase) throws IOException {
         Step step = new Step();
-        Line line = StepParser.parse(reader, tokens, step);
+        line = StepParser.parse(reader, line, step);
         testCase.addStep(step);
 
         return line;

@@ -6,24 +6,46 @@ import java.io.LineNumberReader;
 import java.io.IOException;
 
 public class StepParser {
-    public static Line parse(LineNumberReader reader, String[] tokens, Step step) throws IOException {
+    public static Line parse(LineNumberReader reader, Line line, Step step) throws IOException {
+        String[] tokens = line.tokenize();
         tokens = ParsingUtils.removeIndent(tokens);
-        String first = tokens[0];
 
-        Line line;
-
-        if(first.equalsIgnoreCase(":FOR")) {
-            line = Line.getNextLine(reader);
+        Line newLine;
+        if(tokens[0].equalsIgnoreCase(":FOR")) {
+            newLine = parseForLoop(reader, line, step);
+        }
+        else if (ParsingUtils.compareNoCase(tokens[0], "^(\\$\\{)(.*)(\\})(\\s?)(=?)")){
+            newLine = parseAssignment(reader, line, step);
         }
         else {
-            parseKeywordNameAndParameter(step, tokens);
-            line = Line.getNextLine(reader);
+            newLine = parseKeywordNameAndParameter(reader, line, step);
         }
 
-        return line;
+        return newLine;
     }
 
-    static public void parseKeywordNameAndParameter(Step keyword, String[] tokens) {
+    private static Line parseForLoop(LineNumberReader reader, Line line, Step step) throws IOException {
+        step.setType(Step.Type.ForLoop);
+
+        StringBuilder builder = new StringBuilder(line.toString());
+        Line newLine = ParsingUtils.appendMultiline(reader, builder);
+
+        String forLoop = builder.toString();
+
+        while (newLine.isInBlock(line)){
+            newLine = Line.getNextLine(reader);
+        }
+
+        return newLine;
+    }
+
+    private static Line parseAssignment(LineNumberReader reader, Line line, Step step) throws IOException {
+        step.setType(Step.Type.Assignment);
+        return Line.getNextLine(reader);
+    }
+
+    static private Line parseKeywordNameAndParameter(LineNumberReader reader, Line line, Step keyword) throws IOException {
+        String[] tokens = line.tokenize();
         tokens = ParsingUtils.removeIndent(tokens);
 
         if(tokens.length > 0) {
@@ -35,5 +57,7 @@ public class StepParser {
                 keyword.addParameter(tokens[i]);
             }
         }
+
+        return Line.getNextLine(reader);
     }
 }

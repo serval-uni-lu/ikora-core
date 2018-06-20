@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ParsingUtils {
+class ParsingUtils {
     private ParsingUtils(){}
 
     static boolean compareNoCase(String line, String regex){
@@ -38,7 +38,7 @@ public class ParsingUtils {
         return appendMultiline(reader, builder);
     }
 
-    static private Line appendMultiline(LineNumberReader reader, StringBuilder result) throws IOException {
+    static public Line appendMultiline(LineNumberReader reader, StringBuilder result) throws IOException {
         Line line;
 
         while((line = Line.getNextLine(reader)) != null){

@@ -17,6 +17,7 @@ public class KeywordTableParser {
             }
 
             if(line.isEmpty()){
+                line = Line.getNextLine(reader);
                 continue;
             }
 

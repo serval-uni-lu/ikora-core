@@ -29,7 +29,27 @@ public class Line {
 
     public String[] tokenize(){
         String tokens = this.text.replaceAll("\\s\\s(\\s*)", "\t");
+        tokens = tokens.replaceAll("\\\\t", "\t");
         return tokens.split("\t");
+    }
+
+    public int getIndentSize() {
+        String s = this.text.replaceAll("\\s\\s(\\s*)", "\t");
+        s = s.replaceAll("\\\\\\t", "\t");
+
+        int i = 0;
+
+        for (; i < s.length(); i++){
+            if(s.charAt(i) != '\t'){
+                break;
+            }
+        }
+
+        return i;
+    }
+
+    public boolean isInBlock(Line line) {
+        return getIndentSize() == line.getIndentSize() + 1;
     }
 
     public static Line getNextLine(LineNumberReader reader) throws IOException {

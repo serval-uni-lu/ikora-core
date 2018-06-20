@@ -17,17 +17,13 @@ public class UserKeywordParser {
 
         Line line = Line.getNextLine(reader);
 
-        while(line.isValid()) {
+        while(line.isValid() && line.isInBlock(test)) {
             if(line.isEmpty()) {
                 line = Line.getNextLine(reader);
                 continue;
             }
 
             tokens = line.tokenize();
-
-            if(!tokens[0].isEmpty()){
-                break;
-            }
 
             if(tokens.length < 2) {
                 continue;
@@ -54,7 +50,7 @@ public class UserKeywordParser {
                 line = parseTimeout(reader, tokens, userKeyword);
             }
             else {
-                line = parseStep(reader, tokens, userKeyword);
+                line = parseStep(reader, line, userKeyword);
             }
         }
 
@@ -104,9 +100,9 @@ public class UserKeywordParser {
         return Line.getNextLine(reader);
     }
 
-    private static Line parseStep(LineNumberReader reader, String[] tokens, UserKeyword userKeyword) throws IOException {
+    private static Line parseStep(LineNumberReader reader, Line line, UserKeyword userKeyword) throws IOException {
         Step step = new Step();
-        Line line = StepParser.parse(reader, tokens, step);
+        line = StepParser.parse(reader, line, step);
         userKeyword.addStep(step);
 
         return line;
