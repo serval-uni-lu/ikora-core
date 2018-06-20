@@ -1,8 +1,7 @@
 package lu.uni.serval.robotframework.libraries.selenium.browserManagement;
 
 import lu.uni.serval.robotframework.model.LibraryKeyword;
-import lu.uni.serval.robotframework.report.ExecutionResult;
-import org.openqa.selenium.Dimension;
+import lu.uni.serval.robotframework.runner.Runtime;
 
 public class MaximizeBrowserWindow extends LibraryKeyword {
     @Override

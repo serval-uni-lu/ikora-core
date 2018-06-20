@@ -46,8 +46,6 @@ public abstract class LibraryKeyword implements Keyword {
         this.dependencies.add(keyword);
     }
 
-    public abstract void execute(Runtime runtime);
-
     public static String toKeyword(Class<? extends LibraryKeyword> libraryClass) {
         String name = libraryClass.getSimpleName();
         return name.replaceAll("([A-Z])", " $1").trim().toLowerCase();

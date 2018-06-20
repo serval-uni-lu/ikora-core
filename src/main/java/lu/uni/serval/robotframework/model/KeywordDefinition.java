@@ -1,5 +1,6 @@
 package lu.uni.serval.robotframework.model;
 
+import lu.uni.serval.robotframework.runner.Runtime;
 import lu.uni.serval.utils.tree.LabelTreeNode;
 import lu.uni.serval.utils.tree.TreeNodeData;
 
@@ -84,6 +85,7 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
         this.dependencies.add(keyword);
     }
 
+
     public boolean matches(String name) {
         return this.name.matches(name);
     }
@@ -129,5 +131,10 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
     @Nonnull
     public Iterator<Step> iterator() {
         return steps.iterator();
+    }
+
+    @Override
+    public void execute(Runtime runtime) {
+
     }
 }
