@@ -16,16 +16,16 @@ class Utils {
         return matcher.matches();
     }
 
-    static public boolean isBlock(String line, String block){
+    static boolean isBlock(String line, String block){
         String regex = String.format("^\\*\\*\\*(\\s*)%s(\\s*)\\*\\*\\*", block);
         return Utils.compareNoCase(line, regex);
     }
 
-    static public boolean isBlock(String line) {
+    static boolean isBlock(String line) {
         return isBlock(line, "(.+)");
     }
 
-    static public String[] removeIndent(String[] tokens){
+    static String[] removeIndent(String[] tokens){
         while (tokens[0].isEmpty()){
             tokens = Arrays.copyOfRange(tokens, 1, tokens.length);
         }
@@ -33,12 +33,12 @@ class Utils {
         return tokens;
     }
 
-    static public Line parseDocumentation(LineNumberReader reader, String[] tokens, StringBuilder builder) throws IOException {
+    static Line parseDocumentation(LineNumberReader reader, String[] tokens, StringBuilder builder) throws IOException {
         builder.append(tokens[1]);
         return appendMultiline(reader, builder);
     }
 
-    static public Line appendMultiline(LineNumberReader reader, StringBuilder result) throws IOException {
+    static Line appendMultiline(LineNumberReader reader, StringBuilder result) throws IOException {
         Line line;
 
         while((line = Line.getNextLine(reader)) != null){
