@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserKeyword extends KeywordDefinition {
-    private List<String> arguments;
+    private List<String> parameters;
     private VariableTable localVariables;
 
     public UserKeyword() {
-        arguments = new ArrayList<>();
+        parameters = new ArrayList<>();
         localVariables = new VariableTable();
     }
 
@@ -17,21 +17,21 @@ public class UserKeyword extends KeywordDefinition {
         super.setName(name);
 
         for(String argument: getName().findVariables()){
-            addArgument(argument);
+            addParameter(argument);
         }
     }
 
-    public void addArgument(String argument){
-        arguments.add(argument);
+    public void addParameter(String parameter){
+        parameters.add(parameter);
 
         Variable variable = new Variable();
-        variable.setName(argument);
+        variable.setName(parameter);
 
         localVariables.put(variable.getName(), variable);
     }
 
-    public List<String> getArguments() {
-        return arguments;
+    public List<String> getParameters() {
+        return parameters;
     }
 
     public Variable findLocalVariable(String name) {

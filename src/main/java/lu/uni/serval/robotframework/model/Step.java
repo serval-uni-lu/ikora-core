@@ -4,20 +4,20 @@ import java.util.*;
 
 public class Step {
     private Argument name;
-    private List<Argument> arguments;
+    private List<Argument> parameter;
     private Keyword parent;
     private Keyword keyword;
 
     public Step() {
-        this.arguments = new ArrayList<>();
+        this.parameter = new ArrayList<>();
     }
 
     public void setName(String name) {
         this.name = new Argument(name);
     }
 
-    public void addArgument(String argument) {
-        this.arguments.add(new Argument(argument));
+    public void addParameter(String argument) {
+        this.parameter.add(new Argument(argument));
     }
 
     public void setParent(KeywordDefinition parent) {
@@ -37,8 +37,8 @@ public class Step {
         return this.name;
     }
 
-    public List<Argument> getArguments() {
-        return this.arguments;
+    public List<Argument> getParameter() {
+        return this.parameter;
     }
 
     public Keyword getKeyword() {
@@ -54,14 +54,14 @@ public class Step {
             return false;
         }
 
-        if(arguments.size() != step.arguments.size()){
+        if(parameter.size() != step.parameter.size()){
             return false;
         }
 
         boolean same = name.toString().equalsIgnoreCase(step.name.toString());
 
-        for(int i = 0; same && i < arguments.size(); ++i){
-            same &= arguments.get(i).toString().equalsIgnoreCase(step.arguments.get(i).toString());
+        for(int i = 0; same && i < parameter.size(); ++i){
+            same &= parameter.get(i).toString().equalsIgnoreCase(step.parameter.get(i).toString());
         }
 
         return same;

@@ -16,7 +16,7 @@ public class VariableLinker {
 
     static void linkSteps(UserKeyword userKeyword, TestCaseFile testCaseFile) throws Exception {
         for(Step step: userKeyword) {
-            for(Argument argument: step.getArguments()) {
+            for(Argument argument: step.getParameter()) {
                 resolveArgument(argument, testCaseFile, userKeyword);
             }
         }

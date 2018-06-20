@@ -16,14 +16,14 @@ public class StepParser {
             line = Line.getNextLine(reader);
         }
         else {
-            parseKeywordNameAndArguments(step, tokens);
+            parseKeywordNameAndParameter(step, tokens);
             line = Line.getNextLine(reader);
         }
 
         return line;
     }
 
-    static public void parseKeywordNameAndArguments(Step keyword, String[] tokens) {
+    static public void parseKeywordNameAndParameter(Step keyword, String[] tokens) {
         tokens = ParsingUtils.removeIndent(tokens);
 
         if(tokens.length > 0) {
@@ -32,7 +32,7 @@ public class StepParser {
 
         if (tokens.length > 1) {
             for(int i = 1; i < tokens.length; ++i) {
-                keyword.addArgument(tokens[i]);
+                keyword.addParameter(tokens[i]);
             }
         }
     }

@@ -42,7 +42,7 @@ public class UserKeywordParser {
                 line = parseTags(reader, tokens, userKeyword);
             }
             else if (ParsingUtils.compareNoCase(label, "\\[arguments\\]")) {
-                line = parseArguments(reader, tokens, userKeyword);
+                line = parseParameters(reader, tokens, userKeyword);
             }
             else if (ParsingUtils.compareNoCase(label, "\\[return\\]")) {
                 line = parseReturn(reader, tokens, userKeyword);
@@ -82,11 +82,11 @@ public class UserKeywordParser {
         return Line.getNextLine(reader);
     }
 
-    private static Line parseArguments(LineNumberReader reader, String[] tokens, UserKeyword userKeyword) throws IOException {
+    private static Line parseParameters(LineNumberReader reader, String[] tokens, UserKeyword userKeyword) throws IOException {
         tokens = ParsingUtils.removeIndent(tokens);
 
         for(int i = 1; i < tokens.length; ++i){
-            userKeyword.addArgument(tokens[i]);
+            userKeyword.addParameter(tokens[i]);
         }
 
         return Line.getNextLine(reader);
