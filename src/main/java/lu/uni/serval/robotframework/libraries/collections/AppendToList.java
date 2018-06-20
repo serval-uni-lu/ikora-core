@@ -4,7 +4,7 @@ import lu.uni.serval.robotframework.model.LibraryKeyword;
 
 public class AppendToList extends LibraryKeyword {
     @Override
-    public void execute() {
+    public void execute(Runtime runtime) {
 
     }
 }

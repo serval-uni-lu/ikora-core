@@ -6,7 +6,7 @@ import java.util.concurrent.TimeUnit;
 
 public class SetSeleniumSpeed extends LibraryKeyword {
     @Override
-    public void execute() {
+    public void execute(Runtime runtime) {
         int sec = 0;
 
         //TODO: properly convert time

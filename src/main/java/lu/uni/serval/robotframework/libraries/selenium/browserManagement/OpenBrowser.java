@@ -5,7 +5,7 @@ import lu.uni.serval.robotframework.model.LibraryKeyword;
 
 public class OpenBrowser extends LibraryKeyword {
     @Override
-    public void execute() {
+    public void execute(Runtime runtime) {
         String browser = "browser";
         String url = "url";
 

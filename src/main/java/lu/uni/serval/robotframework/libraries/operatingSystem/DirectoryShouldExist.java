@@ -4,7 +4,7 @@ import lu.uni.serval.robotframework.model.LibraryKeyword;
 
 public class DirectoryShouldExist extends LibraryKeyword {
     @Override
-    public void execute() {
+    public void execute(Runtime runtime) {
 
     }
 }
