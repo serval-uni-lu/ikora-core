@@ -12,8 +12,8 @@ public class Settings {
     private File file;
 
     public Settings() {
-        this.resourcesTable = new ArrayList();
-        this.libraryTable = new ArrayList();
+        this.resourcesTable = new ArrayList<>();
+        this.libraryTable = new ArrayList<>();
         this.defaultTags = new ArrayList<>();
     }
 

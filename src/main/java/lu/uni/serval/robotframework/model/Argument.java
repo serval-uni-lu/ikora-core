@@ -68,6 +68,6 @@ public class Argument {
     }
 
     public static Matcher getVariableMatcher(String value) {
-        return Pattern.compile("\\$\\{(.*?)\\}").matcher(value);
+        return Pattern.compile("(\\$\\{)(.*?)(\\})").matcher(value);
     }
 }
