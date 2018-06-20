@@ -3,23 +3,14 @@ package lu.uni.serval.robotframework.model;
 import java.util.*;
 
 public class Step {
-    public enum Type{
-        Keyword, Assignment, ForLoop
-    }
-
     private Argument name;
     private List<Argument> parameter;
     private Keyword parent;
     private Keyword keyword;
-    private Type type;
 
     public Step() {
         this.parameter = new ArrayList<>();
         keyword = null;
-    }
-
-    public void setType(Type type) {
-        this.type = type;
     }
 
     public void setName(String name) {
@@ -41,10 +32,6 @@ public class Step {
             this.keyword.addDependency(parent);
             this.parent.getNode().add(this.keyword);
         }
-    }
-
-    public Type getType() {
-        return type;
     }
 
     public Argument getName() {
