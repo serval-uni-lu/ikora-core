@@ -6,8 +6,8 @@ import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-class ParsingUtils {
-    private ParsingUtils(){}
+class Utils {
+    private Utils(){}
 
     static boolean compareNoCase(String line, String regex){
         Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
@@ -18,7 +18,7 @@ class ParsingUtils {
 
     static public boolean isBlock(String line, String block){
         String regex = String.format("^\\*\\*\\*(\\s*)%s(\\s*)\\*\\*\\*", block);
-        return ParsingUtils.compareNoCase(line, regex);
+        return Utils.compareNoCase(line, regex);
     }
 
     static public boolean isBlock(String line) {

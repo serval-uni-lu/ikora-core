@@ -12,7 +12,7 @@ public class KeywordTableParser {
         Line line = Line.getNextLine(reader);
 
         while(line.isValid()){
-            if(ParsingUtils.isBlock(line.getText())){
+            if(Utils.isBlock(line.getText())){
                 break;
             }
 

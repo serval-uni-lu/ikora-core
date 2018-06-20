@@ -8,13 +8,13 @@ import java.io.IOException;
 public class StepParser {
     public static Line parse(LineNumberReader reader, Line line, Step step) throws IOException {
         String[] tokens = line.tokenize();
-        tokens = ParsingUtils.removeIndent(tokens);
+        tokens = Utils.removeIndent(tokens);
 
         Line newLine;
         if(tokens[0].equalsIgnoreCase(":FOR")) {
             newLine = parseForLoop(reader, line, step);
         }
-        else if (ParsingUtils.compareNoCase(tokens[0], "^(\\$\\{)(.*)(\\})(\\s?)(=?)")){
+        else if (Utils.compareNoCase(tokens[0], "^(\\$\\{)(.*)(\\})(\\s?)(=?)")){
             newLine = parseAssignment(reader, line, step);
         }
         else {
@@ -28,7 +28,7 @@ public class StepParser {
         step.setType(Step.Type.ForLoop);
 
         StringBuilder builder = new StringBuilder(line.toString());
-        Line newLine = ParsingUtils.appendMultiline(reader, builder);
+        Line newLine = Utils.appendMultiline(reader, builder);
 
         String forLoop = builder.toString();
 
@@ -46,7 +46,7 @@ public class StepParser {
 
     static private Line parseKeywordNameAndParameter(LineNumberReader reader, Line line, Step keyword) throws IOException {
         String[] tokens = line.tokenize();
-        tokens = ParsingUtils.removeIndent(tokens);
+        tokens = Utils.removeIndent(tokens);
 
         if(tokens.length > 0) {
             keyword.setName(tokens[0]);

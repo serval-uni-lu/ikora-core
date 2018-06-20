@@ -31,22 +31,22 @@ public class UserKeywordParser {
 
             String label = tokens[1];
 
-            if (ParsingUtils.compareNoCase(label, "\\[documentation\\]")) {
+            if (Utils.compareNoCase(label, "\\[documentation\\]")) {
                 line = parseDocumentation(reader, tokens, userKeyword);
             }
-            else if (ParsingUtils.compareNoCase(label, "\\[tags\\]")) {
+            else if (Utils.compareNoCase(label, "\\[tags\\]")) {
                 line = parseTags(reader, tokens, userKeyword);
             }
-            else if (ParsingUtils.compareNoCase(label, "\\[arguments\\]")) {
+            else if (Utils.compareNoCase(label, "\\[arguments\\]")) {
                 line = parseParameters(reader, tokens, userKeyword);
             }
-            else if (ParsingUtils.compareNoCase(label, "\\[return\\]")) {
+            else if (Utils.compareNoCase(label, "\\[return\\]")) {
                 line = parseReturn(reader, tokens, userKeyword);
             }
-            else if (ParsingUtils.compareNoCase(label, "\\[teardown\\]")) {
+            else if (Utils.compareNoCase(label, "\\[teardown\\]")) {
                 line = parseTeardown(reader, tokens, userKeyword);
             }
-            else if (ParsingUtils.compareNoCase(label, "\\[timeout\\]")) {
+            else if (Utils.compareNoCase(label, "\\[timeout\\]")) {
                 line = parseTimeout(reader, tokens, userKeyword);
             }
             else {
@@ -61,7 +61,7 @@ public class UserKeywordParser {
 
     private static Line parseDocumentation(LineNumberReader reader, String[] tokens, UserKeyword userKeyword) throws IOException {
         StringBuilder builder = new StringBuilder();
-         Line line = ParsingUtils.parseDocumentation(reader, tokens, builder);
+         Line line = Utils.parseDocumentation(reader, tokens, builder);
 
         userKeyword.setDocumentation(builder.toString());
 
@@ -69,7 +69,7 @@ public class UserKeywordParser {
     }
 
     private static Line parseTags(LineNumberReader reader, String[] tokens, UserKeyword userKeyword) throws IOException {
-        tokens = ParsingUtils.removeIndent(tokens);
+        tokens = Utils.removeIndent(tokens);
 
         for(int i = 1; i < tokens.length; ++i){
             userKeyword.addTag(tokens[i]);
@@ -79,7 +79,7 @@ public class UserKeywordParser {
     }
 
     private static Line parseParameters(LineNumberReader reader, String[] tokens, UserKeyword userKeyword) throws IOException {
-        tokens = ParsingUtils.removeIndent(tokens);
+        tokens = Utils.removeIndent(tokens);
 
         for(int i = 1; i < tokens.length; ++i){
             userKeyword.addParameter(tokens[i]);

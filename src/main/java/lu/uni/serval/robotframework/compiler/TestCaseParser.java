@@ -37,22 +37,22 @@ public class TestCaseParser {
 
             String label = tokens[1];
 
-            if (ParsingUtils.compareNoCase(label, "\\[documentation\\]")) {
+            if (Utils.compareNoCase(label, "\\[documentation\\]")) {
                 line = parseDocumentation(reader, tokens, testCase);
             }
-            else if (ParsingUtils.compareNoCase(label, "\\[tags\\]")) {
+            else if (Utils.compareNoCase(label, "\\[tags\\]")) {
                 line = parseTags(reader, tokens, testCase);
             }
-            else if (ParsingUtils.compareNoCase(label, "\\[setup\\]")) {
+            else if (Utils.compareNoCase(label, "\\[setup\\]")) {
                 line = parseSetup(reader, tokens, testCase);
             }
-            else if (ParsingUtils.compareNoCase(label, "\\[teardown\\]")) {
+            else if (Utils.compareNoCase(label, "\\[teardown\\]")) {
                 line = parseTeardown(reader, tokens, testCase);
             }
-            else if (ParsingUtils.compareNoCase(label, "\\[template\\]")) {
+            else if (Utils.compareNoCase(label, "\\[template\\]")) {
                 line = parseTemplate(reader, tokens, testCase);
             }
-            else if (ParsingUtils.compareNoCase(label, "\\[timeout\\]")) {
+            else if (Utils.compareNoCase(label, "\\[timeout\\]")) {
                 line = parseTimeout(reader, tokens, testCase);
             }
             else {
@@ -82,7 +82,7 @@ public class TestCaseParser {
     }
 
     private static Line parseTags(LineNumberReader reader, String[] tokens, TestCase testCase) throws IOException {
-        tokens = ParsingUtils.removeIndent(tokens);
+        tokens = Utils.removeIndent(tokens);
 
         for(int i = 1; i < tokens.length; ++i){
             testCase.addTag(tokens[i]);
@@ -93,7 +93,7 @@ public class TestCaseParser {
 
     private static Line parseDocumentation(LineNumberReader reader, String[] tokens, TestCase testCase) throws IOException {
         StringBuilder builder = new StringBuilder();
-        Line line = ParsingUtils.parseDocumentation(reader, tokens, builder);
+        Line line = Utils.parseDocumentation(reader, tokens, builder);
 
         testCase.setDocumentation(builder.toString());
 

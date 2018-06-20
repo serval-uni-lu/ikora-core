@@ -16,7 +16,7 @@ public class SettingsTableParser {
         Line line = Line.getNextLine(reader);
 
         while(line.isValid()){
-            if(ParsingUtils.isBlock(line.getText())){
+            if(Utils.isBlock(line.getText())){
                 break;
             }
 
@@ -29,43 +29,43 @@ public class SettingsTableParser {
             String label = tokens[0];
 
 
-            if(ParsingUtils.compareNoCase(label, "documentation")){
+            if(Utils.compareNoCase(label, "documentation")){
                 line = parseDocumentation(reader, tokens, settings);
             }
-            else if(ParsingUtils.compareNoCase(label, "resource")){
+            else if(Utils.compareNoCase(label, "resource")){
                 line = parseResource(reader, tokens, settings);
             }
-            else if(ParsingUtils.compareNoCase(label, "library")){
+            else if(Utils.compareNoCase(label, "library")){
                 line = parseLibrary(reader, tokens, settings);
             }
-            else if(ParsingUtils.compareNoCase(label, "variables")) {
+            else if(Utils.compareNoCase(label, "variables")) {
                 line = parseVariable(reader, tokens, settings);
             }
-            else if(ParsingUtils.compareNoCase(label, "metadata")) {
+            else if(Utils.compareNoCase(label, "metadata")) {
                 line = parseMetadata(reader, tokens, settings);
             }
-            else if(ParsingUtils.compareNoCase(label, "suite setup")) {
+            else if(Utils.compareNoCase(label, "suite setup")) {
                 line = parseSuiteSetup(reader, tokens, settings);
             }
-            else if(ParsingUtils.compareNoCase(label, "suite teardown")) {
+            else if(Utils.compareNoCase(label, "suite teardown")) {
                 line = parseSuiteTeardown(reader, tokens, settings);
             }
-            else if(ParsingUtils.compareNoCase(label, "force tags")) {
+            else if(Utils.compareNoCase(label, "force tags")) {
                 line = parseForceTags(reader, tokens, settings);
             }
-            else if(ParsingUtils.compareNoCase(label, "default tags")){
+            else if(Utils.compareNoCase(label, "default tags")){
                 line = parseDefaultTags(reader, tokens, settings);
             }
-            else if(ParsingUtils.compareNoCase(label, "test setup")){
+            else if(Utils.compareNoCase(label, "test setup")){
                 line = parseTestSetup(reader, tokens, settings);
             }
-            else if(ParsingUtils.compareNoCase(label, "test teardown")){
+            else if(Utils.compareNoCase(label, "test teardown")){
                 line = parseTestTeardown(reader, tokens, settings);
             }
-            else if(ParsingUtils.compareNoCase(label, "test template")){
+            else if(Utils.compareNoCase(label, "test template")){
                 line = parseTestTemplate(reader, tokens, settings);
             }
-            else if(ParsingUtils.compareNoCase(label, "test timeout")){
+            else if(Utils.compareNoCase(label, "test timeout")){
                 line = parseTestTimeout(reader, tokens, settings);
             }
             else {
@@ -114,7 +114,7 @@ public class SettingsTableParser {
 
     private static Line parseDocumentation(LineNumberReader reader, String[] tokens, Settings settings) throws IOException {
         StringBuilder builder = new StringBuilder();
-        Line line = ParsingUtils.parseDocumentation(reader, tokens, builder);
+        Line line = Utils.parseDocumentation(reader, tokens, builder);
 
         settings.setDocumentation(builder.toString());
 
@@ -141,7 +141,7 @@ public class SettingsTableParser {
     }
 
     private static Line parseDefaultTags(LineNumberReader reader, String[] tokens, Settings settings) throws IOException {
-        tokens = ParsingUtils.removeIndent(tokens);
+        tokens = Utils.removeIndent(tokens);
 
         for(int i = 1; i < tokens.length; ++i){
             settings.addDefaultTag(tokens[i]);
