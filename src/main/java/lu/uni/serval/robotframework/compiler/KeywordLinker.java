@@ -24,6 +24,12 @@ public class KeywordLinker {
 
     private static void linkSteps(TestCase testCase, TestCaseFile testCaseFile, LibraryResources libraries) throws Exception {
         for(Step step: testCase) {
+            if(!(step instanceof KeywordCall)) {
+                throw new Exception("expecting a step of type keyword call");
+            }
+
+            KeywordCall call = (KeywordCall)step;
+
             Pattern pattern = Pattern.compile("^(\\s*)(Given|When|Then)", Pattern.CASE_INSENSITIVE);
             Matcher matcher = pattern.matcher(step.getName().toString());
             String name = matcher.replaceAll("").trim();
@@ -38,12 +44,18 @@ public class KeywordLinker {
                 throw new Exception();
             }
 
-            step.setKeyword(keyword);
+            call.setKeyword(keyword);
         }
     }
 
     private static void linkSteps(UserKeyword userKeyword, TestCaseFile testCaseFile, LibraryResources libraries) throws Exception {
         for (Step step: userKeyword) {
+            if(!(step instanceof KeywordCall)) {
+                continue;
+            }
+
+            KeywordCall call = (KeywordCall)step;
+
             String name = step.getName().toString().trim();
 
             Keyword keyword = testCaseFile.findUserKeyword(name);
@@ -57,7 +69,7 @@ public class KeywordLinker {
             }
 
 
-            step.setKeyword(keyword);
+            call.setKeyword(keyword);
         }
     }
 }

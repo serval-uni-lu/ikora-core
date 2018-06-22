@@ -1,5 +1,6 @@
 package lu.uni.serval.robotframework.compiler;
 
+import lu.uni.serval.robotframework.model.ForLoop;
 import lu.uni.serval.robotframework.model.Step;
 
 import java.io.LineNumberReader;
@@ -25,8 +26,6 @@ public class StepParser {
     }
 
     private static Line parseForLoop(LineNumberReader reader, Line line, Step step) throws IOException {
-        step.setType(Step.Type.ForLoop);
-
         StringBuilder builder = new StringBuilder(line.toString());
         Line newLine = Utils.appendMultiline(reader, builder);
 
@@ -40,7 +39,6 @@ public class StepParser {
     }
 
     private static Line parseAssignment(LineNumberReader reader, Line line, Step step) throws IOException {
-        step.setType(Step.Type.Assignment);
         return Line.getNextLine(reader);
     }
 

@@ -1,6 +1,6 @@
 package lu.uni.serval.analytics;
 
-public class CloneIndex {
+class CloneIndex {
     public enum Ignore{
         Subtree(-1.0),
         OneStep(-2.0);

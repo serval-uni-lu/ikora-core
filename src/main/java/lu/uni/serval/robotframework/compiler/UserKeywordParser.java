@@ -101,7 +101,7 @@ public class UserKeywordParser {
     }
 
     private static Line parseStep(LineNumberReader reader, Line line, UserKeyword userKeyword) throws IOException {
-        Step step = new Step();
+        Step step = null;
         line = StepParser.parse(reader, line, step);
         userKeyword.addStep(step);
 

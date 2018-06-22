@@ -101,7 +101,7 @@ public class TestCaseParser {
     }
 
     private static Line parseStep(LineNumberReader reader, Line line, TestCase testCase) throws IOException {
-        Step step = new Step();
+        Step step = null;
         line = StepParser.parse(reader, line, step);
         testCase.addStep(step);
 
