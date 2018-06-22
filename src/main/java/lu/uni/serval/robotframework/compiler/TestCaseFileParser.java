@@ -3,44 +3,39 @@ package lu.uni.serval.robotframework.compiler;
 import lu.uni.serval.robotframework.model.*;
 
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.LineNumberReader;
 
 public class TestCaseFileParser {
     static public void parse(File file, Project project) {
         try {
-            FileReader input = new FileReader(file);
-            LineNumberReader reader = new LineNumberReader(input);
+            LineReader reader = new LineReader(file);
 
             TestCaseFile testCaseFile = new TestCaseFile();
             testCaseFile.setFile(file);
 
-            Line line = Line.getNextLine(reader);
-            while(line.isValid()){
-                if(isSettings(line.getText())){
-                    Settings settings = new Settings();
-                    settings.setFile(testCaseFile.getFile());
-                    line = SettingsTableParser.parse(reader, settings);
+            reader.readLine();
+
+            while(reader.getCurrent().isValid()){
+                String text = reader.getCurrent().getText();
+
+                if(isSettings(text)){
+                    Settings settings = SettingsTableParser.parse(reader);
                     testCaseFile.setSettings(settings);
                 }
-                else if(isTestCases(line.getText())){
-                    TestCaseTable testCaseTable = new TestCaseTable();
-                    line = TestCaseTableParser.parse(reader, testCaseTable);
+                else if(isTestCases(text)){
+                    TestCaseTable testCaseTable = TestCaseTableParser.parse(reader);
                     testCaseFile.setTestCaseTable(testCaseTable);
                 }
-                else if(isKeywords(line.getText())){
-                    KeywordTable keywordTable = new KeywordTable();
-                    line = KeywordTableParser.parse(reader, keywordTable);
+                else if(isKeywords(text)){
+                    KeywordTable keywordTable = KeywordTableParser.parse(reader);
                     testCaseFile.setKeywordTable(keywordTable);
                 }
-                else if(isVariable(line.getText())){
-                    VariableTable variableTable = new VariableTable();
-                    line = VariableTableParser.parse(reader, variableTable);
+                else if(isVariable(text)){
+                    VariableTable variableTable = VariableTableParser.parse(reader);
                     testCaseFile.setVariableTable(variableTable);
                 }
                 else {
-                    line = Line.getNextLine(reader);
+                    reader.readLine();
                 }
             }
 

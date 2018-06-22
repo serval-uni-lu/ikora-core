@@ -3,26 +3,27 @@ package lu.uni.serval.robotframework.compiler;
 import lu.uni.serval.robotframework.model.Variable;
 import lu.uni.serval.robotframework.model.VariableTable;
 
-import java.io.LineNumberReader;
 import java.io.IOException;
 
 public class VariableTableParser {
     private VariableTableParser() {}
 
-    static public Line parse(LineNumberReader reader, VariableTable variableTable) throws IOException {
-        Line line = Line.getNextLine(reader);
+    static public VariableTable parse(LineReader reader) throws IOException {
+        VariableTable variableTable = new VariableTable();
 
-        while(line.isValid()){
-            if(Utils.isBlock(line.getText())){
+        reader.readLine();
+
+        while(reader.getCurrent().isValid()){
+            if(Utils.isBlock(reader.getCurrent().getText())){
                 break;
             }
 
-            if(line.isEmpty()){
-                line = Line.getNextLine(reader);
+            if(reader.getCurrent().isEmpty()){
+                reader.readLine();
                 continue;
             }
 
-            String[] tokens = line.tokenize();
+            String[] tokens = reader.getCurrent().tokenize();
 
             Variable variable = new Variable();
             variable.setName(tokens[0]);
@@ -32,9 +33,9 @@ public class VariableTableParser {
             }
 
             variableTable.put(variable.getName(), variable);
-            line = Line.getNextLine(reader);
+            reader.readLine();
         }
 
-        return line;
+        return variableTable;
     }
 }

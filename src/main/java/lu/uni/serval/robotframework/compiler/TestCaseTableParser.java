@@ -1,28 +1,32 @@
 package lu.uni.serval.robotframework.compiler;
 
+import lu.uni.serval.robotframework.model.TestCase;
 import lu.uni.serval.robotframework.model.TestCaseTable;
 
-import java.io.LineNumberReader;
 import java.io.IOException;
 
 public class TestCaseTableParser {
     private TestCaseTableParser() {}
 
-    static public Line parse(LineNumberReader reader, TestCaseTable testCaseTable) throws IOException {
-        Line line = Line.getNextLine(reader);
+    static public TestCaseTable parse(LineReader reader) throws IOException {
+        TestCaseTable testCaseTable = new TestCaseTable();
 
-        while(line.isValid()){
-            if(Utils.isBlock(line.getText())){
+        reader.readLine();
+
+        while(reader.getCurrent().isValid()){
+            if(Utils.isBlock(reader.getCurrent().getText())){
                 break;
             }
 
-            if(line.isEmpty()){
+            if(reader.getCurrent().isEmpty()){
+                reader.readLine();
                 continue;
             }
 
-            line = TestCaseParser.parse(reader, line, testCaseTable);
+            TestCase testCase = TestCaseParser.parse(reader);
+            testCaseTable.add(testCase);
         }
 
-        return line;
+        return testCaseTable;
     }
 }

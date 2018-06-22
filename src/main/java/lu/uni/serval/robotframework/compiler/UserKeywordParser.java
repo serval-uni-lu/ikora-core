@@ -1,29 +1,28 @@
 package lu.uni.serval.robotframework.compiler;
 
-import lu.uni.serval.robotframework.model.KeywordTable;
 import lu.uni.serval.robotframework.model.Step;
 import lu.uni.serval.robotframework.model.UserKeyword;
 
-import java.io.LineNumberReader;
 import java.io.IOException;
 
 public class UserKeywordParser {
 
-    public static Line parse(LineNumberReader reader, Line test, KeywordTable keywordTable) throws IOException {
-        String[] tokens = test.tokenize();
-
+    public static UserKeyword parse(LineReader reader) throws IOException {
         UserKeyword userKeyword = new UserKeyword();
+
+        Line test = reader.getCurrent();
+        String[] tokens = test.tokenize();
         userKeyword.setName(tokens[0]);
 
-        Line line = Line.getNextLine(reader);
+        reader.readLine();
 
-        while(line.isValid() && line.isInBlock(test)) {
-            if(line.isEmpty()) {
-                line = Line.getNextLine(reader);
+        while(reader.getCurrent().isValid() && reader.getCurrent().isInBlock(test)) {
+            if(reader.getCurrent().isEmpty()) {
+                reader.readLine();
                 continue;
             }
 
-            tokens = line.tokenize();
+            tokens = reader.getCurrent().tokenize();
 
             if(tokens.length < 2) {
                 continue;
@@ -32,80 +31,73 @@ public class UserKeywordParser {
             String label = tokens[1];
 
             if (Utils.compareNoCase(label, "\\[documentation\\]")) {
-                line = parseDocumentation(reader, tokens, userKeyword);
+                parseDocumentation(reader, tokens, userKeyword);
             }
             else if (Utils.compareNoCase(label, "\\[tags\\]")) {
-                line = parseTags(reader, tokens, userKeyword);
+                parseTags(reader, tokens, userKeyword);
             }
             else if (Utils.compareNoCase(label, "\\[arguments\\]")) {
-                line = parseParameters(reader, tokens, userKeyword);
+                parseParameters(reader, tokens, userKeyword);
             }
             else if (Utils.compareNoCase(label, "\\[return\\]")) {
-                line = parseReturn(reader, tokens, userKeyword);
+                parseReturn(reader, tokens, userKeyword);
             }
             else if (Utils.compareNoCase(label, "\\[teardown\\]")) {
-                line = parseTeardown(reader, tokens, userKeyword);
+                parseTeardown(reader, tokens, userKeyword);
             }
             else if (Utils.compareNoCase(label, "\\[timeout\\]")) {
-                line = parseTimeout(reader, tokens, userKeyword);
+                 parseTimeout(reader, tokens, userKeyword);
             }
             else {
-                line = parseStep(reader, line, userKeyword);
+                parseStep(reader, userKeyword);
             }
         }
 
-        keywordTable.add(userKeyword);
-
-        return line;
+        return userKeyword;
     }
 
-    private static Line parseDocumentation(LineNumberReader reader, String[] tokens, UserKeyword userKeyword) throws IOException {
+    private static void parseDocumentation(LineReader reader, String[] tokens, UserKeyword userKeyword) throws IOException {
         StringBuilder builder = new StringBuilder();
-         Line line = Utils.parseDocumentation(reader, tokens, builder);
+         Utils.parseDocumentation(reader, tokens, builder);
 
         userKeyword.setDocumentation(builder.toString());
-
-        return line;
     }
 
-    private static Line parseTags(LineNumberReader reader, String[] tokens, UserKeyword userKeyword) throws IOException {
+    private static void parseTags(LineReader reader, String[] tokens, UserKeyword userKeyword) throws IOException {
         tokens = Utils.removeIndent(tokens);
 
         for(int i = 1; i < tokens.length; ++i){
             userKeyword.addTag(tokens[i]);
         }
 
-        return Line.getNextLine(reader);
+        reader.readLine();
     }
 
-    private static Line parseParameters(LineNumberReader reader, String[] tokens, UserKeyword userKeyword) throws IOException {
+    private static void parseParameters(LineReader reader, String[] tokens, UserKeyword userKeyword) throws IOException {
         tokens = Utils.removeIndent(tokens);
 
         for(int i = 1; i < tokens.length; ++i){
             userKeyword.addParameter(tokens[i]);
         }
 
-        return Line.getNextLine(reader);
+        reader.readLine();
     }
 
-    private static Line parseReturn(LineNumberReader reader, String[] tokens, UserKeyword userKeyword) throws IOException {
-        return Line.getNextLine(reader);
+    private static void parseReturn(LineReader reader, String[] tokens, UserKeyword userKeyword) throws IOException {
+        reader.readLine();
     }
 
-    private static Line parseTeardown(LineNumberReader reader, String[] tokens, UserKeyword userKeyword) throws IOException {
-        return Line.getNextLine(reader);
+    private static void parseTeardown(LineReader reader, String[] tokens, UserKeyword userKeyword) throws IOException {
+        reader.readLine();
     }
 
-    private static Line parseTimeout(LineNumberReader reader, String[] tokens, UserKeyword userKeyword) throws IOException {
-        return Line.getNextLine(reader);
+    private static void parseTimeout(LineReader reader, String[] tokens, UserKeyword userKeyword) throws IOException {
+        reader.readLine();
     }
 
-    private static Line parseStep(LineNumberReader reader, Line line, UserKeyword userKeyword) throws IOException {
-        Step step = null;
-        line = StepParser.parse(reader, line, step);
+    private static void parseStep(LineReader reader, UserKeyword userKeyword) throws IOException {
+        Step step = StepParser.parse(reader);
         userKeyword.addStep(step);
-
-        return line;
     }
 
 }

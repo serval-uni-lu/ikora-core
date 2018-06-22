@@ -1,14 +1,12 @@
 package lu.uni.serval.robotframework.compiler;
 
-import java.io.IOException;
-import java.io.LineNumberReader;
-
 public class Line {
     private String text;
     private int number;
 
-    private Line() {
-        this.number = 0;
+    public Line(String text, int number) {
+        this.text = text;
+        this.number = number;
     }
 
     public int getNumber() {
@@ -50,17 +48,5 @@ public class Line {
 
     public boolean isInBlock(Line line) {
         return getIndentSize() == line.getIndentSize() + 1;
-    }
-
-    public static Line getNextLine(LineNumberReader reader) throws IOException {
-        Line line = new Line();
-
-        line.text = reader.readLine();
-
-        if(line.text != null) {
-            line.number = reader.getLineNumber();
-        }
-
-        return line;
     }
 }

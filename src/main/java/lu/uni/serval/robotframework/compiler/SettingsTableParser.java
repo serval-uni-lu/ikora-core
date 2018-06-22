@@ -12,8 +12,11 @@ import java.util.ArrayList;
 public class SettingsTableParser {
     private SettingsTableParser(){ }
 
-    static public Line parse(LineNumberReader reader, Settings settings) throws IOException {
-        Line line = Line.getNextLine(reader);
+    static public Settings parse(LineReader reader) throws IOException {
+        Settings settings = new Settings();
+        settings.setFile(reader.getFile());
+
+        Line line = reader.readLine();
 
         while(line.isValid()){
             if(Utils.isBlock(line.getText())){
@@ -28,107 +31,106 @@ public class SettingsTableParser {
 
             String label = tokens[0];
 
-
             if(Utils.compareNoCase(label, "documentation")){
-                line = parseDocumentation(reader, tokens, settings);
+                parseDocumentation(reader, tokens, settings);
             }
             else if(Utils.compareNoCase(label, "resource")){
-                line = parseResource(reader, tokens, settings);
+                parseResource(reader, tokens, settings);
             }
             else if(Utils.compareNoCase(label, "library")){
-                line = parseLibrary(reader, tokens, settings);
+                parseLibrary(reader, tokens, settings);
             }
             else if(Utils.compareNoCase(label, "variables")) {
-                line = parseVariable(reader, tokens, settings);
+                parseVariable(reader, tokens, settings);
             }
             else if(Utils.compareNoCase(label, "metadata")) {
-                line = parseMetadata(reader, tokens, settings);
+                parseMetadata(reader, tokens, settings);
             }
             else if(Utils.compareNoCase(label, "suite setup")) {
-                line = parseSuiteSetup(reader, tokens, settings);
+                parseSuiteSetup(reader, tokens, settings);
             }
             else if(Utils.compareNoCase(label, "suite teardown")) {
-                line = parseSuiteTeardown(reader, tokens, settings);
+                parseSuiteTeardown(reader, tokens, settings);
             }
             else if(Utils.compareNoCase(label, "force tags")) {
-                line = parseForceTags(reader, tokens, settings);
+                parseForceTags(reader, tokens, settings);
             }
             else if(Utils.compareNoCase(label, "default tags")){
-                line = parseDefaultTags(reader, tokens, settings);
+                parseDefaultTags(reader, tokens, settings);
             }
             else if(Utils.compareNoCase(label, "test setup")){
-                line = parseTestSetup(reader, tokens, settings);
+                parseTestSetup(reader, tokens, settings);
             }
             else if(Utils.compareNoCase(label, "test teardown")){
-                line = parseTestTeardown(reader, tokens, settings);
+                parseTestTeardown(reader, tokens, settings);
             }
             else if(Utils.compareNoCase(label, "test template")){
-                line = parseTestTemplate(reader, tokens, settings);
+                parseTestTemplate(reader, tokens, settings);
             }
             else if(Utils.compareNoCase(label, "test timeout")){
-                line = parseTestTimeout(reader, tokens, settings);
+                parseTestTimeout(reader, tokens, settings);
             }
             else {
-                line = Line.getNextLine(reader);
+                reader.readLine();
             }
+
+            line = reader.getCurrent();
         }
 
-        return line;
+        return settings;
     }
 
-    private static Line parseTestTimeout(LineNumberReader reader, String[] tokens, Settings settings) throws IOException {
-        return Line.getNextLine(reader);
+    private static void parseTestTimeout(LineReader reader, String[] tokens, Settings settings) throws IOException {
+        reader.readLine();
     }
 
-    private static Line parseTestTemplate(LineNumberReader reader, String[] tokens, Settings settings) throws IOException {
-        return Line.getNextLine(reader);
+    private static void parseTestTemplate(LineReader reader, String[] tokens, Settings settings) throws IOException {
+        reader.readLine();
     }
 
-    private static Line parseTestTeardown(LineNumberReader reader, String[] tokens, Settings settings) throws IOException {
-        return Line.getNextLine(reader);
+    private static void parseTestTeardown(LineReader reader, String[] tokens, Settings settings) throws IOException {
+        reader.readLine();
     }
 
-    private static Line parseTestSetup(LineNumberReader reader, String[] tokens, Settings settings) throws IOException {
-        return Line.getNextLine(reader);
+    private static void parseTestSetup(LineReader reader, String[] tokens, Settings settings) throws IOException {
+        reader.readLine();
     }
 
-    private static Line parseForceTags(LineNumberReader reader, String[] tokens, Settings settings) throws IOException {
-        return Line.getNextLine(reader);
+    private static void parseForceTags(LineReader reader, String[] tokens, Settings settings) throws IOException {
+        reader.readLine();
     }
 
-    private static Line parseSuiteTeardown(LineNumberReader reader, String[] tokens, Settings settings) throws IOException {
-        return Line.getNextLine(reader);
+    private static void parseSuiteTeardown(LineReader reader, String[] tokens, Settings settings) throws IOException {
+        reader.readLine();
     }
 
-    private static Line parseSuiteSetup(LineNumberReader reader, String[] tokens, Settings settings) throws IOException {
-        return Line.getNextLine(reader);
+    private static void parseSuiteSetup(LineReader reader, String[] tokens, Settings settings) throws IOException {
+        reader.readLine();
     }
 
-    private static Line parseMetadata(LineNumberReader reader, String[] tokens, Settings settings) throws IOException {
-        return Line.getNextLine(reader);
+    private static void parseMetadata(LineReader reader, String[] tokens, Settings settings) throws IOException {
+        reader.readLine();
     }
 
-    private static Line parseVariable(LineNumberReader reader, String[] tokens, Settings settings) throws IOException {
-        return Line.getNextLine(reader);
+    private static void parseVariable(LineReader reader, String[] tokens, Settings settings) throws IOException {
+        reader.readLine();
     }
 
-    private static Line parseDocumentation(LineNumberReader reader, String[] tokens, Settings settings) throws IOException {
+    private static void parseDocumentation(LineReader reader, String[] tokens, Settings settings) throws IOException {
         StringBuilder builder = new StringBuilder();
-        Line line = Utils.parseDocumentation(reader, tokens, builder);
+        Utils.parseDocumentation(reader, tokens, builder);
 
         settings.setDocumentation(builder.toString());
-
-        return line;
     }
 
-    private static Line parseLibrary(LineNumberReader reader, String[] tokens, Settings settings) throws IOException {
+    private static void parseLibrary(LineReader reader, String[] tokens, Settings settings) throws IOException {
         Library library = new Library(tokens[1], new ArrayList<>(), "");
         settings.addLibrary(library);
 
-        return Line.getNextLine(reader);
+        reader.readLine();
     }
 
-    private static Line parseResource(LineNumberReader reader, String[] tokens, Settings settings) throws IOException {
+    private static void parseResource(LineReader reader, String[] tokens, Settings settings) throws IOException {
         File filePath = new File(tokens[1]);
         if(!filePath.isAbsolute()) {
             filePath = new File(settings.getFile().getParentFile(), filePath.getPath());
@@ -137,16 +139,16 @@ public class SettingsTableParser {
         Resources resources = new Resources(tokens[1], filePath, new ArrayList<>(), "");
         settings.addResources(resources);
 
-        return Line.getNextLine(reader);
+        reader.readLine();
     }
 
-    private static Line parseDefaultTags(LineNumberReader reader, String[] tokens, Settings settings) throws IOException {
+    private static void parseDefaultTags(LineReader reader, String[] tokens, Settings settings) throws IOException {
         tokens = Utils.removeIndent(tokens);
 
         for(int i = 1; i < tokens.length; ++i){
             settings.addDefaultTag(tokens[i]);
         }
 
-        return Line.getNextLine(reader);
+        reader.readLine();
     }
 }

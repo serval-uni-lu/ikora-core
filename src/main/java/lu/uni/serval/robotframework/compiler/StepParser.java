@@ -1,61 +1,76 @@
 package lu.uni.serval.robotframework.compiler;
 
+import lu.uni.serval.robotframework.model.Assignment;
 import lu.uni.serval.robotframework.model.ForLoop;
+import lu.uni.serval.robotframework.model.KeywordCall;
 import lu.uni.serval.robotframework.model.Step;
 
-import java.io.LineNumberReader;
 import java.io.IOException;
 
 public class StepParser {
-    public static Line parse(LineNumberReader reader, Line line, Step step) throws IOException {
-        String[] tokens = line.tokenize();
+    public static Step parse(LineReader reader) throws IOException {
+        Step step;
+
+        String[] tokens = reader.getCurrent().tokenize();
         tokens = Utils.removeIndent(tokens);
 
-        Line newLine;
         if(tokens[0].equalsIgnoreCase(":FOR")) {
-            newLine = parseForLoop(reader, line, step);
+            step = parseForLoop(reader);
         }
         else if (Utils.compareNoCase(tokens[0], "^(\\$\\{)(.*)(\\})(\\s?)(=?)")){
-            newLine = parseAssignment(reader, line, step);
+            step = parseAssignment(reader);
         }
         else {
-            newLine = parseKeywordNameAndParameter(reader, line, step);
+            step = parseKeywordNameAndParameter(reader);
         }
 
-        return newLine;
+        return step;
     }
 
-    private static Line parseForLoop(LineNumberReader reader, Line line, Step step) throws IOException {
-        StringBuilder builder = new StringBuilder(line.toString());
-        Line newLine = Utils.appendMultiline(reader, builder);
+    private static Step parseForLoop(LineReader reader) throws IOException {
+        ForLoop forLoop = new ForLoop();
 
-        String forLoop = builder.toString();
+        Line loop = reader.getCurrent();
 
-        while (newLine.isInBlock(line)){
-            newLine = Line.getNextLine(reader);
+        StringBuilder builder = new StringBuilder(reader.getCurrent().toString());
+        Utils.appendMultiline(reader, builder);
+
+        forLoop.setName(builder.toString());
+
+        while (reader.getCurrent().isInBlock(loop)){
+            reader.readLine();
         }
 
-        return newLine;
+        return forLoop;
     }
 
-    private static Line parseAssignment(LineNumberReader reader, Line line, Step step) throws IOException {
-        return Line.getNextLine(reader);
+    private static Step parseAssignment(LineReader reader) throws IOException {
+        Assignment assignment = new Assignment();
+        assignment.setName(reader.getCurrent().toString());
+
+        reader.readLine();
+
+        return assignment;
     }
 
-    static private Line parseKeywordNameAndParameter(LineNumberReader reader, Line line, Step keyword) throws IOException {
-        String[] tokens = line.tokenize();
+    static private Step parseKeywordNameAndParameter(LineReader reader) throws IOException {
+        KeywordCall call = new KeywordCall();
+
+        String[] tokens = reader.getCurrent().tokenize();
         tokens = Utils.removeIndent(tokens);
 
         if(tokens.length > 0) {
-            keyword.setName(tokens[0]);
+            call.setName(tokens[0]);
         }
 
         if (tokens.length > 1) {
             for(int i = 1; i < tokens.length; ++i) {
-                keyword.addParameter(tokens[i]);
+                call.addParameter(tokens[i]);
             }
         }
 
-        return Line.getNextLine(reader);
+        reader.readLine();
+
+        return call;
     }
 }

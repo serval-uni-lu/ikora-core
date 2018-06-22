@@ -1,29 +1,32 @@
 package lu.uni.serval.robotframework.compiler;
 
 import lu.uni.serval.robotframework.model.KeywordTable;
+import lu.uni.serval.robotframework.model.UserKeyword;
 
-import java.io.LineNumberReader;
 import java.io.IOException;
 
 public class KeywordTableParser {
     private KeywordTableParser() {}
 
-    static public Line parse(LineNumberReader reader, KeywordTable keywordTable) throws IOException {
-        Line line = Line.getNextLine(reader);
+    static public KeywordTable parse(LineReader reader) throws IOException {
+        KeywordTable keywordTable = new KeywordTable();
 
-        while(line.isValid()){
-            if(Utils.isBlock(line.getText())){
+        reader.readLine();
+
+        while(reader.getCurrent().isValid()){
+            if(Utils.isBlock(reader.getCurrent().getText())){
                 break;
             }
 
-            if(line.isEmpty()){
-                line = Line.getNextLine(reader);
+            if(reader.getCurrent().isEmpty()){
+                reader.readLine();
                 continue;
             }
 
-            line = UserKeywordParser.parse(reader, line, keywordTable);
+            UserKeyword userKeyword = UserKeywordParser.parse(reader);
+            keywordTable.add(userKeyword);
         }
 
-        return line;
+        return keywordTable;
     }
 }

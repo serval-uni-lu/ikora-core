@@ -33,15 +33,15 @@ class Utils {
         return tokens;
     }
 
-    static Line parseDocumentation(LineNumberReader reader, String[] tokens, StringBuilder builder) throws IOException {
+    static void parseDocumentation(LineReader reader, String[] tokens, StringBuilder builder) throws IOException {
         builder.append(tokens[1]);
-        return appendMultiline(reader, builder);
+        appendMultiline(reader, builder);
     }
 
-    static Line appendMultiline(LineNumberReader reader, StringBuilder result) throws IOException {
+    static void appendMultiline(LineReader reader, StringBuilder result) throws IOException {
         Line line;
 
-        while((line = Line.getNextLine(reader)) != null){
+        while((line = reader.readLine()) != null){
             String[] tokens = line.tokenize();
 
             if(tokens.length == 0 || !tokens[0].equalsIgnoreCase("...")){
@@ -54,7 +54,5 @@ class Utils {
                 result.append(tokens[1]);
             }
         }
-
-        return line;
     }
 }
