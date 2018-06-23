@@ -9,7 +9,7 @@ public class KeywordCall extends Step {
         this.keyword = keyword;
 
         if(this.keyword != null) {
-            this.getParent().getNode().add(this.keyword);
+            addDependency(this.keyword);
         }
     }
 

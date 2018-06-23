@@ -18,7 +18,6 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
 
     KeywordDefinition(){
         steps = new ArrayList<>();
-        node = new LabelTreeNode(this);
         dependencies = new HashSet<>();
         tags = new HashSet<>();
         documentation = "";
@@ -88,44 +87,6 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
 
     public boolean matches(String name) {
         return this.name.matches(name);
-    }
-
-    @Override
-    public String getLabel() {
-        return getName().toString();
-    }
-
-    @Override
-    public boolean isSame(TreeNodeData other) {
-        if(other == null){
-            return false;
-        }
-
-        if(!(other instanceof KeywordDefinition)){
-            return false;
-        }
-
-        KeywordDefinition keyword = (KeywordDefinition)other;
-
-        if(steps.size() != keyword.steps.size()){
-            return false;
-        }
-
-        boolean same = true;
-        same &= name.toString().equalsIgnoreCase(keyword.name.toString());
-        same &= documentation.equalsIgnoreCase(keyword.documentation);
-        same &= tags == keyword.tags;
-
-        for(int i = 0; same && i < steps.size(); ++i) {
-            same &= steps.get(i).isSame(keyword.steps.get(i));
-        }
-
-        return same;
-    }
-
-    @Override
-    public boolean isValid() {
-        return true;
     }
 
     @Nonnull

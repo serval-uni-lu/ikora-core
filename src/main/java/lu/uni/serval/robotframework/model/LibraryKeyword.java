@@ -13,22 +13,6 @@ public abstract class LibraryKeyword implements Keyword {
 
     public LibraryKeyword() {
         this.dependencies = new HashSet<>();
-        this.node = new LabelTreeNode(this);
-    }
-
-    @Override
-    public String getLabel() {
-        return toKeyword(this.getClass());
-    }
-
-    @Override
-    public boolean isSame(TreeNodeData other) {
-        return this.equals(other);
-    }
-
-    @Override
-    public boolean isValid() {
-        return true;
     }
 
     @Override

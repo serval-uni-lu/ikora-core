@@ -1,9 +1,9 @@
 package lu.uni.serval.robotframework.model;
 
 import lu.uni.serval.utils.tree.LabelTreeNode;
-import lu.uni.serval.utils.tree.TreeNodeData;
 
 import java.util.*;
+
 
 public abstract class Step implements Keyword {
     private Argument name;
@@ -24,6 +24,7 @@ public abstract class Step implements Keyword {
 
     public void setParent(KeywordDefinition parent) {
         this.parent = parent;
+        this.parent.addDependency(this);
     }
 
     public Argument getName() {
@@ -36,24 +37,6 @@ public abstract class Step implements Keyword {
 
     public Keyword getParent() {
         return parent;
-    }
-
-    public boolean isSame(Step step) {
-        if(step == null){
-            return false;
-        }
-
-        if(parameter.size() != step.parameter.size()){
-            return false;
-        }
-
-        boolean same = name.toString().equalsIgnoreCase(step.name.toString());
-
-        for(int i = 0; same && i < parameter.size(); ++i){
-            same &= parameter.get(i).toString().equalsIgnoreCase(step.parameter.get(i).toString());
-        }
-
-        return same;
     }
 
     @Override
@@ -72,20 +55,5 @@ public abstract class Step implements Keyword {
     @Override
     public void addDependency(Keyword keyword) {
         this.parent = keyword;
-    }
-
-    @Override
-    public String getLabel() {
-        return getName().toString();
-    }
-
-    @Override
-    public boolean isSame(TreeNodeData other) {
-        return this == other;
-    }
-
-    @Override
-    public boolean isValid() {
-        return parent != null;
     }
 }
