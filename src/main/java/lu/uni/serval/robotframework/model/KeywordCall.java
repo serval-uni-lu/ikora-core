@@ -25,7 +25,6 @@ public class KeywordCall extends Step {
         this.parameters.add(new Argument(argument));
     }
 
-
     public List<Argument> getParameters() {
         return this.parameters;
     }

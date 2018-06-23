@@ -37,6 +37,11 @@ public class Assignment extends Step {
     }
 
     @Override
+    public List<Argument> getParameters() {
+        return expression.getParameters();
+    }
+
+    @Override
     public void execute(Runtime runtime) {
 
     }

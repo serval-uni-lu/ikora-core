@@ -7,13 +7,20 @@ import java.util.List;
 
 public class ForLoop extends Step {
     private List<Step> steps;
+    private List<Argument> parameters;
 
     public ForLoop() {
         steps = new ArrayList<>();
+        parameters = new ArrayList<>();
     }
 
     public void addStep(Step step) {
         steps.add(step);
+    }
+
+    @Override
+    public List<Argument> getParameters() {
+        return parameters;
     }
 
     @Override

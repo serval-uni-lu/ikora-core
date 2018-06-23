@@ -30,6 +30,8 @@ public abstract class Step implements Keyword {
         return parent;
     }
 
+    public abstract List<Argument> getParameters();
+
     @Override
     public LabelTreeNode getNode() {
         return null;
