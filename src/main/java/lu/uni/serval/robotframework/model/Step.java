@@ -7,19 +7,14 @@ import java.util.*;
 
 public abstract class Step implements Keyword {
     private Argument name;
-    private List<Argument> parameter;
     private Keyword parent;
 
     public Step() {
-        this.parameter = new ArrayList<>();
+
     }
 
     public void setName(String name) {
         this.name = new Argument(name);
-    }
-
-    public void addParameter(String argument) {
-        this.parameter.add(new Argument(argument));
     }
 
     public void setParent(KeywordDefinition parent) {
@@ -29,10 +24,6 @@ public abstract class Step implements Keyword {
 
     public Argument getName() {
         return this.name;
-    }
-
-    public List<Argument> getParameter() {
-        return this.parameter;
     }
 
     public Keyword getParent() {
@@ -55,5 +46,18 @@ public abstract class Step implements Keyword {
     @Override
     public void addDependency(Keyword keyword) {
         this.parent = keyword;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if(!(other instanceof Step)) {
+            return false;
+        }
+
+        Step step = (Step)other;
+
+        boolean same = name.equals(step.name);
+
+        return same;
     }
 }
