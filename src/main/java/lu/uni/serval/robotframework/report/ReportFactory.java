@@ -63,7 +63,7 @@ public class ReportFactory {
                 suite.addSuite(subSuite);
             }
             else if(tagName.equalsIgnoreCase("kw") || tagName.equalsIgnoreCase("test")){
-                LabelTreeNode keyword = parseKeyword(suite.getSource(), child, dateTime);
+                KeywordStatus keyword = parseKeyword(suite.getSource(), child, dateTime);
 
                 if(keyword == null){
                     continue;
@@ -76,7 +76,7 @@ public class ReportFactory {
         return suite;
     }
 
-    private static LabelTreeNode parseKeyword(String file, final Element keywordElement, final LocalDateTime dateTime) {
+    private static KeywordStatus parseKeyword(String file, final Element keywordElement, final LocalDateTime dateTime) {
         ReportKeywordData data = new ReportKeywordData();
 
         data.type = getType(keywordElement);
@@ -84,35 +84,35 @@ public class ReportFactory {
         data.name = keywordElement.getAttribute("name");
         data.library = keywordElement.getAttribute("library");
 
-        LabelTreeNode treeNode = new LabelTreeNode(data);
+        KeywordStatus keyword = new KeywordStatus();
 
         HashSet<String> types = new HashSet<>(Arrays.asList("doc", "kw", "arguments", "status", "msg"));
         String msg = "";
 
-        for(Element child: getChildren(keywordElement, types)){
-            String elementName = child.getTagName();
+        for(Element childElement: getChildren(keywordElement, types)){
+            String elementName = childElement.getTagName();
 
             if(elementName.equalsIgnoreCase("doc")){
-                data.documentation = child.getTextContent();
+                data.documentation = childElement.getTextContent();
             }
             else if(elementName.equalsIgnoreCase("kw")){
-                LabelTreeNode keyword = parseKeyword(file, child, dateTime);
+                KeywordStatus child = parseKeyword(file, childElement, dateTime);
 
-                if(keyword == null){
+                if(child == null){
                     continue;
                 }
 
-                treeNode.add(keyword);
+                keyword.addChild(child);
             }
             else if(elementName.equalsIgnoreCase("arguments")){
-                data.arguments = parseArguments(child);
+                data.arguments = parseArguments(childElement);
             }
             else if(elementName.equalsIgnoreCase("status")){
-                data.setStatus(child.getAttribute("status"));
+                data.setStatus(childElement.getAttribute("status"));
                 data.executionDate = dateTime;
             }
             else if(elementName.equalsIgnoreCase("msg")){
-                msg = child.getTextContent();
+                msg = childElement.getTextContent();
             }
             else{
                 System.out.println("Ignored tag '" + elementName + "' while parsing kw");
@@ -127,7 +127,7 @@ public class ReportFactory {
             }
         }
 
-        return treeNode;
+        return keyword;
     }
 
     private static String getType(Element keywordElement) {

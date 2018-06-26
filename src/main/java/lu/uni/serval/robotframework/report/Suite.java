@@ -3,14 +3,12 @@ package lu.uni.serval.robotframework.report;
 import java.util.ArrayList;
 import java.util.List;
 
-import lu.uni.serval.utils.tree.LabelTreeNode;
-
 public class Suite {
     private String source;
     private String id;
     private String name;
     private List<Suite> suites;
-    private List<LabelTreeNode> keywords;
+    private List<KeywordStatus> keywords;
 
     public Suite(){
         suites = new ArrayList<>();
@@ -33,8 +31,8 @@ public class Suite {
         return suites;
     }
 
-    public List<LabelTreeNode> getKeywords() {
-        List<LabelTreeNode> keywords = new ArrayList<>();
+    public List<KeywordStatus> getKeywords() {
+        List<KeywordStatus> keywords = new ArrayList<>();
 
         if(hasSuites()){
             for(Suite suite: this.suites){
@@ -73,7 +71,7 @@ public class Suite {
         this.suites = children;
     }
 
-    public void setKeywords(List<LabelTreeNode> keywords) {
+    public void setKeywords(List<KeywordStatus> keywords) {
         this.keywords = keywords;
     }
 
@@ -81,7 +79,7 @@ public class Suite {
         suites.add(suite);
     }
 
-    public void addKeyword(LabelTreeNode keyword) {
+    public void addKeyword(KeywordStatus keyword) {
         keywords.add(keyword);
     }
 }

@@ -3,6 +3,7 @@ package lu.uni.serval.robotframework.report;
 import lu.uni.serval.robotframework.model.Keyword;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class KeywordStatus {
@@ -21,6 +22,8 @@ public class KeywordStatus {
     public KeywordStatus() {
         this.status = Status.IGNORED;
         this.keyword = null;
+
+        this.children = new ArrayList<>();
     }
 
     public void setStatus(Status status) {
@@ -41,5 +44,9 @@ public class KeywordStatus {
 
     public void setLog(String log) {
         this.log = log;
+    }
+
+    public void addChild(KeywordStatus child) {
+        children.add(child);
     }
 }
