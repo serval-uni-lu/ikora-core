@@ -3,6 +3,7 @@ package lu.uni.serval.robotframework.report;
 import lu.uni.serval.robotframework.model.Keyword;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class KeywordStatus {
     public enum Status{
@@ -14,6 +15,8 @@ public class KeywordStatus {
     private LocalDateTime endTime;
     private Keyword keyword;
     private String log;
+
+    private List<KeywordStatus> children;
 
     public KeywordStatus() {
         this.status = Status.IGNORED;
@@ -29,7 +32,7 @@ public class KeywordStatus {
     }
 
     public void setEndTime(LocalDateTime endTime) {
-        this.endTime = endTime
+        this.endTime = endTime;
     }
 
     public void setKeyword(Keyword keyword) {
