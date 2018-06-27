@@ -75,6 +75,12 @@
             <artifactId>reflections</artifactId>
             <version>0.9.11</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.jgit</groupId>
+            <artifactId>org.eclipse.jgit</artifactId>
+            <version>3.5.0.201409260305-r</version>
+        </dependency>
     </dependencies>
 
 </project>
