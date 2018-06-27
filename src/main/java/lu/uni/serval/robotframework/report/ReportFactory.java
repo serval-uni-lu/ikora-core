@@ -1,7 +1,7 @@
 package lu.uni.serval.robotframework.report;
 
-import lu.uni.serval.utils.ReportKeywordData;
-import lu.uni.serval.utils.tree.LabelTreeNode;
+import lu.uni.serval.robotframework.model.*;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -16,7 +16,13 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 public class ReportFactory {
-    public static Report create(final Element robotElement){
+    private final Repository repository;
+
+    public ReportFactory(Repository repository){
+        this.repository = repository;
+    }
+
+    public Report create(final Element robotElement) throws Exception {
         Report report = new Report();
 
         String generated = robotElement.getAttribute("generated");
@@ -31,7 +37,7 @@ public class ReportFactory {
         HashSet<String> types = new HashSet<>(Collections.singletonList("suite"));
 
         for(Element suiteElement: getChildren(robotElement, types)){
-            Suite suite = parseSuite(suiteElement, dateTime);
+            Suite suite = parseSuite(suiteElement);
 
             if(suite == null){
                 continue;
@@ -43,7 +49,7 @@ public class ReportFactory {
         return report;
     }
 
-    private static Suite parseSuite(final Element suiteElement, final LocalDateTime dateTime){
+    private Suite parseSuite(final Element suiteElement) throws Exception {
         Suite suite = new Suite();
         suite.setName(suiteElement.getAttribute("name"));
         suite.setId(suiteElement.getAttribute("id"));
@@ -54,7 +60,7 @@ public class ReportFactory {
         for(Element child: getChildren(suiteElement, types)){
             String tagName = child.getTagName();
             if(tagName.equalsIgnoreCase("suite")){
-                Suite subSuite = parseSuite(child, dateTime);
+                Suite subSuite = parseSuite(child);
 
                 if(subSuite == null){
                     continue;
@@ -62,8 +68,8 @@ public class ReportFactory {
 
                 suite.addSuite(subSuite);
             }
-            else if(tagName.equalsIgnoreCase("kw") || tagName.equalsIgnoreCase("test")){
-                KeywordStatus keyword = parseKeyword(suite.getSource(), child, dateTime);
+            else if(tagName.equalsIgnoreCase("test")){
+                KeywordStatus keyword = parseTestCase(suite, child);
 
                 if(keyword == null){
                     continue;
@@ -76,61 +82,85 @@ public class ReportFactory {
         return suite;
     }
 
-    private static KeywordStatus parseKeyword(String file, final Element keywordElement, final LocalDateTime dateTime) {
-        ReportKeywordData data = new ReportKeywordData();
+    private KeywordStatus parseTestCase(final Suite suite, final Element keywordElement) throws Exception {
+        KeywordStatus keywordStatus = new KeywordStatus();
+        TestCase testCase = findTestCase(suite, keywordElement);
 
-        data.type = getType(keywordElement);
-        data.file = file;
-        data.name = keywordElement.getAttribute("name");
-        data.library = keywordElement.getAttribute("library");
+        if(testCase == null) {
+            throw new Exception("could not find test case from report");
+        }
 
-        KeywordStatus keyword = new KeywordStatus();
+        keywordStatus.setKeyword(testCase);
 
-        HashSet<String> types = new HashSet<>(Arrays.asList("doc", "kw", "arguments", "status", "msg"));
-        String msg = "";
+        processTree(keywordStatus, keywordElement);
+
+        return keywordStatus;
+    }
+
+    private TestCase findTestCase(Suite suite, Element keywordElement) {
+        return repository.findTestCase(suite.getSource(), keywordElement.getAttribute("name"));
+    }
+
+    private KeywordStatus parseKeyword(KeywordStatus parent, final Element keywordElement) throws Exception {
+        KeywordStatus keywordStatus = new KeywordStatus();
+        Step step = findStep(parent, keywordElement);
+
+        if(step == null) {
+            throw new Exception ("could not find step from report");
+        }
+
+        keywordStatus.setKeyword(step);
+
+        processTree(keywordStatus, keywordElement);
+
+        return keywordStatus;
+    }
+
+    private Step findStep(KeywordStatus parent, Element keywordElement) throws Exception {
+        if(!(parent.getKeyword() instanceof KeywordDefinition)) {
+            throw new Exception("Was waiting for a keyword definition");
+        }
+
+        KeywordDefinition definition = (KeywordDefinition)parent.getKeyword();
+
+        for(Step step: definition){
+            if(step.getName().toString().equalsIgnoreCase(keywordElement.getAttribute("name"))){
+                return step;
+            }
+        }
+
+        return null;
+    }
+
+    private void processTree(KeywordStatus keywordStatus, final Element keywordElement) throws Exception {
+
+        HashSet<String> types = new HashSet<>(Arrays.asList("kw", "arguments", "status", "msg"));
 
         for(Element childElement: getChildren(keywordElement, types)){
             String elementName = childElement.getTagName();
 
-            if(elementName.equalsIgnoreCase("doc")){
-                data.documentation = childElement.getTextContent();
-            }
-            else if(elementName.equalsIgnoreCase("kw")){
-                KeywordStatus child = parseKeyword(file, childElement, dateTime);
+            if(elementName.equalsIgnoreCase("kw")){
+                KeywordStatus child = parseKeyword(keywordStatus, childElement);
 
                 if(child == null){
                     continue;
                 }
 
-                keyword.addChild(child);
-            }
-            else if(elementName.equalsIgnoreCase("arguments")){
-                data.arguments = parseArguments(childElement);
+                keywordStatus.addChild(child);
             }
             else if(elementName.equalsIgnoreCase("status")){
-                data.setStatus(childElement.getAttribute("status"));
-                data.executionDate = dateTime;
+                keywordStatus.setStatus(childElement.getAttribute("status"));
             }
             else if(elementName.equalsIgnoreCase("msg")){
-                msg = childElement.getTextContent();
+                keywordStatus.setLog(childElement.getTextContent());
             }
             else{
                 System.out.println("Ignored tag '" + elementName + "' while parsing kw");
             }
         }
-
-        if(msg.length() > 0){
-            List<String> values = OutputMessageParser.parseArguments(msg, data.name, data.library, data.status);
-
-            for(int index = 0; index < values.size(); ++index){
-                data.addVariable(data.arguments.get(index), new ArrayList<>(Collections.singletonList(values.get(index))));
-            }
-        }
-
-        return keyword;
     }
 
-    private static String getType(Element keywordElement) {
+    private String getType(Element keywordElement) {
         if(keywordElement.getTagName().equalsIgnoreCase("test")){
             return "test";
         }
@@ -138,7 +168,7 @@ public class ReportFactory {
         return keywordElement.getAttribute("type");
     }
 
-    private static List<String> parseArguments(Element argumentsElement) {
+    private List<String> parseArguments(Element argumentsElement) {
         List<String> arguments = new ArrayList<>();
 
         HashSet<String> types = new HashSet<>(Collections.singletonList("arg"));

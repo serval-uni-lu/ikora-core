@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class KeywordStatus {
+
     public enum Status{
         PASS, FAIL, IGNORED
     }
@@ -14,6 +15,7 @@ public class KeywordStatus {
     private Status status;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
+    private KeywordStatus parent;
     private Keyword keyword;
     private String log;
 
@@ -28,6 +30,18 @@ public class KeywordStatus {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public void setStatus(String str) {
+        if(str.equalsIgnoreCase("PASS") || str.equalsIgnoreCase("PASSED")) {
+            setStatus(Status.PASS);
+        }
+        else if (str.equalsIgnoreCase("FAIL") || str.equalsIgnoreCase("FAILED")) {
+            setStatus(Status.FAIL);
+        }
+        else {
+            setStatus(Status.IGNORED);
+        }
     }
 
     public void setStartTime(LocalDateTime startTime) {
@@ -48,5 +62,13 @@ public class KeywordStatus {
 
     public void addChild(KeywordStatus child) {
         children.add(child);
+    }
+
+    public void setParent(KeywordStatus parent) {
+        this.parent = parent;
+    }
+
+    public Keyword getKeyword() {
+        return this.keyword;
     }
 }
