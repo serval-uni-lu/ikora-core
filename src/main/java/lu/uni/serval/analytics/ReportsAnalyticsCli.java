@@ -13,12 +13,15 @@ import java.io.*;
 
 public class ReportsAnalyticsCli implements CommandRunner {
     @Override
-    public void run() throws DuplicateNodeException {
+    public void run() throws Exception {
         Configuration config = Configuration.getInstance();
         Plugin analytics = config.getPlugin("report analytics");
-        String location = (String)analytics.getAdditionalProperty("report location", "");
 
-        ReportAnalyzer reports = OutputParser.parse(location);
+        String reportLocation = (String)analytics.getAdditionalProperty("report location", "");
+        String gitUrl = (String)analytics.getAdditionalProperty("git url", "");
+        String localFolder = (String)analytics.getAdditionalProperty("git local path", "");
+
+        ReportAnalyzer reports = OutputParser.parse(reportLocation, gitUrl, localFolder);
 
 /*
         for(Report report: reports){

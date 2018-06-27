@@ -16,10 +16,10 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 public class ReportFactory {
-    private final Repository repository;
+    private final GitRepository gitRepository;
 
-    public ReportFactory(Repository repository){
-        this.repository = repository;
+    public ReportFactory(GitRepository gitRepository){
+        this.gitRepository = gitRepository;
     }
 
     public Report create(final Element robotElement) throws Exception {
@@ -98,7 +98,7 @@ public class ReportFactory {
     }
 
     private TestCase findTestCase(Suite suite, Element keywordElement) {
-        return repository.findTestCase(suite.getSource(), keywordElement.getAttribute("name"));
+        return gitRepository.findTestCase(suite.getSource(), keywordElement.getAttribute("name"));
     }
 
     private KeywordStatus parseKeyword(KeywordStatus parent, final Element keywordElement) throws Exception {

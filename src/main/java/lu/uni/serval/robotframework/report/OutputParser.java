@@ -1,7 +1,7 @@
 package lu.uni.serval.robotframework.report;
 
 import lu.uni.serval.analytics.ReportAnalyzer;
-import lu.uni.serval.robotframework.model.Repository;
+import lu.uni.serval.robotframework.model.GitRepository;
 import org.apache.commons.io.FilenameUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -22,16 +22,14 @@ public class OutputParser {
         factory = DocumentBuilderFactory.newInstance();
     }
 
-    static public ReportAnalyzer parse(String folderPath) throws Exception {
-        List<File> xmlFiles = getXmlPaths(folderPath);
+    static public ReportAnalyzer parse(String reportFolderPath, String gitUrl, String localGitPath) throws Exception {
+        List<File> xmlFiles = getXmlPaths(reportFolderPath);
 
-        //TODO: get uri of the git repo from the configuration file
-
-        Repository repository = new Repository();
+        GitRepository gitRepository = new GitRepository(gitUrl, localGitPath);
         ReportAnalyzer reports = new ReportAnalyzer();
 
         for(File xmlFile: xmlFiles){
-            Report report = parseXml(xmlFile, repository);
+            Report report = parseXml(xmlFile, gitRepository);
 
             if(report == null){
                 continue;
@@ -68,10 +66,10 @@ public class OutputParser {
         }
     }
 
-    private static Report parseXml(File xmlFile, Repository repository) throws Exception {
+    private static Report parseXml(File xmlFile, GitRepository gitRepository) throws Exception {
         Report report;
 
-        ReportFactory reportFactory = new ReportFactory(repository);
+        ReportFactory reportFactory = new ReportFactory(gitRepository);
 
         try {
             final DocumentBuilder builder = factory.newDocumentBuilder();
