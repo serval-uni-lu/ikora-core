@@ -6,10 +6,10 @@ import org.eclipse.jgit.api.errors.GitAPIException;
 import java.io.File;
 import java.time.LocalDateTime;
 
-public class Repository {
+public class GitRepository {
     private Git git;
 
-    public Repository(String url, String localPath)  {
+    public GitRepository(String url, String localPath)  {
         try {
             clone(url, localPath);
         } catch (GitAPIException e) {
