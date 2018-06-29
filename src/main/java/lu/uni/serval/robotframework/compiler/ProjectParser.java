@@ -1,12 +1,13 @@
 package lu.uni.serval.robotframework.compiler;
 
 import lu.uni.serval.robotframework.model.*;
+import org.apache.commons.io.FileUtils;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.LineNumberReader;
-import java.io.IOException;
+import java.io.*;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
 import java.util.Map;
 
 public class ProjectParser {
@@ -18,15 +19,29 @@ public class ProjectParser {
         try {
             File file = new File(filePath);
 
-            if(file.isFile()){
-                parseFiles(file, project);
-                resolveResources(project);
+            if(file.isDirectory()){
+                file = addRobotFiles(file, project);
             }
+
+            parseFiles(file, project);
+            resolveResources(project);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         return project;
+    }
+
+    private static File addRobotFiles(File directory, Project project) {
+        String[] extensions = new String[] { "robot" };
+        List<File> robots = (List<File>) FileUtils.listFiles(directory, extensions, true);
+
+        for(File robot: robots){
+            project.addFile(robot);
+        }
+
+        return robots.size() > 0 ? robots.get(0) : null;
     }
 
     static private void parseFiles(File file, Project project){

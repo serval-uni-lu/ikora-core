@@ -2,10 +2,12 @@ package lu.uni.serval.robotframework.report;
 
 import lu.uni.serval.robotframework.model.*;
 
+import org.apache.commons.io.FilenameUtils;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import java.io.File;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
@@ -46,6 +48,8 @@ public class ReportFactory {
             report.addSuite(suite);
         }
 
+        linkReport(report);
+
         return report;
     }
 
@@ -80,11 +84,6 @@ public class ReportFactory {
         }
 
         return suite;
-    }
-
-
-    private TestCase findTestCase(Suite suite, Element keywordElement) {
-        return gitRepository.findTestCase(suite.getSource(), keywordElement.getAttribute("name"));
     }
 
     private KeywordStatus parseKeyword(final Element keywordElement) throws Exception {
@@ -154,19 +153,56 @@ public class ReportFactory {
         return elements;
     }
 
-    private Step findStep(KeywordStatus parent, Element keywordElement) throws Exception {
-        if(!(parent.getKeyword() instanceof KeywordDefinition)) {
-            throw new Exception("Was waiting for a keyword definition");
-        }
+    private void linkReport(Report report) throws Exception {
+        gitRepository.checkout(report.getCreationTime());
 
-        KeywordDefinition definition = (KeywordDefinition)parent.getKeyword();
+        for(Suite suite: report.getSuites()){
+            String suiteName = FilenameUtils.getBaseName(suite.getName());
 
-        for(Step step: definition){
-            if(step.getName().toString().equalsIgnoreCase(keywordElement.getAttribute("name"))){
-                return step;
+            if(!suiteName.equalsIgnoreCase(gitRepository.getName())){
+                continue;
             }
+
+            File base = new File(suite.getSource());
+
+            linkSuite(suite, base);
+        }
+    }
+
+    private void linkSuite(Suite suite, File base) throws Exception {
+        for (Suite child: suite.getChildren()){
+            linkSuite(child, base);
         }
 
-        return null;
+        for(KeywordStatus keywordStatus: suite.getKeywords()){
+            linkTestCase(keywordStatus, base);
+        }
+    }
+
+    private void linkTestCase(KeywordStatus keywordStatus, File base) throws Exception {
+        String source = keywordStatus.getSource();
+        String relativePath = base.toURI().relativize(new File(source).toURI()).getPath();
+
+        TestCase testCase = gitRepository.findTestCase(relativePath, keywordStatus.getName());
+        keywordStatus.setKeyword(testCase);
+
+        for(KeywordStatus child: keywordStatus.getChildren()){
+            linkKeyword(testCase, child);
+        }
+    }
+
+    private void linkKeyword(Keyword parent, KeywordStatus status) throws Exception {
+        if(parent == null){
+            throw new Exception("parent keyword should not be null");
+        }
+
+        int position = status.getStepPosition();
+        Keyword keyword = parent.getStep(position);
+
+        status.setKeyword(keyword);
+
+        for(KeywordStatus child: status.getChildren()){
+            linkKeyword(keyword, child);
+        }
     }
 }

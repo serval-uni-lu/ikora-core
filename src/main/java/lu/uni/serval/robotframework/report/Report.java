@@ -23,14 +23,19 @@ public class Report implements ReportElement {
         return generator;
     }
 
-    public List<KeywordStatus> getKeywords(){
-        List<KeywordStatus> keywords = new ArrayList<>();
+    public List<Suite> getSuites() {
+        return suites;
+    }
 
-        for(Suite suite: suites){
-            keywords.addAll(suite.getKeywords());
+    @Override
+    public int getChildPosition(ReportElement element) {
+        for(int i = 0; i < suites.size(); ++i){
+            if(suites.get(i) == element){
+                return i;
+            }
         }
 
-        return keywords;
+        return -1;
     }
 
     @Override

@@ -24,4 +24,14 @@ public class TestCaseTable implements Iterable<TestCase> {
     public void add(TestCase testCase) {
         testCaseList.add(testCase);
     }
+
+    public TestCase getTestCase(String name) {
+        for(TestCase testCase: testCaseList){
+            if(testCase.getName().toString().equalsIgnoreCase(name)){
+                return testCase;
+            }
+        }
+
+        return null;
+    }
 }

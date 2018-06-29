@@ -87,13 +87,15 @@ public class ReportAnalyzer implements Iterable<Report>{
         sequences = new KeywordSequence();
 
         for(Report report: reports){
+/*
             List<KeywordStatus> keywords = report.getKeywords();
 
             for(KeywordStatus keyword: keywords){
-                //if(!status.isServiceDown(keyword)){
+                if(!status.isServiceDown(keyword)){
                     sequences.add(keyword);
-                //}
+                }
             }
+*/
         }
     }
 
@@ -103,7 +105,7 @@ public class ReportAnalyzer implements Iterable<Report>{
         }
 
         status = new StatusResults();
-
+/*
         for(Report report: reports){
             List<KeywordStatus> keywords = report.getKeywords();
 
@@ -111,6 +113,7 @@ public class ReportAnalyzer implements Iterable<Report>{
                 status.add(keyword);
             }
         }
+*/
     }
 
     @Override

@@ -16,6 +16,11 @@ public abstract class LibraryKeyword implements Keyword {
     }
 
     @Override
+    public Keyword getStep(int position) {
+        return null;
+    }
+
+    @Override
     public LabelTreeNode getNode() {
         return node;
     }

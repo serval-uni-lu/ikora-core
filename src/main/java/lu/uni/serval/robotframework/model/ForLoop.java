@@ -19,6 +19,15 @@ public class ForLoop extends Step {
     }
 
     @Override
+    public Keyword getStep(int position) {
+        if(steps.size() <= position){
+            return null;
+        }
+
+        return steps.get(position);
+    }
+
+    @Override
     public List<Argument> getParameters() {
         return parameters;
     }

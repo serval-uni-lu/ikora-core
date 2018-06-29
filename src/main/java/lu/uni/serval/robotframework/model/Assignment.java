@@ -14,6 +14,11 @@ public class Assignment extends Step {
     }
 
     @Override
+    public Keyword getStep(int position) {
+        return null;
+    }
+
+    @Override
     public void setName(String name) {
         super.setName(name);
         String[] tokens = getName().toString().split("=");

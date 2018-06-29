@@ -7,6 +7,7 @@ import lu.uni.serval.utils.tree.LabelTreeNode;
 import java.util.Set;
 
 public interface Keyword {
+    Keyword getStep(int position);
     LabelTreeNode getNode();
     Set<Keyword> getDependencies();
 

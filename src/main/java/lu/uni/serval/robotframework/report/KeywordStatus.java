@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class KeywordStatus implements ReportElement {
-
     public enum Status{
         PASS, FAIL, IGNORED
     }
@@ -91,6 +90,10 @@ public class KeywordStatus implements ReportElement {
         return status;
     }
 
+    public List<KeywordStatus> getChildren() {
+        return children;
+    }
+
     public Keyword getKeyword() {
         return this.keyword;
     }
@@ -117,6 +120,14 @@ public class KeywordStatus implements ReportElement {
         return name;
     }
 
+    public int getStepPosition() {
+        if(parent == null){
+            return -1;
+        }
+
+        return parent.getChildPosition(this);
+    }
+
     @Override
     public String getSource() {
         if(parent == null) {
@@ -138,5 +149,16 @@ public class KeywordStatus implements ReportElement {
         }
 
         return parent.getRootElement();
+    }
+
+    @Override
+    public int getChildPosition(ReportElement element) {
+        for(int i = 0; i < children.size(); ++i){
+            if(children.get(i) == element){
+                return i;
+            }
+        }
+
+        return -1;
     }
 }

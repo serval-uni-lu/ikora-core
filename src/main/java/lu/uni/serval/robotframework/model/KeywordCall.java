@@ -34,6 +34,11 @@ public class KeywordCall extends Step {
     }
 
     @Override
+    public Keyword getStep(int position) {
+        return keyword.getStep(position);
+    }
+
+    @Override
     public boolean equals(Object other) {
         if (!(other instanceof KeywordCall)){
             return false;

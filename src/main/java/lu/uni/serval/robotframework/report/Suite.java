@@ -29,6 +29,23 @@ public class Suite implements ReportElement {
     }
 
     @Override
+    public int getChildPosition(ReportElement element) {
+        for(int i = 0; i < suites.size(); ++i){
+            if(suites.get(i) == element){
+                return i;
+            }
+        }
+
+        for(int i = 0; i < keywords.size(); ++i){
+            if(keywords.get(i) == element){
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
+    @Override
     public ReportElement getParent() {
         return this.parent;
     }

@@ -70,6 +70,15 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
     }
 
     @Override
+    public Keyword getStep(int position) {
+        if(steps.size() <= position){
+            return null;
+        }
+
+        return steps.get(position);
+    }
+
+    @Override
     public LabelTreeNode getNode() {
         return node;
     }

@@ -1,16 +1,18 @@
 package lu.uni.serval.robotframework.model;
 
+import lu.uni.serval.robotframework.compiler.ProjectParser;
 import org.apache.commons.io.FilenameUtils;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 
 import java.io.File;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDateTime;
 
 public class GitRepository {
     private Git git;
+    private File localFolder;
+    private String name;
+    Project project;
 
     public GitRepository(String url, String localPath)  {
         try {
@@ -18,26 +20,40 @@ public class GitRepository {
         } catch (GitAPIException e) {
             e.printStackTrace();
             git = null;
+            localFolder = null;
         }
     }
 
-    public TestCase findTestCase(String source, String name) {
-        return null;
+    public String getName() {
+        return name;
+    }
+
+    public TestCase findTestCase(String relativePath, String name) {
+        File absolutePath = new File(localFolder, relativePath);
+
+        TestCaseFile testCaseFile = project.getTestCaseFile(absolutePath);
+
+        if(testCaseFile == null){
+            return null;
+        }
+
+        return testCaseFile.getTestCase(name);
     }
 
     public void checkout(LocalDateTime dateTime) {
-
+        git.checkout();
+        project = ProjectParser.parse(localFolder.getAbsolutePath());
     }
 
     private void clone(String url, String localPath) throws GitAPIException {
 
-        String name = FilenameUtils.getBaseName(url);
+        name = FilenameUtils.getBaseName(url);
         File parentFolder = new File(localPath);
-        File gitFolder = new File(parentFolder, name);
+        localFolder = new File(parentFolder, name);
 
-        this.git = Git.cloneRepository()
+        git = Git.cloneRepository()
                 .setURI(url)
-                .setDirectory(gitFolder)
+                .setDirectory(localFolder)
                 .call();
     }
 }

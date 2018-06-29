@@ -100,6 +100,10 @@ public class TestCaseFile implements Iterable<UserKeyword> {
         }
     }
 
+    public TestCase getTestCase(String name) {
+        return testCaseTable.getTestCase(name);
+    }
+
     @Nonnull
     public Iterator<UserKeyword> iterator() {
         return keywordTable.iterator();
