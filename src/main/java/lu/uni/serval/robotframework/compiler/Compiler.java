@@ -17,11 +17,11 @@ public class Compiler {
         return project;
     }
 
-    static void loadLibraries(Project project) {
+    static private void loadLibraries(Project project) {
         LibraryLoader.load(project);
     }
 
-    static Project parse(String filePath) {
+    static private Project parse(String filePath) {
         return ProjectParser.parse(filePath);
     }
 
