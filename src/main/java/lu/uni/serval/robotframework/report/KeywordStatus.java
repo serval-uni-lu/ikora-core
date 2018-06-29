@@ -120,12 +120,12 @@ public class KeywordStatus implements ReportElement {
         return name;
     }
 
-    public int getStepPosition() {
+    public int getStepPosition(boolean ignoreGhosts) {
         if(parent == null){
             return -1;
         }
 
-        return parent.getChildPosition(this);
+        return parent.getChildPosition(this, ignoreGhosts);
     }
 
     @Override
@@ -152,11 +152,9 @@ public class KeywordStatus implements ReportElement {
     }
 
     @Override
-    public int getChildPosition(ReportElement element) {
-        for(int i = 0; i < children.size(); ++i){
-            if(children.get(i) == element){
-                return i;
-            }
+    public int getChildPosition(ReportElement element, boolean ignoreGhosts) {
+        if(element instanceof KeywordStatus){
+            return Utils.getElementPosition(children, (KeywordStatus) element, ignoreGhosts);
         }
 
         return -1;

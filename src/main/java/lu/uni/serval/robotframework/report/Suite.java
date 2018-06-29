@@ -29,17 +29,13 @@ public class Suite implements ReportElement {
     }
 
     @Override
-    public int getChildPosition(ReportElement element) {
-        for(int i = 0; i < suites.size(); ++i){
-            if(suites.get(i) == element){
-                return i;
-            }
-        }
+    public int getChildPosition(ReportElement element, boolean ignoreGhosts) {
 
-        for(int i = 0; i < keywords.size(); ++i){
-            if(keywords.get(i) == element){
-                return i;
-            }
+        if(element instanceof Suite){
+            return Utils.getElementPosition(suites, (Suite) element, ignoreGhosts);
+        }
+        else if(element instanceof KeywordStatus){
+            return Utils.getElementPosition(keywords, (KeywordStatus) element, ignoreGhosts);
         }
 
         return -1;

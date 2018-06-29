@@ -196,7 +196,7 @@ public class ReportFactory {
             throw new Exception("parent keyword should not be null");
         }
 
-        int position = status.getStepPosition();
+        int position = status.getStepPosition(false);
         Keyword keyword = parent.getStep(position);
 
         status.setKeyword(keyword);

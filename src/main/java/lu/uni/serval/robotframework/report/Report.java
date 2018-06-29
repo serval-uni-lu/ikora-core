@@ -28,11 +28,9 @@ public class Report implements ReportElement {
     }
 
     @Override
-    public int getChildPosition(ReportElement element) {
-        for(int i = 0; i < suites.size(); ++i){
-            if(suites.get(i) == element){
-                return i;
-            }
+    public int getChildPosition(ReportElement element, boolean ignoreGhosts) {
+        if(element instanceof Suite){
+            return  Utils.getElementPosition(suites, (Suite) element, ignoreGhosts);
         }
 
         return -1;
