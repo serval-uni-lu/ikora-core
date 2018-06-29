@@ -1,7 +1,7 @@
 package lu.uni.serval.analytics;
 
+import lu.uni.serval.robotframework.report.KeywordStatus;
 import lu.uni.serval.robotframework.report.Report;
-import lu.uni.serval.utils.ReportKeywordData;
 import lu.uni.serval.utils.tree.*;
 
 import javax.annotation.Nonnull;
@@ -51,30 +51,24 @@ public class ReportAnalyzer implements Iterable<Report>{
 
         DifferenceMemory memory = new DifferenceMemory();
 
-        for(List<LabelTreeNode> sequence: sequences){
-            LabelTreeNode previous = null;
-            for(LabelTreeNode keyword: sequence){
+        for(List<KeywordStatus> sequence: sequences){
+            KeywordStatus previous = null;
+            for(KeywordStatus keyword: sequence){
                 if(previous == null){
                     previous = keyword;
                     continue;
                 }
-
-                LocalDateTime dateTime = ((ReportKeywordData)keyword.getData()).executionDate;
+                /*
+                LocalDateTime dateTime = KeywordStatus.getExecutionDate();
 
                 for(EditAction difference : editDistance.differences(previous, keyword)){
-                    // some steps were not executed, so the report can be ignored in this instance
-                    if(previous.getNodeCount() > keyword.getNodeCount()
-                            && ((ReportKeywordData)keyword.getData()).status == ReportKeywordData.Status.FAILED
-                            && difference.operation == EditOperation.Delete) {
-                        continue;
-                    }
-
                     // check that the change was not already accounted (keywords are reused)
                     if(memory.addDifference(dateTime, difference)){
                         differences.addDifference(difference);
                     }
 
                 }
+                */
 
                 previous = keyword;
             }
@@ -93,12 +87,12 @@ public class ReportAnalyzer implements Iterable<Report>{
         sequences = new KeywordSequence();
 
         for(Report report: reports){
-            List<LabelTreeNode> keywords = report.getKeywords();
+            List<KeywordStatus> keywords = report.getKeywords();
 
-            for(LabelTreeNode keyword: keywords){
-                if(!status.isServiceDown(keyword)){
+            for(KeywordStatus keyword: keywords){
+                //if(!status.isServiceDown(keyword)){
                     sequences.add(keyword);
-                }
+                //}
             }
         }
     }
@@ -111,9 +105,9 @@ public class ReportAnalyzer implements Iterable<Report>{
         status = new StatusResults();
 
         for(Report report: reports){
-            List<LabelTreeNode> keywords = report.getKeywords();
+            List<KeywordStatus> keywords = report.getKeywords();
 
-            for(LabelTreeNode keyword: keywords){
+            for(KeywordStatus keyword: keywords){
                 status.add(keyword);
             }
         }

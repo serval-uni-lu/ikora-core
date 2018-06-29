@@ -1,9 +1,12 @@
 package lu.uni.serval.robotframework.model;
 
+import org.apache.commons.io.FilenameUtils;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 
 public class GitRepository {
@@ -27,9 +30,14 @@ public class GitRepository {
     }
 
     private void clone(String url, String localPath) throws GitAPIException {
+
+        String name = FilenameUtils.getBaseName(url);
+        File parentFolder = new File(localPath);
+        File gitFolder = new File(parentFolder, name);
+
         this.git = Git.cloneRepository()
                 .setURI(url)
-                .setDirectory(new File(localPath))
+                .setDirectory(gitFolder)
                 .call();
     }
 }

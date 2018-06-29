@@ -1,23 +1,32 @@
 package lu.uni.serval.robotframework.report;
 
 import lu.uni.serval.robotframework.model.Keyword;
+import lu.uni.serval.robotframework.model.Step;
+import lu.uni.serval.robotframework.model.TestCase;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class KeywordStatus {
+public class KeywordStatus implements ReportElement {
 
     public enum Status{
         PASS, FAIL, IGNORED
     }
 
+    public enum Type{
+        TESTCASE, STEP, INVALID
+    }
+
     private Status status;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
-    private KeywordStatus parent;
+    private ReportElement parent;
     private Keyword keyword;
     private String log;
+
+    private String name;
+    private List<String> arguments;
 
     private List<KeywordStatus> children;
 
@@ -25,7 +34,16 @@ public class KeywordStatus {
         this.status = Status.IGNORED;
         this.keyword = null;
 
+        this.arguments = new ArrayList<>();
         this.children = new ArrayList<>();
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void addArgument(String argument) {
+        this.arguments.add(argument);
     }
 
     public void setStatus(Status status) {
@@ -61,14 +79,64 @@ public class KeywordStatus {
     }
 
     public void addChild(KeywordStatus child) {
+        child.setParent(this);
         children.add(child);
     }
 
-    public void setParent(KeywordStatus parent) {
+    public void setParent(ReportElement parent) {
         this.parent = parent;
+    }
+
+    public Status getStatus() {
+        return status;
     }
 
     public Keyword getKeyword() {
         return this.keyword;
+    }
+
+    public Type getType() {
+        if(keyword == null) {
+            return Type.INVALID;
+        }
+        else if(keyword instanceof TestCase) {
+            return Type.TESTCASE;
+        }
+        else if(keyword instanceof Step) {
+            return Type.STEP;
+        }
+
+        return Type.INVALID;
+    }
+
+    public String getLog() {
+        return log;
+    }
+
+    public String getName(){
+        return name;
+    }
+
+    @Override
+    public String getSource() {
+        if(parent == null) {
+            return null;
+        }
+
+        return parent.getSource();
+    }
+
+    @Override
+    public ReportElement getParent() {
+        return parent;
+    }
+
+    @Override
+    public ReportElement getRootElement() {
+        if(parent == null){
+            return null;
+        }
+
+        return parent.getRootElement();
     }
 }

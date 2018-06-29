@@ -3,12 +3,13 @@ package lu.uni.serval.robotframework.report;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Suite {
+public class Suite implements ReportElement {
     private String source;
     private String id;
     private String name;
     private List<Suite> suites;
     private List<KeywordStatus> keywords;
+    private ReportElement parent;
 
     public Suite(){
         suites = new ArrayList<>();
@@ -23,12 +24,23 @@ public class Suite {
         return id;
     }
 
-    public String getSource() {
-        return source;
-    }
-
     public List<Suite> getChildren() {
         return suites;
+    }
+
+    @Override
+    public ReportElement getParent() {
+        return this.parent;
+    }
+
+    @Override
+    public ReportElement getRootElement(){
+        return parent.getRootElement();
+    }
+
+    @Override
+    public String getSource() {
+        return source;
     }
 
     public List<KeywordStatus> getKeywords() {
@@ -75,11 +87,17 @@ public class Suite {
         this.keywords = keywords;
     }
 
+    public void setParent(ReportElement parent) {
+        this.parent = parent;
+    }
+
     public void addSuite(Suite suite) {
+        suite.setParent(this);
         suites.add(suite);
     }
 
     public void addKeyword(KeywordStatus keyword) {
+        keyword.setParent(this);
         keywords.add(keyword);
     }
 }

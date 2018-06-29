@@ -10,7 +10,7 @@ import org.apache.commons.cli.*;
 import java.io.IOException;
 
 public class RFTestGenerator {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         try {
             Options options = new Options();
 
