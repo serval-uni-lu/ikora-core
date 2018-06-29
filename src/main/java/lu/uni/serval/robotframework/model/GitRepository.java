@@ -1,6 +1,6 @@
 package lu.uni.serval.robotframework.model;
 
-import lu.uni.serval.robotframework.compiler.ProjectParser;
+import lu.uni.serval.robotframework.compiler.Compiler;
 import org.apache.commons.io.FilenameUtils;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -42,7 +42,7 @@ public class GitRepository {
 
     public void checkout(LocalDateTime dateTime) {
         git.checkout();
-        project = ProjectParser.parse(localFolder.getAbsolutePath());
+        project = Compiler.compile(localFolder.getAbsolutePath());
     }
 
     private void clone(String url, String localPath) throws GitAPIException {
