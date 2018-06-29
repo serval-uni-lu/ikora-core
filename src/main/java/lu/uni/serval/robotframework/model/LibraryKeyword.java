@@ -1,7 +1,6 @@
 package lu.uni.serval.robotframework.model;
 
 import lu.uni.serval.utils.tree.LabelTreeNode;
-import lu.uni.serval.utils.tree.TreeNodeData;
 
 import java.util.HashSet;
 import java.util.Set;

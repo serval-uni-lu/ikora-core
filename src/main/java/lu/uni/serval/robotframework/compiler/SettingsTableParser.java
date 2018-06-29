@@ -4,7 +4,6 @@ import lu.uni.serval.robotframework.model.Library;
 import lu.uni.serval.robotframework.model.Resources;
 import lu.uni.serval.robotframework.model.Settings;
 
-import java.io.LineNumberReader;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;

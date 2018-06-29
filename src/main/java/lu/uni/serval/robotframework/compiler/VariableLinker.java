@@ -14,7 +14,7 @@ public class VariableLinker {
         }
     }
 
-    static void linkSteps(UserKeyword userKeyword, TestCaseFile testCaseFile) throws Exception {
+    static private void linkSteps(UserKeyword userKeyword, TestCaseFile testCaseFile) throws Exception {
         for(Step step: userKeyword) {
             for(Argument argument: step.getParameters()) {
                 resolveArgument(argument, testCaseFile, userKeyword);
@@ -22,7 +22,7 @@ public class VariableLinker {
         }
     }
 
-    static void resolveArgument(Argument argument, TestCaseFile testCaseFile, UserKeyword userKeyword) throws Exception {
+    static private void resolveArgument(Argument argument, TestCaseFile testCaseFile, UserKeyword userKeyword) throws Exception {
         List<String> variables = argument.findVariables();
 
         for(String name: variables){

@@ -1,6 +1,5 @@
 package lu.uni.serval.robotframework.compiler;
 
-import java.io.LineNumberReader;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.regex.Matcher;

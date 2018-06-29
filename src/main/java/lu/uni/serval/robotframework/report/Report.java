@@ -4,8 +4,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import lu.uni.serval.utils.tree.LabelTreeNode;
-
 public class Report implements ReportElement {
     private LocalDateTime creationTime;
     private String generator;
