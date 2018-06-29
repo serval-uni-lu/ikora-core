@@ -201,6 +201,10 @@ public class ReportFactory {
 
         status.setKeyword(keyword);
 
+        if(keyword == null){
+            return;
+        }
+
         for(KeywordStatus child: status.getChildren()){
             linkKeyword(keyword, child);
         }
