@@ -52,8 +52,6 @@ public class ReportAnalyzer implements Iterable<Report>{
 
         DifferenceResults differences = new DifferenceResults();
 
-        DifferenceMemory memory = new DifferenceMemory();
-
         for(List<KeywordDefinition> sequence: sequences){
             KeywordDefinition previous = null;
             for(KeywordDefinition keyword: sequence){
