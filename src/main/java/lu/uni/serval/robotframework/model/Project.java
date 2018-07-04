@@ -3,16 +3,36 @@ package lu.uni.serval.robotframework.model;
 import lu.uni.serval.utils.tree.LabelTreeNode;
 
 import java.io.File;
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class Project {
     private List<TestCaseFile> testCaseFiles;
     private Map<File, TestCaseFile> files;
     private LibraryResources libraries;
+    private String gitUrl;
+    private String commitId;
+    private LocalDateTime dateTime;
 
     public Project(){
         testCaseFiles = new ArrayList<>();
         files = new HashMap<>();
+    }
+
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
+    }
+
+    public void setGitUrl(String gitUrl) {
+        this.gitUrl = gitUrl;
+    }
+
+    public void setCommitId(String commitId) {
+        this.commitId = commitId;
+    }
+
+    public LocalDateTime getDateTime() {
+        return dateTime;
     }
 
     public boolean hasFile(File file){

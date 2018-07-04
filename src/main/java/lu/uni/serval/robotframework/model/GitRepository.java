@@ -2,30 +2,46 @@ package lu.uni.serval.robotframework.model;
 
 import lu.uni.serval.robotframework.compiler.Compiler;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.LogCommand;
 import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.lib.Constants;
+import org.eclipse.jgit.lib.ObjectId;
+import org.eclipse.jgit.lib.Ref;
+import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.revwalk.RevWalk;
 
 import java.io.File;
+import java.io.IOException;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 public class GitRepository {
     private Git git;
+    private String url;
     private File localFolder;
     private String name;
-    Project project;
+
+    private Project project;
 
     public GitRepository(String url, String localPath)  {
-        try {
-            clone(url, localPath);
-        } catch (GitAPIException e) {
-            e.printStackTrace();
-            git = null;
-            localFolder = null;
-        }
+        this.url = url;
+        this.name = FilenameUtils.getBaseName(url);
+
+        File parentFolder = new File(localPath);
+        this.localFolder = new File(parentFolder, name);
     }
 
     public String getName() {
         return name;
+    }
+
+    public Project getProject() {
+        return project;
     }
 
     public TestCase findTestCase(String relativePath, String name) {
@@ -41,19 +57,93 @@ public class GitRepository {
     }
 
     public void checkout(LocalDateTime dateTime) {
-        git.checkout();
-        project = Compiler.compile(localFolder.getAbsolutePath());
+        Pair<String, LocalDateTime> commit = getMostRecentCommit(dateTime);
+        checkout(commit.getKey());
     }
 
-    private void clone(String url, String localPath) throws GitAPIException {
+    public void checkout(String commitId){
+        try {
+            if(git == null){
+                cloneRepository();
+            }
 
-        name = FilenameUtils.getBaseName(url);
-        File parentFolder = new File(localPath);
-        localFolder = new File(parentFolder, name);
+            Ref ref = git.checkout().setName(commitId).call();
 
+            project = Compiler.compile(localFolder.getAbsolutePath());
+
+            project.setGitUrl(url);
+            project.setCommitId(commitId);
+            project.setDateTime(getCommitDate(ref.getObjectId()));
+
+        } catch (GitAPIException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void cloneRepository() throws GitAPIException {
         git = Git.cloneRepository()
                 .setURI(url)
                 .setDirectory(localFolder)
                 .call();
+    }
+
+    public Pair<String, LocalDateTime> getMostRecentCommit(LocalDateTime dateTime){
+        Map<String, LocalDateTime> map = getRevisions();
+
+        Map.Entry<String, LocalDateTime> mostRecentCommit = null;
+
+        for (Map.Entry<String, LocalDateTime> pair: map.entrySet()) {
+            if(mostRecentCommit == null && pair.getValue().isBefore(dateTime)){
+                mostRecentCommit = pair;
+            }else if (mostRecentCommit != null && pair.getValue().isBefore(dateTime)
+                    && pair.getValue().isAfter(mostRecentCommit.getValue())){
+                mostRecentCommit = pair;
+            }
+        }
+
+        if(mostRecentCommit == null){
+            return null;
+        }
+
+        return ImmutablePair.of(mostRecentCommit.getKey(), mostRecentCommit.getValue());
+    }
+
+    public Map<String, LocalDateTime > getRevisions() {
+        Map<String, LocalDateTime> commitMap = new HashMap<>();
+
+        LogCommand logCommand = null;
+        try {
+            logCommand = git.log()
+                    .add(git.getRepository().resolve(Constants.HEAD))
+                    .addPath(localFolder.getPath());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            for (RevCommit revCommit : logCommand.call()) {
+                LocalDateTime commitDate = LocalDateTime.from(Instant.ofEpochSecond(revCommit.getCommitTime()));
+                commitMap.put(revCommit.getName(),commitDate);
+            }
+        } catch (GitAPIException e) {
+            e.printStackTrace();
+        }
+
+        return commitMap;
+    }
+
+    private LocalDateTime getCommitDate(ObjectId commitId){
+        LocalDateTime commitDate = null;
+
+        try {
+            RevWalk revWalk = new RevWalk(git.getRepository());
+            RevCommit revCommit = revWalk.parseCommit(commitId);
+
+            commitDate = LocalDateTime.from(Instant.ofEpochSecond(revCommit.getCommitTime()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return commitDate;
     }
 }

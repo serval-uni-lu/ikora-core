@@ -2,14 +2,11 @@ package lu.uni.serval.analytics;
 
 import lu.uni.serval.robotframework.model.Keyword;
 import lu.uni.serval.robotframework.model.KeywordDefinition;
-import lu.uni.serval.robotframework.report.KeywordStatus;
 import lu.uni.serval.robotframework.report.Report;
-import lu.uni.serval.utils.tree.*;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nonnull;
-import java.time.LocalDateTime;
 import java.util.*;
 
 public class ReportAnalyzer implements Iterable<Report>{

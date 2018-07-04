@@ -1,7 +1,7 @@
 package lu.uni.serval;
 
 import lu.uni.serval.analytics.KeywordsAnalyticsCli;
-import lu.uni.serval.analytics.ReportsAnalyticsCli;
+import lu.uni.serval.analytics.ProjectAnalyticsCli;
 import lu.uni.serval.utils.Configuration;
 import lu.uni.serval.utils.ConsoleColors;
 import lu.uni.serval.utils.exception.DuplicateNodeException;
@@ -27,7 +27,7 @@ public class RFTestGenerator {
             Configuration config = Configuration.getInstance();
 
             if(config.hasPlugin("report analytics")) {
-                ReportsAnalyticsCli reportsAnalyticsCli = new ReportsAnalyticsCli();
+                ProjectAnalyticsCli reportsAnalyticsCli = new ProjectAnalyticsCli();
                 reportsAnalyticsCli.run();
             }
 
