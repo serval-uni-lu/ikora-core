@@ -1,26 +1,26 @@
 package lu.uni.serval.analytics;
 
-import lu.uni.serval.robotframework.report.KeywordStatus;
+import lu.uni.serval.robotframework.model.KeywordDefinition;
 
 import java.util.*;
 
-public class KeywordSequence implements Iterable<List<KeywordStatus>>{
-    private Map<List<String>, List<KeywordStatus>> data;
+public class KeywordSequence implements Iterable<List<KeywordDefinition>>{
+    private Map<List<String>, List<KeywordDefinition>> data;
 
     public KeywordSequence(){
         data = new HashMap<>();
     }
 
-    public void add(KeywordStatus keyword){
+    public void add(KeywordDefinition keyword){
         List<String> key = new ArrayList<>();
-        key.add(keyword.getSource());
-        key.add(keyword.getName());
+        key.add(keyword.getFile());
+        key.add(keyword.getName().toString());
 
         if(data.containsKey(key)){
             data.get(key).add(keyword);
         }
         else{
-            List<KeywordStatus> keywords = new ArrayList<>();
+            List<KeywordDefinition> keywords = new ArrayList<>();
             keywords.add(keyword);
 
             data.put(key, keywords);
@@ -28,7 +28,7 @@ public class KeywordSequence implements Iterable<List<KeywordStatus>>{
     }
 
     @Override
-    public Iterator<List<KeywordStatus>> iterator() {
+    public Iterator<List<KeywordDefinition>> iterator() {
         return data.values().iterator();
     }
 }

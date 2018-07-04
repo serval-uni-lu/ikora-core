@@ -1,8 +1,12 @@
 package lu.uni.serval.analytics;
 
+import lu.uni.serval.robotframework.model.Keyword;
+import lu.uni.serval.robotframework.model.KeywordDefinition;
 import lu.uni.serval.robotframework.report.KeywordStatus;
 import lu.uni.serval.robotframework.report.Report;
 import lu.uni.serval.utils.tree.*;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nonnull;
 import java.time.LocalDateTime;
@@ -47,17 +51,26 @@ public class ReportAnalyzer implements Iterable<Report>{
         initKeywordSequence();
 
         DifferenceResults differences = new DifferenceResults();
-        TreeEditDistance editDistance = new TreeEditDistance(1.0, 1.0, 0.8);
 
         DifferenceMemory memory = new DifferenceMemory();
 
-        for(List<KeywordStatus> sequence: sequences){
-            KeywordStatus previous = null;
-            for(KeywordStatus keyword: sequence){
+        for(List<KeywordDefinition> sequence: sequences){
+            KeywordDefinition previous = null;
+            for(KeywordDefinition keyword: sequence){
                 if(previous == null){
                     previous = keyword;
                     continue;
                 }
+
+                Pair keywordPair = ImmutablePair.of((Keyword)previous, (Keyword)keyword);
+
+                if(differences.containsKey(keywordPair)){
+                    previous = keyword;
+                    continue;
+                }
+
+                Difference difference = Difference.of(previous, keyword);
+
                 /*
                 LocalDateTime dateTime = KeywordStatus.getExecutionDate();
 

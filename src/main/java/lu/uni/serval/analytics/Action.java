@@ -1,0 +1,33 @@
+package lu.uni.serval.analytics;
+
+public class Action {
+    public enum Type{
+        CHANGE_NAME, ADD_STEP, REMOVE_STEP, CHANGE_STEP_ARGUMENTS
+    }
+
+    private final Type type;
+    private final int before;
+    private final int after;
+
+    private Action(Type type, int before, int after){
+        this.type = type;
+        this.before = before;
+        this.after = after;
+    }
+
+    public static Action changeName(){
+        return new Action(Type.CHANGE_NAME, -1, -1);
+    }
+
+    public static Action removeStep(int before){
+        return new Action(Type.REMOVE_STEP, before, -1);
+    }
+
+    public static Action insertStep(int after){
+        return new Action(Type.ADD_STEP, -1, after);
+    }
+
+    public static Action changeStepArguments(int before, int after){
+        return new Action(Type.CHANGE_STEP_ARGUMENTS, before, after);
+    }
+}
