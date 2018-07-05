@@ -7,8 +7,10 @@ import java.io.IOException;
 
 public class TestCaseFileParser {
     static public void parse(File file, Project project) {
+        LineReader reader = null;
+
         try {
-            LineReader reader = new LineReader(file);
+            reader = new LineReader(file);
 
             TestCaseFile testCaseFile = new TestCaseFile();
             testCaseFile.setFile(file);
@@ -43,6 +45,9 @@ public class TestCaseFileParser {
 
         } catch (IOException e) {
             e.printStackTrace();
+        }
+        finally {
+            reader.close();
         }
     }
 

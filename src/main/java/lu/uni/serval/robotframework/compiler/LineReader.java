@@ -26,4 +26,13 @@ public class LineReader {
     public File getFile() {
         return file;
     }
+
+    public void close() {
+        try {
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

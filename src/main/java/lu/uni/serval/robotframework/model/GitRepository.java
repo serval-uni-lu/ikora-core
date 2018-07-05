@@ -66,13 +66,20 @@ public class GitRepository {
                 cloneRepository();
             }
 
-            Ref ref = git.checkout().setName(commitId).call();
+            Ref ref = git.checkout()
+                    .setCreateBranch(true)
+                    .setName(commitId)
+                    .setStartPoint(commitId)
+                    .call();
 
             project = Compiler.compile(localFolder.getAbsolutePath());
 
             project.setGitUrl(url);
             project.setCommitId(commitId);
             project.setDateTime(getCommitDate(ref.getObjectId()));
+
+            git.checkout().setName("master").call();
+            git.branchDelete().setBranchNames(commitId).call();
 
         } catch (GitAPIException e) {
             e.printStackTrace();
@@ -156,7 +163,8 @@ public class GitRepository {
             RevWalk revWalk = new RevWalk(git.getRepository());
             RevCommit revCommit = revWalk.parseCommit(commitId);
 
-            commitDate = LocalDateTime.from(Instant.ofEpochSecond(revCommit.getCommitTime()));
+            Instant instant = Instant.ofEpochSecond(revCommit.getCommitTime());
+            commitDate = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
         } catch (IOException|GitAPIException e) {
             e.printStackTrace();
         }
