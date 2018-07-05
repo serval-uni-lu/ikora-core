@@ -99,8 +99,8 @@ public class Configuration {
         AppDirs appDirs = AppDirsFactory.getInstance();
         String configPath = appDirs.getUserDataDir("RobotFramework", "1.0", "Serval");
 
-        instance.configurationFolder = new File(configPath);
+        configurationFolder = new File(configPath);
 
-        instance.configurationFolder.mkdirs();
+        configurationFolder.mkdirs();
     }
 }

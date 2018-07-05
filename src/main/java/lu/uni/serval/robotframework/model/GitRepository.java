@@ -2,6 +2,7 @@ package lu.uni.serval.robotframework.model;
 
 import lu.uni.serval.robotframework.compiler.Compiler;
 import lu.uni.serval.utils.Configuration;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
@@ -94,6 +95,14 @@ public class GitRepository {
     }
 
     private void cloneRepository() throws GitAPIException {
+        if(localFolder.exists()){
+            try {
+                FileUtils.deleteDirectory(localFolder);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
         git = Git.cloneRepository()
                 .setURI(url)
                 .setDirectory(localFolder)
