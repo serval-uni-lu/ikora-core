@@ -18,10 +18,10 @@ public class ProjectAnalyzer {
         sequences = null;
     }
 
-    public static ProjectAnalyzer parse(String gitUrl, String localFolder) {
+    public static ProjectAnalyzer parse(String gitUrl) {
         ProjectAnalyzer analyzer = new ProjectAnalyzer();
 
-        GitRepository repository = new GitRepository(gitUrl, localFolder);
+        GitRepository repository = new GitRepository(gitUrl);
         Map<String, LocalDateTime> revisions = repository.getRevisions();
 
         for(String commitId: revisions.keySet()){

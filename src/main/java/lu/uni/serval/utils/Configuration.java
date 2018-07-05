@@ -10,6 +10,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.harawata.appdirs.AppDirs;
+import net.harawata.appdirs.AppDirsFactory;
+
 public class Configuration {
 
     @JsonProperty("verbose")
@@ -22,6 +25,8 @@ public class Configuration {
     private Map<String, Object> additionalProperties = new HashMap<>();
     @JsonIgnore
     private static Configuration instance = new Configuration();
+    @JsonIgnore
+    private static File configurationFolder;
 
     private Configuration(){
     }
@@ -81,10 +86,21 @@ public class Configuration {
         return plugins.get(plugin);
     }
 
+    public File getConfigurationFolder(){
+        return configurationFolder;
+    }
+
     public static void initialize(String config) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         File file = new File(config);
 
         instance = mapper.readValue(file, Configuration.class);
+
+        AppDirs appDirs = AppDirsFactory.getInstance();
+        String configPath = appDirs.getUserDataDir("RobotFramework", "1.0", "Serval");
+
+        instance.configurationFolder = new File(configPath);
+
+        instance.configurationFolder.mkdirs();
     }
 }

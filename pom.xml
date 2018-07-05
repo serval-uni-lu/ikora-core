@@ -81,6 +81,13 @@
             <artifactId>org.eclipse.jgit</artifactId>
             <version>3.5.0.201409260305-r</version>
         </dependency>
+
+        <dependency>
+            <groupId>net.harawata</groupId>
+            <artifactId>appdirs</artifactId>
+            <version>1.0.1</version>
+        </dependency>
+
     </dependencies>
 
 </project>

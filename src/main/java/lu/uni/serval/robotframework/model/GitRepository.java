@@ -1,6 +1,7 @@
 package lu.uni.serval.robotframework.model;
 
 import lu.uni.serval.robotframework.compiler.Compiler;
+import lu.uni.serval.utils.Configuration;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
@@ -27,12 +28,18 @@ public class GitRepository {
 
     private Project project;
 
-    public GitRepository(String url, String localPath)  {
+    public GitRepository(String url)  {
         this.url = url;
         this.name = FilenameUtils.getBaseName(url);
 
-        File parentFolder = new File(localPath);
-        this.localFolder = new File(parentFolder, name);
+        File cache = Configuration.getInstance().getConfigurationFolder();
+        this.localFolder = new File(cache, "git");
+
+        if(!this.localFolder.exists()){
+            this.localFolder.mkdir();
+        }
+
+        this.localFolder = new File(this.localFolder.getAbsolutePath(), name);
     }
 
     public String getName() {
