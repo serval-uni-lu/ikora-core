@@ -5,9 +5,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.api.LogCommand;
 import org.eclipse.jgit.api.errors.GitAPIException;
-import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.revwalk.RevCommit;
@@ -17,6 +15,7 @@ import java.io.File;
 import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -88,44 +87,58 @@ public class GitRepository {
     }
 
     public Pair<String, LocalDateTime> getMostRecentCommit(LocalDateTime dateTime){
-        Map<String, LocalDateTime> map = getRevisions();
-
-        Map.Entry<String, LocalDateTime> mostRecentCommit = null;
-
-        for (Map.Entry<String, LocalDateTime> pair: map.entrySet()) {
-            if(mostRecentCommit == null && pair.getValue().isBefore(dateTime)){
-                mostRecentCommit = pair;
-            }else if (mostRecentCommit != null && pair.getValue().isBefore(dateTime)
-                    && pair.getValue().isAfter(mostRecentCommit.getValue())){
-                mostRecentCommit = pair;
+        try {
+            if(git == null){
+                cloneRepository();
             }
+
+            Map<String, LocalDateTime> map = getRevisions();
+
+            Map.Entry<String, LocalDateTime> mostRecentCommit = null;
+
+            for (Map.Entry<String, LocalDateTime> pair: map.entrySet()) {
+                if(mostRecentCommit == null && pair.getValue().isBefore(dateTime)){
+                    mostRecentCommit = pair;
+                }else if (mostRecentCommit != null && pair.getValue().isBefore(dateTime)
+                        && pair.getValue().isAfter(mostRecentCommit.getValue())){
+                    mostRecentCommit = pair;
+                }
+            }
+
+            if(mostRecentCommit == null){
+                return null;
+            }
+
+            return ImmutablePair.of(mostRecentCommit.getKey(), mostRecentCommit.getValue());
+        }
+        catch (GitAPIException e){
+            e.printStackTrace();
         }
 
-        if(mostRecentCommit == null){
-            return null;
-        }
-
-        return ImmutablePair.of(mostRecentCommit.getKey(), mostRecentCommit.getValue());
+        return null;
     }
 
     public Map<String, LocalDateTime > getRevisions() {
         Map<String, LocalDateTime> commitMap = new HashMap<>();
 
-        LogCommand logCommand = null;
         try {
-            logCommand = git.log()
-                    .add(git.getRepository().resolve(Constants.HEAD))
-                    .addPath(localFolder.getPath());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            for (RevCommit revCommit : logCommand.call()) {
-                LocalDateTime commitDate = LocalDateTime.from(Instant.ofEpochSecond(revCommit.getCommitTime()));
-                commitMap.put(revCommit.getName(),commitDate);
+            if(git == null){
+                cloneRepository();
             }
-        } catch (GitAPIException e) {
+
+            try {
+                for (RevCommit revCommit : git.log().call()) {
+                    Instant instant = Instant.ofEpochSecond(revCommit.getCommitTime());
+                    LocalDateTime commitDate = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
+                    commitMap.put(revCommit.getName(),commitDate);
+                }
+            } catch (GitAPIException e) {
+                e.printStackTrace();
+            }
+
+            return commitMap;
+        }
+            catch (GitAPIException e){
             e.printStackTrace();
         }
 
@@ -136,11 +149,15 @@ public class GitRepository {
         LocalDateTime commitDate = null;
 
         try {
+            if(git == null){
+                cloneRepository();
+            }
+
             RevWalk revWalk = new RevWalk(git.getRepository());
             RevCommit revCommit = revWalk.parseCommit(commitId);
 
             commitDate = LocalDateTime.from(Instant.ofEpochSecond(revCommit.getCommitTime()));
-        } catch (IOException e) {
+        } catch (IOException|GitAPIException e) {
             e.printStackTrace();
         }
 

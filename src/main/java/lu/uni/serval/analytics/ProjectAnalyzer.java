@@ -1,9 +1,6 @@
 package lu.uni.serval.analytics;
 
-import lu.uni.serval.robotframework.model.GitRepository;
-import lu.uni.serval.robotframework.model.Keyword;
-import lu.uni.serval.robotframework.model.KeywordDefinition;
-import lu.uni.serval.robotframework.model.Project;
+import lu.uni.serval.robotframework.model.*;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -93,15 +90,9 @@ public class ProjectAnalyzer {
         sequences = new KeywordSequence();
 
         for(Project project: projects){
-/*
-            List<KeywordStatus> keywords = report.getKeywords();
-
-            for(KeywordStatus keyword: keywords){
-                if(!status.isServiceDown(keyword)){
+            for(KeywordDefinition keyword: project.getKeywords()){
                     sequences.add(keyword);
-                }
             }
-*/
         }
     }
 }
