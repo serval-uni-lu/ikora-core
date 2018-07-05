@@ -15,8 +15,8 @@ public class Action {
         this.after = after;
     }
 
-    public static Action changeName(){
-        return new Action(Type.CHANGE_NAME, -1, -1);
+    public static Action changeName(int before, int after){
+        return new Action(Type.CHANGE_NAME, before, after);
     }
 
     public static Action removeStep(int before){

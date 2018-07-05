@@ -2,9 +2,12 @@ package lu.uni.serval.analytics;
 
 import lu.uni.serval.robotframework.model.KeywordDefinition;
 import lu.uni.serval.robotframework.model.Step;
+import lu.uni.serval.utils.nlp.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.apache.commons.lang3.math.NumberUtils.min;
 
 public class Difference {
 
@@ -38,16 +41,21 @@ public class Difference {
 
         }
 
-        computeStepDifferences(difference, before.getSteps(), after.getSteps());
+        difference.extractStepDifferences();
 
         return difference;
     }
 
-    private static void computeStepDifferences(Difference difference, List<Step> before, List<Step> after) {
-        int[][] d = new int[before.size() + 1][after.size() + 1];
+    private void extractStepDifferences(){
+        double[][] distances = computeDistanceMatrix(before.getSteps(), after.getSteps());
+        computeEditMapping(distances);
+    }
 
-        for(int i = 0; i < before.size(); ++i){
-            for(int j = 0; j < after.size(); ++j){
+    private double[][] computeDistanceMatrix(List<Step> before, List<Step> after) {
+        double[][] d = new double[before.size() + 1][after.size() + 1];
+
+        for(int i = 0; i <= before.size(); ++i){
+            for(int j = 0; j <= after.size(); ++j){
                 if(i == 0){
                     d[i][j] = j;
                 }
@@ -55,22 +63,52 @@ public class Difference {
                     d[i][j] = i;
                 }
                 else {
-
-                    if(d[i - 1][j - 1] <= d[i - 1][j] + 1
-                            && d[i - 1][j - 1] <= d[i][j - 1] + 1){
-                        d[i][j] = d[i - 1][j - 1];
-                    }
-                    else if(d[i - 1][j] < d[i][j -1]){
-                        d[i][j] = d[i - 1][j] + 1;
-                    }
-                    else{
-                        d[i][j] = d[i][j - 1] + 1;
-                    }
+                    d[i][j] = min(d[i - 1][j - 1]
+                                    + costOfSubstitution(before.get(i - 1), after.get(j - 1)),
+                            d[i - 1][j] + 1,
+                            d[i][j - 1] + 1);
                 }
             }
         }
 
-        System.out.println(d);
+        return d;
+    }
+
+    private double costOfSubstitution(Step before, Step after){
+        return StringUtils.levenshteinIndex(before.getName().toString(), after.getName().toString());
+    }
+
+    private void computeEditMapping(double[][] distances) {
+        int xPosition = before.getSteps().size();
+        int yPosition = after.getSteps().size();
+
+        double value = distances[xPosition][yPosition];
+
+        while(value != 0){
+            double substitution = distances[xPosition - 1][yPosition - 1];
+            double subtraction = distances[xPosition][yPosition - 1];
+            double addition = distances[xPosition - 1][yPosition];
+
+            if(substitution < subtraction && substitution < addition){
+                actions.add(Action.changeName(xPosition - 1, yPosition - 1));
+
+                value = substitution;
+                xPosition -= 1;
+                yPosition -= 1;
+            }
+            else if (subtraction < addition){
+                actions.add(Action.removeStep(yPosition - 1));
+
+                value = subtraction;
+                yPosition -= 1;
+            }
+            else{
+                actions.add(Action.insertStep(xPosition - 1));
+
+                value = addition;
+                xPosition -= 1;
+            }
+        }
     }
 
     @Override
