@@ -4,9 +4,13 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
+
+import lu.uni.serval.robotframework.model.Argument;
+import lu.uni.serval.robotframework.model.KeywordCall;
 import lu.uni.serval.robotframework.model.KeywordDefinition;
 
 import java.io.IOException;
+import java.util.List;
 
 public class DifferenceSerializer extends JsonSerializer<Difference> {
     @Override
@@ -62,8 +66,18 @@ public class DifferenceSerializer extends JsonSerializer<Difference> {
                 break;
 
                 case CHANGE_STEP_ARGUMENTS:
+                {
+                    jsonGenerator.writeStringField("action", "change arguments");
 
-                    break;
+                    int positionBefore = action.getLeft();
+                    KeywordCall callBefore = (KeywordCall) before.getStep(positionBefore);
+                    jsonGenerator.writeStringField("before", listToString(callBefore.getParameters()));
+
+                    int positionAfter = action.getRight();
+                    KeywordCall callAfter = (KeywordCall) after.getStep(positionAfter);
+                    jsonGenerator.writeStringField("after", listToString(callAfter.getParameters()));
+                }
+                break;
             }
 
             jsonGenerator.writeEndObject();
@@ -79,5 +93,19 @@ public class DifferenceSerializer extends JsonSerializer<Difference> {
         jsonGenerator.writeStringField("name", keyword.getName().toString());
 
         jsonGenerator.writeEndObject();
+    }
+
+    private String listToString(List<Argument> arguments){
+        StringBuilder builder = new StringBuilder();
+
+        for(Argument argument: arguments){
+            if(builder.length() != 0){
+                builder.append("\t");
+            }
+
+            builder.append(argument.toString());
+        }
+
+        return builder.toString();
     }
 }
