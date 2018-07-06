@@ -1,15 +1,11 @@
 package lu.uni.serval.robotframework.model;
 
-import lu.uni.serval.utils.Differentiable;
-import lu.uni.serval.utils.tree.LabelTreeNode;
-
 import java.util.HashSet;
 import java.util.Set;
 
 
 public abstract class LibraryKeyword implements Keyword {
     private Set<Keyword> dependencies;
-    private LabelTreeNode node;
 
     public LibraryKeyword() {
         this.dependencies = new HashSet<>();
@@ -18,11 +14,6 @@ public abstract class LibraryKeyword implements Keyword {
     @Override
     public Keyword getStep(int position) {
         return null;
-    }
-
-    @Override
-    public LabelTreeNode getNode() {
-        return node;
     }
 
     @Override

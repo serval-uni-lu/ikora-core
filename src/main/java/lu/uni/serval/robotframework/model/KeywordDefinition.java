@@ -11,7 +11,6 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
     private Argument name;
     private String documentation;
     private Set<String> tags;
-    private LabelTreeNode node;
     private List<Step> steps;
     private Set<Keyword> dependencies;
 
@@ -75,11 +74,6 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
         }
 
         return steps.get(position);
-    }
-
-    @Override
-    public LabelTreeNode getNode() {
-        return node;
     }
 
     @Override

@@ -1,7 +1,6 @@
 package lu.uni.serval.robotframework.model;
 
 import lu.uni.serval.utils.Differentiable;
-import lu.uni.serval.utils.tree.LabelTreeNode;
 
 import java.util.*;
 
@@ -32,11 +31,6 @@ public abstract class Step implements Keyword, Differentiable<Step> {
     }
 
     public abstract List<Argument> getParameters();
-
-    @Override
-    public LabelTreeNode getNode() {
-        return null;
-    }
 
     @Override
     public Set<Keyword> getDependencies() {

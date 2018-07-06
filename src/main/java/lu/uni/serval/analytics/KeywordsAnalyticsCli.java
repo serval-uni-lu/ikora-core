@@ -31,7 +31,7 @@ public class KeywordsAnalyticsCli implements CommandRunner{
         if(project == null){
             return;
         }
-
+/*
         Set<LabelTreeNode> forest = project.getKeywordNodes();
 
         CloneDetection cloneDetection = new CloneDetection();
@@ -52,5 +52,6 @@ public class KeywordsAnalyticsCli implements CommandRunner{
         } catch (IOException e) {
             e.printStackTrace();
         }
+*/
     }
 }

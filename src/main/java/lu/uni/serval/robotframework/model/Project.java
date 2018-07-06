@@ -1,7 +1,5 @@
 package lu.uni.serval.robotframework.model;
 
-import lu.uni.serval.utils.tree.LabelTreeNode;
-
 import java.io.File;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -65,16 +63,6 @@ public class Project {
         }
 
         return testCaseFiles.get(0).getUserKeywords();
-    }
-
-    public Set<LabelTreeNode> getKeywordNodes() {
-        Set<LabelTreeNode> nodes = new HashSet<>();
-
-        for(UserKeyword keyword: getKeywords()) {
-            nodes.add(keyword.getNode());
-        }
-
-        return nodes;
     }
 
     public void setLibraries(LibraryResources libraries) {
