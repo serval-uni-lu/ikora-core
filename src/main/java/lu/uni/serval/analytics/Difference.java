@@ -13,13 +13,13 @@ import static org.apache.commons.lang3.math.NumberUtils.min;
 @JsonSerialize(using = DifferenceSerializer.class)
 public class Difference {
 
-    private KeywordDefinition before;
-    private KeywordDefinition after;
+    private KeywordDefinition left;
+    private KeywordDefinition right;
     private List<Action> actions;
 
-    private Difference(KeywordDefinition before, KeywordDefinition after){
-        this.before = before;
-        this.after = after;
+    private Difference(KeywordDefinition left, KeywordDefinition right){
+        this.left = left;
+        this.right = right;
 
         this.actions = new ArrayList<>();
     }
@@ -28,12 +28,12 @@ public class Difference {
         return actions.isEmpty();
     }
 
-    public KeywordDefinition getBefore(){
-        return before;
+    public KeywordDefinition getLeft(){
+        return left;
     }
 
-    public KeywordDefinition getAfter(){
-        return after;
+    public KeywordDefinition getRight(){
+        return right;
     }
 
     public List<Action> getActions() {
@@ -57,7 +57,7 @@ public class Difference {
     }
 
     private void extractStepDifferences(){
-        double[][] distances = computeDistanceMatrix(before.getSteps(), after.getSteps());
+        double[][] distances = computeDistanceMatrix(left.getSteps(), right.getSteps());
         computeEditMapping(distances);
     }
 
@@ -89,8 +89,8 @@ public class Difference {
     }
 
     private void computeEditMapping(double[][] distances) {
-        int xPosition = before.getSteps().size();
-        int yPosition = after.getSteps().size();
+        int xPosition = left.getSteps().size();
+        int yPosition = right.getSteps().size();
 
         double value = distances[xPosition][yPosition];
 
@@ -139,15 +139,15 @@ public class Difference {
 
         Difference difference = (Difference)other;
 
-        return this.before == difference.before
-                && this.after == difference.after;
+        return this.left == difference.left
+                && this.right == difference.right;
     }
 
     @Override
     public int hashCode(){
         int hash = 7;
-        hash = getNodeHash(hash, before);
-        hash = getNodeHash(hash, after);
+        hash = getNodeHash(hash, left);
+        hash = getNodeHash(hash, right);
 
         return hash;
     }

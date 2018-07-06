@@ -7,9 +7,9 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 
 import java.io.IOException;
 
-public class DifferenceResultsSerializer extends JsonSerializer<DifferenceResults> {
+public class EvolutionResultsSerializer extends JsonSerializer<EvolutionResults> {
     @Override
-    public void serialize(DifferenceResults results, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException, JsonProcessingException {
+    public void serialize(EvolutionResults results, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException, JsonProcessingException {
         jsonGenerator.writeStartArray();
 
 

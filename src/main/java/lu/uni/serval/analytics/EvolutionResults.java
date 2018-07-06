@@ -8,16 +8,16 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.*;
 
-@JsonSerialize(using = DifferenceResultsSerializer.class)
-public class DifferenceResults implements Map<Pair<Keyword, Keyword>, Difference>{
+@JsonSerialize(using = EvolutionResultsSerializer.class)
+public class EvolutionResults implements Map<Pair<Keyword, Keyword>, Difference>{
     private Map<Pair<Keyword, Keyword>, Difference> differences;
 
-    DifferenceResults(){
+    EvolutionResults(){
         differences = new LinkedHashMap<>();
     }
 
     public void addDifference(Difference difference) {
-        Pair<Keyword, Keyword> dates = new ImmutablePair<>(difference.getBefore(), difference.getAfter());
+        Pair<Keyword, Keyword> dates = new ImmutablePair<>(difference.getLeft(), difference.getRight());
         put(dates, difference);
     }
 

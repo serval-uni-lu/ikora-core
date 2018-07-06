@@ -13,8 +13,8 @@ public class DifferenceSerializer extends JsonSerializer<Difference> {
     public void serialize(Difference difference, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException, JsonProcessingException {
         jsonGenerator.writeStartObject();
 
-        writeKeywordInfo(jsonGenerator, difference.getBefore(), "before");
-        writeKeywordInfo(jsonGenerator, difference.getAfter(), "after");
+        writeKeywordInfo(jsonGenerator, difference.getLeft(), "before");
+        writeKeywordInfo(jsonGenerator, difference.getRight(), "after");
 
         writeActions(difference, jsonGenerator);
 
@@ -24,8 +24,8 @@ public class DifferenceSerializer extends JsonSerializer<Difference> {
     private void writeActions(Difference difference, JsonGenerator jsonGenerator) throws IOException {
         jsonGenerator.writeArrayFieldStart("differences");
 
-        KeywordDefinition before = difference.getBefore();
-        KeywordDefinition after = difference.getAfter();
+        KeywordDefinition before = difference.getLeft();
+        KeywordDefinition after = difference.getRight();
 
         for(Action action: difference.getActions()){
             jsonGenerator.writeStartObject();

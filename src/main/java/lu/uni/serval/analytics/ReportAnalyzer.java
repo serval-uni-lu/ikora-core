@@ -44,10 +44,10 @@ public class ReportAnalyzer implements Iterable<Report>{
     }
 
 
-    public DifferenceResults findDifferences(){
+    public EvolutionResults findDifferences(){
         initKeywordSequence();
 
-        DifferenceResults differences = new DifferenceResults();
+        EvolutionResults differences = new EvolutionResults();
 
         for(List<KeywordDefinition> sequence: sequences){
             KeywordDefinition previous = null;

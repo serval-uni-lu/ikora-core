@@ -24,7 +24,7 @@ public class ProjectAnalyticsCli implements CommandRunner {
             return;
         }
 
-        DifferenceResults results = projects.findDifferences();
+        EvolutionResults results = projects.findDifferences();
 
         try {
             ObjectMapper mapper = new ObjectMapper();

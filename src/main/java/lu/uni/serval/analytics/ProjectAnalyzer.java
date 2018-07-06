@@ -53,10 +53,10 @@ public class ProjectAnalyzer {
     }
 
 
-    public DifferenceResults findDifferences(){
+    public EvolutionResults findDifferences(){
         initKeywordSequence();
 
-        DifferenceResults differences = new DifferenceResults();
+        EvolutionResults differences = new EvolutionResults();
 
         for(List<KeywordDefinition> sequence: sequences){
             KeywordDefinition previous = null;
