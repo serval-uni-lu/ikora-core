@@ -15,6 +15,18 @@ public class Action {
         this.after = after;
     }
 
+    public Type getType() {
+        return type;
+    }
+
+    public int getBefore() {
+        return before;
+    }
+
+    public int getAfter() {
+        return after;
+    }
+
     public static Action changeName(int before, int after){
         return new Action(Type.CHANGE_NAME, before, after);
     }

@@ -1,5 +1,6 @@
 package lu.uni.serval.analytics;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lu.uni.serval.robotframework.model.KeywordDefinition;
 import lu.uni.serval.robotframework.model.Step;
 import lu.uni.serval.utils.nlp.StringUtils;
@@ -9,6 +10,7 @@ import java.util.List;
 
 import static org.apache.commons.lang3.math.NumberUtils.min;
 
+@JsonSerialize(using = DifferenceSerializer.class)
 public class Difference {
 
     private KeywordDefinition before;
@@ -22,12 +24,20 @@ public class Difference {
         this.actions = new ArrayList<>();
     }
 
+    public boolean isEmpty(){
+        return actions.isEmpty();
+    }
+
     public KeywordDefinition getBefore(){
         return before;
     }
 
     public KeywordDefinition getAfter(){
         return after;
+    }
+
+    public List<Action> getActions() {
+        return actions;
     }
 
     public static Difference of(KeywordDefinition before, KeywordDefinition after) {
@@ -90,7 +100,9 @@ public class Difference {
             double addition = distances[xPosition - 1][yPosition];
 
             if(substitution < subtraction && substitution < addition){
-                actions.add(Action.changeName(xPosition - 1, yPosition - 1));
+                if(value > substitution){
+                    actions.add(Action.changeName(xPosition - 1, yPosition - 1));
+                }
 
                 value = substitution;
                 xPosition -= 1;
@@ -151,4 +163,6 @@ public class Difference {
 
         return hash;
     }
+
+
 }

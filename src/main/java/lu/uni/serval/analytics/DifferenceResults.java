@@ -1,11 +1,14 @@
 package lu.uni.serval.analytics;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import lu.uni.serval.robotframework.model.Keyword;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.*;
 
+@JsonSerialize(using = DifferenceResultsSerializer.class)
 public class DifferenceResults implements Map<Pair<Keyword, Keyword>, Difference>{
     private Map<Pair<Keyword, Keyword>, Difference> differences;
 

@@ -10,6 +10,7 @@ public interface Keyword {
     Keyword getStep(int position);
     LabelTreeNode getNode();
     Set<Keyword> getDependencies();
+    Argument getName();
 
     void addDependency(Keyword keyword);
 
