@@ -33,7 +33,7 @@ public class DifferenceSerializer extends JsonSerializer<Difference> {
             switch (action.getType()){
                 case ADD_STEP:
                 {
-                    int position = action.getAfter();
+                    int position = action.getRight();
                     jsonGenerator.writeStringField("action", "add step");
                     jsonGenerator.writeStringField("step", after.getStep(position).getName().toString());
                     jsonGenerator.writeNumberField("position", position);
@@ -42,21 +42,21 @@ public class DifferenceSerializer extends JsonSerializer<Difference> {
 
                 case REMOVE_STEP:
                 {
-                    int position = action.getBefore();
+                    int position = action.getLeft();
                     jsonGenerator.writeStringField("action", "remove step");
                     jsonGenerator.writeStringField("step", after.getStep(position).getName().toString());
                     jsonGenerator.writeNumberField("position", position);
                 }
                 break;
 
-                case CHANGE_NAME:
+                case CHANGE_STEP_NAME:
                 {
                     jsonGenerator.writeStringField("action", "change name");
 
-                    int positionBefore = action.getBefore();
+                    int positionBefore = action.getLeft();
                     jsonGenerator.writeStringField("before", before.getStep(positionBefore).getName().toString());
 
-                    int positionAfter = action.getAfter();
+                    int positionAfter = action.getRight();
                     jsonGenerator.writeStringField("after", after.getStep(positionAfter).getName().toString());
                 }
                 break;

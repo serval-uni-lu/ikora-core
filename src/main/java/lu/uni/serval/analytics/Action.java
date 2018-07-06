@@ -2,44 +2,70 @@ package lu.uni.serval.analytics;
 
 public class Action {
     public enum Type{
-        CHANGE_NAME, ADD_STEP, REMOVE_STEP, CHANGE_STEP_ARGUMENTS
+        CHANGE_NAME,
+
+        CHANGE_STEP_TYPE,
+        ADD_STEP,
+        REMOVE_STEP,
+
+        CHANGE_STEP_NAME,
+        CHANGE_STEP_ARGUMENTS,
+
+        CHANGE_STEP_EXPRESSION,
+        CHANGE_STEP_RETURN_VALUES
     }
 
     private final Type type;
-    private final int before;
-    private final int after;
+    private final int left;
+    private final int right;
 
-    private Action(Type type, int before, int after){
+    private Action(Type type, int left, int right){
         this.type = type;
-        this.before = before;
-        this.after = after;
+        this.left = left;
+        this.right = right;
     }
 
     public Type getType() {
         return type;
     }
 
-    public int getBefore() {
-        return before;
+    public int getLeft() {
+        return left;
     }
 
-    public int getAfter() {
-        return after;
+    public int getRight() {
+        return right;
     }
 
-    public static Action changeName(int before, int after){
-        return new Action(Type.CHANGE_NAME, before, after);
+    public static Action changeName(){
+        return new Action(Type.CHANGE_NAME, -1, -1);
     }
 
-    public static Action removeStep(int before){
-        return new Action(Type.REMOVE_STEP, before, -1);
+    public static Action changeStepType(int left, int right){
+        return new Action(Type.CHANGE_STEP_TYPE, left, right);
     }
 
-    public static Action insertStep(int after){
-        return new Action(Type.ADD_STEP, -1, after);
+    public static Action removeStep(int left){
+        return new Action(Type.REMOVE_STEP, left, -1);
     }
 
-    public static Action changeStepArguments(int before, int after){
-        return new Action(Type.CHANGE_STEP_ARGUMENTS, before, after);
+    public static Action insertStep(int right){
+        return new Action(Type.ADD_STEP, -1, right);
+    }
+
+    public static Action changeStepName(int left, int right){
+        return new Action(Type.CHANGE_STEP_NAME, left, right);
+    }
+
+    public static Action changeStepArguments(int left, int right){
+        return new Action(Type.CHANGE_STEP_ARGUMENTS, left, right);
+    }
+
+    public static Action changeStepExpression(int left, int right){
+        return new Action(Type.CHANGE_STEP_EXPRESSION, left, right);
+    }
+
+    public static Action changeStepReturnValues(int left, int right){
+        return new Action(Type.CHANGE_STEP_RETURN_VALUES, left, right);
     }
 }

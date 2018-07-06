@@ -16,6 +16,14 @@ public class Assignment extends Step {
         returnValues = new ArrayList<>();
     }
 
+    public Step getExpression() {
+        return expression;
+    }
+
+    public List<Variable> getReturnValues() {
+        return returnValues;
+    }
+
     @Override
     public Keyword getStep(int position) {
         return null;

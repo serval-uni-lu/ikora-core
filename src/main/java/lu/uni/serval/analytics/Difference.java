@@ -1,15 +1,12 @@
 package lu.uni.serval.analytics;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import lu.uni.serval.robotframework.model.KeywordDefinition;
-import lu.uni.serval.robotframework.model.Step;
-import lu.uni.serval.utils.Differentiable;
+import lu.uni.serval.robotframework.model.*;
 import lu.uni.serval.utils.LevenshteinDistance;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import lu.uni.serval.utils.LevenshteinDistance;
 
 @JsonSerialize(using = DifferenceSerializer.class)
 public class Difference {
@@ -42,14 +39,18 @@ public class Difference {
     }
 
     public static Difference of(KeywordDefinition before, KeywordDefinition after) {
+        if(before == null || after == null){
+            throw new NullPointerException();
+        }
+
         Difference difference = new Difference(before, after);
 
         if(before == after){
             return difference;
         }
 
-        if(before.getName() != after.getName()){
-
+        if(!before.getName().toString().equalsIgnoreCase(after.getName().toString())){
+            difference.actions.add(Action.changeName());
         }
 
         difference.extractStepDifferences();
@@ -75,7 +76,7 @@ public class Difference {
 
             if(substitution < subtraction && substitution < addition){
                 if(value > substitution){
-                    actions.add(Action.changeName(xPosition - 1, yPosition - 1));
+                    setStepChanges(xPosition - 1, yPosition - 1);
                 }
 
                 value = substitution;
@@ -95,6 +96,59 @@ public class Difference {
                 xPosition -= 1;
             }
         }
+    }
+
+    private void setStepChanges(int leftPosition, int rightPosition) {
+        Step leftStep = (Step)left.getStep(leftPosition);
+        Step rightStep = (Step)right.getStep(rightPosition);
+
+        if(leftStep.getClass() != rightStep.getClass()){
+            actions.add(Action.changeStepType(leftPosition, rightPosition));
+        }
+        else{
+            if(leftStep instanceof KeywordCall){
+                setKeywordCallChanges(leftPosition, rightPosition);
+            }
+            else if(leftStep instanceof Assignment){
+                setAssignmentChanges(leftPosition, rightPosition);
+            }
+            else if(leftStep instanceof ForLoop){
+                setForLoopChanges(leftPosition, rightPosition);
+            }
+        }
+    }
+
+    private void setKeywordCallChanges(int leftPosition, int rightPosition) {
+        KeywordCall leftStep = (KeywordCall)left.getStep(leftPosition);
+        KeywordCall rightStep = (KeywordCall)right.getStep(rightPosition);
+
+        if(!leftStep.getName().toString().equalsIgnoreCase(rightStep.toString())){
+            actions.add(Action.changeStepName(leftPosition, rightPosition));
+        }
+
+        if(leftStep.getParameters() != rightStep.getParameters()){
+            actions.add(Action.changeStepArguments(leftPosition, rightPosition));
+        }
+    }
+
+    private void setAssignmentChanges(int leftPosition, int rightPosition) {
+        Assignment leftStep = (Assignment)left.getStep(leftPosition);
+        Assignment rightStep = (Assignment)right.getStep(rightPosition);
+
+        if(leftStep.getExpression().indexTo(rightStep.getExpression()) > 0){
+            actions.add(Action.changeStepExpression(leftPosition, rightPosition));
+        }
+
+        if(LevenshteinDistance.index(leftStep.getReturnValues(), rightStep.getReturnValues()) > 0){
+            actions.add(Action.changeStepReturnValues(leftPosition, rightPosition));
+        }
+    }
+
+    private void setForLoopChanges(int leftPosition, int rightPosition) {
+        ForLoop leftStep = (ForLoop)left.getStep(leftPosition);
+        ForLoop rightStep = (ForLoop)right.getStep(rightPosition);
+
+        throw new NotImplementedException();
     }
 
     @Override
