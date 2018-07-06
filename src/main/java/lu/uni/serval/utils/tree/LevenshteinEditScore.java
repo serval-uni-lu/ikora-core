@@ -1,6 +1,6 @@
 package lu.uni.serval.utils.tree;
 
-import static lu.uni.serval.utils.nlp.StringUtils.levenshteinIndex;
+import static lu.uni.serval.utils.LevenshteinDistance.stringIndex;
 
 public class LevenshteinEditScore implements EditScore {
     public double replace(LabelTreeNode node1, LabelTreeNode node2) {
@@ -11,7 +11,7 @@ public class LevenshteinEditScore implements EditScore {
             return 0;
         }
 
-        return levenshteinIndex(label1,label2);
+        return stringIndex(label1,label2);
     }
 
     public double delete(LabelTreeNode node1, LabelTreeNode node2) {

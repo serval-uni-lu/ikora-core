@@ -1,6 +1,8 @@
 package lu.uni.serval.robotframework.model;
 
 import lu.uni.serval.robotframework.runner.Runtime;
+import lu.uni.serval.utils.Differentiable;
+import lu.uni.serval.utils.LevenshteinDistance;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,5 +64,19 @@ public class KeywordCall extends Step {
     @Override
     public void execute(Runtime runtime) {
 
+    }
+
+    @Override
+    public double indexTo(Differentiable<Step> other) {
+        if(!(other instanceof Step)){
+            return 1;
+        }
+
+        KeywordCall call = (KeywordCall)other;
+
+        double nameIndex = LevenshteinDistance.stringIndex(getName().toString(), call.getName().toString());
+        double parameterIndex = LevenshteinDistance.index(getParameters(), call.getParameters());
+
+        return (0.5 * nameIndex) + (0.5 * parameterIndex);
     }
 }

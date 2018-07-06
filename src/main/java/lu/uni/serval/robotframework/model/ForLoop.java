@@ -1,6 +1,8 @@
 package lu.uni.serval.robotframework.model;
 
 import lu.uni.serval.robotframework.runner.Runtime;
+import lu.uni.serval.utils.Differentiable;
+import lu.uni.serval.utils.LevenshteinDistance;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,5 +58,16 @@ public class ForLoop extends Step {
     @Override
     public void execute(Runtime runtime) {
 
+    }
+
+    @Override
+    public double indexTo(Differentiable<Step> other) {
+        if(other instanceof ForLoop){
+            return 1;
+        }
+
+        ForLoop forLoop = (ForLoop)other;
+
+        return LevenshteinDistance.index(steps, forLoop.steps);
     }
 }

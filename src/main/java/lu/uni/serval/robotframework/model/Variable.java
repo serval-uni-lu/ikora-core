@@ -1,9 +1,12 @@
 package lu.uni.serval.robotframework.model;
 
+import com.google.errorprone.annotations.Var;
+import lu.uni.serval.utils.Differentiable;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class Variable {
+public class Variable implements Differentiable<Variable> {
     private String  name;
     private List<Argument> definition;
 
@@ -25,5 +28,11 @@ public class Variable {
 
     public List<Argument> getValue() {
         return definition;
+    }
+
+    @Override
+    public double indexTo(Differentiable<Variable> other) {
+        Variable variable = (Variable)other;
+        return name.equals(variable.name) ? 0 : 1;
     }
 }

@@ -4,7 +4,7 @@ import lu.uni.serval.utils.exception.DuplicateNodeException;
 import lu.uni.serval.utils.tree.LabelTreeNode;
 import lu.uni.serval.utils.tree.TreeEditDistance;
 
-import static lu.uni.serval.utils.nlp.StringUtils.levenshteinIndex;
+import static lu.uni.serval.utils.LevenshteinDistance.stringIndex;
 
 import java.util.List;
 import java.util.Set;
@@ -76,7 +76,7 @@ public class CloneDetection {
         }
         else{
             treeIndex = 1- treeEditDistance.index(tree1, tree2);
-            keywordIndex = 1- levenshteinIndex(tree1.getLabel(), tree2.getLabel());
+            keywordIndex = 1- stringIndex(tree1.getLabel(), tree2.getLabel());
         }
 
         double semanticIndex = 1 - treeEditDistance.index(sementicMap.get(tree1), sementicMap.get(tree2));

@@ -3,12 +3,13 @@ package lu.uni.serval.analytics;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lu.uni.serval.robotframework.model.KeywordDefinition;
 import lu.uni.serval.robotframework.model.Step;
-import lu.uni.serval.utils.nlp.StringUtils;
+import lu.uni.serval.utils.Differentiable;
+import lu.uni.serval.utils.LevenshteinDistance;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.apache.commons.lang3.math.NumberUtils.min;
+import lu.uni.serval.utils.LevenshteinDistance;
 
 @JsonSerialize(using = DifferenceSerializer.class)
 public class Difference {
@@ -57,35 +58,8 @@ public class Difference {
     }
 
     private void extractStepDifferences(){
-        double[][] distances = computeDistanceMatrix(left.getSteps(), right.getSteps());
+        double[][] distances = LevenshteinDistance.distanceMatrix(left.getSteps(), right.getSteps());
         computeEditMapping(distances);
-    }
-
-    private double[][] computeDistanceMatrix(List<Step> before, List<Step> after) {
-        double[][] d = new double[before.size() + 1][after.size() + 1];
-
-        for(int i = 0; i <= before.size(); ++i){
-            for(int j = 0; j <= after.size(); ++j){
-                if(i == 0){
-                    d[i][j] = j;
-                }
-                else if (j == 0){
-                    d[i][j] = i;
-                }
-                else {
-                    d[i][j] = min(d[i - 1][j - 1]
-                                    + costOfSubstitution(before.get(i - 1), after.get(j - 1)),
-                            d[i - 1][j] + 1,
-                            d[i][j - 1] + 1);
-                }
-            }
-        }
-
-        return d;
-    }
-
-    private double costOfSubstitution(Step before, Step after){
-        return StringUtils.levenshteinIndex(before.getName().toString(), after.getName().toString());
     }
 
     private void computeEditMapping(double[][] distances) {
@@ -163,6 +137,4 @@ public class Difference {
 
         return hash;
     }
-
-
 }

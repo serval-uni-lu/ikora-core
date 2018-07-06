@@ -1,12 +1,15 @@
 package lu.uni.serval.robotframework.model;
 
 import lu.uni.serval.robotframework.runner.Runtime;
+import lu.uni.serval.utils.Differentiable;
+import lu.uni.serval.utils.LevenshteinDistance;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Assignment extends Step {
     private List<Variable> returnValues;
+
     private Step expression;
 
     public Assignment(){
@@ -72,4 +75,17 @@ public class Assignment extends Step {
         return  same;
     }
 
+    @Override
+    public double indexTo(Differentiable<Step> other) {
+        if(!(other instanceof Assignment)){
+            return 1;
+        }
+
+        Assignment assignment = (Assignment)other;
+
+        double expressionIndex = expression.indexTo(assignment.expression);
+        double returnValuesIndex = LevenshteinDistance.index(returnValues, assignment.returnValues);
+
+        return (0.5 * expressionIndex) + (0.5 * returnValuesIndex);
+    }
 }

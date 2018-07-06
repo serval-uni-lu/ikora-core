@@ -1,5 +1,7 @@
 package lu.uni.serval.robotframework.model;
 
+import lu.uni.serval.utils.Differentiable;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -7,7 +9,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Argument {
+public class Argument implements Differentiable<Argument> {
     private String value;
     private Pattern match;
     private Map<String, Variable> variables;
@@ -69,5 +71,11 @@ public class Argument {
 
     public static Matcher getVariableMatcher(String value) {
         return Pattern.compile("(\\$\\{)(.*?)(\\})").matcher(value);
+    }
+
+    @Override
+    public double indexTo(Differentiable<Argument> other) {
+        Argument argument = (Argument)other;
+        return value.equals(argument.value) ? 0 : 1;
     }
 }

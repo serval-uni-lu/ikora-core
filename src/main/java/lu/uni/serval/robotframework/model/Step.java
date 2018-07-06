@@ -1,11 +1,12 @@
 package lu.uni.serval.robotframework.model;
 
+import lu.uni.serval.utils.Differentiable;
 import lu.uni.serval.utils.tree.LabelTreeNode;
 
 import java.util.*;
 
 
-public abstract class Step implements Keyword {
+public abstract class Step implements Keyword, Differentiable<Step> {
     private Argument name;
     private Keyword parent;
 
