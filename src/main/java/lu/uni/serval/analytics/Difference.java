@@ -126,7 +126,7 @@ public class Difference {
             actions.add(Action.changeStepName(leftPosition, rightPosition));
         }
 
-        if(leftStep.getParameters() != rightStep.getParameters()){
+        if(LevenshteinDistance.index(leftStep.getParameters(), rightStep.getParameters()) > 0){
             actions.add(Action.changeStepArguments(leftPosition, rightPosition));
         }
     }
