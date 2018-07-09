@@ -2,23 +2,21 @@ package lu.uni.serval.analytics;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-import lu.uni.serval.robotframework.model.Keyword;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
+import lu.uni.serval.robotframework.model.Project;
+import lu.uni.serval.utils.UnorderedPair;
 
 import java.util.*;
 
 @JsonSerialize(using = EvolutionResultsSerializer.class)
-public class EvolutionResults implements Map<Pair<Keyword, Keyword>, Difference>{
-    private Map<Pair<Keyword, Keyword>, Difference> differences;
+public class EvolutionResults implements Map<UnorderedPair<Project>, Difference>{
+    private Map<UnorderedPair<Project>, Difference> differences;
 
     EvolutionResults(){
         differences = new LinkedHashMap<>();
     }
 
-    public void addDifference(Difference difference) {
-        Pair<Keyword, Keyword> dates = new ImmutablePair<>(difference.getLeft(), difference.getRight());
-        put(dates, difference);
+    public void addDifference(Project left, Project right, Difference difference) {
+        put(UnorderedPair.of(left, right), difference);
     }
 
     @Override
@@ -47,7 +45,7 @@ public class EvolutionResults implements Map<Pair<Keyword, Keyword>, Difference>
     }
 
     @Override
-    public Difference put(Pair<Keyword, Keyword> key, Difference value) {
+    public Difference put(UnorderedPair<Project> key, Difference value) {
         return differences.put(key, value);
     }
 
@@ -57,7 +55,7 @@ public class EvolutionResults implements Map<Pair<Keyword, Keyword>, Difference>
     }
 
     @Override
-    public void putAll(Map<? extends Pair<Keyword, Keyword>, ? extends Difference> m) {
+    public void putAll(Map<? extends UnorderedPair<Project>, ? extends Difference> m) {
         differences.putAll(m);
     }
 
@@ -67,7 +65,7 @@ public class EvolutionResults implements Map<Pair<Keyword, Keyword>, Difference>
     }
 
     @Override
-    public Set<Pair<Keyword, Keyword>> keySet() {
+    public Set<UnorderedPair<Project>> keySet() {
         return differences.keySet();
     }
 
@@ -77,7 +75,7 @@ public class EvolutionResults implements Map<Pair<Keyword, Keyword>, Difference>
     }
 
     @Override
-    public Set<Entry<Pair<Keyword, Keyword>, Difference>> entrySet() {
+    public Set<Entry<UnorderedPair<Project>, Difference>> entrySet() {
         return differences.entrySet();
     }
 }

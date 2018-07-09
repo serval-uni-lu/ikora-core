@@ -58,22 +58,22 @@ public class ProjectAnalyzer {
 
         EvolutionResults differences = new EvolutionResults();
 
-        for(List<KeywordDefinition> sequence: sequences){
-            KeywordDefinition previous = null;
-            for(KeywordDefinition keyword: sequence){
+        for(List<ImmutablePair<Project, KeywordDefinition>> sequence: sequences){
+            ImmutablePair<Project, KeywordDefinition> previous = null;
+            for(ImmutablePair<Project, KeywordDefinition> keyword: sequence){
                 if(previous == null){
                     previous = keyword;
                     continue;
                 }
 
-                Pair keywordPair = ImmutablePair.of((Keyword)previous, (Keyword)keyword);
+                Pair keywordPair = ImmutablePair.of((Keyword)previous.getRight(), (Keyword)keyword.getRight());
 
                 if(differences.containsKey(keywordPair)){
                     previous = keyword;
                     continue;
                 }
 
-                differences.addDifference(Difference.of(previous, keyword));
+                differences.addDifference(previous.getLeft(), keyword.getLeft(), Difference.of(previous.getRight(), keyword.getRight()));
 
                 previous = keyword;
             }
@@ -91,7 +91,7 @@ public class ProjectAnalyzer {
 
         for(Project project: projects){
             for(KeywordDefinition keyword: project.getKeywords()){
-                    sequences.add(keyword);
+                    sequences.add(project, keyword);
             }
         }
     }
