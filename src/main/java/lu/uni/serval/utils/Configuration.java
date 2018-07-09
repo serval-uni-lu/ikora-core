@@ -17,8 +17,6 @@ public class Configuration {
 
     @JsonProperty("verbose")
     private Boolean verbose;
-    @JsonProperty("testCaseFile")
-    private String testCaseFile;
     @JsonIgnore
     private Map<String, Plugin> plugins = null;
     @JsonIgnore
@@ -43,16 +41,6 @@ public class Configuration {
     @JsonProperty("verbose")
     public void setVerbose(Boolean value) {
         verbose = value;
-    }
-
-    @JsonProperty("testCaseFile")
-    public String getTestCaseFile() {
-        return testCaseFile;
-    }
-
-    @JsonProperty("testCaseFile")
-    public void setTestCaseFile(String value) {
-        testCaseFile = value;
     }
 
     @JsonProperty("plugins")
