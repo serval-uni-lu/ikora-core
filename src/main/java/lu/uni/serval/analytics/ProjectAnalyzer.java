@@ -60,22 +60,26 @@ public class ProjectAnalyzer {
 
         for(List<KeywordInfo> sequence: sequences){
             KeywordInfo previous = null;
-            for(KeywordInfo keyword: sequence){
+            for(KeywordInfo current: sequence){
                 if(previous == null){
-                    previous = keyword;
+                    previous = current;
                     continue;
                 }
 
-                Pair keywordPair = ImmutablePair.of(previous.getKeyword(), keyword.getKeyword());
+                KeywordDefinition keyword1 = previous.getKeyword();
+                KeywordDefinition keyword2 = current.getKeyword();
 
-                if(differences.containsKey(keywordPair)){
-                    previous = keyword;
+                Project project1 = previous.getProject();
+                Project project2 = current.getProject();
+
+                if(differences.containsKeywords(project1, project2, keyword1, keyword2)){
+                    previous = current;
                     continue;
                 }
 
-                differences.addDifference(previous.getProject(), keyword.getProject(), Difference.of(previous.getKeyword(), keyword.getKeyword()));
+                differences.addDifference(project1, project2, Difference.of(keyword1, keyword2));
 
-                previous = keyword;
+                previous = current;
             }
         }
 

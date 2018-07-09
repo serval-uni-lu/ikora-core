@@ -1,81 +1,67 @@
 package lu.uni.serval.analytics;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
+import lu.uni.serval.robotframework.model.Keyword;
 import lu.uni.serval.robotframework.model.Project;
 import lu.uni.serval.utils.UnorderedPair;
 
 import java.util.*;
 
 @JsonSerialize(using = EvolutionResultsSerializer.class)
-public class EvolutionResults implements Map<UnorderedPair<Project>, Difference>{
-    private Map<UnorderedPair<Project>, Difference> differences;
+public class EvolutionResults {
+    private SortedSet<Project> projects;
+
+    private Map<Project, Map<Project, Set<Difference>>> differences;
+    private Map<Project, Map<Project, Set<UnorderedPair<Keyword>>>> keywords;
 
     EvolutionResults(){
+        projects = new TreeSet<>();
         differences = new LinkedHashMap<>();
+        keywords = new LinkedHashMap<>();
     }
 
     public void addDifference(Project left, Project right, Difference difference) {
-        put(UnorderedPair.of(left, right), difference);
+        projects.add(left);
+
+        update(left, right, difference, differences);
+        update(left, right, UnorderedPair.of(difference.getLeft(), difference.getRight()), keywords);
     }
 
-    @Override
-    public int size() {
-        return differences.size();
+    public Set<Project> getComparedTo(Project project){
+        return differences.getOrDefault(project,  new LinkedHashMap<>()).keySet();
     }
 
-    @Override
-    public boolean isEmpty() {
-        return differences.isEmpty();
+    public SortedSet<Project> getProjects(){
+        return projects;
     }
 
-    @Override
-    public boolean containsKey(Object key) {
-        return differences.containsKey(key);
+    public Set<Difference> getDifferences(Project project1, Project project2){
+        return differences.getOrDefault(project1,  new LinkedHashMap<>()).get(project2);
     }
 
-    @Override
-    public boolean containsValue(Object value) {
-        return differences.containsValue(value);
+    public boolean containsKeywords(Project project1, Project project2, Keyword keyword1, Keyword keyword2){
+        Map<Project, Set<UnorderedPair<Keyword>>> comparedTo = keywords.get(project1);
+
+        if(comparedTo == null){
+            return false;
+        }
+
+        Set<UnorderedPair<Keyword>> list = comparedTo.get(project2);
+
+        if(list == null){
+            return false;
+        }
+
+        return list.contains(UnorderedPair.of(keyword1, keyword2));
     }
 
-    @Override
-    public Difference get(Object key) {
-        return differences.get(key);
-    }
+    private <T> void update(Project left, Project right, T value, Map<Project, Map<Project, Set<T>>> container){
+        Map<Project, Set<T>> comparedTo = container.getOrDefault(left, new LinkedHashMap<>());
+        Set<T> list = comparedTo.getOrDefault(right, new HashSet<>());
 
-    @Override
-    public Difference put(UnorderedPair<Project> key, Difference value) {
-        return differences.put(key, value);
-    }
+        list.add(value);
 
-    @Override
-    public Difference remove(Object key) {
-        return differences.remove(key);
-    }
-
-    @Override
-    public void putAll(Map<? extends UnorderedPair<Project>, ? extends Difference> m) {
-        differences.putAll(m);
-    }
-
-    @Override
-    public void clear() {
-        differences.clear();
-    }
-
-    @Override
-    public Set<UnorderedPair<Project>> keySet() {
-        return differences.keySet();
-    }
-
-    @Override
-    public Collection<Difference> values() {
-        return differences.values();
-    }
-
-    @Override
-    public Set<Entry<UnorderedPair<Project>, Difference>> entrySet() {
-        return differences.entrySet();
+        comparedTo.put(right, list);
+        container.put(left, comparedTo);
     }
 }

@@ -4,7 +4,7 @@ import java.io.File;
 import java.time.LocalDateTime;
 import java.util.*;
 
-public class Project {
+public class Project implements Comparable<Project> {
     private List<TestCaseFile> testCaseFiles;
     private Map<File, TestCaseFile> files;
     private LibraryResources libraries;
@@ -89,5 +89,14 @@ public class Project {
         for(Resources resources: settings.getResources()){
             addFile(resources.getFile());
         }
+    }
+
+    @Override
+    public int compareTo(Project other) {
+        if(dateTime == other.dateTime){
+            return 0;
+        }
+
+        return dateTime.isBefore(other.dateTime) ? -1 : 1;
     }
 }
