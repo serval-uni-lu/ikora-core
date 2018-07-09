@@ -20,11 +20,15 @@ public class EvolutionResults {
         keywords = new LinkedHashMap<>();
     }
 
-    public void addDifference(Project left, Project right, Difference difference) {
-        projects.add(left);
+    public void addDifference(Project project1, Project project2, Difference difference) {
+        if(difference.isEmpty()){
+            return;
+        }
 
-        update(left, right, difference, differences);
-        update(left, right, UnorderedPair.of(difference.getLeft(), difference.getRight()), keywords);
+        projects.add(project1);
+
+        update(project1, project2, difference, differences);
+        update(project1, project2, UnorderedPair.of(difference.getLeft(), difference.getRight()), keywords);
     }
 
     public Set<Project> getComparedTo(Project project){

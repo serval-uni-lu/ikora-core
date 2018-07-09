@@ -53,6 +53,14 @@ public class Project implements Comparable<Project> {
         return files;
     }
 
+    public String getCommitId() {
+        return commitId;
+    }
+
+    public String getGitUrl() {
+        return gitUrl;
+    }
+
     public LibraryResources getLibraries() {
         return libraries;
     }
