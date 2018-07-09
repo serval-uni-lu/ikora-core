@@ -49,9 +49,9 @@ public class ReportAnalyzer implements Iterable<Report>{
 
         EvolutionResults differences = new EvolutionResults();
 
-        for(List<KeywordDefinition> sequence: sequences){
-            KeywordDefinition previous = null;
-            for(KeywordDefinition keyword: sequence){
+        for(List<KeywordInfo> sequence: sequences){
+            KeywordInfo previous = null;
+            for(KeywordInfo keyword: sequence){
                 if(previous == null){
                     previous = keyword;
                     continue;
@@ -64,7 +64,7 @@ public class ReportAnalyzer implements Iterable<Report>{
                     continue;
                 }
 
-                Difference difference = Difference.of(previous, keyword);
+                Difference difference = Difference.of(previous.getKeyword(), keyword.getKeyword());
 
                 /*
                 LocalDateTime dateTime = KeywordStatus.getExecutionDate();
