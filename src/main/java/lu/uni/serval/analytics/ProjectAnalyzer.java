@@ -1,6 +1,7 @@
 package lu.uni.serval.analytics;
 
 import lu.uni.serval.robotframework.model.*;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -9,14 +10,12 @@ import java.util.Map;
 
 public class ProjectAnalyzer {
     private List<Project> projects;
-    private KeywordSequence sequences;
 
     public ProjectAnalyzer(){
         projects = new ArrayList<>();
-        sequences = null;
     }
 
-    public static ProjectAnalyzer parse(String gitUrl) {
+    public static ProjectAnalyzer fromGit(String gitUrl) {
         ProjectAnalyzer analyzer = new ProjectAnalyzer();
 
         GitRepository repository = new GitRepository(gitUrl);
@@ -46,55 +45,34 @@ public class ProjectAnalyzer {
         if(!inserted){
             projects.add(project);
         }
-
-        sequences = null;
     }
 
 
     public EvolutionResults findDifferences(){
-        initKeywordSequence();
-
         EvolutionResults differences = new EvolutionResults();
 
-        for(List<KeywordInfo> sequence: sequences){
-            KeywordInfo previous = null;
-            for(KeywordInfo current: sequence){
-                if(previous == null){
-                    previous = current;
-                    continue;
-                }
+        Project project1 = null;
+        for(Project project2: projects){
+            if(project1 == null){
+                project1 = project2;
+                continue;
+            }
 
-                KeywordDefinition keyword1 = previous.getKeyword();
-                KeywordDefinition keyword2 = current.getKeyword();
-
-                Project project1 = previous.getProject();
-                Project project2 = current.getProject();
+            for(KeywordInfoPair keywordPair: KeywordMatcher.getPairs(project1, project2)){
+                KeywordDefinition keyword1 = keywordPair.getKeyword(project1);
+                KeywordDefinition keyword2 = keywordPair.getKeyword(project2);
 
                 if(differences.containsKeywords(project1, project2, keyword1, keyword2)){
-                    previous = current;
+                    project1 = project2;
                     continue;
                 }
 
                 differences.addDifference(project1, project2, Difference.of(keyword1, keyword2));
 
-                previous = current;
+                project1 = project2;
             }
         }
 
         return differences;
-    }
-
-    private void initKeywordSequence(){
-        if(sequences != null){
-            return;
-        }
-
-        sequences = new KeywordSequence();
-
-        for(Project project: projects){
-            for(KeywordDefinition keyword: project.getKeywords()){
-                    sequences.add(project, keyword);
-            }
-        }
     }
 }

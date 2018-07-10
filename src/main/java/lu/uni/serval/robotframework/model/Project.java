@@ -66,8 +66,8 @@ public class Project implements Comparable<Project> {
         return libraries;
     }
 
-    public Set<UserKeyword> getUserKeywords() {
-        Set<UserKeyword> keywords = new HashSet<>();
+    public KeywordTable getUserKeywords() {
+        KeywordTable keywords = new KeywordTable();
 
         for(TestCaseFile testCaseFile: testCaseFiles){
             keywords.addAll(testCaseFile.getUserKeywords());

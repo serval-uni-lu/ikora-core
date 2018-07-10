@@ -40,7 +40,7 @@ public class Difference {
 
     public static Difference of(KeywordDefinition before, KeywordDefinition after) {
         if(before == null || after == null){
-            throw new NullPointerException();
+            return new Difference(before, after);
         }
 
         Difference difference = new Difference(before, after);
