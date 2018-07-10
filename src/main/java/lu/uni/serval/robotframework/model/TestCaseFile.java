@@ -59,11 +59,11 @@ public class TestCaseFile implements Iterable<UserKeyword> {
         return testCaseTable.getTestCases();
     }
 
-    public List<UserKeyword> getUserKeywords() {
-        List<UserKeyword> userKeywords = new ArrayList<>(keywordTable.getUserKeywords());
+    public Set<UserKeyword> getUserKeywords() {
+        Set<UserKeyword> userKeywords = new HashSet<>(keywordTable.getUserKeywords());
 
         for(Resources resources: settings.getResources()){
-            resources.getTestCaseFile().getUserKeywords(userKeywords);
+            userKeywords.addAll(resources.getTestCaseFile().getUserKeywords());
         }
 
         return userKeywords;
@@ -74,16 +74,6 @@ public class TestCaseFile implements Iterable<UserKeyword> {
         getVariables(variables);
 
         return variables;
-    }
-
-    private void getUserKeywords(List<UserKeyword> parentUserKeywords){
-        List<UserKeyword> userKeywords = getUserKeywords();
-
-        for(UserKeyword userKeyword : userKeywords){
-            if(!parentUserKeywords.contains(userKeyword)){
-                parentUserKeywords.add(userKeyword);
-            }
-        }
     }
 
     private void getVariables(VariableTable variables) {

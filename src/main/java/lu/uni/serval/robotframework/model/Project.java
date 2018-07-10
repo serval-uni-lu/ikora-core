@@ -1,6 +1,7 @@
 package lu.uni.serval.robotframework.model;
 
 import java.io.File;
+import java.security.Key;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -65,12 +66,14 @@ public class Project implements Comparable<Project> {
         return libraries;
     }
 
-    public List<UserKeyword> getKeywords() {
-        if(testCaseFiles.isEmpty()) {
-            return new ArrayList<>();
+    public Set<UserKeyword> getUserKeywords() {
+        Set<UserKeyword> keywords = new HashSet<>();
+
+        for(TestCaseFile testCaseFile: testCaseFiles){
+            keywords.addAll(testCaseFile.getUserKeywords());
         }
 
-        return testCaseFiles.get(0).getUserKeywords();
+        return keywords;
     }
 
     public void setLibraries(LibraryResources libraries) {
