@@ -51,9 +51,9 @@ public class ProjectAnalyzer {
                 }
 
                 differences.addDifference(project1, project2, Difference.of(keyword1, keyword2));
-
-                project1 = project2;
             }
+
+            project1 = project2;
         }
 
         return differences;
