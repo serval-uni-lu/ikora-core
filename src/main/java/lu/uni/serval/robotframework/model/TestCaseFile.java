@@ -59,8 +59,8 @@ public class TestCaseFile implements Iterable<UserKeyword> {
         return testCaseTable.getTestCases();
     }
 
-    public Set<UserKeyword> getUserKeywords() {
-        Set<UserKeyword> userKeywords = new HashSet<>(keywordTable.getUserKeywords());
+    public KeywordTable getUserKeywords() {
+        KeywordTable userKeywords = new KeywordTable(keywordTable);
 
         for(Resources resources: settings.getResources()){
             userKeywords.addAll(resources.getTestCaseFile().getUserKeywords());
@@ -100,13 +100,7 @@ public class TestCaseFile implements Iterable<UserKeyword> {
     }
 
     public KeywordDefinition findUserKeyword(String name) {
-        for(KeywordDefinition keyword: getUserKeywords()) {
-            if(keyword.matches(name)) {
-                return keyword;
-            }
-        }
-
-        return null;
+        return getUserKeywords().findKeyword(name);
     }
 
     public Variable findVariable(String name) {
