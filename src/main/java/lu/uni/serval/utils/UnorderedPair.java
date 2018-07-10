@@ -20,7 +20,7 @@ public class UnorderedPair<T> {
 
     @Override
     public boolean equals(Object other) {
-        return other instanceof UnorderedPair && set.equals(((UnorderedPair<T>)other).set);
+        return other instanceof UnorderedPair && set.equals(((UnorderedPair)other).set);
     }
 
     @Override

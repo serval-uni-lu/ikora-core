@@ -1,8 +1,6 @@
 package lu.uni.serval.analytics;
 
 import lu.uni.serval.robotframework.model.*;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

@@ -1,7 +1,6 @@
 package lu.uni.serval.robotframework.model;
 
 import lu.uni.serval.robotframework.runner.Runtime;
-import lu.uni.serval.utils.tree.LabelTreeNode;
 
 import javax.annotation.Nonnull;
 import java.util.*;

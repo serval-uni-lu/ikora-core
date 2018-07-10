@@ -1,6 +1,5 @@
 package lu.uni.serval.robotframework.model;
 
-import com.google.errorprone.annotations.Var;
 import lu.uni.serval.utils.Differentiable;
 
 import java.util.ArrayList;

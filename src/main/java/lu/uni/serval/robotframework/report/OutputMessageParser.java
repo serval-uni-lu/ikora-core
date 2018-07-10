@@ -79,7 +79,7 @@ public class OutputMessageParser {
         while (matcher.find()){
             if(matcher.start() > end){
                 builder.append("(");
-                builder.append(format.substring(end, matcher.start()));
+                builder.append(format, end, matcher.start());
                 builder.append(")");
                 argumentPositions.add(-1);
             }
@@ -92,7 +92,7 @@ public class OutputMessageParser {
 
         if(format.length() > end){
             builder.append("(");
-            builder.append(format.substring(end, format.length()));
+            builder.append(format, end, format.length());
             builder.append(")");
             argumentPositions.add(-1);
         }

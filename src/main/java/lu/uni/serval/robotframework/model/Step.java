@@ -53,8 +53,6 @@ public abstract class Step implements Keyword, Differentiable<Step> {
 
         Step step = (Step)other;
 
-        boolean same = name.equals(step.name);
-
-        return same;
+        return name.equals(step.name);
     }
 }
