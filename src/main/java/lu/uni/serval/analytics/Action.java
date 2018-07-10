@@ -1,7 +1,10 @@
 package lu.uni.serval.analytics;
 
 public class Action {
+
     public enum Type{
+        ADD_USER_KEYWORD,
+        REMOVE_USER_KEYWORD,
         CHANGE_NAME,
 
         CHANGE_STEP_TYPE,
@@ -35,6 +38,14 @@ public class Action {
 
     public int getRight() {
         return right;
+    }
+
+    public static Action addUserKeyword() {
+        return new Action(Type.ADD_USER_KEYWORD, -1, -1);
+    }
+
+    public static Action removeUserKeyword(){
+        return new Action(Type.REMOVE_USER_KEYWORD, -1, -1);
     }
 
     public static Action changeName(){

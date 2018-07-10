@@ -17,8 +17,10 @@ public class DifferenceSerializer extends JsonSerializer<Difference> {
     public void serialize(Difference difference, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException, JsonProcessingException {
         jsonGenerator.writeStartObject();
 
-        writeKeywordInfo(jsonGenerator, difference.getLeft(), "before");
-        writeKeywordInfo(jsonGenerator, difference.getRight(), "after");
+        if(difference.getLeft() != null && difference.getRight() != null){
+            writeKeywordInfo(jsonGenerator, difference.getLeft(), "before");
+            writeKeywordInfo(jsonGenerator, difference.getRight(), "after");
+        }
 
         writeActions(difference, jsonGenerator);
 
@@ -35,6 +37,20 @@ public class DifferenceSerializer extends JsonSerializer<Difference> {
             jsonGenerator.writeStartObject();
 
             switch (action.getType()){
+                case ADD_USER_KEYWORD:
+                {
+                    jsonGenerator.writeStringField("action", "add user keyword");
+                    jsonGenerator.writeStringField("user keyword", after.getName().toString());
+                }
+                break;
+
+                case REMOVE_USER_KEYWORD:
+                {
+                    jsonGenerator.writeStringField("action", "remove user keyword");
+                    jsonGenerator.writeStringField("user keyword", before.getName().toString());
+                }
+                break;
+
                 case ADD_STEP:
                 {
                     int position = action.getRight();

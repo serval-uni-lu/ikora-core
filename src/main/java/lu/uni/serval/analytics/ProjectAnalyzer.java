@@ -1,12 +1,9 @@
 package lu.uni.serval.analytics;
 
 import lu.uni.serval.robotframework.model.*;
-import org.apache.commons.lang3.tuple.Pair;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ProjectAnalyzer {
     private List<Project> projects;
@@ -28,23 +25,9 @@ public class ProjectAnalyzer {
             analyzer.projects.add(project);
         }
 
+        Collections.sort(analyzer.projects, Comparator.comparing(Project::getDateTime));
+
         return analyzer;
-    }
-
-    public void add(Project project){
-        boolean inserted = false;
-
-        for(int index = 0; index < projects.size(); ++index){
-            if(projects.get(index).getDateTime().isAfter(project.getDateTime())){
-                projects.add(index, project);
-                inserted = true;
-                break;
-            }
-        }
-
-        if(!inserted){
-            projects.add(project);
-        }
     }
 
 

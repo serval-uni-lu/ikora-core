@@ -39,13 +39,19 @@ public class Difference {
     }
 
     public static Difference of(KeywordDefinition before, KeywordDefinition after) {
-        if(before == null || after == null){
-            return new Difference(before, after);
-        }
-
         Difference difference = new Difference(before, after);
 
         if(before == after){
+            return difference;
+        }
+
+        if(before == null){
+            difference.actions.add(Action.addUserKeyword());
+            return difference;
+        }
+
+        if(after == null){
+            difference.actions.add(Action.removeUserKeyword());
             return difference;
         }
 
