@@ -1,11 +1,14 @@
 package lu.uni.serval.robotframework.compiler;
 
 import lu.uni.serval.robotframework.model.*;
+import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
 
 public class TestCaseFileParser {
+    final static Logger logger = Logger.getLogger(TestCaseFileParser.class);
+
     static public void parse(File file, Project project) {
         LineReader reader = null;
 
@@ -42,9 +45,10 @@ public class TestCaseFileParser {
             }
 
             project.addTestCaseFile(testCaseFile);
+            logger.info("file parse: " + file.getAbsolutePath());
 
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("failed to parse: " + file.getAbsolutePath());
         }
         finally {
             reader.close();
