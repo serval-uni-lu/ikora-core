@@ -1,11 +1,16 @@
 package lu.uni.serval.robotframework.compiler;
 
 import lu.uni.serval.robotframework.model.*;
+import org.apache.log4j.Logger;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+
+
 public class KeywordLinker {
+    final static Logger logger = Logger.getLogger(KeywordLinker.class);
+
     private KeywordLinker() {}
 
     static public void link(Project project) throws Exception {
@@ -41,10 +46,11 @@ public class KeywordLinker {
             }
 
             if(keyword == null) {
-                throw new Exception();
+                logger.error("Keyword definition for \"" + name + "\" not found!");
             }
-
-            call.setKeyword(keyword);
+            else {
+                call.setKeyword(keyword);
+            }
         }
     }
 
@@ -65,11 +71,11 @@ public class KeywordLinker {
             }
 
             if(keyword == null) {
-                throw new Exception();
+                logger.error("Keyword definition for \"" + name + "\" not found!");
             }
-
-
-            call.setKeyword(keyword);
+            else {
+                call.setKeyword(keyword);
+            }
         }
     }
 }

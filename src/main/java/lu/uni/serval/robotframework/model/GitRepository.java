@@ -1,11 +1,13 @@
 package lu.uni.serval.robotframework.model;
 
 import lu.uni.serval.robotframework.compiler.Compiler;
+import lu.uni.serval.robotframework.compiler.KeywordLinker;
 import lu.uni.serval.utils.Configuration;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.log4j.Logger;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.errors.AmbiguousObjectException;
@@ -25,6 +27,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GitRepository {
+    final static Logger logger = Logger.getLogger(GitRepository.class);
+
     private Git git;
     private String url;
     private String branch;
@@ -75,6 +79,7 @@ public class GitRepository {
     }
 
     public void checkout(String commitId){
+        logger.info("checkout and parse project for commit ID: " + commitId);
         try {
             if(git == null){
                 cloneRepository();
