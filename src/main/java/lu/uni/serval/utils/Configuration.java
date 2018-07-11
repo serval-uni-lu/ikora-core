@@ -12,6 +12,7 @@ import java.util.Map;
 
 import net.harawata.appdirs.AppDirs;
 import net.harawata.appdirs.AppDirsFactory;
+import org.apache.log4j.Logger;
 
 public class Configuration {
 
@@ -25,6 +26,8 @@ public class Configuration {
     private static Configuration instance = new Configuration();
     @JsonIgnore
     private static File configurationFolder;
+    @JsonIgnore
+    final static Logger logger = Logger.getLogger(Configuration.class);
 
     private Configuration(){
     }
@@ -90,5 +93,7 @@ public class Configuration {
         configurationFolder = new File(configPath);
 
         configurationFolder.mkdirs();
+
+        logger.info("Configuration loaded from" + config);
     }
 }

@@ -22,10 +22,10 @@ public class OutputParser {
         factory = DocumentBuilderFactory.newInstance();
     }
 
-    static public ReportAnalyzer parse(String reportFolderPath, String gitUrl) throws Exception {
+    static public ReportAnalyzer parse(String reportFolderPath, String gitUrl, String branch) throws Exception {
         List<File> xmlFiles = getXmlPaths(reportFolderPath);
 
-        GitRepository gitRepository = new GitRepository(gitUrl);
+        GitRepository gitRepository = new GitRepository(gitUrl, branch);
         ReportAnalyzer reports = new ReportAnalyzer();
 
         for(File xmlFile: xmlFiles){

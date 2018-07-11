@@ -8,6 +8,9 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.errors.AmbiguousObjectException;
+import org.eclipse.jgit.errors.IncorrectObjectTypeException;
+import org.eclipse.jgit.errors.MissingObjectException;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.revwalk.RevCommit;
@@ -24,13 +27,16 @@ import java.util.Map;
 public class GitRepository {
     private Git git;
     private String url;
+    private String branch;
     private File localFolder;
     private String name;
 
     private Project project;
 
-    public GitRepository(String url)  {
+    public GitRepository(String url, String branch)  {
         this.url = url;
+        this.branch = branch;
+
         this.name = FilenameUtils.getBaseName(url);
 
         File cache = Configuration.getInstance().getConfigurationFolder();
@@ -105,6 +111,7 @@ public class GitRepository {
 
         git = Git.cloneRepository()
                 .setURI(url)
+                .setBranch(branch)
                 .setDirectory(localFolder)
                 .call();
     }
@@ -150,12 +157,20 @@ public class GitRepository {
             }
 
             try {
-                for (RevCommit revCommit : git.log().call()) {
+                for (RevCommit revCommit : git.log().add(git.getRepository().resolve(branch)).call()) {
                     Instant instant = Instant.ofEpochSecond(revCommit.getCommitTime());
                     LocalDateTime commitDate = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
                     commitMap.put(revCommit.getName(),commitDate);
                 }
             } catch (GitAPIException e) {
+                e.printStackTrace();
+            } catch (IncorrectObjectTypeException e) {
+                e.printStackTrace();
+            } catch (AmbiguousObjectException e) {
+                e.printStackTrace();
+            } catch (MissingObjectException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
                 e.printStackTrace();
             }
 

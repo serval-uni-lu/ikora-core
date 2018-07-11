@@ -14,7 +14,9 @@ public class ProjectAnalyticsCli implements CommandRunner {
         Plugin analytics = config.getPlugin("report analytics");
 
         String gitUrl = (String)analytics.getAdditionalProperty("git url", "");
-        ProjectAnalyzer projects = ProjectAnalyzer.fromGit(gitUrl);
+        String branch = (String)analytics.getAdditionalProperty("git branch", "master");
+
+        ProjectAnalyzer projects = ProjectAnalyzer.fromGit(gitUrl, branch);
 
         exportDifferences(analytics, projects);
     }
