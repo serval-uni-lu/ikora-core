@@ -1,10 +1,13 @@
 package lu.uni.serval.robotframework.compiler;
 
 import lu.uni.serval.robotframework.model.*;
+import org.apache.log4j.Logger;
 
 import java.util.List;
 
 public class VariableLinker {
+    final static Logger logger = Logger.getLogger(VariableLinker.class);
+
     static public void link(Project project) throws Exception {
         for (TestCaseFile testCaseFile: project.getTestCaseFiles()) {
 
@@ -35,7 +38,7 @@ public class VariableLinker {
                 variable = testCaseFile.findVariable(name);
 
                 if(variable == null) {
-                    throw new Exception();
+                    logger.error("Variable for argument \"" + "\" not found!");
                 }
 
                 argument.setVariable(name, variable);
