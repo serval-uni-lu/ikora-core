@@ -1,7 +1,6 @@
 package lu.uni.serval.robotframework.model;
 
 import lu.uni.serval.robotframework.compiler.Compiler;
-import lu.uni.serval.robotframework.compiler.KeywordLinker;
 import lu.uni.serval.utils.Configuration;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -17,6 +16,7 @@ import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
+import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,14 +32,18 @@ public class GitRepository {
     private Git git;
     private String url;
     private String branch;
+    private String username;
+    private String password;
     private File localFolder;
     private String name;
 
     private Project project;
 
-    public GitRepository(String url, String branch)  {
+    public GitRepository(String url, String branch, String username, String password)  {
         this.url = url;
         this.branch = branch;
+        this.username = username;
+        this.password = password;
 
         this.name = FilenameUtils.getBaseName(url);
 
@@ -116,6 +120,7 @@ public class GitRepository {
 
         git = Git.cloneRepository()
                 .setURI(url)
+                .setCredentialsProvider( new UsernamePasswordCredentialsProvider(username, password))
                 .setBranch(branch)
                 .setDirectory(localFolder)
                 .call();

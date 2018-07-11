@@ -12,10 +12,10 @@ public class ProjectAnalyzer {
         projects = new ArrayList<>();
     }
 
-    public static ProjectAnalyzer fromGit(String gitUrl, String branch) {
+    public static ProjectAnalyzer fromGit(String gitUrl, String branch, String username, String password) {
         ProjectAnalyzer analyzer = new ProjectAnalyzer();
 
-        GitRepository repository = new GitRepository(gitUrl, branch);
+        GitRepository repository = new GitRepository(gitUrl, branch, username, password);
         Map<String, LocalDateTime> revisions = repository.getRevisions();
 
         for(String commitId: revisions.keySet()){

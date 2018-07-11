@@ -15,8 +15,10 @@ public class ProjectAnalyticsCli implements CommandRunner {
 
         String gitUrl = (String)analytics.getAdditionalProperty("git url", "");
         String branch = (String)analytics.getAdditionalProperty("git branch", "master");
+        String username = (String)analytics.getAdditionalProperty("git user", "");
+        String password = (String)analytics.getAdditionalProperty("git password", "");
 
-        ProjectAnalyzer projects = ProjectAnalyzer.fromGit(gitUrl, branch);
+        ProjectAnalyzer projects = ProjectAnalyzer.fromGit(gitUrl, branch, username, password);
 
         exportDifferences(analytics, projects);
     }
