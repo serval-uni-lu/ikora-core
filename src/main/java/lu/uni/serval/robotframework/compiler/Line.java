@@ -22,7 +22,7 @@ public class Line {
     }
 
     public boolean isEmpty() {
-        return text.isEmpty();
+        return text.trim().isEmpty();
     }
 
     public String[] tokenize(){
