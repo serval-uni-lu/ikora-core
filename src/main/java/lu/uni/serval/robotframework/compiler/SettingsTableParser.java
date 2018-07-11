@@ -25,6 +25,7 @@ public class SettingsTableParser {
             String[] tokens = line.tokenize();
 
             if(tokens.length == 0){
+                line = reader.readLine();
                 continue;
             }
 
