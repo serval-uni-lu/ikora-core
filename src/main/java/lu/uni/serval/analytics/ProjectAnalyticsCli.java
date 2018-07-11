@@ -4,10 +4,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lu.uni.serval.utils.CommandRunner;
 import lu.uni.serval.utils.Configuration;
 import lu.uni.serval.utils.Plugin;
+import org.apache.log4j.Logger;
 
 import java.io.*;
 
 public class ProjectAnalyticsCli implements CommandRunner {
+    final static Logger logger = Logger.getLogger(ProjectAnalyticsCli.class);
+
     @Override
     public void run() throws Exception {
         Configuration config = Configuration.getInstance();
@@ -25,6 +28,7 @@ public class ProjectAnalyticsCli implements CommandRunner {
 
     private void exportDifferences(Plugin analytics, ProjectAnalyzer projects) {
         if(analytics.getAdditionalProperty("output differences file", "").equals("")){
+            logger.warn("no output differences file provided");
             return;
         }
 
@@ -35,6 +39,8 @@ public class ProjectAnalyticsCli implements CommandRunner {
             File file = new File((String)analytics.getAdditionalProperty("output differences file", "./report-differences.json"));
 
             mapper.writeValue(file, results);
+
+            logger.info("differences written to " + file.getAbsolutePath());
         } catch (IOException e) {
             e.printStackTrace();
         }

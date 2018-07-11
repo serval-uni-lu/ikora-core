@@ -6,10 +6,13 @@ import lu.uni.serval.utils.Configuration;
 import lu.uni.serval.utils.ConsoleColors;
 import lu.uni.serval.utils.exception.DuplicateNodeException;
 import org.apache.commons.cli.*;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 
 public class RFTestGenerator {
+    final static Logger logger = Logger.getLogger(RFTestGenerator.class);
+
     public static void main(String[] args) throws Exception {
         try {
             Options options = new Options();
@@ -44,5 +47,7 @@ public class RFTestGenerator {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        logger.info("program finished");
     }
 }
