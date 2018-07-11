@@ -101,7 +101,7 @@ public class GitRepository {
             project.setCommitId(commitId);
             project.setDateTime(getCommitDate(ref.getObjectId()));
 
-            git.checkout().setName("master").call();
+            git.checkout().setName(branch).call();
             git.branchDelete().setBranchNames(commitId).call();
 
         } catch (GitAPIException e) {
