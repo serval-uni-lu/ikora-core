@@ -68,7 +68,7 @@ public class KeywordCall extends Step {
 
     @Override
     public double indexTo(Differentiable<Step> other) {
-        if(!(other instanceof Step)){
+        if(!(other instanceof KeywordCall)){
             return 1;
         }
 

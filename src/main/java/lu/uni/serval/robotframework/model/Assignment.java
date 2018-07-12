@@ -58,6 +58,10 @@ public class Assignment extends Step {
 
     @Override
     public List<Argument> getParameters() {
+        if(expression == null){
+            return new ArrayList<>();
+        }
+
         return expression.getParameters();
     }
 
