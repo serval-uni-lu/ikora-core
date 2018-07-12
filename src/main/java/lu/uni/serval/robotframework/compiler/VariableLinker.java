@@ -38,10 +38,11 @@ public class VariableLinker {
                 variable = testCaseFile.findVariable(name);
 
                 if(variable == null) {
-                    logger.error("Variable for argument \"" + "\" not found!");
+                    logger.error("Variable for argument \"" + name + "\" not found!");
                 }
-
-                argument.setVariable(name, variable);
+                else{
+                    argument.setVariable(name, variable);
+                }
             }
         }
     }
