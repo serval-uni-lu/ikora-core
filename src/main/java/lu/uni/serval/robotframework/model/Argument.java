@@ -31,7 +31,7 @@ public class Argument implements Differentiable<Argument> {
     }
 
     public boolean matches(String string) {
-        Matcher matcher = match.matcher(string);
+        Matcher matcher = match.matcher(escape(string));
         return matcher.matches();
     }
 
@@ -71,6 +71,11 @@ public class Argument implements Differentiable<Argument> {
 
     public static Matcher getVariableMatcher(String value) {
         return Pattern.compile("(\\$\\{)(.*?)(\\})").matcher(value);
+    }
+
+    public static String escape(String s){
+        Pattern specialRegexChars = Pattern.compile("[\\{\\}\\(\\)\\[\\]\\.\\+\\*\\?\\^\\$\\\\\\|]");
+        return specialRegexChars.matcher(s).replaceAll("\\\\$0");
     }
 
     @Override
