@@ -51,7 +51,9 @@ public class TestCaseFileParser {
             logger.error("failed to parse: " + file.getAbsolutePath());
         }
         finally {
-            reader.close();
+            if(reader != null){
+                reader.close();
+            }
         }
     }
 
