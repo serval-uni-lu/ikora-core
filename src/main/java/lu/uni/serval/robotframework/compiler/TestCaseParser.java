@@ -24,17 +24,9 @@ public class TestCaseParser {
                 continue;
             }
 
-            tokens = line.tokenize();
+            tokens = Utils.removeIndent(line.tokenize());
 
-            if(!tokens[0].isEmpty()){
-                break;
-            }
-
-            if(tokens.length < 2) {
-                continue;
-            }
-
-            String label = tokens[1];
+            String label = tokens[0].trim();
 
             if (Utils.compareNoCase(label, "\\[documentation\\]")) {
                 parseDocumentation(reader, tokens, testCase);

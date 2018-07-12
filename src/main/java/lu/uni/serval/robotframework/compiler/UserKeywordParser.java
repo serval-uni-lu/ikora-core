@@ -22,13 +22,9 @@ public class UserKeywordParser {
                 continue;
             }
 
-            tokens = reader.getCurrent().tokenize();
+            tokens = Utils.removeIndent(reader.getCurrent().tokenize());
 
-            if(tokens.length < 2) {
-                continue;
-            }
-
-            String label = tokens[1];
+            String label = tokens[1].trim();
 
             if (Utils.compareNoCase(label, "\\[documentation\\]")) {
                 parseDocumentation(reader, tokens, userKeyword);
