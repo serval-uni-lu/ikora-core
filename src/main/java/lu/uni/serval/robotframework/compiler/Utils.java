@@ -41,7 +41,7 @@ class Utils {
     }
 
     static void parseDocumentation(LineReader reader, String[] tokens, StringBuilder builder) throws IOException {
-        builder.append(tokens[1]);
+        builder.append(Utils.removeIndent(tokens)[1]);
         appendMultiline(reader, builder);
     }
 
@@ -49,9 +49,13 @@ class Utils {
         Line line;
 
         while((line = reader.readLine()) != null){
-            String[] tokens = line.tokenize();
+            if(Utils.ignore(line)){
+                continue;
+            }
 
-            if(tokens.length == 0 || !tokens[0].equalsIgnoreCase("...")){
+            String[] tokens = Utils.removeIndent(line.tokenize());
+
+            if(!tokens[0].startsWith("...")){
                 break;
             }
 
