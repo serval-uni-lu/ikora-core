@@ -19,7 +19,7 @@ public class TestCaseParser {
         Line line = reader.readLine();
 
         while(line.isValid()) {
-            if(line.isEmpty()) {
+            if(Utils.ignore(line)) {
                 line = reader.readLine();
                 continue;
             }

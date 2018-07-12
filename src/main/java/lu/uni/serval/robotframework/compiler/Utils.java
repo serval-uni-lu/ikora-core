@@ -20,6 +20,14 @@ class Utils {
         return Utils.compareNoCase(line, regex);
     }
 
+    static boolean isComment(String line){
+        return line.trim().startsWith("#");
+    }
+
+    static boolean ignore(Line line){
+        return line.isEmpty() || isComment(line.getText());
+    }
+
     static boolean isBlock(String line) {
         return isBlock(line, "(.+)");
     }

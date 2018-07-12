@@ -14,13 +14,13 @@ public class KeywordTableParser {
         reader.readLine();
 
         while(reader.getCurrent().isValid()){
-            if(Utils.isBlock(reader.getCurrent().getText())){
-                break;
-            }
-
-            if(reader.getCurrent().isEmpty()){
+            if(Utils.ignore(reader.getCurrent())){
                 reader.readLine();
                 continue;
+            }
+
+            if(Utils.isBlock(reader.getCurrent().getText())){
+                break;
             }
 
             UserKeyword userKeyword = UserKeywordParser.parse(reader);

@@ -18,6 +18,11 @@ public class SettingsTableParser {
         Line line = reader.readLine();
 
         while(line.isValid()){
+            if(Utils.ignore(line)){
+                line = reader.readLine();
+                continue;
+            }
+
             if(Utils.isBlock(line.getText())){
                 break;
             }

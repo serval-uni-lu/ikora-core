@@ -31,7 +31,7 @@ public class Argument implements Differentiable<Argument> {
     }
 
     public boolean matches(String string) {
-        Matcher matcher = match.matcher(escape(string));
+        Matcher matcher = match.matcher(string);
         return matcher.matches();
     }
 
@@ -66,7 +66,7 @@ public class Argument implements Differentiable<Argument> {
         Matcher matcher = getVariableMatcher(this.value);
         String pattern = matcher.replaceAll("(.*)").trim();
 
-        match = Pattern.compile("^" + pattern + "$", Pattern.CASE_INSENSITIVE);
+        match = Pattern.compile("^" + escape(pattern) + "$", Pattern.CASE_INSENSITIVE);
     }
 
     public static Matcher getVariableMatcher(String value) {

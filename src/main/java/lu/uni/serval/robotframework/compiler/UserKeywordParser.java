@@ -17,7 +17,7 @@ public class UserKeywordParser {
         reader.readLine();
 
         while(reader.getCurrent().isValid() && reader.getCurrent().isInBlock(test)) {
-            if(reader.getCurrent().isEmpty()) {
+            if(Utils.ignore(reader.getCurrent())) {
                 reader.readLine();
                 continue;
             }
