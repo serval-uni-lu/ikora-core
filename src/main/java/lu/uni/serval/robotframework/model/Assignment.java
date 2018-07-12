@@ -35,7 +35,7 @@ public class Assignment extends Step {
     @Override
     public void setName(String name) {
         super.setName(name);
-        String[] tokens = getName().toString().split("=");
+        String[] tokens = name.split("=", 1);
 
         if(tokens.length != 2){
             logger.error("trying to set invalid assignment name: " + name);
