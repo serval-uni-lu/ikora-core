@@ -3,11 +3,14 @@ package lu.uni.serval.robotframework.model;
 import lu.uni.serval.robotframework.runner.Runtime;
 import lu.uni.serval.utils.Differentiable;
 import lu.uni.serval.utils.LevenshteinDistance;
+import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Assignment extends Step {
+    final static Logger logger = Logger.getLogger(Assignment.class);
+
     private List<Variable> returnValues;
 
     private Step expression;
@@ -35,6 +38,7 @@ public class Assignment extends Step {
         String[] tokens = getName().toString().split("=");
 
         if(tokens.length != 2){
+            logger.error("trying to set invalid assignment name: " + name);
             return;
         }
 
