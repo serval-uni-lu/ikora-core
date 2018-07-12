@@ -166,10 +166,19 @@ public class GitRepository {
                 cloneRepository();
             }
 
-            ObjectId masterId = git.getRepository().resolve("remotes/origin/master");
-            ObjectId branchId = git.getRepository().resolve("remotes/origin" + branch);
+            Iterable<RevCommit> revCommits = null;
 
-            for (RevCommit revCommit : git.log().addRange(masterId, branchId).call()) {
+            if(branch.equals("master")){
+                revCommits = git.log().call();
+            }
+            else{
+                ObjectId masterId = git.getRepository().resolve("remotes/origin/master");
+                ObjectId branchId = git.getRepository().resolve("remotes/origin/" + branch);
+
+                revCommits = git.log().addRange(masterId, branchId).call();
+            }
+
+            for (RevCommit revCommit : revCommits) {
                 Instant instant = Instant.ofEpochSecond(revCommit.getCommitTime());
                 LocalDateTime commitDate = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
                 commitMap.put(revCommit.getName(),commitDate);
