@@ -166,31 +166,22 @@ public class GitRepository {
                 cloneRepository();
             }
 
-            try {
-                for (RevCommit revCommit : git.log().add(git.getRepository().resolve(branch)).call()) {
-                    Instant instant = Instant.ofEpochSecond(revCommit.getCommitTime());
-                    LocalDateTime commitDate = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
-                    commitMap.put(revCommit.getName(),commitDate);
-                }
-            } catch (GitAPIException e) {
-                e.printStackTrace();
-            } catch (IncorrectObjectTypeException e) {
-                e.printStackTrace();
-            } catch (AmbiguousObjectException e) {
-                e.printStackTrace();
-            } catch (MissingObjectException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
+            ObjectId masterId = git.getRepository().resolve("remotes/origin/master");
+            ObjectId branchId = git.getRepository().resolve("remotes/origin" + branch);
+
+            for (RevCommit revCommit : git.log().addRange(masterId, branchId).call()) {
+                Instant instant = Instant.ofEpochSecond(revCommit.getCommitTime());
+                LocalDateTime commitDate = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
+                commitMap.put(revCommit.getName(),commitDate);
             }
 
             return commitMap;
         }
-            catch (GitAPIException e){
-            e.printStackTrace();
-        }
+        catch (GitAPIException | IOException e) {
+            logger.error("Failed to get logs for branch " + branch);
 
-        return commitMap;
+            return new HashMap<>();
+        }
     }
 
     private LocalDateTime getCommitDate(ObjectId commitId){
