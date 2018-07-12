@@ -56,18 +56,18 @@ public class TestCaseFileParser {
     }
 
     static private boolean isSettings(String line){
-        return Utils.isBlock(line, "settings");
+        return Utils.isBlock(line, "setting(s?)");
     }
 
     static private boolean isTestCases(String line){
-        return Utils.isBlock(line, "test cases");
+        return Utils.isBlock(line, "test case(s?)");
     }
 
     static private boolean isKeywords(String line){
-        return Utils.isBlock(line, "keywords");
+        return Utils.isBlock(line, "keyword(s?)");
     }
 
     static private boolean isVariable(String line){
-        return Utils.isBlock(line, "variables");
+        return Utils.isBlock(line, "variable(s?)");
     }
 }
