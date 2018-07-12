@@ -45,9 +45,13 @@ public class TestCaseFileParser {
             }
 
             project.addTestCaseFile(testCaseFile);
-            logger.info("file parse: " + file.getAbsolutePath());
+            logger.trace("file parse: " + file.getAbsolutePath());
 
         } catch (IOException e) {
+            TestCaseFile testCaseFile = new TestCaseFile();
+            testCaseFile.setFile(file);
+            project.addTestCaseFile(testCaseFile);
+
             logger.error("failed to parse: " + file.getAbsolutePath());
         }
         finally {
