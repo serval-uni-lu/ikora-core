@@ -46,7 +46,7 @@ public class StepParser {
 
     private static Step parseAssignment(LineReader reader) throws IOException {
         Assignment assignment = new Assignment();
-        assignment.setName(reader.getCurrent().toString());
+        assignment.setName(reader.getCurrent().getText());
 
         reader.readLine();
 
