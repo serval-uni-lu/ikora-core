@@ -41,7 +41,11 @@ class Utils {
     }
 
     static void parseDocumentation(LineReader reader, String[] tokens, StringBuilder builder) throws IOException {
-        builder.append(Utils.removeIndent(tokens)[1]);
+        tokens = Utils.removeIndent(tokens);
+
+        if(tokens.length > 1){
+            builder.append(Utils.removeIndent(tokens)[1]);
+        }
         appendMultiline(reader, builder);
     }
 
