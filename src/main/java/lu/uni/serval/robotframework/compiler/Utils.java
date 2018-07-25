@@ -10,7 +10,7 @@ class Utils {
 
     static boolean compareNoCase(String line, String regex){
         Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(line);
+        Matcher matcher = pattern.matcher(line.trim());
 
         return matcher.matches();
     }
