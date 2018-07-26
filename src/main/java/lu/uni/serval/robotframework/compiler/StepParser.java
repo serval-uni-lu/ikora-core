@@ -1,11 +1,9 @@
 package lu.uni.serval.robotframework.compiler;
 
-import lu.uni.serval.robotframework.model.Assignment;
-import lu.uni.serval.robotframework.model.ForLoop;
-import lu.uni.serval.robotframework.model.KeywordCall;
-import lu.uni.serval.robotframework.model.Step;
+import lu.uni.serval.robotframework.model.*;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 public class StepParser {
     public static Step parse(LineReader reader) throws IOException {
@@ -46,7 +44,25 @@ public class StepParser {
 
     private static Step parseAssignment(LineReader reader) throws IOException {
         Assignment assignment = new Assignment();
-        assignment.setName(reader.getCurrent().getText());
+
+        String[] tokens = reader.getCurrent().tokenize();
+
+        for(int i = 0; i < tokens.length; ++i){
+            String token = tokens[i].replaceAll("(\\s*)=^", "");
+            token = token.replaceAll("$=(\\s*)", "");
+
+            if(token.isEmpty()){
+                continue;
+            }
+
+            if(Argument.isVariable(token)){
+                assignment.addReturnValue(token);
+            }
+            else{
+                KeywordCall call = getKeywordCall(Arrays.copyOfRange(tokens, i, tokens.length - 1));
+                assignment.setExpression(call);
+            }
+        }
 
         reader.readLine();
 
@@ -54,10 +70,19 @@ public class StepParser {
     }
 
     static private Step parseKeywordNameAndParameter(LineReader reader) throws IOException {
-        KeywordCall call = new KeywordCall();
 
         String[] tokens = reader.getCurrent().tokenize();
         tokens = Utils.removeIndent(tokens);
+
+        KeywordCall call = getKeywordCall(tokens);
+
+        reader.readLine();
+
+        return call;
+    }
+
+    private static KeywordCall getKeywordCall(String[] tokens) {
+        KeywordCall call = new KeywordCall();
 
         if(tokens.length > 0) {
             call.setName(tokens[0]);
@@ -68,9 +93,6 @@ public class StepParser {
                 call.addParameter(tokens[i]);
             }
         }
-
-        reader.readLine();
-
         return call;
     }
 }

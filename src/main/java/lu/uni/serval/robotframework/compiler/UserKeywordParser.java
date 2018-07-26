@@ -24,7 +24,7 @@ public class UserKeywordParser {
 
             tokens = Utils.removeIndent(reader.getCurrent().tokenize());
 
-            String label = tokens[1].trim();
+            String label = tokens[0].trim();
 
             if (Utils.compareNoCase(label, "\\[documentation\\]")) {
                 parseDocumentation(reader, tokens, userKeyword);

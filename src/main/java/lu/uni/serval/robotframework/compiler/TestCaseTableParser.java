@@ -13,14 +13,10 @@ public class TestCaseTableParser {
 
         reader.readLine();
 
-        while(reader.getCurrent().isValid()){
+        while(reader.getCurrent().isValid() && !Utils.isBlock(reader.getCurrent().getText())){
             if(Utils.ignore(reader.getCurrent())){
                 reader.readLine();
-                break;
-            }
-
-            if(Utils.isBlock(reader.getCurrent().getText())){
-                break;
+                continue;
             }
 
             TestCase testCase = TestCaseParser.parse(reader);

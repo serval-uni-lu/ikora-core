@@ -17,14 +17,10 @@ public class SettingsTableParser {
 
         Line line = reader.readLine();
 
-        while(line.isValid()){
+        while(line.isValid() && !Utils.isBlock(line.getText())){
             if(Utils.ignore(line)){
                 line = reader.readLine();
                 continue;
-            }
-
-            if(Utils.isBlock(line.getText())){
-                break;
             }
 
             String[] tokens = line.tokenize();
