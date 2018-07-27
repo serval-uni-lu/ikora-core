@@ -35,8 +35,18 @@ public class Argument implements Differentiable<Argument> {
         return matcher.matches();
     }
 
+    public boolean isVariable() {
+        Matcher matcher = getVariableMatcher(this.value, true);
+        return matcher.matches();
+    }
+
+    public static boolean isVariable(String value) {
+        Argument argument = new Argument(value);
+        return argument.hasVariable();
+    }
+
     public boolean hasVariable() {
-        Matcher matcher = getVariableMatcher(this.value);
+        Matcher matcher = getVariableMatcher(this.value, false);
         return matcher.matches();
     }
 
@@ -48,7 +58,7 @@ public class Argument implements Differentiable<Argument> {
     public List<String> findVariables() {
         List<String> variables = new ArrayList<>();
 
-        Matcher matcher = getVariableMatcher(this.value);
+        Matcher matcher = getVariableMatcher(this.value, false);
 
         while (matcher.find()){
             variables.add(this.value.substring(matcher.start(), matcher.end()));
@@ -63,13 +73,21 @@ public class Argument implements Differentiable<Argument> {
     }
 
     private void buildRegex() {
-        Matcher matcher = getVariableMatcher(this.value);
-        String pattern = matcher.replaceAll("(.*)").trim();
+        Matcher matcher = getVariableMatcher(this.value, false);
+        String placeholder = "@@@@___VARIABLE__PLACEHOLDER___@@@@";
 
-        match = Pattern.compile("^" + escape(pattern) + "$", Pattern.CASE_INSENSITIVE);
+        String pattern = matcher.replaceAll(placeholder).trim();
+        pattern = escape(pattern);
+        pattern = pattern.replaceAll(placeholder, "(.*)");
+
+        match = Pattern.compile("^" + pattern + "$", Pattern.CASE_INSENSITIVE);
     }
 
-    public static Matcher getVariableMatcher(String value) {
+    public static Matcher getVariableMatcher(String value, boolean strict) {
+        if(strict){
+            return Pattern.compile("^(\\$\\{)(.*?)(\\})$").matcher(value);
+        }
+
         return Pattern.compile("(\\$\\{)(.*?)(\\})").matcher(value);
     }
 

@@ -16,7 +16,7 @@ public class ArgumentTest {
 
     @Test
     public void checkVariableMatch(){
-        Argument argument = new Argument("Login \"$(user)\" with password \"$(password)\"");
+        Argument argument = new Argument("Login \"${user}\" with password \"${password}\"");
         String test = "Login \"admin\" with password \"1234\"";
 
         assertTrue(argument.matches(test));
