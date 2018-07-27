@@ -27,33 +27,20 @@ public class Assignment extends Step {
         return returnValues;
     }
 
-    @Override
-    public Keyword getStep(int position) {
-        return null;
+    public void addReturnValue(String returnValue){
+        Variable variable = new Variable();
+        variable.setName(returnValue);
+
+        returnValues.add(variable);
+    }
+
+    public void setExpression(KeywordCall call) {
+        expression = call;
     }
 
     @Override
-    public void setName(String name) {
-        super.setName(name);
-        String[] tokens = name.split("=", 2);
-
-        if(tokens.length != 2){
-            logger.error("trying to set invalid assignment name: " + name);
-            return;
-        }
-
-        Argument left = new Argument(tokens[0]);
-        String right = tokens[1];
-
-        for(String argument: left.findVariables()){
-            Variable variable = new Variable();
-            variable.setName(argument);
-
-            returnValues.add(variable);
-        }
-
-        expression = new KeywordCall();
-        expression.setName(right);
+    public Keyword getStep(int position) {
+        return null;
     }
 
     @Override
