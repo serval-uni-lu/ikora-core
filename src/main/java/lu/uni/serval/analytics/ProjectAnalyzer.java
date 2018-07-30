@@ -25,7 +25,7 @@ public class ProjectAnalyzer {
             analyzer.projects.add(project);
         }
 
-        Collections.sort(analyzer.projects, Comparator.comparing(Project::getDateTime));
+        analyzer.projects.sort(Comparator.comparing(Project::getDateTime));
 
         return analyzer;
     }
