@@ -85,14 +85,14 @@ public class Argument implements Differentiable<Argument> {
 
     public static Matcher getVariableMatcher(String value, boolean strict) {
         if(strict){
-            return Pattern.compile("^(\\$\\{)(.*?)(\\})$").matcher(value);
+            return Pattern.compile("^(([@$&])\\{)(.*?)(})$").matcher(value);
         }
 
-        return Pattern.compile("(\\$\\{)(.*?)(\\})").matcher(value);
+        return Pattern.compile("(([@$&])\\{)(.*?)(})").matcher(value);
     }
 
     public static String escape(String s){
-        Pattern specialRegexChars = Pattern.compile("[\\{\\}\\(\\)\\[\\]\\.\\+\\*\\?\\^\\$\\\\\\|]");
+        Pattern specialRegexChars = Pattern.compile("[{}()\\[\\].+*?^$\\\\|]");
         return specialRegexChars.matcher(s).replaceAll("\\\\$0");
     }
 
