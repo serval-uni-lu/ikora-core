@@ -2,7 +2,6 @@ package lu.uni.serval.analytics;
 
 import lu.uni.serval.robotframework.model.*;
 
-import java.time.LocalDateTime;
 import java.util.*;
 
 public class ProjectAnalyzer {
@@ -16,16 +15,14 @@ public class ProjectAnalyzer {
         ProjectAnalyzer analyzer = new ProjectAnalyzer();
 
         GitRepository repository = new GitRepository(gitUrl, branch, username, password);
-        Map<String, LocalDateTime> revisions = repository.getRevisions();
+        List<GitCommit> commits = repository.getRevisions();
 
-        for(String commitId: revisions.keySet()){
-            repository.checkout(commitId);
+        for(GitCommit commit: commits){
+            repository.checkout(commit.getId());
             Project project = repository.getProject();
 
             analyzer.projects.add(project);
         }
-
-        analyzer.projects.sort(Comparator.comparing(Project::getDateTime));
 
         return analyzer;
     }

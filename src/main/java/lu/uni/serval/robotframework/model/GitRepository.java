@@ -4,8 +4,6 @@ import lu.uni.serval.robotframework.compiler.Compiler;
 import lu.uni.serval.utils.Configuration;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
 import org.apache.log4j.Logger;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -20,8 +18,7 @@ import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class GitRepository {
     final static Logger logger = Logger.getLogger(GitRepository.class);
@@ -75,8 +72,8 @@ public class GitRepository {
     }
 
     public void checkout(LocalDateTime dateTime) {
-        Pair<String, LocalDateTime> commit = getMostRecentCommit(dateTime);
-        checkout(commit.getKey());
+        GitCommit commit = getMostRecentCommit(dateTime);
+        checkout(commit.getId());
     }
 
     public void checkout(String commitId){
@@ -123,40 +120,36 @@ public class GitRepository {
                 .call();
     }
 
-    public Pair<String, LocalDateTime> getMostRecentCommit(LocalDateTime dateTime){
+    public GitCommit getMostRecentCommit(LocalDateTime dateTime){
+        GitCommit mostRecentCommit = null;
+
         try {
             if(git == null){
                 cloneRepository();
             }
 
-            Map<String, LocalDateTime> map = getRevisions();
+            List<GitCommit> commits =  getRevisions();
 
-            Map.Entry<String, LocalDateTime> mostRecentCommit = null;
-
-            for (Map.Entry<String, LocalDateTime> pair: map.entrySet()) {
-                if(mostRecentCommit == null && pair.getValue().isBefore(dateTime)){
-                    mostRecentCommit = pair;
-                }else if (mostRecentCommit != null && pair.getValue().isBefore(dateTime)
-                        && pair.getValue().isAfter(mostRecentCommit.getValue())){
-                    mostRecentCommit = pair;
+            for (GitCommit commit: commits) {
+                if(commit.getDateTime().isAfter(dateTime)){
+                    break;
                 }
+
+                mostRecentCommit = commit;
             }
 
-            if(mostRecentCommit == null){
-                return null;
-            }
-
-            return ImmutablePair.of(mostRecentCommit.getKey(), mostRecentCommit.getValue());
+            return mostRecentCommit;
         }
         catch (GitAPIException e){
+            mostRecentCommit = null;
             e.printStackTrace();
         }
 
-        return null;
+        return mostRecentCommit;
     }
 
-    public Map<String, LocalDateTime > getRevisions() {
-        Map<String, LocalDateTime> commitMap = new HashMap<>();
+    public List<GitCommit> getRevisions() {
+        List<GitCommit> commits = new ArrayList<>();
 
         try {
             if(git == null){
@@ -178,15 +171,17 @@ public class GitRepository {
             for (RevCommit revCommit : revCommits) {
                 Instant instant = Instant.ofEpochSecond(revCommit.getCommitTime());
                 LocalDateTime commitDate = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
-                commitMap.put(revCommit.getName(),commitDate);
+                commits.add(new GitCommit(revCommit.getName(), commitDate));
             }
 
-            return commitMap;
+            commits.sort(Comparator.comparing(GitCommit::getDateTime));
+
+            return commits;
         }
         catch (GitAPIException | IOException e) {
             logger.error("Failed to get logs for branch " + branch);
 
-            return new HashMap<>();
+            return new ArrayList<>();
         }
     }
 
