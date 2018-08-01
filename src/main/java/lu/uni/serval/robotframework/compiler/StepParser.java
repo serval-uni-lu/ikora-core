@@ -27,16 +27,13 @@ public class StepParser {
 
     private static Step parseForLoop(LineReader reader) throws IOException {
         ForLoop forLoop = new ForLoop();
-
         Line loop = reader.getCurrent();
+        forLoop.setName(loop.getText());
 
-        StringBuilder builder = new StringBuilder(reader.getCurrent().toString());
-        Utils.appendMultiline(reader, builder);
-
-        forLoop.setName(builder.toString());
-
-        while (reader.getCurrent().isInBlock(loop)){
-            reader.readLine();
+        while (reader.getCurrent().isValid()){
+            if(!reader.getCurrent().isInBlock(loop)){
+                break;
+            }
         }
 
         return forLoop;

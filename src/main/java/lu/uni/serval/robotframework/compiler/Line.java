@@ -47,7 +47,7 @@ public class Line {
     }
 
     public boolean isInBlock(Line line) {
-        if(Utils.ignore(line)){
+        if(Utils.ignore(this)){
             return true;
         }
 
