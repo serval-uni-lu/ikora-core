@@ -47,6 +47,10 @@ public class Line {
     }
 
     public boolean isInBlock(Line line) {
+        if(Utils.ignore(line)){
+            return true;
+        }
+
         return getIndentSize() == line.getIndentSize() + 1;
     }
 }
