@@ -44,6 +44,7 @@ public class StepParser {
 
     private static Step parseAssignment(LineReader reader) throws IOException {
         Assignment assignment = new Assignment();
+        assignment.setName(reader.getCurrent().getText());
 
         String[] tokens = reader.getCurrent().tokenize();
 
@@ -59,8 +60,9 @@ public class StepParser {
                 assignment.addReturnValue(token);
             }
             else{
-                KeywordCall call = getKeywordCall(Arrays.copyOfRange(tokens, i, tokens.length - 1));
+                KeywordCall call = getKeywordCall(Arrays.copyOfRange(tokens, i, tokens.length));
                 assignment.setExpression(call);
+                break;
             }
         }
 
