@@ -156,13 +156,13 @@ public class GitRepository {
                 cloneRepository();
             }
 
-            Iterable<RevCommit> revCommits = null;
+            Iterable<RevCommit> revCommits;
+            ObjectId masterId = git.getRepository().resolve("remotes/origin/master");
 
-            if(branch.equals("master")){
+            if(branch.equals("master") || masterId == null){
                 revCommits = git.log().call();
             }
             else{
-                ObjectId masterId = git.getRepository().resolve("remotes/origin/master");
                 ObjectId branchId = git.getRepository().resolve("remotes/origin/" + branch);
 
                 revCommits = git.log().addRange(masterId, branchId).call();
