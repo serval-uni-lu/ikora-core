@@ -90,13 +90,13 @@ public class Difference {
                 yPosition -= 1;
             }
             else if (subtraction < addition){
-                actions.add(Action.removeStep(yPosition - 1));
+                actions.add(Action.removeStep(xPosition - 1));
 
                 value = subtraction;
                 yPosition -= 1;
             }
             else{
-                actions.add(Action.insertStep(xPosition - 1));
+                actions.add(Action.insertStep(yPosition - 1));
 
                 value = addition;
                 xPosition -= 1;
@@ -154,7 +154,7 @@ public class Difference {
         ForLoop leftStep = (ForLoop)left.getStep(leftPosition);
         ForLoop rightStep = (ForLoop)right.getStep(rightPosition);
 
-        throw new NotImplementedException();
+        //throw new NotImplementedException();
     }
 
     @Override
