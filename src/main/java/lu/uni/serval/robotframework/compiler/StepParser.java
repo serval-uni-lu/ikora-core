@@ -30,7 +30,7 @@ public class StepParser {
         Line loop = reader.getCurrent();
         forLoop.setName(loop.getText());
 
-        while (reader.getCurrent().isValid()){
+        while (reader.readLine().isValid()){
             if(!reader.getCurrent().isInBlock(loop)){
                 break;
             }
