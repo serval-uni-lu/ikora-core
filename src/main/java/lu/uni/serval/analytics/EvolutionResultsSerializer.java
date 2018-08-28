@@ -21,11 +21,11 @@ public class EvolutionResultsSerializer extends JsonSerializer<EvolutionResults>
             jsonGenerator.writeStringField("time", project1.getDateTime().toString());
 
             Set<Project> compareTo = results.getComparedTo(project1);
-/*
+
             if(compareTo.size() > 1){
                 throw new IOException("Expected only 1 project to compare to");
             }
-*/
+
             for(Project project2: compareTo){
                 writeDifferences(results, jsonGenerator, project1, project2);
             }
