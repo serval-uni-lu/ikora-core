@@ -60,7 +60,7 @@ public class DifferenceSerializer extends JsonSerializer<Difference> {
                 {
                     int position = action.getLeft();
                     jsonGenerator.writeStringField("type", "remove step");
-                    jsonGenerator.writeStringField("step", after.getStep(position).getName().toString());
+                    jsonGenerator.writeStringField("step", before.getStep(position).getName().toString());
                     jsonGenerator.writeNumberField("position", position);
                 }
                 break;
@@ -90,6 +90,10 @@ public class DifferenceSerializer extends JsonSerializer<Difference> {
                     jsonGenerator.writeStringField("after", listToString(callAfter.getParameters()));
                 }
                 break;
+
+                default:
+                    System.out.println("Unhandled");
+                    break;
             }
 
             if(difference.getLeft() != null && difference.getRight() != null){

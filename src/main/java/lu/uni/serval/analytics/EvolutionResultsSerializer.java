@@ -48,6 +48,11 @@ public class EvolutionResultsSerializer extends JsonSerializer<EvolutionResults>
                 continue;
             }
 
+            if(difference == null){
+                continue;
+            }
+
+
             jsonGenerator.writeObject(difference);
         }
         jsonGenerator.writeEndArray();

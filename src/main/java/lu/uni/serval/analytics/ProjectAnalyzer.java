@@ -17,7 +17,7 @@ public class ProjectAnalyzer {
         GitRepository repository = new GitRepository(gitUrl, branch, username, password);
         List<GitCommit> commits = repository.getRevisions();
 
-        commits = commits.subList(Math.max(0, commits.size() - 10), commits.size());
+        commits = commits.subList(Math.max(0, commits.size() - 2), commits.size());
 
         for(GitCommit commit: commits){
             repository.checkout(commit.getId());
