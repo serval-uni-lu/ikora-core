@@ -16,10 +16,14 @@ public class UserKeywordParser {
 
         reader.readLine();
 
-        while(reader.getCurrent().isValid() && reader.getCurrent().isInBlock(test)) {
+        while(reader.getCurrent().isValid()) {
             if(Utils.ignore(reader.getCurrent())) {
                 reader.readLine();
                 continue;
+            }
+
+            if(!reader.getCurrent().isInBlock(test)){
+                break;
             }
 
             tokens = Utils.removeIndent(reader.getCurrent().tokenize());
