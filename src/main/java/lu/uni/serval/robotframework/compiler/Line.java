@@ -1,12 +1,18 @@
 package lu.uni.serval.robotframework.compiler;
 
+import org.apache.log4j.Logger;
+
 public class Line {
+    final static Logger logger = Logger.getLogger(Line.class);
+
     private String text;
     private int number;
 
     public Line(String text, int number) {
         this.text = text;
         this.number = number;
+
+        logger.trace(String.format("line %d: %s", this.number, this.text));
     }
 
     public int getNumber() {
