@@ -78,7 +78,7 @@ public class TestCaseFile implements Iterable<UserKeyword> {
         KeywordTable userKeywords = new KeywordTable(keywordTable);
 
         for(Resources resources: settings.getResources()){
-            userKeywords.addAll(resources.getTestCaseFile().getUserKeywords());
+            userKeywords.extend(resources.getTestCaseFile().getUserKeywords());
         }
 
         return userKeywords;

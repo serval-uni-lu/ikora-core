@@ -1,19 +1,21 @@
 package lu.uni.serval.robotframework.model;
 
-import java.util.*;
+import java.io.File;
+import java.util.HashMap;
+import java.util.Iterator;
 
-public class KeywordTable implements Set<UserKeyword> {
-    private Set<UserKeyword> userKeywordSet;
+public class KeywordTable implements Iterable<UserKeyword> {
+    private HashMap<String, UserKeyword> keywords;
     private String file;
 
     public KeywordTable(){
-        userKeywordSet = new HashSet<>();
+        keywords = new HashMap<>();
     }
 
     public void setFile(String file) {
         this.file = file;
 
-        for (UserKeyword userKeyword: userKeywordSet){
+        for (UserKeyword userKeyword: keywords.values()){
             userKeyword.setFile(this.file);
         }
     }
@@ -23,18 +25,13 @@ public class KeywordTable implements Set<UserKeyword> {
     }
 
     public KeywordTable(KeywordTable other){
-        userKeywordSet = other.userKeywordSet;
+        keywords = other.keywords;
+
+        file = other.file;
     }
 
     public UserKeyword findKeyword(UserKeyword keyword){
-        if(userKeywordSet.contains(keyword)){
-            return keyword;
-        }
-
-        String file = keyword.getFile();
-        String name = keyword.getName().toString();
-
-        return findKeyword(file, name);
+        return keywords.getOrDefault(getKey(keyword), null);
     }
 
     public UserKeyword findKeyword(String name){
@@ -42,7 +39,7 @@ public class KeywordTable implements Set<UserKeyword> {
     }
 
     public UserKeyword findKeyword(String file, String name){
-        for(UserKeyword userKeyword: userKeywordSet){
+        for(UserKeyword userKeyword: keywords.values()){
             if(matches(file, name, userKeyword)){
                 return userKeyword;
             }
@@ -59,68 +56,68 @@ public class KeywordTable implements Set<UserKeyword> {
         return file.equalsIgnoreCase(userKeyword.getFile()) && userKeyword.matches(name);
     }
 
-    @Override
     public int size() {
-        return this.userKeywordSet.size();
+        return this.keywords.size();
     }
 
-    @Override
     public boolean isEmpty() {
-        return this.userKeywordSet.isEmpty();
+        return this.keywords.isEmpty();
     }
 
-    @Override
-    public boolean contains(Object o) {
-        return this.userKeywordSet.contains(o);
+    public boolean contains(UserKeyword keyword) {
+        if(keyword == null){
+            return false;
+        }
+
+        return this.keywords.containsKey(getKey(keyword));
     }
 
     @Override
     public Iterator<UserKeyword> iterator() {
-        return this.userKeywordSet.iterator();
+        return this.keywords.values().iterator();
     }
 
-    @Override
     public Object[] toArray() {
-        return this.userKeywordSet.toArray();
+        return this.keywords.values().toArray();
     }
 
-    @Override
     public <T> T[] toArray(T[] a) {
-        return this.userKeywordSet.toArray(a);
+        return this.keywords.values().toArray(a);
     }
 
     public boolean add(UserKeyword userKeyword) {
-        userKeyword.setFile(this.file);
-        return this.userKeywordSet.add(userKeyword);
+        if(userKeyword == null){
+            return false;
+        }
+
+        keywords.put(getKey(userKeyword), userKeyword);
+
+        return true;
     }
 
-    @Override
-    public boolean remove(Object o) {
-        return this.userKeywordSet.remove(o);
+    public boolean remove(UserKeyword keyword) {
+        if(keyword == null){
+            return false;
+        }
+
+        this.keywords.remove(getKey(keyword));
+
+        return true;
     }
 
-    @Override
-    public boolean containsAll(Collection<?> c) {
-        return this.userKeywordSet.containsAll(c);
+    public boolean extend(KeywordTable table) {
+        for(UserKeyword keyword: table.keywords.values()){
+            this.keywords.put(getKey(keyword), keyword);
+        }
+
+        return true;
     }
 
-    @Override
-    public boolean addAll(Collection<? extends UserKeyword> c) {
-        return this.userKeywordSet.addAll(c);
-    }
-
-    @Override
-    public boolean retainAll(Collection<?> c) {
-        return this.userKeywordSet.retainAll(c);
-    }
-
-    @Override
-    public boolean removeAll(Collection<?> c) {
-        return this.userKeywordSet.removeAll(c);
-    }
-
-    @Override
     public void clear() {
-        this.userKeywordSet.clear();
+        this.keywords.clear();
+    }
+
+    private String getKey(UserKeyword keyword){
+        return keyword.getFile() + File.separator + keyword.getName();
     }
 }

@@ -76,7 +76,7 @@ public class Project implements Comparable<Project> {
         KeywordTable keywords = new KeywordTable();
 
         for(TestCaseFile testCaseFile: testCaseFiles){
-            keywords.addAll(testCaseFile.getUserKeywords());
+            keywords.extend(testCaseFile.getUserKeywords());
         }
 
         return keywords;

@@ -72,7 +72,7 @@ public class TestCaseFileParser {
 
     private static void setName(Project project, TestCaseFile testCaseFile) {
         Path base = Paths.get(project.getRootFolder().getAbsolutePath().trim());
-        Path path = Paths.get(testCaseFile.getFile().getAbsolutePath().trim());
+        Path path = Paths.get(testCaseFile.getFile().getAbsolutePath().trim()).normalize();
 
         String name = base.relativize(path).toString();
 
