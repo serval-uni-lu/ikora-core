@@ -48,8 +48,7 @@ public class LevenshteinDistance {
                     d[i][j] = i;
                 }
                 else {
-                    d[i][j] = min(d[i - 1][j - 1]
-                                    + before.get(i - 1).indexTo(after.get(j - 1)),
+                    d[i][j] = min(d[i - 1][j - 1] + before.get(i - 1).indexTo(after.get(j - 1)),
                             d[i - 1][j] + 1,
                             d[i][j - 1] + 1);
                 }

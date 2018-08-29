@@ -1,7 +1,6 @@
 package lu.uni.serval.robotframework.model;
 
 import java.io.File;
-import java.security.Key;
 import java.time.LocalDateTime;
 import java.util.*;
 

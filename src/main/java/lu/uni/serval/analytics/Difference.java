@@ -3,7 +3,6 @@ package lu.uni.serval.analytics;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lu.uni.serval.robotframework.model.*;
 import lu.uni.serval.utils.LevenshteinDistance;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,11 +73,12 @@ public class Difference {
         int yPosition = right.getSteps().size();
 
         double value = distances[xPosition][yPosition];
+        double initialValue = value;
 
         while(value != 0){
-            double substitution = distances[xPosition - 1][yPosition - 1];
-            double subtraction = distances[xPosition][yPosition - 1];
-            double addition = distances[xPosition - 1][yPosition];
+            double substitution = xPosition > 0 && yPosition > 0 ? distances[xPosition - 1][yPosition - 1] : initialValue;
+            double addition = yPosition > 0 ? distances[xPosition][yPosition - 1] : initialValue;
+            double subtraction = xPosition > 0 ? distances[xPosition - 1][yPosition] : initialValue;
 
             if(substitution < subtraction && substitution < addition){
                 if(value > substitution){
@@ -93,13 +93,13 @@ public class Difference {
                 actions.add(Action.removeStep(xPosition - 1));
 
                 value = subtraction;
-                yPosition -= 1;
+                xPosition -= 1;
             }
             else{
                 actions.add(Action.insertStep(yPosition - 1));
 
                 value = addition;
-                xPosition -= 1;
+                yPosition -= 1;
             }
         }
     }
