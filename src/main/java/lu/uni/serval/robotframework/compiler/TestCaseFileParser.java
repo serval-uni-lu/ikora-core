@@ -5,6 +5,8 @@ import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class TestCaseFileParser {
     final static Logger logger = Logger.getLogger(TestCaseFileParser.class);
@@ -15,8 +17,9 @@ public class TestCaseFileParser {
         try {
             reader = new LineReader(file);
 
-            TestCaseFile testCaseFile = new TestCaseFile();
-            testCaseFile.setFile(file);
+            TestCaseFile testCaseFile = new TestCaseFile(reader.getFile());
+
+            setName(project, testCaseFile);
 
             reader.readLine();
 
@@ -53,8 +56,9 @@ public class TestCaseFileParser {
             logger.trace("file parse: " + file.getAbsolutePath());
 
         } catch (IOException e) {
-            TestCaseFile testCaseFile = new TestCaseFile();
-            testCaseFile.setFile(file);
+            TestCaseFile testCaseFile = new TestCaseFile(file);
+            setName(project, testCaseFile);
+
             project.addTestCaseFile(testCaseFile);
 
             logger.error("failed to parse: " + file.getAbsolutePath());
@@ -64,6 +68,15 @@ public class TestCaseFileParser {
                 reader.close();
             }
         }
+    }
+
+    private static void setName(Project project, TestCaseFile testCaseFile) {
+        Path base = Paths.get(project.getRootFolder().getAbsolutePath().trim());
+        Path path = Paths.get(testCaseFile.getFile().getAbsolutePath().trim());
+
+        String name = base.relativize(path).toString();
+
+        testCaseFile.setName(name);
     }
 
     static private boolean isSettings(String line){

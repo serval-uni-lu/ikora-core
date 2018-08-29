@@ -12,7 +12,7 @@ public class ProjectParser {
     private ProjectParser(){}
 
     static public Project parse(String filePath){
-        Project project = new Project();
+        Project project = new Project(filePath);
 
         try {
             File file = new File(filePath);

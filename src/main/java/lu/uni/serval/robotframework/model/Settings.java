@@ -9,7 +9,7 @@ public class Settings {
     private List<Library> libraryTable;
     private List<String> defaultTags;
     private String documentation;
-    private File file;
+    private String file;
 
     public Settings() {
         this.resourcesTable = new ArrayList<>();
@@ -17,7 +17,7 @@ public class Settings {
         this.defaultTags = new ArrayList<>();
     }
 
-    public File getFile() {
+    public String getFile() {
         return file;
     }
 
@@ -37,7 +37,7 @@ public class Settings {
         return defaultTags;
     }
 
-    public void setFile(File file) {
+    public void setFile(String file) {
         this.file = file;
     }
 

@@ -6,33 +6,48 @@ import java.util.*;
 
 public class TestCaseFile implements Iterable<UserKeyword> {
     private File file;
+    private String name;
     private Settings settings;
     private TestCaseTable testCaseTable;
     private KeywordTable keywordTable;
     private VariableTable variableTable;
 
-    public void setFile(File file) {
-        this.settings = new Settings();
-        this.testCaseTable = new TestCaseTable();
-        this.keywordTable = new KeywordTable();
-        this.variableTable = new VariableTable();
+    public TestCaseFile(File file){
         this.file = file;
+
+        setSettings(new Settings());
+        setTestCaseTable(new TestCaseTable());
+        setKeywordTable(new KeywordTable());
+        setVariableTable(new VariableTable());
+    }
+
+    public void setName(String name) {
+        this.name = name;
+
+        this.settings.setFile(this.name);
+        this.testCaseTable.setFile(this.name);
+        this.keywordTable.setFile(this.name);
+        this.variableTable.setFile(this.name);
     }
 
     public void setSettings(Settings settings) {
         this.settings = settings;
+        this.settings.setFile(this.name);
     }
 
     public void setTestCaseTable(TestCaseTable testCaseTable) {
         this.testCaseTable = testCaseTable;
+        this.testCaseTable.setFile(this.name);
     }
 
     public void setKeywordTable(KeywordTable keywordTable) {
         this.keywordTable = keywordTable;
+        this.keywordTable.setFile(this.name);
     }
 
     public void setVariableTable(VariableTable variableTable) {
         this.variableTable = variableTable;
+        this.variableTable.setFile(this.name);
     }
 
     public File getFile() {

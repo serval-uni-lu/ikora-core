@@ -9,11 +9,13 @@ public class Project implements Comparable<Project> {
     private List<TestCaseFile> testCaseFiles;
     private Map<File, TestCaseFile> files;
     private LibraryResources libraries;
+    private File rootFolder;
     private String gitUrl;
     private String commitId;
     private LocalDateTime dateTime;
 
-    public Project(){
+    public Project(String file){
+        rootFolder = new File(file.trim());
         testCaseFiles = new ArrayList<>();
         files = new HashMap<>();
     }
@@ -28,6 +30,10 @@ public class Project implements Comparable<Project> {
 
     public void setCommitId(String commitId) {
         this.commitId = commitId;
+    }
+
+    public File getRootFolder() {
+        return rootFolder;
     }
 
     public LocalDateTime getDateTime() {

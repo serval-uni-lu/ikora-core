@@ -13,7 +13,6 @@ public class SettingsTableParser {
 
     static public Settings parse(LineReader reader) throws IOException {
         Settings settings = new Settings();
-        settings.setFile(reader.getFile());
 
         Line line = reader.readLine();
 
@@ -134,7 +133,7 @@ public class SettingsTableParser {
     private static void parseResource(LineReader reader, String[] tokens, Settings settings) throws IOException {
         File filePath = new File(tokens[1]);
         if(!filePath.isAbsolute()) {
-            filePath = new File(settings.getFile().getParentFile(), filePath.getPath());
+            filePath = new File(reader.getFile().getParentFile(), filePath.getPath());
         }
 
         Resources resources = new Resources(tokens[1], filePath, new ArrayList<>(), "");

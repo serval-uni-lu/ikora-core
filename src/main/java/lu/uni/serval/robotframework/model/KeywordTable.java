@@ -4,9 +4,22 @@ import java.util.*;
 
 public class KeywordTable implements Set<UserKeyword> {
     private Set<UserKeyword> userKeywordSet;
+    private String file;
 
     public KeywordTable(){
         userKeywordSet = new HashSet<>();
+    }
+
+    public void setFile(String file) {
+        this.file = file;
+
+        for (UserKeyword userKeyword: userKeywordSet){
+            userKeyword.setFile(this.file);
+        }
+    }
+
+    public String getFile() {
+        return file;
     }
 
     public KeywordTable(KeywordTable other){
@@ -77,6 +90,7 @@ public class KeywordTable implements Set<UserKeyword> {
     }
 
     public boolean add(UserKeyword userKeyword) {
+        userKeyword.setFile(this.file);
         return this.userKeywordSet.add(userKeyword);
     }
 
