@@ -15,10 +15,15 @@ public class EvolutionResultsSerializer extends JsonSerializer<EvolutionResults>
         jsonGenerator.writeStartArray();
 
         for(Project project1: results.getProjects()){
+            ProjectStatistics statistics = new ProjectStatistics(project1);
+
             jsonGenerator.writeStartObject();
 
             jsonGenerator.writeStringField("commit ID", project1.getCommitId());
             jsonGenerator.writeStringField("time", project1.getDateTime().toString());
+
+            jsonGenerator.writeNumberField("number files", statistics.getNumberFiles());
+            jsonGenerator.writeNumberField("number keywords", statistics.getNumberKeywords());
 
             Set<Project> compareTo = results.getComparedTo(project1);
 
