@@ -79,4 +79,18 @@ public class KeywordCall extends Step {
 
         return (0.5 * nameIndex) + (0.5 * parameterIndex);
     }
+
+    @Override
+    public String toString(){
+        StringBuilder builder = new StringBuilder();
+
+        builder.append(getName().toString());
+
+        for (Argument parameter: parameters){
+            builder.append("\t");
+            builder.append(parameter.toString());
+        }
+
+        return builder.toString();
+    }
 }

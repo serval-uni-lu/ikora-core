@@ -91,4 +91,19 @@ public class Assignment extends Step {
 
         return (0.5 * expressionIndex) + (0.5 * returnValuesIndex);
     }
+
+    @Override
+    public String toString(){
+        StringBuilder builder = new StringBuilder();
+
+        for (Variable variable: returnValues){
+            builder.append(variable.getName());
+            builder.append("\t");
+        }
+
+        builder.append("\t=\t");
+        builder.append(getExpression().toString());
+
+        return builder.toString();
+    }
 }

@@ -99,11 +99,11 @@ public class DifferenceSerializer extends JsonSerializer<Difference> {
 
                     int positionBefore = action.getLeft();
                     Assignment assignmentBefore = (Assignment) before.getStep(positionBefore);
-                    jsonGenerator.writeStringField("before", assignmentBefore.getExpression().getName().toString());
+                    jsonGenerator.writeStringField("before", assignmentBefore.getExpression().toString());
 
                     int positionAfter = action.getLeft();
                     Assignment assignmentAfter = (Assignment) after.getStep(positionAfter);
-                    jsonGenerator.writeStringField("after", assignmentAfter.getExpression().getName().toString());
+                    jsonGenerator.writeStringField("after", assignmentAfter.getExpression().toString());
 
                     writeKeywordInfo(jsonGenerator, before, "keyword", false);
                 }
