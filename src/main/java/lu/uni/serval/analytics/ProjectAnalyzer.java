@@ -1,6 +1,7 @@
 package lu.uni.serval.analytics;
 
 import lu.uni.serval.robotframework.model.*;
+import lu.uni.serval.utils.Configuration;
 
 import java.util.*;
 
@@ -17,7 +18,11 @@ public class ProjectAnalyzer {
         GitRepository repository = new GitRepository(gitUrl, branch, username, password);
         List<GitCommit> commits = repository.getRevisions();
 
-        commits = commits.subList(Math.max(0, commits.size() - 10), commits.size());
+        int releaseNb = (int) Configuration.getInstance().getPlugin("report analytics").getAdditionalProperty("number of releases", 0);
+
+        if(releaseNb > 2){
+            commits = commits.subList(Math.max(0, commits.size() - 10), commits.size());
+        }
 
         for(GitCommit commit: commits){
             repository.checkout(commit.getId());
