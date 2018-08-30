@@ -9,11 +9,14 @@ import lu.uni.serval.robotframework.model.Argument;
 import lu.uni.serval.robotframework.model.KeywordCall;
 import lu.uni.serval.robotframework.model.KeywordDefinition;
 import lu.uni.serval.robotframework.model.Step;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.util.List;
 
 public class DifferenceSerializer extends JsonSerializer<Difference> {
+    final static Logger logger = Logger.getLogger(DifferenceSerializer.class);
+
     @Override
     public void serialize(Difference difference, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException, JsonProcessingException {
         jsonGenerator.writeStartObject();
@@ -92,7 +95,7 @@ public class DifferenceSerializer extends JsonSerializer<Difference> {
                 break;
 
                 default:
-                    System.out.println("Unhandled");
+                    logger.warn("Unhandled action type " + action.getType().name());
                     break;
             }
 
