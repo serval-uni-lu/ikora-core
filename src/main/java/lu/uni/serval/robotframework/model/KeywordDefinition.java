@@ -99,4 +99,26 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
     public void execute(Runtime runtime) {
 
     }
+
+    @Override
+    public int getSize() {
+        int size = 1;
+
+        for(Step step: steps){
+            size += step.getSize();
+        }
+
+        return size;
+    }
+
+    @Override
+    public List<Keyword> getSequence() {
+        List<Keyword> sequence = new ArrayList<>();
+
+        for(Step step: steps){
+            sequence.addAll(step.getSequence());
+        }
+
+        return sequence;
+    }
 }

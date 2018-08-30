@@ -24,6 +24,9 @@ public class EvolutionResultsSerializer extends JsonSerializer<EvolutionResults>
 
             jsonGenerator.writeNumberField("number files", statistics.getNumberFiles());
             jsonGenerator.writeNumberField("number keywords", statistics.getNumberKeywords());
+            writeNumberArrayField(jsonGenerator, "size distribution", statistics.getSizeDistribution());
+            writeNumberArrayField(jsonGenerator, "sequence distribution", statistics.getSequenceDistribution());
+            writeNumberArrayField(jsonGenerator, "complexity distribution", statistics.getComplexityDistribution());
 
             Set<Project> compareTo = results.getComparedTo(project1);
 
@@ -63,5 +66,15 @@ public class EvolutionResultsSerializer extends JsonSerializer<EvolutionResults>
         jsonGenerator.writeEndArray();
 
         jsonGenerator.writeEndObject();
+    }
+
+    private void writeNumberArrayField(JsonGenerator jsonGenerator, String name, int[] values) throws IOException {
+        jsonGenerator.writeArrayFieldStart(name);
+
+        for(int value: values){
+            jsonGenerator.writeNumber(value);
+        }
+
+        jsonGenerator.writeEndArray();
     }
 }

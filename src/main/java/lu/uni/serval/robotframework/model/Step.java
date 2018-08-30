@@ -19,7 +19,6 @@ public abstract class Step implements Keyword, Differentiable<Step> {
 
     public void setParent(KeywordDefinition parent) {
         this.parent = parent;
-        this.parent.addDependency(this);
     }
 
     public Argument getName() {

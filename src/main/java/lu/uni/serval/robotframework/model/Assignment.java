@@ -58,6 +58,16 @@ public class Assignment extends Step {
     }
 
     @Override
+    public int getSize() {
+        return getExpression().getSize();
+    }
+
+    @Override
+    public List<Keyword> getSequence() {
+        return getExpression().getSequence();
+    }
+
+    @Override
     public boolean equals(Object other) {
         if (!(other instanceof Assignment)){
             return false;

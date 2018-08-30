@@ -19,7 +19,7 @@ public class KeywordCall extends Step {
         this.keyword = keyword;
 
         if(this.keyword != null) {
-            addDependency(this.keyword);
+            this.keyword.addDependency(getParent());
         }
     }
 
@@ -64,6 +64,23 @@ public class KeywordCall extends Step {
     @Override
     public void execute(Runtime runtime) {
 
+    }
+
+    @Override
+    public int getSize() {
+        return this.keyword != null ? this.keyword.getSize() : 0;
+    }
+
+    @Override
+    public List<Keyword> getSequence() {
+        if(this.keyword == null){
+            List<Keyword> sequence = new ArrayList<>();
+            sequence.add(this);
+
+            return sequence;
+        }
+
+        return this.keyword.getSequence();
     }
 
     @Override

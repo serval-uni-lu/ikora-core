@@ -61,6 +61,28 @@ public class ForLoop extends Step {
     }
 
     @Override
+    public int getSize() {
+        int size = 1;
+
+        for(Step step: steps){
+            size += step.getSize();
+        }
+
+        return size;
+    }
+
+    @Override
+    public List<Keyword> getSequence() {
+        List<Keyword> sequence = new ArrayList<>();
+
+        for(Step step: steps){
+            sequence.addAll(step.getSequence());
+        }
+
+        return sequence;
+    }
+
+    @Override
     public double difference(Differentiable<Step> other) {
         if(other instanceof ForLoop){
             return 1;
