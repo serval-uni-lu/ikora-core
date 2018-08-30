@@ -21,11 +21,12 @@ public class EvolutionResults {
     }
 
     public void addDifference(Project project1, Project project2, Difference difference) {
+        projects.add(project1);
+        projects.add(project2);
+
         if(difference.isEmpty()){
             return;
         }
-
-        projects.add(project1);
 
         update(project1, project2, difference, differences);
         update(project1, project2, UnorderedPair.of(difference.getLeft(), difference.getRight()), keywords);
