@@ -46,8 +46,8 @@ public class StepParser {
         String[] tokens = reader.getCurrent().tokenize();
 
         for(int i = 0; i < tokens.length; ++i){
-            String token = tokens[i].replaceAll("(\\s*)=^", "");
-            token = token.replaceAll("$=(\\s*)", "");
+            String token = tokens[i].replaceAll("(\\s*)=(\\s*)$", "");
+            token = token.replaceAll("^(\\s*)=(\\s*)", "");
 
             if(token.isEmpty()){
                 continue;
