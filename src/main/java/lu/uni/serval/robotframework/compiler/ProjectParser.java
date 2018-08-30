@@ -55,7 +55,8 @@ public class ProjectParser {
     static private void resolveResources(Project project) throws Exception {
         for(TestCaseFile testCaseFile: project.getTestCaseFiles()) {
             for (Resources resources: testCaseFile.getSettings().getResources()) {
-                TestCaseFile resourceFile = project.getTestCaseFile(resources.getFile());
+                String name = project.generateFileName(resources.getFile());
+                TestCaseFile resourceFile = project.getTestCaseFile(name);
 
                 if(resourceFile == null) {
                     throw new Exception();
@@ -67,9 +68,9 @@ public class ProjectParser {
     }
 
     static private File getUnparsedFiles(Project project){
-        for (Map.Entry<File, TestCaseFile> file: project.getFiles().entrySet()){
+        for (Map.Entry<String, TestCaseFile> file: project.getFiles().entrySet()){
             if(file.getValue() == null){
-                return file.getKey();
+                return new File(project.getRootFolder(), file.getKey());
             }
         }
 

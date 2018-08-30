@@ -60,9 +60,7 @@ public class GitRepository {
     }
 
     public TestCase findTestCase(String relativePath, String name) {
-        File absolutePath = new File(localFolder, relativePath);
-
-        TestCaseFile testCaseFile = project.getTestCaseFile(absolutePath);
+        TestCaseFile testCaseFile = project.getTestCaseFile(name);
 
         if(testCaseFile == null){
             return null;

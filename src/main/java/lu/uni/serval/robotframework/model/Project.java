@@ -1,12 +1,14 @@
 package lu.uni.serval.robotframework.model;
 
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.*;
 
 public class Project implements Comparable<Project> {
     private List<TestCaseFile> testCaseFiles;
-    private Map<File, TestCaseFile> files;
+    private Map<String, TestCaseFile> files;
     private LibraryResources libraries;
     private File rootFolder;
     private String gitUrl;
@@ -39,23 +41,19 @@ public class Project implements Comparable<Project> {
         return dateTime;
     }
 
-    public boolean hasFile(File file){
-        return files.containsKey(file);
-    }
-
     public List<TestCaseFile> getTestCaseFiles(){
         return testCaseFiles;
     }
 
-    public TestCaseFile getTestCaseFile(File file) {
-        return files.get(file);
+    public TestCaseFile getTestCaseFile(String name) {
+        return files.get(name);
     }
 
     public TestCaseFile getFile(File file){
         return files.get(file);
     }
 
-    public Map<File, TestCaseFile> getFiles(){
+    public Map<String, TestCaseFile> getFiles(){
         return files;
     }
 
@@ -86,17 +84,20 @@ public class Project implements Comparable<Project> {
     }
 
     public void addFile(File file){
-        if(hasFile(file)){
+        String key = generateFileName(file);
+
+        if(files.containsKey(key)){
             return;
         }
 
-        files.put(file, null);
+        files.put(key, null);
     }
 
     public void addTestCaseFile(TestCaseFile testCaseFile){
         testCaseFiles.add(testCaseFile);
 
-        files.put(testCaseFile.getFile(), testCaseFile);
+        String key = generateFileName(testCaseFile.getFile());
+        files.put(key, testCaseFile);
 
         updateFiles(testCaseFile.getSettings());
     }
@@ -105,6 +106,13 @@ public class Project implements Comparable<Project> {
         for(Resources resources: settings.getResources()){
             addFile(resources.getFile());
         }
+    }
+
+    public String generateFileName(File file) {
+        Path base = Paths.get(this.getRootFolder().getAbsolutePath().trim());
+        Path path = Paths.get(file.getAbsolutePath().trim()).normalize();
+
+        return base.relativize(path).toString();
     }
 
     @Override

@@ -5,8 +5,6 @@ import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class TestCaseFileParser {
     final static Logger logger = Logger.getLogger(TestCaseFileParser.class);
@@ -71,11 +69,7 @@ public class TestCaseFileParser {
     }
 
     private static void setName(Project project, TestCaseFile testCaseFile) {
-        Path base = Paths.get(project.getRootFolder().getAbsolutePath().trim());
-        Path path = Paths.get(testCaseFile.getFile().getAbsolutePath().trim()).normalize();
-
-        String name = base.relativize(path).toString();
-
+        String name = project.generateFileName(testCaseFile.getFile());
         testCaseFile.setName(name);
     }
 
