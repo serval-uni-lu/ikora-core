@@ -97,7 +97,7 @@ public class Argument implements Differentiable<Argument> {
     }
 
     @Override
-    public double indexTo(Differentiable<Argument> other) {
+    public double difference(Differentiable<Argument> other) {
         Argument argument = (Argument)other;
         return value.equals(argument.value) ? 0 : 1;
     }

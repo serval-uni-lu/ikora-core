@@ -141,7 +141,7 @@ public class Difference {
         Assignment leftStep = (Assignment)left.getStep(leftPosition);
         Assignment rightStep = (Assignment)right.getStep(rightPosition);
 
-        if(leftStep.getExpression().indexTo(rightStep.getExpression()) > 0){
+        if(leftStep.getExpression().difference(rightStep.getExpression()) > 0){
             actions.add(Action.changeStepExpression(leftPosition, rightPosition));
         }
 

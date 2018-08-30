@@ -30,7 +30,7 @@ public class Variable implements Differentiable<Variable> {
     }
 
     @Override
-    public double indexTo(Differentiable<Variable> other) {
+    public double difference(Differentiable<Variable> other) {
         Variable variable = (Variable)other;
         return name.equals(variable.name) ? 0 : 1;
     }
