@@ -5,10 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 
-import lu.uni.serval.robotframework.model.Argument;
-import lu.uni.serval.robotframework.model.KeywordCall;
-import lu.uni.serval.robotframework.model.KeywordDefinition;
-import lu.uni.serval.robotframework.model.Step;
+import lu.uni.serval.robotframework.model.*;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
@@ -19,16 +16,10 @@ public class DifferenceSerializer extends JsonSerializer<Difference> {
 
     @Override
     public void serialize(Difference difference, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException, JsonProcessingException {
-        jsonGenerator.writeStartObject();
-
         writeActions(difference, jsonGenerator);
-
-        jsonGenerator.writeEndObject();
     }
 
     private void writeActions(Difference difference, JsonGenerator jsonGenerator) throws IOException {
-        jsonGenerator.writeArrayFieldStart("actions");
-
         KeywordDefinition before = difference.getLeft();
         KeywordDefinition after = difference.getRight();
 
@@ -56,6 +47,8 @@ public class DifferenceSerializer extends JsonSerializer<Difference> {
                     jsonGenerator.writeStringField("type", "add step");
                     jsonGenerator.writeStringField("step", after.getStep(position).getName().toString());
                     jsonGenerator.writeNumberField("position", position);
+
+                    writeKeywordInfo(jsonGenerator, before, "keyword", false);
                 }
                 break;
 
@@ -65,6 +58,8 @@ public class DifferenceSerializer extends JsonSerializer<Difference> {
                     jsonGenerator.writeStringField("type", "remove step");
                     jsonGenerator.writeStringField("step", before.getStep(position).getName().toString());
                     jsonGenerator.writeNumberField("position", position);
+
+                    writeKeywordInfo(jsonGenerator, before, "keyword", false);
                 }
                 break;
 
@@ -77,6 +72,8 @@ public class DifferenceSerializer extends JsonSerializer<Difference> {
 
                     int positionAfter = action.getRight();
                     jsonGenerator.writeStringField("after", after.getStep(positionAfter).getName().toString());
+
+                    writeKeywordInfo(jsonGenerator, before, "keyword", false);
                 }
                 break;
 
@@ -91,6 +88,40 @@ public class DifferenceSerializer extends JsonSerializer<Difference> {
                     int positionAfter = action.getRight();
                     KeywordCall callAfter = (KeywordCall) after.getStep(positionAfter);
                     jsonGenerator.writeStringField("after", listToString(callAfter.getParameters()));
+
+                    writeKeywordInfo(jsonGenerator, before, "keyword", false);
+                }
+                break;
+
+                case CHANGE_STEP_EXPRESSION:
+                {
+                    jsonGenerator.writeStringField("type", "change step expression");
+
+                    int positionBefore = action.getLeft();
+                    Assignment assignmentBefore = (Assignment) before.getStep(positionBefore);
+                    jsonGenerator.writeStringField("before", assignmentBefore.getExpression().getName().toString());
+
+                    int positionAfter = action.getLeft();
+                    Assignment assignmentAfter = (Assignment) after.getStep(positionAfter);
+                    jsonGenerator.writeStringField("after", assignmentAfter.getExpression().getName().toString());
+
+                    writeKeywordInfo(jsonGenerator, before, "keyword", false);
+                }
+                break;
+
+                case CHANGE_STEP_TYPE:
+                {
+                    jsonGenerator.writeStringField("type", "change step type");
+
+                    int positionBefore = action.getLeft();
+                    Keyword stepBefore = before.getStep(positionBefore);
+                    jsonGenerator.writeStringField("before", getStepType(stepBefore));
+
+                    int positionAfter = action.getLeft();
+                    Keyword stepAfter = after.getStep(positionAfter);
+                    jsonGenerator.writeStringField("after", getStepType(stepAfter));
+
+                    writeKeywordInfo(jsonGenerator, before, "keyword", false);
                 }
                 break;
 
@@ -99,15 +130,8 @@ public class DifferenceSerializer extends JsonSerializer<Difference> {
                     break;
             }
 
-            if(difference.getLeft() != null && difference.getRight() != null){
-                writeKeywordInfo(jsonGenerator, before, "keyword name before", false);
-                writeKeywordInfo(jsonGenerator, after, "keyword name after", false);
-            }
-
             jsonGenerator.writeEndObject();
         }
-
-        jsonGenerator.writeEndArray();
     }
 
     private void writeKeywordInfo(JsonGenerator jsonGenerator, KeywordDefinition keyword, String name, boolean showSteps) throws IOException {
@@ -141,5 +165,21 @@ public class DifferenceSerializer extends JsonSerializer<Difference> {
         }
 
         return builder.toString();
+    }
+
+    private String getStepType(Keyword step){
+        String type = "Unknown Type";
+
+        if(step instanceof KeywordCall){
+            type = "Keyword Call";
+        }
+        else if (step instanceof Assignment) {
+            type = "Assignment";
+        }
+        else if (step instanceof ForLoop) {
+            type = "For Loop";
+        }
+
+        return type;
     }
 }
