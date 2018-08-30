@@ -29,6 +29,10 @@ public class ForLoop extends Step {
         return steps.get(position);
     }
 
+    public List<Step> getSteps(){
+        return steps;
+    }
+
     @Override
     public List<Argument> getParameters() {
         return parameters;

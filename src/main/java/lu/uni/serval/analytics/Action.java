@@ -1,7 +1,6 @@
 package lu.uni.serval.analytics;
 
 public class Action {
-
     public enum Type{
         ADD_USER_KEYWORD,
         REMOVE_USER_KEYWORD,
@@ -15,7 +14,10 @@ public class Action {
         CHANGE_STEP_ARGUMENTS,
 
         CHANGE_STEP_EXPRESSION,
-        CHANGE_STEP_RETURN_VALUES
+        CHANGE_STEP_RETURN_VALUES,
+
+        CHANGE_FOR_LOOP_CONDITION,
+        CHANGE_FOR_LOOP_BODY
     }
 
     private final Type type;
@@ -78,5 +80,13 @@ public class Action {
 
     public static Action changeStepReturnValues(int left, int right){
         return new Action(Type.CHANGE_STEP_RETURN_VALUES, left, right);
+    }
+
+    public static Action changeForLoopCondition(int left, int right) {
+        return new Action(Type.CHANGE_FOR_LOOP_CONDITION, left, right);
+    }
+
+    public static Action changeForLoopBody(int left, int right) {
+        return new Action(Type.CHANGE_FOR_LOOP_BODY, left, right);
     }
 }

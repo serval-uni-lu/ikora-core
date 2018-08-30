@@ -154,7 +154,13 @@ public class Difference {
         ForLoop leftStep = (ForLoop)left.getStep(leftPosition);
         ForLoop rightStep = (ForLoop)right.getStep(rightPosition);
 
-        //throw new NotImplementedException();
+        if(LevenshteinDistance.stringIndex(leftStep.getName().toString(), rightStep.getName().toString()) > 0){
+            actions.add(Action.changeForLoopCondition(leftPosition, rightPosition));
+        }
+
+        if(LevenshteinDistance.index(leftStep.getSteps(), rightStep.getSteps()) > 0){
+            actions.add(Action.changeForLoopBody(leftPosition, rightPosition));
+        }
     }
 
     @Override
