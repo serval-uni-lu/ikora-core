@@ -4,8 +4,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lu.uni.serval.robotframework.model.*;
 import lu.uni.serval.utils.LevenshteinDistance;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @JsonSerialize(using = DifferenceSerializer.class)
 public class Difference {
@@ -23,6 +22,26 @@ public class Difference {
 
     public boolean isEmpty(){
         return actions.isEmpty();
+    }
+
+    public boolean isEmpty(Action.Type[] ignore){
+        if(actions.isEmpty()){
+            return true;
+        }
+
+        if(ignore.length == 0){
+            return isEmpty();
+        }
+
+        Set<Action.Type> ignoreSet = new HashSet<>(Arrays.asList(ignore));
+
+        for(Action action: actions){
+            if (!ignoreSet.contains(action.getType())){
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public KeywordDefinition getLeft(){
