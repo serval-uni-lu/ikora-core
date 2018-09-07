@@ -125,6 +125,16 @@ public class DifferenceSerializer extends JsonSerializer<Difference> {
                 }
                 break;
 
+                case CHANGE_NAME:
+                {
+                    jsonGenerator.writeStringField("type", "change keyword name");
+
+                    jsonGenerator.writeStringField("before", before.getName().toString());
+                    jsonGenerator.writeStringField("after", after.getName().toString());
+
+                    jsonGenerator.writeStringField("file", after.getFile());
+                }
+
                 default:
                     logger.warn("Unhandled action type " + action.getType().name());
                     break;
