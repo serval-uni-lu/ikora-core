@@ -1,11 +1,8 @@
 package lu.uni.serval.analytics;
 
-import lu.uni.serval.robotframework.model.Keyword;
 import lu.uni.serval.robotframework.model.KeywordDefinition;
 import lu.uni.serval.robotframework.model.Project;
 import lu.uni.serval.robotframework.report.Report;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nonnull;
 import java.util.*;
@@ -50,16 +47,16 @@ public class ReportAnalyzer implements Iterable<Report>{
 
         EvolutionResults differences = new EvolutionResults();
 
-        for(List<KeywordInfo> sequence: sequences){
-            KeywordInfo previous = null;
-            for(KeywordInfo current: sequence){
+        for(List<ElementInfo<KeywordDefinition>> sequence: sequences){
+            ElementInfo<KeywordDefinition> previous = null;
+            for(ElementInfo<KeywordDefinition> current: sequence){
                 if(previous == null){
                     previous = current;
                     continue;
                 }
 
-                KeywordDefinition keyword1 = previous.getKeyword();
-                KeywordDefinition keyword2 = current.getKeyword();
+                KeywordDefinition keyword1 = previous.getElement();
+                KeywordDefinition keyword2 = current.getElement();
 
                 Project project1 = previous.getProject();
                 Project project2 = current.getProject();
@@ -69,7 +66,7 @@ public class ReportAnalyzer implements Iterable<Report>{
                     continue;
                 }
 
-                Difference difference = Difference.of(previous.getKeyword(), current.getKeyword());
+                Difference difference = Difference.of(previous.getElement(), current.getElement());
 
                 /*
                 LocalDateTime dateTime = KeywordStatus.getExecutionDate();

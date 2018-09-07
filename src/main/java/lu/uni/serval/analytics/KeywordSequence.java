@@ -5,15 +5,15 @@ import lu.uni.serval.robotframework.model.Project;
 
 import java.util.*;
 
-public class KeywordSequence implements Iterable<List<KeywordInfo>>{
-    private Map<List<String>, List<KeywordInfo>> data;
+public class KeywordSequence implements Iterable<List<ElementInfo<KeywordDefinition>>>{
+    private Map<List<String>, List<ElementInfo<KeywordDefinition>>> data;
 
     public KeywordSequence(){
         data = new HashMap<>();
     }
 
     public void add(Project project, KeywordDefinition keyword){
-        KeywordInfo keywordInfo = new KeywordInfo(project, keyword);
+        ElementInfo<KeywordDefinition> keywordInfo = new ElementInfo<>(project, keyword);
 
         List<String> key = new ArrayList<>();
         key.add(keyword.getFile());
@@ -23,7 +23,7 @@ public class KeywordSequence implements Iterable<List<KeywordInfo>>{
             data.get(key).add(keywordInfo);
         }
         else{
-            List<KeywordInfo> keywords = new ArrayList<>();
+            List<ElementInfo<KeywordDefinition>> keywords = new ArrayList<>();
             keywords.add(keywordInfo);
 
             data.put(key, keywords);
@@ -31,7 +31,7 @@ public class KeywordSequence implements Iterable<List<KeywordInfo>>{
     }
 
     @Override
-    public Iterator<List<KeywordInfo>> iterator() {
+    public Iterator<List<ElementInfo<KeywordDefinition>>> iterator() {
         return data.values().iterator();
     }
 }

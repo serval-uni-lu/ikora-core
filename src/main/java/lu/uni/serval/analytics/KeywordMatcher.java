@@ -1,5 +1,6 @@
 package lu.uni.serval.analytics;
 
+import lu.uni.serval.robotframework.model.KeywordDefinition;
 import lu.uni.serval.robotframework.model.KeywordTable;
 import lu.uni.serval.robotframework.model.Project;
 import lu.uni.serval.robotframework.model.UserKeyword;
@@ -15,8 +16,8 @@ public class KeywordMatcher {
         ChangeName, ChangeFolder, ChangeFile, ChangeAll
     }
 
-    public static List<KeywordInfoPair> getPairs(Project project1, Project project2) {
-        List<KeywordInfoPair> pairs = new ArrayList<>();
+    public static List<ElementInfoPair<KeywordDefinition>> getPairs(Project project1, Project project2) {
+        List<ElementInfoPair<KeywordDefinition>> pairs = new ArrayList<>();
 
         KeywordTable keywords1 = project1.getUserKeywords();
         KeywordTable keywords2 = project2.getUserKeywords();
@@ -31,7 +32,7 @@ public class KeywordMatcher {
                 unmatched.add(keyword1);
             }
             else{
-                pairs.add(KeywordInfoPair.of(project1, project2, keyword1, keyword2));
+                pairs.add(ElementInfoPair.of(project1, project2, keyword1, keyword2));
                 keywords2.remove(keyword2);
             }
 
@@ -42,14 +43,14 @@ public class KeywordMatcher {
             UserKeyword keyword2 = keywords2.iterator().next();
             UserKeyword keyword1 = findBestCandidate(keyword2, unmatched);
 
-            pairs.add(KeywordInfoPair.of(project1, project2, keyword1, keyword2));
+            pairs.add(ElementInfoPair.of(project1, project2, keyword1, keyword2));
             keywords2.remove(keyword2);
         }
 
         while(unmatched.size() > 0){
             UserKeyword keyword1 = unmatched.iterator().next();
 
-            pairs.add(KeywordInfoPair.of(project1, project2, keyword1, null));
+            pairs.add(ElementInfoPair.of(project1, project2, keyword1, null));
             unmatched.remove(keyword1);
         }
 

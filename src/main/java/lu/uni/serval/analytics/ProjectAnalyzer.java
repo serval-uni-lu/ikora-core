@@ -45,9 +45,9 @@ public class ProjectAnalyzer {
                 continue;
             }
 
-            for(KeywordInfoPair keywordPair: KeywordMatcher.getPairs(project1, project2)){
-                KeywordDefinition keyword1 = keywordPair.getKeyword(project1);
-                KeywordDefinition keyword2 = keywordPair.getKeyword(project2);
+            for(ElementInfoPair<KeywordDefinition> keywordPair: KeywordMatcher.getPairs(project1, project2)){
+                KeywordDefinition keyword1 = keywordPair.getElement(project1);
+                KeywordDefinition keyword2 = keywordPair.getElement(project2);
 
                 if(differences.containsKeywords(project1, project2, keyword1, keyword2)){
                     project1 = project2;
