@@ -134,6 +134,7 @@ public class DifferenceSerializer extends JsonSerializer<Difference> {
 
                     jsonGenerator.writeStringField("file", after.getFile());
                 }
+                break;
 
                 default:
                     logger.warn("Unhandled action type " + action.getType().name());
