@@ -63,9 +63,9 @@ public class DifferenceSerializer extends JsonSerializer<Difference> {
                 }
                 break;
 
-                case CHANGE_STEP_NAME:
+                case CHANGE_STEP:
                 {
-                    jsonGenerator.writeStringField("type", "change name");
+                    jsonGenerator.writeStringField("type", "change step");
 
                     int positionBefore = action.getLeft();
                     jsonGenerator.writeStringField("before", before.getStep(positionBefore).getName().toString());
@@ -79,7 +79,7 @@ public class DifferenceSerializer extends JsonSerializer<Difference> {
 
                 case CHANGE_STEP_ARGUMENTS:
                 {
-                    jsonGenerator.writeStringField("type", "change arguments");
+                    jsonGenerator.writeStringField("type", "change step arguments");
 
                     int positionBefore = action.getLeft();
                     KeywordCall callBefore = (KeywordCall) before.getStep(positionBefore);

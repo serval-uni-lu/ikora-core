@@ -9,8 +9,7 @@ public class Action {
         CHANGE_STEP_TYPE,
         ADD_STEP,
         REMOVE_STEP,
-
-        CHANGE_STEP_NAME,
+        CHANGE_STEP,
         CHANGE_STEP_ARGUMENTS,
 
         CHANGE_STEP_EXPRESSION,
@@ -67,7 +66,7 @@ public class Action {
     }
 
     public static Action changeStepName(int left, int right){
-        return new Action(Type.CHANGE_STEP_NAME, left, right);
+        return new Action(Type.CHANGE_STEP, left, right);
     }
 
     public static Action changeStepArguments(int left, int right){
