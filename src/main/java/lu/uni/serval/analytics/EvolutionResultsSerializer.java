@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import lu.uni.serval.robotframework.model.Project;
+import lu.uni.serval.robotframework.model.UserKeyword;
 
 import java.io.IOException;
 import java.util.Set;
@@ -24,9 +25,9 @@ public class EvolutionResultsSerializer extends JsonSerializer<EvolutionResults>
 
             jsonGenerator.writeNumberField("number files", statistics.getNumberFiles());
             jsonGenerator.writeNumberField("number keywords", statistics.getNumberKeywords());
-            writeNumberArrayField(jsonGenerator, "size distribution", statistics.getSizeDistribution());
-            writeNumberArrayField(jsonGenerator, "sequence distribution", statistics.getSequenceDistribution());
-            writeNumberArrayField(jsonGenerator, "complexity distribution", statistics.getComplexityDistribution());
+            writeNumberArrayField(jsonGenerator, "size distribution", statistics.getSizeDistribution(UserKeyword.class));
+            writeNumberArrayField(jsonGenerator, "sequence distribution", statistics.getSequenceDistribution(UserKeyword.class));
+            writeNumberArrayField(jsonGenerator, "complexity distribution", statistics.getComplexityDistribution(UserKeyword.class));
 
             Set<Project> compareTo = results.getComparedTo(project1);
 

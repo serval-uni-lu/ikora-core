@@ -7,8 +7,8 @@ public class KeywordTable<T extends KeywordDefinition> implements Iterable<T> {
     private HashMap<String, T> keywords;
     private String file;
 
-    public KeywordTable(){
-        keywords = new HashMap<>();
+    public KeywordTable() {
+        this.keywords = new HashMap<>();
     }
 
     public void setFile(String file) {

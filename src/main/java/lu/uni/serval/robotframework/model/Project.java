@@ -69,11 +69,11 @@ public class Project implements Comparable<Project> {
         return libraries;
     }
 
-    public KeywordTable<UserKeyword> getUserKeywords() {
-        KeywordTable keywords = new KeywordTable();
+    public <T extends KeywordDefinition> KeywordTable<T> getKeywords(Class<T> type) {
+        KeywordTable<T> keywords = new KeywordTable<>();
 
         for(TestCaseFile testCaseFile: testCaseFiles){
-            keywords.extend(testCaseFile.getUserKeywords());
+            keywords.extend(testCaseFile.getKeywords(type));
         }
 
         return keywords;

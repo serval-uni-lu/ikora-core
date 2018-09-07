@@ -1,9 +1,6 @@
 package lu.uni.serval.analytics;
 
-import lu.uni.serval.robotframework.model.Keyword;
-import lu.uni.serval.robotframework.model.KeywordTable;
-import lu.uni.serval.robotframework.model.Project;
-import lu.uni.serval.robotframework.model.UserKeyword;
+import lu.uni.serval.robotframework.model.*;
 
 public class ProjectStatistics {
     enum Metric{
@@ -25,26 +22,26 @@ public class ProjectStatistics {
     }
 
     public int getNumberKeywords(){
-        return getKeywords().size();
+        return getKeywords(UserKeyword.class).size();
     }
 
-    public int[] getSizeDistribution(){
-        return getDistribution(Metric.Size);
+    public <T extends KeywordDefinition> int[] getSizeDistribution(Class<T> type){
+        return getDistribution(type, Metric.Size);
     }
 
-    public int[] getComplexityDistribution(){
-        return getDistribution(Metric.Complexity);
+    public <T extends KeywordDefinition> int[] getComplexityDistribution(Class<T> type){
+        return getDistribution(type, Metric.Complexity);
     }
 
-    public int[] getSequenceDistribution(){
-        return getDistribution(Metric.Sequence);
+    public <T extends KeywordDefinition> int[] getSequenceDistribution(Class<T> type){
+        return getDistribution(type, Metric.Sequence);
     }
 
-    public int[] getDistribution(Metric metric){
+    public <T extends KeywordDefinition> int[] getDistribution(Class<T> type, Metric metric){
         int[] distribution = new int[getNumberKeywords()];
 
         int index = 0;
-        for(Keyword keyword: getKeywords()){
+        for(Keyword keyword: getKeywords(type)){
             int value = -1;
 
             switch (metric){
@@ -59,9 +56,9 @@ public class ProjectStatistics {
         return distribution;
     }
 
-    private KeywordTable<UserKeyword> getKeywords(){
+    private <T extends KeywordDefinition> KeywordTable<T> getKeywords(Class<T> type){
         if(keywords == null){
-            keywords = this.project.getUserKeywords();
+            keywords = this.project.getKeywords(type);
         }
 
         return keywords;

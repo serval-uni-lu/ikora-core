@@ -45,7 +45,7 @@ public class ProjectAnalyzer {
                 continue;
             }
 
-            for(ElementInfoPair<KeywordDefinition> keywordPair: KeywordMatcher.getPairs(project1, project2)){
+            for(ElementInfoPair<UserKeyword> keywordPair: KeywordMatcher.getPairs(UserKeyword.class, project1, project2)){
                 KeywordDefinition keyword1 = keywordPair.getElement(project1);
                 KeywordDefinition keyword2 = keywordPair.getElement(project2);
 

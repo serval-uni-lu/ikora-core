@@ -9,7 +9,7 @@ public class TestCaseFile implements Iterable<UserKeyword> {
     private String name;
     private Settings settings;
     private KeywordTable<TestCase> testCaseTable;
-    private KeywordTable keywordTable;
+    private KeywordTable<UserKeyword> userKeywordTable;
     private VariableTable variableTable;
 
     public TestCaseFile(File file){
@@ -17,7 +17,7 @@ public class TestCaseFile implements Iterable<UserKeyword> {
 
         setSettings(new Settings());
         setTestCaseTable(new KeywordTable<>());
-        setKeywordTable(new KeywordTable());
+        setKeywordTable(new KeywordTable<>());
         setVariableTable(new VariableTable());
     }
 
@@ -26,7 +26,7 @@ public class TestCaseFile implements Iterable<UserKeyword> {
 
         this.settings.setFile(this.name);
         this.testCaseTable.setFile(this.name);
-        this.keywordTable.setFile(this.name);
+        this.userKeywordTable.setFile(this.name);
         this.variableTable.setFile(this.name);
     }
 
@@ -40,9 +40,9 @@ public class TestCaseFile implements Iterable<UserKeyword> {
         this.testCaseTable.setFile(this.name);
     }
 
-    public void setKeywordTable(KeywordTable keywordTable) {
-        this.keywordTable = keywordTable;
-        this.keywordTable.setFile(this.name);
+    public void setKeywordTable(KeywordTable<UserKeyword> keywordTable) {
+        this.userKeywordTable = keywordTable;
+        this.userKeywordTable.setFile(this.name);
     }
 
     public void setVariableTable(VariableTable variableTable) {
@@ -74,14 +74,21 @@ public class TestCaseFile implements Iterable<UserKeyword> {
         return testCaseTable.asList();
     }
 
-    public KeywordTable<UserKeyword> getUserKeywords() {
-        KeywordTable<UserKeyword> userKeywords = new KeywordTable<>(keywordTable);
+    public <T extends KeywordDefinition> KeywordTable<T> getKeywords(Class<T> type) {
+        KeywordTable<T> keywords = new KeywordTable<>();
 
-        for(Resources resources: settings.getResources()){
-            userKeywords.extend(resources.getTestCaseFile().getUserKeywords());
+        if(type == UserKeyword.class){
+            keywords.extend((KeywordTable<T>) userKeywordTable);
+        }
+        else if(type == TestCase.class){
+            keywords.extend((KeywordTable<T>) testCaseTable);
         }
 
-        return userKeywords;
+        for(Resources resources: settings.getResources()){
+            keywords.extend(resources.getTestCaseFile().getKeywords(type));
+        }
+
+        return keywords;
     }
 
     public VariableTable getVariables() {
@@ -111,11 +118,11 @@ public class TestCaseFile implements Iterable<UserKeyword> {
 
     @Nonnull
     public Iterator<UserKeyword> iterator() {
-        return keywordTable.iterator();
+        return userKeywordTable.iterator();
     }
 
     public KeywordDefinition findUserKeyword(String name) {
-        return getUserKeywords().findKeyword(name);
+        return this.getKeywords(UserKeyword.class).findKeyword(name);
     }
 
     public Variable findVariable(String name) {
