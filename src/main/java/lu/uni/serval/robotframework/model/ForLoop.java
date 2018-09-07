@@ -88,7 +88,7 @@ public class ForLoop extends Step {
 
     @Override
     public double difference(Differentiable<Step> other) {
-        if(other instanceof ForLoop){
+        if(!(other instanceof ForLoop)){
             return 1;
         }
 
