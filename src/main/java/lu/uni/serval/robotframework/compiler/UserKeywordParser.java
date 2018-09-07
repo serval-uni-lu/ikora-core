@@ -12,7 +12,7 @@ public class UserKeywordParser {
 
         Line test = reader.getCurrent();
         String[] tokens = test.tokenize();
-        userKeyword.setName(tokens[0]);
+        userKeyword.setName(tokens[0].trim());
 
         reader.readLine();
 
