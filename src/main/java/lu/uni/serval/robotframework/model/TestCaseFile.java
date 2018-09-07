@@ -8,7 +8,7 @@ public class TestCaseFile implements Iterable<UserKeyword> {
     private File file;
     private String name;
     private Settings settings;
-    private TestCaseTable testCaseTable;
+    private KeywordTable<TestCase> testCaseTable;
     private KeywordTable keywordTable;
     private VariableTable variableTable;
 
@@ -16,7 +16,7 @@ public class TestCaseFile implements Iterable<UserKeyword> {
         this.file = file;
 
         setSettings(new Settings());
-        setTestCaseTable(new TestCaseTable());
+        setTestCaseTable(new KeywordTable<>());
         setKeywordTable(new KeywordTable());
         setVariableTable(new VariableTable());
     }
@@ -35,7 +35,7 @@ public class TestCaseFile implements Iterable<UserKeyword> {
         this.settings.setFile(this.name);
     }
 
-    public void setTestCaseTable(TestCaseTable testCaseTable) {
+    public void setTestCaseTable(KeywordTable<TestCase> testCaseTable) {
         this.testCaseTable = testCaseTable;
         this.testCaseTable.setFile(this.name);
     }
@@ -71,11 +71,11 @@ public class TestCaseFile implements Iterable<UserKeyword> {
     }
 
     public List<TestCase> getTestCases(){
-        return testCaseTable.getTestCases();
+        return testCaseTable.asList();
     }
 
-    public KeywordTable getUserKeywords() {
-        KeywordTable userKeywords = new KeywordTable(keywordTable);
+    public KeywordTable<UserKeyword> getUserKeywords() {
+        KeywordTable<UserKeyword> userKeywords = new KeywordTable<>(keywordTable);
 
         for(Resources resources: settings.getResources()){
             userKeywords.extend(resources.getTestCaseFile().getUserKeywords());
@@ -106,7 +106,7 @@ public class TestCaseFile implements Iterable<UserKeyword> {
     }
 
     public TestCase getTestCase(String name) {
-        return testCaseTable.getTestCase(name);
+        return testCaseTable.findKeyword(name);
     }
 
     @Nonnull

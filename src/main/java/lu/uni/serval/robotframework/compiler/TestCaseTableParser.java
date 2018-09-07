@@ -1,15 +1,15 @@
 package lu.uni.serval.robotframework.compiler;
 
+import lu.uni.serval.robotframework.model.KeywordTable;
 import lu.uni.serval.robotframework.model.TestCase;
-import lu.uni.serval.robotframework.model.TestCaseTable;
 
 import java.io.IOException;
 
 public class TestCaseTableParser {
     private TestCaseTableParser() {}
 
-    static public TestCaseTable parse(LineReader reader) throws IOException {
-        TestCaseTable testCaseTable = new TestCaseTable();
+    static public KeywordTable<TestCase> parse(LineReader reader) throws IOException {
+        KeywordTable<TestCase> testCaseTable = new KeywordTable<>();
 
         reader.readLine();
 

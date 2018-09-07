@@ -19,8 +19,8 @@ public class KeywordMatcher {
     public static List<ElementInfoPair<KeywordDefinition>> getPairs(Project project1, Project project2) {
         List<ElementInfoPair<KeywordDefinition>> pairs = new ArrayList<>();
 
-        KeywordTable keywords1 = project1.getUserKeywords();
-        KeywordTable keywords2 = project2.getUserKeywords();
+        KeywordTable<UserKeyword> keywords1 = project1.getUserKeywords();
+        KeywordTable<UserKeyword> keywords2 = project2.getUserKeywords();
 
         List<UserKeyword> unmatched = new ArrayList<>();
 

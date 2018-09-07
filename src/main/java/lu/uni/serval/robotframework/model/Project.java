@@ -69,7 +69,7 @@ public class Project implements Comparable<Project> {
         return libraries;
     }
 
-    public KeywordTable getUserKeywords() {
+    public KeywordTable<UserKeyword> getUserKeywords() {
         KeywordTable keywords = new KeywordTable();
 
         for(TestCaseFile testCaseFile: testCaseFiles){

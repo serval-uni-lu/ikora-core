@@ -3,6 +3,7 @@ package lu.uni.serval.analytics;
 import lu.uni.serval.robotframework.model.Keyword;
 import lu.uni.serval.robotframework.model.KeywordTable;
 import lu.uni.serval.robotframework.model.Project;
+import lu.uni.serval.robotframework.model.UserKeyword;
 
 public class ProjectStatistics {
     enum Metric{
@@ -58,7 +59,7 @@ public class ProjectStatistics {
         return distribution;
     }
 
-    private KeywordTable getKeywords(){
+    private KeywordTable<UserKeyword> getKeywords(){
         if(keywords == null){
             keywords = this.project.getUserKeywords();
         }

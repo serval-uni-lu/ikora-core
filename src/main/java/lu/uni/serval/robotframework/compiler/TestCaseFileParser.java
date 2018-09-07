@@ -34,7 +34,7 @@ public class TestCaseFileParser {
                     testCaseFile.setSettings(settings);
                 }
                 else if(isTestCases(text)){
-                    TestCaseTable testCaseTable = TestCaseTableParser.parse(reader);
+                    KeywordTable<TestCase> testCaseTable = TestCaseTableParser.parse(reader);
                     testCaseFile.setTestCaseTable(testCaseTable);
                 }
                 else if(isKeywords(text)){
