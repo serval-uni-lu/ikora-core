@@ -1,10 +1,13 @@
 package lu.uni.serval.robotframework.compiler;
 
 import lu.uni.serval.robotframework.model.*;
+import lu.uni.serval.utils.Configuration;
+import lu.uni.serval.utils.Plugin;
 import org.apache.commons.io.FileUtils;
 
 import java.io.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -35,8 +38,12 @@ public class ProjectParser {
         String[] extensions = new String[] { "robot" };
         List<File> robots = (List<File>) FileUtils.listFiles(directory, extensions, true);
 
+        List<File> ignoreList = getIgnoreList(project);
+
         for(File robot: robots){
-            project.addFile(robot);
+            if(!isIgnored(robot, ignoreList)){
+                project.addFile(robot);
+            }
         }
 
         return robots.size() > 0 ? robots.get(0) : null;
@@ -75,5 +82,41 @@ public class ProjectParser {
         }
 
         return null;
+    }
+
+    static private List<File> getIgnoreList(Project project){
+        Configuration configuration = Configuration.getInstance();
+        Plugin plugin = configuration.getPlugin("report analytics");
+
+        List<String> paths = (List<String>) plugin.getAdditionalProperty("exclude folders", new ArrayList<String>());
+        List<File> ignoreList = new ArrayList<>();
+
+        for(String path: paths){
+            ignoreList.add(new File(project.getRootFolder(), path));
+        }
+
+        return ignoreList;
+    }
+
+    static private boolean isIgnored(File file, List<File> ignoreList){
+        for(File ignoreFolder: ignoreList){
+            if(isInSubDirectory(ignoreFolder, file)){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static boolean isInSubDirectory(File dir, File file) {
+        if (file == null || dir == null){
+            return false;
+        }
+
+        if (file.equals(dir)){
+            return true;
+        }
+
+        return isInSubDirectory(dir, file.getParentFile());
     }
 }
