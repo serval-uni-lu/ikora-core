@@ -6,6 +6,7 @@ import java.util.*;
 public abstract class Step implements Keyword {
     private Argument name;
     private Keyword parent;
+    private String file;
 
     public Step() {
 
@@ -51,5 +52,20 @@ public abstract class Step implements Keyword {
         Step step = (Step)other;
 
         return name.equals(step.name);
+    }
+
+    @Override
+    public void setFile(String file){
+        this.file = file;
+    }
+
+    @Override
+    public String getFile() {
+        return this.file;
+    }
+
+    @Override
+    public boolean matches(String name){
+        return getName().matches(name);
     }
 }

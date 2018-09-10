@@ -1,7 +1,7 @@
 package lu.uni.serval.analytics;
 
 import lu.uni.serval.robotframework.model.KeywordDefinition;
-import lu.uni.serval.robotframework.model.KeywordTable;
+import lu.uni.serval.robotframework.model.ElementTable;
 import lu.uni.serval.robotframework.model.Project;
 
 import java.io.File;
@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class KeywordMatcher<T> {
+public class KeywordMatcher {
     enum Edit{
         ChangeName, ChangeFolder, ChangeFile, ChangeAll
     }
@@ -18,14 +18,14 @@ public class KeywordMatcher<T> {
     public static <T extends KeywordDefinition> List<ElementInfoPair<T>> getPairs(Class<T> type, Project project1, Project project2) {
         List<ElementInfoPair<T>> pairs = new ArrayList<>();
 
-        KeywordTable<T> keywords1 = project1.getKeywords(type);
-        KeywordTable<T> keywords2 = project2.getKeywords(type);
+        ElementTable<T> keywords1 = project1.getKeywords(type);
+        ElementTable<T> keywords2 = project2.getKeywords(type);
 
         List<T> unmatched = new ArrayList<>();
 
         while(keywords1.size() > 0){
             T keyword1 = keywords1.iterator().next();
-            T keyword2 = keywords2.findKeyword(keyword1);
+            T keyword2 = keywords2.findElement(keyword1);
 
             if(keyword2 == null){
                 unmatched.add(keyword1);

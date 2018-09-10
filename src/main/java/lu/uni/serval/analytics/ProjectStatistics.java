@@ -9,7 +9,7 @@ public class ProjectStatistics {
 
     final private Project project;
 
-    private KeywordTable keywords;
+    private ElementTable keywords;
 
 
     ProjectStatistics(Project project){
@@ -56,7 +56,7 @@ public class ProjectStatistics {
         return distribution;
     }
 
-    private <T extends KeywordDefinition> KeywordTable<T> getKeywords(Class<T> type){
+    private <T extends KeywordDefinition> ElementTable<T> getKeywords(Class<T> type){
         if(keywords == null){
             keywords = this.project.getKeywords(type);
         }

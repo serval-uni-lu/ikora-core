@@ -6,8 +6,9 @@ import lu.uni.serval.utils.Differentiable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Variable implements Differentiable {
-    private String  name;
+public class Variable implements Element {
+    private String file;
+    private String name;
     private List<Argument> definition;
 
     public Variable() {
@@ -22,8 +23,23 @@ public class Variable implements Differentiable {
         this.definition.add(new Argument(element));
     }
 
-    public String getName() {
-        return name;
+    @Override
+    public void setFile(String file) {
+        this.file = file;
+    }
+
+    @Override
+    public String getFile() {
+        return this.file;
+    }
+
+    public Argument getName() {
+        return new Argument(this.name);
+    }
+
+    @Override
+    public boolean matches(String name) {
+        return this.name.equalsIgnoreCase(name);
     }
 
     public List<Argument> getValue() {

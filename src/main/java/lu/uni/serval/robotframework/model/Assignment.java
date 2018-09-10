@@ -83,7 +83,7 @@ public class Assignment extends Step {
         boolean same = this.expression.equals(assignment.expression);
 
         for(int i = 0; same && i < this.returnValues.size(); ++i) {
-            same &= this.returnValues.get(i).getName().equalsIgnoreCase(assignment.returnValues.get(i).getName());
+            same &= this.returnValues.get(i).getName().toString().equalsIgnoreCase(assignment.returnValues.get(i).getName().toString());
         }
 
         return  same;

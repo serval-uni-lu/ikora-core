@@ -5,11 +5,11 @@ import java.util.List;
 
 public class UserKeyword extends KeywordDefinition {
     private List<String> parameters;
-    private VariableTable localVariables;
+    private ElementTable<Variable> localVariables;
 
     public UserKeyword() {
         parameters = new ArrayList<>();
-        localVariables = new VariableTable();
+        localVariables = new ElementTable<>();
     }
 
     @Override
@@ -27,7 +27,7 @@ public class UserKeyword extends KeywordDefinition {
         Variable variable = new Variable();
         variable.setName(parameter);
 
-        localVariables.put(variable.getName(), variable);
+        localVariables.add(variable);
     }
 
     public List<String> getParameters() {
@@ -35,6 +35,6 @@ public class UserKeyword extends KeywordDefinition {
     }
 
     public Variable findLocalVariable(String name) {
-        return localVariables.get(name);
+        return localVariables.findElement(name);
     }
 }

@@ -1,6 +1,6 @@
 package lu.uni.serval.robotframework.compiler;
 
-import lu.uni.serval.robotframework.model.KeywordTable;
+import lu.uni.serval.robotframework.model.ElementTable;
 import lu.uni.serval.robotframework.model.UserKeyword;
 
 import java.io.IOException;
@@ -8,8 +8,8 @@ import java.io.IOException;
 public class KeywordTableParser {
     private KeywordTableParser() {}
 
-    static public KeywordTable parse(LineReader reader) throws IOException {
-        KeywordTable keywordTable = new KeywordTable();
+    static public ElementTable parse(LineReader reader) throws IOException {
+        ElementTable elementTable = new ElementTable();
 
         reader.readLine();
 
@@ -20,9 +20,9 @@ public class KeywordTableParser {
             }
 
             UserKeyword userKeyword = UserKeywordParser.parse(reader);
-            keywordTable.add(userKeyword);
+            elementTable.add(userKeyword);
         }
 
-        return keywordTable;
+        return elementTable;
     }
 }

@@ -21,7 +21,7 @@ public class KeywordLinker {
                 linkSteps(testCase, testCaseFile, libraries);
             }
 
-            for(UserKeyword userKeyword: testCaseFile.getKeywords(UserKeyword.class)) {
+            for(UserKeyword userKeyword: testCaseFile.getElements(UserKeyword.class)) {
                 linkSteps(userKeyword, testCaseFile, libraries);
             }
         }

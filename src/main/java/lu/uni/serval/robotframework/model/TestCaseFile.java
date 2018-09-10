@@ -8,17 +8,20 @@ public class TestCaseFile implements Iterable<UserKeyword> {
     private File file;
     private String name;
     private Settings settings;
-    private KeywordTable<TestCase> testCaseTable;
-    private KeywordTable<UserKeyword> userKeywordTable;
-    private VariableTable variableTable;
+    private ElementTable<TestCase> testCaseTable;
+    private ElementTable<UserKeyword> userKeywordTable;
+    private ElementTable<Variable> variableTable;
+
+    private ElementTable<UserKeyword> userKeywordCache;
+    private ElementTable<Variable> variableCache;
 
     public TestCaseFile(File file){
         this.file = file;
 
         setSettings(new Settings());
-        setTestCaseTable(new KeywordTable<>());
-        setKeywordTable(new KeywordTable<>());
-        setVariableTable(new VariableTable());
+        setTestCaseTable(new ElementTable<>());
+        setKeywordTable(new ElementTable<>());
+        setVariableTable(new ElementTable<>());
     }
 
     public void setName(String name) {
@@ -35,19 +38,21 @@ public class TestCaseFile implements Iterable<UserKeyword> {
         this.settings.setFile(this.name);
     }
 
-    public void setTestCaseTable(KeywordTable<TestCase> testCaseTable) {
+    public void setTestCaseTable(ElementTable<TestCase> testCaseTable) {
         this.testCaseTable = testCaseTable;
         this.testCaseTable.setFile(this.name);
     }
 
-    public void setKeywordTable(KeywordTable<UserKeyword> keywordTable) {
-        this.userKeywordTable = keywordTable;
+    public void setKeywordTable(ElementTable<UserKeyword> elementTable) {
+        this.userKeywordTable = elementTable;
         this.userKeywordTable.setFile(this.name);
+        this.userKeywordCache = null;
     }
 
-    public void setVariableTable(VariableTable variableTable) {
+    public void setVariableTable(ElementTable<Variable> variableTable) {
         this.variableTable = variableTable;
         this.variableTable.setFile(this.name);
+        this.variableCache = null;
     }
 
     public File getFile() {
@@ -74,46 +79,28 @@ public class TestCaseFile implements Iterable<UserKeyword> {
         return testCaseTable.asList();
     }
 
-    public <T extends KeywordDefinition> KeywordTable<T> getKeywords(Class<T> type) {
-        KeywordTable<T> keywords = new KeywordTable<>();
+    public <T extends Element> ElementTable<T> getElements(Class<T> type) {
+        ElementTable<T> keywords = new ElementTable<>();
 
         if(type == UserKeyword.class){
-            keywords.extend((KeywordTable<T>) userKeywordTable);
+            keywords.extend((ElementTable<T>) userKeywordTable);
         }
         else if(type == TestCase.class){
-            keywords.extend((KeywordTable<T>) testCaseTable);
+            keywords.extend((ElementTable<T>) testCaseTable);
+        }
+        else if(type == Variable.class){
+            keywords.extend((ElementTable<T>) variableTable);
         }
 
         for(Resources resources: settings.getResources()){
-            keywords.extend(resources.getTestCaseFile().getKeywords(type));
+            keywords.extend(resources.getTestCaseFile().getElements(type));
         }
 
         return keywords;
     }
 
-    public VariableTable getVariables() {
-        VariableTable variables = new VariableTable();
-        getVariables(variables);
-
-        return variables;
-    }
-
-    private void getVariables(VariableTable variables) {
-        for(VariableTable.Entry<String, Variable> variable: variableTable.entrySet()) {
-            if(variables.containsKey(variable.getKey())) {
-                continue;
-            }
-
-            variables.put(variable.getKey(), variable.getValue());
-        }
-
-        for(Resources resources: settings.getResources()){
-            resources.getTestCaseFile().getVariables(variables);
-        }
-    }
-
     public TestCase getTestCase(String name) {
-        return testCaseTable.findKeyword(name);
+        return testCaseTable.findElement(name);
     }
 
     @Nonnull
@@ -122,10 +109,18 @@ public class TestCaseFile implements Iterable<UserKeyword> {
     }
 
     public KeywordDefinition findUserKeyword(String name) {
-        return this.getKeywords(UserKeyword.class).findKeyword(name);
+        if(userKeywordCache == null){
+            userKeywordCache = getElements(UserKeyword.class);
+        }
+
+        return userKeywordCache.findElement(name);
     }
 
     public Variable findVariable(String name) {
-        return getVariables().get(name);
+        if(variableCache == null){
+            variableCache = getElements(Variable.class);
+        }
+
+        return variableCache.findElement(name);
     }
 }

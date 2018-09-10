@@ -1,6 +1,6 @@
 package lu.uni.serval.robotframework.compiler;
 
-import lu.uni.serval.robotframework.model.KeywordTable;
+import lu.uni.serval.robotframework.model.ElementTable;
 import lu.uni.serval.robotframework.model.TestCase;
 
 import java.io.IOException;
@@ -8,8 +8,8 @@ import java.io.IOException;
 public class TestCaseTableParser {
     private TestCaseTableParser() {}
 
-    static public KeywordTable<TestCase> parse(LineReader reader) throws IOException {
-        KeywordTable<TestCase> testCaseTable = new KeywordTable<>();
+    static public ElementTable<TestCase> parse(LineReader reader) throws IOException {
+        ElementTable<TestCase> testCaseTable = new ElementTable<>();
 
         reader.readLine();
 

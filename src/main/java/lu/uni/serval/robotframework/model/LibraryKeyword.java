@@ -11,6 +11,7 @@ import java.util.Set;
 
 public abstract class LibraryKeyword implements Keyword {
     private Set<Keyword> dependencies;
+    private String file;
 
     public LibraryKeyword() {
         this.dependencies = new HashSet<>();
@@ -62,5 +63,20 @@ public abstract class LibraryKeyword implements Keyword {
     @Override
     public List<Action> differences(Differentiable other){
         return null;
+    }
+
+    @Override
+    public String getFile(){
+        return this.file;
+    }
+
+    @Override
+    public void setFile(String file){
+        this.file = file;
+    }
+
+    @Override
+    public boolean matches(String name) {
+        return this.getName().matches(name);
     }
 }
