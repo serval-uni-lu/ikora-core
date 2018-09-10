@@ -58,7 +58,7 @@ public class ProjectStatistics {
 
     private <T extends KeywordDefinition> ElementTable<T> getKeywords(Class<T> type){
         if(keywords == null){
-            keywords = this.project.getKeywords(type);
+            keywords = this.project.getElements(type);
         }
 
         return keywords;

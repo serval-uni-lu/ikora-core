@@ -1,6 +1,6 @@
 package lu.uni.serval.analytics;
 
-import lu.uni.serval.robotframework.model.KeywordDefinition;
+import lu.uni.serval.robotframework.model.Element;
 import lu.uni.serval.robotframework.model.ElementTable;
 import lu.uni.serval.robotframework.model.Project;
 
@@ -10,40 +10,40 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class KeywordMatcher {
+public class ElementMatcher {
     enum Edit{
         ChangeName, ChangeFolder, ChangeFile, ChangeAll
     }
 
-    public static <T extends KeywordDefinition> List<ElementInfoPair<T>> getPairs(Class<T> type, Project project1, Project project2) {
+    public static <T extends Element> List<ElementInfoPair<T>> getPairs(Class<T> type, Project project1, Project project2) {
         List<ElementInfoPair<T>> pairs = new ArrayList<>();
 
-        ElementTable<T> keywords1 = project1.getKeywords(type);
-        ElementTable<T> keywords2 = project2.getKeywords(type);
+        ElementTable<T> elements1 = project1.getElements(type);
+        ElementTable<T> elements2 = project2.getElements(type);
 
         List<T> unmatched = new ArrayList<>();
 
-        while(keywords1.size() > 0){
-            T keyword1 = keywords1.iterator().next();
-            T keyword2 = keywords2.findElement(keyword1);
+        while(elements1.size() > 0){
+            T keyword1 = elements1.iterator().next();
+            T keyword2 = elements2.findElement(keyword1);
 
             if(keyword2 == null){
                 unmatched.add(keyword1);
             }
             else{
                 pairs.add(ElementInfoPair.of(project1, project2, keyword1, keyword2));
-                keywords2.remove(keyword2);
+                elements2.remove(keyword2);
             }
 
-            keywords1.remove(keyword1);
+            elements1.remove(keyword1);
         }
 
-        while(keywords2.size() > 0){
-            T keyword2 = keywords2.iterator().next();
+        while(elements2.size() > 0){
+            T keyword2 = elements2.iterator().next();
             T keyword1 = findBestCandidate(type, keyword2, unmatched);
 
             pairs.add(ElementInfoPair.of(project1, project2, keyword1, keyword2));
-            keywords2.remove(keyword2);
+            elements2.remove(keyword2);
         }
 
         while(unmatched.size() > 0){
@@ -56,7 +56,7 @@ public class KeywordMatcher {
         return pairs;
     }
 
-    private static <T extends KeywordDefinition> Map<Edit, List<T>> findPotentialCandidates(Class<T> type, T keyword2, List<T> unmatched) {
+    private static <T extends Element> Map<Edit, List<T>> findPotentialCandidates(Class<T> type, T keyword2, List<T> unmatched) {
         String fileName = new File(keyword2.getFile()).getName();
         Map<Edit, List<T>> candidates = new HashMap<>();
 
@@ -93,7 +93,7 @@ public class KeywordMatcher {
         return candidates;
     }
 
-    private static <T extends KeywordDefinition> T findBestCandidate(Class<T> type, T keyword, List<T> unmatched){
+    private static <T extends Element> T findBestCandidate(Class<T> type, T keyword, List<T> unmatched){
         Map<Edit, List<T>> candidates = findPotentialCandidates(type, keyword, unmatched);
 
         T bestCandidate = null;

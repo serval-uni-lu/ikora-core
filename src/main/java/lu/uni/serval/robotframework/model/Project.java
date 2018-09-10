@@ -69,7 +69,7 @@ public class Project implements Comparable<Project> {
         return libraries;
     }
 
-    public <T extends KeywordDefinition> ElementTable<T> getKeywords(Class<T> type) {
+    public <T extends Element> ElementTable<T> getElements(Class<T> type) {
         ElementTable<T> keywords = new ElementTable<>();
 
         for(TestCaseFile testCaseFile: testCaseFiles){
