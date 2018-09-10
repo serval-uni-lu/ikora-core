@@ -64,12 +64,12 @@ public class Difference {
         }
 
         if(before == null){
-            difference.actions.add(Action.addUserKeyword());
+            difference.actions.add(Action.addElement(after.getClass()));
             return difference;
         }
 
         if(after == null){
-            difference.actions.add(Action.removeUserKeyword());
+            difference.actions.add(Action.removeElement(before.getClass()));
             return difference;
         }
 

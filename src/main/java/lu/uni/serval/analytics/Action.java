@@ -1,10 +1,16 @@
 package lu.uni.serval.analytics;
 
+import lu.uni.serval.robotframework.model.TestCase;
+import lu.uni.serval.robotframework.model.UserKeyword;
+
 public class Action {
     public enum Type{
         ADD_USER_KEYWORD,
         REMOVE_USER_KEYWORD,
         CHANGE_NAME,
+
+        ADD_TEST_CASE,
+        REMOVE_TEST_CASE,
 
         CHANGE_STEP_TYPE,
         ADD_STEP,
@@ -16,7 +22,9 @@ public class Action {
         CHANGE_STEP_RETURN_VALUES,
 
         CHANGE_FOR_LOOP_CONDITION,
-        CHANGE_FOR_LOOP_BODY
+        CHANGE_FOR_LOOP_BODY,
+
+        INVALID
     }
 
     private final Type type;
@@ -41,12 +49,26 @@ public class Action {
         return right;
     }
 
-    public static Action addUserKeyword() {
-        return new Action(Type.ADD_USER_KEYWORD, -1, -1);
+    public static <T> Action addElement(Class<T> type) {
+        if(type == UserKeyword.class){
+            return new Action(Type.ADD_USER_KEYWORD, -1, -1);
+        }
+        else if(type == TestCase.class){
+            return new Action(Type.ADD_TEST_CASE, -1, -1);
+        }
+
+        return new Action(Type.INVALID, -1, -1);
     }
 
-    public static Action removeUserKeyword(){
-        return new Action(Type.REMOVE_USER_KEYWORD, -1, -1);
+    public static <T> Action removeElement(Class<T> type){
+        if(type == UserKeyword.class){
+            return new Action(Type.REMOVE_USER_KEYWORD, -1, -1);
+        }
+        else if(type == TestCase.class){
+            return new Action(Type.REMOVE_TEST_CASE, -1, -1);
+        }
+
+        return new Action(Type.INVALID, -1, -1);
     }
 
     public static Action changeName(){
