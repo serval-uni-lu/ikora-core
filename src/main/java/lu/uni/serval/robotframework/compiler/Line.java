@@ -32,8 +32,9 @@ public class Line {
     }
 
     public String[] tokenize(){
-        String tokens = this.text.replaceAll("\\s\\s(\\s*)", "\t");
+        String tokens = this.text.trim().replaceAll("\\s\\s(\\s*)", "\t");
         tokens = tokens.replaceAll("\\\\t", "\t");
+
         return tokens.split("\t");
     }
 
