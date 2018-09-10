@@ -26,6 +26,21 @@ public class DifferenceSerializer extends JsonSerializer<Difference> {
             jsonGenerator.writeStartObject();
 
             switch (action.getType()){
+                case ADD_TEST_CASE:
+                {
+                    jsonGenerator.writeStringField("type", "add test case");
+                    writeKeywordInfo(jsonGenerator, difference.getRight(), "test case", true);
+                }
+                break;
+
+                case REMOVE_TEST_CASE:
+                {
+                    jsonGenerator.writeStringField("type", "remove test case");
+                    writeKeywordInfo(jsonGenerator, difference.getLeft(), "test case", true);
+                }
+                break;
+
+
                 case ADD_USER_KEYWORD:
                 {
                     jsonGenerator.writeStringField("type", "add user keyword");
@@ -42,10 +57,8 @@ public class DifferenceSerializer extends JsonSerializer<Difference> {
 
                 case ADD_STEP:
                 {
-                    int position = action.getRight();
                     jsonGenerator.writeStringField("type", "add step");
-                    jsonGenerator.writeStringField("step", getStepName(difference.getRight(), position));
-                    jsonGenerator.writeNumberField("position", position);
+                    jsonGenerator.writeStringField("step", getStepName(action.getRight()));
 
                     writeKeywordInfo(jsonGenerator, difference.getLeft(), "keyword", false);
                 }
@@ -53,10 +66,8 @@ public class DifferenceSerializer extends JsonSerializer<Difference> {
 
                 case REMOVE_STEP:
                 {
-                    int position = action.getLeft();
                     jsonGenerator.writeStringField("type", "remove step");
-                    jsonGenerator.writeStringField("step", getStepName(difference.getLeft(), position));
-                    jsonGenerator.writeNumberField("position", position);
+                    jsonGenerator.writeStringField("step", getStepName(action.getLeft()));
 
                     writeKeywordInfo(jsonGenerator, difference.getLeft(), "keyword", false);
                 }
@@ -66,11 +77,8 @@ public class DifferenceSerializer extends JsonSerializer<Difference> {
                 {
                     jsonGenerator.writeStringField("type", "change step");
 
-                    int positionBefore = action.getLeft();
-                    jsonGenerator.writeStringField("before", getStepName(difference.getLeft(), positionBefore));
-
-                    int positionAfter = action.getRight();
-                    jsonGenerator.writeStringField("after", getStepName(difference.getRight(), positionAfter));
+                    jsonGenerator.writeStringField("before", getStepName(action.getLeft()));
+                    jsonGenerator.writeStringField("after", getStepName(action.getRight()));
 
                     writeKeywordInfo(jsonGenerator, difference.getLeft(), "keyword", false);
                 }
@@ -80,12 +88,10 @@ public class DifferenceSerializer extends JsonSerializer<Difference> {
                 {
                     jsonGenerator.writeStringField("type", "change step arguments");
 
-                    int positionBefore = action.getLeft();
-                    KeywordCall callBefore = (KeywordCall) ((KeywordDefinition)difference.getLeft()).getStep(positionBefore);
+                    KeywordCall callBefore = (KeywordCall) action.getLeft();
                     jsonGenerator.writeStringField("before", listToString(callBefore.getParameters()));
 
-                    int positionAfter = action.getRight();
-                    KeywordCall callAfter = (KeywordCall) ((KeywordDefinition)difference.getRight()).getStep(positionAfter);
+                    KeywordCall callAfter = (KeywordCall) action.getRight();
                     jsonGenerator.writeStringField("after", listToString(callAfter.getParameters()));
 
                     writeKeywordInfo(jsonGenerator, difference.getLeft(), "keyword", false);
@@ -96,12 +102,10 @@ public class DifferenceSerializer extends JsonSerializer<Difference> {
                 {
                     jsonGenerator.writeStringField("type", "change step expression");
 
-                    int positionBefore = action.getLeft();
-                    Assignment assignmentBefore = (Assignment) ((KeywordDefinition)difference.getLeft()).getStep(positionBefore);
+                    Assignment assignmentBefore = (Assignment) action.getLeft();
                     jsonGenerator.writeStringField("before", assignmentBefore.getExpression().toString());
 
-                    int positionAfter = action.getLeft();
-                    Assignment assignmentAfter = (Assignment) ((KeywordDefinition)difference.getRight()).getStep(positionAfter);
+                    Assignment assignmentAfter = (Assignment) action.getRight();
                     jsonGenerator.writeStringField("after", assignmentAfter.getExpression().toString());
 
                     writeKeywordInfo(jsonGenerator, difference.getLeft(), "keyword", false);
@@ -112,12 +116,10 @@ public class DifferenceSerializer extends JsonSerializer<Difference> {
                 {
                     jsonGenerator.writeStringField("type", "change step type");
 
-                    int positionBefore = action.getLeft();
-                    Keyword stepBefore = ((KeywordDefinition)difference.getLeft()).getStep(positionBefore);
+                    Step stepBefore = (Step)action.getLeft();
                     jsonGenerator.writeStringField("before", getStepType(stepBefore));
 
-                    int positionAfter = action.getLeft();
-                    Keyword stepAfter = ((KeywordDefinition)difference.getRight()).getStep(positionAfter);
+                    Step stepAfter = (Step)action.getRight();
                     jsonGenerator.writeStringField("after", getStepType(stepAfter));
 
                     writeKeywordInfo(jsonGenerator, difference.getLeft(), "keyword", false);
@@ -128,10 +130,39 @@ public class DifferenceSerializer extends JsonSerializer<Difference> {
                 {
                     jsonGenerator.writeStringField("type", "change keyword name");
 
-                    jsonGenerator.writeStringField("before", ((KeywordDefinition)difference.getLeft()).getName().toString());
-                    jsonGenerator.writeStringField("after", ((KeywordDefinition)difference.getRight()).getName().toString());
+                    jsonGenerator.writeStringField("before", ((Element)difference.getLeft()).getName().toString());
+                    jsonGenerator.writeStringField("after", ((Element)difference.getRight()).getName().toString());
 
-                    jsonGenerator.writeStringField("file", ((KeywordDefinition)difference.getRight()).getFile());
+                    jsonGenerator.writeStringField("file", ((Element)difference.getRight()).getFile());
+                }
+                break;
+
+                case ADD_VARIABLE:
+                {
+                    jsonGenerator.writeStringField("type", "add variable");
+                    jsonGenerator.writeStringField("variable", ((Element)difference.getRight()).getName().toString());
+
+                    writeKeywordInfo(jsonGenerator, difference.getRight(), "keyword", false);
+                }
+                break;
+
+                case REMOVE_VARIABLE:
+                {
+                    jsonGenerator.writeStringField("type", "remove variable");
+                    jsonGenerator.writeStringField("variable", ((Element)difference.getLeft()).getName().toString());
+
+                    writeKeywordInfo(jsonGenerator, difference.getLeft(), "keyword", false);
+                }
+                break;
+
+                case CHANGE_VARIABLE_DEFINITION:
+                {
+                    jsonGenerator.writeStringField("type", "change variable definition");
+
+                    jsonGenerator.writeStringField("before", ((Variable)difference.getLeft()).getValueAsString());
+                    jsonGenerator.writeStringField("after", ((Variable)difference.getRight()).getValueAsString());
+
+                    jsonGenerator.writeStringField("file", ((Element)difference.getRight()).getFile());
                 }
                 break;
 
@@ -199,12 +230,12 @@ public class DifferenceSerializer extends JsonSerializer<Difference> {
         return type;
     }
 
-    private String getStepName(Differentiable differentiable, int position){
-        if(!(differentiable instanceof KeywordDefinition)){
-            logger.warn("Expecting a KeywordDefinition got " + differentiable.getClass().getSimpleName() + " instead");
+    private String getStepName(Differentiable step){
+        if(!(step instanceof Step)){
+            logger.warn("Expecting a Step got " + step.getClass().getSimpleName() + " instead");
             return "INVALID STEP";
         }
 
-        return ((KeywordDefinition)differentiable).getStep(position).getName().toString();
+        return ((Step)step).getName().toString();
     }
 }

@@ -100,6 +100,27 @@ public class ForLoop extends Step {
 
     @Override
     public List<Action> differences(Differentiable other) {
-        return null;
+        List<Action> actions = new ArrayList<>();
+
+        if(!(other instanceof Step)){
+            return actions;
+        }
+
+        if(this.getClass() != other.getClass()){
+            actions.add(Action.changeStepType(this, other));
+        }
+        else{
+            ForLoop forLoop = (ForLoop)other;
+
+            if(LevenshteinDistance.stringIndex(this.getName().toString(), forLoop.getName().toString()) > 0){
+                actions.add(Action.changeForLoopCondition(this, forLoop));
+            }
+
+            if(LevenshteinDistance.index(this.getSteps(), forLoop.getSteps()) > 0){
+                actions.add(Action.changeForLoopBody(this, forLoop));
+            }
+        }
+
+        return actions;
     }
 }

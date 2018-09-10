@@ -3,7 +3,6 @@ package lu.uni.serval.analytics;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lu.uni.serval.robotframework.model.*;
 import lu.uni.serval.utils.Differentiable;
-import lu.uni.serval.utils.LevenshteinDistance;
 
 import java.util.*;
 
@@ -74,153 +73,9 @@ public class Difference {
             return difference;
         }
 
-        difference.extractNameDifference();
-        difference.extractStepDifferences();
+        difference.actions.addAll(before.differences(after));
 
         return difference;
-    }
-
-    private void extractNameDifference(){
-        if(left == null || right == null){
-            return;
-        }
-
-        if(!(left instanceof KeywordDefinition)){
-            return;
-        }
-
-        KeywordDefinition before = (KeywordDefinition)left;
-        KeywordDefinition after = (KeywordDefinition)right;
-
-        if(!before.getName().toString().equalsIgnoreCase(after.getName().toString())){
-            actions.add(Action.changeName());
-        }
-    }
-
-    private void extractStepDifferences(){
-        if(left == null || right == null){
-            return;
-        }
-
-        if(!(left instanceof KeywordDefinition)){
-            return;
-        }
-
-        KeywordDefinition before = (KeywordDefinition)left;
-        KeywordDefinition after = (KeywordDefinition)right;
-
-        double[][] distances = LevenshteinDistance.distanceMatrix(before.getSteps(), after.getSteps());
-        computeEditMapping(distances);
-    }
-
-    private void computeEditMapping(double[][] distances) {
-        KeywordDefinition before = (KeywordDefinition)left;
-        KeywordDefinition after = (KeywordDefinition)right;
-
-        int xPosition = before.getSteps().size();
-        int yPosition = after.getSteps().size();
-
-        double value = distances[xPosition][yPosition];
-        double initialValue = value;
-
-        while(value != 0){
-            double substitution = xPosition > 0 && yPosition > 0 ? distances[xPosition - 1][yPosition - 1] : initialValue;
-            double addition = yPosition > 0 ? distances[xPosition][yPosition - 1] : initialValue;
-            double subtraction = xPosition > 0 ? distances[xPosition - 1][yPosition] : initialValue;
-
-            if(substitution < subtraction && substitution < addition){
-                if(value > substitution){
-                    setStepChanges(xPosition - 1, yPosition - 1);
-                }
-
-                value = substitution;
-                xPosition -= 1;
-                yPosition -= 1;
-            }
-            else if (subtraction < addition){
-                actions.add(Action.removeStep(xPosition - 1));
-
-                value = subtraction;
-                xPosition -= 1;
-            }
-            else{
-                actions.add(Action.insertStep(yPosition - 1));
-
-                value = addition;
-                yPosition -= 1;
-            }
-        }
-    }
-
-    private void setStepChanges(int leftPosition, int rightPosition) {
-        KeywordDefinition before = (KeywordDefinition)left;
-        KeywordDefinition after = (KeywordDefinition)right;
-
-        Step leftStep = (Step)before.getStep(leftPosition);
-        Step rightStep = (Step)after.getStep(rightPosition);
-
-        if(leftStep.getClass() != rightStep.getClass()){
-            actions.add(Action.changeStepType(leftPosition, rightPosition));
-        }
-        else{
-            if(leftStep instanceof KeywordCall){
-                setKeywordCallChanges(leftPosition, rightPosition);
-            }
-            else if(leftStep instanceof Assignment){
-                setAssignmentChanges(leftPosition, rightPosition);
-            }
-            else if(leftStep instanceof ForLoop){
-                setForLoopChanges(leftPosition, rightPosition);
-            }
-        }
-    }
-
-    private void setKeywordCallChanges(int leftPosition, int rightPosition) {
-        KeywordDefinition before = (KeywordDefinition)left;
-        KeywordDefinition after = (KeywordDefinition)right;
-
-        KeywordCall leftStep = (KeywordCall)before.getStep(leftPosition);
-        KeywordCall rightStep = (KeywordCall)after.getStep(rightPosition);
-
-        if(!leftStep.getName().toString().equalsIgnoreCase(rightStep.toString())){
-            actions.add(Action.changeStepName(leftPosition, rightPosition));
-        }
-
-        if(LevenshteinDistance.index(leftStep.getParameters(), rightStep.getParameters()) > 0){
-            actions.add(Action.changeStepArguments(leftPosition, rightPosition));
-        }
-    }
-
-    private void setAssignmentChanges(int leftPosition, int rightPosition) {
-        KeywordDefinition before = (KeywordDefinition)left;
-        KeywordDefinition after = (KeywordDefinition)right;
-
-        Assignment leftStep = (Assignment)before.getStep(leftPosition);
-        Assignment rightStep = (Assignment)after.getStep(rightPosition);
-
-        if(leftStep.getExpression().distance(rightStep.getExpression()) > 0){
-            actions.add(Action.changeStepExpression(leftPosition, rightPosition));
-        }
-
-        if(LevenshteinDistance.index(leftStep.getReturnValues(), rightStep.getReturnValues()) > 0){
-            actions.add(Action.changeStepReturnValues(leftPosition, rightPosition));
-        }
-    }
-
-    private void setForLoopChanges(int leftPosition, int rightPosition) {
-        KeywordDefinition before = (KeywordDefinition)left;
-        KeywordDefinition after = (KeywordDefinition)right;
-
-        ForLoop leftStep = (ForLoop)before.getStep(leftPosition);
-        ForLoop rightStep = (ForLoop)after.getStep(rightPosition);
-
-        if(LevenshteinDistance.stringIndex(leftStep.getName().toString(), rightStep.getName().toString()) > 0){
-            actions.add(Action.changeForLoopCondition(leftPosition, rightPosition));
-        }
-
-        if(LevenshteinDistance.index(leftStep.getSteps(), rightStep.getSteps()) > 0){
-            actions.add(Action.changeForLoopBody(leftPosition, rightPosition));
-        }
     }
 
     @Override

@@ -100,7 +100,28 @@ public class KeywordCall extends Step {
 
     @Override
     public List<Action> differences(Differentiable other) {
-        return null;
+        List<Action> actions = new ArrayList<>();
+
+        if(!(other instanceof Step)){
+            return actions;
+        }
+
+        if(this.getClass() != other.getClass()){
+            actions.add(Action.changeStepType(this, other));
+        }
+        else{
+            KeywordCall call = (KeywordCall)other;
+
+            if(!this.getName().toString().equalsIgnoreCase(call.toString())){
+                actions.add(Action.changeStepName(this, call));
+            }
+
+            if(LevenshteinDistance.index(this.getParameters(), call.getParameters()) > 0){
+                actions.add(Action.changeStepArguments(this, call));
+            }
+        }
+
+        return actions;
     }
 
     @Override

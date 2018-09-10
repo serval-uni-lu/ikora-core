@@ -105,7 +105,28 @@ public class Assignment extends Step {
 
     @Override
     public List<Action> differences(Differentiable other) {
-        return null;
+        List<Action> actions = new ArrayList<>();
+
+        if(!(other instanceof Step)){
+            return actions;
+        }
+
+        if(this.getClass() != other.getClass()){
+            actions.add(Action.changeStepType(this, other));
+        }
+        else{
+            Assignment assignment = (Assignment)other;
+
+            if(this.getExpression().distance(assignment.getExpression()) > 0){
+                actions.add(Action.changeStepExpression(this, assignment));
+            }
+
+            if(LevenshteinDistance.index(this.getReturnValues(), assignment.getReturnValues()) > 0){
+                actions.add(Action.changeStepReturnValues(this, assignment));
+            }
+        }
+
+        return actions;
     }
 
     @Override
