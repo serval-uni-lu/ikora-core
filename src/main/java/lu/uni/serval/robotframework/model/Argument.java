@@ -1,5 +1,6 @@
 package lu.uni.serval.robotframework.model;
 
+import lu.uni.serval.analytics.Action;
 import lu.uni.serval.utils.Differentiable;
 
 import java.util.ArrayList;
@@ -9,7 +10,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Argument implements Differentiable<Argument> {
+public class Argument implements Differentiable {
     private String value;
     private Pattern match;
     private Map<String, Variable> variables;
@@ -97,8 +98,17 @@ public class Argument implements Differentiable<Argument> {
     }
 
     @Override
-    public double difference(Differentiable<Argument> other) {
+    public double distance(Differentiable other) {
+        if(!(other instanceof Argument)){
+            return 1;
+        }
+
         Argument argument = (Argument)other;
         return value.equals(argument.value) ? 0 : 1;
+    }
+
+    @Override
+    public List<Action> differences(Differentiable other) {
+        return null;
     }
 }

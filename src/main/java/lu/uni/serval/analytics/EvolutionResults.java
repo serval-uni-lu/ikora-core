@@ -1,8 +1,8 @@
 package lu.uni.serval.analytics;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import lu.uni.serval.robotframework.model.Keyword;
 import lu.uni.serval.robotframework.model.Project;
+import lu.uni.serval.utils.Differentiable;
 import lu.uni.serval.utils.UnorderedPair;
 
 import java.util.*;
@@ -12,7 +12,7 @@ public class EvolutionResults {
     private SortedSet<Project> projects;
 
     private Map<Project, Map<Project, Set<Difference>>> differences;
-    private Map<Project, Map<Project, Set<UnorderedPair<Keyword>>>> keywords;
+    private Map<Project, Map<Project, Set<UnorderedPair<Differentiable>>>> keywords;
 
     EvolutionResults(){
         projects = new TreeSet<>();
@@ -44,14 +44,14 @@ public class EvolutionResults {
         return differences.getOrDefault(project1,  new LinkedHashMap<>()).get(project2);
     }
 
-    public boolean containsKeywords(Project project1, Project project2, Keyword keyword1, Keyword keyword2){
-        Map<Project, Set<UnorderedPair<Keyword>>> comparedTo = keywords.get(project1);
+    public boolean containsElement(Project project1, Project project2, Differentiable keyword1, Differentiable keyword2){
+        Map<Project, Set<UnorderedPair<Differentiable>>> comparedTo = keywords.get(project1);
 
         if(comparedTo == null){
             return false;
         }
 
-        Set<UnorderedPair<Keyword>> list = comparedTo.get(project2);
+        Set<UnorderedPair<Differentiable>> list = comparedTo.get(project2);
 
         if(list == null){
             return false;

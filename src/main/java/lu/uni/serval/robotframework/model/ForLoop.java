@@ -1,5 +1,6 @@
 package lu.uni.serval.robotframework.model;
 
+import lu.uni.serval.analytics.Action;
 import lu.uni.serval.robotframework.runner.Runtime;
 import lu.uni.serval.utils.Differentiable;
 import lu.uni.serval.utils.LevenshteinDistance;
@@ -87,7 +88,7 @@ public class ForLoop extends Step {
     }
 
     @Override
-    public double difference(Differentiable<Step> other) {
+    public double distance(Differentiable other) {
         if(!(other instanceof ForLoop)){
             return 1;
         }
@@ -95,5 +96,10 @@ public class ForLoop extends Step {
         ForLoop forLoop = (ForLoop)other;
 
         return LevenshteinDistance.index(steps, forLoop.steps);
+    }
+
+    @Override
+    public List<Action> differences(Differentiable other) {
+        return null;
     }
 }

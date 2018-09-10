@@ -1,5 +1,10 @@
 package lu.uni.serval.utils;
 
-public interface Differentiable<T> {
-    double difference(Differentiable<T> other);
+import lu.uni.serval.analytics.Action;
+
+import java.util.List;
+
+public interface Differentiable {
+    double distance(Differentiable other);
+    List<Action>  differences(Differentiable other);
 }

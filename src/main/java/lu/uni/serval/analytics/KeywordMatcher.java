@@ -40,7 +40,7 @@ public class KeywordMatcher<T> {
 
         while(keywords2.size() > 0){
             T keyword2 = keywords2.iterator().next();
-            T keyword1 = findBestCandidate(keyword2, unmatched);
+            T keyword1 = findBestCandidate(type, keyword2, unmatched);
 
             pairs.add(ElementInfoPair.of(project1, project2, keyword1, keyword2));
             keywords2.remove(keyword2);
@@ -56,7 +56,7 @@ public class KeywordMatcher<T> {
         return pairs;
     }
 
-    private static <T extends KeywordDefinition> Map<Edit, List<T>> findPotentialCandidates(T keyword2, List<T> unmatched) {
+    private static <T extends KeywordDefinition> Map<Edit, List<T>> findPotentialCandidates(Class<T> type, T keyword2, List<T> unmatched) {
         String fileName = new File(keyword2.getFile()).getName();
         Map<Edit, List<T>> candidates = new HashMap<>();
 
@@ -93,8 +93,8 @@ public class KeywordMatcher<T> {
         return candidates;
     }
 
-    private static <T extends KeywordDefinition> T findBestCandidate(T keyword, List<T> unmatched){
-        Map<Edit, List<T>> candidates = findPotentialCandidates(keyword, unmatched);
+    private static <T extends KeywordDefinition> T findBestCandidate(Class<T> type, T keyword, List<T> unmatched){
+        Map<Edit, List<T>> candidates = findPotentialCandidates(type, keyword, unmatched);
 
         T bestCandidate = null;
 

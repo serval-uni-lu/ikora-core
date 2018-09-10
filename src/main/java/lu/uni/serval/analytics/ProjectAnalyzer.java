@@ -49,7 +49,7 @@ public class ProjectAnalyzer {
                 UserKeyword keyword1 = keywordPair.getElement(project1);
                 UserKeyword keyword2 = keywordPair.getElement(project2);
 
-                if(differences.containsKeywords(project1, project2, keyword1, keyword2)){
+                if(differences.containsElement(project1, project2, keyword1, keyword2)){
                     project1 = project2;
                     continue;
                 }
@@ -61,7 +61,7 @@ public class ProjectAnalyzer {
                 TestCase testCase1 = testCasePair.getElement(project1);
                 TestCase testCase2 = testCasePair.getElement(project2);
 
-                if(differences.containsKeywords(project1, project2, testCase1, testCase2)){
+                if(differences.containsElement(project1, project2, testCase1, testCase2)){
                     project1 = project2;
                     continue;
                 }

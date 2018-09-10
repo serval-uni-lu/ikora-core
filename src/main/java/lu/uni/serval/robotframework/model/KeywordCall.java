@@ -1,5 +1,6 @@
 package lu.uni.serval.robotframework.model;
 
+import lu.uni.serval.analytics.Action;
 import lu.uni.serval.robotframework.runner.Runtime;
 import lu.uni.serval.utils.Differentiable;
 import lu.uni.serval.utils.LevenshteinDistance;
@@ -84,7 +85,7 @@ public class KeywordCall extends Step {
     }
 
     @Override
-    public double difference(Differentiable<Step> other) {
+    public double distance(Differentiable other) {
         if(!(other instanceof KeywordCall)){
             return 1;
         }
@@ -95,6 +96,11 @@ public class KeywordCall extends Step {
         double parameterIndex = LevenshteinDistance.index(getParameters(), call.getParameters());
 
         return (0.5 * nameIndex) + (0.5 * parameterIndex);
+    }
+
+    @Override
+    public List<Action> differences(Differentiable other) {
+        return null;
     }
 
     @Override

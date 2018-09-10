@@ -2,6 +2,7 @@ package lu.uni.serval.analytics;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lu.uni.serval.robotframework.model.*;
+import lu.uni.serval.utils.Differentiable;
 import lu.uni.serval.utils.LevenshteinDistance;
 
 import java.util.*;
@@ -9,11 +10,11 @@ import java.util.*;
 @JsonSerialize(using = DifferenceSerializer.class)
 public class Difference {
 
-    private KeywordDefinition left;
-    private KeywordDefinition right;
+    private Differentiable left;
+    private Differentiable right;
     private List<Action> actions;
 
-    private Difference(KeywordDefinition left, KeywordDefinition right){
+    private Difference(Differentiable left, Differentiable right){
         this.left = left;
         this.right = right;
 
@@ -44,11 +45,11 @@ public class Difference {
         return true;
     }
 
-    public KeywordDefinition getLeft(){
+    public Differentiable getLeft(){
         return left;
     }
 
-    public KeywordDefinition getRight(){
+    public Differentiable getRight(){
         return right;
     }
 
@@ -56,7 +57,7 @@ public class Difference {
         return actions;
     }
 
-    public static Difference of(KeywordDefinition before, KeywordDefinition after) {
+    public static Difference of(Differentiable before, Differentiable after) {
         Difference difference = new Difference(before, after);
 
         if(before == after){
@@ -73,23 +74,51 @@ public class Difference {
             return difference;
         }
 
-        if(!before.getName().toString().equalsIgnoreCase(after.getName().toString())){
-            difference.actions.add(Action.changeName());
-        }
-
+        difference.extractNameDifference();
         difference.extractStepDifferences();
 
         return difference;
     }
 
+    private void extractNameDifference(){
+        if(left == null || right == null){
+            return;
+        }
+
+        if(!(left instanceof KeywordDefinition)){
+            return;
+        }
+
+        KeywordDefinition before = (KeywordDefinition)left;
+        KeywordDefinition after = (KeywordDefinition)right;
+
+        if(!before.getName().toString().equalsIgnoreCase(after.getName().toString())){
+            actions.add(Action.changeName());
+        }
+    }
+
     private void extractStepDifferences(){
-        double[][] distances = LevenshteinDistance.distanceMatrix(left.getSteps(), right.getSteps());
+        if(left == null || right == null){
+            return;
+        }
+
+        if(!(left instanceof KeywordDefinition)){
+            return;
+        }
+
+        KeywordDefinition before = (KeywordDefinition)left;
+        KeywordDefinition after = (KeywordDefinition)right;
+
+        double[][] distances = LevenshteinDistance.distanceMatrix(before.getSteps(), after.getSteps());
         computeEditMapping(distances);
     }
 
     private void computeEditMapping(double[][] distances) {
-        int xPosition = left.getSteps().size();
-        int yPosition = right.getSteps().size();
+        KeywordDefinition before = (KeywordDefinition)left;
+        KeywordDefinition after = (KeywordDefinition)right;
+
+        int xPosition = before.getSteps().size();
+        int yPosition = after.getSteps().size();
 
         double value = distances[xPosition][yPosition];
         double initialValue = value;
@@ -124,8 +153,11 @@ public class Difference {
     }
 
     private void setStepChanges(int leftPosition, int rightPosition) {
-        Step leftStep = (Step)left.getStep(leftPosition);
-        Step rightStep = (Step)right.getStep(rightPosition);
+        KeywordDefinition before = (KeywordDefinition)left;
+        KeywordDefinition after = (KeywordDefinition)right;
+
+        Step leftStep = (Step)before.getStep(leftPosition);
+        Step rightStep = (Step)after.getStep(rightPosition);
 
         if(leftStep.getClass() != rightStep.getClass()){
             actions.add(Action.changeStepType(leftPosition, rightPosition));
@@ -144,8 +176,11 @@ public class Difference {
     }
 
     private void setKeywordCallChanges(int leftPosition, int rightPosition) {
-        KeywordCall leftStep = (KeywordCall)left.getStep(leftPosition);
-        KeywordCall rightStep = (KeywordCall)right.getStep(rightPosition);
+        KeywordDefinition before = (KeywordDefinition)left;
+        KeywordDefinition after = (KeywordDefinition)right;
+
+        KeywordCall leftStep = (KeywordCall)before.getStep(leftPosition);
+        KeywordCall rightStep = (KeywordCall)after.getStep(rightPosition);
 
         if(!leftStep.getName().toString().equalsIgnoreCase(rightStep.toString())){
             actions.add(Action.changeStepName(leftPosition, rightPosition));
@@ -157,10 +192,13 @@ public class Difference {
     }
 
     private void setAssignmentChanges(int leftPosition, int rightPosition) {
-        Assignment leftStep = (Assignment)left.getStep(leftPosition);
-        Assignment rightStep = (Assignment)right.getStep(rightPosition);
+        KeywordDefinition before = (KeywordDefinition)left;
+        KeywordDefinition after = (KeywordDefinition)right;
 
-        if(leftStep.getExpression().difference(rightStep.getExpression()) > 0){
+        Assignment leftStep = (Assignment)before.getStep(leftPosition);
+        Assignment rightStep = (Assignment)after.getStep(rightPosition);
+
+        if(leftStep.getExpression().distance(rightStep.getExpression()) > 0){
             actions.add(Action.changeStepExpression(leftPosition, rightPosition));
         }
 
@@ -170,8 +208,11 @@ public class Difference {
     }
 
     private void setForLoopChanges(int leftPosition, int rightPosition) {
-        ForLoop leftStep = (ForLoop)left.getStep(leftPosition);
-        ForLoop rightStep = (ForLoop)right.getStep(rightPosition);
+        KeywordDefinition before = (KeywordDefinition)left;
+        KeywordDefinition after = (KeywordDefinition)right;
+
+        ForLoop leftStep = (ForLoop)before.getStep(leftPosition);
+        ForLoop rightStep = (ForLoop)after.getStep(rightPosition);
 
         if(LevenshteinDistance.stringIndex(leftStep.getName().toString(), rightStep.getName().toString()) > 0){
             actions.add(Action.changeForLoopCondition(leftPosition, rightPosition));
@@ -211,13 +252,18 @@ public class Difference {
         return hash;
     }
 
-    private int getNodeHash(int hash, KeywordDefinition keyword){
-        if(keyword == null){
+    private int getNodeHash(int hash, Differentiable element){
+        if(element == null){
             hash = 31 * hash;
         }
-        else {
+        else if(element instanceof KeywordDefinition){
+            KeywordDefinition keyword = (KeywordDefinition)element;
+
             hash = 31 * hash + (keyword.getFile() == null ? 0 : keyword.getFile().hashCode());
             hash = 31 * hash + (keyword.getName().toString() == null ? 0 : keyword.getName().toString().hashCode());
+        }
+        else{
+            hash = element.hashCode();
         }
 
         return hash;

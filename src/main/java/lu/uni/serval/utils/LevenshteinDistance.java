@@ -36,7 +36,7 @@ public class LevenshteinDistance {
         return score;
     }
 
-    public static <T> double[][] distanceMatrix(List<? extends Differentiable<T>> before, List<? extends Differentiable<T>> after) {
+    public static double[][] distanceMatrix(List<? extends Differentiable> before, List<? extends Differentiable> after) {
         double[][] d = new double[before.size() + 1][after.size() + 1];
 
         for(int i = 0; i <= before.size(); ++i){
@@ -48,7 +48,7 @@ public class LevenshteinDistance {
                     d[i][j] = i;
                 }
                 else {
-                    d[i][j] = min(d[i - 1][j - 1] + before.get(i - 1).difference(after.get(j - 1)),
+                    d[i][j] = min(d[i - 1][j - 1] + before.get(i - 1).distance(after.get(j - 1)),
                             d[i - 1][j] + 1,
                             d[i][j - 1] + 1);
                 }
@@ -58,7 +58,7 @@ public class LevenshteinDistance {
         return d;
     }
 
-    public static <T> double index(List<? extends Differentiable<T>> before, List<? extends Differentiable<T>> after){
+    public static double index(List<? extends Differentiable> before, List<? extends Differentiable> after){
         double size = (double)(before.size() > after.size() ? before.size() : after.size());
         double distance = distanceMatrix(before, after)[before.size()][ after.size()];
 

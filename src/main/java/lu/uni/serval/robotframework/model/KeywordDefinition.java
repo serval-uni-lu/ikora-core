@@ -1,6 +1,9 @@
 package lu.uni.serval.robotframework.model;
 
+import lu.uni.serval.analytics.Action;
 import lu.uni.serval.robotframework.runner.Runtime;
+import lu.uni.serval.utils.Differentiable;
+
 
 import javax.annotation.Nonnull;
 import java.util.*;
@@ -120,5 +123,15 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
         }
 
         return sequence;
+    }
+
+    @Override
+    public double distance(Differentiable other) {
+        return 0;
+    }
+
+    @Override
+    public List<Action> differences(Differentiable other) {
+        return null;
     }
 }

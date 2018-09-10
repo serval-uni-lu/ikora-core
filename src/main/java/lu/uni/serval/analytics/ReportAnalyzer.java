@@ -61,7 +61,7 @@ public class ReportAnalyzer implements Iterable<Report>{
                 Project project1 = previous.getProject();
                 Project project2 = current.getProject();
 
-                if(differences.containsKeywords(project1, project2, keyword1, keyword2)){
+                if(differences.containsElement(project1, project2, keyword1, keyword2)){
                     previous = current;
                     continue;
                 }

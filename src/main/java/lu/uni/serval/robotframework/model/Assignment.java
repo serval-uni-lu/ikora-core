@@ -1,5 +1,6 @@
 package lu.uni.serval.robotframework.model;
 
+import lu.uni.serval.analytics.Action;
 import lu.uni.serval.robotframework.runner.Runtime;
 import lu.uni.serval.utils.Differentiable;
 import lu.uni.serval.utils.LevenshteinDistance;
@@ -89,17 +90,22 @@ public class Assignment extends Step {
     }
 
     @Override
-    public double difference(Differentiable<Step> other) {
+    public double distance(Differentiable other) {
         if(!(other instanceof Assignment)){
             return 1;
         }
 
         Assignment assignment = (Assignment)other;
 
-        double expressionIndex = expression.difference(assignment.expression);
+        double expressionIndex = expression.distance(assignment.expression);
         double returnValuesIndex = LevenshteinDistance.index(returnValues, assignment.returnValues);
 
         return (0.5 * expressionIndex) + (0.5 * returnValuesIndex);
+    }
+
+    @Override
+    public List<Action> differences(Differentiable other) {
+        return null;
     }
 
     @Override
