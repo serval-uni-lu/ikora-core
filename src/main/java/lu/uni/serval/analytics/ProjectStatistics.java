@@ -9,35 +9,42 @@ public class ProjectStatistics {
 
     final private Project project;
 
-    private ElementTable keywords;
-
+    private ElementTable<UserKeyword> userKeywords;
+    private ElementTable<TestCase> testCases;
 
     ProjectStatistics(Project project){
         this.project = project;
-        keywords = null;
+        userKeywords = null;
+        testCases = null;
     }
 
-    public int getNumberFiles(){
+    int getNumberFiles(){
         return this.project.getTestCaseFiles().size();
     }
 
-    public int getNumberKeywords(){
-        return getKeywords(UserKeyword.class).size();
+    int getNumberKeywords(){
+        ElementTable keywords = getKeywords(UserKeyword.class);
+
+        if(keywords != null){
+            return keywords.size();
+        }
+
+        return 0;
     }
 
-    public <T extends KeywordDefinition> int[] getSizeDistribution(Class<T> type){
+    <T extends KeywordDefinition> int[] getSizeDistribution(Class<T> type){
         return getDistribution(type, Metric.Size);
     }
 
-    public <T extends KeywordDefinition> int[] getComplexityDistribution(Class<T> type){
+    <T extends KeywordDefinition> int[] getComplexityDistribution(Class<T> type){
         return getDistribution(type, Metric.Complexity);
     }
 
-    public <T extends KeywordDefinition> int[] getSequenceDistribution(Class<T> type){
+    <T extends KeywordDefinition> int[] getSequenceDistribution(Class<T> type){
         return getDistribution(type, Metric.Sequence);
     }
 
-    public <T extends KeywordDefinition> int[] getDistribution(Class<T> type, Metric metric){
+    private <T extends KeywordDefinition> int[] getDistribution(Class<T> type, Metric metric){
         int[] distribution = new int[getNumberKeywords()];
 
         int index = 0;
@@ -57,10 +64,21 @@ public class ProjectStatistics {
     }
 
     private <T extends KeywordDefinition> ElementTable<T> getKeywords(Class<T> type){
-        if(keywords == null){
-            keywords = this.project.getElements(type);
+        if(type == UserKeyword.class){
+            if(userKeywords == null){
+                userKeywords = (ElementTable<UserKeyword>)this.project.getElements(type);
+            }
+
+            return (ElementTable<T>) userKeywords;
+        }
+        else if(type == TestCase.class){
+            if(testCases == null){
+                testCases = (ElementTable<TestCase>)this.project.getElements(type);
+            }
+
+            return (ElementTable<T>) testCases;
         }
 
-        return keywords;
+        return null;
     }
 }
