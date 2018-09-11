@@ -197,4 +197,14 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
 
         return actions;
     }
+
+    @Override
+    public Argument.Type[] getArgumentTypes() {
+        return new Argument.Type[0];
+    }
+
+    @Override
+    public int[] getKeywordsLaunchedPosition() {
+        return new int[0];
+    }
 }

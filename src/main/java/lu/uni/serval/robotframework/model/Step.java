@@ -68,4 +68,14 @@ public abstract class Step implements Keyword {
     public boolean matches(String name){
         return getName().matches(name);
     }
+
+    @Override
+    public Argument.Type[] getArgumentTypes() {
+        return new Argument.Type[0];
+    }
+
+    @Override
+    public int[] getKeywordsLaunchedPosition() {
+        return new int[0];
+    }
 }

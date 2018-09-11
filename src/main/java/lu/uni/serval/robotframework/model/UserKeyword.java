@@ -21,6 +21,17 @@ public class UserKeyword extends KeywordDefinition {
         }
     }
 
+    @Override
+    public Argument.Type[] getArgumentTypes() {
+        Argument.Type[] types = new Argument.Type[parameters.size()];
+
+        for(int i = 0; i < types.length; ++i){
+            types[i] = Argument.Type.String;
+        }
+
+        return types;
+    }
+
     public void addParameter(String parameter){
         parameters.add(parameter);
 

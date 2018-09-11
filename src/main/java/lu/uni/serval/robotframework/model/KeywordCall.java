@@ -6,14 +6,18 @@ import lu.uni.serval.utils.Differentiable;
 import lu.uni.serval.utils.LevenshteinDistance;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class KeywordCall extends Step {
     private Keyword keyword;
     private List<Argument> parameters;
+    private Map<Argument, Keyword> keywordParameters;
 
     public KeywordCall() {
         this.parameters = new ArrayList<>();
+        this.keywordParameters = new HashMap<>();
     }
 
     public void setKeyword(Keyword keyword){
@@ -69,7 +73,24 @@ public class KeywordCall extends Step {
 
     @Override
     public int getSize() {
-        return this.keyword != null ? this.keyword.getSize() : 0;
+        if(this.keyword == null){
+            return 0;
+        }
+        else if(keywordParameters.size() > 0){
+            int size = 0;
+
+            for (Keyword keywordLaunched: keywordParameters.values()){
+                if(keywordLaunched == null){
+                    continue;
+                }
+
+                size += keywordLaunched.getSize();
+            }
+
+            return size;
+        }
+
+        return this.keyword.getSize();
     }
 
     @Override
@@ -82,6 +103,33 @@ public class KeywordCall extends Step {
         }
 
         return this.keyword.getSequence();
+    }
+
+    @Override
+    public Argument.Type[] getArgumentTypes() {
+        if(this.keyword == null){
+            return new Argument.Type[0];
+        }
+
+        return this.keyword.getArgumentTypes();
+    }
+
+    @Override
+    public int[] getKeywordsLaunchedPosition() {
+        if(this.keyword == null){
+            return new int[0];
+        }
+
+        int[] positions = this.keyword.getKeywordsLaunchedPosition();
+
+        if(positions.length == 1 && positions[0] == -1){
+            positions = new int[getParameters().size()];
+            for (int i = 0; i < positions.length; ++i) {
+                positions[i] = i;
+            }
+        }
+
+        return positions;
     }
 
     @Override
@@ -136,5 +184,23 @@ public class KeywordCall extends Step {
         }
 
         return builder.toString();
+    }
+
+    private boolean hasKeywordsArgument(){
+        if(this.keyword == null){
+            return false;
+        }
+
+        for(Argument.Type type: this.keyword.getArgumentTypes()){
+            if(type == Argument.Type.Keyword){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public void setKeywordParameter(Argument keywordParameter, Keyword keyword) {
+        keywordParameters.put(keywordParameter, keyword);
     }
 }

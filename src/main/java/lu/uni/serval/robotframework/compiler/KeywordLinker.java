@@ -3,6 +3,7 @@ package lu.uni.serval.robotframework.compiler;
 import lu.uni.serval.robotframework.model.*;
 import org.apache.log4j.Logger;
 
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -39,17 +40,11 @@ public class KeywordLinker {
             Matcher matcher = pattern.matcher(step.getName().toString());
             String name = matcher.replaceAll("").trim();
 
-            Keyword keyword = testCaseFile.findUserKeyword(name);
+            Keyword keyword = getKeyword(name, testCaseFile, libraries);
 
-            if(keyword == null) {
-                keyword = libraries.findKeyword(name);
-            }
-
-            if(keyword == null) {
-                logger.error("Keyword definition for \"" + name + "\" not found!");
-            }
-            else {
+            if(keyword != null) {
                 call.setKeyword(keyword);
+                linkStepArguments(call, testCaseFile, libraries);
             }
         }
     }
@@ -64,18 +59,44 @@ public class KeywordLinker {
 
             String name = step.getName().toString().trim();
 
-            Keyword keyword = testCaseFile.findUserKeyword(name);
+            Keyword keyword = getKeyword(name, testCaseFile, libraries);
 
-            if(keyword == null) {
-                keyword = libraries.findKeyword(name);
-            }
-
-            if(keyword == null) {
-                logger.error("Keyword definition for \"" + name + "\" not found!");
-            }
-            else {
+            if(keyword != null) {
                 call.setKeyword(keyword);
+                linkStepArguments(call, testCaseFile, libraries);
             }
         }
+    }
+
+    private static void linkStepArguments(KeywordCall step, TestCaseFile testCaseFile, LibraryResources libraries) throws  Exception {
+        List<Argument> parameters = step.getParameters();
+
+        if(parameters.isEmpty()){
+            return;
+        }
+
+        for(int position: step.getKeywordsLaunchedPosition()){
+            Argument keywordParameter = parameters.get(position);
+
+            Keyword keyword = getKeyword(keywordParameter.toString(), testCaseFile, libraries);
+
+            if(keyword != null) {
+                step.setKeywordParameter(keywordParameter, keyword);
+            }
+        }
+    }
+
+    private static Keyword getKeyword(String name, TestCaseFile testCaseFile, LibraryResources libraries) throws Exception{
+        Keyword keyword = testCaseFile.findUserKeyword(name);
+
+        if(keyword == null) {
+            keyword = libraries.findKeyword(name);
+        }
+
+        if(keyword == null) {
+            logger.error("Keyword definition for \"" + name + "\" not found!");
+        }
+
+        return keyword;
     }
 }

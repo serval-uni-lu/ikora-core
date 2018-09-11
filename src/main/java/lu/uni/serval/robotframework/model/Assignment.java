@@ -143,4 +143,22 @@ public class Assignment extends Step {
 
         return builder.toString();
     }
+
+    @Override
+    public Argument.Type[] getArgumentTypes() {
+        if(this.expression == null){
+            return new Argument.Type[0];
+        }
+
+        return this.expression.getArgumentTypes();
+    }
+
+    @Override
+    public int[] getKeywordsLaunchedPosition() {
+        if(this.expression == null){
+            return new int[0];
+        }
+
+        return this.expression.getKeywordsLaunchedPosition();
+    }
 }

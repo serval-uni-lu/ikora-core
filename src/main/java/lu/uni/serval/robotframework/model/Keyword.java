@@ -16,4 +16,7 @@ public interface Keyword extends Element {
     int getSize();
     List<Keyword> getSequence();
     Set<Keyword> getDependencies();
+
+    Argument.Type[] getArgumentTypes();
+    int[] getKeywordsLaunchedPosition();
 }
