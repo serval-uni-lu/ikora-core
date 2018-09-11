@@ -86,24 +86,4 @@ public abstract class Step implements Keyword {
     public int[] getKeywordsLaunchedPosition() {
         return new int[0];
     }
-
-    @Override
-    public boolean isAction(){
-        return false;
-    }
-
-    @Override
-    public boolean isControlFlow(){
-        return false;
-    }
-
-    @Override
-    public boolean isSynchronisation(){
-        return false;
-    }
-
-    @Override
-    public boolean isCall(){
-        return false;
-    }
 }

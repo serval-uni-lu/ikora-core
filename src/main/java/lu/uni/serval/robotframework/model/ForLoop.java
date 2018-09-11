@@ -84,11 +84,6 @@ public class ForLoop extends Step {
     }
 
     @Override
-    public boolean isAction() {
-        return false;
-    }
-
-    @Override
     public double distance(Differentiable other) {
         if(!(other instanceof ForLoop)){
             return 1;

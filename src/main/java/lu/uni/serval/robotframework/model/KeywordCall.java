@@ -95,35 +95,54 @@ public class KeywordCall extends Step {
         if(this.keyword == null){
             return;
         }
-        else if(this.keyword.isAction() || this.keyword.isSynchronisation()){
-            for(List<Keyword> sequence: sequences){
-                sequence.add(this);
-            }
-        }
-        else if(this.keyword.isCall()){
-            for(KeywordCall step: stepParameters.values()){
-                step.getSequences(sequences);
-            }
-        }
-        else if(this.keyword.isControlFlow()) {
-            List<List<Keyword>> alternates = new ArrayList<>();
 
-            for(List<Keyword> sequence: sequences) {
-                List<Keyword> alternate = new ArrayList<>();
-                for(Keyword element: sequence){
-                    alternate.add(element);
-                }
-                alternates.add(alternate);
-            }
-
-            for(KeywordCall step: stepParameters.values()){
-                step.getSequences(alternates);
-            }
-
-            sequences.addAll(alternates);
+        if(this.keyword instanceof LibraryKeyword){
+            getLibrarySequence((LibraryKeyword)this.keyword, sequences);
         }
         else if(this.keyword instanceof KeywordDefinition){
             ((KeywordDefinition)keyword).getSequences(sequences);
+        }
+    }
+
+    private void getLibrarySequence(LibraryKeyword keyword, List<List<Keyword>> sequences) {
+        switch (keyword.getType()){
+            case Action:
+            case Assertion:
+            case Synchronisation:
+            {
+                for(List<Keyword> sequence: sequences){
+                    sequence.add(this);
+                }
+            }
+            break;
+
+            case ControlFlow:
+            {
+                List<List<Keyword>> alternates = new ArrayList<>();
+
+                for(List<Keyword> sequence: sequences) {
+                    List<Keyword> alternate = new ArrayList<>();
+                    for(Keyword element: sequence){
+                        alternate.add(element);
+                    }
+                    alternates.add(alternate);
+                }
+
+                for(KeywordCall step: stepParameters.values()){
+                    step.getSequences(alternates);
+                }
+
+                sequences.addAll(alternates);
+            }
+            break;
+
+            case Call:
+            {
+                for(KeywordCall step: stepParameters.values()){
+                    step.getSequences(sequences);
+                }
+            }
+            break;
         }
     }
 
@@ -152,21 +171,6 @@ public class KeywordCall extends Step {
         }
 
         return positions;
-    }
-
-    @Override
-    public boolean isAction() {
-        return false;
-    }
-
-    @Override
-    public boolean isControlFlow() {
-        return false;
-    }
-
-    @Override
-    public boolean isCall() {
-        return false;
     }
 
     @Override

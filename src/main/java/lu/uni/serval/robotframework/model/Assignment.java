@@ -161,9 +161,4 @@ public class Assignment extends Step {
 
         return this.expression.getKeywordsLaunchedPosition();
     }
-
-    @Override
-    public boolean isAction() {
-        return false;
-    }
 }

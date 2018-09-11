@@ -18,9 +18,4 @@ public interface Keyword extends Element {
     Argument.Type[] getArgumentTypes();
     int getMaxArgument();
     int[] getKeywordsLaunchedPosition();
-
-    boolean isAction();
-    boolean isControlFlow();
-    boolean isSynchronisation();
-    boolean isCall();
 }

@@ -22,6 +22,10 @@ public abstract class LibraryKeyword implements Keyword {
         this.type = Type.Unknown;
     }
 
+    public Type getType(){
+        return this.type;
+    }
+
     @Override
     public Keyword getStep(int position) {
         return null;
@@ -100,25 +104,5 @@ public abstract class LibraryKeyword implements Keyword {
     @Override
     public int[] getKeywordsLaunchedPosition() {
         return new int[0];
-    }
-
-    @Override
-    public boolean isAction(){
-        return type == Type.Action || type == Type.Assertion;
-    }
-
-    @Override
-    public boolean isControlFlow() {
-        return type == Type.ControlFlow;
-    }
-
-    @Override
-    public boolean isSynchronisation(){
-        return type == Type.Synchronisation;
-    }
-
-    @Override
-    public boolean isCall(){
-        return type == Type.Call;
     }
 }
