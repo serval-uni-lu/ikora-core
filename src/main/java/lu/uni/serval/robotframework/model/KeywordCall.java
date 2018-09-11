@@ -95,9 +95,14 @@ public class KeywordCall extends Step {
         if(this.keyword == null){
             return;
         }
-        else if(this.keyword.isAction()){
+        else if(this.keyword.isAction() || this.keyword.isSynchronisation()){
             for(List<Keyword> sequence: sequences){
                 sequence.add(this);
+            }
+        }
+        else if(this.keyword.isCall()){
+            for(KeywordCall step: stepParameters.values()){
+                step.getSequences(sequences);
             }
         }
         else if(this.keyword.isControlFlow()) {
@@ -156,6 +161,11 @@ public class KeywordCall extends Step {
 
     @Override
     public boolean isControlFlow() {
+        return false;
+    }
+
+    @Override
+    public boolean isCall() {
         return false;
     }
 
