@@ -96,10 +96,7 @@ public class KeywordCall extends Step {
     @Override
     public List<Keyword> getSequence() {
         if(this.keyword == null){
-            List<Keyword> sequence = new ArrayList<>();
-            sequence.add(this);
-
-            return sequence;
+            return new ArrayList<>();
         }
 
         return this.keyword.getSequence();
