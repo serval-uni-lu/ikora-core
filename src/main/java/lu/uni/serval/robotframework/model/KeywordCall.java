@@ -121,11 +121,7 @@ public class KeywordCall extends Step {
                 List<List<Keyword>> alternates = new ArrayList<>();
 
                 for(List<Keyword> sequence: sequences) {
-                    List<Keyword> alternate = new ArrayList<>();
-                    for(Keyword element: sequence){
-                        alternate.add(element);
-                    }
-                    alternates.add(alternate);
+                    alternates.add(new ArrayList<>(sequence));
                 }
 
                 for(KeywordCall step: stepParameters.values()){
