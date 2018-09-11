@@ -5,7 +5,6 @@ import lu.uni.serval.robotframework.runner.Runtime;
 import lu.uni.serval.utils.Differentiable;
 import lu.uni.serval.utils.LevenshteinDistance;
 
-import java.security.Key;
 import java.util.*;
 
 public class KeywordCall extends Step {
@@ -111,11 +110,15 @@ public class KeywordCall extends Step {
                 }
                 alternates.add(alternate);
             }
+
+            for(KeywordCall step: stepParameters.values()){
+                step.getSequences(alternates);
+            }
+
+            sequences.addAll(alternates);
         }
         else if(this.keyword instanceof KeywordDefinition){
-            for(List<Keyword> sequence: sequences){
-
-            }
+            ((KeywordDefinition)keyword).getSequences(sequences);
         }
     }
 
