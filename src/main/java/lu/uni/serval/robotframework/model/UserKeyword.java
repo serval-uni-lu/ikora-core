@@ -32,6 +32,11 @@ public class UserKeyword extends KeywordDefinition {
         return types;
     }
 
+    @Override
+    public int getMaxArgument(){
+        return parameters.size();
+    }
+
     public void addParameter(String parameter){
         parameters.add(parameter);
 

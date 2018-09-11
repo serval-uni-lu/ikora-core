@@ -12,6 +12,9 @@ public abstract class Step implements Keyword {
 
     }
 
+    public abstract int getSize();
+    public abstract void getSequences(List<List<Keyword>> sequences);
+
     public void setName(String name) {
         this.name = new Argument(name);
     }
@@ -75,7 +78,22 @@ public abstract class Step implements Keyword {
     }
 
     @Override
+    public int getMaxArgument(){
+        return 0;
+    }
+
+    @Override
     public int[] getKeywordsLaunchedPosition() {
         return new int[0];
+    }
+
+    @Override
+    public boolean isAction(){
+        return false;
+    }
+
+    @Override
+    public boolean isControlFlow(){
+        return false;
     }
 }

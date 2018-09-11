@@ -77,14 +77,15 @@ public class ForLoop extends Step {
     }
 
     @Override
-    public List<Keyword> getSequence() {
-        List<Keyword> sequence = new ArrayList<>();
-
+    public void getSequences(List<List<Keyword>> sequences) {
         for(Step step: steps){
-            sequence.addAll(step.getSequence());
+            step.getSequences(sequences);
         }
+    }
 
-        return sequence;
+    @Override
+    public boolean isAction() {
+        return false;
     }
 
     @Override

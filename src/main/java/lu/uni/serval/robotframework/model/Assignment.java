@@ -64,8 +64,8 @@ public class Assignment extends Step {
     }
 
     @Override
-    public List<Keyword> getSequence() {
-        return getExpression().getSequence();
+    public void getSequences(List<List<Keyword>> sequences) {
+        getExpression().getSequences(sequences);
     }
 
     @Override
@@ -160,5 +160,10 @@ public class Assignment extends Step {
         }
 
         return this.expression.getKeywordsLaunchedPosition();
+    }
+
+    @Override
+    public boolean isAction() {
+        return false;
     }
 }

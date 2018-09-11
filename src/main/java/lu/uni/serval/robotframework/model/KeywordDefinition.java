@@ -104,7 +104,6 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
 
     }
 
-    @Override
     public int getSize() {
         int size = 1;
 
@@ -115,15 +114,19 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
         return size;
     }
 
-    @Override
-    public List<Keyword> getSequence() {
-        List<Keyword> sequence = new ArrayList<>();
+    public List<List<Keyword>> getSequences() {
+        List<List<Keyword>> sequences = new ArrayList<>();
+        sequences.add(new ArrayList<>());
 
+        getSequences(sequences);
+
+        return sequences;
+    }
+
+    public void getSequences(List<List<Keyword>> sequences){
         for(Step step: steps){
-            sequence.addAll(step.getSequence());
+            step.getSequences(sequences);
         }
-
-        return sequence;
     }
 
     @Override
@@ -204,7 +207,22 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
     }
 
     @Override
+    public int getMaxArgument() {
+        return 0;
+    }
+
+    @Override
     public int[] getKeywordsLaunchedPosition() {
         return new int[0];
+    }
+
+    @Override
+    public boolean isAction() {
+        return false;
+    }
+
+    @Override
+    public boolean isControlFlow() {
+        return false;
     }
 }

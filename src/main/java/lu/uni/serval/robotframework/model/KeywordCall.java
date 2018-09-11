@@ -5,19 +5,17 @@ import lu.uni.serval.robotframework.runner.Runtime;
 import lu.uni.serval.utils.Differentiable;
 import lu.uni.serval.utils.LevenshteinDistance;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.security.Key;
+import java.util.*;
 
 public class KeywordCall extends Step {
     private Keyword keyword;
     private List<Argument> parameters;
-    private Map<Argument, Keyword> keywordParameters;
+    private Map<Argument, KeywordCall> stepParameters;
 
     public KeywordCall() {
         this.parameters = new ArrayList<>();
-        this.keywordParameters = new HashMap<>();
+        this.stepParameters = new HashMap<>();
     }
 
     public void setKeyword(Keyword keyword){
@@ -76,15 +74,15 @@ public class KeywordCall extends Step {
         if(this.keyword == null){
             return 0;
         }
-        else if(keywordParameters.size() > 0){
+        else if(stepParameters.size() > 0){
             int size = 0;
 
-            for (Keyword keywordLaunched: keywordParameters.values()){
-                if(keywordLaunched == null){
+            for (Step step: stepParameters.values()){
+                if(step == null){
                     continue;
                 }
 
-                size += keywordLaunched.getSize();
+                size += step.getSize();
             }
 
             return size;
@@ -94,12 +92,31 @@ public class KeywordCall extends Step {
     }
 
     @Override
-    public List<Keyword> getSequence() {
+    public void getSequences(List<List<Keyword>> sequences) {
         if(this.keyword == null){
-            return new ArrayList<>();
+            return;
         }
+        else if(this.keyword.isAction()){
+            for(List<Keyword> sequence: sequences){
+                sequence.add(this);
+            }
+        }
+        else if(this.keyword.isControlFlow()) {
+            List<List<Keyword>> alternates = new ArrayList<>();
 
-        return this.keyword.getSequence();
+            for(List<Keyword> sequence: sequences) {
+                List<Keyword> alternate = new ArrayList<>();
+                for(Keyword element: sequence){
+                    alternate.add(element);
+                }
+                alternates.add(alternate);
+            }
+        }
+        else if(this.keyword instanceof KeywordDefinition){
+            for(List<Keyword> sequence: sequences){
+
+            }
+        }
     }
 
     @Override
@@ -127,6 +144,16 @@ public class KeywordCall extends Step {
         }
 
         return positions;
+    }
+
+    @Override
+    public boolean isAction() {
+        return false;
+    }
+
+    @Override
+    public boolean isControlFlow() {
+        return false;
     }
 
     @Override
@@ -183,21 +210,23 @@ public class KeywordCall extends Step {
         return builder.toString();
     }
 
-    private boolean hasKeywordsArgument(){
-        if(this.keyword == null){
-            return false;
+    public Step setKeywordParameter(Argument keywordParameter, Keyword keyword) {
+        int index = parameters.indexOf(keywordParameter);
+
+        if(index < 0){
+            return null;
         }
 
-        for(Argument.Type type: this.keyword.getArgumentTypes()){
-            if(type == Argument.Type.Keyword){
-                return true;
-            }
+        KeywordCall step = new KeywordCall();
+        step.setKeyword(keyword);
+        step.setFile(this.getFile());
+        step.setName(keywordParameter.toString());
+
+        int j = keyword.getMaxArgument() == -1 ? parameters.size() : keyword.getMaxArgument();
+        for(int i = index + 1; i < parameters.size() && j > 0; ++i, --j){
+            step.parameters.add(parameters.get(i));
         }
 
-        return false;
-    }
-
-    public void setKeywordParameter(Argument keywordParameter, Keyword keyword) {
-        keywordParameters.put(keywordParameter, keyword);
+        return stepParameters.put(keywordParameter, step);
     }
 }

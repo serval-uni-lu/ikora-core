@@ -41,13 +41,13 @@ public class ProjectStatistics {
         int[] distribution = new int[getNumberKeywords()];
 
         int index = 0;
-        for(Keyword keyword: getKeywords(type)){
+        for(KeywordDefinition keyword: getKeywords(type)){
             int value = -1;
 
             switch (metric){
                 case Size: value = keyword.getSize(); break;
                 case Complexity: value = keyword.getDependencies().size(); break;
-                case Sequence: value = keyword.getSequence().size(); break;
+                case Sequence: value = keyword.getSequences().get(0).size(); break;
             }
 
             distribution[index++] = value;
