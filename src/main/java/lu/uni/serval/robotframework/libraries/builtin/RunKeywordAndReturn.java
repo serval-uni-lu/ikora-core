@@ -5,6 +5,10 @@ import lu.uni.serval.robotframework.model.LibraryKeyword;
 import lu.uni.serval.robotframework.runner.Runtime;
 
 public class RunKeywordAndReturn extends LibraryKeyword {
+    public RunKeywordAndReturn(){
+        this.type = Type.Call;
+    }
+
     @Override
     public void execute(Runtime runtime) {
 

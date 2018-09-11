@@ -225,4 +225,14 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
     public boolean isControlFlow() {
         return false;
     }
+
+    @Override
+    public boolean isSynchronisation() {
+        return false;
+    }
+
+    @Override
+    public boolean isCall() {
+        return false;
+    }
 }

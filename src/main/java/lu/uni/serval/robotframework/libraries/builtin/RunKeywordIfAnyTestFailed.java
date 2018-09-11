@@ -5,6 +5,10 @@ import lu.uni.serval.robotframework.model.LibraryKeyword;
 import lu.uni.serval.robotframework.runner.Runtime;
 
 public class RunKeywordIfAnyTestFailed extends LibraryKeyword {
+    public RunKeywordIfAnyTestFailed(){
+        this.type = Type.ControlFlow;
+    }
+
     @Override
     public void execute(Runtime runtime) {
 

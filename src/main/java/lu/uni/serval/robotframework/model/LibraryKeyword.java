@@ -10,7 +10,7 @@ import java.util.Set;
 
 public abstract class LibraryKeyword implements Keyword {
     public enum Type{
-        ControlFlow, Assertion, Action, Log, Error, Unknown
+        ControlFlow, Assertion, Action, Log, Error, Synchronisation, Call, Unknown
     }
 
     private Set<Keyword> dependencies;
@@ -110,5 +110,15 @@ public abstract class LibraryKeyword implements Keyword {
     @Override
     public boolean isControlFlow() {
         return type == Type.ControlFlow;
+    }
+
+    @Override
+    public boolean isSynchronisation(){
+        return type == Type.Synchronisation;
+    }
+
+    @Override
+    public boolean isCall(){
+        return type == Type.Call;
     }
 }

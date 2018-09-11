@@ -4,6 +4,10 @@ import lu.uni.serval.robotframework.model.LibraryKeyword;
 import lu.uni.serval.robotframework.runner.Runtime;
 
 public class ShouldBeEqualAsNumbers extends LibraryKeyword {
+    public ShouldBeEqualAsNumbers(){
+        this.type = Type.Assertion;
+    }
+
     @Override
     public void execute(Runtime runtime) {
 

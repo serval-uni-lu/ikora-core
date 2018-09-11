@@ -5,6 +5,10 @@ import lu.uni.serval.robotframework.model.LibraryKeyword;
 import lu.uni.serval.robotframework.runner.Runtime;
 
 public class RunKeywordAndIgnoreError extends LibraryKeyword {
+    public RunKeywordAndIgnoreError(){
+        this.type = Type.Call;
+    }
+
     @Override
     public void execute(Runtime runtime) {
 

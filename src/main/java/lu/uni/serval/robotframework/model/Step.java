@@ -96,4 +96,14 @@ public abstract class Step implements Keyword {
     public boolean isControlFlow(){
         return false;
     }
+
+    @Override
+    public boolean isSynchronisation(){
+        return false;
+    }
+
+    @Override
+    public boolean isCall(){
+        return false;
+    }
 }

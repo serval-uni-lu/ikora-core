@@ -21,4 +21,6 @@ public interface Keyword extends Element {
 
     boolean isAction();
     boolean isControlFlow();
+    boolean isSynchronisation();
+    boolean isCall();
 }
