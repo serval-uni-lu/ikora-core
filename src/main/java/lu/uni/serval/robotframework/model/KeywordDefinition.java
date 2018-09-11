@@ -49,7 +49,7 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
         return file;
     }
 
-    public List<Step> getSteps() {
+    private List<Step> getSteps() {
         return steps;
     }
 
@@ -123,7 +123,7 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
         return sequences;
     }
 
-    public void getSequences(List<List<Keyword>> sequences){
+    void getSequences(List<List<Keyword>> sequences){
         for(Step step: steps){
             step.getSequences(sequences);
         }
