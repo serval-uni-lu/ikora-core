@@ -125,7 +125,7 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
         return depth + 1;
     }
 
-    public List<List<Keyword>> getSequences() {
+    List<List<Keyword>> getSequences() {
         List<List<Keyword>> sequences = new ArrayList<>();
         sequences.add(new ArrayList<>());
 
@@ -142,6 +142,10 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
         }
 
         return size;
+    }
+
+    public int getBranchIndex(){
+        return getSequences().size();
     }
 
     void getSequences(List<List<Keyword>> sequences){

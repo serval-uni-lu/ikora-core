@@ -32,6 +32,8 @@ public class EvolutionResultsSerializer extends JsonSerializer<EvolutionResults>
             writeNumberArrayField(jsonGenerator, "test cases sequence distribution", statistics.getSequenceDistribution(TestCase.class));
             writeNumberArrayField(jsonGenerator, "test cases depth distribution", statistics.getDepthDistribution(TestCase.class));
             writeNumberArrayField(jsonGenerator, "keyword depth distribution", statistics.getDepthDistribution(UserKeyword.class));
+            writeNumberArrayField(jsonGenerator, "test cases branch index distribution", statistics.getBranchIndex(TestCase.class));
+            writeNumberArrayField(jsonGenerator, "keyword branch index distribution", statistics.getBranchIndex(UserKeyword.class));
 
             Set<Project> compareTo = results.getComparedTo(project1);
 
