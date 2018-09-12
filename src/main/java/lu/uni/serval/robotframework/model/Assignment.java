@@ -14,13 +14,13 @@ public class Assignment extends Step {
 
     private List<Variable> returnValues;
 
-    private Step expression;
+    private KeywordCall expression;
 
     public Assignment(){
         returnValues = new ArrayList<>();
     }
 
-    public Step getExpression() {
+    public KeywordCall getExpression() {
         return expression;
     }
 

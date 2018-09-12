@@ -51,13 +51,19 @@ public class KeywordLinker {
 
     private static void linkSteps(UserKeyword userKeyword, TestCaseFile testCaseFile, LibraryResources libraries) throws Exception {
         for (Step step: userKeyword) {
-            if(!(step instanceof KeywordCall)) {
+            KeywordCall call;
+
+            if(step instanceof KeywordCall){
+                call = (KeywordCall)step;
+            }
+            else if(step instanceof Assignment){
+                call = ((Assignment)step).getExpression();
+            }
+            else{
                 continue;
             }
 
-            KeywordCall call = (KeywordCall)step;
-
-            String name = step.getName().toString().trim();
+            String name = call.getName().toString().trim();
 
             Keyword keyword = getKeyword(name, testCaseFile, libraries);
 
