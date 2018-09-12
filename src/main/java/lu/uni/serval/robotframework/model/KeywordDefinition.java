@@ -145,7 +145,7 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
     }
 
     public int getBranchIndex(){
-        return getSequences().size();
+        return (int)Math.round(Math.log(getSequences().size()) / Math.log(2));
     }
 
     void getSequences(List<List<Keyword>> sequences){
