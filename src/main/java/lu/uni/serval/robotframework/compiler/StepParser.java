@@ -19,7 +19,7 @@ public class StepParser {
             step = parseAssignment(reader);
         }
         else {
-            step = parseKeywordNameAndParameter(reader);
+            step = parseKeywordCall(reader);
         }
 
         return step;
@@ -68,7 +68,7 @@ public class StepParser {
         return assignment;
     }
 
-    static private Step parseKeywordNameAndParameter(LineReader reader) throws IOException {
+    static private Step parseKeywordCall(LineReader reader) throws IOException {
 
         String[] tokens = reader.getCurrent().tokenize();
         tokens = Utils.removeIndent(tokens);
