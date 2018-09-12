@@ -81,7 +81,8 @@ public class KeywordLinker {
             Keyword keyword = getKeyword(keywordParameter.toString(), testCaseFile, libraries);
 
             if(keyword != null) {
-                step.setKeywordParameter(keywordParameter, keyword);
+                KeywordCall call = step.setKeywordParameter(keywordParameter, keyword);
+                linkStepArguments(call, testCaseFile, libraries);
             }
         }
     }

@@ -223,7 +223,7 @@ public class KeywordCall extends Step {
         return builder.toString();
     }
 
-    public Step setKeywordParameter(Argument keywordParameter, Keyword keyword) {
+    public KeywordCall setKeywordParameter(Argument keywordParameter, Keyword keyword) {
         int index = parameters.indexOf(keywordParameter);
 
         if(index < 0){
@@ -240,6 +240,8 @@ public class KeywordCall extends Step {
             step.parameters.add(parameters.get(i));
         }
 
-        return stepParameters.put(keywordParameter, step);
+        stepParameters.put(keywordParameter, step);
+
+        return step;
     }
 }
