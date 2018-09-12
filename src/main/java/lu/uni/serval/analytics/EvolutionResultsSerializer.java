@@ -25,11 +25,13 @@ public class EvolutionResultsSerializer extends JsonSerializer<EvolutionResults>
             jsonGenerator.writeStringField("time", project1.getDateTime().toString());
 
             jsonGenerator.writeNumberField("number files", statistics.getNumberFiles());
-            jsonGenerator.writeNumberField("number keywords", statistics.getNumberKeywords());
-            jsonGenerator.writeNumberField("number test cases", statistics.getNumberKeywords());
+            jsonGenerator.writeNumberField("number keywords", statistics.getNumberKeywords(UserKeyword.class));
+            jsonGenerator.writeNumberField("number test cases", statistics.getNumberKeywords(TestCase.class));
             writeNumberArrayField(jsonGenerator, "keyword size distribution", statistics.getSizeDistribution(UserKeyword.class));
             writeNumberArrayField(jsonGenerator, "complexity distribution", statistics.getComplexityDistribution(UserKeyword.class));
             writeNumberArrayField(jsonGenerator, "test cases sequence distribution", statistics.getSequenceDistribution(TestCase.class));
+            writeNumberArrayField(jsonGenerator, "test cases depth distribution", statistics.getDepthDistribution(TestCase.class));
+            writeNumberArrayField(jsonGenerator, "keyword depth distribution", statistics.getDepthDistribution(UserKeyword.class));
 
             Set<Project> compareTo = results.getComparedTo(project1);
 

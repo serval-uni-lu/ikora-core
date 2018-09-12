@@ -37,6 +37,11 @@ public abstract class LibraryKeyword implements Keyword {
     }
 
     @Override
+    public int getDepth(){
+        return 0;
+    }
+
+    @Override
     public Set<Keyword> getDependencies() {
         return dependencies;
     }

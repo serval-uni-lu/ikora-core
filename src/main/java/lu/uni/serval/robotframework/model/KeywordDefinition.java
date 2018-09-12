@@ -114,6 +114,17 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
         return size;
     }
 
+    @Override
+    public int getDepth() {
+        int depth = 0;
+
+        for(Step step: steps){
+            depth = Math.max(step.getDepth(), depth);
+        }
+
+        return depth + 1;
+    }
+
     public List<List<Keyword>> getSequences() {
         List<List<Keyword>> sequences = new ArrayList<>();
         sequences.add(new ArrayList<>());
@@ -121,6 +132,16 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
         getSequences(sequences);
 
         return sequences;
+    }
+
+    public int getMaxSequenceSize(){
+        int size = 0;
+
+        for(List<Keyword> sequence: getSequences()){
+            size = Math.max(sequence.size(), size);
+        }
+
+        return size;
     }
 
     void getSequences(List<List<Keyword>> sequences){

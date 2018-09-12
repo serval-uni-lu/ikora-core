@@ -8,6 +8,7 @@ public interface Keyword extends Element {
     Keyword getStep(int position);
     Argument getName();
     int getSize();
+    int getDepth();
 
     void addDependency(Keyword keyword);
 

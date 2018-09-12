@@ -91,6 +91,28 @@ public class KeywordCall extends Step {
     }
 
     @Override
+    public int getDepth() {
+        if(this.keyword == null){
+            return 0;
+        }
+        else if(stepParameters.size() > 0){
+            int depth = 0;
+
+            for (Step step: stepParameters.values()){
+                if(step == null){
+                    continue;
+                }
+
+                depth = Math.max(step.getSize(), depth);
+            }
+
+            return depth;
+        }
+
+        return this.keyword.getDepth();
+    }
+
+    @Override
     public void getSequences(List<List<Keyword>> sequences) {
         if(this.keyword == null){
             return;
@@ -124,8 +146,8 @@ public class KeywordCall extends Step {
                     alternates.add(new ArrayList<>(sequence));
                 }
 
-                for(KeywordCall step: stepParameters.values()){
-                    step.getSequences(alternates);
+                for(KeywordCall call: stepParameters.values()){
+                    call.getSequences(alternates);
                 }
 
                 sequences.addAll(alternates);
@@ -134,8 +156,8 @@ public class KeywordCall extends Step {
 
             case Call:
             {
-                for(KeywordCall step: stepParameters.values()){
-                    step.getSequences(sequences);
+                for(KeywordCall call: stepParameters.values()){
+                    call.getSequences(sequences);
                 }
             }
             break;

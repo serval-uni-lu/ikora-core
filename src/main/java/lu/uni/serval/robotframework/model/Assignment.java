@@ -64,6 +64,11 @@ public class Assignment extends Step {
     }
 
     @Override
+    public int getDepth() {
+        return getExpression().getSize();
+    }
+
+    @Override
     public void getSequences(List<List<Keyword>> sequences) {
         getExpression().getSequences(sequences);
     }

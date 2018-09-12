@@ -77,6 +77,17 @@ public class ForLoop extends Step {
     }
 
     @Override
+    public int getDepth(){
+        int depth = 0;
+
+        for(Step step: steps){
+            depth = Math.max(step.getSize(), depth);
+        }
+
+        return depth;
+    }
+
+    @Override
     public void getSequences(List<List<Keyword>> sequences) {
         for(Step step: steps){
             step.getSequences(sequences);

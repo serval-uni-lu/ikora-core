@@ -4,7 +4,7 @@ import lu.uni.serval.robotframework.model.*;
 
 public class ProjectStatistics {
     enum Metric{
-        Size, Complexity, Sequence
+        Size, Complexity, Sequence, Depth
     }
 
     final private Project project;
@@ -22,8 +22,8 @@ public class ProjectStatistics {
         return this.project.getTestCaseFiles().size();
     }
 
-    int getNumberKeywords(){
-        ElementTable keywords = getKeywords(UserKeyword.class);
+    <T extends KeywordDefinition> int getNumberKeywords(Class<T> type){
+        ElementTable keywords = getKeywords(type);
 
         if(keywords != null){
             return keywords.size();
@@ -44,8 +44,13 @@ public class ProjectStatistics {
         return getDistribution(type, Metric.Sequence);
     }
 
+    <T extends KeywordDefinition> int[] getDepthDistribution(Class<T> type){
+        return getDistribution(type, Metric.Depth);
+    }
+
+
     private <T extends KeywordDefinition> int[] getDistribution(Class<T> type, Metric metric){
-        int[] distribution = new int[getNumberKeywords()];
+        int[] distribution = new int[getNumberKeywords(type)];
 
         int index = 0;
         for(KeywordDefinition keyword: getKeywords(type)){
@@ -54,7 +59,8 @@ public class ProjectStatistics {
             switch (metric){
                 case Size: value = keyword.getSize(); break;
                 case Complexity: value = keyword.getDependencies().size(); break;
-                case Sequence: value = keyword.getSequences().get(0).size(); break;
+                case Sequence: value = keyword.getMaxSequenceSize(); break;
+                case Depth: value = keyword.getDepth(); break;
             }
 
             distribution[index++] = value;
