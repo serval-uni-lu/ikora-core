@@ -7,6 +7,7 @@ import java.util.*;
 public class TestCaseFile implements Iterable<UserKeyword> {
     private File file;
     private String name;
+    private int loc;
     private Settings settings;
     private ElementTable<TestCase> testCaseTable;
     private ElementTable<UserKeyword> userKeywordTable;
@@ -17,6 +18,7 @@ public class TestCaseFile implements Iterable<UserKeyword> {
 
     public TestCaseFile(File file){
         this.file = file;
+        this.loc = 0;
 
         setSettings(new Settings());
         setTestCaseTable(new ElementTable<>());
@@ -31,6 +33,14 @@ public class TestCaseFile implements Iterable<UserKeyword> {
         this.testCaseTable.setFile(this.name);
         this.userKeywordTable.setFile(this.name);
         this.variableTable.setFile(this.name);
+    }
+
+    public void setLoc(int loc) {
+        this.loc = loc;
+    }
+
+    public int getLoc(){
+        return this.loc;
     }
 
     public void setSettings(Settings settings) {
@@ -68,7 +78,7 @@ public class TestCaseFile implements Iterable<UserKeyword> {
     }
 
     public String getName() {
-        return this.getName();
+        return this.name;
     }
 
     public Settings getSettings() {
@@ -99,7 +109,7 @@ public class TestCaseFile implements Iterable<UserKeyword> {
         return keywords;
     }
 
-    public TestCase getTestCase(String name) {
+    TestCase getTestCase(String name) {
         return testCaseTable.findElement(name);
     }
 

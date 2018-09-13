@@ -27,6 +27,7 @@ public class EvolutionResultsSerializer extends JsonSerializer<EvolutionResults>
             jsonGenerator.writeNumberField("number files", statistics.getNumberFiles());
             jsonGenerator.writeNumberField("number keywords", statistics.getNumberKeywords(UserKeyword.class));
             jsonGenerator.writeNumberField("number test cases", statistics.getNumberKeywords(TestCase.class));
+            jsonGenerator.writeNumberField("lines of code", statistics.getLoc());
 
             writeNumberArrayField(jsonGenerator, "keyword size distribution", statistics.getSizeDistribution(UserKeyword.class));
             writeNumberArrayField(jsonGenerator, "keyword complexity distribution", statistics.getComplexityDistribution(UserKeyword.class));

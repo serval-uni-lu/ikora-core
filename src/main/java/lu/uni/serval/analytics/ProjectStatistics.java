@@ -22,6 +22,10 @@ public class ProjectStatistics {
         return this.project.getTestCaseFiles().size();
     }
 
+    int getLoc(){
+        return this.project.getLoc();
+    }
+
     <T extends KeywordDefinition> int getNumberKeywords(Class<T> type){
         ElementTable keywords = getKeywords(type);
 

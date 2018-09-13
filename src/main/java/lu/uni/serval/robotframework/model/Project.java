@@ -14,22 +14,24 @@ public class Project implements Comparable<Project> {
     private String gitUrl;
     private String commitId;
     private LocalDateTime dateTime;
+    private int loc;
 
     public Project(String file){
         rootFolder = new File(file.trim());
         testCaseFiles = new ArrayList<>();
         files = new HashMap<>();
+        loc = 0;
     }
 
-    public void setDateTime(LocalDateTime dateTime) {
+    void setDateTime(LocalDateTime dateTime) {
         this.dateTime = dateTime;
     }
 
-    public void setGitUrl(String gitUrl) {
+    void setGitUrl(String gitUrl) {
         this.gitUrl = gitUrl;
     }
 
-    public void setCommitId(String commitId) {
+    void setCommitId(String commitId) {
         this.commitId = commitId;
     }
 
@@ -79,6 +81,10 @@ public class Project implements Comparable<Project> {
         return keywords;
     }
 
+    public int getLoc() {
+        return loc;
+    }
+
     public void setLibraries(LibraryResources libraries) {
         this.libraries = libraries;
     }
@@ -100,6 +106,8 @@ public class Project implements Comparable<Project> {
         files.put(key, testCaseFile);
 
         updateFiles(testCaseFile.getSettings());
+
+        this.loc += testCaseFile.getLoc();
     }
 
     private void updateFiles(Settings settings){

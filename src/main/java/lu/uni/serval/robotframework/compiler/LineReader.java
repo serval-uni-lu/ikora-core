@@ -6,9 +6,11 @@ public class LineReader {
     private LineNumberReader reader;
     private Line current;
     private File file;
+    private int loc;
 
     public LineReader(File file) throws FileNotFoundException {
         this.file = file;
+        loc = 0;
 
         FileReader input = new FileReader(this.file);
         this.reader = new LineNumberReader(input);
@@ -16,10 +18,15 @@ public class LineReader {
 
     public Line readLine() throws IOException {
         current = new Line(reader.readLine(), reader.getLineNumber());
+
+        if(current.isValid() && !current.isEmpty()){
+            ++loc;
+        }
+
         return current;
     }
 
-    public Line getCurrent(){
+    Line getCurrent(){
         return this.current;
     }
 
@@ -27,7 +34,7 @@ public class LineReader {
         return file;
     }
 
-    public void close() {
+    void close() {
         try {
             reader.close();
         } catch (IOException e) {
@@ -35,4 +42,7 @@ public class LineReader {
         }
     }
 
+    int getLoc() {
+        return loc;
+    }
 }

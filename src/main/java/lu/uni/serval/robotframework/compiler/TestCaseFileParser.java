@@ -50,6 +50,8 @@ public class TestCaseFileParser {
                 }
             }
 
+            testCaseFile.setLoc(reader.getLoc());
+
             project.addTestCaseFile(testCaseFile);
             logger.trace("file parse: " + file.getAbsolutePath());
 
