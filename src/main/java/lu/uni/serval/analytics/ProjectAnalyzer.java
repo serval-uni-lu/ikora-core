@@ -18,12 +18,6 @@ public class ProjectAnalyzer {
         GitRepository repository = new GitRepository(gitUrl, branch, username, password);
         List<GitCommit> commits = repository.getRevisions();
 
-        int releaseNb = (int) Configuration.getInstance().getPlugin("report analytics").getAdditionalProperty("number of releases", 0);
-
-        if(releaseNb > 2){
-            commits = commits.subList(Math.max(0, commits.size() - 10), commits.size());
-        }
-
         for(GitCommit commit: commits){
             repository.checkout(commit.getId());
             Project project = repository.getProject();

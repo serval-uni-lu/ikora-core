@@ -183,6 +183,12 @@ public class GitRepository {
 
             commits.sort(Comparator.comparing(GitCommit::getDateTime));
 
+            int releaseNb = (int) analytics.getAdditionalProperty("number of releases", 0);
+
+            if(releaseNb >= 2){
+                commits = commits.subList(Math.max(0, commits.size() - releaseNb), commits.size());
+            }
+
             return commits;
         }
         catch (GitAPIException | IOException e) {
