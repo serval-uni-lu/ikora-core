@@ -4,7 +4,7 @@ import lu.uni.serval.robotframework.model.*;
 
 public class ProjectStatistics {
     enum Metric{
-        Size, Complexity, Sequence, Depth, BranchIndex
+        Size, Connectivity, Sequence, Depth, BranchIndex
     }
 
     final private Project project;
@@ -40,8 +40,8 @@ public class ProjectStatistics {
         return getDistribution(type, Metric.Size);
     }
 
-    <T extends KeywordDefinition> int[] getComplexityDistribution(Class<T> type){
-        return getDistribution(type, Metric.Complexity);
+    <T extends KeywordDefinition> int[] getConnectivityDistribution(Class<T> type){
+        return getDistribution(type, Metric.Connectivity);
     }
 
     <T extends KeywordDefinition> int[] getSequenceDistribution(Class<T> type){
@@ -65,7 +65,7 @@ public class ProjectStatistics {
 
             switch (metric){
                 case Size: value = keyword.getSize(); break;
-                case Complexity: value = keyword.getDependencies().size(); break;
+                case Connectivity: value = keyword.getConnectivity(-1); break;
                 case Sequence: value = keyword.getMaxSequenceSize(); break;
                 case Depth: value = keyword.getDepth(); break;
                 case BranchIndex: value = keyword.getBranchIndex(); break;

@@ -19,7 +19,7 @@ public abstract class Step implements Keyword {
         this.name = new Argument(name);
     }
 
-    public void setParent(KeywordDefinition parent) {
+    public void setParent(Keyword parent) {
         this.parent = parent;
     }
 
@@ -39,6 +39,21 @@ public abstract class Step implements Keyword {
         dependencies.add(this.parent);
 
         return dependencies;
+    }
+
+    @Override
+    public int getConnectivity(int distance){
+        if(distance == 0){
+            return 0;
+        }
+
+        int size = 0;
+
+        for(Keyword keyword: this.parent.getDependencies()){
+            size += keyword.getConnectivity(distance - 1) + 1;
+        }
+
+        return size;
     }
 
     @Override

@@ -253,6 +253,7 @@ public class KeywordCall extends Step {
         }
 
         KeywordCall step = new KeywordCall();
+        step.setParent(this.getParent());
         step.setKeyword(keyword);
         step.setFile(this.getFile());
         step.setName(keywordParameter.toString());

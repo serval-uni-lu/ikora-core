@@ -30,7 +30,7 @@ public class EvolutionResultsSerializer extends JsonSerializer<EvolutionResults>
             jsonGenerator.writeNumberField("lines of code", statistics.getLoc());
 
             writeNumberArrayField(jsonGenerator, "keyword size distribution", statistics.getSizeDistribution(UserKeyword.class));
-            writeNumberArrayField(jsonGenerator, "keyword complexity distribution", statistics.getComplexityDistribution(UserKeyword.class));
+            writeNumberArrayField(jsonGenerator, "keyword connectivity distribution", statistics.getConnectivityDistribution(UserKeyword.class));
             writeNumberArrayField(jsonGenerator, "keyword sequence distribution", statistics.getSequenceDistribution(UserKeyword.class));
             writeNumberArrayField(jsonGenerator, "keyword depth distribution", statistics.getDepthDistribution(UserKeyword.class));
             writeNumberArrayField(jsonGenerator, "keyword branch index distribution", statistics.getBranchIndex(UserKeyword.class));

@@ -71,6 +71,21 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
     }
 
     @Override
+    public int getConnectivity(int distance){
+        if(distance == 0){
+            return 0;
+        }
+
+        int size = 0;
+
+        for(Keyword keyword: dependencies){
+            size += keyword.getConnectivity(distance - 1) + 1;
+        }
+
+        return size;
+    }
+
+    @Override
     public Keyword getStep(int position) {
         if(steps.size() <= position){
             return null;
@@ -202,6 +217,8 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
                     Step thisStep = (Step)this.getStep(xPosition - 1);
                     Step otherStep = (Step)other.getStep(yPosition - 1);
 
+                    printGrid(distances);
+
                     actions.addAll(thisStep.differences(otherStep));
                 }
 
@@ -239,5 +256,18 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
     @Override
     public int[] getKeywordsLaunchedPosition() {
         return new int[0];
+    }
+
+    public void printGrid(double[][] grid)
+    {
+        for(int i = 0; i < grid.length; i++)
+        {
+            for(int j = 0; j < grid[i].length; j++)
+            {
+                System.out.printf("%.3f", grid[i][j]);
+                System.out.print("\t");
+            }
+            System.out.println();
+        }
     }
 }
