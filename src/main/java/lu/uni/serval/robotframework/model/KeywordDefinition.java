@@ -207,6 +207,8 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
         double value = distances[xPosition][yPosition];
         double initialValue = value;
 
+        printGrid(distances);
+
         while(value != 0){
             double substitution = xPosition > 0 && yPosition > 0 ? distances[xPosition - 1][yPosition - 1] : initialValue;
             double addition = yPosition > 0 ? distances[xPosition][yPosition - 1] : initialValue;
@@ -216,8 +218,6 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
                 if(value > substitution){
                     Step thisStep = (Step)this.getStep(xPosition - 1);
                     Step otherStep = (Step)other.getStep(yPosition - 1);
-
-                    printGrid(distances);
 
                     actions.addAll(thisStep.differences(otherStep));
                 }
@@ -258,16 +258,18 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
         return new int[0];
     }
 
-    public void printGrid(double[][] grid)
+    private void printGrid(double[][] grid)
     {
-        for(int i = 0; i < grid.length; i++)
+        for(int j = 0; j < grid[0].length; j++)
         {
-            for(int j = 0; j < grid[i].length; j++)
+            for(int i = 0; i < grid.length; i++)
             {
                 System.out.printf("%.3f", grid[i][j]);
                 System.out.print("\t");
             }
             System.out.println();
         }
+
+        System.out.println();
     }
 }
