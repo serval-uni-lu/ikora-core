@@ -1,7 +1,10 @@
 package lu.uni.serval.utils;
 
+import lu.uni.serval.analytics.Action;
+import lu.uni.serval.robotframework.model.Step;
 import opennlp.tools.util.StringUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.apache.commons.lang3.math.NumberUtils.min;
@@ -41,6 +44,7 @@ public class LevenshteinDistance {
 
         for(int i = 0; i <= before.size(); ++i){
             for(int j = 0; j <= after.size(); ++j){
+                LevenshteinDistance.printMatrix(d);
                 if(i == 0){
                     d[i][j] = j;
                 }
@@ -48,9 +52,11 @@ public class LevenshteinDistance {
                     d[i][j] = i;
                 }
                 else {
-                    d[i][j] = min(d[i - 1][j - 1] + before.get(i - 1).distance(after.get(j - 1)),
-                            d[i - 1][j] + 1,
-                            d[i][j - 1] + 1);
+                    double substitution = d[i - 1][j - 1] + before.get(i - 1).distance(after.get(j - 1));
+                    double addition = d[i - 1][j] + 1;
+                    double subtraction = d[i][j - 1] + 1;
+
+                    d[i][j] = min(substitution, addition, subtraction);
                 }
             }
         }
@@ -63,5 +69,86 @@ public class LevenshteinDistance {
         double distance = distanceMatrix(before, after)[before.size()][ after.size()];
 
         return size > 0 ? distance / size : 0;
+    }
+
+    public static List<Action> getDifferences(List<? extends Differentiable> before, List<? extends Differentiable> after){
+        List<Action> actions = new ArrayList<>();
+
+        double[][] distances = LevenshteinDistance.distanceMatrix(before, after);
+
+        int xPosition = before.size();
+        int yPosition = after.size();
+
+        double value = distances[xPosition][yPosition];
+        double initialValue = value;
+
+        while(value != 0){
+            double substitution = xPosition > 0 && yPosition > 0 ? distances[xPosition - 1][yPosition - 1] : initialValue;
+            double addition = yPosition > 0 ? distances[xPosition][yPosition - 1] : initialValue;
+            double subtraction = xPosition > 0 ? distances[xPosition - 1][yPosition] : initialValue;
+
+            // first check if steps are equal
+            if(xPosition > 0 && yPosition > 0){
+                Differentiable beforeStep = before.get(xPosition - 1);
+                Differentiable afterStep = after.get(yPosition - 1);
+
+                List<Action> differences = beforeStep.differences(afterStep);
+
+                if(differences.isEmpty()){
+                    value = substitution;
+                    xPosition -= 1;
+                    yPosition -= 1;
+
+                    continue;
+                }
+            }
+
+            // then check for the rest
+            if(substitution < subtraction && substitution < addition){
+                Differentiable beforeStep = before.get(xPosition - 1);
+                Differentiable afterStep = after.get(yPosition - 1);
+
+                List<Action> differences = beforeStep.differences(afterStep);
+
+                if(value > substitution){
+                    actions.addAll(differences);
+                }
+
+                value = substitution;
+                xPosition -= 1;
+                yPosition -= 1;
+            }
+            else if (subtraction < addition){
+                Differentiable beforeStep = before.get(xPosition - 1);
+                actions.add(Action.removeStep(beforeStep));
+
+                value = subtraction;
+                xPosition -= 1;
+            }
+            else{
+                Differentiable afterStep = after.get(yPosition - 1);
+                actions.add(Action.insertStep(afterStep));
+
+                value = addition;
+                yPosition -= 1;
+            }
+        }
+
+        return actions;
+    }
+
+    public static void printMatrix(double[][] grid)
+    {
+        for(int j = 0; j < grid[0].length; j++)
+        {
+            for(int i = 0; i < grid.length; i++)
+            {
+                System.out.printf("%.3f", grid[i][j]);
+                System.out.print("\t");
+            }
+            System.out.println();
+        }
+
+        System.out.println();
     }
 }
