@@ -2,6 +2,7 @@ package lu.uni.serval.robotframework.model;
 
 import lu.uni.serval.robotframework.compiler.Compiler;
 import lu.uni.serval.utils.Configuration;
+import lu.uni.serval.utils.Plugin;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
@@ -166,7 +167,15 @@ public class GitRepository {
                 revCommits = git.log().addRange(masterId, branchId).call();
             }
 
+            Plugin analytics = Configuration.getInstance().getPlugin("report analytics");
+            List<String> ignoreList = (List<String>)analytics.getAdditionalProperty("ignore releases", new ArrayList<>());
+            Set<String> ignoreSet = new HashSet<>(ignoreList);
+
             for (RevCommit revCommit : revCommits) {
+                if(ignoreSet.contains(revCommit.getName())){
+                    continue;
+                }
+
                 Instant instant = Instant.ofEpochSecond(revCommit.getCommitTime());
                 LocalDateTime commitDate = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
                 commits.add(new GitCommit(revCommit.getName(), commitDate));
