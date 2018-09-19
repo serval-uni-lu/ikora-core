@@ -219,7 +219,7 @@ public class KeywordCall extends Step {
         else{
             KeywordCall call = (KeywordCall)other;
 
-            if(!this.getName().toString().equalsIgnoreCase(call.toString())){
+            if(!this.getName().toString().equalsIgnoreCase(call.getName().toString())){
                 actions.add(Action.changeStepName(this, call));
             }
 

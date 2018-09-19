@@ -44,7 +44,6 @@ public class LevenshteinDistance {
 
         for(int i = 0; i <= before.size(); ++i){
             for(int j = 0; j <= after.size(); ++j){
-                LevenshteinDistance.printMatrix(d);
                 if(i == 0){
                     d[i][j] = j;
                 }
@@ -120,14 +119,14 @@ public class LevenshteinDistance {
             }
             else if (subtraction < addition){
                 Differentiable beforeStep = before.get(xPosition - 1);
-                actions.add(Action.removeStep(beforeStep));
+                actions.add(Action.removeElement(beforeStep.getClass(), beforeStep));
 
                 value = subtraction;
                 xPosition -= 1;
             }
             else{
                 Differentiable afterStep = after.get(yPosition - 1);
-                actions.add(Action.insertStep(afterStep));
+                actions.add(Action.addElement(afterStep.getClass(), afterStep));
 
                 value = addition;
                 yPosition -= 1;

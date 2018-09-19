@@ -190,61 +190,8 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
         }
 
         // check step changes
-        List<Action> stepActions = computeStepsDifferences(keyword);
+        List<Action> stepActions = LevenshteinDistance.getDifferences(this.getSteps(), keyword.getSteps());
         actions.addAll(stepActions);
-
-        return actions;
-    }
-
-    private List<Action> computeStepsDifferences(KeywordDefinition other) {
-        List<Action> actions = new ArrayList<>();
-
-        double[][] distances = LevenshteinDistance.distanceMatrix(this.getSteps(), other.getSteps());
-
-        int xPosition = this.getSteps().size();
-        int yPosition = other.getSteps().size();
-
-        double value = distances[xPosition][yPosition];
-        double initialValue = value;
-
-        while(value != 0){
-            double substitution = xPosition > 0 && yPosition > 0 ? distances[xPosition - 1][yPosition - 1] : initialValue;
-            double addition = yPosition > 0 ? distances[xPosition][yPosition - 1] : initialValue;
-            double subtraction = xPosition > 0 ? distances[xPosition - 1][yPosition] : initialValue;
-
-            // first check if steps are equal
-            Step thisStep = (Step)this.getStep(xPosition - 1);
-            Step otherStep = (Step)other.getStep(yPosition - 1);
-
-            List<Action> differences = thisStep.differences(otherStep);
-
-            if(thisStep.distance(otherStep) == 0.0){
-                actions.addAll(differences);
-            }
-
-            // then check for the rest
-            if(substitution < subtraction && substitution < addition){
-                if(value > substitution){
-                    actions.addAll(differences);
-                }
-
-                value = substitution;
-                xPosition -= 1;
-                yPosition -= 1;
-            }
-            else if (subtraction < addition){
-                actions.add(Action.removeStep(this.getStep(xPosition - 1)));
-
-                value = subtraction;
-                xPosition -= 1;
-            }
-            else{
-                actions.add(Action.insertStep(other.getStep(yPosition - 1)));
-
-                value = addition;
-                yPosition -= 1;
-            }
-        }
 
         return actions;
     }

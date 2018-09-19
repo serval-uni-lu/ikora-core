@@ -1,5 +1,6 @@
 package lu.uni.serval.analytics;
 
+import lu.uni.serval.robotframework.model.Step;
 import lu.uni.serval.robotframework.model.TestCase;
 import lu.uni.serval.robotframework.model.UserKeyword;
 import lu.uni.serval.robotframework.model.Variable;
@@ -55,32 +56,38 @@ public class Action {
         return right;
     }
 
-    public static <T> Action addElement(Class<T> type) {
-        if(type == UserKeyword.class){
-            return new Action(Type.ADD_USER_KEYWORD, null, null);
+    public static <T> Action addElement(Class<T> type, Differentiable element) {
+        if(UserKeyword.class.isAssignableFrom(type)){
+            return new Action(Type.ADD_USER_KEYWORD, null, element);
         }
-        else if(type == TestCase.class){
-            return new Action(Type.ADD_TEST_CASE, null, null);
+        else if(TestCase.class.isAssignableFrom(type)){
+            return new Action(Type.ADD_TEST_CASE, null, element);
         }
-        else if(type == Variable.class){
-            return new Action(Type.ADD_VARIABLE, null, null);
+        else if(Variable.class.isAssignableFrom(type)){
+            return new Action(Type.ADD_VARIABLE, null, element);
+        }
+        else if(Step.class.isAssignableFrom(type)){
+            return new Action(Type.ADD_STEP, null, element);
         }
 
-        return new Action(Type.INVALID, null, null);
+        return new Action(Type.INVALID, null, element);
     }
 
-    public static <T> Action removeElement(Class<T> type){
-        if(type == UserKeyword.class){
-            return new Action(Type.REMOVE_USER_KEYWORD, null, null);
+    public static <T> Action removeElement(Class<T> type, Differentiable element){
+        if(UserKeyword.class.isAssignableFrom(type)){
+            return new Action(Type.REMOVE_USER_KEYWORD, element, null);
         }
-        else if(type == TestCase.class){
-            return new Action(Type.REMOVE_TEST_CASE, null, null);
+        else if(TestCase.class.isAssignableFrom(type)){
+            return new Action(Type.REMOVE_TEST_CASE, element, null);
         }
-        else if(type == Variable.class){
-            return new Action(Type.REMOVE_VARIABLE, null, null);
+        else if(Variable.class.isAssignableFrom(type)){
+            return new Action(Type.REMOVE_VARIABLE, element, null);
+        }
+        else if(Step.class.isAssignableFrom(type)){
+            return new Action(Type.REMOVE_STEP, element, null);
         }
 
-        return new Action(Type.INVALID, null, null);
+        return new Action(Type.INVALID, element, null);
     }
 
     public static Action changeName(){
@@ -89,14 +96,6 @@ public class Action {
 
     public static Action changeStepType(Differentiable left, Differentiable right){
         return new Action(Type.CHANGE_STEP_TYPE, left, right);
-    }
-
-    public static Action removeStep(Differentiable left){
-        return new Action(Type.REMOVE_STEP, left, null);
-    }
-
-    public static Action insertStep(Differentiable right){
-        return new Action(Type.ADD_STEP, null, right);
     }
 
     public static Action changeStepName(Differentiable left, Differentiable right){

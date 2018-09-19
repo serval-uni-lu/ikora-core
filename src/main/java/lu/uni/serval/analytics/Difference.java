@@ -64,12 +64,12 @@ public class Difference {
         }
 
         if(before == null){
-            difference.actions.add(Action.addElement(after.getClass()));
+            difference.actions.add(Action.addElement(after.getClass(), after));
             return difference;
         }
 
         if(after == null){
-            difference.actions.add(Action.removeElement(before.getClass()));
+            difference.actions.add(Action.removeElement(before.getClass(), before));
             return difference;
         }
 
