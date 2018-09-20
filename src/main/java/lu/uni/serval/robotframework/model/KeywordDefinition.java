@@ -49,7 +49,7 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
         return file;
     }
 
-    private List<Step> getSteps() {
+    public List<Step> getSteps() {
         return steps;
     }
 

@@ -1,29 +1,33 @@
 package lu.uni.serval.analytics;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lu.uni.serval.robotframework.model.Project;
 import lu.uni.serval.utils.Differentiable;
 import lu.uni.serval.utils.UnorderedPair;
 
 import java.util.*;
 
-@JsonSerialize(using = EvolutionResultsSerializer.class)
 public class EvolutionResults {
     private SortedSet<Project> projects;
 
     private Map<Project, Map<Project, Set<Difference>>> differences;
     private Map<Project, Map<Project, Set<UnorderedPair<Differentiable>>>> keywords;
+    private Map<Differentiable, Difference> keywordToDifference;
 
     EvolutionResults(){
         projects = new TreeSet<>();
         differences = new LinkedHashMap<>();
         keywords = new LinkedHashMap<>();
+        keywordToDifference = new LinkedHashMap<>();
     }
 
     public void addDifference(Project project1, Project project2, Difference difference) {
         projects.add(project1);
         projects.add(project2);
 
+        if(difference.getLeft() != null)
+        {
+            keywordToDifference.put(difference.getLeft(), difference);
+        }
         if(difference.isEmpty()){
             return;
         }
@@ -38,6 +42,10 @@ public class EvolutionResults {
 
     public SortedSet<Project> getProjects(){
         return projects;
+    }
+
+    public Difference getDifference(Differentiable keyword){
+        return keywordToDifference.getOrDefault(keyword, Difference.of(keyword, null));
     }
 
     public Set<Difference> getDifferences(Project project1, Project project2){
