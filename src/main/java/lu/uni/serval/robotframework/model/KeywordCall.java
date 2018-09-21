@@ -140,6 +140,8 @@ public class KeywordCall extends Step {
 
             case ControlFlow:
             {
+                //TODO: properly handle case where there is no forking
+
                 List<List<Keyword>> alternates = new ArrayList<>();
 
                 for(List<Keyword> sequence: sequences) {
@@ -151,14 +153,6 @@ public class KeywordCall extends Step {
                 }
 
                 sequences.addAll(alternates);
-            }
-            break;
-
-            case Call:
-            {
-                for(KeywordCall call: stepParameters.values()){
-                    call.getSequences(sequences);
-                }
             }
             break;
         }

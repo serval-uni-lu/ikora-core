@@ -16,6 +16,13 @@ public class LineReader {
         this.reader = new LineNumberReader(input);
     }
 
+    public LineReader(Reader reader) {
+        this.file = new File("/");
+        loc = 0;
+
+        this.reader = new LineNumberReader(reader);
+    }
+
     public Line readLine() throws IOException {
         current = new Line(reader.readLine(), reader.getLineNumber());
 
