@@ -8,8 +8,8 @@ import java.io.IOException;
 public class KeywordTableParser {
     private KeywordTableParser() {}
 
-    static public ElementTable parse(LineReader reader) throws IOException {
-        ElementTable elementTable = new ElementTable();
+    static public ElementTable<UserKeyword> parse(LineReader reader) throws IOException {
+        ElementTable<UserKeyword> elementTable = new ElementTable<>();
 
         reader.readLine();
 
