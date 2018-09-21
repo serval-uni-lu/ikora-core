@@ -38,7 +38,7 @@ public class TestCaseFileParser {
                     testCaseFile.setTestCaseTable(testCaseTable);
                 }
                 else if(isKeywords(text)){
-                    ElementTable elementTable = KeywordTableParser.parse(reader);
+                    ElementTable<UserKeyword> elementTable = KeywordTableParser.parse(reader);
                     testCaseFile.setKeywordTable(elementTable);
                 }
                 else if(isVariable(text)){
