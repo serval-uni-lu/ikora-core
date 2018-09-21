@@ -10,7 +10,7 @@ import java.util.Set;
 
 public abstract class LibraryKeyword implements Keyword {
     public enum Type{
-        ControlFlow, Assertion, Action, Log, Error, Synchronisation, Call, Unknown
+        ControlFlow, Assertion, Action, Log, Error, Synchronisation, Get,  Unknown
     }
 
     private Set<Keyword> dependencies;

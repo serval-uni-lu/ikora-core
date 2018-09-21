@@ -6,7 +6,7 @@ import lu.uni.serval.robotframework.runner.Runtime;
 
 public class RunKeywordAndContinueOnFailure extends LibraryKeyword {
     public RunKeywordAndContinueOnFailure(){
-        this.type = Type.Call;
+        this.type = Type.ControlFlow;
     }
 
     @Override

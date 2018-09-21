@@ -6,7 +6,7 @@ import lu.uni.serval.robotframework.runner.Runtime;
 
 public class RunKeywords extends LibraryKeyword {
     public RunKeywords(){
-        this.type = Type.Call;
+        this.type = Type.ControlFlow;
     }
 
     @Override

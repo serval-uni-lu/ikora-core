@@ -4,6 +4,10 @@ import lu.uni.serval.robotframework.model.LibraryKeyword;
 import lu.uni.serval.robotframework.runner.Runtime;
 
 public class GetWindowIdentifiers extends LibraryKeyword {
+    public GetWindowIdentifiers(){
+        this.type = Type.Get;
+    }
+
     @Override
     public void execute(Runtime runtime) {
 

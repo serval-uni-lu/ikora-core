@@ -6,7 +6,7 @@ import lu.uni.serval.robotframework.runner.Runtime;
 
 public class RunKeywordAndReturn extends LibraryKeyword {
     public RunKeywordAndReturn(){
-        this.type = Type.Call;
+        this.type = Type.ControlFlow;
     }
 
     @Override

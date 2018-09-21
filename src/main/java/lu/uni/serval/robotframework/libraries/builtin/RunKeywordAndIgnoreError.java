@@ -6,7 +6,7 @@ import lu.uni.serval.robotframework.runner.Runtime;
 
 public class RunKeywordAndIgnoreError extends LibraryKeyword {
     public RunKeywordAndIgnoreError(){
-        this.type = Type.Call;
+        this.type = Type.ControlFlow;
     }
 
     @Override

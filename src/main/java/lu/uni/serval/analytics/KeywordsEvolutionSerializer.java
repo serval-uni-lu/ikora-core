@@ -33,18 +33,55 @@ public class KeywordsEvolutionSerializer extends JsonSerializer<EvolutionResults
     private void writeKeyword(JsonGenerator jsonGenerator, KeywordDefinition keyword, Difference difference, Project project) throws IOException {
         jsonGenerator.writeStartObject();
 
-        jsonGenerator.writeStringField("type", keyword.getClass().getSimpleName());
-        jsonGenerator.writeStringField("file", keyword.getFile());
-        jsonGenerator.writeStringField("name", keyword.getName().toString() );
-        jsonGenerator.writeStringField("commit id", project.getCommitId());
         jsonGenerator.writeNumberField("number steps", keyword.getSteps().size());
         jsonGenerator.writeNumberField("sequence size", keyword.getMaxSequenceSize());
         jsonGenerator.writeNumberField("number branches", keyword.getBranchIndex());
         jsonGenerator.writeNumberField("size", keyword.getSize());
         jsonGenerator.writeNumberField("depth", keyword.getDepth());
         jsonGenerator.writeNumberField("connectivity", keyword.getConnectivity(-1));
-        jsonGenerator.writeNumberField("number changes", difference.getActions().size());
+
+        writeChanges(jsonGenerator, difference);
 
         jsonGenerator.writeEndObject();
+    }
+
+    private void writeChanges(JsonGenerator jsonGenerator, Difference difference) throws IOException {
+        int totalChanges = 0;
+        int changeStep = 0;
+        int changeStepArguments = 0;
+        int changeName = 0;
+
+        for(Action action: difference.getActions()){
+            switch (action.getType()){
+                case CHANGE_NAME:
+                    ++changeName;
+                    break;
+
+                case CHANGE_FOR_LOOP_CONDITION:
+                case CHANGE_FOR_LOOP_BODY:
+                case CHANGE_STEP_EXPRESSION:
+                case CHANGE_STEP_RETURN_VALUES:
+                case ADD_STEP:
+                case REMOVE_STEP:
+                case CHANGE_STEP_TYPE:
+                case CHANGE_STEP:
+                    ++changeStep;
+                    break;
+
+                case CHANGE_STEP_ARGUMENTS:
+                    ++changeStepArguments;
+                    break;
+
+                case INVALID:
+                    break;
+            }
+
+            ++totalChanges;
+        }
+
+        jsonGenerator.writeNumberField("changes total", totalChanges);
+        jsonGenerator.writeNumberField("changes step", changeStep);
+        jsonGenerator.writeNumberField("changes step arguments", changeStepArguments);
+        jsonGenerator.writeNumberField("changes name", changeName);
     }
 }

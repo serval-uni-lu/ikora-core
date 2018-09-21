@@ -5,7 +5,7 @@ import lu.uni.serval.robotframework.runner.Runtime;
 
 public class TitleShouldBe extends LibraryKeyword {
     public TitleShouldBe(){
-        this.type = Type.Action;
+        this.type = Type.Assertion;
     }
 
     @Override

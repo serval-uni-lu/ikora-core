@@ -5,6 +5,10 @@ import lu.uni.serval.robotframework.runner.Runtime;
 
 
 public class SetSeleniumSpeed extends LibraryKeyword {
+    public SetSeleniumSpeed(){
+        this.type = Type.Synchronisation;
+    }
+
     @Override
     public void execute(Runtime runtime) {
         int sec = 0;

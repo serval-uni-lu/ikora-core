@@ -6,7 +6,7 @@ import lu.uni.serval.robotframework.runner.Runtime;
 
 public class RunKeywordAndExpectError extends LibraryKeyword {
     public RunKeywordAndExpectError(){
-        this.type = Type.Call;
+        this.type = Type.ControlFlow;
     }
 
     @Override
