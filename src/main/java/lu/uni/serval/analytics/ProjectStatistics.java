@@ -1,5 +1,6 @@
 package lu.uni.serval.analytics;
 
+import com.beust.jcommander.ParameterException;
 import lu.uni.serval.robotframework.model.*;
 
 public class ProjectStatistics {
@@ -14,8 +15,8 @@ public class ProjectStatistics {
 
     ProjectStatistics(Project project){
         this.project = project;
-        userKeywords = null;
-        testCases = null;
+        userKeywords = this.project.getElements(UserKeyword.class);
+        testCases = this.project.getElements(TestCase.class);
     }
 
     int getNumberFiles(){
@@ -79,20 +80,12 @@ public class ProjectStatistics {
 
     private <T extends KeywordDefinition> ElementTable<T> getKeywords(Class<T> type){
         if(type == UserKeyword.class){
-            if(userKeywords == null){
-                userKeywords = (ElementTable<UserKeyword>)this.project.getElements(type);
-            }
-
             return (ElementTable<T>) userKeywords;
         }
         else if(type == TestCase.class){
-            if(testCases == null){
-                testCases = (ElementTable<TestCase>)this.project.getElements(type);
-            }
-
             return (ElementTable<T>) testCases;
         }
 
-        return null;
+        throw new ParameterException("Unhandled type " + type.getName());
     }
 }
