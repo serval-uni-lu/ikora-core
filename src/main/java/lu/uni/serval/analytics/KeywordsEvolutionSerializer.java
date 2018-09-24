@@ -7,19 +7,20 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import lu.uni.serval.robotframework.model.*;
 
 import java.io.IOException;
+import java.time.ZoneId;
 
 public class KeywordsEvolutionSerializer extends JsonSerializer<EvolutionResults> {
     @Override
     public void serialize(EvolutionResults results, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException, JsonProcessingException {
         jsonGenerator.writeStartArray();
-
+/*
         for(Project project: results.getProjects()){
             for(TestCase keyword: project.getElements(TestCase.class)){
                 Difference difference = results.getDifference(keyword);
                 writeKeyword(jsonGenerator, keyword, difference, project);
             }
         }
-
+*/
         for(Project project: results.getProjects()){
             for(UserKeyword keyword: project.getElements(UserKeyword.class)){
                 Difference difference = results.getDifference(keyword);
@@ -33,6 +34,10 @@ public class KeywordsEvolutionSerializer extends JsonSerializer<EvolutionResults
     private void writeKeyword(JsonGenerator jsonGenerator, KeywordDefinition keyword, Difference difference, Project project) throws IOException {
         jsonGenerator.writeStartObject();
 
+        ZoneId zoneId = ZoneId.systemDefault();
+        long epoch = project.getDateTime().atZone(zoneId).toEpochSecond();
+
+        jsonGenerator.writeNumberField("date", epoch);
         jsonGenerator.writeNumberField("number steps", keyword.getSteps().size());
         jsonGenerator.writeNumberField("sequence size", keyword.getMaxSequenceSize());
         jsonGenerator.writeNumberField("number branches", keyword.getBranchIndex());
