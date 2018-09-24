@@ -15,7 +15,6 @@ public class ElementInfoPair<T> {
         return pair;
     }
 
-
     public ElementInfo<T> getLeft() {
         return left;
     }

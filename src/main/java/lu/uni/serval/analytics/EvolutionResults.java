@@ -12,12 +12,14 @@ public class EvolutionResults {
     private Map<Project, Map<Project, Set<Difference>>> differences;
     private Map<Project, Map<Project, Set<UnorderedPair<Differentiable>>>> keywords;
     private Map<Differentiable, Difference> keywordToDifference;
+    private List<DifferentiableSequence> sequences;
 
     EvolutionResults(){
         projects = new TreeSet<>();
         differences = new LinkedHashMap<>();
         keywords = new LinkedHashMap<>();
         keywordToDifference = new LinkedHashMap<>();
+        sequences = new ArrayList<>();
     }
 
     public void addDifference(Project project1, Project project2, Difference difference) {
@@ -34,6 +36,7 @@ public class EvolutionResults {
 
         update(project1, project2, difference, differences);
         update(project1, project2, UnorderedPair.of(difference.getLeft(), difference.getRight()), keywords);
+        updateSequence(difference);
     }
 
     public Set<Project> getComparedTo(Project project){
@@ -76,5 +79,18 @@ public class EvolutionResults {
 
         comparedTo.put(right, list);
         container.put(left, comparedTo);
+    }
+
+    private void updateSequence(Difference difference){
+        for(DifferentiableSequence sequence: sequences){
+            if(sequence.add(difference)){
+                break;
+            }
+        }
+
+        DifferentiableSequence sequence = new DifferentiableSequence();
+        sequence.add(difference);
+
+        sequences.add(sequence);
     }
 }
