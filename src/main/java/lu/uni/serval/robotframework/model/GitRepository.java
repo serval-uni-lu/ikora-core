@@ -169,6 +169,10 @@ public class GitRepository {
 
             Plugin analytics = Configuration.getInstance().getPlugin("report analytics");
             List<String> ignoreList = (List<String>)analytics.getAdditionalProperty("ignore releases", new ArrayList<>());
+
+            LocalDateTime startDate = analytics.getPropertyAsDate("start date");
+            LocalDateTime endDate = analytics.getPropertyAsDate("end date");
+
             Set<String> ignoreSet = new HashSet<>(ignoreList);
 
             for (RevCommit revCommit : revCommits) {
@@ -178,7 +182,10 @@ public class GitRepository {
 
                 Instant instant = Instant.ofEpochSecond(revCommit.getCommitTime());
                 LocalDateTime commitDate = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
-                commits.add(new GitCommit(revCommit.getName(), commitDate));
+
+                if(isInInterval(commitDate, startDate, endDate)){
+                    commits.add(new GitCommit(revCommit.getName(), commitDate));
+                }
             }
 
             commits.sort(Comparator.comparing(GitCommit::getDateTime));
@@ -216,5 +223,17 @@ public class GitRepository {
         }
 
         return commitDate;
+    }
+
+    private boolean isInInterval(LocalDateTime commitDate, LocalDateTime startDate, LocalDateTime endDate){
+        if(startDate != null && startDate.isAfter(commitDate)){
+            return false;
+        }
+
+        if(endDate != null && endDate.isBefore(commitDate)){
+            return false;
+        }
+
+        return true;
     }
 }
