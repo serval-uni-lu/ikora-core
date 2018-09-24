@@ -4,37 +4,38 @@ import java.io.File;
 import java.util.*;
 
 public class ElementTable<T extends Element> implements Iterable<T> {
-    private HashMap<String, T> elements;
+    private HashMap<String, T> elementMap;
+    private Set<T> elementSet;
     private String file;
 
     public ElementTable() {
-        this.elements = new HashMap<>();
+        this.elementMap = new HashMap<>();
+        this.elementSet = new HashSet<>();
     }
 
     public void setFile(String file) {
         this.file = file;
 
-        HashMap<String, T> tmp = new HashMap<>();
-        for (T element: elements.values()){
+        elementMap = new HashMap<>();
+        for (T element: elementSet){
             element.setFile(this.file);
-            tmp.put(getKey(element), element);
+            elementMap.put(getKey(element), element);
         }
-
-        elements = tmp;
     }
 
     public String getFile() {
         return file;
     }
 
-    public ElementTable(ElementTable other){
-        elements = other.elements;
+    public ElementTable(ElementTable<T> other){
+        elementMap = other.elementMap;
+        elementSet = other.elementSet;
 
         file = other.file;
     }
 
-    public T findElement(T keyword){
-        return elements.getOrDefault(getKey(keyword), null);
+    public T findElement(T element){
+        return findElement(element.getFile(), element.getName().toString());
     }
 
     public T findElement(String name){
@@ -42,7 +43,7 @@ public class ElementTable<T extends Element> implements Iterable<T> {
     }
 
     public T findElement(String file, String name){
-        for(T keyword: elements.values()){
+        for(T keyword: elementSet){
             if(matches(file, name, keyword)){
                 return keyword;
             }
@@ -60,28 +61,28 @@ public class ElementTable<T extends Element> implements Iterable<T> {
     }
 
     public int size() {
-        return this.elements.size();
+        return this.elementSet.size();
     }
 
     public boolean isEmpty() {
-        return this.elements.isEmpty();
+        return this.elementSet.isEmpty();
     }
 
-    public boolean contains(T keyword) {
-        if(keyword == null){
+    public boolean contains(T element) {
+        if(element == null){
             return false;
         }
 
-        return this.elements.containsKey(getKey(keyword));
+        return this.elementSet.contains(element);
     }
 
     @Override
     public Iterator<T> iterator() {
-        return this.elements.values().iterator();
+        return this.elementSet.iterator();
     }
 
     public List<T> asList() {
-        return new ArrayList<>(elements.values());
+        return new ArrayList<>(elementSet);
     }
 
     public boolean add(T element) {
@@ -89,31 +90,41 @@ public class ElementTable<T extends Element> implements Iterable<T> {
             return false;
         }
 
-        elements.put(getKey(element), element);
-
-        return true;
-    }
-
-    public boolean remove(T keyword) {
-        if(keyword == null){
+        if(elementSet.contains(element)){
             return false;
         }
 
-        this.elements.remove(getKey(keyword));
+        elementSet.add(element);
+        elementMap.put(getKey(element), element);
 
         return true;
     }
 
-    public boolean extend(ElementTable<T> table) {
-        for(T keyword: table.elements.values()){
-            this.elements.put(getKey(keyword), keyword);
+    public boolean remove(T element) {
+        if(element == null){
+            return false;
         }
 
+        this.elementMap.remove(getKey(element));
+        this.elementSet.remove(element);
+
         return true;
+    }
+
+    public void extend(ElementTable<T> table) {
+        for(T element: table){
+            if(elementSet.contains(element)){
+                continue;
+            }
+
+            this.elementSet.add(element);
+            this.elementMap.put(getKey(element), element);
+        }
     }
 
     public void clear() {
-        this.elements.clear();
+        this.elementSet.clear();
+        this.elementMap.clear();
     }
 
     private String getKey(T element){

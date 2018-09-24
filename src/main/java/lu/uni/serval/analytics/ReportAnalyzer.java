@@ -1,7 +1,5 @@
 package lu.uni.serval.analytics;
 
-import lu.uni.serval.robotframework.model.KeywordDefinition;
-import lu.uni.serval.robotframework.model.Project;
 import lu.uni.serval.robotframework.report.Report;
 
 import javax.annotation.Nonnull;
@@ -9,7 +7,7 @@ import java.util.*;
 
 public class ReportAnalyzer implements Iterable<Report>{
     private List<Report> reports;
-    private KeywordSequence sequences;
+    private DifferentiableSequence sequences;
     private StatusResults status;
 
     public ReportAnalyzer(){
@@ -46,7 +44,7 @@ public class ReportAnalyzer implements Iterable<Report>{
         initKeywordSequence();
 
         EvolutionResults differences = new EvolutionResults();
-
+/*
         for(List<ElementInfo<KeywordDefinition>> sequence: sequences){
             ElementInfo<KeywordDefinition> previous = null;
             for(ElementInfo<KeywordDefinition> current: sequence){
@@ -68,7 +66,7 @@ public class ReportAnalyzer implements Iterable<Report>{
 
                 Difference difference = Difference.of(previous.getElement(), current.getElement());
 
-                /*
+
                 LocalDateTime dateTime = KeywordStatus.getExecutionDate();
 
                 for(EditAction difference : editDistance.differences(previous, keyword)){
@@ -78,12 +76,12 @@ public class ReportAnalyzer implements Iterable<Report>{
                     }
 
                 }
-                */
+
 
                 previous = current;
             }
         }
-
+*/
         return differences;
     }
 
@@ -94,7 +92,7 @@ public class ReportAnalyzer implements Iterable<Report>{
 
         initStatus();
 
-        sequences = new KeywordSequence();
+        sequences = new DifferentiableSequence();
 
         for(Report report: reports){
 /*
