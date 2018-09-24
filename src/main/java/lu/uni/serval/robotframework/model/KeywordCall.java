@@ -131,13 +131,14 @@ public class KeywordCall extends Step {
             case Action:
             case Assertion:
             case Synchronisation:
+            case ControlFlow:
             {
                 for(List<Keyword> sequence: sequences){
                     sequence.add(this);
                 }
             }
             break;
-
+/*
             case ControlFlow:
             {
                 //TODO: properly handle case where there is no forking
@@ -155,6 +156,7 @@ public class KeywordCall extends Step {
                 sequences.addAll(alternates);
             }
             break;
+*/
         }
     }
 
