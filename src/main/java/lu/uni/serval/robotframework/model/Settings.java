@@ -1,6 +1,5 @@
 package lu.uni.serval.robotframework.model;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +8,7 @@ public class Settings {
     private List<Library> libraryTable;
     private List<String> defaultTags;
     private String documentation;
-    private String file;
+    private TestCaseFile file;
 
     public Settings() {
         this.resourcesTable = new ArrayList<>();
@@ -17,7 +16,7 @@ public class Settings {
         this.defaultTags = new ArrayList<>();
     }
 
-    public String getFile() {
+    public TestCaseFile getFile() {
         return file;
     }
 
@@ -37,7 +36,7 @@ public class Settings {
         return defaultTags;
     }
 
-    public void setFile(String file) {
+    public void setFile(TestCaseFile file) {
         this.file = file;
     }
 

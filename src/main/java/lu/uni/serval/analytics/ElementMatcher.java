@@ -57,7 +57,7 @@ public class ElementMatcher {
     }
 
     private static <T extends Element> Map<Edit, List<T>> findPotentialCandidates(Class<T> type, T keyword2, List<T> unmatched) {
-        String fileName = new File(keyword2.getFile()).getName();
+        String fileName = new File(keyword2.getFileName()).getName();
         Map<Edit, List<T>> candidates = new HashMap<>();
 
         for (T current: unmatched){
@@ -66,7 +66,7 @@ public class ElementMatcher {
                 continue;
             }
 
-            String currentFileName = new File(current.getFile()).getName();
+            String currentFileName = current.getFileName();
 
             if(current.getFile().equals(keyword2.getFile())){
                 List<T> list = candidates.getOrDefault(Edit.ChangeName, new ArrayList<>());

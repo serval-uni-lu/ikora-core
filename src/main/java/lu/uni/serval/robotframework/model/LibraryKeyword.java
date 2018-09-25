@@ -7,14 +7,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-
 public abstract class LibraryKeyword implements Keyword {
     public enum Type{
         ControlFlow, Assertion, Action, Log, Error, Synchronisation, Get,  Unknown
     }
 
     private Set<Keyword> dependencies;
-    private String file;
+    private TestCaseFile file;
     protected Type type;
 
     public LibraryKeyword() {
@@ -87,12 +86,17 @@ public abstract class LibraryKeyword implements Keyword {
     }
 
     @Override
-    public String getFile(){
+    public TestCaseFile getFile(){
         return this.file;
     }
 
     @Override
-    public void setFile(String file){
+    public String getFileName(){
+        return this.file.getName();
+    }
+
+    @Override
+    public void setFile(TestCaseFile file){
         this.file = file;
     }
 

@@ -9,7 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class Variable implements Element {
-    private String file;
+    private TestCaseFile file;
     private String name;
     private List<Argument> definition;
 
@@ -26,13 +26,22 @@ public class Variable implements Element {
     }
 
     @Override
-    public void setFile(String file) {
+    public void setFile(TestCaseFile file) {
         this.file = file;
     }
 
     @Override
-    public String getFile() {
+    public TestCaseFile getFile() {
         return this.file;
+    }
+
+    @Override
+    public String getFileName() {
+        if(this.file == null){
+            return "";
+        }
+
+        return this.file.getName();
     }
 
     public Argument getName() {

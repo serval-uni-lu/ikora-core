@@ -6,7 +6,7 @@ import java.util.*;
 public abstract class Step implements Keyword {
     private Argument name;
     private Keyword parent;
-    private String file;
+    private TestCaseFile file;
 
     public Step() {
 
@@ -73,13 +73,22 @@ public abstract class Step implements Keyword {
     }
 
     @Override
-    public void setFile(String file){
+    public void setFile(TestCaseFile file){
         this.file = file;
     }
 
     @Override
-    public String getFile() {
+    public TestCaseFile getFile() {
         return this.file;
+    }
+
+    @Override
+    public String getFileName(){
+        if(this.file == null){
+            return "";
+        }
+
+        return this.file.getName();
     }
 
     @Override

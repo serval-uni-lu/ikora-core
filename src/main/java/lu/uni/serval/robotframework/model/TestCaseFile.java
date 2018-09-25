@@ -29,10 +29,10 @@ public class TestCaseFile implements Iterable<UserKeyword> {
     public void setName(String name) {
         this.name = name;
 
-        this.settings.setFile(this.name);
-        this.testCaseTable.setFile(this.name);
-        this.userKeywordTable.setFile(this.name);
-        this.variableTable.setFile(this.name);
+        this.settings.setFile(this);
+        this.testCaseTable.setFile(this);
+        this.userKeywordTable.setFile(this);
+        this.variableTable.setFile(this);
     }
 
     public void setLoc(int loc) {
@@ -45,23 +45,23 @@ public class TestCaseFile implements Iterable<UserKeyword> {
 
     public void setSettings(Settings settings) {
         this.settings = settings;
-        this.settings.setFile(this.name);
+        this.settings.setFile(this);
     }
 
     public void setTestCaseTable(ElementTable<TestCase> testCaseTable) {
         this.testCaseTable = testCaseTable;
-        this.testCaseTable.setFile(this.name);
+        this.testCaseTable.setFile(this);
     }
 
     public void setKeywordTable(ElementTable<UserKeyword> elementTable) {
         this.userKeywordTable = elementTable;
-        this.userKeywordTable.setFile(this.name);
+        this.userKeywordTable.setFile(this);
         this.userKeywordCache = null;
     }
 
     public void setVariableTable(ElementTable<Variable> variableTable) {
         this.variableTable = variableTable;
-        this.variableTable.setFile(this.name);
+        this.variableTable.setFile(this);
         this.variableCache = null;
     }
 

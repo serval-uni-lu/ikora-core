@@ -10,7 +10,7 @@ import javax.annotation.Nonnull;
 import java.util.*;
 
 public class KeywordDefinition implements Keyword, Iterable<Step> {
-    private String file;
+    private TestCaseFile file;
     private Argument name;
     private String documentation;
     private Set<String> tags;
@@ -22,10 +22,6 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
         dependencies = new HashSet<>();
         tags = new HashSet<>();
         documentation = "";
-    }
-
-    public void setFile(String file){
-        this.file = file;
     }
 
     public void setName(String name){
@@ -45,8 +41,23 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
         this.dependencies.add(keyword);
     }
 
-    public String getFile() {
+    @Override
+    public void setFile(TestCaseFile file) {
+        this.file = file;
+    }
+
+    @Override
+    public TestCaseFile getFile() {
         return file;
+    }
+
+    @Override
+    public String getFileName() {
+        if(this.file == null){
+            return "";
+        }
+
+        return this.file.getName();
     }
 
     public List<Step> getSteps() {

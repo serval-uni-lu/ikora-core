@@ -6,14 +6,14 @@ import java.util.*;
 public class ElementTable<T extends Element> implements Iterable<T> {
     private HashMap<String, T> elementMap;
     private Set<T> elementSet;
-    private String file;
+    private TestCaseFile file;
 
     public ElementTable() {
         this.elementMap = new HashMap<>();
         this.elementSet = new HashSet<>();
     }
 
-    public void setFile(String file) {
+    public void setFile(TestCaseFile file) {
         this.file = file;
 
         elementMap = new HashMap<>();
@@ -23,7 +23,7 @@ public class ElementTable<T extends Element> implements Iterable<T> {
         }
     }
 
-    public String getFile() {
+    public TestCaseFile getFile() {
         return file;
     }
 
@@ -35,7 +35,7 @@ public class ElementTable<T extends Element> implements Iterable<T> {
     }
 
     public T findElement(T element){
-        return findElement(element.getFile(), element.getName().toString());
+        return findElement(element.getFileName(), element.getName().toString());
     }
 
     public T findElement(String name){
@@ -57,7 +57,7 @@ public class ElementTable<T extends Element> implements Iterable<T> {
             return element.matches(name);
         }
 
-        return file.equalsIgnoreCase(element.getFile()) && element.matches(name);
+        return file.equalsIgnoreCase(element.getFileName()) && element.matches(name);
     }
 
     public int size() {
