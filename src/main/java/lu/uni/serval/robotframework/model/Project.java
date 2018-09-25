@@ -4,6 +4,7 @@ import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.*;
 
 public class Project implements Comparable<Project> {
@@ -79,6 +80,11 @@ public class Project implements Comparable<Project> {
         }
 
         return keywords;
+    }
+
+    public long getEpoch() {
+        ZoneId zoneId = ZoneId.systemDefault();
+        return this.getDateTime().atZone(zoneId).toEpochSecond();
     }
 
     public int getLoc() {

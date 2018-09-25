@@ -61,6 +61,11 @@ public abstract class LibraryKeyword implements Keyword {
     }
 
     @Override
+    public long getEpoch() {
+        return file.getEpoch();
+    }
+
+    @Override
     public void addDependency(Keyword keyword) {
         this.dependencies.add(keyword);
     }

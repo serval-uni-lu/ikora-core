@@ -6,11 +6,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class DifferentiableSequence implements Iterable<Difference> {
+public class Sequence implements Iterable<Difference> {
     private List<Difference> sequence;
     private Differentiable last;
 
-    DifferentiableSequence() {
+    Sequence() {
         sequence = new ArrayList<>();
         last = null;
     }
@@ -20,7 +20,7 @@ public class DifferentiableSequence implements Iterable<Difference> {
             return false;
         }
 
-        if(this.last != difference.getLeft()){
+        if(this.sequence.size() > 0 && this.last != difference.getLeft()){
             return false;
         }
 
@@ -37,5 +37,13 @@ public class DifferentiableSequence implements Iterable<Difference> {
     @Override
     public Iterator<Difference> iterator() {
         return sequence.iterator();
+    }
+
+    public int size() {
+        return sequence.size();
+    }
+
+    public Difference get(int index){
+        return sequence.get(index);
     }
 }

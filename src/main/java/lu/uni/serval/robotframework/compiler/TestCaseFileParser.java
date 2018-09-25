@@ -15,7 +15,7 @@ public class TestCaseFileParser {
         try {
             reader = new LineReader(file);
 
-            TestCaseFile testCaseFile = new TestCaseFile(reader.getFile());
+            TestCaseFile testCaseFile = new TestCaseFile(project, reader.getFile());
 
             setName(project, testCaseFile);
 
@@ -56,7 +56,7 @@ public class TestCaseFileParser {
             logger.trace("file parse: " + file.getAbsolutePath());
 
         } catch (IOException e) {
-            TestCaseFile testCaseFile = new TestCaseFile(file);
+            TestCaseFile testCaseFile = new TestCaseFile(project, file);
             setName(project, testCaseFile);
 
             project.addTestCaseFile(testCaseFile);

@@ -11,14 +11,12 @@ public class EvolutionResults {
 
     private Map<Project, Map<Project, Set<Difference>>> differences;
     private Map<Project, Map<Project, Set<UnorderedPair<Differentiable>>>> keywords;
-    private Map<Differentiable, Difference> keywordToDifference;
-    private List<DifferentiableSequence> sequences;
+    private List<Sequence> sequences;
 
     EvolutionResults(){
         projects = new TreeSet<>();
         differences = new LinkedHashMap<>();
         keywords = new LinkedHashMap<>();
-        keywordToDifference = new LinkedHashMap<>();
         sequences = new ArrayList<>();
     }
 
@@ -26,17 +24,14 @@ public class EvolutionResults {
         projects.add(project1);
         projects.add(project2);
 
-        if(difference.getLeft() != null)
-        {
-            keywordToDifference.put(difference.getLeft(), difference);
-        }
+        updateSequence(difference);
+
         if(difference.isEmpty()){
             return;
         }
 
         update(project1, project2, difference, differences);
         update(project1, project2, UnorderedPair.of(difference.getLeft(), difference.getRight()), keywords);
-        updateSequence(difference);
     }
 
     public Set<Project> getComparedTo(Project project){
@@ -45,10 +40,6 @@ public class EvolutionResults {
 
     public SortedSet<Project> getProjects(){
         return projects;
-    }
-
-    public Difference getDifference(Differentiable keyword){
-        return keywordToDifference.getOrDefault(keyword, Difference.of(keyword, null));
     }
 
     public Set<Difference> getDifferences(Project project1, Project project2){
@@ -82,15 +73,21 @@ public class EvolutionResults {
     }
 
     private void updateSequence(Difference difference){
-        for(DifferentiableSequence sequence: sequences){
-            if(sequence.add(difference)){
-                break;
+        if(difference.getLeft() != null){
+            for(Sequence sequence: sequences){
+                if(sequence.add(difference)){
+                    return;
+                }
             }
         }
 
-        DifferentiableSequence sequence = new DifferentiableSequence();
+        Sequence sequence = new Sequence();
         sequence.add(difference);
 
         sequences.add(sequence);
+    }
+
+    public List<Sequence> getSequences() {
+        return sequences;
     }
 }

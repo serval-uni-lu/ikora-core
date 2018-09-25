@@ -5,7 +5,9 @@ import java.io.File;
 import java.util.*;
 
 public class TestCaseFile implements Iterable<UserKeyword> {
-    private File file;
+    final private Project project;
+    final private File file;
+
     private String name;
     private int loc;
     private Settings settings;
@@ -16,7 +18,8 @@ public class TestCaseFile implements Iterable<UserKeyword> {
     private ElementTable<UserKeyword> userKeywordCache;
     private ElementTable<Variable> variableCache;
 
-    public TestCaseFile(File file){
+    public TestCaseFile(Project project, File file){
+        this.project = project;
         this.file = file;
         this.loc = 0;
 
@@ -107,6 +110,10 @@ public class TestCaseFile implements Iterable<UserKeyword> {
         }
 
         return keywords;
+    }
+
+    public long getEpoch() {
+        return this.project.getEpoch();
     }
 
     TestCase getTestCase(String name) {

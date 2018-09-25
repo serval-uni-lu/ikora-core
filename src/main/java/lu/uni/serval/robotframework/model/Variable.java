@@ -44,6 +44,11 @@ public class Variable implements Element {
         return this.file.getName();
     }
 
+    @Override
+    public long getEpoch(){
+        return this.file.getEpoch();
+    }
+
     public Argument getName() {
         return new Argument(this.name);
     }

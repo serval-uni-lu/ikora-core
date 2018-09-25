@@ -52,6 +52,14 @@ public class Difference {
         return right;
     }
 
+    public Differentiable getValue(){
+        if(left != null){
+            return left;
+        }
+
+        return right;
+    }
+
     public List<Action> getActions() {
         return actions;
     }

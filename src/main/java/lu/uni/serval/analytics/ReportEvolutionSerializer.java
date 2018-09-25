@@ -29,17 +29,6 @@ public class ReportEvolutionSerializer extends JsonSerializer<EvolutionResults> 
             jsonGenerator.writeNumberField("number test cases", statistics.getNumberKeywords(TestCase.class));
             jsonGenerator.writeNumberField("lines of code", statistics.getLoc());
 
-            writeNumberArrayField(jsonGenerator, "keyword size distribution", statistics.getSizeDistribution(UserKeyword.class));
-            writeNumberArrayField(jsonGenerator, "keyword connectivity distribution", statistics.getConnectivityDistribution(UserKeyword.class));
-            writeNumberArrayField(jsonGenerator, "keyword sequence distribution", statistics.getSequenceDistribution(UserKeyword.class));
-            writeNumberArrayField(jsonGenerator, "keyword depth distribution", statistics.getDepthDistribution(UserKeyword.class));
-            writeNumberArrayField(jsonGenerator, "keyword branch index distribution", statistics.getBranchIndex(UserKeyword.class));
-
-            writeNumberArrayField(jsonGenerator, "test case size distribution", statistics.getSizeDistribution(TestCase.class));
-            writeNumberArrayField(jsonGenerator, "test case sequence distribution", statistics.getSequenceDistribution(TestCase.class));
-            writeNumberArrayField(jsonGenerator, "test case depth distribution", statistics.getDepthDistribution(TestCase.class));
-            writeNumberArrayField(jsonGenerator, "test case branch index distribution", statistics.getBranchIndex(TestCase.class));
-
             Set<Project> compareTo = results.getComparedTo(project1);
 
             if(compareTo.size() > 1){

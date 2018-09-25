@@ -92,6 +92,11 @@ public abstract class Step implements Keyword {
     }
 
     @Override
+    public long getEpoch() {
+        return this.file.getEpoch();
+    }
+
+    @Override
     public boolean matches(String name){
         return getName().matches(name);
     }

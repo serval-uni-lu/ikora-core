@@ -60,6 +60,11 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
         return this.file.getName();
     }
 
+    @Override
+    public long getEpoch() {
+        return file.getEpoch();
+    }
+
     public List<Step> getSteps() {
         return steps;
     }

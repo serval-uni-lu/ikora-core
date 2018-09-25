@@ -7,6 +7,8 @@ public interface Element extends Differentiable {
     TestCaseFile getFile();
     String getFileName();
 
+    long getEpoch();
+
     Argument getName();
 
     boolean matches(String name);

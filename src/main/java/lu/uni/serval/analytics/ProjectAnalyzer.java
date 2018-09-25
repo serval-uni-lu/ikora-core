@@ -30,7 +30,7 @@ public class ProjectAnalyzer {
 
 
     public EvolutionResults findDifferences(){
-        EvolutionResults differences = new EvolutionResults();
+        EvolutionResults results = new EvolutionResults();
 
         Project project1 = null;
         for(Project project2: projects){
@@ -43,38 +43,38 @@ public class ProjectAnalyzer {
                 UserKeyword keyword1 = keywordPair.getElement(project1);
                 UserKeyword keyword2 = keywordPair.getElement(project2);
 
-                if(differences.containsElement(project1, project2, keyword1, keyword2)){
+                if(results.containsElement(project1, project2, keyword1, keyword2)){
                     continue;
                 }
 
-                differences.addDifference(project1, project2, Difference.of(keyword1, keyword2));
+                results.addDifference(project1, project2, Difference.of(keyword1, keyword2));
             }
 
             for(ElementInfoPair<TestCase> testCasePair: ElementMatcher.getPairs(TestCase.class, project1, project2)) {
                 TestCase testCase1 = testCasePair.getElement(project1);
                 TestCase testCase2 = testCasePair.getElement(project2);
 
-                if(differences.containsElement(project1, project2, testCase1, testCase2)){
+                if(results.containsElement(project1, project2, testCase1, testCase2)){
                     continue;
                 }
 
-                differences.addDifference(project1, project2, Difference.of(testCase1, testCase2));
+                results.addDifference(project1, project2, Difference.of(testCase1, testCase2));
             }
 
             for(ElementInfoPair<Variable> variablePair: ElementMatcher.getPairs(Variable.class, project1, project2)) {
                 Variable variable1 = variablePair.getElement(project1);
                 Variable variable2 = variablePair.getElement(project2);
 
-                if(differences.containsElement(project1, project2, variable1, variable2)){
+                if(results.containsElement(project1, project2, variable1, variable2)){
                     continue;
                 }
 
-                differences.addDifference(project1, project2, Difference.of(variable1, variable2));
+                results.addDifference(project1, project2, Difference.of(variable1, variable2));
             }
 
             project1 = project2;
         }
 
-        return differences;
+        return results;
     }
 }
