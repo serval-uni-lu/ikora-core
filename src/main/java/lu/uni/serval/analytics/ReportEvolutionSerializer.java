@@ -46,36 +46,12 @@ public class ReportEvolutionSerializer extends JsonSerializer<EvolutionResults> 
     }
 
     private void writeDifferences(EvolutionResults results, JsonGenerator jsonGenerator, Project project1, Project project2) throws IOException {
-        jsonGenerator.writeObjectFieldStart("compare");
+        DifferencesJson changes = new DifferencesJson();
 
-        jsonGenerator.writeStringField("commit ID", project2.getCommitId());
-        jsonGenerator.writeStringField("time", project2.getDateTime().toString());
-
-        jsonGenerator.writeArrayFieldStart("differences");
         for(Difference difference: results.getDifferences(project1, project2)){
-            if(difference.isEmpty()){
-                continue;
-            }
-
-            if(difference == null){
-                continue;
-            }
-
-
-            jsonGenerator.writeObject(difference);
-        }
-        jsonGenerator.writeEndArray();
-
-        jsonGenerator.writeEndObject();
-    }
-
-    private void writeNumberArrayField(JsonGenerator jsonGenerator, String name, int[] values) throws IOException {
-        jsonGenerator.writeArrayFieldStart(name);
-
-        for(int value: values){
-            jsonGenerator.writeNumber(value);
+            changes.add(difference);
         }
 
-        jsonGenerator.writeEndArray();
+        changes.writeJson(jsonGenerator);
     }
 }

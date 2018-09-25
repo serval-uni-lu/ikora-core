@@ -115,4 +115,9 @@ public abstract class Step implements Keyword {
     public int[] getKeywordsLaunchedPosition() {
         return new int[0];
     }
+
+    @Override
+    public Type getType(){
+        return Type.Unknown;
+    }
 }

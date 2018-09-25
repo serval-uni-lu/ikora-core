@@ -56,6 +56,14 @@ public class Action {
         return right;
     }
 
+    public Differentiable getValue() {
+        if(this.left != null){
+            return this.left;
+        }
+
+        return this.right;
+    }
+
     public static <T> Action addElement(Class<T> type, Differentiable element) {
         if(UserKeyword.class.isAssignableFrom(type)){
             return new Action(Type.ADD_USER_KEYWORD, null, element);

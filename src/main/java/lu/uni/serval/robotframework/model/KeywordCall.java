@@ -263,4 +263,13 @@ public class KeywordCall extends Step {
 
         return step;
     }
+
+    @Override
+    public Type getType(){
+        if(this.keyword == null){
+            return Type.Unknown;
+        }
+
+        return this.keyword.getType();
+    }
 }

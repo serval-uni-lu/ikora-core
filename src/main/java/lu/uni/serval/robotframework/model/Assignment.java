@@ -166,4 +166,9 @@ public class Assignment extends Step {
 
         return this.expression.getKeywordsLaunchedPosition();
     }
+
+    @Override
+    public Type getType(){
+        return this.expression.getType();
+    }
 }

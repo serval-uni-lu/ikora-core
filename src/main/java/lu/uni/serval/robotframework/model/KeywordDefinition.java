@@ -226,4 +226,9 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
     public int[] getKeywordsLaunchedPosition() {
         return new int[0];
     }
+
+    @Override
+    public Type getType(){
+        return Type.User;
+    }
 }
