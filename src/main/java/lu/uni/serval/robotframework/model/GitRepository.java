@@ -60,7 +60,7 @@ public class GitRepository {
         return project;
     }
 
-    public TestCase findTestCase(String relativePath, String name) {
+    public TestCase findTestCase(String name) {
         TestCaseFile testCaseFile = project.getTestCaseFile(name);
 
         if(testCaseFile == null){

@@ -7,7 +7,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import java.io.File;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
@@ -53,7 +52,7 @@ public class ReportFactory {
         return report;
     }
 
-    private Suite parseSuite(final Element suiteElement) throws Exception {
+    private Suite parseSuite(final Element suiteElement) {
         Suite suite = new Suite();
         suite.setName(suiteElement.getAttribute("name"));
         suite.setId(suiteElement.getAttribute("id"));
@@ -86,7 +85,7 @@ public class ReportFactory {
         return suite;
     }
 
-    private KeywordStatus parseKeyword(final Element keywordElement) throws Exception {
+    private KeywordStatus parseKeyword(final Element keywordElement) {
         KeywordStatus keywordStatus = new KeywordStatus();
         keywordStatus.setName(keywordElement.getAttribute("name"));
 
@@ -163,27 +162,22 @@ public class ReportFactory {
                 continue;
             }
 
-            File base = new File(suite.getSource());
-
-            linkSuite(suite, base);
+            linkSuite(suite);
         }
     }
 
-    private void linkSuite(Suite suite, File base) throws Exception {
+    private void linkSuite(Suite suite) throws Exception {
         for (Suite child: suite.getChildren()){
-            linkSuite(child, base);
+            linkSuite(child);
         }
 
         for(KeywordStatus keywordStatus: suite.getKeywords()){
-            linkTestCase(keywordStatus, base);
+            linkTestCase(keywordStatus);
         }
     }
 
-    private void linkTestCase(KeywordStatus keywordStatus, File base) throws Exception {
-        String source = keywordStatus.getSource();
-        String relativePath = base.toURI().relativize(new File(source).toURI()).getPath();
-
-        TestCase testCase = gitRepository.findTestCase(relativePath, keywordStatus.getName());
+    private void linkTestCase(KeywordStatus keywordStatus) throws Exception {
+        TestCase testCase = gitRepository.findTestCase(keywordStatus.getName());
         keywordStatus.setKeyword(testCase);
 
         for(KeywordStatus child: keywordStatus.getChildren()){
