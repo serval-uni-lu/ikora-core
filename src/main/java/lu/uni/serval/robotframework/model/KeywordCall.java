@@ -103,7 +103,7 @@ public class KeywordCall extends Step {
                     continue;
                 }
 
-                depth = Math.max(step.getSize(), depth);
+                depth = Math.max(step.getDepth(), depth);
             }
 
             return depth;
