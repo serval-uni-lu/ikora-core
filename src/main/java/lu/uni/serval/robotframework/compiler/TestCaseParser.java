@@ -1,5 +1,6 @@
 package lu.uni.serval.robotframework.compiler;
 
+import lu.uni.serval.robotframework.model.LineRange;
 import lu.uni.serval.robotframework.model.Step;
 import lu.uni.serval.robotframework.model.TestCase;
 
@@ -11,6 +12,7 @@ public class TestCaseParser {
 
     public static TestCase parse(LineReader reader) throws IOException {
         TestCase testCase = new TestCase();
+        int startLine = reader.getCurrent().getNumber();
 
         Line test = reader.getCurrent();
         String[] tokens = test.tokenize();
@@ -52,6 +54,9 @@ public class TestCaseParser {
 
             line = reader.getCurrent();
         }
+
+        int endLine = reader.getCurrent().getNumber();
+        testCase.setLineRange(new LineRange(startLine, endLine));
 
         return testCase;
     }

@@ -8,6 +8,7 @@ import java.util.Arrays;
 public class StepParser {
     public static Step parse(LineReader reader) throws IOException {
         Step step;
+        int startLine = reader.getCurrent().getNumber();
 
         String[] tokens = reader.getCurrent().tokenize();
         tokens = Utils.removeIndent(tokens);
@@ -21,6 +22,9 @@ public class StepParser {
         else {
             step = parseKeywordCall(reader);
         }
+
+        int endLine = reader.getCurrent().getNumber();
+        step.setLineRange(new LineRange(startLine, endLine));
 
         return step;
     }

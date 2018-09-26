@@ -1,5 +1,6 @@
 package lu.uni.serval.robotframework.compiler;
 
+import lu.uni.serval.robotframework.model.LineRange;
 import lu.uni.serval.robotframework.model.Step;
 import lu.uni.serval.robotframework.model.UserKeyword;
 
@@ -9,6 +10,7 @@ public class UserKeywordParser {
 
     public static UserKeyword parse(LineReader reader) throws IOException {
         UserKeyword userKeyword = new UserKeyword();
+        int startLine = reader.getCurrent().getNumber();
 
         Line test = reader.getCurrent();
         String[] tokens = test.tokenize();
@@ -52,6 +54,9 @@ public class UserKeywordParser {
                 parseStep(reader, userKeyword);
             }
         }
+
+        int endLine = reader.getCurrent().getNumber();
+        userKeyword.setLineRange(new LineRange(startLine, endLine));
 
         return userKeyword;
     }
