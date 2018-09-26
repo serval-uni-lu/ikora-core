@@ -150,9 +150,14 @@ public class DifferencesJson {
         jsonGenerator.writeObjectFieldStart("changes");
 
         for(Type type: actions.keySet()){
-            jsonGenerator.writeNumberField(type.name(), actions.get(type));
+            jsonGenerator.writeNumberField(cleanName(type.name()), actions.get(type));
         }
 
         jsonGenerator.writeEndObject();
+    }
+
+    private String cleanName(String raw){
+        String clean = raw.replace('_', ' ');
+        return clean.toLowerCase();
     }
 }
