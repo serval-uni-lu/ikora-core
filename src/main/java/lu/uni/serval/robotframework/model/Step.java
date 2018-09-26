@@ -7,6 +7,7 @@ public abstract class Step implements Keyword {
     private Argument name;
     private Keyword parent;
     private TestCaseFile file;
+    private LineRange lineRange;
 
     public Step() {
 
@@ -119,5 +120,15 @@ public abstract class Step implements Keyword {
     @Override
     public Type getType(){
         return Type.Unknown;
+    }
+
+    @Override
+    public void setLineRange(LineRange lineRange){
+        this.lineRange = lineRange;
+    }
+
+    @Override
+    public LineRange getLineRange(){
+        return this.lineRange;
     }
 }

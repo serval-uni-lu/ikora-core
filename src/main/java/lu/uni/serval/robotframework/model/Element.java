@@ -7,6 +7,9 @@ public interface Element extends Differentiable {
     TestCaseFile getFile();
     String getFileName();
 
+    void setLineRange(LineRange range);
+    LineRange getLineRange();
+
     long getEpoch();
 
     Argument getName();

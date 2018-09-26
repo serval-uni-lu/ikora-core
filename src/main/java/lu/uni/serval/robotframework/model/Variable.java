@@ -12,6 +12,7 @@ public class Variable implements Element {
     private TestCaseFile file;
     private String name;
     private List<Argument> definition;
+    private LineRange lineRange;
 
     public Variable() {
         definition = new ArrayList<>();
@@ -102,5 +103,15 @@ public class Variable implements Element {
         }
 
         return actions;
+    }
+
+    @Override
+    public void setLineRange(LineRange lineRange){
+        this.lineRange = lineRange;
+    }
+
+    @Override
+    public LineRange getLineRange(){
+        return this.lineRange;
     }
 }

@@ -10,6 +10,8 @@ import java.util.Set;
 public abstract class LibraryKeyword implements Keyword {
     private Set<Keyword> dependencies;
     private TestCaseFile file;
+    private LineRange lineRange;
+
     protected Type type;
 
     public LibraryKeyword() {
@@ -129,5 +131,15 @@ public abstract class LibraryKeyword implements Keyword {
     @Override
     public int[] getKeywordsLaunchedPosition() {
         return new int[0];
+    }
+
+    @Override
+    public void setLineRange(LineRange lineRange){
+        this.lineRange = lineRange;
+    }
+
+    @Override
+    public LineRange getLineRange(){
+        return this.lineRange;
     }
 }

@@ -16,6 +16,7 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
     private Set<String> tags;
     private List<Step> steps;
     private Set<Keyword> dependencies;
+    private LineRange lineRange;
 
     KeywordDefinition(){
         steps = new ArrayList<>();
@@ -230,5 +231,15 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
     @Override
     public Type getType(){
         return Type.User;
+    }
+
+    @Override
+    public void setLineRange(LineRange lineRange){
+        this.lineRange = lineRange;
+    }
+
+    @Override
+    public LineRange getLineRange(){
+        return this.lineRange;
     }
 }
