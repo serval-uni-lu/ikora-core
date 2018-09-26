@@ -21,7 +21,7 @@ public class TestCaseParser {
         Line line = reader.readLine();
 
         while(line.isValid() && line.isInBlock(test)) {
-            if(Utils.ignore(line)) {
+            if(line.ignore()) {
                 line = reader.readLine();
                 continue;
             }

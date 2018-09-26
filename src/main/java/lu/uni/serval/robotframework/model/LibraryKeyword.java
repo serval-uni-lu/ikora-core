@@ -142,4 +142,9 @@ public abstract class LibraryKeyword implements Keyword {
     public LineRange getLineRange(){
         return this.lineRange;
     }
+
+    @Override
+    public int getLoc() {
+        return 1;
+    }
 }

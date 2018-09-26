@@ -31,6 +31,14 @@ public class Line {
         return text.trim().isEmpty();
     }
 
+    public boolean isComment(){
+        return text.trim().startsWith("#");
+    }
+
+    public boolean ignore(){
+        return isEmpty() || isComment();
+    }
+
     public String[] tokenize(){
         String tokens = this.text.trim().replaceAll("\\s\\s(\\s*)", "\t");
         tokens = tokens.replaceAll("\\\\t", "\t");
@@ -54,7 +62,7 @@ public class Line {
     }
 
     public boolean isInBlock(Line line) {
-        if(Utils.ignore(this)){
+        if(ignore()){
             return true;
         }
 

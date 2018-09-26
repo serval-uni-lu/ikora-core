@@ -21,7 +21,7 @@ public class TestCaseFileParser {
             reader.readLine();
 
             while(reader.getCurrent().isValid()){
-                if(Utils.ignore(reader.getCurrent())){
+                if(reader.getCurrent().ignore()){
                     reader.readLine();
                     continue;
                 }

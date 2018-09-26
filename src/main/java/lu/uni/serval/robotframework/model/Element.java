@@ -9,6 +9,7 @@ public interface Element extends Differentiable {
 
     void setLineRange(LineRange range);
     LineRange getLineRange();
+    int getLoc();
 
     long getEpoch();
 

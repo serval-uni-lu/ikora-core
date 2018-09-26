@@ -131,4 +131,9 @@ public abstract class Step implements Keyword {
     public LineRange getLineRange(){
         return this.lineRange;
     }
+
+    @Override
+    public int getLoc(){
+        return file.getLoc(lineRange);
+    }
 }

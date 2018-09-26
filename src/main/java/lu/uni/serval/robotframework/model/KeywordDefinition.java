@@ -242,4 +242,9 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
     public LineRange getLineRange(){
         return this.lineRange;
     }
+
+    @Override
+    public int getLoc() {
+        return this.file.getLoc(this.lineRange);
+    }
 }

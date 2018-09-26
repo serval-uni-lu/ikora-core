@@ -114,4 +114,9 @@ public class Variable implements Element {
     public LineRange getLineRange(){
         return this.lineRange;
     }
+
+    @Override
+    public int getLoc() {
+        return file.getLoc(lineRange);
+    }
 }

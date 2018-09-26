@@ -14,7 +14,7 @@ public class TestCaseTableParser {
         reader.readLine();
 
         while(reader.getCurrent().isValid() && !Utils.isBlock(reader.getCurrent().getText())){
-            if(Utils.ignore(reader.getCurrent())){
+            if(reader.getCurrent().ignore()){
                 reader.readLine();
                 continue;
             }

@@ -51,6 +51,16 @@ public class TestCaseFile implements Iterable<UserKeyword> {
         return this.loc;
     }
 
+    public int getLoc(LineRange lineRange) {
+        int loc = 0;
+
+        for(int index = lineRange.getStart(); index < lineRange.getEnd(); ++index){
+            loc += lines.get(index).ignore() ? 0 : 1;
+        }
+
+        return loc;
+    }
+
     public void setSettings(Settings settings) {
         this.settings = settings;
         this.settings.setFile(this);

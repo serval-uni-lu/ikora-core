@@ -20,14 +20,6 @@ class Utils {
         return Utils.compareNoCase(line, regex);
     }
 
-    static boolean isComment(String line){
-        return line.trim().startsWith("#");
-    }
-
-    static boolean ignore(Line line){
-        return line.isEmpty() || isComment(line.getText());
-    }
-
     static boolean isBlock(String line) {
         return isBlock(line, "(.+)");
     }
@@ -53,7 +45,7 @@ class Utils {
         Line line;
 
         while((line = reader.readLine()) != null){
-            if(Utils.ignore(line)){
+            if(line.ignore()){
                 continue;
             }
 
