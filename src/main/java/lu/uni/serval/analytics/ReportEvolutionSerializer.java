@@ -52,6 +52,6 @@ public class ReportEvolutionSerializer extends JsonSerializer<EvolutionResults> 
             changes.add(difference);
         }
 
-        changes.writeJson(jsonGenerator);
+        changes.writeJson(jsonGenerator, Project.class);
     }
 }

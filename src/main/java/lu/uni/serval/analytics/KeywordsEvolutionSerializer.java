@@ -109,43 +109,10 @@ public class KeywordsEvolutionSerializer extends JsonSerializer<EvolutionResults
     }
 
     private void writeChanges(JsonGenerator jsonGenerator, Difference difference) throws IOException {
-        int totalChanges = 0;
-        int changeStep = 0;
-        int changeStepArguments = 0;
-        int changeName = 0;
+        DifferencesJson differencesJson = new DifferencesJson();
+        differencesJson.add(difference);
 
-        for(Action action: difference.getActions()){
-            switch (action.getType()){
-                case CHANGE_NAME:
-                    ++changeName;
-                    break;
-
-                case CHANGE_FOR_LOOP_CONDITION:
-                case CHANGE_FOR_LOOP_BODY:
-                case CHANGE_STEP_EXPRESSION:
-                case CHANGE_STEP_RETURN_VALUES:
-                case ADD_STEP:
-                case REMOVE_STEP:
-                case CHANGE_STEP_TYPE:
-                case CHANGE_STEP:
-                    ++changeStep;
-                    break;
-
-                case CHANGE_STEP_ARGUMENTS:
-                    ++changeStepArguments;
-                    break;
-
-                case INVALID:
-                    break;
-            }
-
-            ++totalChanges;
-        }
-
-        jsonGenerator.writeNumberField("changes total", totalChanges);
-        jsonGenerator.writeNumberField("changes step", changeStep);
-        jsonGenerator.writeNumberField("changes step arguments", changeStepArguments);
-        jsonGenerator.writeNumberField("changes name", changeName);
+        differencesJson.writeJson(jsonGenerator, KeywordDefinition.class);
     }
 
     private Position getPosition(int index, int size){

@@ -2,6 +2,7 @@ package lu.uni.serval.analytics;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import lu.uni.serval.robotframework.model.Keyword;
+import lu.uni.serval.robotframework.model.KeywordDefinition;
 import lu.uni.serval.utils.Differentiable;
 import org.openqa.selenium.InvalidArgumentException;
 
@@ -17,6 +18,10 @@ public class DifferencesJson {
 
         ADD_TEST_CASE,
         REMOVE_TEST_CASE,
+
+        ADD_VARIABLE,
+        REMOVE_VARIABLE,
+        CHANGE_VARIABLE_DEFINITION,
 
         CHANGE_SYNC_STEP,
         CHANGE_USER_STEP,
@@ -34,11 +39,9 @@ public class DifferencesJson {
         CHANGE_FOR_LOOP_CONDITION,
         CHANGE_FOR_LOOP_BODY,
 
-        ADD_VARIABLE,
-        REMOVE_VARIABLE,
-        CHANGE_VARIABLE_DEFINITION,
+        INVALID,
 
-        INVALID
+        TOTAL
     }
 
     Map<Type, Integer> actions;
@@ -102,6 +105,8 @@ public class DifferencesJson {
                     changeStep(action);
                     break;
             }
+
+            actions.put(Type.TOTAL, actions.get(Type.TOTAL) + 1);
         }
     }
 
@@ -146,8 +151,19 @@ public class DifferencesJson {
         }
     }
 
-    public void writeJson(JsonGenerator jsonGenerator) throws IOException {
+    public <T> void writeJson(JsonGenerator jsonGenerator, Class<T> clazz) throws IOException {
         jsonGenerator.writeObjectFieldStart("changes");
+
+        if(KeywordDefinition.class.isAssignableFrom(clazz)){
+            actions.remove(Type.ADD_USER_KEYWORD);
+            actions.remove(Type.REMOVE_USER_KEYWORD);
+            actions.remove(Type.CHANGE_NAME);
+            actions.remove(Type.ADD_TEST_CASE);
+            actions.remove(Type.REMOVE_TEST_CASE);
+            actions.remove(Type.ADD_VARIABLE);
+            actions.remove(Type.REMOVE_VARIABLE);
+            actions.remove(Type.CHANGE_VARIABLE_DEFINITION);
+        }
 
         for(Type type: actions.keySet()){
             jsonGenerator.writeNumberField(cleanName(type.name()), actions.get(type));
