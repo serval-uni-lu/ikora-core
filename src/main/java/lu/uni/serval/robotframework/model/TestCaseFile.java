@@ -1,5 +1,7 @@
 package lu.uni.serval.robotframework.model;
 
+import lu.uni.serval.robotframework.compiler.Line;
+
 import javax.annotation.Nonnull;
 import java.io.File;
 import java.util.*;
@@ -8,8 +10,10 @@ public class TestCaseFile implements Iterable<UserKeyword> {
     final private Project project;
     final private File file;
 
-    private String name;
     private int loc;
+    private List<Line> lines;
+
+    private String name;
     private Settings settings;
     private ElementTable<TestCase> testCaseTable;
     private ElementTable<UserKeyword> userKeywordTable;
@@ -22,6 +26,7 @@ public class TestCaseFile implements Iterable<UserKeyword> {
         this.project = project;
         this.file = file;
         this.loc = 0;
+        this.lines = new ArrayList<>();
 
         setSettings(new Settings());
         setTestCaseTable(new ElementTable<>());
@@ -139,5 +144,9 @@ public class TestCaseFile implements Iterable<UserKeyword> {
         }
 
         return variableCache.findElement(name);
+    }
+
+    public void addLine(Line line) {
+        lines.add(line);
     }
 }

@@ -13,9 +13,8 @@ public class TestCaseFileParser {
         LineReader reader = null;
 
         try {
-            reader = new LineReader(file);
-
-            TestCaseFile testCaseFile = new TestCaseFile(project, reader.getFile());
+            TestCaseFile testCaseFile = new TestCaseFile(project, file);
+            reader = new LineReader(testCaseFile);
 
             setName(project, testCaseFile);
 
@@ -49,8 +48,6 @@ public class TestCaseFileParser {
                     reader.readLine();
                 }
             }
-
-            testCaseFile.setLoc(reader.getLoc());
 
             project.addTestCaseFile(testCaseFile);
             logger.trace("file parse: " + file.getAbsolutePath());
