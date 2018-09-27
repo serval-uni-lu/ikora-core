@@ -31,7 +31,7 @@ public class Element implements Differentiable {
             return actions;
         }
 
-        actions.add(Action.changeName());
+        actions.add(Action.changeName(this, other));
 
         return actions;
     }

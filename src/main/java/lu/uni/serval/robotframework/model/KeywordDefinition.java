@@ -45,6 +45,10 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
     @Override
     public void setFile(TestCaseFile file) {
         this.file = file;
+
+        for(Step step: this.steps){
+            step.setFile(this.file);
+        }
     }
 
     @Override
@@ -203,7 +207,7 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
 
         // check name change
         if(!this.getName().toString().equalsIgnoreCase(keyword.getName().toString())){
-            actions.add(Action.changeName());
+            actions.add(Action.changeName(this, other));
         }
 
         // check step changes

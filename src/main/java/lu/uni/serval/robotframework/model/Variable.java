@@ -99,7 +99,7 @@ public class Variable implements Element {
         Variable variable = (Variable)other;
 
         if(LevenshteinDistance.index(definition, variable.definition) > 0){
-            actions.add(Action.changeVariableDefinition());
+            actions.add(Action.changeVariableDefinition(this, other));
         }
 
         return actions;

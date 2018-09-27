@@ -98,8 +98,8 @@ public class Action {
         return new Action(Type.INVALID, element, null);
     }
 
-    public static Action changeName(){
-        return new Action(Type.CHANGE_NAME, null, null);
+    public static Action changeName(Differentiable left, Differentiable right){
+        return new Action(Type.CHANGE_NAME, left, right);
     }
 
     public static Action changeStepType(Differentiable left, Differentiable right){
@@ -130,7 +130,7 @@ public class Action {
         return new Action(Type.CHANGE_FOR_LOOP_BODY, left, right);
     }
 
-    public static Action changeVariableDefinition() {
-        return new Action(Type.CHANGE_VARIABLE_DEFINITION, null, null);
+    public static Action changeVariableDefinition(Differentiable left, Differentiable right) {
+        return new Action(Type.CHANGE_VARIABLE_DEFINITION, left, right);
     }
 }
