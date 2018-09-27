@@ -43,10 +43,6 @@ public class ProjectAnalyzer {
                 UserKeyword keyword1 = keywordPair.getElement(project1);
                 UserKeyword keyword2 = keywordPair.getElement(project2);
 
-                if(results.containsElement(project1, project2, keyword1, keyword2)){
-                    continue;
-                }
-
                 results.addDifference(project1, project2, Difference.of(keyword1, keyword2));
             }
 
@@ -54,20 +50,12 @@ public class ProjectAnalyzer {
                 TestCase testCase1 = testCasePair.getElement(project1);
                 TestCase testCase2 = testCasePair.getElement(project2);
 
-                if(results.containsElement(project1, project2, testCase1, testCase2)){
-                    continue;
-                }
-
                 results.addDifference(project1, project2, Difference.of(testCase1, testCase2));
             }
 
             for(ElementInfoPair<Variable> variablePair: ElementMatcher.getPairs(Variable.class, project1, project2)) {
                 Variable variable1 = variablePair.getElement(project1);
                 Variable variable2 = variablePair.getElement(project2);
-
-                if(results.containsElement(project1, project2, variable1, variable2)){
-                    continue;
-                }
 
                 results.addDifference(project1, project2, Difference.of(variable1, variable2));
             }

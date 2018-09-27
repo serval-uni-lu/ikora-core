@@ -10,13 +10,11 @@ public class EvolutionResults {
     private SortedSet<Project> projects;
 
     private Map<Project, Map<Project, Set<Difference>>> differences;
-    private Map<Project, Map<Project, Set<UnorderedPair<Differentiable>>>> keywords;
     private List<Sequence> sequences;
 
     EvolutionResults(){
         projects = new TreeSet<>();
         differences = new LinkedHashMap<>();
-        keywords = new LinkedHashMap<>();
         sequences = new ArrayList<>();
     }
 
@@ -31,7 +29,6 @@ public class EvolutionResults {
         }
 
         update(project1, project2, difference, differences);
-        update(project1, project2, UnorderedPair.of(difference.getLeft(), difference.getRight()), keywords);
     }
 
     public Set<Project> getComparedTo(Project project){
@@ -44,22 +41,6 @@ public class EvolutionResults {
 
     public Set<Difference> getDifferences(Project project1, Project project2){
         return differences.getOrDefault(project1,  new LinkedHashMap<>()).get(project2);
-    }
-
-    public boolean containsElement(Project project1, Project project2, Differentiable keyword1, Differentiable keyword2){
-        Map<Project, Set<UnorderedPair<Differentiable>>> comparedTo = keywords.get(project1);
-
-        if(comparedTo == null){
-            return false;
-        }
-
-        Set<UnorderedPair<Differentiable>> list = comparedTo.get(project2);
-
-        if(list == null){
-            return false;
-        }
-
-        return list.contains(UnorderedPair.of(keyword1, keyword2));
     }
 
     private <T> void update(Project left, Project right, T value, Map<Project, Map<Project, Set<T>>> container){
