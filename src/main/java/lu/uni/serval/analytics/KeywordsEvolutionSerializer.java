@@ -19,19 +19,19 @@ public class KeywordsEvolutionSerializer extends JsonSerializer<EvolutionResults
         jsonGenerator.writeStartArray();
         int id = 1;
 
-        for(Sequence sequence : results.getSequences()){
-            if(!isKeywordDefinition(sequence)){
+        for(TimeLine timeLine : results.getTimeLines()){
+            if(!isKeywordDefinition(timeLine)){
                 continue;
             }
 
-            int size = sequence.size();
-            int loc = getLoc(sequence);
+            int size = timeLine.size();
+            int loc = getLoc(timeLine);
             int changes = 0;
 
             for(int i = 0; i < size; ++i){
                 Position position = getPosition(i, size);
-                writeDifference(jsonGenerator, sequence.get(i), position, id, loc, changes);
-                changes += sequence.get(i).getActions().size();
+                writeDifference(jsonGenerator, timeLine.get(i), position, id, loc, changes);
+                changes += timeLine.get(i).getActions().size();
             }
 
             ++id;
@@ -131,19 +131,19 @@ public class KeywordsEvolutionSerializer extends JsonSerializer<EvolutionResults
         return position;
     }
 
-    private boolean isKeywordDefinition(Sequence sequence){
-        if(sequence.size() == 0){
+    private boolean isKeywordDefinition(TimeLine timeLine){
+        if(timeLine.size() == 0){
             return false;
         }
 
-        Difference difference = sequence.get(0);
+        Difference difference = timeLine.get(0);
         Differentiable differentiable = difference.getValue();
 
         return KeywordDefinition.class.isAssignableFrom(differentiable.getClass());
     }
 
-    private int getLoc(Sequence sequence){
-        Differentiable differentiable = sequence.get(0).getValue();
+    private int getLoc(TimeLine timeLine){
+        Differentiable differentiable = timeLine.get(0).getValue();
         return ((KeywordDefinition)differentiable).getSteps().size() + 1;
     }
 }

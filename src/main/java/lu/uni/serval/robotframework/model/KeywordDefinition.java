@@ -161,9 +161,9 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
         return depth + 1;
     }
 
-    List<List<Keyword>> getSequences() {
-        List<List<Keyword>> sequences = new ArrayList<>();
-        sequences.add(new ArrayList<>());
+    List<Sequence> getSequences() {
+        List<Sequence> sequences = new ArrayList<>();
+        sequences.add(new Sequence());
 
         getSequences(sequences);
 
@@ -171,20 +171,35 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
     }
 
     public int getMaxSequenceSize(){
-        int size = 0;
+        Sequence maxSequence = getMaxSequence();
 
-        for(List<Keyword> sequence: getSequences()){
-            size = Math.max(sequence.size(), size);
+        if(maxSequence == null){
+            return 0;
         }
 
-        return size;
+        return maxSequence.size();
+    }
+
+    public Sequence getMaxSequence() {
+        Sequence maxSequence = null;
+
+        for(Sequence sequence: getSequences()){
+            if(maxSequence == null){
+                maxSequence = sequence;
+            }
+            else if (maxSequence.size() < sequence.size()){
+                maxSequence = sequence;
+            }
+        }
+
+        return maxSequence;
     }
 
     public int getBranchIndex(){
         return (int)Math.round(Math.log(getSequences().size()) / Math.log(2));
     }
 
-    void getSequences(List<List<Keyword>> sequences){
+    void getSequences(List<Sequence> sequences){
         for(Step step: steps){
             step.getSequences(sequences);
         }
@@ -192,14 +207,19 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
 
     @Override
     public double distance(Differentiable other) {
-        return 0;
+        return (double)differences(other).size() / this.getLoc();
     }
 
     @Override
     public List<Action> differences(Differentiable other) {
         List<Action> actions = new ArrayList<>();
 
-        if(!(other.getClass() == this.getClass())){
+        if(other == this){
+            return actions;
+        }
+
+        if(other.getClass() != this.getClass()){
+            actions.add(Action.invalid(this, other));
             return actions;
         }
 

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import lu.uni.serval.robotframework.model.Project;
+import lu.uni.serval.robotframework.model.Sequence;
 import lu.uni.serval.robotframework.model.TestCase;
 import lu.uni.serval.robotframework.model.UserKeyword;
 
@@ -36,6 +37,7 @@ public class ReportEvolutionSerializer extends JsonSerializer<EvolutionResults> 
             }
 
             for(Project project2: compareTo){
+                writeSequences(results, jsonGenerator, project1, project2);
                 writeDifferences(results, jsonGenerator, project1, project2);
             }
 
@@ -43,6 +45,23 @@ public class ReportEvolutionSerializer extends JsonSerializer<EvolutionResults> 
         }
 
         jsonGenerator.writeEndArray();
+    }
+
+    private void writeSequences(EvolutionResults results, JsonGenerator jsonGenerator, Project project1, Project project2) throws IOException {
+        int sequenceSize = 0;
+        int sequenceDifferences = 0;
+
+        for(Difference difference: results.getSequenceDifferences(project1, project2)){
+            if(difference == null){
+                continue;
+            }
+
+            sequenceSize += ((Sequence)difference.getLeft()).size();
+            sequenceDifferences += difference.getActions().size();
+        }
+
+        jsonGenerator.writeNumberField("sequence steps number", sequenceSize);
+        jsonGenerator.writeNumberField("changes sequence steps", sequenceDifferences);
     }
 
     private void writeDifferences(EvolutionResults results, JsonGenerator jsonGenerator, Project project1, Project project2) throws IOException {

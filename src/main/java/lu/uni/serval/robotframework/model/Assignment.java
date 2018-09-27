@@ -69,7 +69,7 @@ public class Assignment extends Step {
     }
 
     @Override
-    public void getSequences(List<List<Keyword>> sequences) {
+    public void getSequences(List<Sequence> sequences) {
         getExpression().getSequences(sequences);
     }
 

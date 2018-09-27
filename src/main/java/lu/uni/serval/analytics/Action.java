@@ -1,9 +1,6 @@
 package lu.uni.serval.analytics;
 
-import lu.uni.serval.robotframework.model.Step;
-import lu.uni.serval.robotframework.model.TestCase;
-import lu.uni.serval.robotframework.model.UserKeyword;
-import lu.uni.serval.robotframework.model.Variable;
+import lu.uni.serval.robotframework.model.*;
 import lu.uni.serval.utils.Differentiable;
 
 public class Action {
@@ -132,5 +129,9 @@ public class Action {
 
     public static Action changeVariableDefinition(Differentiable left, Differentiable right) {
         return new Action(Type.CHANGE_VARIABLE_DEFINITION, left, right);
+    }
+
+    public static Action invalid(Differentiable left, Differentiable right) {
+        return new Action(Type.INVALID, left, right);
     }
 }

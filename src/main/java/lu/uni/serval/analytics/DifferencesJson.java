@@ -56,6 +56,10 @@ public class DifferencesJson {
     }
 
     public void add(Difference difference) throws InvalidArgumentException {
+        if(difference == null){
+            return;
+        }
+
         for(Action action: difference.getActions()){
 
             Differentiable differentiable = action.getValue();

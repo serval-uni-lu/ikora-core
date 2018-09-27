@@ -88,7 +88,7 @@ public class ForLoop extends Step {
     }
 
     @Override
-    public void getSequences(List<List<Keyword>> sequences) {
+    public void getSequences(List<Sequence> sequences) {
         for(Step step: steps){
             step.getSequences(sequences);
         }

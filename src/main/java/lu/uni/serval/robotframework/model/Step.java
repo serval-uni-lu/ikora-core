@@ -14,7 +14,7 @@ public abstract class Step implements Keyword {
     }
 
     public abstract int getSize();
-    public abstract void getSequences(List<List<Keyword>> sequences);
+    public abstract void getSequences(List<Sequence> sequences);
 
     public void setName(String name) {
         this.name = new Argument(name);

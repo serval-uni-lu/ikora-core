@@ -7,7 +7,7 @@ import java.util.*;
 
 public class ReportAnalyzer implements Iterable<Report>{
     private List<Report> reports;
-    private Sequence sequences;
+    private TimeLine sequences;
     private StatusResults status;
 
     public ReportAnalyzer(){
@@ -92,7 +92,7 @@ public class ReportAnalyzer implements Iterable<Report>{
 
         initStatus();
 
-        sequences = new Sequence();
+        sequences = new TimeLine();
 
         for(Report report: reports){
 /*

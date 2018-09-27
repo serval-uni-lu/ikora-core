@@ -2,6 +2,7 @@ package lu.uni.serval.analytics;
 
 import lu.uni.serval.robotframework.model.*;
 import lu.uni.serval.utils.Configuration;
+import lu.uni.serval.utils.LevenshteinDistance;
 
 import java.util.*;
 
@@ -50,7 +51,10 @@ public class ProjectAnalyzer {
                 TestCase testCase1 = testCasePair.getElement(project1);
                 TestCase testCase2 = testCasePair.getElement(project2);
 
-                results.addDifference(project1, project2, Difference.of(testCase1, testCase2));
+                Sequence sequence1 = testCase1 != null ? testCase1.getMaxSequence() : null;
+                Sequence sequence2 = testCase2 != null ? testCase2.getMaxSequence() : null;
+
+                results.addDifference(project1, project2, Difference.of(testCase1, testCase2), Difference.of(sequence1, sequence2));
             }
 
             for(ElementInfoPair<Variable> variablePair: ElementMatcher.getPairs(Variable.class, project1, project2)) {

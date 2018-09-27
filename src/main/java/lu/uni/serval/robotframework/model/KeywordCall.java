@@ -113,7 +113,7 @@ public class KeywordCall extends Step {
     }
 
     @Override
-    public void getSequences(List<List<Keyword>> sequences) {
+    public void getSequences(List<Sequence> sequences) {
         if(this.keyword == null){
             return;
         }
@@ -126,15 +126,15 @@ public class KeywordCall extends Step {
         }
     }
 
-    private void getLibrarySequence(LibraryKeyword keyword, List<List<Keyword>> sequences) {
+    private void getLibrarySequence(LibraryKeyword keyword, List<Sequence> sequences) {
         switch (keyword.getType()){
             case Action:
             case Assertion:
             case Synchronisation:
             case ControlFlow:
             {
-                for(List<Keyword> sequence: sequences){
-                    sequence.add(this);
+                for(Sequence sequence: sequences){
+                    sequence.addStep(this);
                 }
             }
             break;
@@ -150,7 +150,7 @@ public class KeywordCall extends Step {
                 }
 
                 for(KeywordCall call: stepParameters.values()){
-                    call.getSequences(alternates);
+                    call.getTimeLines(alternates);
                 }
 
                 sequences.addAll(alternates);

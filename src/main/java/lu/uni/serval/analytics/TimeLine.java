@@ -6,11 +6,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class Sequence implements Iterable<Difference> {
+public class TimeLine implements Iterable<Difference> {
     private List<Difference> sequence;
     private Differentiable last;
 
-    Sequence() {
+    TimeLine() {
         sequence = new ArrayList<>();
         last = null;
     }
