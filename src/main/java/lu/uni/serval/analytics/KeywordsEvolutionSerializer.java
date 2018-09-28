@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import lu.uni.serval.robotframework.model.*;
 import lu.uni.serval.utils.Differentiable;
+import lu.uni.serval.utils.StringUtils;
 
 import java.io.IOException;
 
@@ -25,13 +26,10 @@ public class KeywordsEvolutionSerializer extends JsonSerializer<EvolutionResults
             }
 
             int size = timeLine.size();
-            int loc = getLoc(timeLine);
-            int changes = 0;
 
             for(int i = 0; i < size; ++i){
                 Position position = getPosition(i, size);
-                writeDifference(jsonGenerator, timeLine.get(i), position, id, loc, changes);
-                changes += timeLine.get(i).getActions().size();
+                writeDifference(jsonGenerator, timeLine.get(i), position, id);
             }
 
             ++id;
@@ -40,13 +38,13 @@ public class KeywordsEvolutionSerializer extends JsonSerializer<EvolutionResults
         jsonGenerator.writeEndArray();
     }
 
-    private void writeDifference(JsonGenerator jsonGenerator, Difference difference, Position position, int id, int loc, int changes) throws IOException {
+    private void writeDifference(JsonGenerator jsonGenerator, Difference difference, Position position, int id) throws IOException {
         switch (position){
             case First:
             case Other:
             {
                 if(difference.getLeft() instanceof KeywordDefinition){
-                    writeKeyword(jsonGenerator, (KeywordDefinition)difference.getLeft(), difference, id, loc, changes);
+                    writeKeyword(jsonGenerator, (KeywordDefinition)difference.getLeft(), difference, id);
                 }
             }
             break;
@@ -55,8 +53,7 @@ public class KeywordsEvolutionSerializer extends JsonSerializer<EvolutionResults
             {
                 if(difference.getRight() instanceof KeywordDefinition){
                     Difference emptyDifference = Difference.of(difference.getRight(), difference.getRight());
-                    changes += difference.getActions().size();
-                    writeKeyword(jsonGenerator, (KeywordDefinition)difference.getRight(), emptyDifference, id, loc, changes + difference.getActions().size());
+                    writeKeyword(jsonGenerator, (KeywordDefinition)difference.getRight(), emptyDifference, id);
                 }
             }
             break;
@@ -64,32 +61,32 @@ public class KeywordsEvolutionSerializer extends JsonSerializer<EvolutionResults
             case Both:
             {
                 if(difference.getLeft() instanceof KeywordDefinition){
-                    writeKeyword(jsonGenerator, (KeywordDefinition)difference.getLeft(), difference, id, loc, changes);
+                    writeKeyword(jsonGenerator, (KeywordDefinition)difference.getLeft(), difference, id);
                 }
 
                 if(difference.getRight() instanceof KeywordDefinition){
                     Difference emptyDifference = Difference.of(difference.getRight(), difference.getRight());
-                    changes += difference.getActions().size();
-                    writeKeyword(jsonGenerator, (KeywordDefinition)difference.getRight(), emptyDifference, id, loc, changes);
+                    writeKeyword(jsonGenerator, (KeywordDefinition)difference.getRight(), emptyDifference, id);
                 }
             }
             break;
         }
     }
 
-    private void writeKeyword(JsonGenerator jsonGenerator, KeywordDefinition keyword, Difference difference, int id, int loc, int changes) throws IOException {
+    private void writeKeyword(JsonGenerator jsonGenerator, KeywordDefinition keyword, Difference difference, int id) throws IOException {
         jsonGenerator.writeStartObject();
 
         jsonGenerator.writeNumberField("type", getType(keyword));
         jsonGenerator.writeNumberField("time", keyword.getEpoch());
         jsonGenerator.writeNumberField("id", id);
+        jsonGenerator.writeNumberField("lines of code", keyword.getLoc());
+        jsonGenerator.writeNumberField("document length", getDocumentationLength(keyword));
         jsonGenerator.writeNumberField("number steps", keyword.getSteps().size());
         jsonGenerator.writeNumberField("sequence size", keyword.getMaxSequenceSize());
         jsonGenerator.writeNumberField("number branches", keyword.getBranchIndex());
         jsonGenerator.writeNumberField("size", keyword.getSize());
         jsonGenerator.writeNumberField("depth", keyword.getDepth());
         jsonGenerator.writeNumberField("connectivity", keyword.getConnectivity(-1));
-        jsonGenerator.writeNumberField("churn", (float)changes / loc);
 
         writeChanges(jsonGenerator, difference);
 
@@ -142,8 +139,13 @@ public class KeywordsEvolutionSerializer extends JsonSerializer<EvolutionResults
         return KeywordDefinition.class.isAssignableFrom(differentiable.getClass());
     }
 
-    private int getLoc(TimeLine timeLine){
-        Differentiable differentiable = timeLine.get(0).getValue();
-        return ((KeywordDefinition)differentiable).getSteps().size() + 1;
+    private int getDocumentationLength(KeywordDefinition keyword){
+        String documentation = keyword.getDocumentation();
+
+        if(documentation.isEmpty()){
+            return 0;
+        }
+
+        return StringUtils.countLines(keyword.getDocumentation());
     }
 }

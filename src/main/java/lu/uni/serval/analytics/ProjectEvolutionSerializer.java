@@ -27,6 +27,7 @@ public class ProjectEvolutionSerializer extends JsonSerializer<EvolutionResults>
             jsonGenerator.writeNumberField("number files", statistics.getNumberFiles());
             jsonGenerator.writeNumberField("number keywords", statistics.getNumberKeywords(UserKeyword.class));
             jsonGenerator.writeNumberField("number test cases", statistics.getNumberKeywords(TestCase.class));
+            jsonGenerator.writeNumberField("documentation length", statistics.getDocumentationLength());
             jsonGenerator.writeNumberField("lines of code", statistics.getLoc());
             jsonGenerator.writeNumberField("sequence steps number", getSequenceStepNumber(results, project));
 

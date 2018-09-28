@@ -122,6 +122,10 @@ public class ElementTable<T extends Element> implements Iterable<T> {
         }
     }
 
+    public Set<T> toSet(){
+        return this.elementSet;
+    }
+
     public void clear() {
         this.elementSet.clear();
         this.elementMap.clear();

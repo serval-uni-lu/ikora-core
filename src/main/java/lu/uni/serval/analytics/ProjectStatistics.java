@@ -2,6 +2,10 @@ package lu.uni.serval.analytics;
 
 import com.beust.jcommander.ParameterException;
 import lu.uni.serval.robotframework.model.*;
+import lu.uni.serval.utils.StringUtils;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class ProjectStatistics {
     enum Metric{
@@ -35,6 +39,20 @@ public class ProjectStatistics {
         }
 
         return 0;
+    }
+
+    public int getDocumentationLength() {
+        int length = 0;
+
+        Set<KeywordDefinition> keywords = new HashSet<>();
+        keywords.addAll(userKeywords.toSet());
+        keywords.addAll(testCases.toSet());
+
+        for (KeywordDefinition keyword: keywords){
+            length += StringUtils.countLines(keyword.getDocumentation());
+        }
+
+        return length;
     }
 
     <T extends KeywordDefinition> int[] getSizeDistribution(Class<T> type){
