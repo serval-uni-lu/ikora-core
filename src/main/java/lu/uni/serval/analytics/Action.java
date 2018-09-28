@@ -28,6 +28,13 @@ public class Action {
         REMOVE_VARIABLE,
         CHANGE_VARIABLE_DEFINITION,
 
+        ADD_SEQUENCE,
+        REMOVE_SEQUENCE,
+
+        ADD_DOCUMENTATION,
+        REMOVE_DOCUMENTATION,
+        CHANGE_DOCUMENTATION,
+
         INVALID
     }
 
@@ -74,6 +81,9 @@ public class Action {
         else if(Step.class.isAssignableFrom(type)){
             return new Action(Type.ADD_STEP, null, element);
         }
+        else if(Sequence.class.isAssignableFrom(type)){
+            return new Action(Type.ADD_SEQUENCE, null, element);
+        }
 
         return new Action(Type.INVALID, null, element);
     }
@@ -90,6 +100,9 @@ public class Action {
         }
         else if(Step.class.isAssignableFrom(type)){
             return new Action(Type.REMOVE_STEP, element, null);
+        }
+        else if(Sequence.class.isAssignableFrom(type)){
+            return new Action(Type.REMOVE_SEQUENCE, element, null);
         }
 
         return new Action(Type.INVALID, element, null);
@@ -129,6 +142,18 @@ public class Action {
 
     public static Action changeVariableDefinition(Differentiable left, Differentiable right) {
         return new Action(Type.CHANGE_VARIABLE_DEFINITION, left, right);
+    }
+
+    public static Action addDocumentation(Differentiable left, Differentiable right) {
+        return new Action(Type.ADD_DOCUMENTATION, left, right);
+    }
+
+    public static Action removeDocumentation(Differentiable left, Differentiable right) {
+        return new Action(Type.REMOVE_DOCUMENTATION, left, right);
+    }
+
+    public static Action changeDocumentation(Differentiable left, Differentiable right) {
+        return new Action(Type.CHANGE_DOCUMENTATION, left, right);
     }
 
     public static Action invalid(Differentiable left, Differentiable right) {

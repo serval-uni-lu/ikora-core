@@ -230,11 +230,33 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
             actions.add(Action.changeName(this, other));
         }
 
+        // check documentation change
+        Action documentationAction = differenceDocumentation(keyword);
+        if(documentationAction != null){
+            actions.add(documentationAction);
+        }
+
         // check step changes
         List<Action> stepActions = LevenshteinDistance.getDifferences(this.getSteps(), keyword.getSteps());
         actions.addAll(stepActions);
 
         return actions;
+    }
+
+    private Action differenceDocumentation(KeywordDefinition keyword) {
+        Action action = null;
+
+        if(this.documentation.isEmpty() && !keyword.documentation.isEmpty()){
+            action = Action.addDocumentation(this, keyword);
+        }
+        else if(!this.documentation.isEmpty() && keyword.documentation.isEmpty()){
+            action = Action.removeDocumentation(this, keyword);
+        }
+        else if(!this.documentation.equals(keyword.documentation)){
+            action = Action.changeDocumentation(this, keyword);
+        }
+
+        return action;
     }
 
     @Override

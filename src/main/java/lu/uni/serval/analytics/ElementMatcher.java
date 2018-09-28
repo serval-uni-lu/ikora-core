@@ -40,7 +40,7 @@ public class ElementMatcher {
 
         while(elements2.size() > 0){
             T keyword2 = elements2.iterator().next();
-            T keyword1 = findBestCandidate(type, keyword2, unmatched);
+            T keyword1 = findBestCandidate(keyword2, unmatched);
 
             pairs.add(ElementInfoPair.of(project1, project2, keyword1, keyword2));
             elements2.remove(keyword2);
@@ -56,29 +56,33 @@ public class ElementMatcher {
         return pairs;
     }
 
-    private static <T extends Element> Map<Edit, List<T>> findPotentialCandidates(Class<T> type, T keyword2, List<T> unmatched) {
-        String fileName = new File(keyword2.getFileName()).getName();
+    private static <T extends Element> Map<Edit, List<T>> findPotentialCandidates(T keyword, List<T> unmatched) {
+        String fileName = new File(keyword.getFileName()).getName();
         Map<Edit, List<T>> candidates = new HashMap<>();
 
         for (T current: unmatched){
-            Action.Type[] ignore = {Action.Type.CHANGE_NAME};
-            if(!Difference.of(keyword2, current).isEmpty(ignore)){
+            Action.Type[] ignore = {Action.Type.CHANGE_NAME,
+                    Action.Type.CHANGE_DOCUMENTATION,
+                    Action.Type.REMOVE_DOCUMENTATION,
+                    Action.Type.ADD_DOCUMENTATION};
+
+            if(!Difference.of(keyword, current).isEmpty(ignore)){
                 continue;
             }
 
             String currentFileName = current.getFileName();
 
-            if(current.getFile().equals(keyword2.getFile())){
+            if(current.getFile().equals(keyword.getFile())){
                 List<T> list = candidates.getOrDefault(Edit.ChangeName, new ArrayList<>());
                 list.add(current);
                 candidates.put(Edit.ChangeName, list);
             }
-            else if(current.getName().toString().equals(keyword2.getName().toString()) && currentFileName.equals(fileName)){
+            else if(current.getName().toString().equals(keyword.getName().toString()) && currentFileName.equals(fileName)){
                 List<T> list = candidates.getOrDefault(Edit.ChangeFolder, new ArrayList<>());
                 list.add(current);
                 candidates.put(Edit.ChangeFolder, list);
             }
-            else if(current.getName().toString().equals(keyword2.getName().toString())){
+            else if(current.getName().toString().equals(keyword.getName().toString())){
                 List<T> list = candidates.getOrDefault(Edit.ChangeFile, new ArrayList<>());
                 list.add(current);
                 candidates.put(Edit.ChangeFile, list);
@@ -93,8 +97,8 @@ public class ElementMatcher {
         return candidates;
     }
 
-    private static <T extends Element> T findBestCandidate(Class<T> type, T keyword, List<T> unmatched){
-        Map<Edit, List<T>> candidates = findPotentialCandidates(type, keyword, unmatched);
+    private static <T extends Element> T findBestCandidate(T keyword, List<T> unmatched){
+        Map<Edit, List<T>> candidates = findPotentialCandidates(keyword, unmatched);
 
         T bestCandidate = null;
 

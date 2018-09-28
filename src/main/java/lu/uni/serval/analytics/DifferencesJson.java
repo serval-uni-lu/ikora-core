@@ -5,6 +5,9 @@ import lu.uni.serval.robotframework.model.Element;
 import lu.uni.serval.robotframework.model.Keyword;
 import lu.uni.serval.robotframework.model.KeywordDefinition;
 import lu.uni.serval.utils.Differentiable;
+import lu.uni.serval.utils.DifferentiableStringList;
+import lu.uni.serval.utils.LevenshteinDistance;
+import lu.uni.serval.utils.StringUtils;
 import org.openqa.selenium.InvalidArgumentException;
 
 import java.io.IOException;
@@ -40,6 +43,8 @@ public class DifferencesJson {
         CHANGE_FOR_LOOP_CONDITION,
         CHANGE_FOR_LOOP_BODY,
 
+        CHANGE_DOCUMENTATION,
+
         INVALID,
 
         TOTAL
@@ -69,7 +74,7 @@ public class DifferencesJson {
             }
 
             if(!(differentiable instanceof Element)){
-                throw new InvalidArgumentException("Expected a Element got " + differentiable.getClass() + " instead!");
+                throw new InvalidArgumentException("Expected a DifferentiableString got " + differentiable.getClass() + " instead!");
             }
 
             Element element = (Element)differentiable;
@@ -111,6 +116,12 @@ public class DifferencesJson {
                 case CHANGE_VARIABLE_DEFINITION:
                     actions.put(Type.CHANGE_VARIABLE_DEFINITION, actions.get(Type.CHANGE_VARIABLE_DEFINITION) + element.getLoc());
                     break;
+                case ADD_DOCUMENTATION:
+                case REMOVE_DOCUMENTATION:
+                case CHANGE_DOCUMENTATION:
+                    int changes_documentation = getDocumentationChanges(action);
+                    actions.put(Type.CHANGE_DOCUMENTATION, actions.get(Type.CHANGE_DOCUMENTATION) + changes_documentation);
+
                 case INVALID:
                     actions.put(Type.INVALID, actions.get(Type.INVALID) + element.getLoc());
                     break;
@@ -126,6 +137,36 @@ public class DifferencesJson {
 
             actions.put(Type.TOTAL, actions.get(Type.TOTAL) + 1);
         }
+    }
+
+    private int getDocumentationChanges(Action action) {
+        if(!KeywordDefinition.class.isAssignableFrom(action.getLeft().getClass())){
+            throw new InvalidArgumentException("Expected a Keyword got " + action.getLeft().getClass() + " instead!");
+        }
+
+        if(!KeywordDefinition.class.isAssignableFrom(action.getRight().getClass())){
+            throw new InvalidArgumentException("Expected a Keyword got " + action.getRight().getClass() + " instead!");
+        }
+
+        KeywordDefinition keyword1 = (KeywordDefinition)action.getLeft();
+        KeywordDefinition keyword2 = (KeywordDefinition)action.getRight();
+
+        int lines = 0;
+
+        if(action.getType() == Action.Type.ADD_DOCUMENTATION){
+            lines = StringUtils.countLines(keyword2.getDocumentation());
+        }
+        else if(action.getType() == Action.Type.REMOVE_DOCUMENTATION){
+            lines = StringUtils.countLines(keyword1.getDocumentation());
+        }
+        else if(action.getType() == Action.Type.CHANGE_DOCUMENTATION){
+            DifferentiableStringList doc1 = DifferentiableStringList.fromTextBlock(keyword1.getDocumentation());
+            DifferentiableStringList doc2 = DifferentiableStringList.fromTextBlock(keyword2.getDocumentation());
+
+            lines = LevenshteinDistance.getDifferences(doc1, doc2).size();
+        }
+
+        return lines;
     }
 
     private void changeStep(Element element) throws InvalidArgumentException {
@@ -189,7 +230,7 @@ public class DifferencesJson {
         jsonGenerator.writeEndObject();
     }
 
-    private String cleanName(String raw){
+    private static String cleanName(String raw){
         String clean = raw.replace('_', ' ');
         return clean.toLowerCase();
     }
