@@ -11,7 +11,7 @@ import lu.uni.serval.robotframework.model.UserKeyword;
 
 import java.io.IOException;
 
-public class ReportEvolutionSerializer extends JsonSerializer<EvolutionResults> {
+public class ProjectEvolutionSerializer extends JsonSerializer<EvolutionResults> {
     @Override
     public void serialize(EvolutionResults results, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException, JsonProcessingException {
         jsonGenerator.writeStartArray();

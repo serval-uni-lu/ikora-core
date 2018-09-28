@@ -39,7 +39,7 @@ public class ProjectAnalyticsCli implements CommandRunner {
             ObjectMapper mapper = new ObjectMapper();
 
             SimpleModule module = new SimpleModule();
-            module.addSerializer(EvolutionResults.class, new ReportEvolutionSerializer());
+            module.addSerializer(EvolutionResults.class, new ProjectEvolutionSerializer());
             mapper.registerModule(module);
 
             File file = new File((String)analytics.getAdditionalProperty("output report differences file", "./report-differences.json"));
