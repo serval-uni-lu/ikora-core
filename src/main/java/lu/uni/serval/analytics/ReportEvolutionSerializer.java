@@ -10,36 +10,28 @@ import lu.uni.serval.robotframework.model.TestCase;
 import lu.uni.serval.robotframework.model.UserKeyword;
 
 import java.io.IOException;
-import java.util.Set;
 
 public class ReportEvolutionSerializer extends JsonSerializer<EvolutionResults> {
     @Override
     public void serialize(EvolutionResults results, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException, JsonProcessingException {
         jsonGenerator.writeStartArray();
 
-        for(Project project1: results.getProjects()){
-            ProjectStatistics statistics = new ProjectStatistics(project1);
+        for(Project project: results.getProjects()){
+            ProjectStatistics statistics = new ProjectStatistics(project);
 
             jsonGenerator.writeStartObject();
 
-            jsonGenerator.writeStringField("commit ID", project1.getCommitId());
-            jsonGenerator.writeStringField("time", project1.getDateTime().toString());
+            jsonGenerator.writeStringField("commit ID", project.getCommitId());
+            jsonGenerator.writeStringField("time", project.getDateTime().toString());
 
             jsonGenerator.writeNumberField("number files", statistics.getNumberFiles());
             jsonGenerator.writeNumberField("number keywords", statistics.getNumberKeywords(UserKeyword.class));
             jsonGenerator.writeNumberField("number test cases", statistics.getNumberKeywords(TestCase.class));
             jsonGenerator.writeNumberField("lines of code", statistics.getLoc());
+            jsonGenerator.writeNumberField("sequence steps number", getSequenceStepNumber(results, project));
 
-            Set<Project> compareTo = results.getComparedTo(project1);
-
-            if(compareTo.size() > 1){
-                throw new IOException("Expected only 1 project to compare to");
-            }
-
-            for(Project project2: compareTo){
-                writeSequences(results, jsonGenerator, project1, project2);
-                writeDifferences(results, jsonGenerator, project1, project2);
-            }
+            jsonGenerator.writeNumberField("changes sequence steps", getSequenceDifferences(results, project));
+            writeDifferences(results, jsonGenerator, project);
 
             jsonGenerator.writeEndObject();
         }
@@ -47,27 +39,43 @@ public class ReportEvolutionSerializer extends JsonSerializer<EvolutionResults> 
         jsonGenerator.writeEndArray();
     }
 
-    private void writeSequences(EvolutionResults results, JsonGenerator jsonGenerator, Project project1, Project project2) throws IOException {
-        int sequenceSize = 0;
+    private int getSequenceStepNumber(EvolutionResults results, Project project) {
+        int size = 0;
+
+        for(Sequence sequence: results.getSequence(project)){
+            size += sequence.size();
+        }
+
+        return size;
+    }
+
+    private int getSequenceDifferences(EvolutionResults results, Project project) {
         int sequenceDifferences = 0;
 
-        for(Difference difference: results.getSequenceDifferences(project1, project2)){
+        for(Difference difference: results.getSequenceDifferences(project)){
             if(difference == null){
                 continue;
             }
 
-            sequenceSize += ((Sequence)difference.getLeft()).size();
-            sequenceDifferences += difference.getActions().size();
+            for (Action action: difference.getActions()){
+                switch (action.getType()){
+                    case ADD_SEQUENCE:
+                    case REMOVE_SEQUENCE:
+                        sequenceDifferences += ((Sequence)difference.getValue()).size();
+                        break;
+                    default:
+                        sequenceDifferences++;
+                }
+            }
         }
 
-        jsonGenerator.writeNumberField("sequence steps number", sequenceSize);
-        jsonGenerator.writeNumberField("changes sequence steps", sequenceDifferences);
+        return sequenceDifferences;
     }
 
-    private void writeDifferences(EvolutionResults results, JsonGenerator jsonGenerator, Project project1, Project project2) throws IOException {
+    private void writeDifferences(EvolutionResults results, JsonGenerator jsonGenerator, Project project) throws IOException {
         DifferencesJson changes = new DifferencesJson();
 
-        for(Difference difference: results.getDifferences(project1, project2)){
+        for(Difference difference: results.getDifferences(project)){
             changes.add(difference);
         }
 

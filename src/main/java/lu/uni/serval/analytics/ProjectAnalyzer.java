@@ -44,7 +44,7 @@ public class ProjectAnalyzer {
                 UserKeyword keyword1 = keywordPair.getElement(project1);
                 UserKeyword keyword2 = keywordPair.getElement(project2);
 
-                results.addDifference(project1, project2, Difference.of(keyword1, keyword2));
+                results.addDifference(project1, Difference.of(keyword1, keyword2));
             }
 
             for(ElementInfoPair<TestCase> testCasePair: ElementMatcher.getPairs(TestCase.class, project1, project2)) {
@@ -54,15 +54,21 @@ public class ProjectAnalyzer {
                 Sequence sequence1 = testCase1 != null ? testCase1.getMaxSequence() : null;
                 Sequence sequence2 = testCase2 != null ? testCase2.getMaxSequence() : null;
 
-                results.addDifference(project1, project2, Difference.of(testCase1, testCase2), Difference.of(sequence1, sequence2));
+                results.addDifference(project1, Difference.of(testCase1, testCase2), Difference.of(sequence1, sequence2));
+
+                results.addSequence(project1, sequence1);
+                results.addSequence(project2, sequence2);
             }
 
             for(ElementInfoPair<Variable> variablePair: ElementMatcher.getPairs(Variable.class, project1, project2)) {
                 Variable variable1 = variablePair.getElement(project1);
                 Variable variable2 = variablePair.getElement(project2);
 
-                results.addDifference(project1, project2, Difference.of(variable1, variable2));
+                results.addDifference(project1, Difference.of(variable1, variable2));
             }
+
+            results.addProject(project1);
+            results.addProject(project2);
 
             project1 = project2;
         }
