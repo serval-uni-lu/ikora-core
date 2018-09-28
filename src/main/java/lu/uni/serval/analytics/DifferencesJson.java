@@ -50,7 +50,7 @@ public class DifferencesJson {
         TOTAL
     }
 
-    Map<Type, Integer> actions;
+    private Map<Type, Integer> actions;
 
     public DifferencesJson() {
         this.actions = new HashMap<>();
