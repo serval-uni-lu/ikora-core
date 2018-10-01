@@ -27,11 +27,12 @@ public class ProjectAnalyticsCli implements CommandRunner {
 
         exportReportEvolution(analytics, results);
         exportKeywordEvolution(analytics, results);
+        exportKeywordNames(analytics, results);
     }
 
     private void exportReportEvolution(Plugin analytics, EvolutionResults results) {
         if(analytics.getAdditionalProperty("output report differences file", "").equals("")){
-            logger.warn("no output differences file provided");
+            logger.warn("no output  report differences file provided");
             return;
         }
 
@@ -54,7 +55,7 @@ public class ProjectAnalyticsCli implements CommandRunner {
 
     private void exportKeywordEvolution(Plugin analytics, EvolutionResults results){
         if(analytics.getAdditionalProperty("output keyword differences file", "").equals("")){
-            logger.warn("no output differences file provided");
+            logger.warn("no output keyword differences file provided");
             return;
         }
 
@@ -70,6 +71,29 @@ public class ProjectAnalyticsCli implements CommandRunner {
             mapper.writeValue(file, results);
 
             logger.info("differences written to " + file.getAbsolutePath());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void exportKeywordNames(Plugin analytics, EvolutionResults results){
+        if(analytics.getAdditionalProperty("output keyword names file", "").equals("")){
+            logger.warn("no output keyword names file provided");
+            return;
+        }
+
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+
+            SimpleModule module = new SimpleModule();
+            module.addSerializer(EvolutionResults.class, new KeywordsNamesSerializer());
+            mapper.registerModule(module);
+
+            File file = new File((String)analytics.getAdditionalProperty("output keyword names file", "./keyword-names.json"));
+
+            mapper.writeValue(file, results);
+
+            logger.info("names written to " + file.getAbsolutePath());
         } catch (IOException e) {
             e.printStackTrace();
         }
