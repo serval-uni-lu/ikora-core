@@ -3,18 +3,25 @@ package lu.uni.serval.analytics;
 import lu.uni.serval.robotframework.model.Element;
 import lu.uni.serval.robotframework.model.KeywordDefinition;
 import lu.uni.serval.utils.Differentiable;
+import lu.uni.serval.utils.LevenshteinDistance;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class TimeLine implements Iterable<Difference> {
+public class TimeLine implements Differentiable, Iterable<Difference> {
     private List<Difference> sequence;
+    private List<Action> actions;
     private Differentiable last;
+    private Differentiable lastValid;
+    private boolean hasChanged;
 
     TimeLine() {
         sequence = new ArrayList<>();
+        actions = new ArrayList<>();
         last = null;
+        lastValid = null;
+        hasChanged = false;
     }
 
     public boolean add(Difference difference){
@@ -27,13 +34,14 @@ public class TimeLine implements Iterable<Difference> {
         }
 
         this.sequence.add(difference);
+        this.actions.addAll(difference.getActions());
+
         this.last = difference.getRight();
+        this.lastValid = difference.getValue();
+
+        this.hasChanged |= !difference.getActions().isEmpty();
 
         return true;
-    }
-
-    public Differentiable getLast(){
-        return this.last;
     }
 
     @Override
@@ -50,46 +58,71 @@ public class TimeLine implements Iterable<Difference> {
     }
 
     public String getType() {
-        Differentiable differentiable = firstDifferentiable();
-
-        if(differentiable == null){
+        if(lastValid == null){
             return "";
         }
 
-        return differentiable.getClass().getSimpleName();
+        return lastValid.getClass().getSimpleName();
     }
 
     public String getName(){
-        Differentiable differentiable = firstDifferentiable();
-
-        if(differentiable == null){
+        if(lastValid == null){
             return "";
         }
 
-        if(!Element.class.isAssignableFrom(differentiable.getClass())){
+        if(!Element.class.isAssignableFrom(lastValid.getClass())){
             return "";
         }
 
-        return ((Element)differentiable).getName().toString();
+        return ((Element)lastValid).getName().toString();
     }
 
     public boolean isKeywordDefinition(){
-        Differentiable differentiable = firstDifferentiable();
-
-        if(differentiable == null){
+        if(lastValid == null){
             return false;
         }
 
-        return KeywordDefinition.class.isAssignableFrom(differentiable.getClass());
+        return KeywordDefinition.class.isAssignableFrom(lastValid.getClass());
     }
 
-    private Differentiable firstDifferentiable(){
-        if(size() == 0){
-            return null;
+    public boolean hasChanged(){
+        return hasChanged;
+    }
+
+    @Override
+    public double distance(Differentiable other) {
+        if(other.getClass() != this.getClass()){
+            return 1.0;
         }
 
-        Difference difference = sequence.get(0);
+        if(((TimeLine)other).lastValid == null){
+            System.out.println(10);
+        }
 
-        return difference.getValue();
+        if(this.lastValid == null){
+            System.out.println(10);
+        }
+
+        if(!((TimeLine)other).getType().equals(this.getType())){
+            return 1.0;
+        }
+
+        return LevenshteinDistance.index(actions, ((TimeLine)other).actions);
+    }
+
+    @Override
+    public List<Action> differences(Differentiable other) {
+        List<Action> invalid = new ArrayList<>();
+        invalid.add(Action.invalid(this, other));
+
+        if(other.getClass() != this.getClass()){
+            return invalid;
+        }
+
+        if(((TimeLine)other).lastValid.getClass() != this.lastValid.getClass()){
+            return invalid;
+        }
+
+        return LevenshteinDistance.getDifferences(this.actions, ((TimeLine)other).actions);
     }
 }

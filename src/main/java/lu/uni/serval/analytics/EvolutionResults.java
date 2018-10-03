@@ -1,5 +1,6 @@
 package lu.uni.serval.analytics;
 
+import lu.uni.serval.robotframework.model.Element;
 import lu.uni.serval.robotframework.model.Project;
 import lu.uni.serval.robotframework.model.Sequence;
 
@@ -13,6 +14,8 @@ public class EvolutionResults {
     private Map<Project, List<Difference>> sequenceDifferences;
 
     private List<TimeLine> timeLines;
+    private DifferentiableMatcher timeLineMatcher;
+    private List<TimeLine> timeLineNotChanged;
 
     EvolutionResults(){
         projects = new HashSet<>();
@@ -21,6 +24,9 @@ public class EvolutionResults {
         differences = new LinkedHashMap<>();
         sequenceDifferences = new LinkedHashMap<>();
         timeLines = new ArrayList<>();
+
+        timeLineMatcher = null;
+        timeLineNotChanged = null;
     }
 
     public void addProject(Project project) {
@@ -113,5 +119,30 @@ public class EvolutionResults {
 
     public List<TimeLine> getTimeLines() {
         return timeLines;
+    }
+
+    public DifferentiableMatcher getTimeLinesMatches() {
+        if(timeLineMatcher == null){
+            List<TimeLine> timeLineChanged = new ArrayList<>(timeLines);
+            timeLineChanged.removeAll(getNotChanged());
+
+            timeLineMatcher = DifferentiableMatcher.match(timeLineChanged, 0.8);
+        }
+
+        return timeLineMatcher;
+    }
+
+    public List<TimeLine> getNotChanged(){
+        if(timeLineNotChanged == null){
+            timeLineNotChanged = new ArrayList<>();
+
+            for(TimeLine timeLine: timeLines){
+                if(!timeLine.hasChanged()){
+                    timeLineNotChanged.add(timeLine);
+                }
+            }
+        }
+
+        return timeLineNotChanged;
     }
 }

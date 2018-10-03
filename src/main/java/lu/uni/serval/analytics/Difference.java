@@ -3,11 +3,12 @@ package lu.uni.serval.analytics;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lu.uni.serval.robotframework.model.*;
 import lu.uni.serval.utils.Differentiable;
+import lu.uni.serval.utils.LevenshteinDistance;
 
 import java.util.*;
 
 @JsonSerialize(using = DifferenceSerializer.class)
-public class Difference {
+public class Difference implements Differentiable {
 
     private Differentiable left;
     private Differentiable right;
@@ -130,5 +131,23 @@ public class Difference {
         }
 
         return hash;
+    }
+
+    @Override
+    public double distance(Differentiable other) {
+        if(other.getClass() != this.getClass()){
+            return 1.0;
+        }
+
+        if(((Difference)other).getValue().getClass() != this.getValue().getClass()){
+            return 1.0;
+        }
+
+        return LevenshteinDistance.index(this.actions, ((Difference)other).actions);
+    }
+
+    @Override
+    public List<Action> differences(Differentiable other) {
+        return null;
     }
 }

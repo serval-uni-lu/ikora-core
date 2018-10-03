@@ -77,4 +77,12 @@ public class Plugin {
 
         return LocalDateTime.parse(dateTime, formatter);
     }
+
+    public String getPropertyAsString(String name){
+        return (String)getAdditionalProperty(name, "");
+    }
+
+    public String getPropertyAsString(String name, String value){
+        return (String)getAdditionalProperty(name, value);
+    }
 }

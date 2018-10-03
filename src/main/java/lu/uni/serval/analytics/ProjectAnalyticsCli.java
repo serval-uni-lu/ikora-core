@@ -30,46 +30,57 @@ public class ProjectAnalyticsCli implements CommandRunner {
         exportKeywordEvolution(analytics, results);
         exportKeywordNames(analytics, results);
         exportKeywordChangeSequence(analytics, results);
+        exportKeywordSequenceDifference(analytics, results);
     }
 
     private void exportReportEvolution(Plugin analytics, EvolutionResults results) {
-        if(analytics.getAdditionalProperty("output report differences file", "").equals("")){
+        if(analytics.getPropertyAsString("output report differences file").isEmpty()){
             logger.warn("no output  report differences file provided");
             return;
         }
 
-        String fileName = (String)analytics.getAdditionalProperty("output report differences file", "./report-differences.json");
+        String fileName = analytics.getPropertyAsString("output report differences file", "./report-differences.json");
         export(new ProjectEvolutionSerializer(), fileName, results);
     }
 
     private void exportKeywordEvolution(Plugin analytics, EvolutionResults results){
-        if(analytics.getAdditionalProperty("output keyword differences file", "").equals("")){
+        if(analytics.getPropertyAsString("output keyword differences file").isEmpty()){
             logger.warn("no output keyword differences file provided");
             return;
         }
 
-        String fileName = (String)analytics.getAdditionalProperty("output keyword differences file", "./keyword-differences.json");
+        String fileName = analytics.getPropertyAsString("output keyword differences file");
         export(new KeywordsEvolutionSerializer(), fileName, results);
     }
 
     private void exportKeywordNames(Plugin analytics, EvolutionResults results){
-        if(analytics.getAdditionalProperty("output keyword names file", "").equals("")){
+        if(analytics.getPropertyAsString("output keyword names file").isEmpty()){
             logger.warn("no output keyword names file provided");
             return;
         }
 
-        String fileName = (String)analytics.getAdditionalProperty("output keyword names file", "./keyword-names.json");
+        String fileName = analytics.getPropertyAsString("output keyword names file");
         export(new KeywordsNamesSerializer(), fileName, results);
     }
 
     private void exportKeywordChangeSequence(Plugin analytics, EvolutionResults results) {
-        if(analytics.getAdditionalProperty("output keyword changes sequences file", "").equals("")){
+        if(analytics.getPropertyAsString("output keyword changes sequences file").isEmpty()){
             logger.warn("no output keyword changes sequences file provided");
             return;
         }
 
-        String fileName = (String)analytics.getAdditionalProperty("output keyword changes sequences file", "./keyword-changes-sequences.json");
+        String fileName = analytics.getPropertyAsString("output keyword changes sequences file");
         export(new KeywordsChangeSequenceSerializer(), fileName, results);
+    }
+
+    private void exportKeywordSequenceDifference(Plugin analytics, EvolutionResults results) {
+        if(analytics.getPropertyAsString("output keyword sequence difference file").isEmpty()){
+            logger.warn("no output keyword sequence difference file provided");
+            return;
+        }
+
+        String fileName = analytics.getPropertyAsString("output keyword sequence difference file");
+        export(new KeywordsSequenceDifferenceSerializer(), fileName, results);
     }
 
     private void export(JsonSerializer serializer, String fileName, EvolutionResults results){

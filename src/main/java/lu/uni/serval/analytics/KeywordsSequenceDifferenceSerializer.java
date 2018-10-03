@@ -1,0 +1,78 @@
+package lu.uni.serval.analytics;
+
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import lu.uni.serval.utils.Differentiable;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+public class KeywordsSequenceDifferenceSerializer extends JsonSerializer<EvolutionResults> {
+
+    @Override
+    public void serialize(EvolutionResults results, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException, JsonProcessingException {
+        jsonGenerator.writeStartObject();
+
+        writeDifferences(jsonGenerator, results.getTimeLinesMatches());
+        writeUnchanged(jsonGenerator, results.getNotChanged());
+
+        jsonGenerator.writeEndObject();
+    }
+
+    private void writeUnchanged(JsonGenerator jsonGenerator, List<TimeLine> notChanged) throws IOException {
+        jsonGenerator.writeArrayFieldStart("unchanged");
+
+        for(TimeLine timeLine: notChanged){
+            if(!timeLine.isKeywordDefinition()){
+                continue;
+            }
+
+            jsonGenerator.writeStartObject();
+            writeTimeLineInfo(jsonGenerator, timeLine);
+            jsonGenerator.writeEndObject();
+        }
+
+        jsonGenerator.writeEndArray();
+    }
+
+    private void writeDifferences(JsonGenerator jsonGenerator, DifferentiableMatcher timeLinesMatches) throws IOException {
+        jsonGenerator.writeArrayFieldStart("compare");
+
+        Map<Differentiable, Set<Differentiable>> matched = timeLinesMatches.getMatched();
+
+        for(Differentiable differentiable1: matched.keySet()){
+            TimeLine timeLine = (TimeLine)differentiable1;
+
+            if(!timeLine.isKeywordDefinition()){
+                continue;
+            }
+
+            jsonGenerator.writeStartObject();
+            writeTimeLineInfo(jsonGenerator, timeLine);
+
+            jsonGenerator.writeArrayFieldStart("similar");
+            for(Differentiable differentiable2: matched.get(timeLine)){
+                TimeLine similar = (TimeLine)differentiable2;
+
+                jsonGenerator.writeStartObject();
+                writeTimeLineInfo(jsonGenerator, similar);
+                jsonGenerator.writeNumberField("similarity", 1 - timeLine.distance(similar));
+                jsonGenerator.writeEndObject();
+            }
+            jsonGenerator.writeEndArray();
+
+            jsonGenerator.writeEndObject();
+        }
+
+        jsonGenerator.writeEndArray();
+    }
+
+    private void writeTimeLineInfo(JsonGenerator jsonGenerator, TimeLine timeLine) throws IOException {
+        jsonGenerator.writeStringField("type", timeLine.getType());
+        jsonGenerator.writeStringField("name", timeLine.getName());
+    }
+}

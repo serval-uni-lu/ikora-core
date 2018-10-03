@@ -3,7 +3,10 @@ package lu.uni.serval.analytics;
 import lu.uni.serval.robotframework.model.*;
 import lu.uni.serval.utils.Differentiable;
 
-public class Action {
+import java.util.ArrayList;
+import java.util.List;
+
+public class Action implements Differentiable {
     public enum Type{
         ADD_USER_KEYWORD,
         REMOVE_USER_KEYWORD,
@@ -68,6 +71,30 @@ public class Action {
         return this.right;
     }
 
+    @Override
+    public double distance(Differentiable other) {
+        if(other.getClass() != this.getClass()){
+            return 1.0;
+        }
+
+        return this.type == ((Action)other).type ? 0.0 : 1.0;
+    }
+
+    @Override
+    public List<Action> differences(Differentiable other) {
+        List<Action> differences = new ArrayList<>();
+
+        if(other.getClass() != this.getClass()){
+            return differences;
+        }
+
+        if(this.type != ((Action)other).type){
+            differences.add(Action.changeStep(this, other));
+        }
+
+        return differences;
+    }
+
     public static <T> Action addElement(Class<T> type, Differentiable element) {
         if(UserKeyword.class.isAssignableFrom(type)){
             return new Action(Type.ADD_USER_KEYWORD, null, element);
@@ -110,6 +137,10 @@ public class Action {
 
     public static Action changeName(Differentiable left, Differentiable right){
         return new Action(Type.CHANGE_NAME, left, right);
+    }
+
+    public static Action changeStep(Differentiable left, Differentiable right){
+        return new Action(Type.CHANGE_STEP, left, right);
     }
 
     public static Action changeStepType(Differentiable left, Differentiable right){
