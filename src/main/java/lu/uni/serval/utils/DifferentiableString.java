@@ -35,4 +35,9 @@ public class DifferentiableString implements Differentiable {
 
         return actions;
     }
+
+    @Override
+    public String getName() {
+        return this.text;
+    }
 }

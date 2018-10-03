@@ -69,7 +69,7 @@ public class CloneResultSerializer extends StdSerializer<CloneResults> {
         KeywordDefinition keyword = (KeywordDefinition)node.getData();
 
         jsonGenerator.writeStringField("file", keyword.getFileName());
-        jsonGenerator.writeStringField("name", keyword.getName().toString());
+        jsonGenerator.writeStringField("name", keyword.getName());
         jsonGenerator.writeNumberField("number of steps", node.getChildCount());
         jsonGenerator.writeEndObject();
     }

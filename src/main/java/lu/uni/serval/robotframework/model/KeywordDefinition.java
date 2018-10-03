@@ -78,7 +78,13 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
         this.documentation = documentation;
     }
 
-    public Argument getName() {
+    @Override
+    public String getName() {
+        return name.toString();
+    }
+
+    @Override
+    public Argument getNameAsArgument() {
         return name;
     }
 

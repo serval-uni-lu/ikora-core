@@ -95,6 +95,11 @@ public class Action implements Differentiable {
         return differences;
     }
 
+    @Override
+    public String getName() {
+        return this.getType().name();
+    }
+
     public static <T> Action addElement(Class<T> type, Differentiable element) {
         if(UserKeyword.class.isAssignableFrom(type)){
             return new Action(Type.ADD_USER_KEYWORD, null, element);

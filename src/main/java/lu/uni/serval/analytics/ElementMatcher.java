@@ -77,12 +77,12 @@ public class ElementMatcher {
                 list.add(current);
                 candidates.put(Edit.ChangeName, list);
             }
-            else if(current.getName().toString().equals(keyword.getName().toString()) && currentFileName.equals(fileName)){
+            else if(current.getName().equals(keyword.getName()) && currentFileName.equals(fileName)){
                 List<T> list = candidates.getOrDefault(Edit.ChangeFolder, new ArrayList<>());
                 list.add(current);
                 candidates.put(Edit.ChangeFolder, list);
             }
-            else if(current.getName().toString().equals(keyword.getName().toString())){
+            else if(current.getName().equals(keyword.getName())){
                 List<T> list = candidates.getOrDefault(Edit.ChangeFile, new ArrayList<>());
                 list.add(current);
                 candidates.put(Edit.ChangeFile, list);

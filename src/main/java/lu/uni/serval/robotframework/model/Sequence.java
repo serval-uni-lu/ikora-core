@@ -54,4 +54,9 @@ public class Sequence implements Differentiable {
 
         return actions;
     }
+
+    @Override
+    public String getName() {
+        return String.valueOf(hashCode());
+    }
 }

@@ -69,7 +69,12 @@ public abstract class LibraryKeyword implements Keyword {
     }
 
     @Override
-    public Argument getName(){
+    public String getName(){
+        return toKeyword(this.getClass());
+    }
+
+    @Override
+    public Argument getNameAsArgument(){
         return new Argument(toKeyword(this.getClass()));
     }
 

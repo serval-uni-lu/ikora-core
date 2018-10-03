@@ -13,7 +13,7 @@ public interface Element extends Differentiable {
 
     long getEpoch();
 
-    Argument getName();
+    Argument getNameAsArgument();
 
     boolean matches(String name);
 }

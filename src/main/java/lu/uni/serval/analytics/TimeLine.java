@@ -74,7 +74,7 @@ public class TimeLine implements Differentiable, Iterable<Difference> {
             return "";
         }
 
-        return ((Element)lastValid).getName().toString();
+        return lastValid.getName();
     }
 
     public boolean isKeywordDefinition(){

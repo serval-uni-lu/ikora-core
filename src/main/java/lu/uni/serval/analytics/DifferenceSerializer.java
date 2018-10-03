@@ -130,8 +130,8 @@ public class DifferenceSerializer extends JsonSerializer<Difference> {
                 {
                     jsonGenerator.writeStringField("type", "change keyword name");
 
-                    jsonGenerator.writeStringField("before", ((Element)difference.getLeft()).getName().toString());
-                    jsonGenerator.writeStringField("after", ((Element)difference.getRight()).getName().toString());
+                    jsonGenerator.writeStringField("before", difference.getLeft().getName());
+                    jsonGenerator.writeStringField("after", difference.getRight().getName());
 
                     jsonGenerator.writeStringField("file", ((Element)difference.getRight()).getFileName());
                 }
@@ -140,7 +140,7 @@ public class DifferenceSerializer extends JsonSerializer<Difference> {
                 case ADD_VARIABLE:
                 {
                     jsonGenerator.writeStringField("type", "add variable");
-                    jsonGenerator.writeStringField("variable", ((Element)difference.getRight()).getName().toString());
+                    jsonGenerator.writeStringField("variable", difference.getRight().getName());
 
                     writeKeywordInfo(jsonGenerator, difference.getRight(), "keyword", false);
                 }
@@ -149,7 +149,7 @@ public class DifferenceSerializer extends JsonSerializer<Difference> {
                 case REMOVE_VARIABLE:
                 {
                     jsonGenerator.writeStringField("type", "remove variable");
-                    jsonGenerator.writeStringField("variable", ((Element)difference.getLeft()).getName().toString());
+                    jsonGenerator.writeStringField("variable", difference.getLeft().getName());
 
                     writeKeywordInfo(jsonGenerator, difference.getLeft(), "keyword", false);
                 }
@@ -185,13 +185,13 @@ public class DifferenceSerializer extends JsonSerializer<Difference> {
         jsonGenerator.writeObjectFieldStart(name);
 
         jsonGenerator.writeStringField("file", keyword.getFileName());
-        jsonGenerator.writeStringField("name", keyword.getName().toString());
+        jsonGenerator.writeStringField("name", keyword.getName());
 
         if(showSteps){
             jsonGenerator.writeArrayFieldStart("steps");
 
             for(Step step: keyword){
-                jsonGenerator.writeString(step.getName().toString());
+                jsonGenerator.writeString(step.getName());
             }
 
             jsonGenerator.writeEndArray();
@@ -236,6 +236,6 @@ public class DifferenceSerializer extends JsonSerializer<Difference> {
             return "INVALID STEP";
         }
 
-        return ((Step)step).getName().toString();
+        return step.getName();
     }
 }

@@ -150,4 +150,9 @@ public class Difference implements Differentiable {
     public List<Action> differences(Differentiable other) {
         return null;
     }
+
+    @Override
+    public String getName() {
+        return String.valueOf(this.hashCode());
+    }
 }

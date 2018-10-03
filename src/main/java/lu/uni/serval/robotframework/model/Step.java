@@ -24,8 +24,12 @@ public abstract class Step implements Keyword {
         this.parent = parent;
     }
 
-    public Argument getName() {
+    public Argument getNameAsArgument() {
         return this.name;
+    }
+
+    public String getName() {
+        return this.name.toString();
     }
 
     public Keyword getParent() {

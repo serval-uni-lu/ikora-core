@@ -35,6 +35,11 @@ public class Argument implements Differentiable {
         return this.value;
     }
 
+    @Override
+    public String getName(){
+        return toString();
+    }
+
     public boolean matches(String string) {
         Matcher matcher = match.matcher(string);
         return matcher.matches();

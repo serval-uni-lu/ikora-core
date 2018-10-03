@@ -35,7 +35,7 @@ public class ElementTable<T extends Element> implements Iterable<T> {
     }
 
     public T findElement(T element){
-        return findElement(element.getFileName(), element.getName().toString());
+        return findElement(element.getFileName(), element.getName());
     }
 
     public T findElement(String name){
