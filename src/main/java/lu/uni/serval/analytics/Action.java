@@ -88,7 +88,8 @@ public class Action implements Differentiable {
             return differences;
         }
 
-        if(this.type != ((Action)other).type){
+        if(this.type != ((Action)other).type
+        && this.getValue().getName().equals(((Action)other).getValue().getName())){
             differences.add(Action.changeStep(this, other));
         }
 
