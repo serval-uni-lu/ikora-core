@@ -5,7 +5,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import lu.uni.serval.robotframework.model.*;
-import lu.uni.serval.utils.Differentiable;
 import lu.uni.serval.utils.StringUtils;
 
 import java.io.IOException;
@@ -21,7 +20,7 @@ public class KeywordsEvolutionSerializer extends JsonSerializer<EvolutionResults
         int id = 1;
 
         for(TimeLine timeLine : results.getTimeLines()){
-            if(!isKeywordDefinition(timeLine)){
+            if(!timeLine.isKeywordDefinition()){
                 continue;
             }
 
@@ -126,17 +125,6 @@ public class KeywordsEvolutionSerializer extends JsonSerializer<EvolutionResults
         }
 
         return position;
-    }
-
-    private boolean isKeywordDefinition(TimeLine timeLine){
-        if(timeLine.size() == 0){
-            return false;
-        }
-
-        Difference difference = timeLine.get(0);
-        Differentiable differentiable = difference.getValue();
-
-        return KeywordDefinition.class.isAssignableFrom(differentiable.getClass());
     }
 
     private int getDocumentationLength(KeywordDefinition keyword){
