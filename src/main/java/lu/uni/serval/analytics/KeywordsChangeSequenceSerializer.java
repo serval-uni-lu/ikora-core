@@ -48,7 +48,7 @@ public class KeywordsChangeSequenceSerializer extends JsonSerializer<EvolutionRe
         jsonGenerator.writeArrayFieldStart("actions");
 
         for (Action action: difference.getActions()){
-            jsonGenerator.writeStringField("type", action.getType().name());
+            jsonGenerator.writeString(action.getType().name());
         }
 
         jsonGenerator.writeEndArray();
