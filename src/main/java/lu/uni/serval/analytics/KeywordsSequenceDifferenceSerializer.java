@@ -17,14 +17,14 @@ public class KeywordsSequenceDifferenceSerializer extends JsonSerializer<Evoluti
     public void serialize(EvolutionResults results, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException, JsonProcessingException {
         jsonGenerator.writeStartObject();
 
-        writeDifferences(jsonGenerator, results.getTimeLinesMatches());
-        writeUnchanged(jsonGenerator, results.getNotChanged());
+        writeCoevolution(jsonGenerator, results.getTimeLinesMatches());
+        writeNotChanged(jsonGenerator, results.getNotChanged());
 
         jsonGenerator.writeEndObject();
     }
 
-    private void writeUnchanged(JsonGenerator jsonGenerator, List<TimeLine> notChanged) throws IOException {
-        jsonGenerator.writeArrayFieldStart("unchanged");
+    private void writeNotChanged(JsonGenerator jsonGenerator, List<TimeLine> notChanged) throws IOException {
+        jsonGenerator.writeArrayFieldStart("not changed");
 
         for(TimeLine timeLine: notChanged){
             if(!timeLine.isKeywordDefinition()){
@@ -39,8 +39,8 @@ public class KeywordsSequenceDifferenceSerializer extends JsonSerializer<Evoluti
         jsonGenerator.writeEndArray();
     }
 
-    private void writeDifferences(JsonGenerator jsonGenerator, DifferentiableMatcher timeLinesMatches) throws IOException {
-        jsonGenerator.writeArrayFieldStart("compare");
+    private void writeCoevolution(JsonGenerator jsonGenerator, DifferentiableMatcher timeLinesMatches) throws IOException {
+        jsonGenerator.writeArrayFieldStart("coevolution");
 
         Map<Differentiable, Set<Differentiable>> matched = timeLinesMatches.getMatched();
 
