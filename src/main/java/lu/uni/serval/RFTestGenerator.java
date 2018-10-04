@@ -1,6 +1,5 @@
 package lu.uni.serval;
 
-import lu.uni.serval.analytics.KeywordsAnalyticsCli;
 import lu.uni.serval.analytics.ProjectAnalyticsCli;
 import lu.uni.serval.utils.Configuration;
 import lu.uni.serval.utils.ConsoleColors;
@@ -29,14 +28,9 @@ public class RFTestGenerator {
             Configuration.initialize(cmd.getOptionValue("config"));
             Configuration config = Configuration.getInstance();
 
-            if(config.hasPlugin("report analytics")) {
-                ProjectAnalyticsCli reportsAnalyticsCli = new ProjectAnalyticsCli();
-                reportsAnalyticsCli.run();
-            }
-
-            if(config.hasPlugin("keywords analytics")){
-                KeywordsAnalyticsCli keywordsAnalyticsCli = new KeywordsAnalyticsCli();
-                keywordsAnalyticsCli.run();
+            if(config.hasPlugin("project analytics")) {
+                ProjectAnalyticsCli projectAnalyticsCli = new ProjectAnalyticsCli();
+                projectAnalyticsCli.run();
             }
 
         } catch (ParseException e) {
