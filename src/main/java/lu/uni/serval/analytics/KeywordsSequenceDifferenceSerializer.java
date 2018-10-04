@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import lu.uni.serval.robotframework.model.Element;
+import lu.uni.serval.robotframework.model.KeywordDefinition;
 import lu.uni.serval.utils.Differentiable;
 
 import java.io.IOException;
@@ -76,6 +77,7 @@ public class KeywordsSequenceDifferenceSerializer extends JsonSerializer<Evoluti
         jsonGenerator.writeStringField("type", timeLine.getType());
         //jsonGenerator.writeStringField("file", getFileName(timeLine));
         jsonGenerator.writeStringField("name", timeLine.getName());
+        jsonGenerator.writeStringField("depth", getDepth(timeLine));
         //writeActions(jsonGenerator, timeLine);
     }
 
@@ -104,5 +106,21 @@ public class KeywordsSequenceDifferenceSerializer extends JsonSerializer<Evoluti
         }
 
         return ((Element)last).getFile().getName();
+    }
+
+    private String getDepth(TimeLine timeLine){
+        Differentiable last = timeLine.getLastValid();
+
+        if(last == null){
+            return "0";
+        }
+
+        if(!KeywordDefinition.class.isAssignableFrom(last.getClass())){
+            return "0";
+        }
+
+        int depth = ((KeywordDefinition)last).getDepth();
+
+        return String.valueOf(depth);
     }
 }
