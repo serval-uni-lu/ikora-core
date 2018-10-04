@@ -77,7 +77,11 @@ public class Action implements Differentiable {
             return 1.0;
         }
 
-        return this.type == ((Action)other).type ? 0.0 : 1.0;
+        if(this.type == ((Action)other).type && this.getValue().getName().equals(((Action)other).getValue().getName())){
+            return 0.0;
+        }
+
+        return 1.0;
     }
 
     @Override

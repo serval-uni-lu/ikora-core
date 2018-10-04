@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
+import lu.uni.serval.robotframework.model.Element;
 import lu.uni.serval.utils.Differentiable;
 
 import java.io.IOException;
@@ -73,6 +74,35 @@ public class KeywordsSequenceDifferenceSerializer extends JsonSerializer<Evoluti
 
     private void writeTimeLineInfo(JsonGenerator jsonGenerator, TimeLine timeLine) throws IOException {
         jsonGenerator.writeStringField("type", timeLine.getType());
+        //jsonGenerator.writeStringField("file", getFileName(timeLine));
         jsonGenerator.writeStringField("name", timeLine.getName());
+        //writeActions(jsonGenerator, timeLine);
+    }
+
+    private void writeActions(JsonGenerator jsonGenerator, TimeLine timeLine) throws IOException {
+        jsonGenerator.writeArrayFieldStart("actions");
+
+        for(Action action: timeLine.getActions()){
+            jsonGenerator.writeStartObject();
+            jsonGenerator.writeStringField("type", action.getType().name());
+            jsonGenerator.writeStringField("value", action.getValue().getName());
+            jsonGenerator.writeEndObject();
+        }
+
+        jsonGenerator.writeEndArray();
+    }
+
+    private String getFileName(TimeLine timeLine){
+        Differentiable last = timeLine.getLastValid();
+
+        if(last == null){
+            return "";
+        }
+
+        if(!Element.class.isAssignableFrom(last.getClass())){
+            return "";
+        }
+
+        return ((Element)last).getFile().getName();
     }
 }

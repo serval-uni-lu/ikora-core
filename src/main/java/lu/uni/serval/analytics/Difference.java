@@ -124,7 +124,7 @@ public class Difference implements Differentiable {
             KeywordDefinition keyword = (KeywordDefinition)element;
 
             hash = 31 * hash + (keyword.getFile() == null ? 0 : keyword.getFile().hashCode());
-            hash = 31 * hash + (keyword.getName().toString() == null ? 0 : keyword.getName().toString().hashCode());
+            hash = 31 * hash + (keyword.getName() == null ? 0 : keyword.getName().hashCode());
         }
         else{
             hash = element.hashCode();
