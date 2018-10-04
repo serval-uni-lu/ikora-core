@@ -1,8 +1,9 @@
 package lu.uni.serval.analytics;
 
-import lu.uni.serval.robotframework.model.Element;
 import lu.uni.serval.robotframework.model.Project;
 import lu.uni.serval.robotframework.model.Sequence;
+import lu.uni.serval.robotframework.model.TestCase;
+import lu.uni.serval.robotframework.model.UserKeyword;
 
 import java.util.*;
 
@@ -16,6 +17,8 @@ public class EvolutionResults {
     private List<TimeLine> timeLines;
     private DifferentiableMatcher timeLineMatcher;
     private List<TimeLine> timeLineNotChanged;
+    private Map<Project, CloneResults> keywordClones;
+    private Map<Project, CloneResults> testCaseClones;
 
     EvolutionResults(){
         projects = new HashSet<>();
@@ -27,6 +30,8 @@ public class EvolutionResults {
 
         timeLineMatcher = null;
         timeLineNotChanged = null;
+        keywordClones = null;
+        testCaseClones = null;
     }
 
     public void addProject(Project project) {
@@ -144,5 +149,31 @@ public class EvolutionResults {
         }
 
         return timeLineNotChanged;
+    }
+
+    public CloneResults getKeywordClones(Project project){
+        if(keywordClones == null){
+            keywordClones = new HashMap<>();
+
+            for(Project current: projects){
+                CloneResults<UserKeyword> cloneResults = CloneDetection.findClones(current, UserKeyword.class);
+                keywordClones.put(current, cloneResults);
+            }
+        }
+
+        return keywordClones.get(project);
+    }
+
+    public CloneResults getTestCaseClones(Project project){
+        if(testCaseClones == null){
+            testCaseClones = new HashMap<>();
+
+            for(Project current: projects){
+                CloneResults<TestCase> cloneResults = CloneDetection.findClones(current, TestCase.class);
+                testCaseClones.put(current, cloneResults);
+            }
+        }
+
+        return testCaseClones.get(project);
     }
 }

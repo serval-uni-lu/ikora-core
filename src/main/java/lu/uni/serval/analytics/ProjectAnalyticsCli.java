@@ -3,6 +3,7 @@ package lu.uni.serval.analytics;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import lu.uni.serval.robotframework.model.Project;
 import lu.uni.serval.utils.CommandRunner;
 import lu.uni.serval.utils.Configuration;
 import lu.uni.serval.utils.Plugin;
@@ -25,6 +26,10 @@ public class ProjectAnalyticsCli implements CommandRunner {
 
         ProjectAnalyzer projects = ProjectAnalyzer.fromGit(gitUrl, branch, username, password);
         EvolutionResults results = projects.findDifferences();
+
+        for(Project project: results.getProjects()){
+            results.getKeywordClones(project);
+        }
 
         exportReportEvolution(analytics, results);
         exportKeywordEvolution(analytics, results);
