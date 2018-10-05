@@ -7,6 +7,7 @@ import lu.uni.serval.utils.LevenshteinDistance;
 import java.util.*;
 
 public class TimeLine implements Differentiable, Iterable<Difference> {
+
     private List<Difference> sequence;
     private LinkedHashSet<Differentiable> items;
     private List<Action> actions;
@@ -106,6 +107,10 @@ public class TimeLine implements Differentiable, Iterable<Difference> {
         Element otherItem = (Element)other.findItemByCommit(commit);
 
         return CloneDetection.getCloneType(thisItem, otherItem);
+    }
+
+    public LinkedHashSet<Differentiable> getItems() {
+        return items;
     }
 
     private String findFirstCommonCommit(TimeLine other) {

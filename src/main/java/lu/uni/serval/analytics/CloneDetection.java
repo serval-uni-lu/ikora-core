@@ -124,11 +124,6 @@ public class CloneDetection<T extends  Element> {
                 }
             }
             break;
-
-            case TypeIII:
-                break;
-            case TypeIV:
-                break;
         }
 
         return new Action.Type[]{};

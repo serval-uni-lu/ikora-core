@@ -6,9 +6,12 @@ import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import lu.uni.serval.robotframework.model.Element;
 import lu.uni.serval.robotframework.model.KeywordDefinition;
+import lu.uni.serval.robotframework.model.TestCase;
+import lu.uni.serval.robotframework.model.UserKeyword;
 import lu.uni.serval.utils.Differentiable;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -19,8 +22,9 @@ public class SequenceComparisonSerializer extends JsonSerializer<EvolutionResult
     public void serialize(EvolutionResults results, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException, JsonProcessingException {
         jsonGenerator.writeStartObject();
 
-        writeCoevolution(jsonGenerator, results.getTimeLinesMatches());
+        writeCoEvolution(jsonGenerator, results.getTimeLinesMatches());
         writeNotChanged(jsonGenerator, results.getNotChanged());
+        writeProportions(jsonGenerator, results);
 
         jsonGenerator.writeEndObject();
     }
@@ -41,7 +45,7 @@ public class SequenceComparisonSerializer extends JsonSerializer<EvolutionResult
         jsonGenerator.writeEndArray();
     }
 
-    private void writeCoevolution(JsonGenerator jsonGenerator, DifferentiableMatcher timeLinesMatches) throws IOException {
+    private void writeCoEvolution(JsonGenerator jsonGenerator, DifferentiableMatcher timeLinesMatches) throws IOException {
         jsonGenerator.writeArrayFieldStart("coevolution");
 
         Map<Differentiable, Set<Differentiable>> matched = timeLinesMatches.getMatched();
@@ -93,6 +97,37 @@ public class SequenceComparisonSerializer extends JsonSerializer<EvolutionResult
         }
 
         jsonGenerator.writeEndArray();
+    }
+
+    private void writeProportions(JsonGenerator jsonGenerator, EvolutionResults results) throws IOException {
+        jsonGenerator.writeObjectFieldStart("proportions");
+
+        List<Class<? extends Element>> elementTypes = new ArrayList<>();
+        elementTypes.add(TestCase.class);
+        elementTypes.add(UserKeyword.class);
+
+        CloneResults.Type[] cloneTypes = {CloneResults.Type.TypeI, CloneResults.Type.TypeII, CloneResults.Type.None};
+        EvolutionResults.CoEvolutionType[] coEvolutionTypes = {EvolutionResults.CoEvolutionType.CoEvolution, EvolutionResults.CoEvolutionType.NoCoEvolution, EvolutionResults.CoEvolutionType.NoChange};
+
+        for(Class<? extends Element> elementType: elementTypes){
+            jsonGenerator.writeObjectFieldStart(elementType.getSimpleName());
+
+            for(CloneResults.Type cloneType: cloneTypes){
+                jsonGenerator.writeObjectFieldStart(cloneType.name());
+
+                for(EvolutionResults.CoEvolutionType coEvolutionType: coEvolutionTypes){
+                    int total = results.getTotalElement(elementType, cloneType, coEvolutionType);
+
+                    jsonGenerator.writeNumberField(coEvolutionType.name(), total);
+                }
+
+                jsonGenerator.writeEndObject();
+            }
+
+            jsonGenerator.writeEndObject();
+        }
+
+        jsonGenerator.writeEndObject();
     }
 
     private String getFileName(TimeLine timeLine){

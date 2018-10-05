@@ -1,13 +1,15 @@
 package lu.uni.serval.analytics;
 
-import lu.uni.serval.robotframework.model.Project;
-import lu.uni.serval.robotframework.model.Sequence;
-import lu.uni.serval.robotframework.model.TestCase;
-import lu.uni.serval.robotframework.model.UserKeyword;
+import lu.uni.serval.robotframework.model.*;
+import lu.uni.serval.utils.Differentiable;
 
 import java.util.*;
 
 public class EvolutionResults {
+    public enum CoEvolutionType{
+        CoEvolution, NoCoEvolution, NoChange, Invalid
+    }
+
     private Set<Project> projects;
 
     private Map<Project, List<Sequence>> sequences;
@@ -19,6 +21,8 @@ public class EvolutionResults {
     private List<TimeLine> timeLineNotChanged;
     private Map<Project, CloneResults> keywordClones;
     private Map<Project, CloneResults> testCaseClones;
+
+    private Map<Differentiable, CoEvolutionType> coEvolutionTypes;
 
     EvolutionResults(){
         projects = new HashSet<>();
@@ -32,6 +36,8 @@ public class EvolutionResults {
         timeLineNotChanged = null;
         keywordClones = null;
         testCaseClones = null;
+
+        coEvolutionTypes = null;
     }
 
     public void addProject(Project project) {
@@ -151,6 +157,27 @@ public class EvolutionResults {
         return timeLineNotChanged;
     }
 
+    public CoEvolutionType getCoEvolutionType(Differentiable differentiable){
+        if(coEvolutionTypes == null){
+            coEvolutionTypes = new HashMap<>();
+            for(TimeLine notChanged: getNotChanged()){
+                for(Differentiable notChangeItem: notChanged.getItems()){
+                    coEvolutionTypes.put(notChangeItem, CoEvolutionType.NoChange);
+                }
+            }
+
+            for(Map.Entry<Differentiable, Set<Differentiable>> timeLines: getTimeLinesMatches().getMatched().entrySet()){
+                CoEvolutionType type = timeLines.getValue().size() > 0 ? CoEvolutionType.CoEvolution: CoEvolutionType.NoCoEvolution;
+
+                for(Differentiable coEvolution: ((TimeLine)timeLines.getKey()).getItems()){
+                    coEvolutionTypes.put(coEvolution, type);
+                }
+            }
+        }
+
+        return coEvolutionTypes.getOrDefault(differentiable, CoEvolutionType.Invalid);
+    }
+
     public CloneResults getKeywordClones(Project project){
         if(keywordClones == null){
             keywordClones = new HashMap<>();
@@ -175,5 +202,46 @@ public class EvolutionResults {
         }
 
         return testCaseClones.get(project);
+    }
+
+    public int getTotalElement(Class<? extends Element> elementType, CloneResults.Type cloneType, CoEvolutionType coEvolutionType){
+        int total = 0;
+
+        for(Project project: projects){
+            for (Element element: project.getElements(elementType)){
+                if(!checkCloneCriterion(project, element, cloneType)){
+                    continue;
+                }
+
+                if(!checkCoEvolutionCriterion(element, coEvolutionType)){
+                    continue;
+                }
+
+                ++total;
+            }
+        }
+
+        return total;
+    }
+
+    private boolean checkCloneCriterion(Project project, Element element, CloneResults.Type type){
+        CloneResults clones = null;
+        if(element.getClass() == UserKeyword.class){
+            clones = getKeywordClones(project);
+        }
+        else if(element.getClass() == TestCase.class){
+            clones = getTestCaseClones(project);
+        }
+
+        if(clones == null){
+            return false;
+        }
+
+        return clones.getCloneType(element) == type;
+    }
+
+    private boolean checkCoEvolutionCriterion(Element element, CoEvolutionType type){
+        CoEvolutionType found = getCoEvolutionType(element);
+        return found == type;
     }
 }
