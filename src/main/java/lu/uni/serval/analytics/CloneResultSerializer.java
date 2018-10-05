@@ -23,5 +23,8 @@ public class CloneResultSerializer extends StdSerializer<CloneResults> {
 
     @Override
     public void serialize(CloneResults cloneResults, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
+        jsonGenerator.writeArrayFieldStart("clones");
+
+        jsonGenerator.writeEndObject();
     }
 }

@@ -86,7 +86,7 @@ public class ProjectParser {
 
     static private List<File> getIgnoreList(Project project){
         Configuration configuration = Configuration.getInstance();
-        Plugin plugin = configuration.getPlugin("report analytics");
+        Plugin plugin = configuration.getPlugin("project analytics");
 
         List<String> paths = (List<String>) plugin.getAdditionalProperty("exclude folders", new ArrayList<String>());
         List<File> ignoreList = new ArrayList<>();

@@ -155,4 +155,8 @@ public class Difference implements Differentiable {
     public String getName() {
         return String.valueOf(this.hashCode());
     }
+
+    public Class<?> getType() {
+        return this.getValue().getClass();
+    }
 }

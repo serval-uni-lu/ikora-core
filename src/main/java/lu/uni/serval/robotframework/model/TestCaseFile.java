@@ -83,6 +83,10 @@ public class TestCaseFile implements Iterable<UserKeyword> {
         this.variableCache = null;
     }
 
+    public Project getProject() {
+        return project;
+    }
+
     public File getFile() {
         return file;
     }

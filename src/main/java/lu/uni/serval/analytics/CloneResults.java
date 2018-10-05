@@ -2,8 +2,6 @@ package lu.uni.serval.analytics;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lu.uni.serval.robotframework.model.Element;
-import lu.uni.serval.utils.CompareCache;
-import lu.uni.serval.utils.tree.LabelTreeNode;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -36,5 +34,15 @@ public class CloneResults<T extends Element> {
 
         values.put(t1, clones);
         this.clones.put(type, values);
+    }
+
+    public int size(Type type) {
+        Map<T, Set<T>> types = this.clones.get(type);
+
+        if(types == null){
+            return 0;
+        }
+
+        return types.size();
     }
 }

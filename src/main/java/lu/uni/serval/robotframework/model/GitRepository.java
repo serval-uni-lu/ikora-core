@@ -167,7 +167,7 @@ public class GitRepository {
                 revCommits = git.log().addRange(masterId, branchId).call();
             }
 
-            Plugin analytics = Configuration.getInstance().getPlugin("report analytics");
+            Plugin analytics = Configuration.getInstance().getPlugin("project analytics");
             List<String> ignoreList = (List<String>)analytics.getAdditionalProperty("ignore releases", new ArrayList<>());
 
             LocalDateTime startDate = analytics.getPropertyAsDate("start date");

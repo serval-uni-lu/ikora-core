@@ -27,7 +27,7 @@ public class KeywordsChangeSequenceSerializer extends JsonSerializer<EvolutionRe
     private void writeTimeLine(JsonGenerator jsonGenerator, TimeLine timeLine) throws IOException {
         jsonGenerator.writeStartObject();
 
-        jsonGenerator.writeStringField("type", timeLine.getType());
+        jsonGenerator.writeStringField("type", timeLine.getType().getSimpleName());
         jsonGenerator.writeStringField("name", timeLine.getName());
 
         jsonGenerator.writeArrayFieldStart("changes");

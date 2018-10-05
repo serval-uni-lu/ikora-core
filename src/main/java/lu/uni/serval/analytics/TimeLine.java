@@ -1,21 +1,21 @@
 package lu.uni.serval.analytics;
 
-import lu.uni.serval.robotframework.model.KeywordDefinition;
+import lu.uni.serval.robotframework.model.*;
 import lu.uni.serval.utils.Differentiable;
 import lu.uni.serval.utils.LevenshteinDistance;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class TimeLine implements Differentiable, Iterable<Difference> {
     private List<Difference> sequence;
+    private LinkedHashSet<Differentiable> items;
     private List<Action> actions;
     private Differentiable last;
     private Differentiable lastValid;
 
     TimeLine() {
         sequence = new ArrayList<>();
+        items = new LinkedHashSet<>();
         actions = new ArrayList<>();
         last = null;
         lastValid = null;
@@ -31,12 +31,23 @@ public class TimeLine implements Differentiable, Iterable<Difference> {
         }
 
         this.sequence.add(difference);
+        addElement(difference);
         addActions(difference);
 
         this.last = difference.getRight();
         this.lastValid = difference.getValue();
 
         return true;
+    }
+
+    private void addElement(Difference difference) {
+        if(difference.getLeft() != null){
+            items.add(difference.getLeft());
+        }
+
+        if(difference.getRight() != null){
+            items.add(difference.getRight());
+        }
     }
 
     private void addActions(Difference difference){
@@ -60,12 +71,12 @@ public class TimeLine implements Differentiable, Iterable<Difference> {
         return sequence.get(index);
     }
 
-    public String getType() {
+    public Class<?> getType() {
         if(lastValid == null){
-            return "";
+            return null;
         }
 
-        return lastValid.getClass().getSimpleName();
+        return lastValid.getClass();
     }
 
     public String getName(){
@@ -82,6 +93,76 @@ public class TimeLine implements Differentiable, Iterable<Difference> {
 
     public Differentiable getLastValid() {
         return lastValid;
+    }
+
+    public CloneResults.Type getCloneType(TimeLine other) {
+        String commit = findFirstCommonCommit(other);
+
+        if(commit.isEmpty()){
+            return CloneResults.Type.None;
+        }
+
+        Element thisItem = (Element)this.findItemByCommit(commit);
+        Element otherItem = (Element)other.findItemByCommit(commit);
+
+        return CloneDetection.getCloneType(thisItem, otherItem);
+    }
+
+    private String findFirstCommonCommit(TimeLine other) {
+        List<String> thisCommits = getCommits();
+        List<String> otherCommits = other.getCommits();
+
+        thisCommits.retainAll(otherCommits);
+
+        if(thisCommits.isEmpty()){
+            return "";
+        }
+
+        return thisCommits.get(0);
+    }
+
+    private List<String> getCommits() {
+        List<String> commits = new ArrayList<>();
+
+        for(Differentiable item: items){
+            String commit = getItemCommit(item);
+
+            if(!commit.isEmpty()){
+                commits.add(commit);
+            }
+        }
+
+        return commits;
+    }
+
+    private String getItemCommit(Differentiable item) {
+        if(!Element.class.isAssignableFrom(item.getClass())){
+            return "";
+        }
+
+        Element element = (Element)item;
+
+        TestCaseFile file = element.getFile();
+        if(file == null){
+            return "";
+        }
+
+        Project project = file.getProject();
+        if(project == null){
+            return "";
+        }
+
+        return project.getCommitId();
+    }
+
+    private Differentiable findItemByCommit(String commit){
+        for(Differentiable item: items){
+            if(getItemCommit(item).equals(commit)){
+                return item;
+            }
+        }
+
+        return null;
     }
 
     public boolean isKeywordDefinition(){

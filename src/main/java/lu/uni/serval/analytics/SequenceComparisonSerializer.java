@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class KeywordsSequenceDifferenceSerializer extends JsonSerializer<EvolutionResults> {
+public class SequenceComparisonSerializer extends JsonSerializer<EvolutionResults> {
 
     @Override
     public void serialize(EvolutionResults results, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException, JsonProcessingException {
@@ -63,6 +63,7 @@ public class KeywordsSequenceDifferenceSerializer extends JsonSerializer<Evoluti
                 jsonGenerator.writeStartObject();
                 writeTimeLineInfo(jsonGenerator, similar);
                 jsonGenerator.writeNumberField("similarity", 1 - timeLine.distance(similar));
+                jsonGenerator.writeStringField("clone type", timeLine.getCloneType(similar).name());
                 jsonGenerator.writeEndObject();
             }
             jsonGenerator.writeEndArray();
@@ -74,8 +75,8 @@ public class KeywordsSequenceDifferenceSerializer extends JsonSerializer<Evoluti
     }
 
     private void writeTimeLineInfo(JsonGenerator jsonGenerator, TimeLine timeLine) throws IOException {
-        jsonGenerator.writeStringField("type", timeLine.getType());
-        //jsonGenerator.writeStringField("file", getFileName(timeLine));
+        jsonGenerator.writeStringField("type", timeLine.getType().getSimpleName());
+        jsonGenerator.writeStringField("file", getFileName(timeLine));
         jsonGenerator.writeStringField("name", timeLine.getName());
         jsonGenerator.writeStringField("depth", getDepth(timeLine));
         //writeActions(jsonGenerator, timeLine);
