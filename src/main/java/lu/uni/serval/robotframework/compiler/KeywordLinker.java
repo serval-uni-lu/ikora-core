@@ -37,7 +37,7 @@ public class KeywordLinker {
             KeywordCall call = (KeywordCall)step;
 
             Pattern pattern = Pattern.compile("^(\\s*)(Given|When|Then|And)", Pattern.CASE_INSENSITIVE);
-            Matcher matcher = pattern.matcher(step.getName().toString());
+            Matcher matcher = pattern.matcher(step.getName());
             String name = matcher.replaceAll("").trim();
 
             Keyword keyword = getKeyword(name, testCaseFile, libraries);
@@ -63,7 +63,7 @@ public class KeywordLinker {
                 continue;
             }
 
-            String name = call.getName().toString().trim();
+            String name = call.getName().trim();
 
             Keyword keyword = getKeyword(name, testCaseFile, libraries);
 

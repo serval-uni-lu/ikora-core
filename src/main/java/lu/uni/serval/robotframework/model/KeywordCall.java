@@ -195,7 +195,7 @@ public class KeywordCall extends Step {
 
         KeywordCall call = (KeywordCall)other;
 
-        double nameIndex = LevenshteinDistance.stringIndex(getName().toString(), call.getName().toString());
+        double nameIndex = LevenshteinDistance.stringIndex(getName(), call.getName());
         double parameterIndex = LevenshteinDistance.index(getParameters(), call.getParameters());
 
         return (0.5 * nameIndex) + (0.5 * parameterIndex);
@@ -215,7 +215,7 @@ public class KeywordCall extends Step {
         else{
             KeywordCall call = (KeywordCall)other;
 
-            if(!this.getName().toString().equalsIgnoreCase(call.getName().toString())){
+            if(!this.getName().equalsIgnoreCase(call.getName())){
                 actions.add(Action.changeStepName(this, call));
             }
 
@@ -231,7 +231,7 @@ public class KeywordCall extends Step {
     public String toString(){
         StringBuilder builder = new StringBuilder();
 
-        builder.append(getName().toString());
+        builder.append(getName());
 
         for (Argument parameter: parameters){
             builder.append("\t");
