@@ -108,7 +108,7 @@ public class KeywordsEvolutionSerializer extends JsonSerializer<EvolutionResults
         DifferencesJson differencesJson = new DifferencesJson();
         differencesJson.add(difference);
 
-        differencesJson.writeJson(jsonGenerator, KeywordDefinition.class);
+        differencesJson.writeJson(jsonGenerator);
     }
 
     private Position getPosition(int index, int size){

@@ -10,6 +10,8 @@ import lu.uni.serval.robotframework.model.TestCase;
 import lu.uni.serval.robotframework.model.UserKeyword;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ProjectEvolutionSerializer extends JsonSerializer<EvolutionResults> {
     @Override
@@ -74,12 +76,24 @@ public class ProjectEvolutionSerializer extends JsonSerializer<EvolutionResults>
     }
 
     private void writeDifferences(EvolutionResults results, JsonGenerator jsonGenerator, Project project) throws IOException {
-        DifferencesJson changes = new DifferencesJson();
+        Map<Action.Type, Integer> changes = new HashMap<>();
 
-        for(Difference difference: results.getDifferences(project)){
-            changes.add(difference);
+        for(Action.Type changeType: Action.Type.values()){
+            changes.put(changeType, 0);
         }
 
-        changes.writeJson(jsonGenerator, Project.class);
+        for(Difference difference: results.getDifferences(project)){
+            for(Action action: difference.getActions()){
+                changes.put(action.getType(), changes.get(action.getType()) + 1);
+            }
+        }
+
+        jsonGenerator.writeObjectFieldStart("changes");
+
+        for(Map.Entry<Action.Type, Integer> change: changes.entrySet()){
+            jsonGenerator.writeNumberField(DifferencesJson.cleanName(change.getKey().name()), change.getValue());
+        }
+
+        jsonGenerator.writeEndObject();
     }
 }

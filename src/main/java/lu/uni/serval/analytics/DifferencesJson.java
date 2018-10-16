@@ -16,16 +16,7 @@ import java.util.Map;
 
 public class DifferencesJson {
     private enum Type{
-        ADD_USER_KEYWORD,
-        REMOVE_USER_KEYWORD,
         CHANGE_NAME,
-
-        ADD_TEST_CASE,
-        REMOVE_TEST_CASE,
-
-        ADD_VARIABLE,
-        REMOVE_VARIABLE,
-        CHANGE_VARIABLE_DEFINITION,
 
         CHANGE_SYNC_STEP,
         CHANGE_USER_STEP,
@@ -55,8 +46,8 @@ public class DifferencesJson {
     public DifferencesJson() {
         this.actions = new HashMap<>();
 
-        for(Type type: Type.values()){
-            actions.put(type, 0);
+        for(Type changeType: Type.values()){
+            actions.put(changeType, 0);
         }
     }
 
@@ -80,20 +71,8 @@ public class DifferencesJson {
             Element element = (Element)differentiable;
 
             switch (action.getType()){
-                case ADD_USER_KEYWORD:
-                    actions.put(Type.ADD_USER_KEYWORD, actions.get(Type.ADD_USER_KEYWORD) + element.getLoc());
-                    break;
-                case REMOVE_USER_KEYWORD:
-                    actions.put(Type.REMOVE_USER_KEYWORD, actions.get(Type.REMOVE_USER_KEYWORD) + element.getLoc());
-                    break;
                 case CHANGE_NAME:
                     actions.put(Type.CHANGE_NAME, actions.get(Type.CHANGE_NAME) + 1);
-                    break;
-                case ADD_TEST_CASE:
-                    actions.put(Type.ADD_TEST_CASE, actions.get(Type.ADD_TEST_CASE) + element.getLoc());
-                    break;
-                case REMOVE_TEST_CASE:
-                    actions.put(Type.REMOVE_TEST_CASE, actions.get(Type.REMOVE_TEST_CASE) + element.getLoc());
                     break;
                 case CHANGE_STEP_TYPE:
                     actions.put(Type.CHANGE_STEP_TYPE, actions.get(Type.CHANGE_STEP_TYPE) + element.getLoc());
@@ -106,15 +85,6 @@ public class DifferencesJson {
                     break;
                 case CHANGE_FOR_LOOP_BODY:
                     actions.put(Type.CHANGE_FOR_LOOP_BODY, actions.get(Type.CHANGE_FOR_LOOP_BODY) + element.getLoc());
-                    break;
-                case ADD_VARIABLE:
-                    actions.put(Type.ADD_VARIABLE, actions.get(Type.ADD_VARIABLE) + element.getLoc());
-                    break;
-                case REMOVE_VARIABLE:
-                    actions.put(Type.REMOVE_VARIABLE, actions.get(Type.REMOVE_VARIABLE) + element.getLoc());
-                    break;
-                case CHANGE_VARIABLE_DEFINITION:
-                    actions.put(Type.CHANGE_VARIABLE_DEFINITION, actions.get(Type.CHANGE_VARIABLE_DEFINITION) + element.getLoc());
                     break;
                 case ADD_DOCUMENTATION:
                 case REMOVE_DOCUMENTATION:
@@ -209,19 +179,8 @@ public class DifferencesJson {
         }
     }
 
-    public <T> void writeJson(JsonGenerator jsonGenerator, Class<T> clazz) throws IOException {
+    public void writeJson(JsonGenerator jsonGenerator) throws IOException {
         jsonGenerator.writeObjectFieldStart("changes");
-
-        if(KeywordDefinition.class.isAssignableFrom(clazz)){
-            actions.remove(Type.ADD_USER_KEYWORD);
-            actions.remove(Type.REMOVE_USER_KEYWORD);
-            actions.remove(Type.CHANGE_NAME);
-            actions.remove(Type.ADD_TEST_CASE);
-            actions.remove(Type.REMOVE_TEST_CASE);
-            actions.remove(Type.ADD_VARIABLE);
-            actions.remove(Type.REMOVE_VARIABLE);
-            actions.remove(Type.CHANGE_VARIABLE_DEFINITION);
-        }
 
         for(Type type: actions.keySet()){
             jsonGenerator.writeNumberField(cleanName(type.name()), actions.get(type));
@@ -230,7 +189,7 @@ public class DifferencesJson {
         jsonGenerator.writeEndObject();
     }
 
-    private static String cleanName(String raw){
+    public static String cleanName(String raw){
         String clean = raw.replace('_', ' ');
         return clean.toLowerCase();
     }
