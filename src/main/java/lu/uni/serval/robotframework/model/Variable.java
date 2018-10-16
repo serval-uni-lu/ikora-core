@@ -15,7 +15,7 @@ public class Variable implements Element {
     private LineRange lineRange;
 
     public Variable() {
-        definition = new ArrayList<>();
+        this.definition = new ArrayList<>();
     }
 
     public void setName(String name) {
