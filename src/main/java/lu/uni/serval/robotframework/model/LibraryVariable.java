@@ -9,17 +9,14 @@ public abstract class LibraryVariable extends Variable {
 
     public LibraryVariable(){
         this.format = Format.scalar;
-    }
-
-    public void setName(){
+        super.setName(toVariable(this.getClass()));
     }
 
     @Override
-    public String getName(){
-        return toVariable(this.getClass());
+    public void setName(String name){
     }
 
-    public static String toVariable(Class<? extends LibraryVariable> variableClass) {
+    private static String toVariable(Class<? extends LibraryVariable> variableClass) {
         String name = variableClass.getSimpleName();
         name = name.replaceAll("([A-Z])", " $1").trim().toUpperCase();
 

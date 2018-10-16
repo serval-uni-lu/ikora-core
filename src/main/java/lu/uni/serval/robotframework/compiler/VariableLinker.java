@@ -9,23 +9,25 @@ public class VariableLinker {
     final static Logger logger = Logger.getLogger(VariableLinker.class);
 
     static public void link(Project project) throws Exception {
+        LibraryResources libraries = project.getLibraries();
+
         for (TestCaseFile testCaseFile: project.getTestCaseFiles()) {
 
             for(UserKeyword userKeyword: testCaseFile.getElements(UserKeyword.class)) {
-                linkSteps(userKeyword, testCaseFile);
+                linkSteps(userKeyword, testCaseFile, libraries);
             }
         }
     }
 
-    static private void linkSteps(UserKeyword userKeyword, TestCaseFile testCaseFile) throws Exception {
+    static private void linkSteps(UserKeyword userKeyword, TestCaseFile testCaseFile, LibraryResources library) throws Exception {
         for(Step step: userKeyword) {
             for(Argument argument: step.getParameters()) {
-                resolveArgument(argument, testCaseFile, userKeyword);
+                resolveArgument(argument, testCaseFile, userKeyword, library);
             }
         }
     }
 
-    static private void resolveArgument(Argument argument, TestCaseFile testCaseFile, UserKeyword userKeyword) throws Exception {
+    static private void resolveArgument(Argument argument, TestCaseFile testCaseFile, UserKeyword userKeyword, LibraryResources library) throws Exception {
         List<String> variables = argument.findVariables();
 
         for(String name: variables){
@@ -36,6 +38,10 @@ public class VariableLinker {
             }
             else {
                 variable = testCaseFile.findVariable(name);
+
+                if(variable == null){
+                    variable = library.findVariable(name);
+                }
 
                 if(variable == null) {
                     logger.error("Variable for argument \"" + name + "\" not found!");

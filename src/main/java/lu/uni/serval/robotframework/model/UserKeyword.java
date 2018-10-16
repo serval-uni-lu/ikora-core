@@ -22,6 +22,17 @@ public class UserKeyword extends KeywordDefinition {
     }
 
     @Override
+    public void addStep(Step step){
+        super.addStep(step);
+
+        if(Assignment.class.isAssignableFrom(step.getClass())){
+            for (Variable variable: ((Assignment)step).getReturnValues()){
+                localVariables.add(variable);
+            }
+        }
+    }
+
+    @Override
     public Argument.Type[] getArgumentTypes() {
         Argument.Type[] types = new Argument.Type[parameters.size()];
 
