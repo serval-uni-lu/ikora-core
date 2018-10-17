@@ -2,6 +2,8 @@ package lu.uni.serval.utils;
 
 import com.fasterxml.jackson.annotation.*;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -63,5 +65,24 @@ public class Plugin {
         }
 
         return value;
+    }
+
+    public LocalDateTime getPropertyAsDate(String name){
+        if(!additionalProperties.containsKey(name)){
+            return null;
+        }
+
+        String dateTime = (String)getAdditionalProperty(name);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        return LocalDateTime.parse(dateTime, formatter);
+    }
+
+    public String getPropertyAsString(String name){
+        return (String)getAdditionalProperty(name, "");
+    }
+
+    public String getPropertyAsString(String name, String value){
+        return (String)getAdditionalProperty(name, value);
     }
 }

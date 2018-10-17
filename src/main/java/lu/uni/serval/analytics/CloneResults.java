@@ -1,66 +1,57 @@
 package lu.uni.serval.analytics;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import lu.uni.serval.utils.CompareCache;
-import lu.uni.serval.utils.tree.LabelTreeNode;
+import lu.uni.serval.robotframework.model.Element;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 @JsonSerialize(using = CloneResultSerializer.class)
-public class CloneResults {
-    public enum CloneType{
-        None, Same, Synonym, Homonym
+public class CloneResults<T extends Element> {
+    enum Type{
+        TypeI, TypeII, None
     }
 
-    private Map<CloneType, CompareCache<LabelTreeNode, CloneIndex>> results;
+    private Map<Type, Map<T, Set<T>>> clones;
 
     public CloneResults(){
-        results = new HashMap<>();
-
-        results.put(CloneType.Same, new CompareCache<>());
-        results.put(CloneType.Synonym, new CompareCache<>());
-        results.put(CloneType.Homonym, new CompareCache<>());
+        this.clones = new HashMap<>();
     }
 
-    public CompareCache<LabelTreeNode, CloneIndex> getSame(){
-        return results.get(CloneType.Same);
+    public void update(T t1, T t2, Type type){
+        set(t1, t2, type);
+        set(t2, t1, type);
     }
 
-    public CompareCache<LabelTreeNode, CloneIndex> getSynonym(){
-        return results.get(CloneType.Synonym);
+    private void set(T t1, T t2, Type type){
+        Map<T, Set<T>> values = this.clones.getOrDefault(type, new HashMap<>());
+        Set<T> clones = values.getOrDefault(t1, new HashSet<>());
+        clones.add(t2);
+
+        values.put(t1, clones);
+        this.clones.put(type, values);
     }
 
-    public CompareCache<LabelTreeNode, CloneIndex> getHomonym(){
-        return results.get(CloneType.Homonym);
-    }
-
-    public CompareCache<LabelTreeNode, CloneIndex> getByType(CloneType type){
-        return results.get(type);
-    }
-
-    public void update(CloneIndex cloneIndex, LabelTreeNode tree1, LabelTreeNode tree2) {
-        CloneType type = CloneType.None;
-
-        if(cloneIndex.isSame()){
-            type = CloneType.Same;
-        } else if(cloneIndex.isHomonym()){
-            type = CloneType.Homonym;
-        } else if(cloneIndex.isSynonym()){
-            type = CloneType.Synonym;
+    public Type getCloneType(T element) {
+        if(clones.getOrDefault(Type.TypeI, new HashMap<>()).get(element) != null){
+            return Type.TypeI;
+        }
+        else if(clones.getOrDefault(Type.TypeII, new HashMap<>()).get(element) != null){
+            return Type.TypeII;
         }
 
-        if(type != CloneType.None){
-            update(results.get(type), cloneIndex, tree1, tree2);
-        }
+        return Type.None;
     }
 
-    private void update(CompareCache<LabelTreeNode, CloneIndex> clones, CloneIndex cloneIndex,
-                        LabelTreeNode tree1, LabelTreeNode tree2){
-        if(clones == null){
-            return;
+    public int size(Type type) {
+        Map<T, Set<T>> types = this.clones.get(type);
+
+        if(types == null){
+            return 0;
         }
 
-        clones.set(tree1, tree2, cloneIndex);
+        return types.size();
     }
 }

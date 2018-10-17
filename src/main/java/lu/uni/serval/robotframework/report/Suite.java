@@ -3,14 +3,13 @@ package lu.uni.serval.robotframework.report;
 import java.util.ArrayList;
 import java.util.List;
 
-import lu.uni.serval.utils.tree.LabelTreeNode;
-
-public class Suite {
+public class Suite implements ReportElement {
     private String source;
     private String id;
     private String name;
     private List<Suite> suites;
-    private List<LabelTreeNode> keywords;
+    private List<KeywordStatus> keywords;
+    private ReportElement parent;
 
     public Suite(){
         suites = new ArrayList<>();
@@ -25,16 +24,40 @@ public class Suite {
         return id;
     }
 
-    public String getSource() {
-        return source;
-    }
-
     public List<Suite> getChildren() {
         return suites;
     }
 
-    public List<LabelTreeNode> getKeywords() {
-        List<LabelTreeNode> keywords = new ArrayList<>();
+    @Override
+    public int getChildPosition(ReportElement element, boolean ignoreGhosts) {
+
+        if(element instanceof Suite){
+            return Utils.getElementPosition(suites, (Suite) element, ignoreGhosts);
+        }
+        else if(element instanceof KeywordStatus){
+            return Utils.getElementPosition(keywords, (KeywordStatus) element, ignoreGhosts);
+        }
+
+        return -1;
+    }
+
+    @Override
+    public ReportElement getParent() {
+        return this.parent;
+    }
+
+    @Override
+    public ReportElement getRootElement(){
+        return parent.getRootElement();
+    }
+
+    @Override
+    public String getSource() {
+        return source;
+    }
+
+    public List<KeywordStatus> getKeywords() {
+        List<KeywordStatus> keywords = new ArrayList<>();
 
         if(hasSuites()){
             for(Suite suite: this.suites){
@@ -73,15 +96,21 @@ public class Suite {
         this.suites = children;
     }
 
-    public void setKeywords(List<LabelTreeNode> keywords) {
+    public void setKeywords(List<KeywordStatus> keywords) {
         this.keywords = keywords;
     }
 
+    public void setParent(ReportElement parent) {
+        this.parent = parent;
+    }
+
     public void addSuite(Suite suite) {
+        suite.setParent(this);
         suites.add(suite);
     }
 
-    public void addKeyword(LabelTreeNode keyword) {
+    public void addKeyword(KeywordStatus keyword) {
+        keyword.setParent(this);
         keywords.add(keyword);
     }
 }

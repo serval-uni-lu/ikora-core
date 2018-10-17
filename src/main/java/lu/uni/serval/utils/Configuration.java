@@ -10,18 +10,24 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.harawata.appdirs.AppDirs;
+import net.harawata.appdirs.AppDirsFactory;
+import org.apache.log4j.Logger;
+
 public class Configuration {
 
     @JsonProperty("verbose")
     private Boolean verbose;
-    @JsonProperty("testCaseFile")
-    private String testCaseFile;
     @JsonIgnore
     private Map<String, Plugin> plugins = null;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<>();
     @JsonIgnore
     private static Configuration instance = new Configuration();
+    @JsonIgnore
+    private static File configurationFolder;
+    @JsonIgnore
+    final static Logger logger = Logger.getLogger(Configuration.class);
 
     private Configuration(){
     }
@@ -38,16 +44,6 @@ public class Configuration {
     @JsonProperty("verbose")
     public void setVerbose(Boolean value) {
         verbose = value;
-    }
-
-    @JsonProperty("testCaseFile")
-    public String getTestCaseFile() {
-        return testCaseFile;
-    }
-
-    @JsonProperty("testCaseFile")
-    public void setTestCaseFile(String value) {
-        testCaseFile = value;
     }
 
     @JsonProperty("plugins")
@@ -81,10 +77,23 @@ public class Configuration {
         return plugins.get(plugin);
     }
 
+    public File getConfigurationFolder(){
+        return configurationFolder;
+    }
+
     public static void initialize(String config) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         File file = new File(config);
 
         instance = mapper.readValue(file, Configuration.class);
+
+        AppDirs appDirs = AppDirsFactory.getInstance();
+        String configPath = appDirs.getUserDataDir("RobotFramework", "1.0", "Serval");
+
+        configurationFolder = new File(configPath);
+
+        configurationFolder.mkdirs();
+
+        logger.info("Configuration loaded from" + config);
     }
 }

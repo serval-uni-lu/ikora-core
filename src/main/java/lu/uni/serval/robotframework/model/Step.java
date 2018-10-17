@@ -2,62 +2,142 @@ package lu.uni.serval.robotframework.model;
 
 import java.util.*;
 
-import static com.google.common.primitives.Ints.min;
 
-public class Step {
-    private String file;
-    private String name;
-    private List<String> arguments;
+public abstract class Step implements Keyword {
+    private Argument name;
+    private Keyword parent;
+    private TestCaseFile file;
+    private LineRange lineRange;
 
-    public Step(String file, String name, List<String> arguments) {
-        this.file = file;
-        this.name = name;
-        this.arguments = arguments;
+    public Step() {
+
     }
 
-    public String getFile() {
-        return this.file;
+    public abstract int getSize();
+    public abstract void getSequences(List<Sequence> sequences);
+
+    public void setName(String name) {
+        this.name = new Argument(name);
     }
 
-    public String getName() {
+    public void setParent(Keyword parent) {
+        this.parent = parent;
+    }
+
+    public Argument getNameAsArgument() {
         return this.name;
     }
 
-    public String getCleanName() {
-        return this.name.trim().replaceAll("(?i)^(given|when|then) ", "").trim();
+    public String getName() {
+        return this.name.toString();
     }
 
-    public List<String> getArguments() {
-        return this.arguments;
+    public Keyword getParent() {
+        return parent;
     }
 
-    public Map<String, List<String>> fetchVariables(UserKeyword keyword) {
-        Map<String, List<String>> variables = new HashMap<>();
+    public abstract List<Argument> getParameters();
 
-        if(!keyword.getName().hasVariable()) {
-            return variables;
+    @Override
+    public Set<Keyword> getDependencies() {
+        Set<Keyword> dependencies = new HashSet<>();
+        dependencies.add(this.parent);
+
+        return dependencies;
+    }
+
+    @Override
+    public int getConnectivity(int distance){
+        if(distance == 0){
+            return 0;
         }
 
-        List<String> keywordTokens = Arrays.asList(keyword.getName().toString().split(" "));
-        List<String> stepTokens = Arrays.asList(this.getCleanName().split(" "));
+        int size = 0;
 
-        int end = min(keywordTokens.size(), stepTokens.size());
-
-        for (int i = 0; i < end; ++i) {
-            String keywordToken = keywordTokens.get(i).replace("\"", "");
-            final String stepToken = stepTokens.get(i).replace("\"", "");
-
-            if(keywordToken.equalsIgnoreCase(stepToken)) {
-                continue;
-            }
-
-            if(!Argument.hasVariable(keywordToken)) {
-                continue;
-            }
-
-            variables.put(keywordToken, Collections.singletonList(stepToken));
+        for(Keyword keyword: this.parent.getDependencies()){
+            size += keyword.getConnectivity(distance - 1) + 1;
         }
 
-        return variables;
+        return size;
+    }
+
+    @Override
+    public void addDependency(Keyword keyword) {
+        this.parent = keyword;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if(!(other instanceof Step)) {
+            return false;
+        }
+
+        Step step = (Step)other;
+
+        return name.equals(step.name);
+    }
+
+    @Override
+    public void setFile(TestCaseFile file){
+        this.file = file;
+    }
+
+    @Override
+    public TestCaseFile getFile() {
+        return this.file;
+    }
+
+    @Override
+    public String getFileName(){
+        if(this.file == null){
+            return "";
+        }
+
+        return this.file.getName();
+    }
+
+    @Override
+    public long getEpoch() {
+        return this.file.getEpoch();
+    }
+
+    @Override
+    public boolean matches(String name){
+        return getName().matches(name);
+    }
+
+    @Override
+    public Argument.Type[] getArgumentTypes() {
+        return new Argument.Type[0];
+    }
+
+    @Override
+    public int getMaxArgument(){
+        return 0;
+    }
+
+    @Override
+    public int[] getKeywordsLaunchedPosition() {
+        return new int[0];
+    }
+
+    @Override
+    public Type getType(){
+        return Type.Unknown;
+    }
+
+    @Override
+    public void setLineRange(LineRange lineRange){
+        this.lineRange = lineRange;
+    }
+
+    @Override
+    public LineRange getLineRange(){
+        return this.lineRange;
+    }
+
+    @Override
+    public int getLoc(){
+        return file.getLoc(lineRange);
     }
 }

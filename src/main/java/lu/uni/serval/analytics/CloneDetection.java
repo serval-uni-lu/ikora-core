@@ -1,108 +1,131 @@
 package lu.uni.serval.analytics;
 
-import lu.uni.serval.utils.exception.DuplicateNodeException;
-import lu.uni.serval.utils.tree.LabelTreeNode;
-import lu.uni.serval.utils.tree.TreeEditDistance;
+import lu.uni.serval.robotframework.model.*;
 
-import static lu.uni.serval.utils.nlp.StringUtils.levenshteinIndex;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.*;
+import org.apache.log4j.Logger;
 
-import java.util.List;
-import java.util.Set;
-import java.util.Map;
-import java.util.ArrayList;
-import java.util.HashMap;
+public class CloneDetection<T extends  Element> {
+    final static Logger logger = Logger.getLogger(CloneDetection.class);
 
-public class CloneDetection {
-    private final TreeEditDistance treeEditDistance;
+    private Project project;
 
-    public CloneDetection(){
-        treeEditDistance = new TreeEditDistance(1.0, 1.0, 1.0);
+    private CloneResults<T> clones;
+
+    private CloneDetection(Project project){
+        this.project = project;
+        this.clones = new CloneResults<>();
     }
 
-    public CloneResults findClones(final Set<LabelTreeNode> forest) throws DuplicateNodeException {
-        CloneResults results = new CloneResults();
-        List<LabelTreeNode> forestArray = new ArrayList<>(forest);
+    public static <T extends  Element> CloneResults<T> findClones(Project project, Class<T> type){
+        CloneDetection<T> detection = new CloneDetection<>(project);
+        return detection.run(type);
+    }
 
-        Map<LabelTreeNode, LabelTreeNode> semanticMap = createSemanticMap(forestArray);
+    public static  <T extends  Element> CloneResults.Type getCloneType(T t1, T t2){
+        CloneResults.Type type = CloneResults.Type.None;
 
-        for (int i = 0; i < forest.size(); ++i){
-            for (int j = i + 1; j < forest.size(); ++j){
-                CloneIndex cloneIndex = computeCloneIndex(forestArray.get(i), forestArray.get(j), semanticMap);
-                results.update(cloneIndex, forestArray.get(i), forestArray.get(j));
+        if(isSameSize(t1, t2) && !isTooShort(t1, t2)){
+            Difference difference = Difference.of(t1, t2);
+
+            if(isType1(t1.getClass(), difference)){
+                type = CloneResults.Type.TypeI;
+            }
+            else if(isType2(t1.getClass(), difference)){
+                type = CloneResults.Type.TypeII;
             }
         }
 
-        return results;
+        return type;
     }
 
-    public CloneIndex computeCloneIndex(final LabelTreeNode tree1, final LabelTreeNode tree2) throws DuplicateNodeException {
-        List<LabelTreeNode> forest = new ArrayList<>(2);
-        forest.add(tree1);
-        forest.add(tree2);
+    private CloneResults<T> run(Class<T> type){
+        Instant start = Instant.now();
 
-        Map<LabelTreeNode, LabelTreeNode> semanticMap = createSemanticMap(forest);
+        List<T> elements = project.getElements(type).asList();
+        int size = elements.size();
 
-        return computeCloneIndex(tree1, tree2, semanticMap);
-    }
+        for(int i = 0; i < size; ++i){
+            T t1 = elements.get(i);
 
-    private Map<LabelTreeNode, LabelTreeNode> createSemanticMap(final List<LabelTreeNode> forest) throws DuplicateNodeException {
-
-        Map<LabelTreeNode, LabelTreeNode> semanticMap = new HashMap<>();
-
-        for(LabelTreeNode tree: forest){
-            LabelTreeNode actionTree = new LabelTreeNode(tree.getData());
-
-            for(LabelTreeNode leaf: tree.getLeaves()){
-                actionTree.add(leaf.getData());
+            for(int j = i + 1; j < size; ++j){
+                T t2 = elements.get(j);
+                clones.update(t1, t2, getCloneType(t1, t2));
             }
-
-            semanticMap.put(tree, actionTree);
         }
 
-        return semanticMap;
+        System.gc();
+
+        Instant finish = Instant.now();
+        long timeElapsed = Duration.between(start, finish).toMillis();
+
+        logger.info(String.format("Computed clones for project %s in %d ms", this.project.getCommitId(), timeElapsed));
+
+        return clones;
     }
 
-    private CloneIndex computeCloneIndex(final LabelTreeNode tree1, final LabelTreeNode tree2, final Map<LabelTreeNode, LabelTreeNode> sementicMap){
-        double treeIndex;
-        double keywordIndex;
-
-        if(checkSubtree(tree1, tree2)) {
-            treeIndex = CloneIndex.Ignore.Subtree.getValue();
-            keywordIndex = CloneIndex.Ignore.Subtree.getValue();
-        }
-        else if(tree1.getChildCount() == 1 && tree2.getChildCount() == 1) {
-            treeIndex = CloneIndex.Ignore.OneStep.getValue();
-            keywordIndex = CloneIndex.Ignore.OneStep.getValue();
-        }
-        else{
-            treeIndex = 1- treeEditDistance.index(tree1, tree2);
-            keywordIndex = 1- levenshteinIndex(tree1.getLabel(), tree2.getLabel());
-        }
-
-        double semanticIndex = 1 - treeEditDistance.index(sementicMap.get(tree1), sementicMap.get(tree2));
-
-        return new CloneIndex(keywordIndex, treeIndex, semanticIndex);
+    private static boolean isType1(Class<? extends Element> elementType, Difference difference) {
+        return difference.isEmpty(getIgnore(elementType, CloneResults.Type.TypeI));
     }
 
-    private boolean checkSubtree(final LabelTreeNode tree1, final LabelTreeNode tree2){
-        return tree1.getDepth() > tree2.getDepth() ? isSubtree(tree1, tree2) : isSubtree(tree2, tree1);
+    private static boolean isType2(Class<? extends Element> elementType, Difference difference) {
+        return difference.isEmpty(getIgnore(elementType, CloneResults.Type.TypeII));
     }
 
-    private boolean isSubtree(LabelTreeNode tree1, LabelTreeNode tree2){
-        if(tree1.getData().isSame(tree2.getData()) && tree1.getDepth() == tree2.getDepth()){
-            return true;
-        }
+    private static <T extends  Element> boolean isTooShort(T t1, T t2){
+        if(KeywordDefinition.class.isAssignableFrom(t1.getClass())){
+            KeywordDefinition keyword1 = (KeywordDefinition)t1;
+            KeywordDefinition keyword2 = (KeywordDefinition)t2;
 
-        if(tree2.getDepth() >= tree1.getDepth()){
-            return false;
-        }
-
-        for(int i = 0; i < tree1.getChildCount(); ++i){
-            if(isSubtree((LabelTreeNode)tree1.getChildAt(i), tree2)){
-                return true;
-            }
+            return keyword1.getSteps().size() <= 1 || keyword2.getSteps().size() <= 1;
         }
 
         return false;
+    }
+
+    private static <T extends  Element> boolean isSameSize(T t1, T t2){
+        if(!KeywordDefinition.class.isAssignableFrom(t1.getClass())){
+            return true;
+        }
+
+        return ((KeywordDefinition)t1).getSteps().size() == ((KeywordDefinition)t2).getSteps().size();
+    }
+
+    private static Action.Type[] getIgnore(Class<? extends Element> elementType, CloneResults.Type cloneType) {
+        switch (cloneType){
+            case TypeI:
+            {
+                if(KeywordDefinition.class.isAssignableFrom(elementType)){
+                    return new Action.Type[]{Action.Type.CHANGE_NAME,
+                            Action.Type.CHANGE_DOCUMENTATION,
+                            Action.Type.REMOVE_DOCUMENTATION,
+                            Action.Type.ADD_DOCUMENTATION};
+                }
+                else if (Variable.class.isAssignableFrom(elementType)){
+                    return new Action.Type[]{Action.Type.CHANGE_NAME};
+                }
+            }
+            break;
+
+            case TypeII:
+            {
+                if(KeywordDefinition.class.isAssignableFrom(elementType)){
+                    return new Action.Type[]{Action.Type.CHANGE_NAME,
+                            Action.Type.CHANGE_DOCUMENTATION,
+                            Action.Type.REMOVE_DOCUMENTATION,
+                            Action.Type.ADD_DOCUMENTATION,
+                            Action.Type.CHANGE_STEP_ARGUMENTS,
+                            Action.Type.CHANGE_STEP_RETURN_VALUES};
+                }
+                else if (Variable.class.isAssignableFrom(elementType)){
+                    return new Action.Type[]{Action.Type.CHANGE_NAME};
+                }
+            }
+            break;
+        }
+
+        return new Action.Type[]{};
     }
 }

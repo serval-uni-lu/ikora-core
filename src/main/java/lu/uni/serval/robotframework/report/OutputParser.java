@@ -1,6 +1,7 @@
 package lu.uni.serval.robotframework.report;
 
 import lu.uni.serval.analytics.ReportAnalyzer;
+import lu.uni.serval.robotframework.model.GitRepository;
 import org.apache.commons.io.FilenameUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -21,13 +22,14 @@ public class OutputParser {
         factory = DocumentBuilderFactory.newInstance();
     }
 
-    static public ReportAnalyzer parse(String folderPath){
-        List<File> xmlFiles = getXmlPaths(folderPath);
+    static public ReportAnalyzer parse(String reportFolderPath, String gitUrl, String branch, String username, String password) throws Exception {
+        List<File> xmlFiles = getXmlPaths(reportFolderPath);
 
+        GitRepository gitRepository = new GitRepository(gitUrl, branch, username, password);
         ReportAnalyzer reports = new ReportAnalyzer();
 
         for(File xmlFile: xmlFiles){
-            Report report = parseXml(xmlFile);
+            Report report = parseXml(xmlFile, gitRepository);
 
             if(report == null){
                 continue;
@@ -64,8 +66,10 @@ public class OutputParser {
         }
     }
 
-    private static Report parseXml(File xmlFile){
+    private static Report parseXml(File xmlFile, GitRepository gitRepository) throws Exception {
         Report report;
+
+        ReportFactory reportFactory = new ReportFactory(gitRepository);
 
         try {
             final DocumentBuilder builder = factory.newDocumentBuilder();
@@ -77,7 +81,7 @@ public class OutputParser {
                 throw new IllegalArgumentException("XML root node should be root, got " + root.getTagName() + " instead");
             }
 
-            report = ReportFactory.create(root);
+            report = reportFactory.create(root);
 
         } catch (IllegalArgumentException | ParserConfigurationException | SAXException | IOException e) {
             System.out.println(e.getMessage());

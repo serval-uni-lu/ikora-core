@@ -4,12 +4,11 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-import lu.uni.serval.utils.ReportKeywordData;
-import lu.uni.serval.utils.tree.LabelTreeNode;
+import lu.uni.serval.robotframework.report.KeywordStatus;
+import lu.uni.serval.robotframework.report.Report;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 
 public class StatusResultSerializer extends StdSerializer<StatusResults> {
     public StatusResultSerializer(){
@@ -26,20 +25,20 @@ public class StatusResultSerializer extends StdSerializer<StatusResults> {
         writeTests(results, jsonGenerator);
 
         jsonGenerator.writeArrayFieldStart("total");
-        writeTotal(results, jsonGenerator, ReportKeywordData.Status.PASS);
-        writeTotal(results, jsonGenerator, ReportKeywordData.Status.FAILED);
+        writeTotal(results, jsonGenerator, KeywordStatus.Status.PASS);
+        writeTotal(results, jsonGenerator, KeywordStatus.Status.FAIL);
         jsonGenerator.writeEndArray();
 
         jsonGenerator.writeEndObject();
     }
 
-    private void writeTotal(StatusResults results, JsonGenerator jsonGenerator, ReportKeywordData.Status status) throws IOException {
+    private void writeTotal(StatusResults results, JsonGenerator jsonGenerator, KeywordStatus.Status status) throws IOException {
         jsonGenerator.writeStartObject();
 
         jsonGenerator.writeStringField("status", status.name());
 
         jsonGenerator.writeArrayFieldStart("sequence");
-        for(Pair<LocalDateTime, Integer> pair: results.getTotal(status)){
+        for(Pair<Report, Integer> pair: results.getTotal(status)){
             jsonGenerator.writeStartObject();
 
             jsonGenerator.writeStringField("date", pair.getLeft().toString());
@@ -61,19 +60,19 @@ public class StatusResultSerializer extends StdSerializer<StatusResults> {
             jsonGenerator.writeStringField("file", info.getFile());
 
             jsonGenerator.writeArrayFieldStart("sequence");
-            for(Pair<LocalDateTime, LabelTreeNode> pair: results.getKeyword(info)){
+            for(Pair<Report, KeywordStatus> pair: results.getKeyword(info)){
+                /*
                 if(results.isServiceDown(pair.getValue())){
                     continue;
                 }
+                */
 
                 jsonGenerator.writeStartObject();
 
-                ReportKeywordData data = (ReportKeywordData)pair.getValue().getData();
-
-                jsonGenerator.writeStringField("date", pair.getKey().toString());
-                jsonGenerator.writeStringField("status", data.status.name());
-                jsonGenerator.writeNumberField("size", pair.getValue().getNodeCount());
-                jsonGenerator.writeNumberField("number of actions", pair.getValue().getLeavesSize());
+                //jsonGenerator.writeStringField("date", pair.getValue().getExecutionDate());
+                jsonGenerator.writeStringField("status", pair.getValue().getName());
+                //jsonGenerator.writeNumberField("size", pair.getValue().getNodeCount());
+                //jsonGenerator.writeNumberField("number of actions", pair.getValue().getLeavesSize());
 
                 jsonGenerator.writeEndObject();
             }

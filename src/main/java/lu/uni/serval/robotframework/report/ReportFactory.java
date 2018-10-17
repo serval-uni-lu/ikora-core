@@ -1,7 +1,8 @@
 package lu.uni.serval.robotframework.report;
 
-import lu.uni.serval.utils.ReportKeywordData;
-import lu.uni.serval.utils.tree.LabelTreeNode;
+import lu.uni.serval.robotframework.model.*;
+
+import org.apache.commons.io.FilenameUtils;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -16,7 +17,13 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 public class ReportFactory {
-    public static Report create(final Element robotElement){
+    private final GitRepository gitRepository;
+
+    public ReportFactory(GitRepository gitRepository){
+        this.gitRepository = gitRepository;
+    }
+
+    public Report create(final Element robotElement) throws Exception {
         Report report = new Report();
 
         String generated = robotElement.getAttribute("generated");
@@ -31,7 +38,7 @@ public class ReportFactory {
         HashSet<String> types = new HashSet<>(Collections.singletonList("suite"));
 
         for(Element suiteElement: getChildren(robotElement, types)){
-            Suite suite = parseSuite(suiteElement, dateTime);
+            Suite suite = parseSuite(suiteElement);
 
             if(suite == null){
                 continue;
@@ -40,10 +47,12 @@ public class ReportFactory {
             report.addSuite(suite);
         }
 
+        linkReport(report);
+
         return report;
     }
 
-    private static Suite parseSuite(final Element suiteElement, final LocalDateTime dateTime){
+    private Suite parseSuite(final Element suiteElement) {
         Suite suite = new Suite();
         suite.setName(suiteElement.getAttribute("name"));
         suite.setId(suiteElement.getAttribute("id"));
@@ -54,7 +63,7 @@ public class ReportFactory {
         for(Element child: getChildren(suiteElement, types)){
             String tagName = child.getTagName();
             if(tagName.equalsIgnoreCase("suite")){
-                Suite subSuite = parseSuite(child, dateTime);
+                Suite subSuite = parseSuite(child);
 
                 if(subSuite == null){
                     continue;
@@ -62,8 +71,8 @@ public class ReportFactory {
 
                 suite.addSuite(subSuite);
             }
-            else if(tagName.equalsIgnoreCase("kw") || tagName.equalsIgnoreCase("test")){
-                LabelTreeNode keyword = parseKeyword(suite.getSource(), child, dateTime);
+            else if(tagName.equalsIgnoreCase("test")){
+                KeywordStatus keyword = parseKeyword(child);
 
                 if(keyword == null){
                     continue;
@@ -76,78 +85,52 @@ public class ReportFactory {
         return suite;
     }
 
-    private static LabelTreeNode parseKeyword(String file, final Element keywordElement, final LocalDateTime dateTime) {
-        ReportKeywordData data = new ReportKeywordData();
+    private KeywordStatus parseKeyword(final Element keywordElement) {
+        KeywordStatus keywordStatus = new KeywordStatus();
+        keywordStatus.setName(keywordElement.getAttribute("name"));
 
-        data.type = getType(keywordElement);
-        data.file = file;
-        data.name = keywordElement.getAttribute("name");
-        data.library = keywordElement.getAttribute("library");
+        HashSet<String> types = new HashSet<>(Arrays.asList("kw", "arguments", "status", "msg"));
 
-        LabelTreeNode treeNode = new LabelTreeNode(data);
+        for(Element childElement: getChildren(keywordElement, types)){
+            String elementName = childElement.getTagName();
 
-        HashSet<String> types = new HashSet<>(Arrays.asList("doc", "kw", "arguments", "status", "msg"));
-        String msg = "";
+            if(elementName.equalsIgnoreCase("kw")){
+                KeywordStatus child = parseKeyword(childElement);
 
-        for(Element child: getChildren(keywordElement, types)){
-            String elementName = child.getTagName();
-
-            if(elementName.equalsIgnoreCase("doc")){
-                data.documentation = child.getTextContent();
-            }
-            else if(elementName.equalsIgnoreCase("kw")){
-                LabelTreeNode keyword = parseKeyword(file, child, dateTime);
-
-                if(keyword == null){
+                if(child == null){
                     continue;
                 }
 
-                treeNode.add(keyword);
-            }
-            else if(elementName.equalsIgnoreCase("arguments")){
-                data.arguments = parseArguments(child);
+                keywordStatus.addChild(child);
             }
             else if(elementName.equalsIgnoreCase("status")){
-                data.setStatus(child.getAttribute("status"));
-                data.executionDate = dateTime;
+                keywordStatus.setStatus(childElement.getAttribute("status"));
+
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd HH:mm:ss.SSS");
+
+                String startTime = childElement.getAttribute("starttime");
+                keywordStatus.setStartTime(LocalDateTime.parse(startTime, formatter));
+
+                String endTime = childElement.getAttribute("endtime");
+                keywordStatus.setEndTime(LocalDateTime.parse(endTime, formatter));
             }
             else if(elementName.equalsIgnoreCase("msg")){
-                msg = child.getTextContent();
+                keywordStatus.setLog(childElement.getTextContent());
+            }
+            else if(elementName.equalsIgnoreCase("arguments")){
+
+                HashSet<String> arguments = new HashSet<>(Arrays.asList("argument"));
+                for(Element child: getChildren(childElement, arguments)){
+                    String argument = child.getTextContent();
+                    keywordStatus.addArgument(argument);
+                }
             }
             else{
                 System.out.println("Ignored tag '" + elementName + "' while parsing kw");
             }
         }
 
-        if(msg.length() > 0){
-            List<String> values = OutputMessageParser.parseArguments(msg, data.name, data.library, data.status);
-
-            for(int index = 0; index < values.size(); ++index){
-                data.addVariable(data.arguments.get(index), new ArrayList<>(Collections.singletonList(values.get(index))));
-            }
-        }
-
-        return treeNode;
-    }
-
-    private static String getType(Element keywordElement) {
-        if(keywordElement.getTagName().equalsIgnoreCase("test")){
-            return "test";
-        }
-
-        return keywordElement.getAttribute("type");
-    }
-
-    private static List<String> parseArguments(Element argumentsElement) {
-        List<String> arguments = new ArrayList<>();
-
-        HashSet<String> types = new HashSet<>(Collections.singletonList("arg"));
-
-        for(Element argumentElement: getChildren(argumentsElement, types)){
-           arguments.add(argumentElement.getTextContent());
-        }
-
-        return arguments;
+        return keywordStatus;
     }
 
     private static List<Element> getChildren(Element parent, Set<String> types){
@@ -167,5 +150,57 @@ public class ReportFactory {
         }
 
         return elements;
+    }
+
+    private void linkReport(Report report) throws Exception {
+        gitRepository.checkout(report.getCreationTime());
+
+        for(Suite suite: report.getSuites()){
+            String suiteName = FilenameUtils.getBaseName(suite.getName());
+
+            if(!suiteName.equalsIgnoreCase(gitRepository.getName())){
+                continue;
+            }
+
+            linkSuite(suite);
+        }
+    }
+
+    private void linkSuite(Suite suite) throws Exception {
+        for (Suite child: suite.getChildren()){
+            linkSuite(child);
+        }
+
+        for(KeywordStatus keywordStatus: suite.getKeywords()){
+            linkTestCase(keywordStatus);
+        }
+    }
+
+    private void linkTestCase(KeywordStatus keywordStatus) throws Exception {
+        TestCase testCase = gitRepository.findTestCase(keywordStatus.getName());
+        keywordStatus.setKeyword(testCase);
+
+        for(KeywordStatus child: keywordStatus.getChildren()){
+            linkKeyword(testCase, child);
+        }
+    }
+
+    private void linkKeyword(Keyword parent, KeywordStatus status) throws Exception {
+        if(parent == null){
+            throw new Exception("parent keyword should not be null");
+        }
+
+        int position = status.getStepPosition(false);
+        Keyword keyword = parent.getStep(position);
+
+        status.setKeyword(keyword);
+
+        if(keyword == null){
+            return;
+        }
+
+        for(KeywordStatus child: status.getChildren()){
+            linkKeyword(keyword, child);
+        }
     }
 }

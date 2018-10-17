@@ -1,81 +1,67 @@
 package lu.uni.serval.robotframework.model;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-public class UserKeyword implements Iterable<Step> {
-    private List<Argument> arguments;
-    private String file;
-    private Argument name;
-    private String documentation;
-    private List<Step> steps;
-    private List<String> tags;
+public class UserKeyword extends KeywordDefinition {
+    private List<String> parameters;
+    private ElementTable<Variable> localVariables;
 
-    public UserKeyword(String file, String name, List<String> arguments, String documentation, List<Step> steps, List<String> tags) {
-        this.file = file;
-        this.name = new Argument(name);
-        this.documentation = documentation;
-        this.steps = steps;
-        this.tags = tags;
+    public UserKeyword() {
+        parameters = new ArrayList<>();
+        localVariables = new ElementTable<>();
+    }
 
-        this.arguments = new ArrayList<>();
-        for(String argument : arguments) {
-            this.arguments.add(new Argument(argument));
+    @Override
+    public void setName(String name) {
+        super.setName(name);
+
+        for(String argument: getNameAsArgument().findVariables()){
+            addParameter(argument);
         }
     }
 
-    public UserKeyword(Step step) {
-        this(step.getFile(), step.getName(), step.getArguments(), "", new ArrayList<>(), new ArrayList<>());
-    }
+    @Override
+    public void addStep(Step step){
+        super.addStep(step);
 
-    public String getFile() {
-        return file;
-    }
-
-    public Argument getName() {
-        return name;
-    }
-
-    public String getDocumentation() {
-        return documentation;
-    }
-
-    public List<Step> getSteps() {
-        return steps;
-    }
-
-    public List<String> getTags() {
-        return tags;
-    }
-
-    @Nonnull
-    public Iterator<Step> iterator() {
-        return steps.iterator();
-    }
-
-    public List<Argument> getArguments() {
-        return arguments;
-    }
-
-    public boolean isEqual(Object other) {
-        if(other instanceof UserKeyword){
-            return ((UserKeyword)other).file.equals(this.file)
-                    && ((UserKeyword)other).name == this.name
-                    && ((UserKeyword)other).steps == this.steps;
-
+        if(Assignment.class.isAssignableFrom(step.getClass())){
+            for (Variable variable: ((Assignment)step).getReturnValues()){
+                localVariables.add(variable);
+            }
         }
-        else if(other instanceof Step){
-            String stepName = ((Step)other).getCleanName();
-            stepName = stepName.replaceAll("\"[^\"]+\"", "");
+    }
 
-            String keyword = this.getName().toString().trim();
-            keyword = keyword.replaceAll("\"[^\"]+\"", "");
+    @Override
+    public Argument.Type[] getArgumentTypes() {
+        Argument.Type[] types = new Argument.Type[parameters.size()];
 
-            return keyword.equalsIgnoreCase(stepName);
+        for(int i = 0; i < types.length; ++i){
+            types[i] = Argument.Type.String;
         }
 
-        return super.equals(other);
+        return types;
+    }
+
+    @Override
+    public int getMaxArgument(){
+        return parameters.size();
+    }
+
+    public void addParameter(String parameter){
+        parameters.add(parameter);
+
+        Variable variable = new Variable();
+        variable.setName(parameter);
+
+        localVariables.add(variable);
+    }
+
+    public List<String> getParameters() {
+        return parameters;
+    }
+
+    public Variable findLocalVariable(String name) {
+        return localVariables.findElement(name);
     }
 }

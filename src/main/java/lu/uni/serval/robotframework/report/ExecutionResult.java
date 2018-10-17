@@ -55,6 +55,6 @@ public class ExecutionResult {
 
     public void setElementNotFoundError(String locator) {
         this.error = Error.ElementNotFound;
-        this.message = "Element '" + locator + "' was not found";
+        this.message = "DifferentiableString '" + locator + "' was not found";
     }
 }
