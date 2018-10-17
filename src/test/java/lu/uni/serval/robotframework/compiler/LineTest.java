@@ -24,9 +24,9 @@ public class LineTest {
 
         String[] tokens = line.tokenize();
 
-        assertEquals(tokens.length, 2);
+        assertEquals(2, tokens.length);
         assertTrue(tokens[0].isEmpty());
-        assertEquals(tokens[1], "[Documentation]");
+        assertEquals("[Documentation]", tokens[1] );
     }
 
     @Test
@@ -35,7 +35,7 @@ public class LineTest {
 
         String[] tokens = line.tokenize();
 
-        assertEquals(tokens.length, 2);
+        assertEquals(2, tokens.length);
         assertTrue(tokens[0].isEmpty());
         assertEquals(tokens[1], "[Documentation]");
     }

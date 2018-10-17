@@ -40,7 +40,7 @@ public class LineReader {
             ++loc;
         }
 
-        if(!current.isValid()){
+        if(testCaseFile != null && !current.isValid()){
             testCaseFile.setLoc(loc);
         }
 
