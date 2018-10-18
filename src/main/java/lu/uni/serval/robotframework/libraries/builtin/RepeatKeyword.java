@@ -25,6 +25,6 @@ public class RepeatKeyword extends LibraryKeyword {
 
     @Override
     public int[] getKeywordsLaunchedPosition() {
-        return new int[]{0};
+        return new int[]{1};
     }
 }
