@@ -41,8 +41,6 @@ public class CloneDetection<T extends  Element> {
     }
 
     private CloneResults<T> run(Class<T> type){
-        Instant start = Instant.now();
-
         List<T> elements = project.getElements(type).asList();
         int size = elements.size();
 
@@ -54,11 +52,6 @@ public class CloneDetection<T extends  Element> {
                 clones.update(t1, t2, getCloneType(t1, t2));
             }
         }
-
-        Instant finish = Instant.now();
-        long timeElapsed = Duration.between(start, finish).toMillis();
-
-        logger.info(String.format("Computed clones for project %s in %d ms", this.project.getCommitId(), timeElapsed));
 
         return clones;
     }
