@@ -11,16 +11,19 @@ public class CompareCache<K, T> implements Iterable<Map.Entry<UnorderedPair<K>, 
     private Map<UnorderedPair<K>, T> map;
     private Queue<UnorderedPair<K>> queue;
     private final int maximumSize;
+    private final int cleanBufferSize;
 
     public CompareCache(){
         this.maximumSize = 100000;
+        this.cleanBufferSize = 1000;
 
         this.map = new HashMap<>(maximumSize + 1);
         this.queue = new LinkedBlockingQueue<>(maximumSize + 1);
     }
 
-    public CompareCache(int maximumSize){
+    public CompareCache(int maximumSize, int cleanBufferSize){
         this.maximumSize = maximumSize;
+        this.cleanBufferSize = cleanBufferSize;
 
         this.map = new HashMap<>();
         this.queue = new LinkedBlockingQueue<>(maximumSize + 1);
@@ -42,12 +45,18 @@ public class CompareCache<K, T> implements Iterable<Map.Entry<UnorderedPair<K>, 
         UnorderedPair<K> pair = UnorderedPair.of(key1, key2);
 
         this.map.put(pair, score);
-
-        if(this.queue.size() >= maximumSize){
-            this.map.remove(this.queue.poll());
-        }
-
         this.queue.add(pair);
+
+        updateBuffer();
+    }
+
+    private void updateBuffer(){
+        if(this.queue.size() >= maximumSize){
+            int i = cleanBufferSize;
+            while(queue.size() > 0 && i-- > 0){
+                this.map.remove(this.queue.poll());
+            }
+        }
     }
 
     @Nonnull

@@ -26,11 +26,11 @@ public class ProjectClonesEvolutionSerializer extends JsonSerializer<EvolutionRe
         int numberKeyword = project.getElements(UserKeyword.class).size();
         int numberTestCase = project.getElements(TestCase.class).size();
 
-        int numberKeywordClonesTypeI = results.getKeywordClones(project).size(CloneResults.Type.TypeI);
-        int numberTestCaseClonesTypeI = results.getTestCaseClones(project).size(CloneResults.Type.TypeI);
+        int numberKeywordClonesTypeI = results.getKeywordClones(project).size(Difference.Clone.TypeI);
+        int numberTestCaseClonesTypeI = results.getTestCaseClones(project).size(Difference.Clone.TypeI);
 
-        int numberKeywordClonesTypeII = results.getKeywordClones(project).size(CloneResults.Type.TypeII);
-        int numberTestCaseClonesTypeII = results.getTestCaseClones(project).size(CloneResults.Type.TypeII);
+        int numberKeywordClonesTypeII = results.getKeywordClones(project).size(Difference.Clone.TypeII);
+        int numberTestCaseClonesTypeII = results.getTestCaseClones(project).size(Difference.Clone.TypeII);
 
         jsonGenerator.writeStartObject();
 

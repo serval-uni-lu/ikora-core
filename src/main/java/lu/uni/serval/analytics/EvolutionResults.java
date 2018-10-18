@@ -204,7 +204,7 @@ public class EvolutionResults {
         return testCaseClones.get(project);
     }
 
-    public int getTotalElement(Class<? extends Element> elementType, CloneResults.Type cloneType, CoEvolutionType coEvolutionType){
+    public int getTotalElement(Class<? extends Element> elementType, Difference.Clone cloneType, CoEvolutionType coEvolutionType){
         int total = 0;
 
         for(Project project: projects){
@@ -224,7 +224,7 @@ public class EvolutionResults {
         return total;
     }
 
-    private boolean checkCloneCriterion(Project project, Element element, CloneResults.Type type){
+    private boolean checkCloneCriterion(Project project, Element element, Difference.Clone cloneType){
         CloneResults clones = null;
         if(element.getClass() == UserKeyword.class){
             clones = getKeywordClones(project);
@@ -237,7 +237,7 @@ public class EvolutionResults {
             return false;
         }
 
-        return clones.getCloneType(element) == type;
+        return clones.getCloneType(element) == cloneType;
     }
 
     private boolean checkCoEvolutionCriterion(Element element, CoEvolutionType type){

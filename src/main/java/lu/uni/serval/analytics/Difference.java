@@ -9,10 +9,34 @@ import java.util.*;
 
 @JsonSerialize(using = DifferenceSerializer.class)
 public class Difference implements Differentiable {
+    enum Clone{
+        TypeI, TypeII, None
+    }
 
     private Differentiable left;
     private Differentiable right;
     private List<Action> actions;
+
+    static private Set<Action.Type> ignoreForTypeI;
+    static private Set<Action.Type> ignoreForTypeII;
+
+    static {
+        Set<Action.Type> typeI = new HashSet<>(4);
+        typeI.add(Action.Type.CHANGE_NAME);
+        typeI.add(Action.Type.CHANGE_DOCUMENTATION);
+        typeI.add(Action.Type.REMOVE_DOCUMENTATION);
+        typeI.add(Action.Type.ADD_DOCUMENTATION);
+        ignoreForTypeI = Collections.unmodifiableSet(typeI);
+
+        Set<Action.Type> typeII = new HashSet<>(6);
+        typeII.add(Action.Type.CHANGE_NAME);
+        typeII.add(Action.Type.CHANGE_DOCUMENTATION);
+        typeII.add(Action.Type.REMOVE_DOCUMENTATION);
+        typeII.add(Action.Type.ADD_DOCUMENTATION);
+        typeII.add(Action.Type.CHANGE_STEP_ARGUMENTS);
+        typeII.add(Action.Type.CHANGE_STEP_RETURN_VALUES);
+        ignoreForTypeII = Collections.unmodifiableSet(typeII);
+    }
 
     private Difference(Differentiable left, Differentiable right){
         this.left = left;
@@ -25,24 +49,30 @@ public class Difference implements Differentiable {
         return actions.isEmpty();
     }
 
-    public boolean isEmpty(Action.Type[] ignore){
+    public boolean isEmpty(Set<Action.Type> ignore){
         if(actions.isEmpty()){
             return true;
         }
 
-        if(ignore.length == 0){
+        if(ignore.size() == 0){
             return isEmpty();
         }
 
-        Set<Action.Type> ignoreSet = new HashSet<>(Arrays.asList(ignore));
-
         for(Action action: actions){
-            if (!ignoreSet.contains(action.getType())){
+            if (!ignore.contains(action.getType())){
                 return false;
             }
         }
 
         return true;
+    }
+
+    public boolean isCloneTypeI(){
+        return isEmpty(ignoreForTypeI);
+    }
+
+    public boolean isCloneTypeII(){
+        return isEmpty(ignoreForTypeII);
     }
 
     public Differentiable getLeft(){

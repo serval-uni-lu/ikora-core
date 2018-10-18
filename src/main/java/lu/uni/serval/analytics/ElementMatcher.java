@@ -5,10 +5,7 @@ import lu.uni.serval.robotframework.model.ElementTable;
 import lu.uni.serval.robotframework.model.Project;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ElementMatcher {
     enum Edit{
@@ -61,12 +58,7 @@ public class ElementMatcher {
         Map<Edit, List<T>> candidates = new HashMap<>();
 
         for (T current: unmatched){
-            Action.Type[] ignore = {Action.Type.CHANGE_NAME,
-                    Action.Type.CHANGE_DOCUMENTATION,
-                    Action.Type.REMOVE_DOCUMENTATION,
-                    Action.Type.ADD_DOCUMENTATION};
-
-            if(!Difference.of(keyword, current).isEmpty(ignore)){
+            if(!Difference.of(keyword, current).isCloneTypeI()){
                 continue;
             }
 
