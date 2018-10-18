@@ -27,11 +27,16 @@ public class LevenshteinDistance {
     }
 
     public static double stringIndex(String string1, String string2) {
+        int size = string1.length() > string2.length() ? string1.length() : string2.length();
+
+        if(size == 0){
+            return 0;
+        }
+
         if(levenshteinIndexMemory.isCached(string1, string2)){
             return levenshteinIndexMemory.getScore(string1, string2);
         }
 
-        int size = string1.length() > string2.length() ? string1.length() : string2.length();
         double score = (double)stringDistance(string1, string2) / (double)size;
 
         levenshteinIndexMemory.set(string1, string2, score);

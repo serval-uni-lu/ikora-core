@@ -1,6 +1,6 @@
 package lu.uni.serval.utils;
 
-import lu.uni.serval.utils.StringUtils;
+import com.sun.istack.internal.NotNull;
 
 import java.util.*;
 
