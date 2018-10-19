@@ -46,7 +46,7 @@ public class ProjectParser {
             }
         }
 
-        return robots.size() > 0 ? robots.get(0) : null;
+        return getNextNotParsedFile(project);
     }
 
     static private void parseFiles(File file, Project project){
@@ -56,7 +56,7 @@ public class ProjectParser {
 
         TestCaseFileParser.parse(file, project);
 
-        parseFiles(getUnparsedFiles(project), project);
+        parseFiles(getNextNotParsedFile(project), project);
     }
 
     static private void resolveResources(Project project) throws Exception {
@@ -74,7 +74,7 @@ public class ProjectParser {
         }
     }
 
-    static private File getUnparsedFiles(Project project){
+    static private File getNextNotParsedFile(Project project){
         for (Map.Entry<String, TestCaseFile> file: project.getFiles().entrySet()){
             if(file.getValue() == null){
                 return new File(project.getRootFolder(), file.getKey());
