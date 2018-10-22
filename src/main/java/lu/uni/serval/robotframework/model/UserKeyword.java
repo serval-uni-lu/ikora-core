@@ -51,7 +51,7 @@ public class UserKeyword extends KeywordDefinition {
     public void addParameter(String parameter){
         parameters.add(parameter);
 
-        Variable variable = new Variable();
+        Variable variable = new ScalarVariable();
         variable.setName(parameter);
 
         localVariables.add(variable);

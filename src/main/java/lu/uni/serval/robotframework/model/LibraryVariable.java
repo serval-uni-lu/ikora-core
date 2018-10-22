@@ -1,6 +1,6 @@
 package lu.uni.serval.robotframework.model;
 
-public abstract class LibraryVariable extends Variable {
+public abstract class LibraryVariable extends ScalarVariable {
     protected enum Format{
         scalar, list, dictionary
     }

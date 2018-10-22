@@ -3,6 +3,7 @@ package lu.uni.serval.robotframework.compiler;
 import lu.uni.serval.robotframework.model.ElementTable;
 import lu.uni.serval.robotframework.model.LineRange;
 import lu.uni.serval.robotframework.model.Variable;
+import lu.uni.serval.robotframework.model.VariableFactory;
 
 import java.io.IOException;
 
@@ -26,13 +27,11 @@ public class VariableTableParser {
 
             String[] tokens = reader.getCurrent().tokenize();
 
-            Variable variable = new Variable();
+            Variable variable = VariableFactory.create(tokens[0]);
             int startLine = reader.getCurrent().getNumber();
 
-            variable.setName(tokens[0]);
-
             for (int i = 1; i < tokens.length; ++i) {
-                variable.addValueElement(tokens[i]);
+                variable.addElement(tokens[i]);
             }
 
             reader.readLine();

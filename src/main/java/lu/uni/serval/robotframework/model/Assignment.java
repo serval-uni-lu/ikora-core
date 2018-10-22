@@ -29,8 +29,7 @@ public class Assignment extends Step {
     }
 
     public void addReturnValue(String returnValue){
-        Variable variable = new Variable();
-        variable.setName(returnValue);
+        Variable variable = VariableFactory.create(returnValue);
         variable.setAssignment(this);
 
         returnValues.add(variable);
