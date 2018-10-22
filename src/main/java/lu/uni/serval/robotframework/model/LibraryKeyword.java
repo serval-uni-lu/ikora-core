@@ -74,8 +74,8 @@ public abstract class LibraryKeyword implements Keyword {
     }
 
     @Override
-    public Argument getNameAsArgument(){
-        return new Argument(toKeyword(this.getClass()));
+    public Value getNameAsArgument(){
+        return new Value(toKeyword(this.getClass()));
     }
 
     public static String toKeyword(Class<? extends LibraryKeyword> libraryClass) {
@@ -114,19 +114,19 @@ public abstract class LibraryKeyword implements Keyword {
     }
 
     @Override
-    public Argument.Type[] getArgumentTypes() {
-        return new Argument.Type[0];
+    public Value.Type[] getArgumentTypes() {
+        return new Value.Type[0];
     }
 
     @Override
     public int getMaxArgument(){
-        Argument.Type[] types = getArgumentTypes();
+        Value.Type[] types = getArgumentTypes();
 
         if(types.length == 0){
             return 0;
         }
 
-        if(types[types.length - 1] == Argument.Type.Kwargs){
+        if(types[types.length - 1] == Value.Type.Kwargs){
             return -1;
         }
 

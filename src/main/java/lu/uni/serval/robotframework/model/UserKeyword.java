@@ -33,11 +33,11 @@ public class UserKeyword extends KeywordDefinition {
     }
 
     @Override
-    public Argument.Type[] getArgumentTypes() {
-        Argument.Type[] types = new Argument.Type[parameters.size()];
+    public Value.Type[] getArgumentTypes() {
+        Value.Type[] types = new Value.Type[parameters.size()];
 
         for(int i = 0; i < types.length; ++i){
-            types[i] = Argument.Type.String;
+            types[i] = Value.Type.String;
         }
 
         return types;

@@ -1,6 +1,6 @@
 package lu.uni.serval.utils;
 
-import lu.uni.serval.robotframework.model.Argument;
+import lu.uni.serval.robotframework.model.Value;
 import lu.uni.serval.utils.tree.TreeNodeData;
 
 import java.util.*;
@@ -88,7 +88,7 @@ public class KeywordData implements TreeNodeData {
     }
 
     private String cleanArgument(String argument, int iteration) {
-        if (!Argument.hasVariable(argument)) {
+        if (!Value.hasVariable(argument)) {
             return argument;
         }
 
@@ -96,7 +96,7 @@ public class KeywordData implements TreeNodeData {
 
          do {
 
-             variables = Argument.findVariables(argument);
+             variables = Value.findVariables(argument);
 
             for(String variable : variables) {
                 argument = argument.replace(variable, resolveVariable(variable, ++iteration));
@@ -117,7 +117,7 @@ public class KeywordData implements TreeNodeData {
         else if (values.size() == 1) {
             String value = values.get(0);
 
-            if(Argument.hasVariable(value)) {
+            if(Value.hasVariable(value)) {
                 value = cleanArgument(value, iteration);
             }
 

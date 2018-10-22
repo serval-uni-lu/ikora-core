@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Argument implements Differentiable {
+public class Value implements Differentiable {
     public enum Type{
         String, Object, Keyword, Locator, Condition, Keywords, Kwargs
     }
@@ -29,7 +29,7 @@ public class Argument implements Differentiable {
     private Pattern match;
     private Map<String, Variable> variables;
 
-    Argument(String value) {
+    Value(String value) {
         this.value = value;
         this.variables = new HashMap<>();
 
@@ -60,9 +60,9 @@ public class Argument implements Differentiable {
         return matcher.matches();
     }
 
-    public static boolean isVariable(String value) {
-        Argument argument = new Argument(value);
-        return argument.hasVariable();
+    public static boolean isVariable(String text) {
+        Value value = new Value(text);
+        return value.hasVariable();
     }
 
     public boolean hasVariable() {
@@ -70,9 +70,9 @@ public class Argument implements Differentiable {
         return matcher.matches();
     }
 
-    static public boolean hasVariable(String value) {
-        Argument argument = new Argument(value);
-        return argument.hasVariable();
+    static public boolean hasVariable(String text) {
+        Value value = new Value(text);
+        return value.hasVariable();
     }
 
     public List<String> findVariables() {
@@ -87,9 +87,9 @@ public class Argument implements Differentiable {
         return variables;
     }
 
-    public static List<String> findVariables(String value) {
-        Argument argument = new Argument(value);
-        return argument.findVariables();
+    public static List<String> findVariables(String text) {
+        Value value = new Value(text);
+        return value.findVariables();
     }
 
     private void buildRegex() {
@@ -118,12 +118,12 @@ public class Argument implements Differentiable {
 
     @Override
     public double distance(Differentiable other) {
-        if(!(other instanceof Argument)){
+        if(!(other instanceof Value)){
             return 1;
         }
 
-        Argument argument = (Argument)other;
-        return value.equals(argument.value) ? 0 : 1;
+        Value value = (Value)other;
+        return this.value.equals(value.value) ? 0 : 1;
     }
 
     @Override

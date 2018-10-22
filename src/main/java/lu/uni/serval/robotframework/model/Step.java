@@ -4,7 +4,7 @@ import java.util.*;
 
 
 public abstract class Step implements Keyword {
-    private Argument name;
+    private Value name;
     private Keyword parent;
     private TestCaseFile file;
     private LineRange lineRange;
@@ -17,14 +17,14 @@ public abstract class Step implements Keyword {
     public abstract void getSequences(List<Sequence> sequences);
 
     public void setName(String name) {
-        this.name = new Argument(name);
+        this.name = new Value(name);
     }
 
     public void setParent(Keyword parent) {
         this.parent = parent;
     }
 
-    public Argument getNameAsArgument() {
+    public Value getNameAsArgument() {
         return this.name;
     }
 
@@ -36,7 +36,7 @@ public abstract class Step implements Keyword {
         return parent;
     }
 
-    public abstract List<Argument> getParameters();
+    public abstract List<Value> getParameters();
 
     @Override
     public Set<Keyword> getDependencies() {
@@ -107,8 +107,8 @@ public abstract class Step implements Keyword {
     }
 
     @Override
-    public Argument.Type[] getArgumentTypes() {
-        return new Argument.Type[0];
+    public Value.Type[] getArgumentTypes() {
+        return new Value.Type[0];
     }
 
     @Override

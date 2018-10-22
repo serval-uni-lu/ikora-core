@@ -9,8 +9,8 @@ import java.util.*;
 
 public class KeywordCall extends Step {
     private Keyword keyword;
-    private List<Argument> parameters;
-    private Map<Argument, KeywordCall> stepParameters;
+    private List<Value> parameters;
+    private Map<Value, KeywordCall> stepParameters;
 
     public KeywordCall() {
         this.parameters = new ArrayList<>();
@@ -25,11 +25,11 @@ public class KeywordCall extends Step {
         }
     }
 
-    public void addParameter(String argument) {
-        this.parameters.add(new Argument(argument));
+    public void addParameter(String value) {
+        this.parameters.add(new Value(value));
     }
 
-    public List<Argument> getParameters() {
+    public List<Value> getParameters() {
         return this.parameters;
     }
 
@@ -161,9 +161,9 @@ public class KeywordCall extends Step {
     }
 
     @Override
-    public Argument.Type[] getArgumentTypes() {
+    public Value.Type[] getArgumentTypes() {
         if(this.keyword == null){
-            return new Argument.Type[0];
+            return new Value.Type[0];
         }
 
         return this.keyword.getArgumentTypes();
@@ -233,7 +233,7 @@ public class KeywordCall extends Step {
 
         builder.append(getName());
 
-        for (Argument parameter: parameters){
+        for (Value parameter: parameters){
             builder.append("\t");
             builder.append(parameter.toString());
         }
@@ -241,7 +241,7 @@ public class KeywordCall extends Step {
         return builder.toString();
     }
 
-    public KeywordCall setKeywordParameter(Argument keywordParameter, Keyword keyword) {
+    public KeywordCall setKeywordParameter(Value keywordParameter, Keyword keyword) {
         int index = parameters.indexOf(keywordParameter);
 
         if(index < 0){

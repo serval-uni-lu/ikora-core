@@ -11,7 +11,7 @@ import java.util.*;
 
 public class KeywordDefinition implements Keyword, Iterable<Step> {
     private TestCaseFile file;
-    private Argument name;
+    private Value name;
     private String documentation;
     private Set<String> tags;
     private List<Step> steps;
@@ -26,7 +26,7 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
     }
 
     public void setName(String name){
-        this.name = new Argument(name);
+        this.name = new Value(name);
     }
 
     public void addStep(Step step){
@@ -84,7 +84,7 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
     }
 
     @Override
-    public Argument getNameAsArgument() {
+    public Value getNameAsArgument() {
         return name;
     }
 
@@ -266,8 +266,8 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
     }
 
     @Override
-    public Argument.Type[] getArgumentTypes() {
-        return new Argument.Type[0];
+    public Value.Type[] getArgumentTypes() {
+        return new Value.Type[0];
     }
 
     @Override

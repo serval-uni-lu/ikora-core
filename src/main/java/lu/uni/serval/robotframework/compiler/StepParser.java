@@ -57,7 +57,7 @@ public class StepParser {
                 continue;
             }
 
-            if(Argument.isVariable(token)){
+            if(Value.isVariable(token)){
                 assignment.addReturnValue(token);
             }
             else{

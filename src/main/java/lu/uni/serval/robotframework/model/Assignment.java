@@ -64,7 +64,7 @@ public class Assignment extends Step {
     }
 
     @Override
-    public List<Argument> getParameters() {
+    public List<Value> getParameters() {
         if(expression == null){
             return new ArrayList<>();
         }
@@ -169,9 +169,9 @@ public class Assignment extends Step {
     }
 
     @Override
-    public Argument.Type[] getArgumentTypes() {
+    public Value.Type[] getArgumentTypes() {
         if(this.expression == null){
-            return new Argument.Type[0];
+            return new Value.Type[0];
         }
 
         return this.expression.getArgumentTypes();

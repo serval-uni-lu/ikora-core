@@ -5,20 +5,20 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-public class ArgumentTest {
+public class ValueTest {
     @Test
     public void checkSimpleMatch(){
-        Argument argument = new Argument("Input password");
+        Value value = new Value("Input password");
         String test = "Input password";
 
-        assertTrue(argument.matches(test));
+        assertTrue(value.matches(test));
     }
 
     @Test
     public void checkVariableMatch(){
-        Argument argument = new Argument("Login \"${user}\" with password \"${password}\"");
+        Value value = new Value("Login \"${user}\" with password \"${password}\"");
         String test = "Login \"admin\" with password \"1234\"";
 
-        assertTrue(argument.matches(test));
+        assertTrue(value.matches(test));
     }
 }

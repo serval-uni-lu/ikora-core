@@ -73,8 +73,8 @@ public class Linker {
             if(keyword != null) {
                 call.setKeyword(keyword);
 
-                for(Argument argument: step.getParameters()) {
-                    resolveArgument(argument, testCaseFile, userKeyword, libraries);
+                for(Value value : step.getParameters()) {
+                    resolveArgument(value, testCaseFile, userKeyword, libraries);
                 }
 
                 linkStepArguments(call, testCaseFile, libraries);
@@ -83,14 +83,14 @@ public class Linker {
     }
 
     private static void linkStepArguments(KeywordCall step, TestCaseFile testCaseFile, LibraryResources libraries) throws  Exception {
-        List<Argument> parameters = step.getParameters();
+        List<Value> parameters = step.getParameters();
 
         if(parameters.isEmpty()){
             return;
         }
 
         for(int position: step.getKeywordsLaunchedPosition()){
-            Argument keywordParameter = parameters.get(position);
+            Value keywordParameter = parameters.get(position);
 
             Keyword keyword = getKeyword(keywordParameter.toString(), testCaseFile, libraries);
 
@@ -115,8 +115,8 @@ public class Linker {
         return keyword;
     }
 
-    static private void resolveArgument(Argument argument, TestCaseFile testCaseFile, UserKeyword userKeyword, LibraryResources library) throws Exception {
-        List<String> variables = argument.findVariables();
+    static private void resolveArgument(Value value, TestCaseFile testCaseFile, UserKeyword userKeyword, LibraryResources library) throws Exception {
+        List<String> variables = value.findVariables();
 
         for(String name: variables){
             Variable variable = null;
@@ -126,7 +126,7 @@ public class Linker {
             }
 
             if(variable != null){
-                argument.setVariable(name, variable);
+                value.setVariable(name, variable);
             }
             else {
                 variable = testCaseFile.findVariable(name);
@@ -136,10 +136,10 @@ public class Linker {
                 }
 
                 if(variable == null) {
-                    logger.error("Variable for argument \"" + name + "\" in \"" + testCaseFile.getName() + "\" not found!");
+                    logger.error("Variable for value \"" + name + "\" in \"" + testCaseFile.getName() + "\" not found!");
                 }
                 else{
-                    argument.setVariable(name, variable);
+                    value.setVariable(name, variable);
                 }
             }
         }

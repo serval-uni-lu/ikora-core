@@ -12,7 +12,7 @@ import java.util.List;
 public class Variable implements Element {
     private TestCaseFile file;
     private String name;
-    private List<Argument> definition;
+    private List<Value> definition;
     private LineRange lineRange;
     private Assignment assignment;
 
@@ -26,7 +26,7 @@ public class Variable implements Element {
     }
 
     public void addValueElement(String element) {
-        this.definition.add(new Argument(element));
+        this.definition.add(new Value(element));
     }
 
     public void setAssignment(Assignment assignment) {
@@ -66,8 +66,8 @@ public class Variable implements Element {
     }
 
     @Override
-    public Argument getNameAsArgument() {
-        return new Argument(this.name);
+    public Value getNameAsArgument() {
+        return new Value(this.name);
     }
 
     @Override
@@ -80,14 +80,14 @@ public class Variable implements Element {
         return this.name.equalsIgnoreCase(name);
     }
 
-    public List<Argument> getValue() {
+    public List<Value> getValue() {
         return definition;
     }
 
     public String getValueAsString(){
         StringBuilder builder = new StringBuilder();
 
-        for(Iterator<Argument> i = definition.iterator(); i.hasNext();) {
+        for(Iterator<Value> i = definition.iterator(); i.hasNext();) {
             builder.append(i.next().toString());
 
             if(i.hasNext()){

@@ -1,6 +1,6 @@
 package lu.uni.serval.robotframework.libraries.selenium.formElement;
 
-import lu.uni.serval.robotframework.model.Argument;
+import lu.uni.serval.robotframework.model.Value;
 import lu.uni.serval.robotframework.model.LibraryKeyword;
 import lu.uni.serval.robotframework.runner.Runtime;
 
@@ -15,9 +15,9 @@ public class ClickButton extends LibraryKeyword {
     }
 
     @Override
-    public Argument.Type[] getArgumentTypes() {
-        return new Argument.Type[]{
-                Argument.Type.Locator
+    public Value.Type[] getArgumentTypes() {
+        return new Value.Type[]{
+                Value.Type.Locator
         };
     }
 }

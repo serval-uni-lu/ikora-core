@@ -200,15 +200,15 @@ public class DifferenceSerializer extends JsonSerializer<Difference> {
         jsonGenerator.writeEndObject();
     }
 
-    private String listToString(List<Argument> arguments){
+    private String listToString(List<Value> values){
         StringBuilder builder = new StringBuilder();
 
-        for(Argument argument: arguments){
+        for(Value value : values){
             if(builder.length() != 0){
                 builder.append("\t");
             }
 
-            builder.append(argument.toString());
+            builder.append(value.toString());
         }
 
         return builder.toString();
