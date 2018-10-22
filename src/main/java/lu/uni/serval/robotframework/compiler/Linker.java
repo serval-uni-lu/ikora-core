@@ -3,7 +3,6 @@ package lu.uni.serval.robotframework.compiler;
 import lu.uni.serval.robotframework.model.*;
 import org.apache.log4j.Logger;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -12,6 +11,12 @@ public class Linker {
     final static Logger logger = Logger.getLogger(Linker.class);
 
     private Linker() {}
+
+    static final private Pattern gherkinPattern;
+
+    static {
+        gherkinPattern =  Pattern.compile("^(\\s*)(Given|When|Then|And|But)(.)*$", Pattern.CASE_INSENSITIVE);
+    }
 
     static public void link(Project project) throws Exception {
         LibraryResources libraries = project.getLibraries();
@@ -35,8 +40,7 @@ public class Linker {
 
             KeywordCall call = (KeywordCall)step;
 
-            Pattern pattern = Pattern.compile("^(\\s*)(Given|When|Then|And|But)", Pattern.CASE_INSENSITIVE);
-            Matcher matcher = pattern.matcher(step.getName());
+            Matcher matcher = gherkinPattern.matcher(step.getName());
             String name = matcher.replaceAll("").trim();
 
             Keyword keyword = getKeyword(name, testCaseFile, libraries);
