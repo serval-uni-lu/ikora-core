@@ -11,10 +11,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Argument implements Differentiable {
-    public enum Format{
-        scalar, list, dictionary
-    }
-
     public enum Type{
         String, Object, Keyword, Locator, Condition, Keywords, Kwargs
     }
