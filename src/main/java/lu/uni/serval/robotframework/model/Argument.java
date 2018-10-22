@@ -19,6 +19,16 @@ public class Argument implements Differentiable {
         String, Object, Keyword, Locator, Condition, Keywords, Kwargs
     }
 
+    static private Pattern isVariablePattern;
+    static private Pattern hasVariablePattern;
+    static private Pattern escapePattern;
+
+    static {
+        isVariablePattern = Pattern.compile("^(([@$&])\\{)(.*?)(})$");
+        hasVariablePattern = Pattern.compile("(([@$&])\\{)(.*?)(})");
+        escapePattern = Pattern.compile("[{}()\\[\\].+*?^$\\\\|]");
+    }
+
     private String value;
     private Pattern match;
     private Map<String, Variable> variables;
@@ -88,6 +98,7 @@ public class Argument implements Differentiable {
 
     private void buildRegex() {
         Matcher matcher = getVariableMatcher(this.value, false);
+
         String placeholder = "@@@@___VARIABLE__PLACEHOLDER___@@@@";
 
         String pattern = matcher.replaceAll(placeholder).trim();
@@ -99,15 +110,14 @@ public class Argument implements Differentiable {
 
     public static Matcher getVariableMatcher(String value, boolean strict) {
         if(strict){
-            return Pattern.compile("^(([@$&])\\{)(.*?)(})$").matcher(value);
+            return isVariablePattern.matcher(value);
         }
 
-        return Pattern.compile("(([@$&])\\{)(.*?)(})").matcher(value);
+        return hasVariablePattern.matcher(value);
     }
 
     public static String escape(String s){
-        Pattern specialRegexChars = Pattern.compile("[{}()\\[\\].+*?^$\\\\|]");
-        return specialRegexChars.matcher(s).replaceAll("\\\\$0");
+        return escapePattern.matcher(s).replaceAll("\\\\$0");
     }
 
     @Override
