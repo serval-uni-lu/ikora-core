@@ -3,16 +3,15 @@ package lu.uni.serval.robotframework.compiler;
 import lu.uni.serval.robotframework.model.*;
 import org.apache.log4j.Logger;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+public class Linker {
+    final static Logger logger = Logger.getLogger(Linker.class);
 
-
-public class KeywordLinker {
-    final static Logger logger = Logger.getLogger(KeywordLinker.class);
-
-    private KeywordLinker() {}
+    private Linker() {}
 
     static public void link(Project project) throws Exception {
         LibraryResources libraries = project.getLibraries();
@@ -69,6 +68,11 @@ public class KeywordLinker {
 
             if(keyword != null) {
                 call.setKeyword(keyword);
+
+                for(Argument argument: step.getParameters()) {
+                    resolveArgument(argument, testCaseFile, userKeyword, libraries);
+                }
+
                 linkStepArguments(call, testCaseFile, libraries);
             }
         }
@@ -101,9 +105,39 @@ public class KeywordLinker {
         }
 
         if(keyword == null) {
-            logger.error("Keyword definition for \"" + name + "\" not found!");
+            logger.error("Keyword definition for \"" + name + "\" in \"" + testCaseFile.getName() + "\" not found!");
         }
 
         return keyword;
+    }
+
+    static private void resolveArgument(Argument argument, TestCaseFile testCaseFile, UserKeyword userKeyword, LibraryResources library) throws Exception {
+        List<String> variables = argument.findVariables();
+
+        for(String name: variables){
+            Variable variable = null;
+
+            if(userKeyword != null){
+                variable = userKeyword.findLocalVariable(name);
+            }
+
+            if(variable != null){
+                argument.setVariable(name, variable);
+            }
+            else {
+                variable = testCaseFile.findVariable(name);
+
+                if(variable == null){
+                    variable = library.findVariable(name);
+                }
+
+                if(variable == null) {
+                    logger.error("Variable for argument \"" + name + "\" in \"" + testCaseFile.getName() + "\" not found!");
+                }
+                else{
+                    argument.setVariable(name, variable);
+                }
+            }
+        }
     }
 }

@@ -16,7 +16,7 @@ public class Compiler {
         try {
             project = parse(filePath);
             loadLibraries(project);
-            link(project);
+            Linker.link(project);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -36,10 +36,5 @@ public class Compiler {
 
     static private Project parse(String filePath) {
         return ProjectParser.parse(filePath);
-    }
-
-    static private void link(Project project) throws Exception {
-        KeywordLinker.link(project);
-        VariableLinker.link(project);
     }
 }
