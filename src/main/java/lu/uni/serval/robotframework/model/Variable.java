@@ -4,6 +4,7 @@ import lu.uni.serval.analytics.Action;
 import lu.uni.serval.utils.Differentiable;
 import lu.uni.serval.utils.LevenshteinDistance;
 
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -13,9 +14,11 @@ public class Variable implements Element {
     private String name;
     private List<Argument> definition;
     private LineRange lineRange;
+    private Assignment assignment;
 
     public Variable() {
         this.definition = new ArrayList<>();
+        this.assignment = null;
     }
 
     public void setName(String name) {
@@ -26,9 +29,21 @@ public class Variable implements Element {
         this.definition.add(new Argument(element));
     }
 
+    public void setAssignment(Assignment assignment) {
+        if(!this.definition.isEmpty()){
+            throw new InvalidParameterException("Assignment return cannot already be pointing to values");
+        }
+
+        this.assignment = assignment;
+    }
+
     @Override
     public void setFile(TestCaseFile file) {
         this.file = file;
+    }
+
+    public boolean isAssignment(){
+        return this.assignment != null;
     }
 
     @Override

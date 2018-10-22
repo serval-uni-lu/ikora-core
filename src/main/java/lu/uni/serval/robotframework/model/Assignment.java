@@ -31,12 +31,31 @@ public class Assignment extends Step {
     public void addReturnValue(String returnValue){
         Variable variable = new Variable();
         variable.setName(returnValue);
+        variable.setAssignment(this);
 
         returnValues.add(variable);
     }
 
     public void setExpression(KeywordCall call) {
         expression = call;
+    }
+
+    @Override
+    public void setFile(TestCaseFile file){
+        super.setFile(file);
+
+        for(Variable variable: returnValues){
+            variable.setFile(this.getFile());
+        }
+    }
+
+    @Override
+    public void setLineRange(LineRange lineRange){
+        super.setLineRange(lineRange);
+
+        for(Variable variable: returnValues){
+            variable.setLineRange(this.getLineRange());
+        }
     }
 
     @Override
@@ -171,4 +190,6 @@ public class Assignment extends Step {
     public Type getType(){
         return this.expression.getType();
     }
+
+
 }
