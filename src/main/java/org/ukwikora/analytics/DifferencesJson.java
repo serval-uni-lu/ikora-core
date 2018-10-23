@@ -1,6 +1,7 @@
 package org.ukwikora.analytics;
 
 import com.fasterxml.jackson.core.JsonGenerator;
+import org.ukwikora.export.ProjectEvolutionSerializer;
 import org.ukwikora.model.Element;
 import org.ukwikora.model.Keyword;
 import org.ukwikora.model.KeywordDefinition;

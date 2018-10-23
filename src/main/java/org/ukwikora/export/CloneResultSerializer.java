@@ -1,9 +1,10 @@
-package org.ukwikora.analytics;
+package org.ukwikora.export;
 
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import org.ukwikora.analytics.CloneResults;
 
 import java.io.IOException;
 

@@ -1,6 +1,7 @@
 package org.ukwikora.analytics;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.ukwikora.export.DifferenceSerializer;
 import org.ukwikora.utils.LevenshteinDistance;
 import org.ukwikora.model.KeywordDefinition;
 
@@ -8,7 +9,7 @@ import java.util.*;
 
 @JsonSerialize(using = DifferenceSerializer.class)
 public class Difference implements StatusResults.Differentiable {
-    enum Clone{
+    public enum Clone{
         TypeI, TypeII, None
     }
 

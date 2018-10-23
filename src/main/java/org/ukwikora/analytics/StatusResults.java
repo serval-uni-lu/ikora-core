@@ -2,6 +2,7 @@ package org.ukwikora.analytics;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+import org.ukwikora.export.StatusResultSerializer;
 import org.ukwikora.report.KeywordStatus;
 import org.ukwikora.report.Report;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -26,11 +27,11 @@ public class StatusResults {
             info.add(file.getName());
         }
 
-        String getName(){
+        public String getName(){
             return info.get(0);
         }
 
-        String getFile(){
+        public String getFile(){
             return info.get(1);
         }
 

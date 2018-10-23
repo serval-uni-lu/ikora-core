@@ -20,21 +20,21 @@ public class ProjectStatistics {
     private ElementTable<UserKeyword> userKeywords;
     private ElementTable<TestCase> testCases;
 
-    ProjectStatistics(Project project){
+    public ProjectStatistics(Project project){
         this.project = project;
         userKeywords = this.project.getElements(UserKeyword.class);
         testCases = this.project.getElements(TestCase.class);
     }
 
-    int getNumberFiles(){
+    public int getNumberFiles(){
         return this.project.getTestCaseFiles().size();
     }
 
-    int getLoc(){
+    public int getLoc(){
         return this.project.getLoc();
     }
 
-    <T extends KeywordDefinition> int getNumberKeywords(Class<T> type){
+    public <T extends KeywordDefinition> int getNumberKeywords(Class<T> type){
         ElementTable keywords = getKeywords(type);
 
         if(keywords != null){
@@ -58,19 +58,19 @@ public class ProjectStatistics {
         return length;
     }
 
-    <T extends KeywordDefinition> int[] getSizeDistribution(Class<T> type){
+    public <T extends KeywordDefinition> int[] getSizeDistribution(Class<T> type){
         return getDistribution(type, Metric.Size);
     }
 
-    <T extends KeywordDefinition> int[] getConnectivityDistribution(Class<T> type){
+    public <T extends KeywordDefinition> int[] getConnectivityDistribution(Class<T> type){
         return getDistribution(type, Metric.Connectivity);
     }
 
-    <T extends KeywordDefinition> int[] getSequenceDistribution(Class<T> type){
+    public <T extends KeywordDefinition> int[] getSequenceDistribution(Class<T> type){
         return getDistribution(type, Metric.Sequence);
     }
 
-    <T extends KeywordDefinition> int[] getDepthDistribution(Class<T> type){
+    public <T extends KeywordDefinition> int[] getDepthDistribution(Class<T> type){
         return getDistribution(type, Metric.Depth);
     }
 

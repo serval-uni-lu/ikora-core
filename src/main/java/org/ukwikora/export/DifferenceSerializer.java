@@ -1,4 +1,4 @@
-package org.ukwikora.analytics;
+package org.ukwikora.export;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -6,6 +6,9 @@ import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 
 import org.apache.log4j.Logger;
+import org.ukwikora.analytics.Action;
+import org.ukwikora.analytics.Difference;
+import org.ukwikora.analytics.StatusResults;
 import org.ukwikora.model.*;
 
 import java.io.IOException;
