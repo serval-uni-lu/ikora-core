@@ -1,7 +1,7 @@
 package lu.uni.serval.robotframework.model;
 
-import lu.uni.serval.analytics.Action;
-import lu.uni.serval.utils.Differentiable;
+import lu.uni.serval.robotframework.analytics.Action;
+import lu.uni.serval.robotframework.analytics.StatusResults;
 
 import java.util.HashSet;
 import java.util.List;
@@ -84,12 +84,12 @@ public abstract class LibraryKeyword implements Keyword {
     }
 
     @Override
-    public double distance(Differentiable other){
+    public double distance(StatusResults.Differentiable other){
         return other.getClass() == this.getClass() ? 0 : 1;
     }
 
     @Override
-    public List<Action> differences(Differentiable other){
+    public List<Action> differences(StatusResults.Differentiable other){
         return null;
     }
 

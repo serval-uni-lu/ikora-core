@@ -1,8 +1,8 @@
 package lu.uni.serval.robotframework.model;
 
 import lu.uni.serval.robotframework.compiler.Compiler;
-import lu.uni.serval.utils.Configuration;
-import lu.uni.serval.utils.Plugin;
+import lu.uni.serval.robotframework.utils.Configuration;
+import lu.uni.serval.robotframework.utils.Plugin;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;

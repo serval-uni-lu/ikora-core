@@ -20,7 +20,7 @@ public class VariableTableParser {
                 break;
             }
 
-            if(reader.getCurrent().isEmpty()){
+            if(reader.getCurrent().ignore()){
                 reader.readLine();
                 continue;
             }

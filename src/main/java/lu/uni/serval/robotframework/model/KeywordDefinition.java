@@ -1,9 +1,10 @@
 package lu.uni.serval.robotframework.model;
 
-import lu.uni.serval.analytics.Action;
+import lu.uni.serval.robotframework.analytics.Action;
+import lu.uni.serval.robotframework.analytics.ReportAnalyzer;
+import lu.uni.serval.robotframework.analytics.StatusResults;
 import lu.uni.serval.robotframework.runner.Runtime;
-import lu.uni.serval.utils.Differentiable;
-import lu.uni.serval.utils.LevenshteinDistance;
+import lu.uni.serval.robotframework.utils.LevenshteinDistance;
 
 
 import javax.annotation.Nonnull;
@@ -212,12 +213,12 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
     }
 
     @Override
-    public double distance(Differentiable other) {
+    public double distance(StatusResults.Differentiable other) {
         return (double)differences(other).size() / this.getLoc();
     }
 
     @Override
-    public List<Action> differences(Differentiable other) {
+    public List<Action> differences(StatusResults.Differentiable other) {
         List<Action> actions = new ArrayList<>();
 
         if(other == this){

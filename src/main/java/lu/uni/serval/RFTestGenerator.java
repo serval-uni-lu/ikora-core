@@ -1,9 +1,9 @@
 package lu.uni.serval;
 
-import lu.uni.serval.analytics.ProjectAnalyticsCli;
-import lu.uni.serval.utils.Configuration;
-import lu.uni.serval.utils.ConsoleColors;
-import lu.uni.serval.utils.exception.DuplicateNodeException;
+import lu.uni.serval.robotframework.analytics.ProjectAnalyticsCli;
+import lu.uni.serval.robotframework.utils.Configuration;
+import lu.uni.serval.robotframework.utils.ConsoleColors;
+import lu.uni.serval.robotframework.exception.DuplicateNodeException;
 import org.apache.commons.cli.*;
 import org.apache.log4j.Logger;
 

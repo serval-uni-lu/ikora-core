@@ -1,9 +1,10 @@
 package lu.uni.serval.robotframework.model;
 
-import lu.uni.serval.analytics.Action;
+import lu.uni.serval.robotframework.analytics.Action;
+import lu.uni.serval.robotframework.analytics.ReportAnalyzer;
+import lu.uni.serval.robotframework.analytics.StatusResults;
 import lu.uni.serval.robotframework.runner.Runtime;
-import lu.uni.serval.utils.Differentiable;
-import lu.uni.serval.utils.LevenshteinDistance;
+import lu.uni.serval.robotframework.utils.LevenshteinDistance;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -95,7 +96,7 @@ public class ForLoop extends Step {
     }
 
     @Override
-    public double distance(Differentiable other) {
+    public double distance(StatusResults.Differentiable other) {
         if(!(other instanceof ForLoop)){
             return 1;
         }
@@ -106,7 +107,7 @@ public class ForLoop extends Step {
     }
 
     @Override
-    public List<Action> differences(Differentiable other) {
+    public List<Action> differences(StatusResults.Differentiable other) {
         List<Action> actions = new ArrayList<>();
 
         if(!(other instanceof Step)){

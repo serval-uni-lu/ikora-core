@@ -1,13 +1,14 @@
 package lu.uni.serval.robotframework.model;
 
-import lu.uni.serval.analytics.Action;
-import lu.uni.serval.utils.Differentiable;
-import lu.uni.serval.utils.LevenshteinDistance;
+import lu.uni.serval.robotframework.analytics.Action;
+import lu.uni.serval.robotframework.analytics.ReportAnalyzer;
+import lu.uni.serval.robotframework.analytics.StatusResults;
+import lu.uni.serval.robotframework.utils.LevenshteinDistance;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Sequence implements Differentiable {
+public class Sequence implements StatusResults.Differentiable {
     private List<Keyword> steps;
 
     public Sequence(){
@@ -23,7 +24,7 @@ public class Sequence implements Differentiable {
     }
 
     @Override
-    public double distance(Differentiable other) {
+    public double distance(StatusResults.Differentiable other) {
         List<Action> actions = differences(other);
 
         for(Action action: actions){
@@ -36,7 +37,7 @@ public class Sequence implements Differentiable {
     }
 
     @Override
-    public List<Action> differences(Differentiable other) {
+    public List<Action> differences(StatusResults.Differentiable other) {
         List<Action> actions = new ArrayList<>();
 
         if(other == this){

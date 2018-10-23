@@ -1,8 +1,8 @@
 package lu.uni.serval.robotframework.model;
 
-import lu.uni.serval.utils.Differentiable;
+import lu.uni.serval.robotframework.analytics.StatusResults;
 
-public interface Element extends Differentiable {
+public interface Element extends StatusResults.Differentiable {
     void setFile(TestCaseFile file);
     TestCaseFile getFile();
     String getFileName();

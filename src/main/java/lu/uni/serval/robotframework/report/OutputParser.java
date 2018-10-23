@@ -1,6 +1,6 @@
 package lu.uni.serval.robotframework.report;
 
-import lu.uni.serval.analytics.ReportAnalyzer;
+import lu.uni.serval.robotframework.analytics.ReportAnalyzer;
 import lu.uni.serval.robotframework.model.GitRepository;
 import org.apache.commons.io.FilenameUtils;
 import org.w3c.dom.Document;

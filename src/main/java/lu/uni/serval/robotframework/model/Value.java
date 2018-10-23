@@ -1,7 +1,7 @@
 package lu.uni.serval.robotframework.model;
 
-import lu.uni.serval.analytics.Action;
-import lu.uni.serval.utils.Differentiable;
+import lu.uni.serval.robotframework.analytics.Action;
+import lu.uni.serval.robotframework.analytics.StatusResults;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Value implements Differentiable {
+public class Value implements StatusResults.Differentiable {
     public enum Type{
         String, Object, Keyword, Locator, Condition, Keywords, Kwargs
     }
@@ -117,7 +117,7 @@ public class Value implements Differentiable {
     }
 
     @Override
-    public double distance(Differentiable other) {
+    public double distance(StatusResults.Differentiable other) {
         if(!(other instanceof Value)){
             return 1;
         }
@@ -127,7 +127,7 @@ public class Value implements Differentiable {
     }
 
     @Override
-    public List<Action> differences(Differentiable other) {
+    public List<Action> differences(StatusResults.Differentiable other) {
         return null;
     }
 }

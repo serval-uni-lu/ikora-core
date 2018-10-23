@@ -1,6 +1,6 @@
 package lu.uni.serval.robotframework.report;
 
-import lu.uni.serval.utils.ConsoleColors;
+import lu.uni.serval.robotframework.utils.ConsoleColors;
 
 import java.util.ArrayList;
 import java.util.List;

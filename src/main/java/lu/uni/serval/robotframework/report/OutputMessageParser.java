@@ -1,7 +1,6 @@
 package lu.uni.serval.robotframework.report;
 
-import lu.uni.serval.utils.EasyPair;
-import lu.uni.serval.utils.ReportKeywordData;
+import lu.uni.serval.robotframework.utils.EasyPair;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -18,7 +17,7 @@ public class OutputMessageParser {
         errorDictionary = initializeErrorDictionary();
     }
 
-    public static List<String> parseArguments(String message, String keyword, String library, ReportKeywordData.Status status){
+    public static List<String> parseArguments(String message, String keyword, String library, Status status){
         if(ignoreSet.contains(new EasyPair<>(library, keyword))){
             return new ArrayList<>();
         }
@@ -37,8 +36,8 @@ public class OutputMessageParser {
         return extractArguments(message, format.left, format.right);
     }
 
-    private static EasyPair<String, Integer> getFormat(String keyword, String library, ReportKeywordData.Status status){
-        if(status == ReportKeywordData.Status.FAILED){
+    private static EasyPair<String, Integer> getFormat(String keyword, String library, Status status){
+        if(status.getType() == Status.Type.FAILED){
             return errorDictionary.get(new EasyPair<>(library.toLowerCase(), keyword.toLowerCase()));
         }
 
