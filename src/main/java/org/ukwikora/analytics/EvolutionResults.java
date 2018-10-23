@@ -21,7 +21,7 @@ public class EvolutionResults {
     private Map<Project, CloneResults> keywordClones;
     private Map<Project, CloneResults> testCaseClones;
 
-    private Map<StatusResults.Differentiable, CoEvolutionType> coEvolutionTypes;
+    private Map<Differentiable, CoEvolutionType> coEvolutionTypes;
 
     EvolutionResults(){
         projects = new HashSet<>();
@@ -156,19 +156,19 @@ public class EvolutionResults {
         return timeLineNotChanged;
     }
 
-    public CoEvolutionType getCoEvolutionType(StatusResults.Differentiable differentiable){
+    public CoEvolutionType getCoEvolutionType(Differentiable differentiable){
         if(coEvolutionTypes == null){
             coEvolutionTypes = new HashMap<>();
             for(TimeLine notChanged: getNotChanged()){
-                for(StatusResults.Differentiable notChangeItem: notChanged.getItems()){
+                for(Differentiable notChangeItem: notChanged.getItems()){
                     coEvolutionTypes.put(notChangeItem, CoEvolutionType.NoChange);
                 }
             }
 
-            for(Map.Entry<StatusResults.Differentiable, Set<StatusResults.Differentiable>> timeLines: getTimeLinesMatches().getMatched().entrySet()){
+            for(Map.Entry<Differentiable, Set<Differentiable>> timeLines: getTimeLinesMatches().getMatched().entrySet()){
                 CoEvolutionType type = timeLines.getValue().size() > 0 ? CoEvolutionType.CoEvolution: CoEvolutionType.NoCoEvolution;
 
-                for(StatusResults.Differentiable coEvolution: ((TimeLine)timeLines.getKey()).getItems()){
+                for(Differentiable coEvolution: ((TimeLine)timeLines.getKey()).getItems()){
                     coEvolutionTypes.put(coEvolution, type);
                 }
             }

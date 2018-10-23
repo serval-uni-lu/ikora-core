@@ -106,14 +106,14 @@ public class Assignment extends Step {
         boolean same = this.expression.equals(assignment.expression);
 
         for(int i = 0; same && i < this.returnValues.size(); ++i) {
-            same &= this.returnValues.get(i).getName().toString().equalsIgnoreCase(assignment.returnValues.get(i).getName().toString());
+            same &= this.returnValues.get(i).getName().equalsIgnoreCase(assignment.returnValues.get(i).getName());
         }
 
         return  same;
     }
 
     @Override
-    public double distance(StatusResults.Differentiable other) {
+    public double distance(Differentiable other) {
         if(!(other instanceof Assignment)){
             return 1;
         }
@@ -127,7 +127,7 @@ public class Assignment extends Step {
     }
 
     @Override
-    public List<Action> differences(StatusResults.Differentiable other) {
+    public List<Action> differences(Differentiable other) {
         List<Action> actions = new ArrayList<>();
 
         if(!(other instanceof Step)){

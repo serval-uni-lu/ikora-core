@@ -84,12 +84,12 @@ public abstract class LibraryKeyword implements Keyword {
     }
 
     @Override
-    public double distance(StatusResults.Differentiable other){
+    public double distance(Differentiable other){
         return other.getClass() == this.getClass() ? 0 : 1;
     }
 
     @Override
-    public List<Action> differences(StatusResults.Differentiable other){
+    public List<Action> differences(Differentiable other){
         return null;
     }
 

@@ -5,10 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import org.ukwikora.analytics.*;
-import org.ukwikora.model.Element;
-import org.ukwikora.model.KeywordDefinition;
-import org.ukwikora.model.TestCase;
-import org.ukwikora.model.UserKeyword;
+import org.ukwikora.model.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -48,9 +45,9 @@ public class SequenceComparisonSerializer extends JsonSerializer<EvolutionResult
     private void writeCoEvolution(JsonGenerator jsonGenerator, DifferentiableMatcher timeLinesMatches) throws IOException {
         jsonGenerator.writeArrayFieldStart("coevolution");
 
-        Map<StatusResults.Differentiable, Set<StatusResults.Differentiable>> matched = timeLinesMatches.getMatched();
+        Map<Differentiable, Set<Differentiable>> matched = timeLinesMatches.getMatched();
 
-        for(StatusResults.Differentiable differentiable1: matched.keySet()){
+        for(Differentiable differentiable1: matched.keySet()){
             TimeLine timeLine = (TimeLine)differentiable1;
 
             if(!timeLine.isKeywordDefinition()){
@@ -61,7 +58,7 @@ public class SequenceComparisonSerializer extends JsonSerializer<EvolutionResult
             writeTimeLineInfo(jsonGenerator, timeLine);
 
             jsonGenerator.writeArrayFieldStart("similar");
-            for(StatusResults.Differentiable differentiable2: matched.get(timeLine)){
+            for(Differentiable differentiable2: matched.get(timeLine)){
                 TimeLine similar = (TimeLine)differentiable2;
 
                 jsonGenerator.writeStartObject();
@@ -131,7 +128,7 @@ public class SequenceComparisonSerializer extends JsonSerializer<EvolutionResult
     }
 
     private String getFileName(TimeLine timeLine){
-        StatusResults.Differentiable last = timeLine.getLastValid();
+        Differentiable last = timeLine.getLastValid();
 
         if(last == null){
             return "";
@@ -145,7 +142,7 @@ public class SequenceComparisonSerializer extends JsonSerializer<EvolutionResult
     }
 
     private String getDepth(TimeLine timeLine){
-        StatusResults.Differentiable last = timeLine.getLastValid();
+        Differentiable last = timeLine.getLastValid();
 
         if(last == null){
             return "0";

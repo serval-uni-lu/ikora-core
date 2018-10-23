@@ -116,9 +116,8 @@ public abstract class Step implements Keyword {
         return 0;
     }
 
-    @Override
-    public int[] getKeywordsLaunchedPosition() {
-        return new int[0];
+    public List<Value> getKeywordParameters() {
+        return new ArrayList<>();
     }
 
     @Override

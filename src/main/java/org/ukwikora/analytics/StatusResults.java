@@ -151,10 +151,4 @@ public class StatusResults {
         return this.getFailureRate(executionDate) > 0.5;
     }
  */
-
-    public static interface Differentiable {
-        double distance(Differentiable other);
-        List<Action>  differences(Differentiable other);
-        String getName();
-    }
 }

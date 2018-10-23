@@ -2,9 +2,11 @@ package org.ukwikora.analytics;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import org.ukwikora.export.ProjectEvolutionSerializer;
+import org.ukwikora.model.Differentiable;
 import org.ukwikora.model.Element;
 import org.ukwikora.model.Keyword;
 import org.ukwikora.model.KeywordDefinition;
+import org.ukwikora.utils.DifferentiableStringList;
 import org.ukwikora.utils.LevenshteinDistance;
 import org.ukwikora.utils.StringUtils;
 import org.openqa.selenium.InvalidArgumentException;
@@ -57,7 +59,7 @@ public class DifferencesJson {
 
         for(Action action: difference.getActions()){
 
-            StatusResults.Differentiable differentiable = action.getValue();
+            Differentiable differentiable = action.getValue();
 
             if(differentiable == null){
                 return;
@@ -129,8 +131,8 @@ public class DifferencesJson {
             lines = StringUtils.countLines(keyword1.getDocumentation());
         }
         else if(action.getType() == Action.Type.CHANGE_DOCUMENTATION){
-            ProjectEvolutionSerializer.DifferentiableStringList doc1 = ProjectEvolutionSerializer.DifferentiableStringList.fromTextBlock(keyword1.getDocumentation());
-            ProjectEvolutionSerializer.DifferentiableStringList doc2 = ProjectEvolutionSerializer.DifferentiableStringList.fromTextBlock(keyword2.getDocumentation());
+            DifferentiableStringList doc1 = DifferentiableStringList.fromTextBlock(keyword1.getDocumentation());
+            DifferentiableStringList doc2 = DifferentiableStringList.fromTextBlock(keyword2.getDocumentation());
 
             lines = LevenshteinDistance.getDifferences(doc1, doc2).size();
         }

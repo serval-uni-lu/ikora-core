@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Value implements StatusResults.Differentiable {
+public class Value implements Differentiable {
     public enum Type{
         String, Object, Keyword, Locator, Condition, Keywords, Kwargs
     }
@@ -117,7 +117,7 @@ public class Value implements StatusResults.Differentiable {
     }
 
     @Override
-    public double distance(StatusResults.Differentiable other) {
+    public double distance(Differentiable other) {
         if(!(other instanceof Value)){
             return 1;
         }
@@ -127,7 +127,7 @@ public class Value implements StatusResults.Differentiable {
     }
 
     @Override
-    public List<Action> differences(StatusResults.Differentiable other) {
+    public List<Action> differences(Differentiable other) {
         return null;
     }
 }

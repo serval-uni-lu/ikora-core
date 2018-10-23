@@ -188,7 +188,7 @@ public class KeywordCall extends Step {
     }
 
     @Override
-    public double distance(StatusResults.Differentiable other) {
+    public double distance(Differentiable other) {
         if(!(other instanceof KeywordCall)){
             return 1;
         }
@@ -202,7 +202,7 @@ public class KeywordCall extends Step {
     }
 
     @Override
-    public List<Action> differences(StatusResults.Differentiable other) {
+    public List<Action> differences(Differentiable other) {
         List<Action> actions = new ArrayList<>();
 
         if(!(other instanceof Step)){

@@ -2,19 +2,20 @@ package org.ukwikora.analytics;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.ukwikora.export.DifferenceSerializer;
+import org.ukwikora.model.Differentiable;
 import org.ukwikora.utils.LevenshteinDistance;
 import org.ukwikora.model.KeywordDefinition;
 
 import java.util.*;
 
 @JsonSerialize(using = DifferenceSerializer.class)
-public class Difference implements StatusResults.Differentiable {
+public class Difference implements Differentiable {
     public enum Clone{
         TypeI, TypeII, None
     }
 
-    private StatusResults.Differentiable left;
-    private StatusResults.Differentiable right;
+    private Differentiable left;
+    private Differentiable right;
     private List<Action> actions;
 
     static private Set<Action.Type> ignoreForTypeI;
@@ -38,7 +39,7 @@ public class Difference implements StatusResults.Differentiable {
         ignoreForTypeII = Collections.unmodifiableSet(typeII);
     }
 
-    private Difference(StatusResults.Differentiable left, StatusResults.Differentiable right){
+    private Difference(Differentiable left, Differentiable right){
         this.left = left;
         this.right = right;
 
@@ -75,15 +76,15 @@ public class Difference implements StatusResults.Differentiable {
         return isEmpty(ignoreForTypeII);
     }
 
-    public StatusResults.Differentiable getLeft(){
+    public Differentiable getLeft(){
         return left;
     }
 
-    public StatusResults.Differentiable getRight(){
+    public Differentiable getRight(){
         return right;
     }
 
-    public StatusResults.Differentiable getValue(){
+    public Differentiable getValue(){
         if(left != null){
             return left;
         }
@@ -95,7 +96,7 @@ public class Difference implements StatusResults.Differentiable {
         return actions;
     }
 
-    public static Difference of(StatusResults.Differentiable before, StatusResults.Differentiable after) {
+    public static Difference of(Differentiable before, Differentiable after) {
         Difference difference = new Difference(before, after);
 
         if(before == after){
@@ -146,7 +147,7 @@ public class Difference implements StatusResults.Differentiable {
         return hash;
     }
 
-    private int getNodeHash(int hash, StatusResults.Differentiable element){
+    private int getNodeHash(int hash, Differentiable element){
         if(element == null){
             hash = 31 * hash;
         }
@@ -164,7 +165,7 @@ public class Difference implements StatusResults.Differentiable {
     }
 
     @Override
-    public double distance(StatusResults.Differentiable other) {
+    public double distance(Differentiable other) {
         if(other.getClass() != this.getClass()){
             return 1.0;
         }
@@ -177,7 +178,7 @@ public class Difference implements StatusResults.Differentiable {
     }
 
     @Override
-    public List<Action> differences(StatusResults.Differentiable other) {
+    public List<Action> differences(Differentiable other) {
         return null;
     }
 

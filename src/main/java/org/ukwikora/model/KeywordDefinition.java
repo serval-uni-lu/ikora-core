@@ -212,12 +212,12 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
     }
 
     @Override
-    public double distance(StatusResults.Differentiable other) {
+    public double distance(Differentiable other) {
         return (double)differences(other).size() / this.getLoc();
     }
 
     @Override
-    public List<Action> differences(StatusResults.Differentiable other) {
+    public List<Action> differences(Differentiable other) {
         List<Action> actions = new ArrayList<>();
 
         if(other == this){

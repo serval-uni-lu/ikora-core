@@ -1,20 +1,17 @@
 package org.ukwikora.analytics;
 
-import org.ukwikora.model.Project;
-import org.ukwikora.model.TestCaseFile;
+import org.ukwikora.model.*;
 import org.ukwikora.utils.LevenshteinDistance;
-import org.ukwikora.model.Element;
-import org.ukwikora.model.KeywordDefinition;
 
 import java.util.*;
 
-public class TimeLine implements StatusResults.Differentiable, Iterable<Difference> {
+public class TimeLine implements Differentiable, Iterable<Difference> {
 
     private List<Difference> sequence;
-    private LinkedHashSet<StatusResults.Differentiable> items;
+    private LinkedHashSet<Differentiable> items;
     private List<Action> actions;
-    private StatusResults.Differentiable last;
-    private StatusResults.Differentiable lastValid;
+    private Differentiable last;
+    private Differentiable lastValid;
 
     TimeLine() {
         sequence = new ArrayList<>();
@@ -94,7 +91,7 @@ public class TimeLine implements StatusResults.Differentiable, Iterable<Differen
         return this.actions;
     }
 
-    public StatusResults.Differentiable getLastValid() {
+    public Differentiable getLastValid() {
         return lastValid;
     }
 
@@ -111,7 +108,7 @@ public class TimeLine implements StatusResults.Differentiable, Iterable<Differen
         return CloneDetection.getCloneType(thisItem, otherItem);
     }
 
-    public LinkedHashSet<StatusResults.Differentiable> getItems() {
+    public LinkedHashSet<Differentiable> getItems() {
         return items;
     }
 
@@ -131,7 +128,7 @@ public class TimeLine implements StatusResults.Differentiable, Iterable<Differen
     private List<String> getCommits() {
         List<String> commits = new ArrayList<>();
 
-        for(StatusResults.Differentiable item: items){
+        for(Differentiable item: items){
             String commit = getItemCommit(item);
 
             if(!commit.isEmpty()){
@@ -142,7 +139,7 @@ public class TimeLine implements StatusResults.Differentiable, Iterable<Differen
         return commits;
     }
 
-    private String getItemCommit(StatusResults.Differentiable item) {
+    private String getItemCommit(Differentiable item) {
         if(!Element.class.isAssignableFrom(item.getClass())){
             return "";
         }
@@ -162,8 +159,8 @@ public class TimeLine implements StatusResults.Differentiable, Iterable<Differen
         return project.getCommitId();
     }
 
-    private StatusResults.Differentiable findItemByCommit(String commit){
-        for(StatusResults.Differentiable item: items){
+    private Differentiable findItemByCommit(String commit){
+        for(Differentiable item: items){
             if(getItemCommit(item).equals(commit)){
                 return item;
             }
@@ -197,7 +194,7 @@ public class TimeLine implements StatusResults.Differentiable, Iterable<Differen
     }
 
     @Override
-    public double distance(StatusResults.Differentiable other) {
+    public double distance(Differentiable other) {
         if(other.getClass() != this.getClass()){
             return 1.0;
         }
@@ -210,7 +207,7 @@ public class TimeLine implements StatusResults.Differentiable, Iterable<Differen
     }
 
     @Override
-    public List<Action> differences(StatusResults.Differentiable other) {
+    public List<Action> differences(Differentiable other) {
         List<Action> invalid = new ArrayList<>();
         invalid.add(Action.invalid(this, other));
 

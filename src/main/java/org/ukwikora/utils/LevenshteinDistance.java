@@ -3,6 +3,7 @@ package org.ukwikora.utils;
 import org.ukwikora.analytics.Action;
 import org.ukwikora.analytics.StatusResults;
 import opennlp.tools.util.StringUtil;
+import org.ukwikora.model.Differentiable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +45,7 @@ public class LevenshteinDistance {
         return score;
     }
 
-    public static double[][] distanceMatrix(List<? extends StatusResults.Differentiable> before, List<? extends StatusResults.Differentiable> after) {
+    public static double[][] distanceMatrix(List<? extends Differentiable> before, List<? extends Differentiable> after) {
         double[][] d = new double[before.size() + 1][after.size() + 1];
 
         for(int i = 0; i <= before.size(); ++i){
@@ -68,14 +69,14 @@ public class LevenshteinDistance {
         return d;
     }
 
-    public static double index(List<? extends StatusResults.Differentiable> before, List<? extends StatusResults.Differentiable> after){
+    public static double index(List<? extends Differentiable> before, List<? extends Differentiable> after){
         double size = (double)(before.size() > after.size() ? before.size() : after.size());
         double distance = distanceMatrix(before, after)[before.size()][ after.size()];
 
         return size > 0 ? distance / size : 0;
     }
 
-    public static List<Action> getDifferences(List<? extends StatusResults.Differentiable> before, List<? extends StatusResults.Differentiable> after){
+    public static List<Action> getDifferences(List<? extends Differentiable> before, List<? extends Differentiable> after){
         List<Action> actions = new ArrayList<>();
 
         double[][] distances = LevenshteinDistance.distanceMatrix(before, after);
@@ -93,8 +94,8 @@ public class LevenshteinDistance {
 
             // first check if steps are equal
             if(xPosition > 0 && yPosition > 0){
-                StatusResults.Differentiable beforeStep = before.get(xPosition - 1);
-                StatusResults.Differentiable afterStep = after.get(yPosition - 1);
+                Differentiable beforeStep = before.get(xPosition - 1);
+                Differentiable afterStep = after.get(yPosition - 1);
 
                 List<Action> differences = beforeStep.differences(afterStep);
 
@@ -109,8 +110,8 @@ public class LevenshteinDistance {
 
             // then check for the rest
             if(substitution < subtraction && substitution < addition){
-                StatusResults.Differentiable beforeStep = before.get(xPosition - 1);
-                StatusResults.Differentiable afterStep = after.get(yPosition - 1);
+                Differentiable beforeStep = before.get(xPosition - 1);
+                Differentiable afterStep = after.get(yPosition - 1);
 
                 List<Action> differences = beforeStep.differences(afterStep);
 
@@ -123,14 +124,14 @@ public class LevenshteinDistance {
                 yPosition -= 1;
             }
             else if (subtraction < addition){
-                StatusResults.Differentiable beforeStep = before.get(xPosition - 1);
+                Differentiable beforeStep = before.get(xPosition - 1);
                 actions.add(Action.removeElement(beforeStep.getClass(), beforeStep));
 
                 value = subtraction;
                 xPosition -= 1;
             }
             else{
-                StatusResults.Differentiable afterStep = after.get(yPosition - 1);
+                Differentiable afterStep = after.get(yPosition - 1);
                 actions.add(Action.addElement(afterStep.getClass(), afterStep));
 
                 value = addition;

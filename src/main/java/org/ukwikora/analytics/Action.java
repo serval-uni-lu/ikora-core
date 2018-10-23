@@ -5,7 +5,7 @@ import org.ukwikora.model.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Action implements StatusResults.Differentiable {
+public class Action implements Differentiable {
     public enum Type{
         ADD_USER_KEYWORD,
         REMOVE_USER_KEYWORD,
@@ -41,10 +41,10 @@ public class Action implements StatusResults.Differentiable {
     }
 
     private final Type type;
-    private final StatusResults.Differentiable left;
-    private final StatusResults.Differentiable right;
+    private final Differentiable left;
+    private final Differentiable right;
 
-    private Action(Type type, StatusResults.Differentiable left, StatusResults.Differentiable right){
+    private Action(Type type, Differentiable left, Differentiable right){
         this.type = type;
         this.left = left;
         this.right = right;
@@ -54,15 +54,15 @@ public class Action implements StatusResults.Differentiable {
         return type;
     }
 
-    public StatusResults.Differentiable getLeft() {
+    public Differentiable getLeft() {
         return left;
     }
 
-    public StatusResults.Differentiable getRight() {
+    public Differentiable getRight() {
         return right;
     }
 
-    public StatusResults.Differentiable getValue() {
+    public Differentiable getValue() {
         if(this.left != null){
             return this.left;
         }
@@ -71,7 +71,7 @@ public class Action implements StatusResults.Differentiable {
     }
 
     @Override
-    public double distance(StatusResults.Differentiable other) {
+    public double distance(Differentiable other) {
         if(other.getClass() != this.getClass()){
             return 1.0;
         }
@@ -84,7 +84,7 @@ public class Action implements StatusResults.Differentiable {
     }
 
     @Override
-    public List<Action> differences(StatusResults.Differentiable other) {
+    public List<Action> differences(Differentiable other) {
         List<Action> differences = new ArrayList<>();
 
         if(other.getClass() != this.getClass()){
@@ -104,7 +104,7 @@ public class Action implements StatusResults.Differentiable {
         return this.getType().name();
     }
 
-    public static <T> Action addElement(Class<T> type, StatusResults.Differentiable element) {
+    public static <T> Action addElement(Class<T> type, Differentiable element) {
         if(UserKeyword.class.isAssignableFrom(type)){
             return new Action(Type.ADD_USER_KEYWORD, null, element);
         }
@@ -124,7 +124,7 @@ public class Action implements StatusResults.Differentiable {
         return new Action(Type.INVALID, null, element);
     }
 
-    public static <T> Action removeElement(Class<T> type, StatusResults.Differentiable element){
+    public static <T> Action removeElement(Class<T> type, Differentiable element){
         if(UserKeyword.class.isAssignableFrom(type)){
             return new Action(Type.REMOVE_USER_KEYWORD, element, null);
         }
@@ -144,59 +144,59 @@ public class Action implements StatusResults.Differentiable {
         return new Action(Type.INVALID, element, null);
     }
 
-    public static Action changeName(StatusResults.Differentiable left, StatusResults.Differentiable right){
+    public static Action changeName(Differentiable left, Differentiable right){
         return new Action(Type.CHANGE_NAME, left, right);
     }
 
-    public static Action changeStep(StatusResults.Differentiable left, StatusResults.Differentiable right){
+    public static Action changeStep(Differentiable left, Differentiable right){
         return new Action(Type.CHANGE_STEP, left, right);
     }
 
-    public static Action changeStepType(StatusResults.Differentiable left, StatusResults.Differentiable right){
+    public static Action changeStepType(Differentiable left, Differentiable right){
         return new Action(Type.CHANGE_STEP_TYPE, left, right);
     }
 
-    public static Action changeStepName(StatusResults.Differentiable left, StatusResults.Differentiable right){
+    public static Action changeStepName(Differentiable left, Differentiable right){
         return new Action(Type.CHANGE_STEP, left, right);
     }
 
-    public static Action changeStepArguments(StatusResults.Differentiable left, StatusResults.Differentiable right){
+    public static Action changeStepArguments(Differentiable left, Differentiable right){
         return new Action(Type.CHANGE_STEP_ARGUMENTS, left, right);
     }
 
-    public static Action changeStepExpression(StatusResults.Differentiable left, StatusResults.Differentiable right){
+    public static Action changeStepExpression(Differentiable left, Differentiable right){
         return new Action(Type.CHANGE_STEP_EXPRESSION, left, right);
     }
 
-    public static Action changeStepReturnValues(StatusResults.Differentiable left, StatusResults.Differentiable right){
+    public static Action changeStepReturnValues(Differentiable left, Differentiable right){
         return new Action(Type.CHANGE_STEP_RETURN_VALUES, left, right);
     }
 
-    public static Action changeForLoopCondition(StatusResults.Differentiable left, StatusResults.Differentiable right) {
+    public static Action changeForLoopCondition(Differentiable left, Differentiable right) {
         return new Action(Type.CHANGE_FOR_LOOP_CONDITION, left, right);
     }
 
-    public static Action changeForLoopBody(StatusResults.Differentiable left, StatusResults.Differentiable right) {
+    public static Action changeForLoopBody(Differentiable left, Differentiable right) {
         return new Action(Type.CHANGE_FOR_LOOP_BODY, left, right);
     }
 
-    public static Action changeVariableDefinition(StatusResults.Differentiable left, StatusResults.Differentiable right) {
+    public static Action changeVariableDefinition(Differentiable left, Differentiable right) {
         return new Action(Type.CHANGE_VARIABLE_DEFINITION, left, right);
     }
 
-    public static Action addDocumentation(StatusResults.Differentiable left, StatusResults.Differentiable right) {
+    public static Action addDocumentation(Differentiable left, Differentiable right) {
         return new Action(Type.ADD_DOCUMENTATION, left, right);
     }
 
-    public static Action removeDocumentation(StatusResults.Differentiable left, StatusResults.Differentiable right) {
+    public static Action removeDocumentation(Differentiable left, Differentiable right) {
         return new Action(Type.REMOVE_DOCUMENTATION, left, right);
     }
 
-    public static Action changeDocumentation(StatusResults.Differentiable left, StatusResults.Differentiable right) {
+    public static Action changeDocumentation(Differentiable left, Differentiable right) {
         return new Action(Type.CHANGE_DOCUMENTATION, left, right);
     }
 
-    public static Action invalid(StatusResults.Differentiable left, StatusResults.Differentiable right) {
+    public static Action invalid(Differentiable left, Differentiable right) {
         return new Action(Type.INVALID, left, right);
     }
 }

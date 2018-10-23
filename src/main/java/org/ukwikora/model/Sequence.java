@@ -7,7 +7,7 @@ import org.ukwikora.utils.LevenshteinDistance;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Sequence implements StatusResults.Differentiable {
+public class Sequence implements Differentiable {
     private List<Keyword> steps;
 
     public Sequence(){
@@ -23,7 +23,7 @@ public class Sequence implements StatusResults.Differentiable {
     }
 
     @Override
-    public double distance(StatusResults.Differentiable other) {
+    public double distance(Differentiable other) {
         List<Action> actions = differences(other);
 
         for(Action action: actions){
@@ -36,7 +36,7 @@ public class Sequence implements StatusResults.Differentiable {
     }
 
     @Override
-    public List<Action> differences(StatusResults.Differentiable other) {
+    public List<Action> differences(Differentiable other) {
         List<Action> actions = new ArrayList<>();
 
         if(other == this){

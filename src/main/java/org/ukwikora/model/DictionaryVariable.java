@@ -7,12 +7,12 @@ import java.util.List;
 
 public class DictionaryVariable extends Variable {
     @Override
-    public double distance(StatusResults.Differentiable other) {
+    public double distance(Differentiable other) {
         return 0;
     }
 
     @Override
-    public List<Action> differences(StatusResults.Differentiable other) {
+    public List<Action> differences(Differentiable other) {
         return null;
     }
 

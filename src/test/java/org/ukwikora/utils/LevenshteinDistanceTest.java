@@ -33,14 +33,14 @@ public class LevenshteinDistanceTest {
 
     @Test
     public void checkDistanceMatrix(){
-        List<ProjectStatistics.DifferentiableString> list1 = new ArrayList<>();
-        list1.add(new ProjectStatistics.DifferentiableString("Step 1"));
-        list1.add(new ProjectStatistics.DifferentiableString("Step 2"));
-        list1.add(new ProjectStatistics.DifferentiableString("Step 3"));
+        List<DifferentiableString> list1 = new ArrayList<>();
+        list1.add(new DifferentiableString("Step 1"));
+        list1.add(new DifferentiableString("Step 2"));
+        list1.add(new DifferentiableString("Step 3"));
 
-        List<ProjectStatistics.DifferentiableString> list2 = new ArrayList<>();
-        list2.add(new ProjectStatistics.DifferentiableString("Step 2"));
-        list2.add(new ProjectStatistics.DifferentiableString("Step 3"));
+        List<DifferentiableString> list2 = new ArrayList<>();
+        list2.add(new DifferentiableString("Step 2"));
+        list2.add(new DifferentiableString("Step 3"));
 
         double[][] matrix = LevenshteinDistance.distanceMatrix(list1, list2);
         LevenshteinDistance.getDifferences(list1, list2);

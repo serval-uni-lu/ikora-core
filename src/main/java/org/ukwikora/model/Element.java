@@ -1,8 +1,6 @@
 package org.ukwikora.model;
 
-import org.ukwikora.analytics.StatusResults;
-
-public interface Element extends StatusResults.Differentiable {
+public interface Element extends Differentiable {
     void setFile(TestCaseFile file);
     TestCaseFile getFile();
     String getFileName();

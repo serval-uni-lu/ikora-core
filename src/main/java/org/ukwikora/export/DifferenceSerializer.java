@@ -177,7 +177,7 @@ public class DifferenceSerializer extends JsonSerializer<Difference> {
         }
     }
 
-    private void writeKeywordInfo(JsonGenerator jsonGenerator, StatusResults.Differentiable differentiable, String name, boolean showSteps) throws IOException {
+    private void writeKeywordInfo(JsonGenerator jsonGenerator, Differentiable differentiable, String name, boolean showSteps) throws IOException {
         if(!(differentiable instanceof KeywordDefinition)){
             return;
         }
@@ -232,7 +232,7 @@ public class DifferenceSerializer extends JsonSerializer<Difference> {
         return type;
     }
 
-    private String getStepName(StatusResults.Differentiable step){
+    private String getStepName(Differentiable step){
         if(!(step instanceof Step)){
             logger.warn("Expecting a Step got " + step.getClass().getSimpleName() + " instead");
             return "INVALID STEP";
