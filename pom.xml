@@ -20,7 +20,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>lu.uni.serval.RFTestGenerator</mainClass>
+                            <mainClass>org.ukwikora.Ukwikora</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
