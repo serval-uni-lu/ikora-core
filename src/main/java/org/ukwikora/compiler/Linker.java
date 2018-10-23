@@ -15,7 +15,7 @@ public class Linker {
     static final private Pattern gherkinPattern;
 
     static {
-        gherkinPattern =  Pattern.compile("^(\\s*)(Given|When|Then|And|But)(.)*$", Pattern.CASE_INSENSITIVE);
+        gherkinPattern =  Pattern.compile("^(\\s*)(Given|When|Then|And|But)", Pattern.CASE_INSENSITIVE);
     }
 
     static public void link(Project project) throws Exception {
