@@ -116,10 +116,6 @@ public abstract class Step implements Keyword {
         return 0;
     }
 
-    public List<Value> getKeywordParameters() {
-        return new ArrayList<>();
-    }
-
     @Override
     public Type getType(){
         return Type.Unknown;
