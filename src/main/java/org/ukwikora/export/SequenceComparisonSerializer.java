@@ -1,9 +1,10 @@
-package org.ukwikora.analytics;
+package org.ukwikora.export;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
+import org.ukwikora.analytics.*;
 import org.ukwikora.model.Element;
 import org.ukwikora.model.KeywordDefinition;
 import org.ukwikora.model.TestCase;
