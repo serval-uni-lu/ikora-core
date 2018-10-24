@@ -7,6 +7,7 @@ import org.ukwikora.utils.LevenshteinDistance;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class ForLoop extends Step {
     private List<Step> steps;
@@ -37,6 +38,16 @@ public class ForLoop extends Step {
     @Override
     public List<Value> getParameters() {
         return parameters;
+    }
+
+    @Override
+    public Optional<Value> getParameter(int position, boolean resolved) {
+        return Optional.empty();
+    }
+
+    @Override
+    public boolean hasParameters() {
+        return false;
     }
 
     @Override

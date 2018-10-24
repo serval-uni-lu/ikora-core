@@ -4,38 +4,42 @@ import org.ukwikora.analytics.Action;
 import org.ukwikora.analytics.StatusResults;
 import org.ukwikora.utils.LevenshteinDistance;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.security.InvalidParameterException;
+import java.util.*;
 
 public class ScalarVariable extends Variable {
-    private List<Value> definition;
+    private Value value;
 
     public ScalarVariable(){
-        this.definition = new ArrayList<>();
+        this.value = Value.empty();
     }
 
     @Override
-    public void addElement(String element) {
-        this.definition.add(new Value(element));
+    public String getValueAsString() {
+        return this.value.toString();
     }
 
-    public List<Value> getValue() {
-        return definition;
+    public Value getValue(){
+        return value;
     }
 
-    public String getValueAsString(){
-        StringBuilder builder = new StringBuilder();
+    @Override
+    public void addElement(String element){
+        this.value = new Value(element);
+    }
 
-        for(Iterator<Value> i = definition.iterator(); i.hasNext();) {
-            builder.append(i.next().toString());
+    @Override
+    public List<Value> getValues() {
+        return Collections.singletonList(this.value);
+    }
 
-            if(i.hasNext()){
-                builder.append("\t");
-            }
+    @Override
+    public Optional<List<Value>> getResolvedValues() {
+        if(this.isAssignment()){
+            return Optional.empty();
         }
 
-        return builder.toString();
+        return getValue().getResolvedValues();
     }
 
     @Override
@@ -46,7 +50,7 @@ public class ScalarVariable extends Variable {
 
         ScalarVariable variable = (ScalarVariable)other;
         double value = getName().equals(variable.getName()) ? 0 : 0.5;
-        return value + (LevenshteinDistance.index(definition, variable.definition) / 2.0);
+        return value + (LevenshteinDistance.index(getValues(), variable.getValues()) / 2.0);
     }
 
     @Override
@@ -59,7 +63,7 @@ public class ScalarVariable extends Variable {
 
         ScalarVariable variable = (ScalarVariable)other;
 
-        if(LevenshteinDistance.index(definition, variable.definition) > 0){
+        if(LevenshteinDistance.index(getValues(), variable.getValues()) > 0){
             actions.add(Action.changeVariableDefinition(this, other));
         }
 

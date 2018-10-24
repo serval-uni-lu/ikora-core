@@ -38,6 +38,10 @@ public abstract class Step implements Keyword {
 
     public abstract List<Value> getParameters();
 
+    public abstract Optional<Value> getParameter(int position, boolean resolved);
+
+    public abstract boolean hasParameters();
+
     @Override
     public Set<Keyword> getDependencies() {
         Set<Keyword> dependencies = new HashSet<>();

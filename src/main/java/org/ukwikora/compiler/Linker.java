@@ -83,21 +83,23 @@ public class Linker {
     }
 
     private static void linkStepArguments(KeywordCall step, TestCaseFile testCaseFile, LibraryResources libraries) throws  Exception {
-        List<Value> parameters = step.getParameters();
-
-        if(parameters.isEmpty()){
+        if(!step.hasParameters()){
             return;
         }
 
         for(int position: step.getKeywordsLaunchedPosition()){
-            Value keywordParameter = parameters.get(position);
+            step.getParameter(position, true).ifPresent(keywordParameter ->{
+                try {
+                    Keyword keyword = getKeyword(keywordParameter.toString(), testCaseFile, libraries);
 
-            Keyword keyword = getKeyword(keywordParameter.toString(), testCaseFile, libraries);
-
-            if(keyword != null) {
-                KeywordCall call = step.setKeywordParameter(keywordParameter, keyword);
-                linkStepArguments(call, testCaseFile, libraries);
-            }
+                    if(keyword != null) {
+                        KeywordCall call = step.setKeywordParameter(keywordParameter, keyword);
+                        linkStepArguments(call, testCaseFile, libraries);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
         }
     }
 

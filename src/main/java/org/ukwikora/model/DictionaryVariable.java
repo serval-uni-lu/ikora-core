@@ -1,11 +1,18 @@
 package org.ukwikora.model;
 
 import org.ukwikora.analytics.Action;
-import org.ukwikora.analytics.StatusResults;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class DictionaryVariable extends Variable {
+    List<Value> values;
+
+    public DictionaryVariable(){
+        this.values = new ArrayList<>();
+    }
+
     @Override
     public double distance(Differentiable other) {
         return 0;
@@ -18,11 +25,23 @@ public class DictionaryVariable extends Variable {
 
     @Override
     public void addElement(String element) {
-
+        values.add(new Value(element));
     }
 
     @Override
     public String getValueAsString() {
-        return null;
+        StringBuilder builder = new StringBuilder();
+
+        for(Value value: values){
+            builder.append(value.toString());
+            builder.append("\t");
+        }
+
+        return builder.toString().trim();
+    }
+
+    @Override
+    public List<Value> getValues() {
+        return values;
     }
 }

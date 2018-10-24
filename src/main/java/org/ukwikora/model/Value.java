@@ -3,10 +3,7 @@ package org.ukwikora.model;
 import org.ukwikora.analytics.Action;
 import org.ukwikora.analytics.StatusResults;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -62,7 +59,7 @@ public class Value implements Differentiable {
 
     public static boolean isVariable(String text) {
         Value value = new Value(text);
-        return value.hasVariable();
+        return value.isVariable();
     }
 
     public boolean hasVariable() {
@@ -90,6 +87,24 @@ public class Value implements Differentiable {
     public static List<String> findVariables(String text) {
         Value value = new Value(text);
         return value.findVariables();
+    }
+
+    public Optional<List<Value>> getResolvedValues() {
+        if(isVariable()){
+            return this.variables.get(this.value).getResolvedValues();
+        }
+
+        if(hasVariable()){
+            String resolvedValue = this.value;
+
+            for(Map.Entry<String, Variable> entry: this.variables.entrySet()){
+                resolvedValue = resolvedValue.replaceAll(entry.getKey(), entry.getValue().getValueAsString());
+            }
+
+            return Optional.of(Collections.singletonList(new Value(resolvedValue)));
+        }
+
+        return Optional.of(Collections.singletonList(this));
     }
 
     private void buildRegex() {
@@ -129,5 +144,9 @@ public class Value implements Differentiable {
     @Override
     public List<Action> differences(Differentiable other) {
         return null;
+    }
+
+    public static Value empty(){
+        return new Value("");
     }
 }

@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class Assignment extends Step {
     final static Logger logger = Logger.getLogger(Assignment.class);
@@ -69,6 +70,24 @@ public class Assignment extends Step {
         }
 
         return expression.getParameters();
+    }
+
+    @Override
+    public Optional<Value> getParameter(int position, boolean resolved) {
+        if(expression == null){
+            return Optional.empty();
+        }
+
+        return expression.getParameter(position, resolved);
+    }
+
+    @Override
+    public boolean hasParameters() {
+        if(expression == null){
+            return false;
+        }
+
+        return expression.hasParameters();
     }
 
     @Override

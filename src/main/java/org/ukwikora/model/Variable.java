@@ -1,5 +1,9 @@
 package org.ukwikora.model;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 public abstract class Variable implements Element {
     private TestCaseFile file;
     private String name;
@@ -17,8 +21,6 @@ public abstract class Variable implements Element {
     public void setAssignment(Assignment assignment) {
         this.assignment = assignment;
     }
-
-    public abstract void addElement(String element);
 
     @Override
     public void setFile(TestCaseFile file) {
@@ -79,4 +81,23 @@ public abstract class Variable implements Element {
     public int getLoc() {
         return file.getLoc(lineRange);
     }
+
+    public Optional<List<Value>> getResolvedValues() {
+        List<Value> values = new ArrayList<>();
+
+        for(Value value: getValues()){
+            Optional<List<Value>> resolvedValues = value.getResolvedValues();
+
+            if(!resolvedValues.isPresent()){
+                return Optional.empty();
+            }
+
+            values.addAll(resolvedValues.get());
+        }
+
+        return Optional.of(values);
+    }
+
+    public abstract void addElement(String element);
+    public abstract List<Value> getValues();
 }

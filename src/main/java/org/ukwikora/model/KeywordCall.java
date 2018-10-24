@@ -33,6 +33,43 @@ public class KeywordCall extends Step {
         return this.parameters;
     }
 
+    @Override
+    public Optional<Value> getParameter(int position, boolean resolved) {
+        if (position < 0){
+            return Optional.empty();
+        }
+
+        if(resolved){
+            int current = 0;
+            for(Value parameter: this.parameters){
+                Optional<List<Value>> resolvedParameters  = parameter.getResolvedValues();
+
+                if(!resolvedParameters.isPresent()){
+                    return Optional.empty();
+                }
+
+                for(Value resolvedParameter: resolvedParameters.get()){
+                    if(position == current){
+                        return Optional.of(resolvedParameter);
+                    }
+
+                    ++current;
+                }
+            }
+        }
+
+        if(position < this.parameters.size()){
+            return Optional.ofNullable(this.parameters.get(position));
+        }
+
+        return Optional.empty();
+    }
+
+    @Override
+    public boolean hasParameters() {
+        return !this.parameters.isEmpty();
+    }
+
     public Keyword getKeyword() {
         return keyword;
     }
