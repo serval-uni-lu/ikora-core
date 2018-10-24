@@ -3,7 +3,7 @@ package org.ukwikora.compiler;
 import org.ukwikora.model.LibraryKeyword;
 import org.ukwikora.model.LibraryResources;
 import org.ukwikora.model.LibraryVariable;
-import org.ukwikora.model.Project;
+import org.ukwikora.model.Runtime;
 import org.reflections.Reflections;
 
 import java.util.Set;
@@ -11,7 +11,7 @@ import java.util.Set;
 public class LibraryLoader {
     private LibraryLoader() {}
 
-    static public void load(Project project) {
+    static public void load(Runtime runtime) {
         Reflections reflections = new Reflections("org.ukwikora.libraries");
         Set<Class<? extends LibraryKeyword>> keywordClasses = reflections.getSubTypesOf(LibraryKeyword.class);
         Set<Class<? extends LibraryVariable>> variableClasses = reflections.getSubTypesOf(LibraryVariable.class);
@@ -26,6 +26,6 @@ public class LibraryLoader {
             libraries.loadClass(libraryClass);
         }
 
-        project.setLibraries(libraries);
+        runtime.setLibraries(libraries);
     }
 }

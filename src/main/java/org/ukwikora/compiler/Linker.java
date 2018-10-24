@@ -18,19 +18,19 @@ public class Linker {
         gherkinPattern =  Pattern.compile("^(\\s*)(Given|When|Then|And|But)", Pattern.CASE_INSENSITIVE);
     }
 
-    static public void link(Project project) throws Exception {
-        for (TestCaseFile testCaseFile: project.getTestCaseFiles()) {
+    static public void link(StaticRuntime runtime) throws Exception {
+        for (TestCaseFile testCaseFile: runtime.getTestCaseFiles()) {
             for(TestCase testCase: testCaseFile.getTestCases()) {
-                linkSteps(testCase, testCaseFile, project);
+                linkSteps(testCase, testCaseFile, runtime);
             }
 
             for(UserKeyword userKeyword: testCaseFile.getElements(UserKeyword.class)) {
-                linkSteps(userKeyword, testCaseFile, project);
+                linkSteps(userKeyword, testCaseFile, runtime);
             }
         }
     }
 
-    private static void linkSteps(TestCase testCase, TestCaseFile testCaseFile, Project project) throws Exception {
+    private static void linkSteps(TestCase testCase, TestCaseFile testCaseFile, StaticRuntime runtime) throws Exception {
         for(Step step: testCase) {
             if(!(step instanceof KeywordCall)) {
                 throw new Exception("expecting a step of type keyword call");
@@ -41,16 +41,16 @@ public class Linker {
             Matcher matcher = gherkinPattern.matcher(step.getName());
             String name = matcher.replaceAll("").trim();
 
-            Keyword keyword = getKeyword(name, testCaseFile, project);
+            Keyword keyword = getKeyword(name, testCaseFile, runtime);
 
             if(keyword != null) {
                 call.setKeyword(keyword);
-                linkStepArguments(call, testCaseFile, project);
+                linkStepArguments(call, testCaseFile, runtime);
             }
         }
     }
 
-    private static void linkSteps(UserKeyword userKeyword, TestCaseFile testCaseFile, Project project) throws Exception {
+    private static void linkSteps(UserKeyword userKeyword, TestCaseFile testCaseFile, StaticRuntime runtime) throws Exception {
         for (Step step: userKeyword) {
             KeywordCall call;
 
@@ -66,21 +66,21 @@ public class Linker {
 
             String name = call.getName().trim();
 
-            Keyword keyword = getKeyword(name, testCaseFile, project);
+            Keyword keyword = getKeyword(name, testCaseFile, runtime);
 
             if(keyword != null) {
                 call.setKeyword(keyword);
 
                 for(Value value : step.getParameters()) {
-                    resolveArgument(value, testCaseFile, userKeyword, project);
+                    resolveArgument(value, testCaseFile, userKeyword, runtime);
                 }
 
-                linkStepArguments(call, testCaseFile, project);
+                linkStepArguments(call, testCaseFile, runtime);
             }
         }
     }
 
-    private static void linkStepArguments(KeywordCall step, TestCaseFile testCaseFile, Project project) {
+    private static void linkStepArguments(KeywordCall step, TestCaseFile testCaseFile, StaticRuntime runtime) {
         if(!step.hasParameters()){
             return;
         }
@@ -88,11 +88,11 @@ public class Linker {
         for(int position: step.getKeywordsLaunchedPosition()){
             step.getParameter(position, true).ifPresent(keywordParameter ->{
                 try {
-                    Keyword keyword = getKeyword(keywordParameter.toString(), testCaseFile, project);
+                    Keyword keyword = getKeyword(keywordParameter.toString(), testCaseFile, runtime);
 
                     if(keyword != null) {
                         KeywordCall call = step.setKeywordParameter(keywordParameter, keyword);
-                        linkStepArguments(call, testCaseFile, project);
+                        linkStepArguments(call, testCaseFile, runtime);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -101,7 +101,7 @@ public class Linker {
         }
     }
 
-    private static Keyword getKeyword(String name, TestCaseFile testCaseFile, Project project) throws Exception{
+    private static Keyword getKeyword(String name, TestCaseFile testCaseFile, StaticRuntime project) throws Exception{
         Keyword keyword = testCaseFile.findUserKeyword(name);
 
         if(keyword == null) {
@@ -115,7 +115,7 @@ public class Linker {
         return keyword;
     }
 
-    static private void resolveArgument(Value value, TestCaseFile testCaseFile, UserKeyword userKeyword, Project project) {
+    static private void resolveArgument(Value value, TestCaseFile testCaseFile, UserKeyword userKeyword, StaticRuntime runtime) {
         List<String> variables = value.findVariables();
 
         for(String name: variables){
@@ -137,7 +137,7 @@ public class Linker {
             }
 
             for(TestCase test: userKeyword.getTestCases()){
-                variable = project.findTestVariable(test, name);
+                variable = runtime.findTestVariable(test, name);
                 if(variable != null){
                     value.setVariable(name, variable);
                     break;
@@ -148,13 +148,13 @@ public class Linker {
                 continue;
             }
 
-            variable = project.findGlobalVariable(name);
+            variable = runtime.findGlobalVariable(name);
             if(variable != null){
                 value.setVariable(name, variable);
                 continue;
             }
 
-            variable = project.findLibraryVariable(name);
+            variable = runtime.findLibraryVariable(name);
             if(variable != null){
                 value.setVariable(name, variable);
                 continue;

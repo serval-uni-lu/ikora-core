@@ -15,8 +15,10 @@ public class Compiler {
         Project project = null;
         try {
             project = parse(filePath);
-            loadLibraries(project);
-            Linker.link(project);
+            StaticRuntime runtime = new StaticRuntime(project);
+
+            loadLibraries(runtime);
+            Linker.link(runtime);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -30,8 +32,8 @@ public class Compiler {
         return project;
     }
 
-    static private void loadLibraries(Project project) {
-        LibraryLoader.load(project);
+    static private void loadLibraries(StaticRuntime runtime) {
+        LibraryLoader.load(runtime);
     }
 
     static private Project parse(String filePath) {

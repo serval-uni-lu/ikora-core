@@ -10,8 +10,6 @@ import java.util.*;
 public class Project implements Comparable<Project> {
     private List<TestCaseFile> testCaseFiles;
     private Map<String, TestCaseFile> files;
-    private LibraryResources libraries;
-    private Scope scope;
 
     private File rootFolder;
     private String gitUrl;
@@ -23,7 +21,6 @@ public class Project implements Comparable<Project> {
         rootFolder = new File(file.trim());
         testCaseFiles = new ArrayList<>();
         files = new HashMap<>();
-        scope = new Scope();
         loc = 0;
     }
 
@@ -71,10 +68,6 @@ public class Project implements Comparable<Project> {
         return gitUrl;
     }
 
-    public LibraryResources getLibraries() {
-        return libraries;
-    }
-
     public <T extends Element> ElementTable<T> getElements(Class<T> type) {
         ElementTable<T> keywords = new ElementTable<>();
 
@@ -92,10 +85,6 @@ public class Project implements Comparable<Project> {
 
     public int getLoc() {
         return loc;
-    }
-
-    public void setLibraries(LibraryResources libraries) {
-        this.libraries = libraries;
     }
 
     public void addFile(File file){
@@ -130,18 +119,6 @@ public class Project implements Comparable<Project> {
         Path path = Paths.get(file.getAbsolutePath().trim()).normalize();
 
         return base.relativize(path).toString();
-    }
-
-    public Variable findLibraryVariable(String name){
-        return this.libraries.findVariable(name);
-    }
-
-    public Variable findTestVariable(TestCase test, String name) {
-        return this.scope.findTestVariable(test, name);
-    }
-
-    public Variable findGlobalVariable(String name) {
-        return this.scope.findGlobalVariable(name);
     }
 
     @Override
