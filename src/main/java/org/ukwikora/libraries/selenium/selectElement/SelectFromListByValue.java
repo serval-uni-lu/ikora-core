@@ -1,7 +1,7 @@
 package org.ukwikora.libraries.selenium.selectElement;
 
 import org.ukwikora.model.LibraryKeyword;
-import org.ukwikora.runner.Runtime;
+import org.ukwikora.model.Runtime;
 
 public class SelectFromListByValue extends LibraryKeyword {
     public SelectFromListByValue(){

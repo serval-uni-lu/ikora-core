@@ -2,7 +2,7 @@ package org.ukwikora.libraries.selenium.element;
 
 import org.ukwikora.model.Value;
 import org.ukwikora.model.LibraryKeyword;
-import org.ukwikora.runner.Runtime;
+import org.ukwikora.model.Runtime;
 
 public class PageShouldContainElement extends LibraryKeyword {
     public PageShouldContainElement(){

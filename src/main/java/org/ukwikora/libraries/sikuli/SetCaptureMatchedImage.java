@@ -1,7 +1,7 @@
 package org.ukwikora.libraries.sikuli;
 
 import org.ukwikora.model.LibraryKeyword;
-import org.ukwikora.runner.Runtime;
+import org.ukwikora.model.Runtime;
 
 public class SetCaptureMatchedImage extends LibraryKeyword {
     @Override

@@ -1,7 +1,7 @@
 package org.ukwikora.libraries.selenium.cookies;
 
 import org.ukwikora.model.LibraryKeyword;
-import org.ukwikora.runner.Runtime;
+import org.ukwikora.model.Runtime;
 
 public class GetCookieValue extends LibraryKeyword {
     public GetCookieValue(){

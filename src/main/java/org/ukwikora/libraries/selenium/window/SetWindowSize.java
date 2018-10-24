@@ -1,7 +1,7 @@
 package org.ukwikora.libraries.selenium.window;
 
 import org.ukwikora.model.LibraryKeyword;
-import org.ukwikora.runner.Runtime;
+import org.ukwikora.model.Runtime;
 
 public class SetWindowSize extends LibraryKeyword {
     public SetWindowSize(){

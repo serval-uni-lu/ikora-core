@@ -1,7 +1,7 @@
 package org.ukwikora.libraries.builtin;
 
 import org.ukwikora.model.LibraryKeyword;
-import org.ukwikora.runner.Runtime;
+import org.ukwikora.model.Runtime;
 
 public class ShouldNotMatchRegexp extends LibraryKeyword {
     public ShouldNotMatchRegexp(){

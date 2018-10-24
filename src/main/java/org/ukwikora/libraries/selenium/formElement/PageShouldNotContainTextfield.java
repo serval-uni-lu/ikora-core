@@ -1,7 +1,7 @@
 package org.ukwikora.libraries.selenium.formElement;
 
 import org.ukwikora.model.LibraryKeyword;
-import org.ukwikora.runner.Runtime;
+import org.ukwikora.model.Runtime;
 
 public class PageShouldNotContainTextfield extends LibraryKeyword {
     public PageShouldNotContainTextfield(){
