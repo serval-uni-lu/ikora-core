@@ -11,6 +11,8 @@ public class Project implements Comparable<Project> {
     private List<TestCaseFile> testCaseFiles;
     private Map<String, TestCaseFile> files;
     private LibraryResources libraries;
+    private Scope scope;
+
     private File rootFolder;
     private String gitUrl;
     private String commitId;
@@ -21,6 +23,7 @@ public class Project implements Comparable<Project> {
         rootFolder = new File(file.trim());
         testCaseFiles = new ArrayList<>();
         files = new HashMap<>();
+        scope = new Scope();
         loc = 0;
     }
 
@@ -127,6 +130,18 @@ public class Project implements Comparable<Project> {
         Path path = Paths.get(file.getAbsolutePath().trim()).normalize();
 
         return base.relativize(path).toString();
+    }
+
+    public Variable findLibraryVariable(String name){
+        return this.libraries.findVariable(name);
+    }
+
+    public Variable findTestVariable(TestCase test, String name) {
+        return this.scope.findTestVariable(test, name);
+    }
+
+    public Variable findGlobalVariable(String name) {
+        return this.scope.findGlobalVariable(name);
     }
 
     @Override

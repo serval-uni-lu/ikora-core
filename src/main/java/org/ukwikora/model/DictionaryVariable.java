@@ -4,10 +4,9 @@ import org.ukwikora.analytics.Action;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class DictionaryVariable extends Variable {
-    List<Value> values;
+    private List<Value> values;
 
     public DictionaryVariable(){
         this.values = new ArrayList<>();

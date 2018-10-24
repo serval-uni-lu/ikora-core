@@ -2,6 +2,7 @@ package org.ukwikora.model;
 
 import org.ukwikora.runner.Runtime;
 
+import java.util.List;
 import java.util.Set;
 
 public interface Keyword extends Element {
@@ -16,6 +17,7 @@ public interface Keyword extends Element {
     int getMaxArgument();
     int[] getKeywordsLaunchedPosition();
     Set<Keyword> getDependencies();
+    List<TestCase> getTestCases();
     int getConnectivity(int distance);
 
     void addDependency(Keyword keyword);

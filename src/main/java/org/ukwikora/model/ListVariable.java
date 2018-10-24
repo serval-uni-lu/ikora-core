@@ -1,14 +1,12 @@
 package org.ukwikora.model;
 
 import org.ukwikora.analytics.Action;
-import org.ukwikora.analytics.StatusResults;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class ListVariable extends Variable {
-    List<Value> values;
+    private List<Value> values;
 
     public ListVariable(){
         this.values = new ArrayList<>();

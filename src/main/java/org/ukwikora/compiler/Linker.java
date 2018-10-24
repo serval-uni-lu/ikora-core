@@ -19,20 +19,18 @@ public class Linker {
     }
 
     static public void link(Project project) throws Exception {
-        LibraryResources libraries = project.getLibraries();
-
         for (TestCaseFile testCaseFile: project.getTestCaseFiles()) {
             for(TestCase testCase: testCaseFile.getTestCases()) {
-                linkSteps(testCase, testCaseFile, libraries);
+                linkSteps(testCase, testCaseFile, project);
             }
 
             for(UserKeyword userKeyword: testCaseFile.getElements(UserKeyword.class)) {
-                linkSteps(userKeyword, testCaseFile, libraries);
+                linkSteps(userKeyword, testCaseFile, project);
             }
         }
     }
 
-    private static void linkSteps(TestCase testCase, TestCaseFile testCaseFile, LibraryResources libraries) throws Exception {
+    private static void linkSteps(TestCase testCase, TestCaseFile testCaseFile, Project project) throws Exception {
         for(Step step: testCase) {
             if(!(step instanceof KeywordCall)) {
                 throw new Exception("expecting a step of type keyword call");
@@ -43,16 +41,16 @@ public class Linker {
             Matcher matcher = gherkinPattern.matcher(step.getName());
             String name = matcher.replaceAll("").trim();
 
-            Keyword keyword = getKeyword(name, testCaseFile, libraries);
+            Keyword keyword = getKeyword(name, testCaseFile, project);
 
             if(keyword != null) {
                 call.setKeyword(keyword);
-                linkStepArguments(call, testCaseFile, libraries);
+                linkStepArguments(call, testCaseFile, project);
             }
         }
     }
 
-    private static void linkSteps(UserKeyword userKeyword, TestCaseFile testCaseFile, LibraryResources libraries) throws Exception {
+    private static void linkSteps(UserKeyword userKeyword, TestCaseFile testCaseFile, Project project) throws Exception {
         for (Step step: userKeyword) {
             KeywordCall call;
 
@@ -68,21 +66,21 @@ public class Linker {
 
             String name = call.getName().trim();
 
-            Keyword keyword = getKeyword(name, testCaseFile, libraries);
+            Keyword keyword = getKeyword(name, testCaseFile, project);
 
             if(keyword != null) {
                 call.setKeyword(keyword);
 
                 for(Value value : step.getParameters()) {
-                    resolveArgument(value, testCaseFile, userKeyword, libraries);
+                    resolveArgument(value, testCaseFile, userKeyword, project);
                 }
 
-                linkStepArguments(call, testCaseFile, libraries);
+                linkStepArguments(call, testCaseFile, project);
             }
         }
     }
 
-    private static void linkStepArguments(KeywordCall step, TestCaseFile testCaseFile, LibraryResources libraries) throws  Exception {
+    private static void linkStepArguments(KeywordCall step, TestCaseFile testCaseFile, Project project) {
         if(!step.hasParameters()){
             return;
         }
@@ -90,11 +88,11 @@ public class Linker {
         for(int position: step.getKeywordsLaunchedPosition()){
             step.getParameter(position, true).ifPresent(keywordParameter ->{
                 try {
-                    Keyword keyword = getKeyword(keywordParameter.toString(), testCaseFile, libraries);
+                    Keyword keyword = getKeyword(keywordParameter.toString(), testCaseFile, project);
 
                     if(keyword != null) {
                         KeywordCall call = step.setKeywordParameter(keywordParameter, keyword);
-                        linkStepArguments(call, testCaseFile, libraries);
+                        linkStepArguments(call, testCaseFile, project);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -103,11 +101,11 @@ public class Linker {
         }
     }
 
-    private static Keyword getKeyword(String name, TestCaseFile testCaseFile, LibraryResources libraries) throws Exception{
+    private static Keyword getKeyword(String name, TestCaseFile testCaseFile, Project project) throws Exception{
         Keyword keyword = testCaseFile.findUserKeyword(name);
 
         if(keyword == null) {
-            keyword = libraries.findKeyword(name);
+            keyword = project.getLibraries().findKeyword(name);
         }
 
         if(keyword == null) {
@@ -117,33 +115,52 @@ public class Linker {
         return keyword;
     }
 
-    static private void resolveArgument(Value value, TestCaseFile testCaseFile, UserKeyword userKeyword, LibraryResources library) throws Exception {
+    static private void resolveArgument(Value value, TestCaseFile testCaseFile, UserKeyword userKeyword, Project project) {
         List<String> variables = value.findVariables();
 
         for(String name: variables){
-            Variable variable = null;
+            Variable variable;
 
             if(userKeyword != null){
                 variable = userKeyword.findLocalVariable(name);
+
+                if(variable != null){
+                    value.setVariable(name, variable);
+                    continue;
+                }
+            }
+
+            variable = testCaseFile.findVariable(name);
+            if(variable != null){
+                value.setVariable(name, variable);
+                continue;
+            }
+
+            for(TestCase test: userKeyword.getTestCases()){
+                variable = project.findTestVariable(test, name);
+                if(variable != null){
+                    value.setVariable(name, variable);
+                    break;
+                }
             }
 
             if(variable != null){
+                continue;
+            }
+
+            variable = project.findGlobalVariable(name);
+            if(variable != null){
                 value.setVariable(name, variable);
+                continue;
             }
-            else {
-                variable = testCaseFile.findVariable(name);
 
-                if(variable == null){
-                    variable = library.findVariable(name);
-                }
-
-                if(variable == null) {
-                    logger.error("Variable for value \"" + name + "\" in \"" + testCaseFile.getName() + "\" not found!");
-                }
-                else{
-                    value.setVariable(name, variable);
-                }
+            variable = project.findLibraryVariable(name);
+            if(variable != null){
+                value.setVariable(name, variable);
+                continue;
             }
+
+            logger.error("Variable for value \"" + name + "\" in \"" + testCaseFile.getName() + "\" not found!");
         }
     }
 }

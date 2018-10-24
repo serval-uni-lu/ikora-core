@@ -3,6 +3,7 @@ package org.ukwikora.model;
 import org.ukwikora.analytics.Action;
 import org.ukwikora.analytics.StatusResults;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -41,6 +42,22 @@ public abstract class LibraryKeyword implements Keyword {
     @Override
     public Set<Keyword> getDependencies() {
         return dependencies;
+    }
+
+    @Override
+    public List<TestCase> getTestCases() {
+        List<TestCase> testCases = new ArrayList<>();
+
+        for(Keyword dependency: getDependencies()){
+            if (dependency instanceof TestCase){
+                testCases.add((TestCase) dependency);
+            }
+            else{
+                testCases.addAll(dependency.getTestCases());
+            }
+        }
+
+        return testCases;
     }
 
     @Override

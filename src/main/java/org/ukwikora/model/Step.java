@@ -51,6 +51,22 @@ public abstract class Step implements Keyword {
     }
 
     @Override
+    public List<TestCase> getTestCases() {
+        List<TestCase> testCases = new ArrayList<>();
+
+        for(Keyword dependency: getDependencies()){
+            if (dependency instanceof TestCase){
+                testCases.add((TestCase) dependency);
+            }
+            else{
+                testCases.addAll(dependency.getTestCases());
+            }
+        }
+
+        return testCases;
+    }
+
+    @Override
     public int getConnectivity(int distance){
         if(distance == 0){
             return 0;
