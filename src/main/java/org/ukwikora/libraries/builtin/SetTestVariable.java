@@ -4,6 +4,10 @@ import org.ukwikora.model.LibraryKeyword;
 import org.ukwikora.model.Runtime;
 
 public class SetTestVariable extends LibraryKeyword {
+    public SetTestVariable(){
+        this.type = Type.Set;
+    }
+
     @Override
     public void execute(Runtime runtime) {
 
