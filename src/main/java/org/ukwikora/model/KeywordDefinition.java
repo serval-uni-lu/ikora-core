@@ -181,7 +181,7 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
         return depth + 1;
     }
 
-    List<Sequence> getSequences() {
+    public List<Sequence> getSequences() {
         List<Sequence> sequences = new ArrayList<>();
         sequences.add(new Sequence());
 
@@ -246,7 +246,7 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
         KeywordDefinition keyword = (KeywordDefinition)other;
 
         // check name change
-        if(!this.getName().toString().equalsIgnoreCase(keyword.getName().toString())){
+        if(!this.getName().equalsIgnoreCase(keyword.getName())){
             actions.add(Action.changeName(this, other));
         }
 
