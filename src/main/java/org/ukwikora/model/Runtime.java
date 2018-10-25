@@ -1,11 +1,12 @@
 package org.ukwikora.model;
 
 import java.util.List;
+import java.util.Optional;
 
 public abstract class Runtime {
-    private Scope scope;
-    private LibraryResources libraries;
-    private Project project;
+    protected Scope scope;
+    protected LibraryResources libraries;
+    protected Project project;
 
     public Runtime(Project project){
         this.project = project;
@@ -24,8 +25,12 @@ public abstract class Runtime {
         return this.libraries.findVariable(name);
     }
 
-    public Variable findTestVariable(TestCase test, String name) {
+    public Optional<Variable> findTestVariable(TestCase test, String name) {
         return this.scope.findTestVariable(test, name);
+    }
+
+    public Optional<Variable> findSuiteVariable(String suite, String name) {
+        return this.scope.findSuiteVariable(suite, name);
     }
 
     public Variable findGlobalVariable(String name) {

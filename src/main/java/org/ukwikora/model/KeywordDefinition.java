@@ -112,6 +112,17 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
     }
 
     @Override
+    public List<String> getSuites() {
+        List<String> suites = new ArrayList<>();
+
+        for(TestCase testCase: getTestCases()){
+            suites.add(testCase.getFile().getName());
+        }
+
+        return suites;
+    }
+
+    @Override
     public int getConnectivity(int distance){
         if(distance == 0){
             return 0;

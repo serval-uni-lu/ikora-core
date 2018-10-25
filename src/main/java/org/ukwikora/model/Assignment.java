@@ -28,10 +28,10 @@ public class Assignment extends Step {
     }
 
     public void addReturnValue(String returnValue){
-        Variable variable = VariableFactory.create(returnValue);
-        variable.setAssignment(this);
-
-        returnValues.add(variable);
+        VariableFactory.create(returnValue).ifPresent(variable -> {
+            variable.setAssignment(this);
+            returnValues.add(variable);
+        });
     }
 
     public void setExpression(KeywordCall call) {

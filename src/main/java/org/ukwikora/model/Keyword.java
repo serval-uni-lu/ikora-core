@@ -5,7 +5,7 @@ import java.util.Set;
 
 public interface Keyword extends Element {
     enum Type{
-        User, ControlFlow, Assertion, Action, Log, Error, Synchronisation, Get,  Unknown
+        User, ControlFlow, Assertion, Action, Log, Error, Synchronisation, Get,  Unknown, Set
     }
 
     Keyword getStep(int position);
@@ -16,6 +16,8 @@ public interface Keyword extends Element {
     int[] getKeywordsLaunchedPosition();
     Set<Keyword> getDependencies();
     List<TestCase> getTestCases();
+    List<String> getSuites();
+
     int getConnectivity(int distance);
 
     void addDependency(Keyword keyword);

@@ -3,7 +3,10 @@ package org.ukwikora.compiler;
 import org.apache.log4j.Logger;
 import org.ukwikora.model.*;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,18 +22,33 @@ public class Linker {
     }
 
     static public void link(StaticRuntime runtime) throws Exception {
+        List<ScopeValue> unresolvedArguments = new ArrayList<>();
+
         for (TestCaseFile testCaseFile: runtime.getTestCaseFiles()) {
             for(TestCase testCase: testCaseFile.getTestCases()) {
-                linkSteps(testCase, testCaseFile, runtime);
+                unresolvedArguments.addAll(linkSteps(testCase, testCaseFile, runtime));
             }
 
             for(UserKeyword userKeyword: testCaseFile.getElements(UserKeyword.class)) {
-                linkSteps(userKeyword, testCaseFile, runtime);
+                unresolvedArguments.addAll(linkSteps(userKeyword, testCaseFile, runtime));
+            }
+        }
+
+        for(ScopeValue valueScope: unresolvedArguments){
+            Optional<Variable> variable = runtime.findInScope(valueScope.testCases, valueScope.suites, valueScope.variableName);
+
+            if(variable.isPresent()){
+                valueScope.value.setVariable(valueScope.variableName, variable.get());
+            }
+            else{
+                logger.error("Variable for value \"" + valueScope.variableName + "\" in \"" + valueScope.keyword.getName() + "\" not found!");
             }
         }
     }
 
-    private static void linkSteps(TestCase testCase, TestCaseFile testCaseFile, StaticRuntime runtime) throws Exception {
+    private static List<ScopeValue> linkSteps(TestCase testCase, TestCaseFile testCaseFile, StaticRuntime runtime) throws Exception {
+        List<ScopeValue> unresolvedArguments = new ArrayList<>();
+
         for(Step step: testCase) {
             if(!(step instanceof KeywordCall)) {
                 throw new Exception("expecting a step of type keyword call");
@@ -45,12 +63,23 @@ public class Linker {
 
             if(keyword != null) {
                 call.setKeyword(keyword);
+
+                for(Value value : step.getParameters()) {
+                    unresolvedArguments.addAll(resolveArgument(value, testCaseFile, testCase, runtime));
+                }
+
                 linkStepArguments(call, testCaseFile, runtime);
+
+                runtime.resolveGlobal(call);
             }
         }
+
+        return unresolvedArguments;
     }
 
-    private static void linkSteps(UserKeyword userKeyword, TestCaseFile testCaseFile, StaticRuntime runtime) throws Exception {
+    private static List<ScopeValue> linkSteps(UserKeyword userKeyword, TestCaseFile testCaseFile, StaticRuntime runtime) throws Exception {
+        List<ScopeValue> unresolvedArguments = new ArrayList<>();
+
         for (Step step: userKeyword) {
             KeywordCall call;
 
@@ -72,12 +101,16 @@ public class Linker {
                 call.setKeyword(keyword);
 
                 for(Value value : step.getParameters()) {
-                    resolveArgument(value, testCaseFile, userKeyword, runtime);
+                    unresolvedArguments.addAll(resolveArgument(value, testCaseFile, userKeyword, runtime));
                 }
 
                 linkStepArguments(call, testCaseFile, runtime);
+
+                runtime.resolveGlobal(call);
             }
         }
+
+        return unresolvedArguments;
     }
 
     private static void linkStepArguments(KeywordCall step, TestCaseFile testCaseFile, StaticRuntime runtime) {
@@ -115,7 +148,41 @@ public class Linker {
         return keyword;
     }
 
-    static private void resolveArgument(Value value, TestCaseFile testCaseFile, UserKeyword userKeyword, StaticRuntime runtime) {
+    static private  List<ScopeValue> resolveArgument(Value value, TestCaseFile testCaseFile, TestCase testCase, StaticRuntime runtime) {
+        List<ScopeValue> unresolvedArguments = new ArrayList<>();
+
+        List<String> variables = value.findVariables();
+
+        for(String name: variables){
+            Variable variable;
+
+            variable = testCaseFile.findVariable(name);
+            if(variable != null){
+                value.setVariable(name, variable);
+                continue;
+            }
+
+            Optional<Variable> option = runtime.findInScope(Collections.singletonList(testCase), testCase.getSuites(), name);
+            if(option.isPresent()){
+                value.setVariable(name, option.get());
+                continue;
+            }
+
+            variable = runtime.findLibraryVariable(name);
+            if(variable != null){
+                value.setVariable(name, variable);
+                continue;
+            }
+
+            unresolvedArguments.add(new ScopeValue(testCase, value, name));
+        }
+
+        return unresolvedArguments;
+    }
+
+    static private  List<ScopeValue> resolveArgument(Value value, TestCaseFile testCaseFile, UserKeyword userKeyword, StaticRuntime runtime) {
+        List<ScopeValue> unresolvedArguments = new ArrayList<>();
+
         List<String> variables = value.findVariables();
 
         for(String name: variables){
@@ -137,8 +204,9 @@ public class Linker {
             }
 
             for(TestCase test: userKeyword.getTestCases()){
-                variable = runtime.findTestVariable(test, name);
-                if(variable != null){
+                Optional<Variable> optional = runtime.findTestVariable(test, name);
+                if(optional.isPresent()){
+                    variable = optional.get();
                     value.setVariable(name, variable);
                     break;
                 }
@@ -148,9 +216,9 @@ public class Linker {
                 continue;
             }
 
-            variable = runtime.findGlobalVariable(name);
-            if(variable != null){
-                value.setVariable(name, variable);
+            Optional<Variable> optional = runtime.findInScope(userKeyword.getTestCases(), userKeyword.getSuites(), name);
+            if(optional.isPresent()){
+                value.setVariable(name, optional.get());
                 continue;
             }
 
@@ -160,7 +228,25 @@ public class Linker {
                 continue;
             }
 
-            logger.error("Variable for value \"" + name + "\" in \"" + testCaseFile.getName() + "\" not found!");
+            unresolvedArguments.add(new ScopeValue(userKeyword, value, name));
         }
+
+        return unresolvedArguments;
+    }
+}
+
+class ScopeValue {
+    Value value;
+    String variableName;
+    KeywordDefinition keyword;
+    List<TestCase> testCases;
+    List<String> suites;
+
+    ScopeValue(KeywordDefinition keyword, Value value, String variableName){
+        this.value = value;
+        this.variableName = variableName;
+        this.keyword = keyword;
+        this.testCases = keyword.getTestCases();
+        this.suites = keyword.getSuites();
     }
 }

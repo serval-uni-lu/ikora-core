@@ -18,7 +18,7 @@ public class Compiler {
             StaticRuntime runtime = new StaticRuntime(project);
 
             loadLibraries(runtime);
-            Linker.link(runtime);
+            link(runtime);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -34,6 +34,10 @@ public class Compiler {
 
     static private void loadLibraries(StaticRuntime runtime) {
         LibraryLoader.load(runtime);
+    }
+
+    private static void link(StaticRuntime runtime) throws Exception {
+        Linker.link(runtime);
     }
 
     static private Project parse(String filePath) {

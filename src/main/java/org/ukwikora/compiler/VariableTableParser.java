@@ -6,6 +6,8 @@ import org.ukwikora.model.Variable;
 import org.ukwikora.model.VariableFactory;
 
 import java.io.IOException;
+import java.security.InvalidParameterException;
+import java.util.Optional;
 
 public class VariableTableParser {
     private VariableTableParser() {}
@@ -27,7 +29,14 @@ public class VariableTableParser {
 
             String[] tokens = reader.getCurrent().tokenize();
 
-            Variable variable = VariableFactory.create(tokens[0]);
+            Optional<Variable> optional = VariableFactory.create(tokens[0]);
+
+            if(!optional.isPresent()){
+                throw new InvalidParameterException(tokens[0]);
+            }
+
+            Variable variable = optional.get();
+
             int startLine = reader.getCurrent().getNumber();
 
             for (int i = 1; i < tokens.length; ++i) {

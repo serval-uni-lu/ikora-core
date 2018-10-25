@@ -1,7 +1,9 @@
 package org.ukwikora.model;
 
+import java.util.Optional;
+
 public class VariableFactory {
-    public static Variable create(String name){
+    public static Optional<Variable> create(String name){
         Variable variable = null;
 
         String first = name.trim().substring(0, 1);
@@ -19,6 +21,6 @@ public class VariableFactory {
             variable.setName(name);
         }
 
-        return variable;
+        return Optional.ofNullable(variable);
     }
 }

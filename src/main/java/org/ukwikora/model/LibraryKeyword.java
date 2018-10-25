@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 public abstract class LibraryKeyword implements Keyword {
+
     private Set<Keyword> dependencies;
     private TestCaseFile file;
     private LineRange lineRange;
@@ -58,6 +59,17 @@ public abstract class LibraryKeyword implements Keyword {
         }
 
         return testCases;
+    }
+
+    @Override
+    public List<String> getSuites() {
+        List<String> suites = new ArrayList<>();
+
+        for(TestCase testCase: getTestCases()){
+            suites.add(testCase.getFile().getName());
+        }
+
+        return suites;
     }
 
     @Override
