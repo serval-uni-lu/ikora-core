@@ -131,6 +131,10 @@ public class Assignment extends Step {
 
     @Override
     public double distance(Differentiable other) {
+        if(other == this){
+            return 0.0;
+        }
+
         if(!(other instanceof Assignment)){
             return 1;
         }

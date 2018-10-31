@@ -238,6 +238,10 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
 
     @Override
     public double distance(Differentiable other) {
+        if(other == this){
+            return 0.0;
+        }
+
         return (double)differences(other).size() / this.getLoc();
     }
 

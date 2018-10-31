@@ -133,6 +133,10 @@ public class Value implements Differentiable {
 
     @Override
     public double distance(Differentiable other) {
+        if(other == this){
+            return 0.0;
+        }
+
         if(!(other instanceof Value)){
             return 1;
         }
