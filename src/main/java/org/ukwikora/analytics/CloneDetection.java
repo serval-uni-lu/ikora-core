@@ -25,7 +25,11 @@ public class CloneDetection<T extends Element> {
     public static  <T extends  Element> Difference.Clone getCloneType(T t1, T t2){
         Difference.Clone clone = Difference.Clone.None;
 
-        if(isSameSize(t1, t2) && !isTooShort(t1, t2)){
+        if(isTooShort(t1, t2)){
+            return clone;
+        }
+
+        if(isSameSize(t1, t2)){
             Difference difference = Difference.of(t1, t2);
 
             if(difference.isCloneTypeI()){

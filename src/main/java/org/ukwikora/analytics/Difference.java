@@ -11,7 +11,7 @@ import java.util.*;
 @JsonSerialize(using = DifferenceSerializer.class)
 public class Difference implements Differentiable {
     public enum Clone{
-        TypeI, TypeII, None
+        TypeI, TypeII, TypeIII, TypeIV, None
     }
 
     private Differentiable left;
@@ -166,6 +166,10 @@ public class Difference implements Differentiable {
 
     @Override
     public double distance(Differentiable other) {
+        if(other == this){
+            return 0.0;
+        }
+
         if(other.getClass() != this.getClass()){
             return 1.0;
         }
