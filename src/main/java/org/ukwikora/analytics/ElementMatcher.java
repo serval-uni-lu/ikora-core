@@ -58,7 +58,7 @@ public class ElementMatcher {
         Map<Edit, List<T>> candidates = new HashMap<>();
 
         for (T current: unmatched){
-            if(!Difference.of(keyword, current).isCloneTypeI()){
+            if(!CloneDetection.isCloneTypeI(keyword.getClass(), Difference.of(keyword, current))){
                 continue;
             }
 

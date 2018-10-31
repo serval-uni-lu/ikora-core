@@ -18,8 +18,8 @@ public class EvolutionResults {
     private List<TimeLine> timeLines;
     private DifferentiableMatcher timeLineMatcher;
     private List<TimeLine> timeLineNotChanged;
-    private Map<Project, CloneResults> keywordClones;
-    private Map<Project, CloneResults> testCaseClones;
+    private Map<Project, Clones> keywordClones;
+    private Map<Project, Clones> testCaseClones;
 
     private Map<Differentiable, CoEvolutionType> coEvolutionTypes;
 
@@ -177,33 +177,33 @@ public class EvolutionResults {
         return coEvolutionTypes.getOrDefault(differentiable, CoEvolutionType.Invalid);
     }
 
-    public CloneResults getKeywordClones(Project project){
+    public Clones getKeywordClones(Project project){
         if(keywordClones == null){
             keywordClones = new HashMap<>();
 
             for(Project current: projects){
-                CloneResults<UserKeyword> cloneResults = CloneDetection.findClones(current, UserKeyword.class);
-                keywordClones.put(current, cloneResults);
+                Clones<UserKeyword> clones = CloneDetection.findClones(current, UserKeyword.class);
+                keywordClones.put(current, clones);
             }
         }
 
         return keywordClones.get(project);
     }
 
-    public CloneResults getTestCaseClones(Project project){
+    public Clones getTestCaseClones(Project project){
         if(testCaseClones == null){
             testCaseClones = new HashMap<>();
 
             for(Project current: projects){
-                CloneResults<TestCase> cloneResults = CloneDetection.findClones(current, TestCase.class);
-                testCaseClones.put(current, cloneResults);
+                Clones<TestCase> clones = CloneDetection.findClones(current, TestCase.class);
+                testCaseClones.put(current, clones);
             }
         }
 
         return testCaseClones.get(project);
     }
 
-    public int getTotalElement(Class<? extends Element> elementType, Difference.Clone cloneType, CoEvolutionType coEvolutionType){
+    public int getTotalElement(Class<? extends Element> elementType, Clones.Type cloneType, CoEvolutionType coEvolutionType){
         int total = 0;
 
         for(Project project: projects){
@@ -223,8 +223,8 @@ public class EvolutionResults {
         return total;
     }
 
-    private boolean checkCloneCriterion(Project project, Element element, Difference.Clone cloneType){
-        CloneResults clones = null;
+    private boolean checkCloneCriterion(Project project, Element element, Clones.Type cloneType){
+        Clones clones = null;
         if(element.getClass() == UserKeyword.class){
             clones = getKeywordClones(project);
         }

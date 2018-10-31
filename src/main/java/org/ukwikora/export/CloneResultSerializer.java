@@ -4,21 +4,21 @@ package org.ukwikora.export;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-import org.ukwikora.analytics.CloneResults;
+import org.ukwikora.analytics.Clones;
 
 import java.io.IOException;
 
-public class CloneResultSerializer extends StdSerializer<CloneResults> {
+public class CloneResultSerializer extends StdSerializer<Clones> {
     public CloneResultSerializer() {
         this(null);
     }
 
-    public CloneResultSerializer(Class<CloneResults> t) {
+    public CloneResultSerializer(Class<Clones> t) {
         super(t);
     }
 
     @Override
-    public void serialize(CloneResults cloneResults, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
+    public void serialize(Clones clones, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
         jsonGenerator.writeArrayFieldStart("clones");
 
         jsonGenerator.writeEndObject();
