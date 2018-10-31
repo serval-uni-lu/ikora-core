@@ -10,34 +10,9 @@ import java.util.*;
 
 @JsonSerialize(using = DifferenceSerializer.class)
 public class Difference implements Differentiable {
-    public enum Clone{
-        TypeI, TypeII, TypeIII, TypeIV, None
-    }
-
     private Differentiable left;
     private Differentiable right;
     private List<Action> actions;
-
-    static private Set<Action.Type> ignoreForTypeI;
-    static private Set<Action.Type> ignoreForTypeII;
-
-    static {
-        Set<Action.Type> typeI = new HashSet<>(4);
-        typeI.add(Action.Type.CHANGE_NAME);
-        typeI.add(Action.Type.CHANGE_DOCUMENTATION);
-        typeI.add(Action.Type.REMOVE_DOCUMENTATION);
-        typeI.add(Action.Type.ADD_DOCUMENTATION);
-        ignoreForTypeI = Collections.unmodifiableSet(typeI);
-
-        Set<Action.Type> typeII = new HashSet<>(6);
-        typeII.add(Action.Type.CHANGE_NAME);
-        typeII.add(Action.Type.CHANGE_DOCUMENTATION);
-        typeII.add(Action.Type.REMOVE_DOCUMENTATION);
-        typeII.add(Action.Type.ADD_DOCUMENTATION);
-        typeII.add(Action.Type.CHANGE_STEP_ARGUMENTS);
-        typeII.add(Action.Type.CHANGE_STEP_RETURN_VALUES);
-        ignoreForTypeII = Collections.unmodifiableSet(typeII);
-    }
 
     private Difference(Differentiable left, Differentiable right){
         this.left = left;
@@ -66,14 +41,6 @@ public class Difference implements Differentiable {
         }
 
         return true;
-    }
-
-    public boolean isCloneTypeI(){
-        return isEmpty(ignoreForTypeI);
-    }
-
-    public boolean isCloneTypeII(){
-        return isEmpty(ignoreForTypeII);
     }
 
     public Differentiable getLeft(){
