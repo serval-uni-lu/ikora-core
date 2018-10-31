@@ -3,10 +3,7 @@ package org.ukwikora.model;
 import org.ukwikora.analytics.Action;
 import org.ukwikora.analytics.StatusResults;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public abstract class LibraryKeyword implements Keyword {
 
@@ -119,7 +116,11 @@ public abstract class LibraryKeyword implements Keyword {
 
     @Override
     public List<Action> differences(Differentiable other){
-        return null;
+        if(other.getClass() == this.getClass()){
+            return Collections.emptyList();
+        }
+
+        return Collections.singletonList(Action.invalid(this, other));
     }
 
     @Override

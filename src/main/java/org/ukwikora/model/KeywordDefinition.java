@@ -253,7 +253,7 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
             return actions;
         }
 
-        if(other.getClass() != this.getClass()){
+        if(!KeywordDefinition.class.isAssignableFrom(other.getClass())){
             actions.add(Action.invalid(this, other));
             return actions;
         }

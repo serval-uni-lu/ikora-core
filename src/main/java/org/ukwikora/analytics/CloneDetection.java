@@ -3,12 +3,14 @@ package org.ukwikora.analytics;
 import java.util.*;
 import org.apache.log4j.Logger;
 import org.ukwikora.model.*;
+import org.ukwikora.utils.LevenshteinDistance;
 
 public class CloneDetection<T extends Element> {
     final static Logger logger = Logger.getLogger(CloneDetection.class);
 
     static private Set<Action.Type> ignoreForTypeI;
     static private Set<Action.Type> ignoreForTypeII;
+    static private Set<Action.Type> ignoreForTypeIIExtended;
 
     static {
         Set<Action.Type> typeI = new HashSet<>(4);
@@ -18,14 +20,14 @@ public class CloneDetection<T extends Element> {
         typeI.add(Action.Type.ADD_DOCUMENTATION);
         ignoreForTypeI = Collections.unmodifiableSet(typeI);
 
-        Set<Action.Type> typeII = new HashSet<>(6);
-        typeII.add(Action.Type.CHANGE_NAME);
-        typeII.add(Action.Type.CHANGE_DOCUMENTATION);
-        typeII.add(Action.Type.REMOVE_DOCUMENTATION);
-        typeII.add(Action.Type.ADD_DOCUMENTATION);
+        Set<Action.Type> typeII = new HashSet<>(ignoreForTypeI);
         typeII.add(Action.Type.CHANGE_STEP_ARGUMENTS);
         typeII.add(Action.Type.CHANGE_STEP_RETURN_VALUES);
         ignoreForTypeII = Collections.unmodifiableSet(typeII);
+
+        Set<Action.Type> typeIIExtended = new HashSet<>(ignoreForTypeII);
+        typeIIExtended.add(Action.Type.CHANGE_STEP);
+        ignoreForTypeIIExtended = Collections.unmodifiableSet(typeIIExtended);
     }
 
     private Project project;
@@ -48,15 +50,19 @@ public class CloneDetection<T extends Element> {
             return clone;
         }
 
-        if(isSameSize(t1, t2)){
-            Difference difference = Difference.of(t1, t2);
+        Difference difference = Difference.of(t1, t2);
 
+        if(isSameSize(t1, t2)){
             if(isCloneTypeI(t1.getClass(), difference)){
                 clone = Clones.Type.TypeI;
             }
             else if(isCloneTypeII(t1.getClass(), difference)){
                 clone = Clones.Type.TypeII;
             }
+        }
+
+        if(clone == Clones.Type.None && isCloneTypeIV(t1.getClass(), difference)){
+            clone = Clones.Type.TypeIV;
         }
 
         return clone;
@@ -104,18 +110,25 @@ public class CloneDetection<T extends Element> {
     public static boolean isCloneTypeII(Class<?> type, Difference difference){
         boolean isTypeII = difference.isEmpty(ignoreForTypeII);
 
-        if(!isTypeII && type == KeywordDefinition.class){
+        if(!isTypeII && KeywordDefinition.class.isAssignableFrom(type)){
             isTypeII = isStepsClones(difference);
         }
 
         return isTypeII;
     }
 
-    private static boolean isStepsClones(Difference difference){
-        Set<Action.Type> types =  ignoreForTypeII;
-        types.add(Action.Type.CHANGE_STEP);
+    public static boolean isCloneTypeIV(Class<?> type, Difference difference){
+        boolean isTypeIV = false;
 
-        if(!difference.isEmpty(types)){
+        if(KeywordDefinition.class.isAssignableFrom(type)){
+            isTypeIV = isSameSequence(difference);
+        }
+
+        return isTypeIV;
+    }
+
+    private static boolean isStepsClones(Difference difference){
+        if(!difference.isEmpty(ignoreForTypeIIExtended)){
             return false;
         }
 
@@ -125,7 +138,7 @@ public class CloneDetection<T extends Element> {
             }
 
             Keyword left = getKeywordFromStep((Step)action.getLeft());
-            Keyword right = getKeywordFromStep((Step)action.getLeft());
+            Keyword right = getKeywordFromStep((Step)action.getRight());
 
             if(left == null || right == null){
                 return false;
@@ -139,6 +152,13 @@ public class CloneDetection<T extends Element> {
         }
 
         return true;
+    }
+
+    private static boolean isSameSequence(Difference difference) {
+        KeywordDefinition left = (KeywordDefinition) difference.getLeft();
+        KeywordDefinition right = (KeywordDefinition) difference.getRight();
+
+        return LevenshteinDistance.index(left.getSteps(), right.getSteps()) == 0.0;
     }
 
     private static Keyword getKeywordFromStep(Step step){

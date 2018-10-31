@@ -15,7 +15,6 @@ public class Clones<T extends Element> {
         TypeI, TypeII, TypeIII, TypeIV, None
     }
 
-
     private Map<Type, Map<T, Set<T>>> clones;
 
     public Clones(){
