@@ -2,12 +2,9 @@ package org.ukwikora.analytics;
 
 import com.beust.jcommander.ParameterException;
 import org.ukwikora.model.*;
-import org.ukwikora.utils.LevenshteinDistance;
 import org.ukwikora.utils.StringUtils;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class ProjectStatistics {
@@ -89,7 +86,7 @@ public class ProjectStatistics {
                 case Size: value = keyword.getSize(); break;
                 case Connectivity: value = keyword.getConnectivity(-1); break;
                 case Sequence: value = keyword.getMaxSequenceSize(); break;
-                case Depth: value = keyword.getDepth(); break;
+                case Depth: value = keyword.getLevel(); break;
                 case BranchIndex: value = keyword.getBranchIndex(); break;
             }
 

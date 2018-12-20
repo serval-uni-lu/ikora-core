@@ -126,7 +126,7 @@ public class KeywordCall extends Step {
     }
 
     @Override
-    public int getDepth() {
+    public int getLevel() {
         if(this.keyword == null){
             return 0;
         }
@@ -138,13 +138,13 @@ public class KeywordCall extends Step {
                     continue;
                 }
 
-                depth = Math.max(step.getDepth(), depth);
+                depth = Math.max(step.getLevel(), depth);
             }
 
             return depth;
         }
 
-        return this.keyword.getDepth();
+        return this.keyword.getLevel();
     }
 
     @Override

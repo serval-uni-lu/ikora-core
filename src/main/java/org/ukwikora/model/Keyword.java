@@ -10,7 +10,7 @@ public interface Keyword extends Element {
 
     Keyword getStep(int position);
     int getSize();
-    int getDepth();
+    int getLevel();
     Value.Type[] getArgumentTypes();
     int getMaxArgument();
     int[] getKeywordsLaunchedPosition();

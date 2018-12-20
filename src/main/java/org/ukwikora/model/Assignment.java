@@ -99,7 +99,7 @@ public class Assignment extends Step {
     }
 
     @Override
-    public int getDepth() {
+    public int getLevel() {
         return getExpression().getSize();
     }
 

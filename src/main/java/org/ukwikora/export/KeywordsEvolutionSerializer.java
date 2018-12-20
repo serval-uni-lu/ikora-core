@@ -90,7 +90,7 @@ public class KeywordsEvolutionSerializer extends JsonSerializer<EvolutionResults
         jsonGenerator.writeNumberField("sequence size", keyword.getMaxSequenceSize());
         jsonGenerator.writeNumberField("number branches", keyword.getBranchIndex());
         jsonGenerator.writeNumberField("size", keyword.getSize());
-        jsonGenerator.writeNumberField("depth", keyword.getDepth());
+        jsonGenerator.writeNumberField("depth", keyword.getLevel());
         jsonGenerator.writeNumberField("connectivity", keyword.getConnectivity(-1));
 
         writeChanges(jsonGenerator, difference);

@@ -33,7 +33,7 @@ public abstract class LibraryKeyword implements Keyword {
     }
 
     @Override
-    public int getDepth(){
+    public int getLevel(){
         return 0;
     }
 

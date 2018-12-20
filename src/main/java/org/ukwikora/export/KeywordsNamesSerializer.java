@@ -36,7 +36,7 @@ public class KeywordsNamesSerializer extends JsonSerializer<EvolutionResults> {
             jsonGenerator.writeStartObject();
 
             jsonGenerator.writeStringField("type", keyword.getClass().getSimpleName());
-            jsonGenerator.writeNumberField("depth", keyword.getDepth());
+            jsonGenerator.writeNumberField("depth", keyword.getLevel());
             jsonGenerator.writeStringField("name", keyword.getName().toString());
 
             jsonGenerator.writeEndObject();

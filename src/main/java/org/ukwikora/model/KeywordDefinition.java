@@ -182,11 +182,11 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
     }
 
     @Override
-    public int getDepth() {
+    public int getLevel() {
         int depth = 0;
 
         for(Step step: steps){
-            depth = Math.max(step.getDepth(), depth);
+            depth = Math.max(step.getLevel(), depth);
         }
 
         return depth + 1;

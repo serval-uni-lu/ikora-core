@@ -86,7 +86,7 @@ public class ForLoop extends Step {
     }
 
     @Override
-    public int getDepth(){
+    public int getLevel(){
         int depth = 0;
 
         for(Step step: steps){
