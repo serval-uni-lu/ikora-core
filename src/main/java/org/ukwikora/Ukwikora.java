@@ -1,5 +1,6 @@
 package org.ukwikora;
 
+import org.ukwikora.analytics.GitAnalyticsCli;
 import org.ukwikora.analytics.ProjectAnalyticsCli;
 import org.ukwikora.utils.Configuration;
 import org.ukwikora.utils.ConsoleColors;
@@ -28,7 +29,12 @@ public class Ukwikora {
             Configuration.initialize(cmd.getOptionValue("config"));
             Configuration config = Configuration.getInstance();
 
-            if(config.hasPlugin("project analytics")) {
+            if(config.hasPlugin("git analytics")) {
+                GitAnalyticsCli gitAnalyticsCli = new GitAnalyticsCli();
+                gitAnalyticsCli.run();
+            }
+
+            if(config.hasPlugin("project analytics")){
                 ProjectAnalyticsCli projectAnalyticsCli = new ProjectAnalyticsCli();
                 projectAnalyticsCli.run();
             }
