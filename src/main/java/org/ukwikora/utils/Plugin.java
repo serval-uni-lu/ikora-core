@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -84,5 +85,19 @@ public class Plugin {
 
     public String getPropertyAsString(String name, String value){
         return (String)getAdditionalProperty(name, value);
+    }
+
+    public Map<String, String> getPropertyAsStringMap(String name) {
+        if(!additionalProperties.containsKey(name)) {
+            return Collections.emptyMap();
+        }
+
+        Object value = additionalProperties.get(name);
+
+        if(Map.class.isAssignableFrom(value.getClass())){
+            return (Map)value;
+        }
+
+        return Collections.emptyMap();
     }
 }
