@@ -17,7 +17,7 @@ public class EvolutionAnalyticsCli implements CommandRunner {
     @Override
     public void run() throws Exception {
         Configuration config = Configuration.getInstance();
-        Plugin analytics = config.getPlugin("git analytics");
+        Plugin analytics = config.getPlugin("evolution analytics");
 
         String gitUrl = analytics.getPropertyAsString("git url", "");
         String branch = analytics.getPropertyAsString("git branch", "master");
