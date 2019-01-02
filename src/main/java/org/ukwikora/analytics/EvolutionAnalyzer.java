@@ -4,15 +4,15 @@ import org.ukwikora.model.*;
 
 import java.util.*;
 
-public class ProjectAnalyzer {
+public class EvolutionAnalyzer {
     private List<Project> projects;
 
-    public ProjectAnalyzer(){
+    public EvolutionAnalyzer(){
         projects = new ArrayList<>();
     }
 
-    public static ProjectAnalyzer fromGit(String gitUrl, String branch, String username, String password) {
-        ProjectAnalyzer analyzer = new ProjectAnalyzer();
+    public static EvolutionAnalyzer fromGit(String gitUrl, String branch, String username, String password) {
+        EvolutionAnalyzer analyzer = new EvolutionAnalyzer();
 
         GitRepository repository = new GitRepository(gitUrl, branch, username, password);
         List<GitCommit> commits = repository.getRevisions();

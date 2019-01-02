@@ -11,8 +11,8 @@ import org.apache.log4j.Logger;
 
 import java.io.*;
 
-public class GitAnalyticsCli implements CommandRunner {
-    final static Logger logger = Logger.getLogger(GitAnalyticsCli.class);
+public class EvolutionAnalyticsCli implements CommandRunner {
+    private final static Logger logger = Logger.getLogger(EvolutionAnalyticsCli.class);
 
     @Override
     public void run() throws Exception {
@@ -24,7 +24,7 @@ public class GitAnalyticsCli implements CommandRunner {
         String username = analytics.getPropertyAsString("git user", "");
         String password = analytics.getPropertyAsString("git password", "");
 
-        ProjectAnalyzer projects = ProjectAnalyzer.fromGit(gitUrl, branch, username, password);
+        EvolutionAnalyzer projects = EvolutionAnalyzer.fromGit(gitUrl, branch, username, password);
         EvolutionResults results = projects.findDifferences();
 
         exportReportEvolution(analytics, results);
