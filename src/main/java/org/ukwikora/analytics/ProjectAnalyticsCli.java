@@ -4,7 +4,6 @@ import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.ukwikora.compiler.Compiler;
 import org.ukwikora.model.Project;
-import org.ukwikora.model.UserKeyword;
 import org.ukwikora.utils.CommandRunner;
 import org.ukwikora.utils.Configuration;
 import org.ukwikora.utils.Plugin;
@@ -13,6 +12,7 @@ import org.gitlabloader.api.Gitlab;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -24,11 +24,9 @@ public class ProjectAnalyticsCli implements CommandRunner {
     public void run() throws Exception {
         Configuration config = Configuration.getInstance();
         Plugin analytics = config.getPlugin("project analytics");
+
         String location = loadProjects(analytics);
-
-        Project project = Compiler.compile(location);
-        CloneDetection.findClones(project, UserKeyword.class);
-
+        compileProjects(location);
     }
 
     private String loadProjects(Plugin analytics) throws IOException {
@@ -70,5 +68,16 @@ public class ProjectAnalyticsCli implements CommandRunner {
         }
 
         return location;
+    }
+
+    private List<Project> compileProjects(String location) {
+        List<Project> projects = new ArrayList<>();
+
+        for(String folder: org.ukwikora.utils.FileUtils.getSubFolders(location)) {
+            Project project = Compiler.compile(folder);
+            projects.add(project);
+        }
+
+        return projects;
     }
 }
