@@ -1,6 +1,7 @@
 package org.ukwikora.analytics;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
 import org.ukwikora.compiler.Compiler;
 import org.ukwikora.model.Project;
 import org.ukwikora.model.UserKeyword;
@@ -17,6 +18,8 @@ import java.util.List;
 import java.util.Map;
 
 public class ProjectAnalyticsCli implements CommandRunner {
+    private final static Logger logger = Logger.getLogger(ProjectAnalyticsCli.class);
+
     @Override
     public void run() throws Exception {
         Configuration config = Configuration.getInstance();
@@ -61,7 +64,9 @@ public class ProjectAnalyticsCli implements CommandRunner {
         }
 
         if(!folder.exists()) {
-            folder.mkdir();
+            if(!folder.mkdir()){
+                logger.error("Failed to create directory '" + location + "'", new IOException("Failed to create directory " + location));
+            }
         }
 
         return location;
