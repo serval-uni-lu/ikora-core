@@ -54,7 +54,7 @@ public class ProjectAnalyticsCli implements CommandRunner {
             File tmp = FileUtils.getTempDirectory();
             Date date = new Date();
             Timestamp ts = new Timestamp(date.getTime());
-            String folderName = "project-analytics-" + ts.toString().replace(":", "").replace(".", "");
+            String folderName = "project-analytics-" + ts.toInstant().toEpochMilli();
             folder = new File(tmp, folderName);
 
             location = folder.getAbsolutePath();
