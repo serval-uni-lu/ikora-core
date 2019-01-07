@@ -1,7 +1,6 @@
 package org.ukwikora.utils;
 
 import org.ukwikora.Globals;
-import org.ukwikora.analytics.ProjectStatistics;
 import org.junit.Test;
 
 import java.util.ArrayList;
