@@ -20,6 +20,7 @@ public class TestCaseFile implements Iterable<UserKeyword> {
     private ElementTable<Variable> variableTable;
 
     private ElementTable<UserKeyword> userKeywordCache;
+    private ElementTable<UserKeyword> externalKeywordCache;
     private ElementTable<Variable> variableCache;
 
     public TestCaseFile(Project project, File file){
@@ -111,7 +112,7 @@ public class TestCaseFile implements Iterable<UserKeyword> {
         return testCaseTable.asList();
     }
 
-    public <T extends Element> ElementTable<T> getElements(Class<T> type) {
+    public <T extends Element> ElementTable<T> getElements(Class<T> type, boolean includeResources) {
         ElementTable<T> keywords = new ElementTable<>();
 
         if(type == UserKeyword.class){
@@ -124,8 +125,20 @@ public class TestCaseFile implements Iterable<UserKeyword> {
             keywords.extend((ElementTable<T>) variableTable);
         }
 
-        for(Resources resources: settings.getResources()){
-            keywords.extend(resources.getTestCaseFile().getElements(type));
+        if(includeResources){
+            for(Resources resources: settings.getResources()){
+                keywords.extend(resources.getTestCaseFile().getElements(type, false));
+            }
+        }
+
+        return keywords;
+    }
+
+    public <T extends Element> ElementTable<T> getExternalElements(Class<T> type) {
+        ElementTable<T> keywords = new ElementTable<>();
+
+        for(Resources resources: settings.getExternalResources()){
+            keywords.extend(resources.getTestCaseFile().getElements(type, false));
         }
 
         return keywords;
@@ -146,15 +159,23 @@ public class TestCaseFile implements Iterable<UserKeyword> {
 
     public KeywordDefinition findUserKeyword(String name) {
         if(userKeywordCache == null){
-            userKeywordCache = getElements(UserKeyword.class);
+            userKeywordCache = getElements(UserKeyword.class, true);
         }
 
-        return userKeywordCache.findElement(name);
+        KeywordDefinition userKeyword = userKeywordCache.findElement(name);
+
+        if(userKeyword == null) {
+            if(externalKeywordCache == null) {
+                externalKeywordCache = getExternalElements(UserKeyword.class);
+            }
+        }
+
+        return userKeyword;
     }
 
     public Variable findVariable(String name) {
         if(variableCache == null){
-            variableCache = getElements(Variable.class);
+            variableCache = getElements(Variable.class, true);
         }
 
         return variableCache.findElement(name);
