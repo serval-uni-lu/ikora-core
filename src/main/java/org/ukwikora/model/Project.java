@@ -10,6 +10,7 @@ import java.util.*;
 public class Project implements Comparable<Project> {
     private List<TestCaseFile> testCaseFiles;
     private Map<String, TestCaseFile> files;
+    private Set<Project> dependencies;
 
     private File rootFolder;
     private String gitUrl;
@@ -21,6 +22,7 @@ public class Project implements Comparable<Project> {
         rootFolder = new File(file.trim());
         testCaseFiles = new ArrayList<>();
         files = new HashMap<>();
+        dependencies = new HashSet<>();
         loc = 0;
     }
 
@@ -78,6 +80,16 @@ public class Project implements Comparable<Project> {
         return keywords;
     }
 
+    public Set<Resources> getExternalResources() {
+        Set<Resources> externalResources = new HashSet<>();
+
+        for(TestCaseFile testCaseFile: testCaseFiles){
+            externalResources.addAll(testCaseFile.getSettings().getExternalResources());
+        }
+
+        return externalResources;
+    }
+
     public long getEpoch() {
         ZoneId zoneId = ZoneId.systemDefault();
         return this.getDateTime().atZone(zoneId).toEpochSecond();
@@ -85,6 +97,14 @@ public class Project implements Comparable<Project> {
 
     public int getLoc() {
         return loc;
+    }
+
+    public Set<Project> getDependencies() {
+        return this.dependencies;
+    }
+
+    public boolean isDependency(Project project) {
+        return this.dependencies.contains(project);
     }
 
     public void addFile(File file){
@@ -114,6 +134,12 @@ public class Project implements Comparable<Project> {
         }
     }
 
+    public void addDependency(Project dependency) {
+        if(dependency != null){
+            dependencies.add(dependency);
+        }
+    }
+
     public String generateFileName(File file) {
         Path base = Paths.get(this.getRootFolder().getAbsolutePath().trim());
         Path path = Paths.get(file.getAbsolutePath().trim()).normalize();
@@ -128,9 +154,5 @@ public class Project implements Comparable<Project> {
         }
 
         return dateTime.isBefore(other.dateTime) ? -1 : 1;
-    }
-
-    public void resolveDependencies(List<Project> projects) {
-
     }
 }
