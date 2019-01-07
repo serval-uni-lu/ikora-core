@@ -25,8 +25,8 @@ public class ProjectAnalyticsCli implements CommandRunner {
         Configuration config = Configuration.getInstance();
         Plugin analytics = config.getPlugin("project analytics");
 
-        String location = loadProjects(analytics);
-        compileProjects(location);
+        String tmpLocation = loadProjects(analytics);
+        List<Project> projects = compileProjects(tmpLocation);
     }
 
     private String loadProjects(Plugin analytics) throws IOException {
