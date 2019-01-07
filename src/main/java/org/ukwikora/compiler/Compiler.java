@@ -6,9 +6,29 @@ import org.apache.log4j.Logger;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Compiler {
     final static Logger logger = Logger.getLogger(Compiler.class);
+
+    static public List<Project> compile(String[] paths){
+        List<Project> projects = new ArrayList<>();
+
+        for(String folder: paths) {
+            Project project = Compiler.compile(folder);
+
+            if(project != null){
+                projects.add(project);
+            }
+        }
+
+        for(Project project: projects) {
+            project.resolveDependencies(projects);
+        }
+
+        return projects;
+    }
 
     static public Project compile(String filePath) {
         Instant start = Instant.now();

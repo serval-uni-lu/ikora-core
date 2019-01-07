@@ -29,7 +29,7 @@ public class ProjectAnalyticsCli implements CommandRunner {
         List<Project> projects = compileProjects(tmpLocation);
     }
 
-    private String loadProjects(Plugin analytics) throws IOException {
+    private String loadProjects(Plugin analytics) {
         String url = analytics.getPropertyAsString("git url", "");
         String username = analytics.getPropertyAsString("git user", "");
         String password = analytics.getPropertyAsString("git password", "");
@@ -48,7 +48,7 @@ public class ProjectAnalyticsCli implements CommandRunner {
         return location;
     }
 
-    private String createTmpFolder(String location) throws IOException {
+    private String createTmpFolder(String location) {
         File folder = new File(location);
 
         if(location.isEmpty() || !folder.isDirectory()){
@@ -71,13 +71,6 @@ public class ProjectAnalyticsCli implements CommandRunner {
     }
 
     private List<Project> compileProjects(String location) {
-        List<Project> projects = new ArrayList<>();
-
-        for(String folder: org.ukwikora.utils.FileUtils.getSubFolders(location)) {
-            Project project = Compiler.compile(folder);
-            projects.add(project);
-        }
-
-        return projects;
+        return Compiler.compile(org.ukwikora.utils.FileUtils.getSubFolders(location));
     }
 }

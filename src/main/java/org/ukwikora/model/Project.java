@@ -129,4 +129,8 @@ public class Project implements Comparable<Project> {
 
         return dateTime.isBefore(other.dateTime) ? -1 : 1;
     }
+
+    public void resolveDependencies(List<Project> projects) {
+
+    }
 }
