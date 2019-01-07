@@ -1,5 +1,6 @@
 package org.ukwikora.compiler;
 
+import org.ukwikora.model.LibraryResources;
 import org.ukwikora.model.Project;
 import org.apache.log4j.Logger;
 
@@ -16,7 +17,6 @@ public class Compiler {
         try {
             project = parse(filePath);
             StaticRuntime runtime = new StaticRuntime(project);
-
             loadLibraries(runtime);
             link(runtime);
 
@@ -33,7 +33,8 @@ public class Compiler {
     }
 
     static private void loadLibraries(StaticRuntime runtime) {
-        LibraryLoader.load(runtime);
+        LibraryResources libraries = LibraryLoader.load();
+        runtime.setLibraries(libraries);
     }
 
     private static void link(StaticRuntime runtime) throws Exception {
