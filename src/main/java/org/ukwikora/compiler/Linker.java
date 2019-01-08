@@ -37,7 +37,7 @@ public class Linker {
                 unresolvedArguments.addAll(linkSteps(testCase, testCaseFile));
             }
 
-            for(UserKeyword userKeyword: testCaseFile.getElements(UserKeyword.class, false)) {
+            for(UserKeyword userKeyword: testCaseFile.getElements(UserKeyword.class)) {
                 unresolvedArguments.addAll(linkSteps(userKeyword, testCaseFile));
             }
         }
