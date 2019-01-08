@@ -1,5 +1,6 @@
 package org.ukwikora.model;
 
+import com.sun.deploy.util.OrderedHashSet;
 import org.ukwikora.compiler.Line;
 
 import javax.annotation.Nonnull;
@@ -113,6 +114,11 @@ public class TestCaseFile implements Iterable<UserKeyword> {
     }
 
     public <T extends Element> ElementTable<T> getElements(Class<T> type) {
+        OrderedHashSet files = new OrderedHashSet();
+        return getElements(type, files);
+    }
+
+    private <T extends Element> ElementTable<T> getElements(Class<T> type, OrderedHashSet files) {
         ElementTable<T> keywords = new ElementTable<>();
 
         if(type == UserKeyword.class){
@@ -125,8 +131,12 @@ public class TestCaseFile implements Iterable<UserKeyword> {
             keywords.extend((ElementTable<T>) variableTable);
         }
 
+        files.add(this);
+
         for(Resources resources: settings.getResources()){
-            keywords.extend(resources.getTestCaseFile().getElements(type));
+            if(files.contains(resources.getTestCaseFile())) {
+                keywords.extend(resources.getTestCaseFile().getElements(type, files));
+            }
         }
 
         return keywords;

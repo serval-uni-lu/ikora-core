@@ -74,7 +74,7 @@ public class Project implements Comparable<Project> {
         ElementTable<T> keywords = new ElementTable<>();
 
         for(TestCaseFile testCaseFile: testCaseFiles){
-            keywords.extend(testCaseFile.getElements(type, false));
+            keywords.extend(testCaseFile.getElements(type));
         }
 
         return keywords;
