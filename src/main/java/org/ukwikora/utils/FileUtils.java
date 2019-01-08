@@ -10,7 +10,19 @@ public class FileUtils {
             return ArrayUtils.EMPTY_STRING_ARRAY;
         }
 
-        return folder.list( (File current, String name) -> new File(current, name).isDirectory() );
+        File[] files = folder.listFiles( (File current, String name) -> new File(current, name).isDirectory() );
+
+        if(files == null) {
+            return ArrayUtils.EMPTY_STRING_ARRAY;
+        }
+
+        String[] paths = new String[files.length];
+
+        for(int i = 0; i < files.length; ++i) {
+            paths[i] = files[i].getAbsolutePath();
+        }
+
+        return paths;
     }
 
     public static String[] getSubFolders(String location) {
