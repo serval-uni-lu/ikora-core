@@ -4,6 +4,7 @@ import org.ukwikora.analytics.Action;
 import org.ukwikora.analytics.StatusResults;
 import org.ukwikora.utils.LevenshteinDistance;
 
+import javax.annotation.Nonnull;
 import java.security.InvalidParameterException;
 import java.util.*;
 
@@ -43,7 +44,7 @@ public class ScalarVariable extends Variable {
     }
 
     @Override
-    public double distance(Differentiable other) {
+    public double distance(@Nonnull Differentiable other) {
         if(!(other instanceof ScalarVariable)){
             return 1;
         }
@@ -54,7 +55,7 @@ public class ScalarVariable extends Variable {
     }
 
     @Override
-    public List<Action> differences(Differentiable other) {
+    public List<Action> differences(@Nonnull Differentiable other) {
         List<Action> actions = new ArrayList<>();
 
         if(!(other instanceof ScalarVariable)){

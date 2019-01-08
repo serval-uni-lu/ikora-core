@@ -30,7 +30,7 @@ public class Resources {
         return this.testCasefile;
     }
 
-    public void setTestCasefile(TestCaseFile testCasefile) {
+    public void setTestCaseFile(TestCaseFile testCasefile) {
         this.testCasefile = testCasefile;
     }
 }

@@ -1,5 +1,6 @@
 package org.ukwikora.model;
 
+import javax.annotation.Nonnull;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -52,10 +53,6 @@ public class Project implements Comparable<Project> {
 
     public TestCaseFile getTestCaseFile(String name) {
         return files.get(name);
-    }
-
-    public TestCaseFile getFile(File file){
-        return files.get(file);
     }
 
     public Map<String, TestCaseFile> getFiles(){
@@ -148,7 +145,7 @@ public class Project implements Comparable<Project> {
     }
 
     @Override
-    public int compareTo(Project other) {
+    public int compareTo(@Nonnull Project other) {
         if(dateTime == other.dateTime){
             return 0;
         }

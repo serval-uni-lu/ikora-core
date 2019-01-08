@@ -4,6 +4,7 @@ import org.ukwikora.analytics.Action;
 import org.ukwikora.analytics.StatusResults;
 import org.ukwikora.utils.LevenshteinDistance;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +24,7 @@ public class Sequence implements Differentiable {
     }
 
     @Override
-    public double distance(Differentiable other) {
+    public double distance(@Nonnull Differentiable other) {
         List<Action> actions = differences(other);
 
         for(Action action: actions){
@@ -36,7 +37,7 @@ public class Sequence implements Differentiable {
     }
 
     @Override
-    public List<Action> differences(Differentiable other) {
+    public List<Action> differences(@Nonnull Differentiable other) {
         List<Action> actions = new ArrayList<>();
 
         if(other == this){

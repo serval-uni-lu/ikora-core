@@ -71,7 +71,7 @@ public class ProjectParser {
                     throw new Exception();
                 }
 
-                resources.setTestCasefile(resourceFile);
+                resources.setTestCaseFile(resourceFile);
             }
         }
     }

@@ -1,5 +1,6 @@
 package org.ukwikora.model;
 
+import org.apache.commons.lang3.StringUtils;
 import org.ukwikora.analytics.Action;
 import org.ukwikora.utils.LevenshteinDistance;
 
@@ -33,15 +34,20 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
     }
 
     public void addTag(String tag){
-        this.tags.add(tag);
+        if(!StringUtils.isBlank(tag)) {
+            this.tags.add(tag);
+        }
     }
 
     public void addDependency(KeywordDefinition keyword) {
-        this.dependencies.add(keyword);
+        if(keyword != null) {
+            this.dependencies.add(keyword);
+        }
+
     }
 
     @Override
-    public void setFile(TestCaseFile file) {
+    public void setFile(@Nonnull TestCaseFile file) {
         this.file = file;
 
         for(Step step: this.steps){
@@ -139,7 +145,7 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
 
     @Override
     public Keyword getStep(int position) {
-        if(steps.size() <= position){
+        if(steps.size() <= position  || 0 > position){
             return null;
         }
 
@@ -152,14 +158,12 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
     }
 
     @Override
-    public void addDependency(Keyword keyword) {
-        if(keyword != null) {
-            this.dependencies.add(keyword);
-        }
+    public void addDependency(@Nonnull Keyword keyword) {
+        this.dependencies.add(keyword);
     }
 
 
-    public boolean matches(String name) {
+    public boolean matches(@Nonnull String name) {
         return this.name.matches(name);
     }
 
@@ -239,7 +243,7 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
     }
 
     @Override
-    public double distance(Differentiable other) {
+    public double distance(@Nonnull Differentiable other) {
         if(other == this){
             return 0.0;
         }
@@ -248,7 +252,7 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
     }
 
     @Override
-    public List<Action> differences(Differentiable other) {
+    public List<Action> differences(@Nonnull Differentiable other) {
         List<Action> actions = new ArrayList<>();
 
         if(other == this){
@@ -317,7 +321,7 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
     }
 
     @Override
-    public void setLineRange(LineRange lineRange){
+    public void setLineRange(@Nonnull LineRange lineRange){
         this.lineRange = lineRange;
     }
 

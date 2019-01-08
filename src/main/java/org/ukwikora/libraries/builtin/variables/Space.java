@@ -2,6 +2,7 @@ package org.ukwikora.libraries.builtin.variables;
 
 import org.ukwikora.model.LibraryVariable;
 
+import javax.annotation.Nonnull;
 import java.util.regex.Pattern;
 
 public class Space extends LibraryVariable {
@@ -12,7 +13,7 @@ public class Space extends LibraryVariable {
     }
 
     @Override
-    public boolean matches(String name) {
+    public boolean matches(@Nonnull String name) {
         return match.matcher(name).matches();
     }
 }

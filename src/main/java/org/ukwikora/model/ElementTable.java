@@ -1,5 +1,6 @@
 package org.ukwikora.model;
 
+import javax.annotation.Nonnull;
 import java.io.File;
 import java.util.*;
 
@@ -77,6 +78,7 @@ public class ElementTable<T extends Element> implements Iterable<T> {
     }
 
     @Override
+    @Nonnull
     public Iterator<T> iterator() {
         return this.elementSet.iterator();
     }

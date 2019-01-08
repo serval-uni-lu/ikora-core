@@ -1,8 +1,8 @@
 package org.ukwikora.model;
 
 import org.ukwikora.analytics.Action;
-import org.ukwikora.analytics.StatusResults;
 
+import javax.annotation.Nonnull;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -132,7 +132,7 @@ public class Value implements Differentiable {
     }
 
     @Override
-    public double distance(Differentiable other) {
+    public double distance(@Nonnull Differentiable other) {
         if(other == this){
             return 0.0;
         }
@@ -146,7 +146,7 @@ public class Value implements Differentiable {
     }
 
     @Override
-    public List<Action> differences(Differentiable other) {
+    public List<Action> differences(@Nonnull Differentiable other) {
         return null;
     }
 

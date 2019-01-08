@@ -3,6 +3,7 @@ package org.ukwikora.model;
 import org.ukwikora.analytics.Action;
 import org.ukwikora.utils.LevenshteinDistance;
 
+import javax.annotation.Nonnull;
 import java.util.*;
 
 public class KeywordCall extends Step {
@@ -223,7 +224,7 @@ public class KeywordCall extends Step {
     }
 
     @Override
-    public double distance(Differentiable other) {
+    public double distance(@Nonnull Differentiable other) {
         if(!(other instanceof KeywordCall)){
             return 1;
         }
@@ -237,7 +238,7 @@ public class KeywordCall extends Step {
     }
 
     @Override
-    public List<Action> differences(Differentiable other) {
+    public List<Action> differences(@Nonnull  Differentiable other) {
         List<Action> actions = new ArrayList<>();
 
         if(!(other instanceof Step)){

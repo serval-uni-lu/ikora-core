@@ -22,7 +22,7 @@ import java.time.ZoneId;
 import java.util.*;
 
 public class GitRepository {
-    final static Logger logger = Logger.getLogger(GitRepository.class);
+    private final static Logger logger = Logger.getLogger(GitRepository.class);
 
     private Git git;
     private String url;
@@ -45,11 +45,15 @@ public class GitRepository {
         File cache = Configuration.getInstance().getConfigurationFolder();
         this.localFolder = new File(cache, "git");
 
-        if(!this.localFolder.exists()){
-            this.localFolder.mkdir();
+        if(!this.localFolder.exists() && !this.localFolder.mkdir()){
+            logger.error("failed to create folder '" + this.localFolder.getAbsolutePath() + "'");
+            this.localFolder = null;
+        }
+        else {
+            logger.info("created local folder '" + this.localFolder.getAbsolutePath() + "'");
+            this.localFolder = new File(this.localFolder.getAbsolutePath(), name);
         }
 
-        this.localFolder = new File(this.localFolder.getAbsolutePath(), name);
     }
 
     public String getName() {
@@ -136,12 +140,10 @@ public class GitRepository {
 
                 mostRecentCommit = commit;
             }
-
-            return mostRecentCommit;
         }
         catch (GitAPIException e){
             mostRecentCommit = null;
-            e.printStackTrace();
+            logger.error("Failed to retrieve most commit for " + dateTime.toString() + "because: " + e.getMessage());
         }
 
         return mostRecentCommit;

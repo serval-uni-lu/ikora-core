@@ -1,5 +1,6 @@
 package org.ukwikora.model;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Set;
 
@@ -20,7 +21,7 @@ public interface Keyword extends Element {
 
     int getConnectivity(int distance);
 
-    void addDependency(Keyword keyword);
+    void addDependency(@Nonnull Keyword keyword);
 
     void execute(Runtime runtime);
 

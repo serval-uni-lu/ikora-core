@@ -1,5 +1,6 @@
 package org.ukwikora.model;
 
+import javax.annotation.Nonnull;
 import java.util.*;
 
 
@@ -16,11 +17,11 @@ public abstract class Step implements Keyword {
     public abstract int getSize();
     public abstract void getSequences(List<Sequence> sequences);
 
-    public void setName(String name) {
+    public void setName(@Nonnull String name) {
         this.name = new Value(name);
     }
 
-    public void setParent(Keyword parent) {
+    public void setParent(@Nonnull Keyword parent) {
         this.parent = parent;
     }
 
@@ -93,7 +94,7 @@ public abstract class Step implements Keyword {
     }
 
     @Override
-    public void addDependency(Keyword keyword) {
+    public void addDependency(@Nonnull Keyword keyword) {
         this.parent = keyword;
     }
 
@@ -109,7 +110,7 @@ public abstract class Step implements Keyword {
     }
 
     @Override
-    public void setFile(TestCaseFile file){
+    public void setFile(@Nonnull TestCaseFile file){
         this.file = file;
     }
 
@@ -133,7 +134,7 @@ public abstract class Step implements Keyword {
     }
 
     @Override
-    public boolean matches(String name){
+    public boolean matches(@Nonnull String name){
         return getName().matches(name);
     }
 
@@ -153,7 +154,7 @@ public abstract class Step implements Keyword {
     }
 
     @Override
-    public void setLineRange(LineRange lineRange){
+    public void setLineRange(@Nonnull LineRange lineRange){
         this.lineRange = lineRange;
     }
 

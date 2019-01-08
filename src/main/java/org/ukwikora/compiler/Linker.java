@@ -10,7 +10,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Linker {
-    final static Logger logger = Logger.getLogger(Linker.class);
+    private final static Logger logger = Logger.getLogger(Linker.class);
 
     final private StaticRuntime runtime;
 

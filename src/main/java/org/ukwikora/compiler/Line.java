@@ -3,7 +3,7 @@ package org.ukwikora.compiler;
 import org.apache.log4j.Logger;
 
 public class Line {
-    final static Logger logger = Logger.getLogger(Line.class);
+    private final static Logger logger = Logger.getLogger(Line.class);
 
     private String text;
     private int number;

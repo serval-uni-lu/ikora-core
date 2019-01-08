@@ -4,15 +4,13 @@ import org.ukwikora.analytics.Action;
 import org.ukwikora.utils.LevenshteinDistance;
 import org.apache.log4j.Logger;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 public class Assignment extends Step {
-    final static Logger logger = Logger.getLogger(Assignment.class);
-
     private List<Variable> returnValues;
-
     private KeywordCall expression;
 
     public Assignment(){
@@ -34,12 +32,12 @@ public class Assignment extends Step {
         });
     }
 
-    public void setExpression(KeywordCall call) {
+    public void setExpression(@Nonnull KeywordCall call) {
         expression = call;
     }
 
     @Override
-    public void setFile(TestCaseFile file){
+    public void setFile(@Nonnull TestCaseFile file){
         super.setFile(file);
 
         for(Variable variable: returnValues){
@@ -130,7 +128,7 @@ public class Assignment extends Step {
     }
 
     @Override
-    public double distance(Differentiable other) {
+    public double distance(@Nonnull Differentiable other) {
         if(other == this){
             return 0.0;
         }
@@ -148,7 +146,7 @@ public class Assignment extends Step {
     }
 
     @Override
-    public List<Action> differences(Differentiable other) {
+    public List<Action> differences(@Nonnull Differentiable other) {
         List<Action> actions = new ArrayList<>();
 
         if(!(other instanceof Step)){

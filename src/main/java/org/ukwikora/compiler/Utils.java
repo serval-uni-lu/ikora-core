@@ -41,7 +41,7 @@ class Utils {
         appendMultiline(reader, builder);
     }
 
-    static void appendMultiline(LineReader reader, StringBuilder result) throws IOException {
+    private static void appendMultiline(LineReader reader, StringBuilder result) throws IOException {
         Line line;
 
         while((line = reader.readLine()) != null){

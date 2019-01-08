@@ -3,6 +3,7 @@ package org.ukwikora.model;
 import org.ukwikora.analytics.Action;
 import org.ukwikora.analytics.StatusResults;
 
+import javax.annotation.Nonnull;
 import java.util.*;
 
 public abstract class LibraryKeyword implements Keyword {
@@ -90,7 +91,7 @@ public abstract class LibraryKeyword implements Keyword {
     }
 
     @Override
-    public void addDependency(Keyword keyword) {
+    public void addDependency(@Nonnull Keyword keyword) {
         this.dependencies.add(keyword);
     }
 
@@ -110,12 +111,12 @@ public abstract class LibraryKeyword implements Keyword {
     }
 
     @Override
-    public double distance(Differentiable other){
+    public double distance(@Nonnull Differentiable other){
         return other.getClass() == this.getClass() ? 0 : 1;
     }
 
     @Override
-    public List<Action> differences(Differentiable other){
+    public List<Action> differences(@Nonnull Differentiable other){
         if(other.getClass() == this.getClass()){
             return Collections.emptyList();
         }
@@ -134,12 +135,12 @@ public abstract class LibraryKeyword implements Keyword {
     }
 
     @Override
-    public void setFile(TestCaseFile file){
+    public void setFile(@Nonnull TestCaseFile file){
         this.file = file;
     }
 
     @Override
-    public boolean matches(String name) {
+    public boolean matches(@Nonnull String name) {
         return this.getName().matches(name);
     }
 
@@ -169,7 +170,7 @@ public abstract class LibraryKeyword implements Keyword {
     }
 
     @Override
-    public void setLineRange(LineRange lineRange){
+    public void setLineRange(@Nonnull LineRange lineRange){
         this.lineRange = lineRange;
     }
 

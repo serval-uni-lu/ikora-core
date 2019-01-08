@@ -38,14 +38,14 @@ public class Scope {
 
     public Optional<Variable> findInScope(List<TestCase> testCases, List<String> suites, String name){
         for(TestCase testCase: testCases){
-            Optional variable = findTestVariable(testCase, name);
+            Optional<Variable> variable = findTestVariable(testCase, name);
             if(variable.isPresent()){
                 return variable;
             }
         }
 
         for(String suite: suites){
-            Optional variable = findSuiteVariable(suite, name);
+            Optional<Variable> variable = findSuiteVariable(suite, name);
             if(variable.isPresent()){
                 return variable;
             }

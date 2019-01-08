@@ -91,7 +91,7 @@ public class Compiler {
         project.addDependency(dependency);
         String name = dependency.generateFileName(external.getFile());
         TestCaseFile testCaseFile = dependency.getTestCaseFile(name);
-        external.setTestCasefile(testCaseFile);
+        external.setTestCaseFile(testCaseFile);
     }
 
     static public Project compile(String filePath) {

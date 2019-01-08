@@ -2,6 +2,7 @@ package org.ukwikora.analytics;
 
 import org.ukwikora.model.*;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,7 +72,7 @@ public class Action implements Differentiable {
     }
 
     @Override
-    public double distance(Differentiable other) {
+    public double distance(@Nonnull Differentiable other) {
         if(other.getClass() != this.getClass()){
             return 1.0;
         }
@@ -84,7 +85,7 @@ public class Action implements Differentiable {
     }
 
     @Override
-    public List<Action> differences(Differentiable other) {
+    public List<Action> differences(@Nonnull Differentiable other) {
         List<Action> differences = new ArrayList<>();
 
         if(other.getClass() != this.getClass()){

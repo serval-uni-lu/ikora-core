@@ -1,11 +1,14 @@
 package org.ukwikora.model;
 
+
+import javax.annotation.Nonnull;
+
 public interface Element extends Differentiable {
-    void setFile(TestCaseFile file);
+    void setFile(@Nonnull TestCaseFile file);
     TestCaseFile getFile();
     String getFileName();
 
-    void setLineRange(LineRange range);
+    void setLineRange(@Nonnull LineRange range);
     LineRange getLineRange();
     int getLoc();
 
@@ -13,5 +16,5 @@ public interface Element extends Differentiable {
 
     Value getNameAsArgument();
 
-    boolean matches(String name);
+    boolean matches(@Nonnull String name);
 }

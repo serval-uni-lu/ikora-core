@@ -1,5 +1,6 @@
 package org.ukwikora.model;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -23,7 +24,7 @@ public abstract class Variable implements Element {
     }
 
     @Override
-    public void setFile(TestCaseFile file) {
+    public void setFile(@Nonnull TestCaseFile file) {
         this.file = file;
     }
 
@@ -63,12 +64,12 @@ public abstract class Variable implements Element {
     }
 
     @Override
-    public boolean matches(String name) {
+    public boolean matches(@Nonnull String name) {
         return this.name.equalsIgnoreCase(name);
     }
 
     @Override
-    public void setLineRange(LineRange lineRange){
+    public void setLineRange(@Nonnull LineRange lineRange){
         this.lineRange = lineRange;
     }
 

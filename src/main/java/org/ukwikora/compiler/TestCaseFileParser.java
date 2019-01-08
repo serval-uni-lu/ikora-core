@@ -7,7 +7,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class TestCaseFileParser {
-    final static Logger logger = Logger.getLogger(TestCaseFileParser.class);
+    private final static Logger logger = Logger.getLogger(TestCaseFileParser.class);
 
     static public void parse(File file, Project project) {
         LineReader reader = null;

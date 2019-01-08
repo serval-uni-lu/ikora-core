@@ -2,6 +2,7 @@ package org.ukwikora.model;
 
 import org.ukwikora.analytics.Action;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,12 +36,12 @@ public class ListVariable extends Variable {
     }
 
     @Override
-    public double distance(Differentiable other) {
+    public double distance(@Nonnull Differentiable other) {
         return 0;
     }
 
     @Override
-    public List<Action> differences(Differentiable other) {
+    public List<Action> differences(@Nonnull Differentiable other) {
         return null;
     }
 }
