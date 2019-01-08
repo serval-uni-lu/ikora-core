@@ -112,7 +112,7 @@ public class TestCaseFile implements Iterable<UserKeyword> {
         return testCaseTable.asList();
     }
 
-    public <T extends Element> ElementTable<T> getElements(Class<T> type, boolean includeResources) {
+    public <T extends Element> ElementTable<T> getElements(Class<T> type) {
         ElementTable<T> keywords = new ElementTable<>();
 
         if(type == UserKeyword.class){
@@ -125,10 +125,8 @@ public class TestCaseFile implements Iterable<UserKeyword> {
             keywords.extend((ElementTable<T>) variableTable);
         }
 
-        if(includeResources){
-            for(Resources resources: settings.getResources()){
-                keywords.extend(resources.getTestCaseFile().getElements(type, false));
-            }
+        for(Resources resources: settings.getResources()){
+            keywords.extend(resources.getTestCaseFile().getElements(type));
         }
 
         return keywords;
@@ -138,7 +136,7 @@ public class TestCaseFile implements Iterable<UserKeyword> {
         ElementTable<T> keywords = new ElementTable<>();
 
         for(Resources resources: settings.getExternalResources()){
-            keywords.extend(resources.getTestCaseFile().getElements(type, false));
+            keywords.extend(resources.getTestCaseFile().getElements(type));
         }
 
         return keywords;
@@ -159,7 +157,7 @@ public class TestCaseFile implements Iterable<UserKeyword> {
 
     public KeywordDefinition findUserKeyword(String name) {
         if(userKeywordCache == null){
-            userKeywordCache = getElements(UserKeyword.class, true);
+            userKeywordCache = getElements(UserKeyword.class);
         }
 
         KeywordDefinition userKeyword = userKeywordCache.findElement(name);
@@ -175,7 +173,7 @@ public class TestCaseFile implements Iterable<UserKeyword> {
 
     public Variable findVariable(String name) {
         if(variableCache == null){
-            variableCache = getElements(Variable.class, true);
+            variableCache = getElements(Variable.class);
         }
 
         return variableCache.findElement(name);

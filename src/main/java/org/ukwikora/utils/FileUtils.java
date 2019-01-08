@@ -1,5 +1,6 @@
 package org.ukwikora.utils;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import java.io.File;
 import java.io.IOException;
@@ -19,7 +20,7 @@ public class FileUtils {
         String[] paths = new String[files.length];
 
         for(int i = 0; i < files.length; ++i) {
-            paths[i] = files[i].getAbsolutePath();
+            paths[i] = FilenameUtils.normalize(files[i].getAbsolutePath());
         }
 
         return paths;
