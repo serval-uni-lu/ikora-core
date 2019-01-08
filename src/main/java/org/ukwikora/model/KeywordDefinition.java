@@ -153,7 +153,9 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
 
     @Override
     public void addDependency(Keyword keyword) {
-        this.dependencies.add(keyword);
+        if(keyword != null) {
+            this.dependencies.add(keyword);
+        }
     }
 
 

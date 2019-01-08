@@ -18,7 +18,7 @@ public class KeywordCall extends Step {
     public void setKeyword(Keyword keyword){
         this.keyword = keyword;
 
-        if(this.keyword != null) {
+        if(this.keyword != null && getParent() != null) {
             this.keyword.addDependency(getParent());
         }
     }
