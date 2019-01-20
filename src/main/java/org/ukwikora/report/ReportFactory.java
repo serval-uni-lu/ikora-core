@@ -40,11 +40,6 @@ public class ReportFactory {
 
         for(Element suiteElement: getChildren(robotElement, types)){
             Suite suite = parseSuite(suiteElement);
-
-            if(suite == null){
-                continue;
-            }
-
             report.addSuite(suite);
         }
 
