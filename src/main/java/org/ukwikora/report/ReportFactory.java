@@ -69,11 +69,6 @@ public class ReportFactory {
             }
             else if(tagName.equalsIgnoreCase("test")){
                 KeywordStatus keyword = parseKeyword(child);
-
-                if(keyword == null){
-                    continue;
-                }
-
                 suite.addKeyword(keyword);
             }
         }
