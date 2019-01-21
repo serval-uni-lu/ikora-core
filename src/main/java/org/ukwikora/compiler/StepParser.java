@@ -13,10 +13,10 @@ public class StepParser {
         String[] tokens = reader.getCurrent().tokenize();
         tokens = Utils.removeIndent(tokens);
 
-        if(tokens[0].equalsIgnoreCase(":FOR")) {
+        if(isForLoop(tokens)) {
             step = parseForLoop(reader);
         }
-        else if (Utils.compareNoCase(tokens[0], "^(\\$\\{)(.*)(\\})(\\s?)(=?)")){
+        else if (isAssignment(tokens)){
             step = parseAssignment(reader);
         }
         else {
@@ -97,5 +97,13 @@ public class StepParser {
             }
         }
         return call;
+    }
+
+    private static boolean isAssignment(String[] tokens){
+        return Utils.compareNoCase(tokens[0], "^((\\$|@|&)\\{)(.*)(\\})(\\s?)(=?)");
+    }
+
+    private static boolean isForLoop(String[] tokens) {
+        return tokens[0].equalsIgnoreCase(":FOR");
     }
 }
