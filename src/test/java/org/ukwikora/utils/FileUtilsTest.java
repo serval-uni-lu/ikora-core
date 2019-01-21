@@ -23,6 +23,7 @@ public class FileUtilsTest {
     @Test
     public void checkIsSubfolderDetectsWhenTrue() {
         try {
+            assertTrue(FileUtils.isSubDirectory(base, base));
             assertTrue(FileUtils.isSubDirectory(base, child1));
             assertTrue(FileUtils.isSubDirectory(base, child2));
         } catch (IOException e) {
@@ -33,7 +34,6 @@ public class FileUtilsTest {
     @Test
     public void checkIsSubfolderDetectsWhenFalse() {
         try {
-            assertFalse(FileUtils.isSubDirectory(base, base));
             assertFalse(FileUtils.isSubDirectory(child1, base));
             assertFalse(FileUtils.isSubDirectory(child2, base));
         } catch (IOException e) {
