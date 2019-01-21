@@ -56,7 +56,7 @@ public class StaticRuntime extends Runtime {
     }
 
     private Optional<Variable> createVariable(Value value){
-        Optional<Variable> variable = VariableFactory.create(value.toString());
+        Optional<Variable> variable = VariableParser.parse(value.toString());
 
         if(variable.isPresent()){
             value.setVariable(value.toString(), variable.get());

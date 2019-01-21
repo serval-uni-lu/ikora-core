@@ -3,7 +3,6 @@ package org.ukwikora.compiler;
 import org.ukwikora.model.ElementTable;
 import org.ukwikora.model.LineRange;
 import org.ukwikora.model.Variable;
-import org.ukwikora.model.VariableFactory;
 
 import java.io.IOException;
 import java.security.InvalidParameterException;
@@ -29,7 +28,7 @@ public class VariableTableParser {
 
             String[] tokens = reader.getCurrent().tokenize();
 
-            Optional<Variable> optional = VariableFactory.create(tokens[0]);
+            Optional<Variable> optional = VariableParser.parse(tokens[0]);
 
             if(!optional.isPresent()){
                 throw new InvalidParameterException(tokens[0]);

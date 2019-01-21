@@ -1,8 +1,8 @@
 package org.ukwikora.model;
 
 import org.ukwikora.analytics.Action;
+import org.ukwikora.compiler.VariableParser;
 import org.ukwikora.utils.LevenshteinDistance;
-import org.apache.log4j.Logger;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -26,7 +26,7 @@ public class Assignment extends Step {
     }
 
     public void addReturnValue(String returnValue){
-        VariableFactory.create(returnValue).ifPresent(variable -> {
+        VariableParser.create(returnValue).ifPresent(variable -> {
             variable.setAssignment(this);
             returnValues.add(variable);
         });

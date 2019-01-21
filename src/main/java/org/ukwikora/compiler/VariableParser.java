@@ -1,9 +1,14 @@
-package org.ukwikora.model;
+package org.ukwikora.compiler;
+
+import org.ukwikora.model.DictionaryVariable;
+import org.ukwikora.model.ListVariable;
+import org.ukwikora.model.ScalarVariable;
+import org.ukwikora.model.Variable;
 
 import java.util.Optional;
 
-public class VariableFactory {
-    public static Optional<Variable> create(String name){
+public class VariableParser {
+    public static Optional<Variable> parse(String name){
         Variable variable;
         switch (name.trim().substring(0, 1)) {
             case "$":  variable = new ScalarVariable(); break;
