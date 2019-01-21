@@ -12,13 +12,19 @@ public class Value implements Differentiable {
         String, Object, Keyword, Locator, Condition, Keywords, Kwargs
     }
 
+    private enum Matching{
+        isVariable, hasVariable, findVariable
+    }
+
     static private Pattern isVariablePattern;
     static private Pattern hasVariablePattern;
+    static private Pattern findVariablePattern;
     static private Pattern escapePattern;
 
     static {
         isVariablePattern = Pattern.compile("^(([@$&])\\{)(.*?)(})$");
-        hasVariablePattern = Pattern.compile("(([@$&])\\{)(.*?)(})");
+        hasVariablePattern = Pattern.compile("(.*)(([@$&])\\{)(.*?)(})(.*)");
+        findVariablePattern = Pattern.compile("(([@$&])\\{)(.*?)(})");
         escapePattern = Pattern.compile("[{}()\\[\\].+*?^$\\\\|]");
     }
 
@@ -53,7 +59,7 @@ public class Value implements Differentiable {
     }
 
     public boolean isVariable() {
-        Matcher matcher = getVariableMatcher(this.value, true);
+        Matcher matcher = getVariableMatcher(this.value, Matching.isVariable);
         return matcher.matches();
     }
 
@@ -63,7 +69,7 @@ public class Value implements Differentiable {
     }
 
     public boolean hasVariable() {
-        Matcher matcher = getVariableMatcher(this.value, false);
+        Matcher matcher = getVariableMatcher(this.value, Matching.hasVariable);
         return matcher.matches();
     }
 
@@ -75,7 +81,7 @@ public class Value implements Differentiable {
     public List<String> findVariables() {
         List<String> variables = new ArrayList<>();
 
-        Matcher matcher = getVariableMatcher(this.value, false);
+        Matcher matcher = getVariableMatcher(this.value, Matching.findVariable);
 
         while (matcher.find()){
             variables.add(this.value.substring(matcher.start(), matcher.end()));
@@ -108,7 +114,7 @@ public class Value implements Differentiable {
     }
 
     private void buildRegex() {
-        Matcher matcher = getVariableMatcher(this.value, false);
+        Matcher matcher = getVariableMatcher(this.value, Matching.findVariable);
 
         String placeholder = "@@@@___VARIABLE__PLACEHOLDER___@@@@";
 
@@ -119,12 +125,22 @@ public class Value implements Differentiable {
         match = Pattern.compile("^" + pattern + "$", Pattern.CASE_INSENSITIVE);
     }
 
-    public static Matcher getVariableMatcher(String value, boolean strict) {
-        if(strict){
-            return isVariablePattern.matcher(value);
+    private static Matcher getVariableMatcher(String value, Matching matching) {
+        Matcher matcher = null;
+
+        switch (matching) {
+            case isVariable:
+                matcher = isVariablePattern.matcher(value);
+                break;
+            case hasVariable:
+                matcher = hasVariablePattern.matcher(value);
+                break;
+            case findVariable:
+                matcher = findVariablePattern.matcher(value);
+                break;
         }
 
-        return hasVariablePattern.matcher(value);
+        return matcher;
     }
 
     public static String escape(String s){
