@@ -27,7 +27,7 @@ public class LevenshteinDistanceTest {
 
         double index = LevenshteinDistance.stringIndex(string1, string2);
 
-        assertEquals(0.461538461538, index, Globals.delta);
+        assertEquals(0.461538461538, index, Globals.epsilon);
     }
 
     @Test

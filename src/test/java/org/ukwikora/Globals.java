@@ -1,5 +1,5 @@
 package org.ukwikora;
 
 public class Globals {
-    public static double delta = 0.0001;
+    public static double epsilon = 0.0001;
 }
