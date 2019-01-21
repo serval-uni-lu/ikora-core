@@ -63,7 +63,7 @@ class UserKeywordParser {
 
     private static void parseDocumentation(LineReader reader, String[] tokens, UserKeyword userKeyword) throws IOException {
         StringBuilder builder = new StringBuilder();
-         LexerUtils.parseDocumentation(reader, tokens, builder);
+         LexerUtils.parseDocumentation(reader, builder);
 
         userKeyword.setDocumentation(builder.toString());
     }

@@ -23,12 +23,14 @@ class LexerUtils {
         return tokens;
     }
 
-    static void parseDocumentation(LineReader reader, String[] tokens, StringBuilder builder) throws IOException {
+    static void parseDocumentation(LineReader reader, StringBuilder builder) throws IOException {
+        String[] tokens = tokenize(reader.getCurrent().getText());
         tokens = LexerUtils.removeIndent(tokens);
 
         if(tokens.length > 1){
             builder.append(LexerUtils.removeIndent(tokens)[1]);
         }
+
         appendMultiline(reader, builder);
     }
 

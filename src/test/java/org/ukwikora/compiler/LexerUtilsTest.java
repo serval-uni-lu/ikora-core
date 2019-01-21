@@ -2,6 +2,10 @@ package org.ukwikora.compiler;
 
 import org.junit.Test;
 
+import java.io.IOException;
+import java.io.Reader;
+import java.io.StringReader;
+
 import static org.junit.Assert.*;
 
 public class LexerUtilsTest {
@@ -51,5 +55,43 @@ public class LexerUtilsTest {
         assertEquals(2, tokens.length);
         assertTrue(tokens[0].isEmpty());
         assertEquals(tokens[1], "Some text");
+    }
+
+    @Test
+    public void checkMultiLineDocumentation(){
+        String documentation = "\t[Documenation]\tFirst line\n" +
+                "\t...\tSecond line\n" +
+                "\t...\tThird line\n" +
+                "\tNot documentation";
+
+        StringBuilder builder = new StringBuilder();
+
+        try {
+            LineReader reader = createReader(documentation);
+            LexerUtils.parseDocumentation(reader, builder);
+        } catch (IOException e) {
+            fail("Exception raised: " + e.getMessage());
+        }
+
+        String[] lines = builder.toString().split("\n");
+
+        assertEquals(3, lines.length);
+        assertEquals("First line", lines[0]);
+        assertEquals("Second line", lines[1]);
+        assertEquals("Third line", lines[2]);
+    }
+
+    private LineReader createReader(String text){
+        LineReader reader = null;
+
+        try {
+            Reader targetReader = new StringReader(text);
+            reader = new LineReader(targetReader);
+            reader.readLine();
+        } catch (IOException e) {
+            fail("Error while creating LineReader: " + e.getMessage());
+        }
+
+        return reader;
     }
 }

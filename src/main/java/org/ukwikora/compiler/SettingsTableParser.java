@@ -118,7 +118,7 @@ class SettingsTableParser {
 
     private static void parseDocumentation(LineReader reader, String[] tokens, Settings settings) throws IOException {
         StringBuilder builder = new StringBuilder();
-        LexerUtils.parseDocumentation(reader, tokens, builder);
+        LexerUtils.parseDocumentation(reader, builder);
 
         settings.setDocumentation(builder.toString());
     }

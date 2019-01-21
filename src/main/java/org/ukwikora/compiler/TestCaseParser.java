@@ -89,7 +89,7 @@ class TestCaseParser {
 
     private static void parseDocumentation(LineReader reader, String[] tokens, TestCase testCase) throws IOException {
         StringBuilder builder = new StringBuilder();
-        LexerUtils.parseDocumentation(reader, tokens, builder);
+        LexerUtils.parseDocumentation(reader, builder);
 
         testCase.setDocumentation(builder.toString());
     }
