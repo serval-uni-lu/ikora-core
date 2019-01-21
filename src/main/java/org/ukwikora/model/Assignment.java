@@ -1,7 +1,6 @@
 package org.ukwikora.model;
 
 import org.ukwikora.analytics.Action;
-import org.ukwikora.compiler.VariableParser;
 import org.ukwikora.utils.LevenshteinDistance;
 
 import javax.annotation.Nonnull;
@@ -25,11 +24,8 @@ public class Assignment extends Step {
         return returnValues;
     }
 
-    public void addReturnValue(String returnValue){
-        VariableParser.create(returnValue).ifPresent(variable -> {
-            variable.setAssignment(this);
-            returnValues.add(variable);
-        });
+    public void addReturnValue(@Nonnull Variable variable){
+        returnValues.add(variable);
     }
 
     public void setExpression(@Nonnull KeywordCall call) {
@@ -46,7 +42,7 @@ public class Assignment extends Step {
     }
 
     @Override
-    public void setLineRange(LineRange lineRange){
+    public void setLineRange(@Nonnull LineRange lineRange){
         super.setLineRange(lineRange);
 
         for(Variable variable: returnValues){

@@ -5,13 +5,12 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class LineTest {
+public class LexerUtilsTest {
 
     @Test
     public void checkTokenizerWith2spaceIndent(){
-        Line line = new Line("  [Documentation]", 0);
-
-        String[] tokens = line.tokenize();
+        String line = "  [Documentation]";
+        String[] tokens = LexerUtils.tokenize(line);
 
         assertEquals(tokens.length, 2);
         assertTrue(tokens[0].isEmpty());
@@ -20,9 +19,8 @@ public class LineTest {
 
     @Test
     public void checkTokenizeWith4spaceIndent(){
-        Line line = new Line("    [Documentation]", 0);
-
-        String[] tokens = line.tokenize();
+        String line = "    [Documentation]";
+        String[] tokens = LexerUtils.tokenize(line);
 
         assertEquals(2, tokens.length);
         assertTrue(tokens[0].isEmpty());
@@ -31,9 +29,8 @@ public class LineTest {
 
     @Test
     public void checkTokenizeWithTabIndent(){
-        Line line = new Line("\t[Documentation]", 0);
-
-        String[] tokens = line.tokenize();
+        String line = "\t[Documentation]";
+        String[] tokens = LexerUtils.tokenize(line);
 
         assertEquals(2, tokens.length);
         assertTrue(tokens[0].isEmpty());

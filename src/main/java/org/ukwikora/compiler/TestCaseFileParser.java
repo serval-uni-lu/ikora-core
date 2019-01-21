@@ -6,7 +6,7 @@ import org.ukwikora.model.*;
 import java.io.File;
 import java.io.IOException;
 
-public class TestCaseFileParser {
+class TestCaseFileParser {
     private final static Logger logger = Logger.getLogger(TestCaseFileParser.class);
 
     static public void parse(File file, Project project) {
@@ -73,18 +73,18 @@ public class TestCaseFileParser {
     }
 
     static private boolean isSettings(String line){
-        return Utils.isBlock(line, "setting(s?)");
+        return LexerUtils.isBlock(line, "setting(s?)");
     }
 
     static private boolean isTestCases(String line){
-        return Utils.isBlock(line, "test case(s?)");
+        return LexerUtils.isBlock(line, "test case(s?)");
     }
 
     static private boolean isKeywords(String line){
-        return Utils.isBlock(line, "keyword(s?)");
+        return LexerUtils.isBlock(line, "keyword(s?)");
     }
 
     static private boolean isVariable(String line){
-        return Utils.isBlock(line, "variable(s?)");
+        return LexerUtils.isBlock(line, "variable(s?)");
     }
 }

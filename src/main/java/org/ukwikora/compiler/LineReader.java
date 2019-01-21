@@ -30,7 +30,10 @@ public class LineReader {
     }
 
     public Line readLine() throws IOException {
-        current = new Line(reader.readLine(), reader.getLineNumber());
+        String currentText = reader.readLine();
+        int currentNumber = reader.getLineNumber();
+
+        current = new Line(currentText, currentNumber, LexerUtils.isComment(currentText), LexerUtils.isEmpty(currentText));
 
         if(testCaseFile != null){
             testCaseFile.addLine(current);

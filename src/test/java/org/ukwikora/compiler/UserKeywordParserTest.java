@@ -38,9 +38,9 @@ public class UserKeywordParserTest {
 
         assertNotNull(keyword);
 
-        assertEquals(keyword.getName().toString(), "I create a transfer of <${amount}> to an other account with 3 letters name");
-        assertEquals(keyword.getDocumentation().trim(), "Click on button \"Make a transfer\", select the debit account, choose to create a new beneficiary with 3 letters name as credit account, create the transfer by entering all the fields and validate with a good card code");
-        assertEquals(keyword.getSteps().size(), 9);
+        assertEquals("I create a transfer of <${amount}> to an other account with 3 letters name", keyword.getName());
+        assertEquals("Click on button \"Make a transfer\", select the debit account, choose to create a new beneficiary with 3 letters name as credit account, create the transfer by entering all the fields and validate with a good card code", keyword.getDocumentation().trim());
+        assertEquals(9, keyword.getSteps().size());
     }
 
     LineReader createLineReader(String text) throws IOException {

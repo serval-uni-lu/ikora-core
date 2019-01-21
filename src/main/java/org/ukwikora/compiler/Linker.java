@@ -9,7 +9,7 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Linker {
+class Linker {
     private final static Logger logger = Logger.getLogger(Linker.class);
 
     final private StaticRuntime runtime;

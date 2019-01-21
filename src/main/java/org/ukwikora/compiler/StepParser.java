@@ -5,13 +5,13 @@ import org.ukwikora.model.*;
 import java.io.IOException;
 import java.util.Arrays;
 
-public class StepParser {
+class StepParser {
     public static Step parse(LineReader reader) throws IOException {
         Step step;
         int startLine = reader.getCurrent().getNumber();
 
-        String[] tokens = reader.getCurrent().tokenize();
-        tokens = Utils.removeIndent(tokens);
+        String[] tokens = LexerUtils.tokenize(reader.getCurrent().getText());
+        tokens = LexerUtils.removeIndent(tokens);
 
         if(isForLoop(tokens)) {
             step = parseForLoop(reader);
@@ -35,7 +35,7 @@ public class StepParser {
         forLoop.setName(loop.getText());
 
         while (reader.readLine().isValid()){
-            if(!reader.getCurrent().isInBlock(loop)){
+            if(!LexerUtils.isInBlock(loop.getText(), reader.getCurrent().getText())){
                 break;
             }
         }
@@ -47,7 +47,7 @@ public class StepParser {
         Assignment assignment = new Assignment();
         assignment.setName(reader.getCurrent().getText());
 
-        String[] tokens = reader.getCurrent().tokenize();
+        String[] tokens = LexerUtils.tokenize(reader.getCurrent().getText());
 
         for(int i = 0; i < tokens.length; ++i){
             String token = tokens[i].replaceAll("(\\s*)=(\\s*)$", "");
@@ -58,7 +58,10 @@ public class StepParser {
             }
 
             if(Value.isVariable(token)){
-                assignment.addReturnValue(token);
+                VariableParser.parse(token).ifPresent(variable -> {
+                    variable.setAssignment(assignment);
+                    assignment.addReturnValue(variable);
+                });
             }
             else{
                 KeywordCall call = getKeywordCall(Arrays.copyOfRange(tokens, i, tokens.length));
@@ -74,8 +77,8 @@ public class StepParser {
 
     static private Step parseKeywordCall(LineReader reader) throws IOException {
 
-        String[] tokens = reader.getCurrent().tokenize();
-        tokens = Utils.removeIndent(tokens);
+        String[] tokens = LexerUtils.tokenize(reader.getCurrent().getText());
+        tokens = LexerUtils.removeIndent(tokens);
 
         KeywordCall call = getKeywordCall(tokens);
 
@@ -100,7 +103,7 @@ public class StepParser {
     }
 
     private static boolean isAssignment(String[] tokens){
-        return Utils.compareNoCase(tokens[0], "^((\\$|@|&)\\{)(.*)(\\})(\\s?)(=?)");
+        return LexerUtils.compareNoCase(tokens[0], "^((\\$|@|&)\\{)(.*)(\\})(\\s?)(=?)");
     }
 
     private static boolean isForLoop(String[] tokens) {

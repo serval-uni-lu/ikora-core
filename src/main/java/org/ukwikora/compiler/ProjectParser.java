@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class ProjectParser {
+class ProjectParser {
     private ProjectParser(){}
 
     static public Project parse(String filePath){

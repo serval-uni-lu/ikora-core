@@ -1,18 +1,16 @@
 package org.ukwikora.compiler;
 
-import org.apache.log4j.Logger;
-
 public class Line {
-    private final static Logger logger = Logger.getLogger(Line.class);
-
     private String text;
     private int number;
+    private boolean isComment;
+    private boolean isEmpty;
 
-    public Line(String text, int number) {
+    public Line(String text, int number, boolean isComment, boolean isEmpty) {
         this.text = text;
         this.number = number;
-
-        logger.trace(String.format("line %d: %s", this.number, this.text));
+        this.isComment = isComment;
+        this.isEmpty = isEmpty;
     }
 
     public int getNumber() {
@@ -27,45 +25,15 @@ public class Line {
         return text != null;
     }
 
+    public boolean isComment() {
+        return isComment;
+    }
+
     public boolean isEmpty() {
-        return text.trim().isEmpty();
+        return isEmpty;
     }
 
-    public boolean isComment(){
-        return text.trim().startsWith("#");
-    }
-
-    public boolean ignore(){
-        return isEmpty() || isComment();
-    }
-
-    public String[] tokenize(){
-        String tokens = this.text.replaceAll("\\s+$", "").replaceAll("\\s\\s(\\s*)", "\t");
-        tokens = tokens.replaceAll("\\\\t", "\t");
-
-        return tokens.split("\t");
-    }
-
-    public int getIndentSize() {
-        String s = this.text.replaceAll("\\s\\s(\\s*)", "\t");
-        s = s.replaceAll("\\\\\\t", "\t");
-
-        int i = 0;
-
-        for (; i < s.length(); i++){
-            if(s.charAt(i) != '\t'){
-                break;
-            }
-        }
-
-        return i;
-    }
-
-    public boolean isInBlock(Line line) {
-        if(ignore()){
-            return true;
-        }
-
-        return getIndentSize() == line.getIndentSize() + 1;
+    public boolean ignore() {
+        return isComment || isEmpty;
     }
 }

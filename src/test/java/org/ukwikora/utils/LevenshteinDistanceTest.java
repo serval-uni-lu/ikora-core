@@ -41,9 +41,6 @@ public class LevenshteinDistanceTest {
         list2.add(new DifferentiableString("Step 2"));
         list2.add(new DifferentiableString("Step 3"));
 
-        double[][] matrix = LevenshteinDistance.distanceMatrix(list1, list2);
         LevenshteinDistance.getDifferences(list1, list2);
-
-        LevenshteinDistance.printMatrix(matrix);
     }
 }

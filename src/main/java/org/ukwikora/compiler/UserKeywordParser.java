@@ -6,14 +6,14 @@ import org.ukwikora.model.UserKeyword;
 
 import java.io.IOException;
 
-public class UserKeywordParser {
+class UserKeywordParser {
 
     public static UserKeyword parse(LineReader reader) throws IOException {
         UserKeyword userKeyword = new UserKeyword();
         int startLine = reader.getCurrent().getNumber();
 
         Line test = reader.getCurrent();
-        String[] tokens = test.tokenize();
+        String[] tokens = LexerUtils.tokenize(test.getText());
         userKeyword.setName(tokens[0].trim());
 
         reader.readLine();
@@ -24,30 +24,30 @@ public class UserKeywordParser {
                 continue;
             }
 
-            if(!reader.getCurrent().isInBlock(test)){
+            if(!LexerUtils.isInBlock(test.getText(), reader.getCurrent().getText())){
                 break;
             }
 
-            tokens = Utils.removeIndent(reader.getCurrent().tokenize());
+            tokens = LexerUtils.removeIndent(LexerUtils.tokenize(reader.getCurrent().getText()));
 
             String label = tokens[0].trim();
 
-            if (Utils.compareNoCase(label, "\\[documentation\\]")) {
+            if (LexerUtils.compareNoCase(label, "\\[documentation\\]")) {
                 parseDocumentation(reader, tokens, userKeyword);
             }
-            else if (Utils.compareNoCase(label, "\\[tags\\]")) {
+            else if (LexerUtils.compareNoCase(label, "\\[tags\\]")) {
                 parseTags(reader, tokens, userKeyword);
             }
-            else if (Utils.compareNoCase(label, "\\[arguments\\]")) {
+            else if (LexerUtils.compareNoCase(label, "\\[arguments\\]")) {
                 parseParameters(reader, tokens, userKeyword);
             }
-            else if (Utils.compareNoCase(label, "\\[return\\]")) {
+            else if (LexerUtils.compareNoCase(label, "\\[return\\]")) {
                 parseReturn(reader, tokens, userKeyword);
             }
-            else if (Utils.compareNoCase(label, "\\[teardown\\]")) {
+            else if (LexerUtils.compareNoCase(label, "\\[teardown\\]")) {
                 parseTeardown(reader, tokens, userKeyword);
             }
-            else if (Utils.compareNoCase(label, "\\[timeout\\]")) {
+            else if (LexerUtils.compareNoCase(label, "\\[timeout\\]")) {
                  parseTimeout(reader, tokens, userKeyword);
             }
             else {
@@ -63,13 +63,13 @@ public class UserKeywordParser {
 
     private static void parseDocumentation(LineReader reader, String[] tokens, UserKeyword userKeyword) throws IOException {
         StringBuilder builder = new StringBuilder();
-         Utils.parseDocumentation(reader, tokens, builder);
+         LexerUtils.parseDocumentation(reader, tokens, builder);
 
         userKeyword.setDocumentation(builder.toString());
     }
 
     private static void parseTags(LineReader reader, String[] tokens, UserKeyword userKeyword) throws IOException {
-        tokens = Utils.removeIndent(tokens);
+        tokens = LexerUtils.removeIndent(tokens);
 
         for(int i = 1; i < tokens.length; ++i){
             userKeyword.addTag(tokens[i]);
@@ -79,7 +79,7 @@ public class UserKeywordParser {
     }
 
     private static void parseParameters(LineReader reader, String[] tokens, UserKeyword userKeyword) throws IOException {
-        tokens = Utils.removeIndent(tokens);
+        tokens = LexerUtils.removeIndent(tokens);
 
         for(int i = 1; i < tokens.length; ++i){
             userKeyword.addParameter(tokens[i]);

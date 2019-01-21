@@ -7,7 +7,7 @@ import org.ukwikora.model.Variable;
 
 import java.util.Optional;
 
-public class VariableParser {
+class VariableParser {
     public static Optional<Variable> parse(String name){
         Variable variable;
         switch (name.trim().substring(0, 1)) {

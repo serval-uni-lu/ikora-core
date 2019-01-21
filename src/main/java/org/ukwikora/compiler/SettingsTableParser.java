@@ -8,7 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class SettingsTableParser {
+class SettingsTableParser {
     private SettingsTableParser(){ }
 
     static public Settings parse(LineReader reader) throws IOException {
@@ -16,13 +16,13 @@ public class SettingsTableParser {
 
         Line line = reader.readLine();
 
-        while(line.isValid() && !Utils.isBlock(line.getText())){
+        while(line.isValid() && !LexerUtils.isBlock(line.getText())){
             if(line.ignore()){
                 line = reader.readLine();
                 continue;
             }
 
-            String[] tokens = line.tokenize();
+            String[] tokens = LexerUtils.tokenize(line.getText());
 
             if(tokens.length == 0){
                 line = reader.readLine();
@@ -31,43 +31,43 @@ public class SettingsTableParser {
 
             String label = tokens[0];
 
-            if(Utils.compareNoCase(label, "documentation")){
+            if(LexerUtils.compareNoCase(label, "documentation")){
                 parseDocumentation(reader, tokens, settings);
             }
-            else if(Utils.compareNoCase(label, "resource")){
+            else if(LexerUtils.compareNoCase(label, "resource")){
                 parseResource(reader, tokens, settings);
             }
-            else if(Utils.compareNoCase(label, "library")){
+            else if(LexerUtils.compareNoCase(label, "library")){
                 parseLibrary(reader, tokens, settings);
             }
-            else if(Utils.compareNoCase(label, "variables")) {
+            else if(LexerUtils.compareNoCase(label, "variables")) {
                 parseVariable(reader, tokens, settings);
             }
-            else if(Utils.compareNoCase(label, "metadata")) {
+            else if(LexerUtils.compareNoCase(label, "metadata")) {
                 parseMetadata(reader, tokens, settings);
             }
-            else if(Utils.compareNoCase(label, "suite setup")) {
+            else if(LexerUtils.compareNoCase(label, "suite setup")) {
                 parseSuiteSetup(reader, tokens, settings);
             }
-            else if(Utils.compareNoCase(label, "suite teardown")) {
+            else if(LexerUtils.compareNoCase(label, "suite teardown")) {
                 parseSuiteTeardown(reader, tokens, settings);
             }
-            else if(Utils.compareNoCase(label, "force tags")) {
+            else if(LexerUtils.compareNoCase(label, "force tags")) {
                 parseForceTags(reader, tokens, settings);
             }
-            else if(Utils.compareNoCase(label, "default tags")){
+            else if(LexerUtils.compareNoCase(label, "default tags")){
                 parseDefaultTags(reader, tokens, settings);
             }
-            else if(Utils.compareNoCase(label, "test setup")){
+            else if(LexerUtils.compareNoCase(label, "test setup")){
                 parseTestSetup(reader, tokens, settings);
             }
-            else if(Utils.compareNoCase(label, "test teardown")){
+            else if(LexerUtils.compareNoCase(label, "test teardown")){
                 parseTestTeardown(reader, tokens, settings);
             }
-            else if(Utils.compareNoCase(label, "test template")){
+            else if(LexerUtils.compareNoCase(label, "test template")){
                 parseTestTemplate(reader, tokens, settings);
             }
-            else if(Utils.compareNoCase(label, "test timeout")){
+            else if(LexerUtils.compareNoCase(label, "test timeout")){
                 parseTestTimeout(reader, tokens, settings);
             }
             else {
@@ -118,7 +118,7 @@ public class SettingsTableParser {
 
     private static void parseDocumentation(LineReader reader, String[] tokens, Settings settings) throws IOException {
         StringBuilder builder = new StringBuilder();
-        Utils.parseDocumentation(reader, tokens, builder);
+        LexerUtils.parseDocumentation(reader, tokens, builder);
 
         settings.setDocumentation(builder.toString());
     }
@@ -143,7 +143,7 @@ public class SettingsTableParser {
     }
 
     private static void parseDefaultTags(LineReader reader, String[] tokens, Settings settings) throws IOException {
-        tokens = Utils.removeIndent(tokens);
+        tokens = LexerUtils.removeIndent(tokens);
 
         for(int i = 1; i < tokens.length; ++i){
             settings.addDefaultTag(tokens[i]);

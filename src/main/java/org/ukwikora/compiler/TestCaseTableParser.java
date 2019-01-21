@@ -5,7 +5,7 @@ import org.ukwikora.model.TestCase;
 
 import java.io.IOException;
 
-public class TestCaseTableParser {
+class TestCaseTableParser {
     private TestCaseTableParser() {}
 
     static public ElementTable<TestCase> parse(LineReader reader) throws IOException {
@@ -13,7 +13,7 @@ public class TestCaseTableParser {
 
         reader.readLine();
 
-        while(reader.getCurrent().isValid() && !Utils.isBlock(reader.getCurrent().getText())){
+        while(reader.getCurrent().isValid() && !LexerUtils.isBlock(reader.getCurrent().getText())){
             if(reader.getCurrent().ignore()){
                 reader.readLine();
                 continue;

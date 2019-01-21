@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.security.InvalidParameterException;
 import java.util.Optional;
 
-public class VariableTableParser {
+class VariableTableParser {
     private VariableTableParser() {}
 
     static public ElementTable<Variable> parse(LineReader reader) throws IOException {
@@ -17,7 +17,7 @@ public class VariableTableParser {
         reader.readLine();
 
         while(reader.getCurrent().isValid()){
-            if(Utils.isBlock(reader.getCurrent().getText())){
+            if(LexerUtils.isBlock(reader.getCurrent().getText())){
                 break;
             }
 
@@ -26,7 +26,7 @@ public class VariableTableParser {
                 continue;
             }
 
-            String[] tokens = reader.getCurrent().tokenize();
+            String[] tokens = LexerUtils.tokenize(reader.getCurrent().getText());
 
             Optional<Variable> optional = VariableParser.parse(tokens[0]);
 
