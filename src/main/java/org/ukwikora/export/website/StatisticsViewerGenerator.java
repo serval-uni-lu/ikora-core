@@ -31,7 +31,7 @@ public class StatisticsViewerGenerator {
 
     void copyResources() throws IOException, URISyntaxException {
         File source = FileUtils.getResourceFile("reporting/html/project_analytics");
-        org.apache.commons.io.FileUtils.copyDirectory(source, destination, new SuffixFileFilter("class"));
+        org.apache.commons.io.FileUtils.copyDirectory(source, destination);
     }
 
     void generateSummaryPage() throws IOException, URISyntaxException, TemplateException {
