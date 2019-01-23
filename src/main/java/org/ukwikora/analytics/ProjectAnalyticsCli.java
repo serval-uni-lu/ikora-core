@@ -4,6 +4,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ukwikora.compiler.Compiler;
+import org.ukwikora.export.website.StatisticsViewerGenerator;
 import org.ukwikora.model.Project;
 import org.ukwikora.utils.CommandRunner;
 import org.ukwikora.utils.Configuration;
@@ -22,11 +23,18 @@ public class ProjectAnalyticsCli implements CommandRunner {
 
     @Override
     public void run() throws Exception {
+        // read configuration and setup system
         Configuration config = Configuration.getInstance();
         Plugin analytics = config.getPlugin("project analytics");
-
         String tmpLocation = loadProjects(analytics);
+        File outputDir = new File(analytics.getPropertyAsString("output directory"));
+
+        // analyze projects
         List<Project> projects = compileProjects(tmpLocation);
+
+        // export to static website
+        StatisticsViewerGenerator generator = new StatisticsViewerGenerator(projects, outputDir);
+        generator.generate();
     }
 
     private String loadProjects(Plugin analytics) {

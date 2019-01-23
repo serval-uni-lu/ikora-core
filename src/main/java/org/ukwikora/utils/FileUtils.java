@@ -2,8 +2,12 @@ package org.ukwikora.utils;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.ArrayUtils;
+
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Paths;
 
 public class FileUtils {
     public static String[] getSubFolders(File folder) {
@@ -42,5 +46,15 @@ public class FileUtils {
             parentFile = parentFile.getParentFile();
         }
         return false;
+    }
+
+    public static File getResourceFile(String name) throws IOException, URISyntaxException {
+        URL resource = FileUtils.class.getClassLoader().getResource(name);
+
+        if(resource == null){
+            throw new IOException("failed to locate resource template for project analytics");
+        }
+
+        return Paths.get(resource.toURI()).toFile();
     }
 }

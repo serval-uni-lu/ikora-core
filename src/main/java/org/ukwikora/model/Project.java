@@ -39,6 +39,10 @@ public class Project implements Comparable<Project> {
         this.commitId = commitId;
     }
 
+    public String getName() {
+        return rootFolder.getName();
+    }
+
     public File getRootFolder() {
         return rootFolder;
     }
