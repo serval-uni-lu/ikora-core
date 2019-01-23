@@ -1,4 +1,4 @@
-package org.ukwikora.export;
+package org.ukwikora.export.json;
 
 
 import com.fasterxml.jackson.core.JsonGenerator;

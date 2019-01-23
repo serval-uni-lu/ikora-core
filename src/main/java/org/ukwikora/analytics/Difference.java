@@ -1,7 +1,7 @@
 package org.ukwikora.analytics;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.ukwikora.export.DifferenceSerializer;
+import org.ukwikora.export.json.DifferenceSerializer;
 import org.ukwikora.model.Differentiable;
 import org.ukwikora.utils.LevenshteinDistance;
 import org.ukwikora.model.KeywordDefinition;

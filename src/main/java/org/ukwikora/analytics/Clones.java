@@ -1,7 +1,7 @@
 package org.ukwikora.analytics;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.ukwikora.export.CloneResultSerializer;
+import org.ukwikora.export.json.CloneResultSerializer;
 import org.ukwikora.model.Element;
 
 import java.util.HashMap;

@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ukwikora.export.*;
+import org.ukwikora.export.json.*;
 import org.ukwikora.utils.CommandRunner;
 import org.ukwikora.utils.Configuration;
 import org.ukwikora.utils.Plugin;

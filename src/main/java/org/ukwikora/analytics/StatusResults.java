@@ -2,7 +2,7 @@ package org.ukwikora.analytics;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-import org.ukwikora.export.StatusResultSerializer;
+import org.ukwikora.export.json.StatusResultSerializer;
 import org.ukwikora.report.KeywordStatus;
 import org.ukwikora.report.Report;
 import org.apache.commons.lang3.tuple.ImmutablePair;
