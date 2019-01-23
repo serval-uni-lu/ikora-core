@@ -133,7 +133,7 @@ public class TestCaseFile implements Iterable<UserKeyword> {
         files.add(this);
 
         for(Resources resources: settings.getResources()){
-            if(files.contains(resources.getTestCaseFile())) {
+            if(!files.contains(resources.getTestCaseFile())) {
                 keywords.extend(resources.getTestCaseFile().getElements(type, files));
             }
         }
