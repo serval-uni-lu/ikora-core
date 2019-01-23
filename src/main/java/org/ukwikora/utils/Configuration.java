@@ -19,6 +19,8 @@ public class Configuration {
 
     @JsonProperty("verbose")
     private Boolean verbose;
+    @JsonProperty("logger level")
+    private String loggerLevel;
     @JsonIgnore
     private Map<String, Plugin> plugins = null;
     @JsonIgnore
@@ -28,9 +30,11 @@ public class Configuration {
     @JsonIgnore
     private static File configurationFolder;
     @JsonIgnore
-    final static Logger logger = LogManager.getLogger(Configuration.class);
+    private final static Logger logger = LogManager.getLogger(Configuration.class);
 
     private Configuration(){
+        verbose = true;
+        loggerLevel = "INFO";
     }
 
     public static Configuration getInstance()
@@ -45,6 +49,16 @@ public class Configuration {
     @JsonProperty("verbose")
     public void setVerbose(Boolean value) {
         verbose = value;
+    }
+
+    @JsonProperty("logger level")
+    public String getLoggerLevel() {
+        return loggerLevel;
+    }
+
+    @JsonProperty("logger level")
+    public void setLoggerLevel(String value) {
+        loggerLevel = value;
     }
 
     @JsonProperty("plugins")
