@@ -3,16 +3,17 @@ package org.ukwikora.analytics;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.ukwikora.export.*;
 import org.ukwikora.utils.CommandRunner;
 import org.ukwikora.utils.Configuration;
 import org.ukwikora.utils.Plugin;
-import org.apache.log4j.Logger;
 
 import java.io.*;
 
 public class EvolutionAnalyticsCli implements CommandRunner {
-    private final static Logger logger = Logger.getLogger(EvolutionAnalyticsCli.class);
+    private final static Logger logger = LogManager.getLogger(EvolutionAnalyticsCli.class);
 
     @Override
     public void run() throws Exception {

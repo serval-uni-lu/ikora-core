@@ -1,6 +1,7 @@
 package org.ukwikora.compiler;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.ukwikora.libraries.builtin.SetGlobalVariable;
 import org.ukwikora.libraries.builtin.SetSuiteVariable;
 import org.ukwikora.libraries.builtin.SetTestVariable;
@@ -10,8 +11,9 @@ import org.ukwikora.model.Runtime;
 import java.util.List;
 import java.util.Optional;
 
+
 public class StaticRuntime extends Runtime {
-    private final static Logger logger = Logger.getLogger(StaticRuntime.class);
+    private final static Logger logger = LogManager.getLogger(StaticRuntime.class);
 
     public StaticRuntime(Project project) {
         super(project);

@@ -1,12 +1,14 @@
 package org.ukwikora.analytics;
 
 import java.util.*;
-import org.apache.log4j.Logger;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.ukwikora.model.*;
 import org.ukwikora.utils.LevenshteinDistance;
 
 public class CloneDetection<T extends Element> {
-    final static Logger logger = Logger.getLogger(CloneDetection.class);
+    final static Logger logger = LogManager.getLogger(CloneDetection.class);
 
     static private Set<Action.Type> ignoreForTypeI;
     static private Set<Action.Type> ignoreForTypeII;

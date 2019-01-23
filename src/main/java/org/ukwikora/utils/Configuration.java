@@ -12,7 +12,8 @@ import java.util.Map;
 
 import net.harawata.appdirs.AppDirs;
 import net.harawata.appdirs.AppDirsFactory;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class Configuration {
 
@@ -27,7 +28,7 @@ public class Configuration {
     @JsonIgnore
     private static File configurationFolder;
     @JsonIgnore
-    final static Logger logger = Logger.getLogger(Configuration.class);
+    final static Logger logger = LogManager.getLogger(Configuration.class);
 
     private Configuration(){
     }

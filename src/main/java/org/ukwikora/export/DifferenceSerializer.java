@@ -5,17 +5,17 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.ukwikora.analytics.Action;
 import org.ukwikora.analytics.Difference;
-import org.ukwikora.analytics.StatusResults;
 import org.ukwikora.model.*;
 
 import java.io.IOException;
 import java.util.List;
 
 public class DifferenceSerializer extends JsonSerializer<Difference> {
-    final static Logger logger = Logger.getLogger(DifferenceSerializer.class);
+    final static Logger logger = LogManager.getLogger(DifferenceSerializer.class);
 
     @Override
     public void serialize(Difference difference, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException, JsonProcessingException {

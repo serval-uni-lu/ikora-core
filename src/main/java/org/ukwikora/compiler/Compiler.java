@@ -1,8 +1,9 @@
 package org.ukwikora.compiler;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.ukwikora.model.LibraryResources;
 import org.ukwikora.model.Project;
-import org.apache.log4j.Logger;
 import org.ukwikora.model.Resources;
 import org.ukwikora.model.TestCaseFile;
 import org.ukwikora.utils.FileUtils;
@@ -16,7 +17,7 @@ import java.util.List;
 import java.util.Set;
 
 public class Compiler {
-    private final static Logger logger = Logger.getLogger(Compiler.class);
+    private final static Logger logger = LogManager.getLogger(Compiler.class);
 
     static public List<Project> compile(String[] paths){
         List<Project> projects = new ArrayList<>();

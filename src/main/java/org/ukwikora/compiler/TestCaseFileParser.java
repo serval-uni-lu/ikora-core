@@ -1,13 +1,14 @@
 package org.ukwikora.compiler;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.ukwikora.model.*;
 
 import java.io.File;
 import java.io.IOException;
 
 class TestCaseFileParser {
-    private final static Logger logger = Logger.getLogger(TestCaseFileParser.class);
+    private final static Logger logger = LogManager.getLogger(TestCaseFileParser.class);
 
     static public void parse(File file, Project project) {
         LineReader reader = null;

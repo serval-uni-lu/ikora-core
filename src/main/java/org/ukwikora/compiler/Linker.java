@@ -1,6 +1,7 @@
 package org.ukwikora.compiler;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.ukwikora.model.*;
 
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 class Linker {
-    private final static Logger logger = Logger.getLogger(Linker.class);
+    private final static Logger logger = LogManager.getLogger(Linker.class);
 
     final private StaticRuntime runtime;
 

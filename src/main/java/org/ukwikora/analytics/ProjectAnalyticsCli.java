@@ -1,7 +1,8 @@
 package org.ukwikora.analytics;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.ukwikora.compiler.Compiler;
 import org.ukwikora.model.Project;
 import org.ukwikora.utils.CommandRunner;
@@ -17,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ProjectAnalyticsCli implements CommandRunner {
-    private final static Logger logger = Logger.getLogger(ProjectAnalyticsCli.class);
+    private final static Logger logger = LogManager.getLogger(ProjectAnalyticsCli.class);
 
     @Override
     public void run() throws Exception {

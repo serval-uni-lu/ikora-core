@@ -1,17 +1,18 @@
 package org.ukwikora;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.ukwikora.analytics.EvolutionAnalyticsCli;
 import org.ukwikora.analytics.ProjectAnalyticsCli;
 import org.ukwikora.utils.Configuration;
 import org.ukwikora.utils.ConsoleColors;
 import org.ukwikora.exception.DuplicateNodeException;
 import org.apache.commons.cli.*;
-import org.apache.log4j.Logger;
 
 import java.io.IOException;
 
 public class Ukwikora {
-    private final static Logger logger = Logger.getLogger(Ukwikora.class);
+    private final static Logger logger = LogManager.getLogger(Ukwikora.class);
 
     public static void main(String[] args) throws Exception {
         try {

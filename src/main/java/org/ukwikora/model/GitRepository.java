@@ -1,11 +1,12 @@
 package org.ukwikora.model;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.ukwikora.compiler.Compiler;
 import org.ukwikora.utils.Configuration;
 import org.ukwikora.utils.Plugin;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.log4j.Logger;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.ObjectId;
@@ -22,7 +23,7 @@ import java.time.ZoneId;
 import java.util.*;
 
 public class GitRepository {
-    private final static Logger logger = Logger.getLogger(GitRepository.class);
+    private final static Logger logger = LogManager.getLogger(GitRepository.class);
 
     private Git git;
     private String url;
