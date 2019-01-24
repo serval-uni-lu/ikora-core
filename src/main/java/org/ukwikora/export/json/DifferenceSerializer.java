@@ -18,7 +18,7 @@ public class DifferenceSerializer extends JsonSerializer<Difference> {
     final static Logger logger = LogManager.getLogger(DifferenceSerializer.class);
 
     @Override
-    public void serialize(Difference difference, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException, JsonProcessingException {
+    public void serialize(Difference difference, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
         writeActions(difference, jsonGenerator);
     }
 

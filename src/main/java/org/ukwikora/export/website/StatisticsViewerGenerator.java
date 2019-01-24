@@ -1,7 +1,6 @@
 package org.ukwikora.export.website;
 
 import freemarker.template.*;
-import org.apache.commons.io.filefilter.SuffixFileFilter;
 import org.ukwikora.model.Project;
 import org.ukwikora.utils.FileUtils;
 

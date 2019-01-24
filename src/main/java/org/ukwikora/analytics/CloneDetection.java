@@ -7,8 +7,8 @@ import org.apache.logging.log4j.Logger;
 import org.ukwikora.model.*;
 import org.ukwikora.utils.LevenshteinDistance;
 
-public class CloneDetection<T extends Element> {
-    final static Logger logger = LogManager.getLogger(CloneDetection.class);
+class CloneDetection<T extends Element> {
+    private final static Logger logger = LogManager.getLogger(CloneDetection.class);
 
     static private Set<Action.Type> ignoreForTypeI;
     static private Set<Action.Type> ignoreForTypeII;

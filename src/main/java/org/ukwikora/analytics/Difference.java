@@ -6,6 +6,7 @@ import org.ukwikora.model.Differentiable;
 import org.ukwikora.utils.LevenshteinDistance;
 import org.ukwikora.model.KeywordDefinition;
 
+import javax.annotation.Nonnull;
 import java.util.*;
 
 @JsonSerialize(using = DifferenceSerializer.class)
@@ -149,7 +150,7 @@ public class Difference implements Differentiable {
     }
 
     @Override
-    public List<Action> differences(Differentiable other) {
+    public List<Action> differences(@Nonnull Differentiable other) {
         return null;
     }
 

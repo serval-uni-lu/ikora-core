@@ -1,7 +1,6 @@
 package org.ukwikora.utils;
 
 import org.ukwikora.analytics.Action;
-import org.ukwikora.analytics.StatusResults;
 import opennlp.tools.util.StringUtil;
 import org.ukwikora.model.Differentiable;
 
@@ -146,9 +145,8 @@ public class LevenshteinDistance {
     {
         for(int j = 0; j < grid[0].length; j++)
         {
-            for(int i = 0; i < grid.length; i++)
-            {
-                System.out.printf("%.3f", grid[i][j]);
+            for (double[] row : grid) {
+                System.out.printf("%.3f", row[j]);
                 System.out.print("\t");
             }
             System.out.println();

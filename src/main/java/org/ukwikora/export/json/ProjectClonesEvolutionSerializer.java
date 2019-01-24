@@ -14,7 +14,7 @@ import java.io.IOException;
 
 public class ProjectClonesEvolutionSerializer extends JsonSerializer<EvolutionResults> {
     @Override
-    public void serialize(EvolutionResults results, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException, JsonProcessingException {
+    public void serialize(EvolutionResults results, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
         jsonGenerator.writeStartArray();
 
         for(Project project: results.getProjects()){

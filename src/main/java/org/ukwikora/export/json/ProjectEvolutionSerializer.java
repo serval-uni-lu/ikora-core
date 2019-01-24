@@ -1,7 +1,6 @@
 package org.ukwikora.export.json;
 
 import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import org.ukwikora.analytics.*;
@@ -9,14 +8,13 @@ import org.ukwikora.model.Project;
 import org.ukwikora.model.Sequence;
 import org.ukwikora.model.TestCase;
 import org.ukwikora.model.UserKeyword;
-import org.ukwikora.utils.StringUtils;
 
 import java.io.IOException;
 import java.util.*;
 
 public class ProjectEvolutionSerializer extends JsonSerializer<EvolutionResults> {
     @Override
-    public void serialize(EvolutionResults results, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException, JsonProcessingException {
+    public void serialize(EvolutionResults results, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
         jsonGenerator.writeStartArray();
 
         for(Project project: results.getProjects()){

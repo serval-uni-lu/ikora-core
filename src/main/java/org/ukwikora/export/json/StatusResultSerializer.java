@@ -20,7 +20,7 @@ public class StatusResultSerializer extends StdSerializer<StatusResults> {
     }
 
     @Override
-    public void serialize(StatusResults results, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException, JsonProcessingException {
+    public void serialize(StatusResults results, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
         jsonGenerator.writeStartObject();
 
         writeTests(results, jsonGenerator);

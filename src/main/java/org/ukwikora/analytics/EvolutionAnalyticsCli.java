@@ -96,7 +96,7 @@ public class EvolutionAnalyticsCli implements CommandRunner {
         export(new ProjectClonesEvolutionSerializer(), fileName, results);
     }
 
-    private void export(JsonSerializer serializer, String fileName, EvolutionResults results){
+    private void export(JsonSerializer<EvolutionResults> serializer, String fileName, EvolutionResults results){
         try {
             ObjectMapper mapper = new ObjectMapper();
 

@@ -16,7 +16,7 @@ import java.util.Set;
 public class SequenceComparisonSerializer extends JsonSerializer<EvolutionResults> {
 
     @Override
-    public void serialize(EvolutionResults results, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException, JsonProcessingException {
+    public void serialize(EvolutionResults results, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
         jsonGenerator.writeStartObject();
 
         writeCoEvolution(jsonGenerator, results.getTimeLinesMatches());

@@ -5,8 +5,6 @@ import org.ukwikora.report.Report;
 import javax.annotation.Nonnull;
 import java.util.*;
 
-import static org.apache.commons.lang3.math.NumberUtils.min;
-
 public class ReportAnalyzer implements Iterable<Report>{
     private List<Report> reports;
     private TimeLine sequences;

@@ -134,7 +134,7 @@ public class ForLoop extends Step {
         else{
             ForLoop forLoop = (ForLoop)other;
 
-            if(LevenshteinDistance.stringIndex(this.getName().toString(), forLoop.getName().toString()) > 0){
+            if(LevenshteinDistance.stringIndex(this.getName(), forLoop.getName()) > 0){
                 actions.add(Action.changeForLoopCondition(this, forLoop));
             }
 

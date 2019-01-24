@@ -1,7 +1,6 @@
 package org.ukwikora.model;
 
 import org.ukwikora.analytics.Action;
-import org.ukwikora.analytics.StatusResults;
 
 import javax.annotation.Nonnull;
 import java.util.*;

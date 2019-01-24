@@ -120,7 +120,7 @@ public class ReportFactory {
             }
             else if(elementName.equalsIgnoreCase("arguments")){
 
-                HashSet<String> arguments = new HashSet<>(Arrays.asList("argument"));
+                HashSet<String> arguments = new HashSet<>(Collections.singletonList("argument"));
                 for(Element child: getChildren(childElement, arguments)){
                     String argument = child.getTextContent();
                     keywordStatus.addArgument(argument);

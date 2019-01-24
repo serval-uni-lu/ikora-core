@@ -3,6 +3,7 @@ package org.ukwikora.utils;
 import org.ukwikora.analytics.Action;
 import org.ukwikora.model.Differentiable;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +15,7 @@ public class DifferentiableString implements Differentiable {
     }
 
     @Override
-    public double distance(Differentiable other) {
+    public double distance(@Nonnull Differentiable other) {
         if(!(other instanceof DifferentiableString)){
             return 1;
         }
@@ -25,7 +26,7 @@ public class DifferentiableString implements Differentiable {
     }
 
     @Override
-    public List<Action> differences(Differentiable other) {
+    public List<Action> differences(@Nonnull Differentiable other) {
         List<Action> actions = new ArrayList<>();
 
         if(other instanceof DifferentiableString && ((DifferentiableString)other).text.equals(this.text)){

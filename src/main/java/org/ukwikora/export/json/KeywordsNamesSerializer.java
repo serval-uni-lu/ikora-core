@@ -11,7 +11,7 @@ import java.io.IOException;
 
 public class KeywordsNamesSerializer extends JsonSerializer<EvolutionResults> {
     @Override
-    public void serialize(EvolutionResults results, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException, JsonProcessingException {
+    public void serialize(EvolutionResults results, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
         jsonGenerator.writeStartArray();
 
         for(Project project: results.getProjects()){
@@ -37,7 +37,7 @@ public class KeywordsNamesSerializer extends JsonSerializer<EvolutionResults> {
 
             jsonGenerator.writeStringField("type", keyword.getClass().getSimpleName());
             jsonGenerator.writeNumberField("depth", keyword.getLevel());
-            jsonGenerator.writeStringField("name", keyword.getName().toString());
+            jsonGenerator.writeStringField("name", keyword.getName());
 
             jsonGenerator.writeEndObject();
         }
