@@ -3,8 +3,8 @@ package org.ukwikora.libraries.selenium.alert;
 import org.ukwikora.model.LibraryKeyword;
 import org.ukwikora.model.Runtime;
 
-public class AlertShoultBePresent extends LibraryKeyword {
-    public AlertShoultBePresent(){
+public class AlertShouldBePresent extends LibraryKeyword {
+    public AlertShouldBePresent(){
         this.type = Type.Assertion;
     }
 
