@@ -9,7 +9,7 @@ public class Space extends LibraryVariable {
     private Pattern match;
 
     public Space(){
-        match = Pattern.compile("^\\$\\{SPACE(\\s*\\*\\s*\\d*)?\\}$", Pattern.CASE_INSENSITIVE);
+        match = Pattern.compile("^\\$\\{SPACE(\\s*\\*\\s*\\d*)?}$", Pattern.CASE_INSENSITIVE);
     }
 
     @Override

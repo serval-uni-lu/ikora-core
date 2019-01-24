@@ -67,7 +67,7 @@ public class OutputMessageParser {
     }
 
     private static String createRegex(String format, List<Integer> argumentPositions) {
-        String variables = "(\\{[0-9]+\\})";
+        String variables = "(\\{[0-9]+})";
 
         Pattern pattern = Pattern.compile(variables);
         Matcher matcher = pattern.matcher(format);
