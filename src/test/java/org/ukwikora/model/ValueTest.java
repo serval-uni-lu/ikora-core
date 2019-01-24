@@ -83,4 +83,31 @@ public class ValueTest {
         assertEquals(1, resolvedValues.get().size());
         assertEquals("Login with John Smith and secret", resolvedValues.get().get(0).toString());
     }
+
+    @Test
+    public void checkResolveCompositeValues(){
+        ScalarVariable name = new ScalarVariable();
+        name.addElement("John Smith");
+
+        ScalarVariable environment = new ScalarVariable();
+        environment.addElement("testing");
+
+        ScalarVariable passwordProduction = new ScalarVariable();
+        passwordProduction.addElement("secret1");
+
+        ScalarVariable passwordTesting = new ScalarVariable();
+        passwordTesting.addElement("secret2");
+
+        Value value = new Value("Login with ${name} and ${password-${ENV}}");
+        value.setVariable("${name}", name);
+        value.setVariable("${ENV}", environment);
+        value.setVariable("${password-testing}", passwordTesting);
+        value.setVariable("${password-production}", passwordProduction);
+
+        Optional<List<Value>> resolvedValues = value.getResolvedValues();
+
+        assertTrue(resolvedValues.isPresent());
+        assertEquals(1, resolvedValues.get().size());
+        assertEquals("Login with John Smith and secret2", resolvedValues.get().get(0).toString());
+    }
 }
