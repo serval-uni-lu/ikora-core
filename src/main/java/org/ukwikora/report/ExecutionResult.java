@@ -43,7 +43,7 @@ public class ExecutionResult {
         this.error = error;
     }
 
-    public void setWrongNumberArugmentError(int expect, int got) {
+    public void setWrongNumberArgumentError(int expect, int got) {
         this.error = Error.WrongNumberArgument;
         this.message = "Expected at least " + expect + " argument" + (expect > 1 ? "s" : "") + " got " + got + " instead!";
     }

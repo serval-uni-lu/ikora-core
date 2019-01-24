@@ -59,7 +59,7 @@ public class LexerUtilsTest {
 
     @Test
     public void checkMultiLineDocumentation(){
-        String documentation = "\t[Documenation]\tFirst line\n" +
+        String documentation = "\t[Documentation]\tFirst line\n" +
                 "\t...\tSecond line\n" +
                 "\t...\tThird line\n" +
                 "\tNot documentation";

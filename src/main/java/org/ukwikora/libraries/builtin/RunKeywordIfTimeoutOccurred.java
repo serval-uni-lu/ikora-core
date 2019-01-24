@@ -4,8 +4,8 @@ import org.ukwikora.model.Value;
 import org.ukwikora.model.LibraryKeyword;
 import org.ukwikora.model.Runtime;
 
-public class RunKeywordIfTimeoutOccured extends LibraryKeyword {
-    public RunKeywordIfTimeoutOccured(){
+public class RunKeywordIfTimeoutOccurred extends LibraryKeyword {
+    public RunKeywordIfTimeoutOccurred(){
         this.type = Type.ControlFlow;
     }
 
