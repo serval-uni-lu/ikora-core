@@ -1,9 +1,9 @@
-package org.ukwikora.libraries.datetime;
+package org.ukwikora.libraries.sikuli;
 
 import org.ukwikora.model.LibraryKeyword;
 import org.ukwikora.model.Runtime;
 
-public class SubstractDateFromDate extends LibraryKeyword {
+public class ScreenShouldNotContain extends LibraryKeyword {
     @Override
     public void execute(Runtime runtime) {
 
