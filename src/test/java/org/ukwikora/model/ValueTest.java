@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.Optional;
 
 public class ValueTest {
     @Test
@@ -24,7 +25,7 @@ public class ValueTest {
     }
 
     @Test
-    public void checkScalarVariableMatch(){
+    public void checkFindVariables(){
         String raw = "Login \"@{user}\" with password \"${password}\" with options \"&{options}\"";
         List<String> variables = Value.findVariables(raw);
 
@@ -62,5 +63,24 @@ public class ValueTest {
 
         String regularString = "String with some text";
         assertFalse(Value.hasVariable(regularString));
+    }
+
+    @Test
+    public void checkResolvedSimpleValues(){
+        ScalarVariable name = new ScalarVariable();
+        name.addElement("John Smith");
+
+        ScalarVariable password = new ScalarVariable();
+        password.addElement("secret");
+
+        Value value = new Value("Login with ${name} and ${password}");
+        value.setVariable("${name}", name);
+        value.setVariable("${password}", password);
+
+        Optional<List<Value>> resolvedValues = value.getResolvedValues();
+
+        assertTrue(resolvedValues.isPresent());
+        assertEquals(1, resolvedValues.get().size());
+        assertEquals("Login with John Smith and secret", resolvedValues.get().get(0).toString());
     }
 }

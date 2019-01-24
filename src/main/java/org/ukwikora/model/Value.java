@@ -104,7 +104,7 @@ public class Value implements Differentiable {
             String resolvedValue = this.value;
 
             for(Map.Entry<String, Variable> entry: this.variables.entrySet()){
-                resolvedValue = resolvedValue.replaceAll(entry.getKey(), entry.getValue().getValueAsString());
+                resolvedValue = resolvedValue.replace(entry.getKey(), entry.getValue().getValueAsString());
             }
 
             return Optional.of(Collections.singletonList(new Value(resolvedValue)));
