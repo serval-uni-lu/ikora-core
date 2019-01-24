@@ -1,12 +1,17 @@
 package org.ukwikora.export.website;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.ukwikora.model.Project;
 import org.ukwikora.utils.JsonUtils;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ProjectsSummary {
+    private static Logger logger = LogManager.getLogger(ProjectsSummary.class);
+
     private List<String> names;
     private List<Integer> lines;
 
@@ -31,10 +36,20 @@ public class ProjectsSummary {
     }
 
     public String getJsonNames(){
-        return JsonUtils.convertToJsonArray(names);
+        try {
+            return JsonUtils.convertToJsonArray(names);
+        } catch (IOException e) {
+            logger.error(String.format("Failed to get json names project summary: %s", e.getMessage()));
+            return "[]";
+        }
     }
 
     public String getJsonLines(){
-        return JsonUtils.convertToJsonArray(lines);
+        try {
+            return JsonUtils.convertToJsonArray(lines);
+        } catch (IOException e) {
+            logger.error(String.format("Failed to get json lines for project summary: %s", e.getMessage()));
+            return "[]";
+        }
     }
 }

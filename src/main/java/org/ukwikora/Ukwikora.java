@@ -12,7 +12,6 @@ import org.apache.logging.log4j.core.config.builder.impl.BuiltConfiguration;
 import org.ukwikora.analytics.EvolutionAnalyticsCli;
 import org.ukwikora.analytics.ProjectAnalyticsCli;
 import org.ukwikora.utils.Configuration;
-import org.ukwikora.utils.ConsoleColors;
 import org.ukwikora.exception.DuplicateNodeException;
 import org.apache.commons.cli.*;
 
@@ -50,15 +49,14 @@ public class Ukwikora {
             }
 
         } catch (ParseException e) {
-            String message = "argument '" + e.getMessage() + "' is missing";
-            System.out.println(ConsoleColors.RED + "\t" + message + ConsoleColors.RESET);
+            logger.error(String.format("Parse Exception: argument '%s' is missing", e.getMessage()));
         } catch (DuplicateNodeException e) {
-            System.out.println(ConsoleColors.RED + "\t" + e.getMessage() + ConsoleColors.RESET);
+            logger.error(String.format("Duplicate Node Exception: %s", e.getMessage()));
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(String.format("IO Exception: %s", e.getMessage()));
         }
 
-        //logger.info("program finished");
+        logger.info("program finished");
     }
 
     private static void initializeLogger(Configuration config){

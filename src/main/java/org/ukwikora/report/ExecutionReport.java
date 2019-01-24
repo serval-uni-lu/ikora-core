@@ -1,11 +1,15 @@
 package org.ukwikora.report;
 
-import org.ukwikora.utils.ConsoleColors;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class ExecutionReport {
+    Logger logger = LogManager.getLogger(ExecutionReport.class);
+
     private List<ExecutionResult> results;
     private String name;
 
@@ -22,13 +26,15 @@ public class ExecutionReport {
     }
 
     public void print() {
-        System.out.println(name);
+        logger.info(name);
 
         for(ExecutionResult result : results) {
-            String color = result.isError() ? ConsoleColors.RED : ConsoleColors.GREEN;
-            String message = color + "\t" + result.getMessage() + ConsoleColors.RESET;
-
-            System.out.println(message);
+            if(result.isError()){
+                logger.info(result.getMessage());
+            }
+            else{
+                logger.error(result.getMessage());
+            }
         }
     }
 }

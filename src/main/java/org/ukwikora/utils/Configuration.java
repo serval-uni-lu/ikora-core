@@ -106,9 +106,8 @@ public class Configuration {
         String configPath = appDirs.getUserDataDir("RobotFramework", "1.0", "Serval");
 
         configurationFolder = new File(configPath);
-
         configurationFolder.mkdirs();
 
-        logger.info("Configuration loaded from" + config);
+        logger.info("Configuration loaded from " + config);
     }
 }

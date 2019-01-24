@@ -1,7 +1,5 @@
 package org.ukwikora.utils;
 
-import org.ukwikora.analytics.ProjectStatistics;
-
 import java.util.*;
 
 public class DifferentiableStringList implements List<DifferentiableString> {
@@ -133,7 +131,7 @@ public class DifferentiableStringList implements List<DifferentiableString> {
     public static DifferentiableStringList fromTextBlock(String block){
         DifferentiableStringList list = new DifferentiableStringList();
 
-        for(String line: block.split(StringUtils.lineBreak)){
+        for(String line: block.split(StringUtils.lineBreak.pattern())){
             list.add(line);
         }
 
