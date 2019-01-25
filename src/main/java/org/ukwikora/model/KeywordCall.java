@@ -105,28 +105,6 @@ public class KeywordCall extends Step {
     }
 
     @Override
-    public int getSize() {
-        if(this.keyword == null){
-            return 0;
-        }
-        else if(stepParameters.size() > 0){
-            int size = 0;
-
-            for (Step step: stepParameters.values()){
-                if(step == null){
-                    continue;
-                }
-
-                size += step.getSize();
-            }
-
-            return size;
-        }
-
-        return this.keyword.getSize();
-    }
-
-    @Override
     public int getLevel() {
         if(this.keyword == null){
             return 0;
@@ -307,6 +285,16 @@ public class KeywordCall extends Step {
         }
 
         return this.keyword.getType();
+    }
+
+    @Override
+    public boolean hasKeywordParameters() {
+        return !stepParameters.isEmpty();
+    }
+
+    @Override
+    public List<KeywordCall> getKeywordParameter() {
+        return (List<KeywordCall>) stepParameters.values();
     }
 
     @Override

@@ -11,7 +11,6 @@ public interface Keyword extends Statement {
     int getMaxArgument();
     int[] getKeywordsLaunchedPosition();
 
-    int getSize();
     int getLevel();
 
     void execute(Runtime runtime);

@@ -87,7 +87,7 @@ public class KeywordsEvolutionSerializer extends JsonSerializer<EvolutionResults
         jsonGenerator.writeNumberField("number steps", keyword.getSteps().size());
         jsonGenerator.writeNumberField("sequence size", keyword.getMaxSequenceSize());
         jsonGenerator.writeNumberField("number branches", keyword.getBranchIndex());
-        jsonGenerator.writeNumberField("size", keyword.getSize());
+        jsonGenerator.writeNumberField("size", getSize(keyword));
         jsonGenerator.writeNumberField("depth", keyword.getLevel());
         jsonGenerator.writeNumberField("connectivity", getConnectivity(keyword));
 
@@ -146,5 +146,12 @@ public class KeywordsEvolutionSerializer extends JsonSerializer<EvolutionResults
         statement.accept(visitor);
 
         return visitor.getConnectivity();
+    }
+
+    private int getSize(Statement statement){
+        SizeVisitor visitor = new SizeVisitor();
+        statement.accept(visitor);
+
+        return visitor.getSize();
     }
 }

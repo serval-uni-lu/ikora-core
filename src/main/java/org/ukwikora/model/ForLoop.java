@@ -5,6 +5,7 @@ import org.ukwikora.utils.LevenshteinDistance;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -71,19 +72,18 @@ public class ForLoop extends Step {
     }
 
     @Override
-    public void execute(Runtime runtime) {
-
+    public boolean hasKeywordParameters() {
+        return false;
     }
 
     @Override
-    public int getSize() {
-        int size = 1;
+    public List<KeywordCall> getKeywordParameter() {
+        return Collections.emptyList();
+    }
 
-        for(Step step: steps){
-            size += step.getSize();
-        }
+    @Override
+    public void execute(Runtime runtime) {
 
-        return size;
     }
 
     @Override
@@ -91,7 +91,7 @@ public class ForLoop extends Step {
         int depth = 0;
 
         for(Step step: steps){
-            depth = Math.max(step.getSize(), depth);
+            depth = Math.max(step.getLevel(), depth);
         }
 
         return depth;

@@ -83,7 +83,7 @@ public class ProjectStatistics {
             int value = -1;
 
             switch (metric){
-                case Size: value = keyword.getSize(); break;
+                case Size: value = getSize(keyword); break;
                 case Connectivity: value = getConnectivity(keyword); break;
                 case Sequence: value = keyword.getMaxSequenceSize(); break;
                 case Depth: value = keyword.getLevel(); break;
@@ -112,5 +112,12 @@ public class ProjectStatistics {
         statement.accept(visitor);
 
         return visitor.getConnectivity();
+    }
+
+    private int getSize(Statement statement){
+        SizeVisitor visitor = new SizeVisitor();
+        statement.accept(visitor);
+
+        return visitor.getSize();
     }
 }

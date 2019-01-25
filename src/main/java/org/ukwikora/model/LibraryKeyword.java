@@ -29,11 +29,6 @@ public abstract class LibraryKeyword implements Keyword {
     }
 
     @Override
-    public int getSize(){
-        return 1;
-    }
-
-    @Override
     public int getLevel(){
         return 0;
     }

@@ -134,16 +134,6 @@ public abstract class KeywordDefinition implements Keyword, Iterable<Step> {
 
     }
 
-    public int getSize() {
-        int size = 1;
-
-        for(Step step: steps){
-            size += step.getSize();
-        }
-
-        return size;
-    }
-
     @Override
     public int getLevel() {
         int depth = 0;

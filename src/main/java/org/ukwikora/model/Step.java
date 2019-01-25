@@ -1,7 +1,5 @@
 package org.ukwikora.model;
 
-import org.ukwikora.analytics.FindTestCaseVisitor;
-
 import javax.annotation.Nonnull;
 import java.util.*;
 
@@ -16,7 +14,6 @@ public abstract class Step implements Keyword {
 
     }
 
-    public abstract int getSize();
     public abstract void getSequences(List<Sequence> sequences);
 
     public void setName(@Nonnull String name) {
@@ -125,4 +122,8 @@ public abstract class Step implements Keyword {
     public int getLoc(){
         return file.getLoc(lineRange);
     }
+
+    public abstract boolean hasKeywordParameters();
+
+    public abstract List<KeywordCall> getKeywordParameter();
 }

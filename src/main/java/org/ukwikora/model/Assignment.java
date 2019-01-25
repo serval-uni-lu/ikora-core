@@ -5,6 +5,7 @@ import org.ukwikora.utils.LevenshteinDistance;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,6 +52,24 @@ public class Assignment extends Step {
     }
 
     @Override
+    public boolean hasKeywordParameters() {
+        if(getExpression() != null){
+            return getExpression().hasKeywordParameters();
+        }
+
+        return false;
+    }
+
+    @Override
+    public List<KeywordCall> getKeywordParameter() {
+        if(getExpression() != null){
+            return getExpression().getKeywordParameter();
+        }
+
+        return Collections.emptyList();
+    }
+
+    @Override
     public Keyword getStep(int position) {
         return null;
     }
@@ -88,13 +107,8 @@ public class Assignment extends Step {
     }
 
     @Override
-    public int getSize() {
-        return getExpression().getSize();
-    }
-
-    @Override
     public int getLevel() {
-        return getExpression().getSize();
+        return getExpression().getLevel();
     }
 
     @Override
