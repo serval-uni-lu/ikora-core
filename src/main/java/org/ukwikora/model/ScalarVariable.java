@@ -68,4 +68,9 @@ public class ScalarVariable extends Variable {
 
         return actions;
     }
+
+    @Override
+    public void accept(StatementVisitor visitor){
+        visitor.visit(this);
+    }
 }

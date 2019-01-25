@@ -2,6 +2,7 @@ package org.ukwikora.compiler;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ukwikora.analytics.FindTestCaseVisitor;
 import org.ukwikora.libraries.builtin.SetGlobalVariable;
 import org.ukwikora.libraries.builtin.SetSuiteVariable;
 import org.ukwikora.libraries.builtin.SetTestVariable;
@@ -10,6 +11,7 @@ import org.ukwikora.model.Runtime;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 
 public class StaticRuntime extends Runtime {
@@ -45,7 +47,10 @@ public class StaticRuntime extends Runtime {
         else if(keyword.getClass() == SetTestVariable.class){
             call.getParameter(0, false).ifPresent(value ->
                     createVariable(value).ifPresent(variable -> {
-                        for(TestCase testCase: call.getTestCases()){
+                        FindTestCaseVisitor visitor = new FindTestCaseVisitor();
+                        call.accept(visitor);
+
+                        for(TestCase testCase: visitor.getTestCases()){
                             this.scope.setTestScope(testCase, variable);
                         }
                     })
@@ -53,7 +58,7 @@ public class StaticRuntime extends Runtime {
         }
     }
 
-    public Optional<Variable> findInScope(List<TestCase> testCases, List<String> suites, String name){
+    public Optional<Variable> findInScope(Set<TestCase> testCases, List<String> suites, String name){
         return scope.findInScope(testCases, suites, name);
     }
 

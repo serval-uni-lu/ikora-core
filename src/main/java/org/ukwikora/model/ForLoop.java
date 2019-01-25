@@ -145,4 +145,9 @@ public class ForLoop extends Step {
 
         return actions;
     }
+
+    @Override
+    public void accept(StatementVisitor visitor){
+        visitor.visit(this);
+    }
 }

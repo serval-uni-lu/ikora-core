@@ -205,5 +205,8 @@ public class Assignment extends Step {
         return this.expression.getType();
     }
 
-
+    @Override
+    public void accept(StatementVisitor visitor){
+        visitor.visit(this);
+    }
 }

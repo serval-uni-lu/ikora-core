@@ -1,9 +1,6 @@
 package org.ukwikora.model;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class Scope {
     private StatementTable<Variable> globalScope;
@@ -36,7 +33,7 @@ public class Scope {
         return globalScope.findStatement(name);
     }
 
-    public Optional<Variable> findInScope(List<TestCase> testCases, List<String> suites, String name){
+    public Optional<Variable> findInScope(Set<TestCase> testCases, List<String> suites, String name){
         for(TestCase testCase: testCases){
             Optional<Variable> variable = findTestVariable(testCase, name);
             if(variable.isPresent()){

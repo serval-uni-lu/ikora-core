@@ -1,6 +1,7 @@
 package org.ukwikora.model;
 
 import org.ukwikora.analytics.Action;
+import org.ukwikora.analytics.FindTestCaseVisitor;
 
 import javax.annotation.Nonnull;
 import java.util.*;
@@ -43,26 +44,18 @@ public abstract class LibraryKeyword implements Keyword {
     }
 
     @Override
-    public List<TestCase> getTestCases() {
-        List<TestCase> testCases = new ArrayList<>();
-
-        for(Statement dependency: getDependencies()){
-            if (dependency instanceof TestCase){
-                testCases.add((TestCase) dependency);
-            }
-            else if(dependency instanceof Keyword){
-                testCases.addAll(((Keyword)dependency).getTestCases());
-            }
-        }
-
-        return testCases;
+    public void accept(StatementVisitor visitor){
+        visitor.visit(this);
     }
 
     @Override
     public List<String> getSuites() {
         List<String> suites = new ArrayList<>();
 
-        for(TestCase testCase: getTestCases()){
+        FindTestCaseVisitor visitor = new FindTestCaseVisitor();
+        accept(visitor);
+
+        for(TestCase testCase: visitor.getTestCases()){
             suites.add(testCase.getFile().getName());
         }
 

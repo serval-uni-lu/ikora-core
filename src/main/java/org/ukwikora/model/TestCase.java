@@ -29,7 +29,7 @@ public class TestCase extends KeywordDefinition {
     }
 
     @Override
-    public List<TestCase> getTestCases(){
-        return Collections.singletonList(this);
+    public void accept(StatementVisitor visitor){
+        visitor.visit(this);
     }
 }

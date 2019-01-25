@@ -2,13 +2,14 @@ package org.ukwikora.model;
 
 import org.apache.commons.lang3.StringUtils;
 import org.ukwikora.analytics.Action;
+import org.ukwikora.analytics.FindTestCaseVisitor;
 import org.ukwikora.utils.LevenshteinDistance;
 
 
 import javax.annotation.Nonnull;
 import java.util.*;
 
-public class KeywordDefinition implements Keyword, Iterable<Step> {
+public abstract class KeywordDefinition implements Keyword, Iterable<Step> {
     private TestCaseFile file;
     private Value name;
     private String documentation;
@@ -43,7 +44,6 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
         if(keyword != null) {
             this.dependencies.add(keyword);
         }
-
     }
 
     @Override
@@ -102,26 +102,13 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
     }
 
     @Override
-    public List<TestCase> getTestCases() {
-        List<TestCase> testCases = new ArrayList<>();
-
-        for(Statement dependency: getDependencies()){
-            if (dependency instanceof TestCase){
-                testCases.add((TestCase) dependency);
-            }
-            else if(dependency instanceof Keyword){
-                testCases.addAll(((Keyword)dependency).getTestCases());
-            }
-        }
-
-        return testCases;
-    }
-
-    @Override
     public List<String> getSuites() {
         List<String> suites = new ArrayList<>();
 
-        for(TestCase testCase: getTestCases()){
+        FindTestCaseVisitor visitor = new FindTestCaseVisitor();
+        accept(visitor);
+
+        for(TestCase testCase: visitor.getTestCases()){
             suites.add(testCase.getFile().getName());
         }
 

@@ -15,7 +15,6 @@ public interface Keyword extends Statement {
 
     int getSize();
     int getLevel();
-    List<TestCase> getTestCases();
     List<String> getSuites();
     int getConnectivity(int distance);
 

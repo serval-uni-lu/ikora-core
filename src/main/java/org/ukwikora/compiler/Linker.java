@@ -2,11 +2,13 @@ package org.ukwikora.compiler;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ukwikora.analytics.FindTestCaseVisitor;
 import org.ukwikora.model.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -207,8 +209,11 @@ class Linker {
             this.keyword = keyword;
         }
 
-        List<TestCase> getTestCases(){
-            return this.keyword.getTestCases();
+        Set<TestCase> getTestCases(){
+            FindTestCaseVisitor visitor = new FindTestCaseVisitor();
+            this.keyword.accept(visitor);
+
+            return visitor.getTestCases();
         }
 
         List<String> getSuites(){

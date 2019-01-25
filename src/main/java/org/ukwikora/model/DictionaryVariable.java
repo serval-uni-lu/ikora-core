@@ -44,4 +44,9 @@ public class DictionaryVariable extends Variable {
     public List<Value> getValues() {
         return values;
     }
+
+    @Override
+    public void accept(StatementVisitor visitor){
+        visitor.visit(this);
+    }
 }

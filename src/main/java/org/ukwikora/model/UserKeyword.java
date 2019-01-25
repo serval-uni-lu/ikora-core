@@ -64,4 +64,9 @@ public class UserKeyword extends KeywordDefinition {
     public Variable findLocalVariable(String name) {
         return localVariables.findStatement(name);
     }
+
+    @Override
+    public void accept(StatementVisitor visitor){
+        visitor.visit(this);
+    }
 }

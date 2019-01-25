@@ -44,4 +44,9 @@ public class ListVariable extends Variable {
     public List<Action> differences(@Nonnull Differentiable other) {
         return null;
     }
+
+    @Override
+    public void accept(StatementVisitor visitor){
+        visitor.visit(this);
+    }
 }

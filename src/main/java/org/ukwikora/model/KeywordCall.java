@@ -308,4 +308,9 @@ public class KeywordCall extends Step {
 
         return this.keyword.getType();
     }
+
+    @Override
+    public void accept(StatementVisitor visitor){
+        visitor.visit(this);
+    }
 }

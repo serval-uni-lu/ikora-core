@@ -17,6 +17,8 @@ public interface Statement extends Differentiable {
 
     Value getNameAsArgument();
 
+    void accept(StatementVisitor visitor);
+
     boolean matches(@Nonnull String name);
 
     Set<Statement> getDependencies();
