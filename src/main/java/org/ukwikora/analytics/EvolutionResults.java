@@ -203,16 +203,16 @@ public class EvolutionResults {
         return testCaseClones.get(project);
     }
 
-    public int getTotalElement(Class<? extends Element> elementType, Clones.Type cloneType, CoEvolutionType coEvolutionType){
+    public int getTotalElement(Class<? extends Statement> statementType, Clones.Type cloneType, CoEvolutionType coEvolutionType){
         int total = 0;
 
         for(Project project: projects){
-            for (Element element: project.getElements(elementType)){
-                if(!checkCloneCriterion(project, element, cloneType)){
+            for (Statement statement : project.getStatements(statementType)){
+                if(!checkCloneCriterion(project, statement, cloneType)){
                     continue;
                 }
 
-                if(!checkCoEvolutionCriterion(element, coEvolutionType)){
+                if(!checkCoEvolutionCriterion(statement, coEvolutionType)){
                     continue;
                 }
 
@@ -223,12 +223,12 @@ public class EvolutionResults {
         return total;
     }
 
-    private boolean checkCloneCriterion(Project project, Element element, Clones.Type cloneType){
+    private boolean checkCloneCriterion(Project project, Statement statement, Clones.Type cloneType){
         Clones clones = null;
-        if(element.getClass() == UserKeyword.class){
+        if(statement.getClass() == UserKeyword.class){
             clones = getKeywordClones(project);
         }
-        else if(element.getClass() == TestCase.class){
+        else if(statement.getClass() == TestCase.class){
             clones = getTestCaseClones(project);
         }
 
@@ -236,11 +236,11 @@ public class EvolutionResults {
             return false;
         }
 
-        return clones.getCloneType(element) == cloneType;
+        return clones.getCloneType(statement) == cloneType;
     }
 
-    private boolean checkCoEvolutionCriterion(Element element, CoEvolutionType type){
-        CoEvolutionType found = getCoEvolutionType(element);
+    private boolean checkCoEvolutionCriterion(Statement statement, CoEvolutionType type){
+        CoEvolutionType found = getCoEvolutionType(statement);
         return found == type;
     }
 }

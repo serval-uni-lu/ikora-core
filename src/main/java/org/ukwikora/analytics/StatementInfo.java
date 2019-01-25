@@ -2,17 +2,17 @@ package org.ukwikora.analytics;
 
 import org.ukwikora.model.Project;
 
-public class ElementInfo<T> {
+public class StatementInfo<T> {
     final private Project project;
-    final private T element;
+    final private T statement;
 
-    ElementInfo(Project project, T element){
+    StatementInfo(Project project, T statement){
         this.project = project;
-        this.element = element;
+        this.statement = statement;
     }
 
-    public T getElement() {
-        return element;
+    public T getStatement() {
+        return statement;
     }
 
     public Project getProject() {

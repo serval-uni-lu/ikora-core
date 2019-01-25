@@ -5,22 +5,22 @@ import java.io.File;
 import java.util.*;
 
 public class StatementTable<T extends Statement> implements Iterable<T> {
-    private HashMap<String, T> elementMap;
-    private Set<T> elementSet;
+    private HashMap<String, T> statementMap;
+    private Set<T> statementSet;
     private TestCaseFile file;
 
     public StatementTable() {
-        this.elementMap = new HashMap<>();
-        this.elementSet = new HashSet<>();
+        this.statementMap = new HashMap<>();
+        this.statementSet = new HashSet<>();
     }
 
     public void setFile(TestCaseFile file) {
         this.file = file;
 
-        elementMap = new HashMap<>();
-        for (T element: elementSet){
-            element.setFile(this.file);
-            elementMap.put(getKey(element), element);
+        statementMap = new HashMap<>();
+        for (T statement: statementSet){
+            statement.setFile(this.file);
+            statementMap.put(getKey(statement), statement);
         }
     }
 
@@ -29,22 +29,22 @@ public class StatementTable<T extends Statement> implements Iterable<T> {
     }
 
     public StatementTable(StatementTable<T> other){
-        elementMap = other.elementMap;
-        elementSet = other.elementSet;
+        statementMap = other.statementMap;
+        statementSet = other.statementSet;
 
         file = other.file;
     }
 
-    public T findElement(T element){
-        return findElement(element.getFileName(), element.getName());
+    public T findStatement(T statement){
+        return findStatement(statement.getFileName(), statement.getName());
     }
 
-    public T findElement(String name){
-        return findElement(null, name);
+    public T findStatement(String name){
+        return findStatement(null, name);
     }
 
-    public T findElement(String file, String name){
-        for(T keyword: elementSet){
+    public T findStatement(String file, String name){
+        for(T keyword: statementSet){
             if(matches(file, name, keyword)){
                 return keyword;
             }
@@ -53,87 +53,87 @@ public class StatementTable<T extends Statement> implements Iterable<T> {
         return null;
     }
 
-    private boolean matches(String file, String name, T element){
+    private boolean matches(String file, String name, T statement){
         if(file == null){
-            return element.matches(name);
+            return statement.matches(name);
         }
 
-        return file.equalsIgnoreCase(element.getFileName()) && element.matches(name);
+        return file.equalsIgnoreCase(statement.getFileName()) && statement.matches(name);
     }
 
     public int size() {
-        return this.elementSet.size();
+        return this.statementSet.size();
     }
 
     public boolean isEmpty() {
-        return this.elementSet.isEmpty();
+        return this.statementSet.isEmpty();
     }
 
-    public boolean contains(T element) {
-        if(element == null){
+    public boolean contains(T statement) {
+        if(statement == null){
             return false;
         }
 
-        return this.elementSet.contains(element);
+        return this.statementSet.contains(statement);
     }
 
     @Override
     @Nonnull
     public Iterator<T> iterator() {
-        return this.elementSet.iterator();
+        return this.statementSet.iterator();
     }
 
     public List<T> asList() {
-        return new ArrayList<>(elementSet);
+        return new ArrayList<>(statementSet);
     }
 
-    public boolean add(T element) {
-        if(element == null){
+    public boolean add(T statement) {
+        if(statement == null){
             return false;
         }
 
-        if(elementSet.contains(element)){
+        if(statementSet.contains(statement)){
             return false;
         }
 
-        elementSet.add(element);
-        elementMap.put(getKey(element), element);
+        statementSet.add(statement);
+        statementMap.put(getKey(statement), statement);
 
         return true;
     }
 
-    public boolean remove(T element) {
-        if(element == null){
+    public boolean remove(T statement) {
+        if(statement == null){
             return false;
         }
 
-        this.elementMap.remove(getKey(element));
-        this.elementSet.remove(element);
+        this.statementMap.remove(getKey(statement));
+        this.statementSet.remove(statement);
 
         return true;
     }
 
     public void extend(StatementTable<T> table) {
-        for(T element: table){
-            if(elementSet.contains(element)){
+        for(T statement: table){
+            if(statementSet.contains(statement)){
                 continue;
             }
 
-            this.elementSet.add(element);
-            this.elementMap.put(getKey(element), element);
+            this.statementSet.add(statement);
+            this.statementMap.put(getKey(statement), statement);
         }
     }
 
     public Set<T> toSet(){
-        return this.elementSet;
+        return this.statementSet;
     }
 
     public void clear() {
-        this.elementSet.clear();
-        this.elementMap.clear();
+        this.statementSet.clear();
+        this.statementMap.clear();
     }
 
-    private String getKey(T element){
-        return element.getFile() + File.separator + element.getName();
+    private String getKey(T statement){
+        return statement.getFile() + File.separator + statement.getName();
     }
 }

@@ -21,7 +21,7 @@ public class Scope {
             return Optional.empty();
         }
 
-        return Optional.of(testScope.get(testCase).findElement(name));
+        return Optional.of(testScope.get(testCase).findStatement(name));
     }
 
     public Optional<Variable> findSuiteVariable(String suite, String name) {
@@ -29,11 +29,11 @@ public class Scope {
             return Optional.empty();
         }
 
-        return Optional.of(suiteScope.get(suite).findElement(name));
+        return Optional.of(suiteScope.get(suite).findStatement(name));
     }
 
     public Variable findGlobalVariable(String name) {
-        return globalScope.findElement(name);
+        return globalScope.findStatement(name);
     }
 
     public Optional<Variable> findInScope(List<TestCase> testCases, List<String> suites, String name){

@@ -14,13 +14,13 @@ public class ProjectStatistics {
 
     final private Project project;
 
-    private ElementTable<UserKeyword> userKeywords;
-    private ElementTable<TestCase> testCases;
+    private StatementTable<UserKeyword> userKeywords;
+    private StatementTable<TestCase> testCases;
 
     public ProjectStatistics(Project project){
         this.project = project;
-        userKeywords = this.project.getElements(UserKeyword.class);
-        testCases = this.project.getElements(TestCase.class);
+        userKeywords = this.project.getStatements(UserKeyword.class);
+        testCases = this.project.getStatements(TestCase.class);
     }
 
     public int getNumberFiles(){
@@ -32,7 +32,7 @@ public class ProjectStatistics {
     }
 
     public <T extends KeywordDefinition> int getNumberKeywords(Class<T> type){
-        ElementTable keywords = getKeywords(type);
+        StatementTable keywords = getKeywords(type);
 
         if(keywords != null){
             return keywords.size();
@@ -96,12 +96,12 @@ public class ProjectStatistics {
         return distribution;
     }
 
-    private <T extends KeywordDefinition> ElementTable<T> getKeywords(Class<T> type){
+    private <T extends KeywordDefinition> StatementTable<T> getKeywords(Class<T> type){
         if(type == UserKeyword.class){
-            return (ElementTable<T>) userKeywords;
+            return (StatementTable<T>) userKeywords;
         }
         else if(type == TestCase.class){
-            return (ElementTable<T>) testCases;
+            return (StatementTable<T>) testCases;
         }
 
         throw new ParameterException("Unhandled type " + type.getName());

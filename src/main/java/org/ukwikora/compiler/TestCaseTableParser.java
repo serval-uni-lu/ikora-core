@@ -1,6 +1,6 @@
 package org.ukwikora.compiler;
 
-import org.ukwikora.model.ElementTable;
+import org.ukwikora.model.StatementTable;
 import org.ukwikora.model.TestCase;
 
 import java.io.IOException;
@@ -8,8 +8,8 @@ import java.io.IOException;
 class TestCaseTableParser {
     private TestCaseTableParser() {}
 
-    static public ElementTable<TestCase> parse(LineReader reader) throws IOException {
-        ElementTable<TestCase> testCaseTable = new ElementTable<>();
+    static public StatementTable<TestCase> parse(LineReader reader) throws IOException {
+        StatementTable<TestCase> testCaseTable = new StatementTable<>();
 
         reader.readLine();
 

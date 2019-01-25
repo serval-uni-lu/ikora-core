@@ -1,6 +1,6 @@
 package org.ukwikora.compiler;
 
-import org.ukwikora.model.ElementTable;
+import org.ukwikora.model.StatementTable;
 import org.ukwikora.model.LineRange;
 import org.ukwikora.model.Variable;
 
@@ -11,8 +11,8 @@ import java.util.Optional;
 class VariableTableParser {
     private VariableTableParser() {}
 
-    static public ElementTable<Variable> parse(LineReader reader) throws IOException {
-        ElementTable<Variable> variableTable = new ElementTable<>();
+    static public StatementTable<Variable> parse(LineReader reader) throws IOException {
+        StatementTable<Variable> variableTable = new StatementTable<>();
 
         reader.readLine();
 

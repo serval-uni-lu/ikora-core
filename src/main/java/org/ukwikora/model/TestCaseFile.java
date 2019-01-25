@@ -156,7 +156,7 @@ public class TestCaseFile implements Iterable<UserKeyword> {
     }
 
     TestCase getTestCase(String name) {
-        return testCaseTable.findElement(name);
+        return testCaseTable.findStatement(name);
     }
 
     @Nonnull
@@ -169,7 +169,7 @@ public class TestCaseFile implements Iterable<UserKeyword> {
             userKeywordCache = getStatements(UserKeyword.class);
         }
 
-        KeywordDefinition userKeyword = userKeywordCache.findElement(name);
+        KeywordDefinition userKeyword = userKeywordCache.findStatement(name);
 
         if(userKeyword == null) {
             if(externalKeywordCache == null) {
@@ -185,7 +185,7 @@ public class TestCaseFile implements Iterable<UserKeyword> {
             variableCache = getStatements(Variable.class);
         }
 
-        return variableCache.findElement(name);
+        return variableCache.findStatement(name);
     }
 
     public void addLine(Line line) {

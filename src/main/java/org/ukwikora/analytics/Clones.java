@@ -2,7 +2,7 @@ package org.ukwikora.analytics;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.ukwikora.export.json.CloneResultSerializer;
-import org.ukwikora.model.Element;
+import org.ukwikora.model.Statement;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.Set;
 
 @JsonSerialize(using = CloneResultSerializer.class)
-public class Clones<T extends Element> {
+public class Clones<T extends Statement> {
     public enum Type{
         TypeI, TypeII, TypeIII, TypeIV, None
     }

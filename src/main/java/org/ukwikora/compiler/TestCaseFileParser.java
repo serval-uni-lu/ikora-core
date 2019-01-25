@@ -34,15 +34,15 @@ class TestCaseFileParser {
                     testCaseFile.setSettings(settings);
                 }
                 else if(isTestCases(text)){
-                    ElementTable<TestCase> testCaseTable = TestCaseTableParser.parse(reader);
+                    StatementTable<TestCase> testCaseTable = TestCaseTableParser.parse(reader);
                     testCaseFile.setTestCaseTable(testCaseTable);
                 }
                 else if(isKeywords(text)){
-                    ElementTable<UserKeyword> elementTable = KeywordTableParser.parse(reader);
-                    testCaseFile.setKeywordTable(elementTable);
+                    StatementTable<UserKeyword> statementTable = KeywordTableParser.parse(reader);
+                    testCaseFile.setKeywordTable(statementTable);
                 }
                 else if(isVariable(text)){
-                    ElementTable<Variable> variableTable = VariableTableParser.parse(reader);
+                    StatementTable<Variable> variableTable = VariableTableParser.parse(reader);
                     testCaseFile.setVariableTable(variableTable);
                 }
                 else {

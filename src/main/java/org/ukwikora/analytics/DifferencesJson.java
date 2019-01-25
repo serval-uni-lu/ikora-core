@@ -2,7 +2,7 @@ package org.ukwikora.analytics;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import org.ukwikora.model.Differentiable;
-import org.ukwikora.model.Element;
+import org.ukwikora.model.Statement;
 import org.ukwikora.model.Keyword;
 import org.ukwikora.model.KeywordDefinition;
 import org.ukwikora.utils.DifferentiableStringList;
@@ -64,18 +64,18 @@ public class DifferencesJson {
                 return;
             }
 
-            if(!(differentiable instanceof Element)){
+            if(!(differentiable instanceof Statement)){
                 throw new InvalidArgumentException("Expected a DifferentiableString got " + differentiable.getClass() + " instead!");
             }
 
-            Element element = (Element)differentiable;
+            Statement statement = (Statement)differentiable;
 
             switch (action.getType()){
                 case CHANGE_NAME:
                     actions.put(Type.CHANGE_NAME, actions.get(Type.CHANGE_NAME) + 1);
                     break;
                 case CHANGE_STEP_TYPE:
-                    actions.put(Type.CHANGE_STEP_TYPE, actions.get(Type.CHANGE_STEP_TYPE) + element.getLoc());
+                    actions.put(Type.CHANGE_STEP_TYPE, actions.get(Type.CHANGE_STEP_TYPE) + statement.getLoc());
                     break;
                 case CHANGE_STEP_RETURN_VALUES:
                     actions.put(Type.CHANGE_STEP_RETURN_VALUES, actions.get(Type.CHANGE_STEP_RETURN_VALUES) + 1);
@@ -84,7 +84,7 @@ public class DifferencesJson {
                     actions.put(Type.CHANGE_FOR_LOOP_CONDITION, actions.get(Type.CHANGE_FOR_LOOP_CONDITION) + 1);
                     break;
                 case CHANGE_FOR_LOOP_BODY:
-                    actions.put(Type.CHANGE_FOR_LOOP_BODY, actions.get(Type.CHANGE_FOR_LOOP_BODY) + element.getLoc());
+                    actions.put(Type.CHANGE_FOR_LOOP_BODY, actions.get(Type.CHANGE_FOR_LOOP_BODY) + statement.getLoc());
                     break;
                 case ADD_DOCUMENTATION:
                 case REMOVE_DOCUMENTATION:
@@ -93,7 +93,7 @@ public class DifferencesJson {
                     actions.put(Type.CHANGE_DOCUMENTATION, actions.get(Type.CHANGE_DOCUMENTATION) + changes_documentation);
 
                 case INVALID:
-                    actions.put(Type.INVALID, actions.get(Type.INVALID) + element.getLoc());
+                    actions.put(Type.INVALID, actions.get(Type.INVALID) + statement.getLoc());
                     break;
 
                 case ADD_STEP:
@@ -101,7 +101,7 @@ public class DifferencesJson {
                 case CHANGE_STEP_EXPRESSION:
                 case CHANGE_STEP:
                 case CHANGE_STEP_ARGUMENTS:
-                    changeStep(element);
+                    changeStep(statement);
                     break;
             }
 
@@ -139,12 +139,12 @@ public class DifferencesJson {
         return lines;
     }
 
-    private void changeStep(Element element) throws InvalidArgumentException {
-        if(!(element instanceof Keyword)){
-            throw new InvalidArgumentException("Expected a Keyword got " + element.getClass() + " instead!");
+    private void changeStep(Statement statement) throws InvalidArgumentException {
+        if(!(statement instanceof Keyword)){
+            throw new InvalidArgumentException("Expected a Keyword got " + statement.getClass() + " instead!");
         }
 
-        Keyword keyword = (Keyword)element;
+        Keyword keyword = (Keyword) statement;
 
 
         switch (keyword.getType()){

@@ -1,7 +1,6 @@
 package org.ukwikora.export.json;
 
 import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import org.ukwikora.analytics.EvolutionResults;
@@ -21,8 +20,8 @@ public class KeywordsNamesSerializer extends JsonSerializer<EvolutionResults> {
             jsonGenerator.writeStringField("time", project.getDateTime().toString());
 
             jsonGenerator.writeArrayFieldStart("keywords");
-            writeKeywords(jsonGenerator, project.getElements(UserKeyword.class));
-            writeKeywords(jsonGenerator, project.getElements(TestCase.class));
+            writeKeywords(jsonGenerator, project.getStatements(UserKeyword.class));
+            writeKeywords(jsonGenerator, project.getStatements(TestCase.class));
             jsonGenerator.writeEndArray();
 
             jsonGenerator.writeEndObject();
@@ -31,7 +30,7 @@ public class KeywordsNamesSerializer extends JsonSerializer<EvolutionResults> {
         jsonGenerator.writeEndArray();
     }
 
-    private void writeKeywords(JsonGenerator jsonGenerator, ElementTable<? extends KeywordDefinition> keywords) throws IOException {
+    private void writeKeywords(JsonGenerator jsonGenerator, StatementTable<? extends KeywordDefinition> keywords) throws IOException {
         for(KeywordDefinition keyword: keywords){
             jsonGenerator.writeStartObject();
 

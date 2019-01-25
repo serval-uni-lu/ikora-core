@@ -1,6 +1,6 @@
 package org.ukwikora.compiler;
 
-import org.ukwikora.model.ElementTable;
+import org.ukwikora.model.StatementTable;
 import org.ukwikora.model.UserKeyword;
 
 import java.io.IOException;
@@ -8,8 +8,8 @@ import java.io.IOException;
 class KeywordTableParser {
     private KeywordTableParser() {}
 
-    static public ElementTable<UserKeyword> parse(LineReader reader) throws IOException {
-        ElementTable<UserKeyword> elementTable = new ElementTable<>();
+    static public StatementTable<UserKeyword> parse(LineReader reader) throws IOException {
+        StatementTable<UserKeyword> statementTable = new StatementTable<>();
 
         reader.readLine();
 
@@ -20,9 +20,9 @@ class KeywordTableParser {
             }
 
             UserKeyword userKeyword = UserKeywordParser.parse(reader);
-            elementTable.add(userKeyword);
+            statementTable.add(userKeyword);
         }
 
-        return elementTable;
+        return statementTable;
     }
 }

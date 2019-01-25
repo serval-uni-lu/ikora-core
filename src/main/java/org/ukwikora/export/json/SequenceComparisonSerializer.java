@@ -1,7 +1,6 @@
 package org.ukwikora.export.json;
 
 import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import org.ukwikora.analytics.*;
@@ -99,21 +98,21 @@ public class SequenceComparisonSerializer extends JsonSerializer<EvolutionResult
     private void writeProportions(JsonGenerator jsonGenerator, EvolutionResults results) throws IOException {
         jsonGenerator.writeObjectFieldStart("proportions");
 
-        List<Class<? extends Element>> elementTypes = new ArrayList<>();
-        elementTypes.add(TestCase.class);
-        elementTypes.add(UserKeyword.class);
+        List<Class<? extends Statement>> statementTypes = new ArrayList<>();
+        statementTypes.add(TestCase.class);
+        statementTypes.add(UserKeyword.class);
 
         Clones.Type[] cloneTypes = {Clones.Type.TypeI, Clones.Type.TypeII, Clones.Type.None};
         EvolutionResults.CoEvolutionType[] coEvolutionTypes = {EvolutionResults.CoEvolutionType.CoEvolution, EvolutionResults.CoEvolutionType.NoCoEvolution, EvolutionResults.CoEvolutionType.NoChange};
 
-        for(Class<? extends Element> elementType: elementTypes){
-            jsonGenerator.writeObjectFieldStart(elementType.getSimpleName());
+        for(Class<? extends Statement> statementType: statementTypes){
+            jsonGenerator.writeObjectFieldStart(statementType.getSimpleName());
 
             for(Clones.Type cloneType: cloneTypes){
                 jsonGenerator.writeObjectFieldStart(cloneType.name());
 
                 for(EvolutionResults.CoEvolutionType coEvolutionType: coEvolutionTypes){
-                    int total = results.getTotalElement(elementType, cloneType, coEvolutionType);
+                    int total = results.getTotalElement(statementType, cloneType, coEvolutionType);
 
                     jsonGenerator.writeNumberField(coEvolutionType.name(), total);
                 }
@@ -134,11 +133,11 @@ public class SequenceComparisonSerializer extends JsonSerializer<EvolutionResult
             return "";
         }
 
-        if(!Element.class.isAssignableFrom(last.getClass())){
+        if(!Statement.class.isAssignableFrom(last.getClass())){
             return "";
         }
 
-        return ((Element)last).getFile().getName();
+        return ((Statement)last).getFile().getName();
     }
 
     private String getDepth(TimeLine timeLine){

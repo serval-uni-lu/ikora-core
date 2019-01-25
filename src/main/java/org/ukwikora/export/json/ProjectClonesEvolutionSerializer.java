@@ -1,7 +1,6 @@
 package org.ukwikora.export.json;
 
 import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import org.ukwikora.analytics.Clones;
@@ -25,8 +24,8 @@ public class ProjectClonesEvolutionSerializer extends JsonSerializer<EvolutionRe
     }
 
     private void writeClones(JsonGenerator jsonGenerator, Project project, EvolutionResults results) throws IOException {
-        int numberKeyword = project.getElements(UserKeyword.class).size();
-        int numberTestCase = project.getElements(TestCase.class).size();
+        int numberKeyword = project.getStatements(UserKeyword.class).size();
+        int numberTestCase = project.getStatements(TestCase.class).size();
 
         int numberKeywordClonesTypeI = results.getKeywordClones(project).size(Clones.Type.TypeI);
         int numberTestCaseClonesTypeI = results.getTestCaseClones(project).size(Clones.Type.TypeI);

@@ -7,7 +7,7 @@ import org.apache.logging.log4j.Logger;
 import org.ukwikora.model.*;
 import org.ukwikora.utils.LevenshteinDistance;
 
-class CloneDetection<T extends Element> {
+class CloneDetection<T extends Statement> {
     private final static Logger logger = LogManager.getLogger(CloneDetection.class);
 
     static private Set<Action.Type> ignoreForTypeI;
@@ -40,12 +40,12 @@ class CloneDetection<T extends Element> {
         this.clones = new Clones<>();
     }
 
-    public static <T extends  Element> Clones<T> findClones(Project project, Class<T> type){
+    public static <T extends Statement> Clones<T> findClones(Project project, Class<T> type){
         CloneDetection<T> detection = new CloneDetection<>(project);
         return detection.run(type);
     }
 
-    public static  <T extends  Element> Clones.Type getCloneType(T t1, T t2){
+    public static  <T extends Statement> Clones.Type getCloneType(T t1, T t2){
         Clones.Type clone = Clones.Type.None;
 
         if(isTooShort(t1, t2)){
@@ -71,14 +71,14 @@ class CloneDetection<T extends Element> {
     }
 
     private Clones<T> run(Class<T> type){
-        List<T> elements = project.getElements(type).asList();
-        int size = elements.size();
+        List<T> statements = project.getStatements(type).asList();
+        int size = statements.size();
 
         for(int i = 0; i < size; ++i){
-            T t1 = elements.get(i);
+            T t1 = statements.get(i);
 
             for(int j = i + 1; j < size; ++j){
-                T t2 = elements.get(j);
+                T t2 = statements.get(j);
                 clones.update(t1, t2, getCloneType(t1, t2));
             }
         }
@@ -86,7 +86,7 @@ class CloneDetection<T extends Element> {
         return clones;
     }
 
-    private static <T extends  Element> boolean isTooShort(T t1, T t2){
+    private static <T extends Statement> boolean isTooShort(T t1, T t2){
         if(KeywordDefinition.class.isAssignableFrom(t1.getClass())){
             KeywordDefinition keyword1 = (KeywordDefinition)t1;
             KeywordDefinition keyword2 = (KeywordDefinition)t2;
@@ -97,7 +97,7 @@ class CloneDetection<T extends Element> {
         return false;
     }
 
-    private static <T extends  Element> boolean isSameSize(T t1, T t2){
+    private static <T extends Statement> boolean isSameSize(T t1, T t2){
         if(!KeywordDefinition.class.isAssignableFrom(t1.getClass())){
             return true;
         }

@@ -38,14 +38,14 @@ public class EvolutionAnalyzer {
                 continue;
             }
 
-            for(ElementInfoPair<UserKeyword> keywordPair: ElementMatcher.getPairs(UserKeyword.class, project1, project2)){
+            for(StatementInfoPair<UserKeyword> keywordPair: StatementMatcher.getPairs(UserKeyword.class, project1, project2)){
                 UserKeyword keyword1 = keywordPair.getElement(project1);
                 UserKeyword keyword2 = keywordPair.getElement(project2);
 
                 results.addDifference(project1, Difference.of(keyword1, keyword2));
             }
 
-            for(ElementInfoPair<TestCase> testCasePair: ElementMatcher.getPairs(TestCase.class, project1, project2)) {
+            for(StatementInfoPair<TestCase> testCasePair: StatementMatcher.getPairs(TestCase.class, project1, project2)) {
                 TestCase testCase1 = testCasePair.getElement(project1);
                 TestCase testCase2 = testCasePair.getElement(project2);
 
@@ -58,7 +58,7 @@ public class EvolutionAnalyzer {
                 results.addSequence(project2, sequence2);
             }
 
-            for(ElementInfoPair<Variable> variablePair: ElementMatcher.getPairs(Variable.class, project1, project2)) {
+            for(StatementInfoPair<Variable> variablePair: StatementMatcher.getPairs(Variable.class, project1, project2)) {
                 Variable variable1 = variablePair.getElement(project1);
                 Variable variable2 = variablePair.getElement(project2);
 

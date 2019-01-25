@@ -45,16 +45,16 @@ public class ReportAnalyzer implements Iterable<Report>{
 
         EvolutionResults differences = new EvolutionResults();
 /*
-        for(List<ElementInfo<KeywordDefinition>> sequence: sequences){
-            ElementInfo<KeywordDefinition> previous = null;
-            for(ElementInfo<KeywordDefinition> current: sequence){
+        for(List<StatementInfo<KeywordDefinition>> sequence: sequences){
+            StatementInfo<KeywordDefinition> previous = null;
+            for(StatementInfo<KeywordDefinition> current: sequence){
                 if(previous == null){
                     previous = current;
                     continue;
                 }
 
-                KeywordDefinition keyword1 = previous.getElement();
-                KeywordDefinition keyword2 = current.getElement();
+                KeywordDefinition keyword1 = previous.getStatement();
+                KeywordDefinition keyword2 = current.getStatement();
 
                 Project project1 = previous.getProject();
                 Project project2 = current.getProject();
@@ -64,7 +64,7 @@ public class ReportAnalyzer implements Iterable<Report>{
                     continue;
                 }
 
-                Difference difference = Difference.of(previous.getElement(), current.getElement());
+                Difference difference = Difference.of(previous.getStatement(), current.getStatement());
 
 
                 LocalDateTime dateTime = KeywordStatus.getExecutionDate();

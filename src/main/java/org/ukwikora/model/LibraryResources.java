@@ -29,13 +29,13 @@ public class LibraryResources {
     }
 
     public Keyword findKeyword(String name) throws InstantiationException, IllegalAccessException {
-        Item<LibraryKeyword> element = keywordsNames.get(name.toLowerCase());
+        Item<LibraryKeyword> keyword = keywordsNames.get(name.toLowerCase());
 
-        if(element == null){
+        if(keyword == null){
             return null;
         }
 
-        return element.getObject();
+        return keyword.getObject();
     }
 
     public Variable findVariable(String name) {

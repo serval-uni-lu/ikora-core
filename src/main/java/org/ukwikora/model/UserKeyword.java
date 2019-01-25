@@ -62,6 +62,6 @@ public class UserKeyword extends KeywordDefinition {
     }
 
     public Variable findLocalVariable(String name) {
-        return localVariables.findElement(name);
+        return localVariables.findStatement(name);
     }
 }
