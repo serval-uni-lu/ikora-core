@@ -70,8 +70,8 @@
         </a>
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
-            <#list summary.names as name>
-            <a class="collapse-item" href="${name}.html">${name}</a>
+            <#list summary.links as link>
+            <a class="collapse-item" href="${link.url}.html">${link.text}</a>
             </#list>a>
           </div>
         </div>
