@@ -69,7 +69,7 @@ public class ProjectsSummary {
         String url;
 
         Link(String name) throws UnsupportedEncodingException {
-            text = StringUtils.lineTruncate(StringUtils.toBeautifulName(name), 50);
+            text = StringUtils.lineTruncate(StringUtils.toBeautifulName(name), 20);
             url = StringUtils.toBeautifulUrl(name, "html");
         }
     }
