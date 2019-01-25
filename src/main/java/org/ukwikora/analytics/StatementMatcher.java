@@ -1,5 +1,6 @@
 package org.ukwikora.analytics;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.ukwikora.model.Statement;
 import org.ukwikora.model.StatementTable;
 import org.ukwikora.model.Project;
@@ -12,8 +13,8 @@ public class StatementMatcher {
         ChangeName, ChangeFolder, ChangeFile, ChangeAll
     }
 
-    public static <T extends Statement> List<StatementInfoPair<T>> getPairs(Class<T> type, Project project1, Project project2) {
-        List<StatementInfoPair<T>> pairs = new ArrayList<>();
+    public static <T extends Statement> List<Pair<T,T>> getPairs(Class<T> type, Project project1, Project project2) {
+        List<Pair<T,T>> pairs = new ArrayList<>();
 
         StatementTable<T> statement1 = project1.getStatements(type);
         StatementTable<T> statement2 = project2.getStatements(type);
@@ -28,7 +29,7 @@ public class StatementMatcher {
                 unmatched.add(keyword1);
             }
             else{
-                pairs.add(StatementInfoPair.of(project1, project2, keyword1, keyword2));
+                pairs.add(Pair.of(keyword1, keyword2));
                 statement2.remove(keyword2);
             }
 
@@ -39,14 +40,14 @@ public class StatementMatcher {
             T keyword2 = statement2.iterator().next();
             T keyword1 = findBestCandidate(keyword2, unmatched);
 
-            pairs.add(StatementInfoPair.of(project1, project2, keyword1, keyword2));
+            pairs.add(Pair.of(keyword1, keyword2));
             statement2.remove(keyword2);
         }
 
         while(unmatched.size() > 0){
             T keyword1 = unmatched.iterator().next();
 
-            pairs.add(StatementInfoPair.of(project1, project2, keyword1, null));
+            pairs.add(Pair.of(keyword1, null));
             unmatched.remove(keyword1);
         }
 

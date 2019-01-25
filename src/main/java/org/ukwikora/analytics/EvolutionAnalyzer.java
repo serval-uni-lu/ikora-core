@@ -1,5 +1,6 @@
 package org.ukwikora.analytics;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.ukwikora.model.*;
 
 import java.util.*;
@@ -38,16 +39,16 @@ public class EvolutionAnalyzer {
                 continue;
             }
 
-            for(StatementInfoPair<UserKeyword> keywordPair: StatementMatcher.getPairs(UserKeyword.class, project1, project2)){
-                UserKeyword keyword1 = keywordPair.getElement(project1);
-                UserKeyword keyword2 = keywordPair.getElement(project2);
+            for(Pair<UserKeyword,UserKeyword> keywordPair: StatementMatcher.getPairs(UserKeyword.class, project1, project2)){
+                UserKeyword keyword1 = getElement(keywordPair, project1);
+                UserKeyword keyword2 = getElement(keywordPair, project2);
 
                 results.addDifference(project1, Difference.of(keyword1, keyword2));
             }
 
-            for(StatementInfoPair<TestCase> testCasePair: StatementMatcher.getPairs(TestCase.class, project1, project2)) {
-                TestCase testCase1 = testCasePair.getElement(project1);
-                TestCase testCase2 = testCasePair.getElement(project2);
+            for(Pair<TestCase,TestCase> testCasePair: StatementMatcher.getPairs(TestCase.class, project1, project2)) {
+                TestCase testCase1 = getElement(testCasePair, project1);
+                TestCase testCase2 = getElement(testCasePair, project2);
 
                 Sequence sequence1 = testCase1 != null ? testCase1.getMaxSequence() : null;
                 Sequence sequence2 = testCase2 != null ? testCase2.getMaxSequence() : null;
@@ -58,9 +59,9 @@ public class EvolutionAnalyzer {
                 results.addSequence(project2, sequence2);
             }
 
-            for(StatementInfoPair<Variable> variablePair: StatementMatcher.getPairs(Variable.class, project1, project2)) {
-                Variable variable1 = variablePair.getElement(project1);
-                Variable variable2 = variablePair.getElement(project2);
+            for(Pair<Variable,Variable> variablePair: StatementMatcher.getPairs(Variable.class, project1, project2)) {
+                Variable variable1 = getElement(variablePair, project1);
+                Variable variable2 = getElement(variablePair, project2);
 
                 results.addDifference(project1, Difference.of(variable1, variable2));
             }
@@ -72,5 +73,16 @@ public class EvolutionAnalyzer {
         }
 
         return results;
+    }
+
+    private <T extends Statement> T getElement(Pair<T,T> pair, Project project){
+        if(pair.getRight() != null && pair.getRight().getFile() != null && pair.getRight().getFile().getProject() == project) {
+            return pair.getRight();
+        }
+        else if(pair.getLeft() != null && pair.getLeft().getFile() != null && pair.getLeft().getFile().getProject() == project){
+            return pair.getLeft();
+        }
+
+        return null;
     }
 }
