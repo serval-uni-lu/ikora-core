@@ -101,23 +101,6 @@ public abstract class KeywordDefinition implements Keyword, Iterable<Step> {
     }
 
     @Override
-    public int getConnectivity(int distance){
-        if(distance == 0){
-            return 0;
-        }
-
-        int size = 0;
-
-        for(Statement keyword: dependencies){
-            if(keyword instanceof Keyword){
-                size += ((Keyword)keyword).getConnectivity(distance - 1) + 1;
-            }
-        }
-
-        return size;
-    }
-
-    @Override
     public Keyword getStep(int position) {
         if(steps.size() <= position  || 0 > position){
             return null;

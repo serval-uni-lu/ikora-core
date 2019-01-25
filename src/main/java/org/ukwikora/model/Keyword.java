@@ -13,7 +13,6 @@ public interface Keyword extends Statement {
 
     int getSize();
     int getLevel();
-    int getConnectivity(int distance);
 
     void execute(Runtime runtime);
 

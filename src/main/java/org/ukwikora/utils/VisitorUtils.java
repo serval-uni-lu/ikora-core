@@ -7,7 +7,6 @@ public class VisitorUtils {
     public static void traverseDependencies(StatementVisitor visitor, Statement statement){
         for(Statement dependency: statement.getDependencies()){
             if(visitor.isAcceptable(dependency)){
-                visitor.process(dependency);
                 dependency.accept(visitor);
             }
         }

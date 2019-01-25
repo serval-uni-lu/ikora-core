@@ -4,10 +4,8 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
-import org.ukwikora.analytics.Difference;
-import org.ukwikora.analytics.DifferencesJson;
-import org.ukwikora.analytics.EvolutionResults;
-import org.ukwikora.analytics.TimeLine;
+import org.ukwikora.analytics.*;
+import org.ukwikora.model.Statement;
 import org.ukwikora.model.UserKeyword;
 import org.ukwikora.utils.StringUtils;
 import org.ukwikora.model.KeywordDefinition;
@@ -91,7 +89,7 @@ public class KeywordsEvolutionSerializer extends JsonSerializer<EvolutionResults
         jsonGenerator.writeNumberField("number branches", keyword.getBranchIndex());
         jsonGenerator.writeNumberField("size", keyword.getSize());
         jsonGenerator.writeNumberField("depth", keyword.getLevel());
-        jsonGenerator.writeNumberField("connectivity", keyword.getConnectivity(-1));
+        jsonGenerator.writeNumberField("connectivity", getConnectivity(keyword));
 
         writeChanges(jsonGenerator, difference);
 
@@ -141,5 +139,12 @@ public class KeywordsEvolutionSerializer extends JsonSerializer<EvolutionResults
         }
 
         return StringUtils.countLines(keyword.getDocumentation());
+    }
+
+    private int getConnectivity(Statement statement){
+        ConnectivityVisitor visitor = new ConnectivityVisitor();
+        statement.accept(visitor);
+
+        return visitor.getConnectivity();
     }
 }

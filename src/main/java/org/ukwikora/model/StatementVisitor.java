@@ -12,5 +12,4 @@ public interface StatementVisitor {
     void visit(ListVariable list);
 
     boolean isAcceptable(Statement statement);
-    void process(Statement statement);
 }

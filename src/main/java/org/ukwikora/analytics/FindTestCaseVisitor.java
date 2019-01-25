@@ -67,9 +67,4 @@ public class FindTestCaseVisitor implements StatementVisitor {
     public boolean isAcceptable(Statement statement) {
         return memory.add(statement);
     }
-
-    @Override
-    public void process(Statement statement) {
-
-    }
 }

@@ -49,23 +49,6 @@ public abstract class LibraryKeyword implements Keyword {
     }
 
     @Override
-    public int getConnectivity(int distance){
-        if(distance == 0){
-            return 0;
-        }
-
-        int size = 0;
-
-        for(Statement keyword: dependencies){
-            if(keyword instanceof Keyword){
-                size += ((Keyword)keyword).getConnectivity(distance - 1) + 1;
-            }
-        }
-
-        return size;
-    }
-
-    @Override
     public long getEpoch() {
         return file.getEpoch();
     }

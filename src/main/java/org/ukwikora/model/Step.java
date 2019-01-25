@@ -50,23 +50,6 @@ public abstract class Step implements Keyword {
     }
 
     @Override
-    public int getConnectivity(int distance){
-        if(distance == 0){
-            return 0;
-        }
-
-        int size = 0;
-
-        for(Statement keyword: this.parent.getDependencies()){
-            if(keyword instanceof Keyword){
-                size += ((Keyword)keyword).getConnectivity(distance - 1) + 1;
-            }
-        }
-
-        return size;
-    }
-
-    @Override
     public void addDependency(@Nonnull Statement dependency) {
         if(dependency instanceof Keyword){
             this.parent = dependency;

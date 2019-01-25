@@ -84,7 +84,7 @@ public class ProjectStatistics {
 
             switch (metric){
                 case Size: value = keyword.getSize(); break;
-                case Connectivity: value = keyword.getConnectivity(-1); break;
+                case Connectivity: value = getConnectivity(keyword); break;
                 case Sequence: value = keyword.getMaxSequenceSize(); break;
                 case Depth: value = keyword.getLevel(); break;
                 case BranchIndex: value = keyword.getBranchIndex(); break;
@@ -105,5 +105,12 @@ public class ProjectStatistics {
         }
 
         throw new ParameterException("Unhandled type " + type.getName());
+    }
+
+    private int getConnectivity(Statement statement){
+        ConnectivityVisitor visitor = new ConnectivityVisitor();
+        statement.accept(visitor);
+
+        return visitor.getConnectivity();
     }
 }
