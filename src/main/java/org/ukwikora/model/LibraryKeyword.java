@@ -7,7 +7,7 @@ import java.util.*;
 
 public abstract class LibraryKeyword implements Keyword {
 
-    private Set<Keyword> dependencies;
+    private Set<Statement> dependencies;
     private TestCaseFile file;
     private LineRange lineRange;
 
@@ -38,7 +38,7 @@ public abstract class LibraryKeyword implements Keyword {
     }
 
     @Override
-    public Set<Keyword> getDependencies() {
+    public Set<Statement> getDependencies() {
         return dependencies;
     }
 
@@ -46,12 +46,12 @@ public abstract class LibraryKeyword implements Keyword {
     public List<TestCase> getTestCases() {
         List<TestCase> testCases = new ArrayList<>();
 
-        for(Keyword dependency: getDependencies()){
+        for(Statement dependency: getDependencies()){
             if (dependency instanceof TestCase){
                 testCases.add((TestCase) dependency);
             }
-            else{
-                testCases.addAll(dependency.getTestCases());
+            else if(dependency instanceof Keyword){
+                testCases.addAll(((Keyword)dependency).getTestCases());
             }
         }
 
@@ -77,8 +77,10 @@ public abstract class LibraryKeyword implements Keyword {
 
         int size = 0;
 
-        for(Keyword keyword: dependencies){
-            size += keyword.getConnectivity(distance - 1) + 1;
+        for(Statement keyword: dependencies){
+            if(keyword instanceof Keyword){
+                size += ((Keyword)keyword).getConnectivity(distance - 1) + 1;
+            }
         }
 
         return size;
@@ -90,8 +92,8 @@ public abstract class LibraryKeyword implements Keyword {
     }
 
     @Override
-    public void addDependency(@Nonnull Keyword keyword) {
-        this.dependencies.add(keyword);
+    public void addDependency(@Nonnull Statement dependency) {
+        this.dependencies.add(dependency);
     }
 
     @Override

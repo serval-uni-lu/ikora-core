@@ -4,12 +4,14 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public abstract class Variable implements Statement {
     private TestCaseFile file;
     private String name;
     private LineRange lineRange;
     private Assignment assignment;
+    private Set<Statement> dependencies;
 
     public Variable() {
         this.assignment = null;
@@ -81,6 +83,16 @@ public abstract class Variable implements Statement {
     @Override
     public int getLoc() {
         return file.getLoc(lineRange);
+    }
+
+    @Override
+    public Set<Statement> getDependencies(){
+        return dependencies;
+    }
+
+    @Override
+    public void addDependency(@Nonnull Statement dependency){
+        dependencies.add(dependency);
     }
 
     public Optional<List<Value>> getResolvedValues() {

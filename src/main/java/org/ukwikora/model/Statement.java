@@ -2,6 +2,7 @@ package org.ukwikora.model;
 
 
 import javax.annotation.Nonnull;
+import java.util.Set;
 
 public interface Statement extends Differentiable {
     void setFile(@Nonnull TestCaseFile file);
@@ -17,4 +18,7 @@ public interface Statement extends Differentiable {
     Value getNameAsArgument();
 
     boolean matches(@Nonnull String name);
+
+    Set<Statement> getDependencies();
+    void addDependency(@Nonnull Statement dependency);
 }

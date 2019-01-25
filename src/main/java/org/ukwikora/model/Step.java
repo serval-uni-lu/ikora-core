@@ -6,7 +6,7 @@ import java.util.*;
 
 public abstract class Step implements Keyword {
     private Value name;
-    private Keyword parent;
+    private Statement parent;
     private TestCaseFile file;
     private LineRange lineRange;
 
@@ -21,10 +21,6 @@ public abstract class Step implements Keyword {
         this.name = new Value(name);
     }
 
-    public void setParent(@Nonnull Keyword parent) {
-        this.parent = parent;
-    }
-
     public Value getNameAsArgument() {
         return this.name;
     }
@@ -33,7 +29,7 @@ public abstract class Step implements Keyword {
         return this.name.toString();
     }
 
-    public Keyword getParent() {
+    public Statement getParent() {
         return parent;
     }
 
@@ -44,8 +40,8 @@ public abstract class Step implements Keyword {
     public abstract boolean hasParameters();
 
     @Override
-    public Set<Keyword> getDependencies() {
-        Set<Keyword> dependencies = new HashSet<>();
+    public Set<Statement> getDependencies() {
+        Set<Statement> dependencies = new HashSet<>();
         dependencies.add(this.parent);
 
         return dependencies;
@@ -55,12 +51,12 @@ public abstract class Step implements Keyword {
     public List<TestCase> getTestCases() {
         List<TestCase> testCases = new ArrayList<>();
 
-        for(Keyword dependency: getDependencies()){
+        for(Statement dependency: getDependencies()){
             if (dependency instanceof TestCase){
                 testCases.add((TestCase) dependency);
             }
-            else{
-                testCases.addAll(dependency.getTestCases());
+            else if(dependency instanceof Keyword){
+                testCases.addAll(((Keyword)dependency).getTestCases());
             }
         }
 
@@ -86,16 +82,20 @@ public abstract class Step implements Keyword {
 
         int size = 0;
 
-        for(Keyword keyword: this.parent.getDependencies()){
-            size += keyword.getConnectivity(distance - 1) + 1;
+        for(Statement keyword: this.parent.getDependencies()){
+            if(keyword instanceof Keyword){
+                size += ((Keyword)keyword).getConnectivity(distance - 1) + 1;
+            }
         }
 
         return size;
     }
 
     @Override
-    public void addDependency(@Nonnull Keyword keyword) {
-        this.parent = keyword;
+    public void addDependency(@Nonnull Statement dependency) {
+        if(dependency instanceof Keyword){
+            this.parent = dependency;
+        }
     }
 
     @Override

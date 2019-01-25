@@ -14,7 +14,7 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
     private String documentation;
     private Set<String> tags;
     private List<Step> steps;
-    private Set<Keyword> dependencies;
+    private Set<Statement> dependencies;
     private LineRange lineRange;
 
     KeywordDefinition(){
@@ -30,7 +30,7 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
 
     public void addStep(Step step){
         this.steps.add(step);
-        step.setParent(this);
+        step.addDependency(this);
     }
 
     public void addTag(String tag){
@@ -105,12 +105,12 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
     public List<TestCase> getTestCases() {
         List<TestCase> testCases = new ArrayList<>();
 
-        for(Keyword dependency: getDependencies()){
+        for(Statement dependency: getDependencies()){
             if (dependency instanceof TestCase){
                 testCases.add((TestCase) dependency);
             }
-            else{
-                testCases.addAll(dependency.getTestCases());
+            else if(dependency instanceof Keyword){
+                testCases.addAll(((Keyword)dependency).getTestCases());
             }
         }
 
@@ -136,8 +136,10 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
 
         int size = 0;
 
-        for(Keyword keyword: dependencies){
-            size += keyword.getConnectivity(distance - 1) + 1;
+        for(Statement keyword: dependencies){
+            if(keyword instanceof Keyword){
+                size += ((Keyword)keyword).getConnectivity(distance - 1) + 1;
+            }
         }
 
         return size;
@@ -153,13 +155,13 @@ public class KeywordDefinition implements Keyword, Iterable<Step> {
     }
 
     @Override
-    public Set<Keyword> getDependencies() {
+    public Set<Statement> getDependencies() {
         return dependencies;
     }
 
     @Override
-    public void addDependency(@Nonnull Keyword keyword) {
-        this.dependencies.add(keyword);
+    public void addDependency(@Nonnull Statement dependency) {
+        this.dependencies.add(dependency);
     }
 
 
