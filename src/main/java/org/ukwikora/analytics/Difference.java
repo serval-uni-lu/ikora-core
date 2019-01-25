@@ -133,7 +133,7 @@ public class Difference implements Differentiable {
     }
 
     @Override
-    public double distance(Differentiable other) {
+    public double distance(@Nonnull Differentiable other) {
         if(other == this){
             return 0.0;
         }

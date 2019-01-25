@@ -3,6 +3,7 @@ package org.ukwikora.analytics;
 import org.ukwikora.model.*;
 import org.ukwikora.utils.LevenshteinDistance;
 
+import javax.annotation.Nonnull;
 import java.util.*;
 
 public class TimeLine implements Differentiable, Iterable<Difference> {
@@ -59,7 +60,7 @@ public class TimeLine implements Differentiable, Iterable<Difference> {
     }
 
     @Override
-    public Iterator<Difference> iterator() {
+    public @Nonnull Iterator<Difference> iterator() {
         return sequence.iterator();
     }
 
@@ -194,7 +195,7 @@ public class TimeLine implements Differentiable, Iterable<Difference> {
     }
 
     @Override
-    public double distance(Differentiable other) {
+    public double distance(@Nonnull Differentiable other) {
         if(other.getClass() != this.getClass()){
             return 1.0;
         }
@@ -207,7 +208,7 @@ public class TimeLine implements Differentiable, Iterable<Difference> {
     }
 
     @Override
-    public List<Action> differences(Differentiable other) {
+    public List<Action> differences(@Nonnull Differentiable other) {
         List<Action> invalid = new ArrayList<>();
         invalid.add(Action.invalid(this, other));
 

@@ -1,5 +1,6 @@
 package org.ukwikora.utils;
 
+import javax.annotation.Nonnull;
 import java.util.*;
 
 public class DifferentiableStringList implements List<DifferentiableString> {
@@ -25,17 +26,17 @@ public class DifferentiableStringList implements List<DifferentiableString> {
     }
 
     @Override
-    public Iterator<DifferentiableString> iterator() {
+    public @Nonnull Iterator<DifferentiableString> iterator() {
         return stringList.iterator();
     }
 
     @Override
-    public Object[] toArray() {
+    public @Nonnull Object[] toArray() {
         return stringList.toArray();
     }
 
     @Override
-    public <T> T[] toArray(T[] a) {
+    public @Nonnull <T> T[] toArray(@Nonnull T[] a) {
         return stringList.toArray(a);
     }
 
@@ -54,27 +55,27 @@ public class DifferentiableStringList implements List<DifferentiableString> {
     }
 
     @Override
-    public boolean containsAll(Collection<?> c) {
+    public boolean containsAll(@Nonnull Collection<?> c) {
         return stringList.containsAll(c);
     }
 
     @Override
-    public boolean addAll(Collection<? extends DifferentiableString> c) {
+    public boolean addAll(@Nonnull Collection<? extends DifferentiableString> c) {
         return stringList.addAll(c);
     }
 
     @Override
-    public boolean addAll(int index, Collection<? extends DifferentiableString> c) {
+    public boolean addAll(int index, @Nonnull Collection<? extends DifferentiableString> c) {
         return stringList.addAll(index, c);
     }
 
     @Override
-    public boolean removeAll(Collection<?> c) {
+    public boolean removeAll(@Nonnull Collection<?> c) {
         return stringList.removeAll(c);
     }
 
     @Override
-    public boolean retainAll(Collection<?> c) {
+    public boolean retainAll(@Nonnull Collection<?> c) {
         return stringList.retainAll(c);
     }
 
@@ -114,17 +115,17 @@ public class DifferentiableStringList implements List<DifferentiableString> {
     }
 
     @Override
-    public ListIterator<DifferentiableString> listIterator() {
+    public @Nonnull ListIterator<DifferentiableString> listIterator() {
         return stringList.listIterator();
     }
 
     @Override
-    public ListIterator<DifferentiableString> listIterator(int index) {
+    public @Nonnull ListIterator<DifferentiableString> listIterator(int index) {
         return stringList.listIterator(index);
     }
 
     @Override
-    public List<DifferentiableString> subList(int fromIndex, int toIndex) {
+    public @Nonnull List<DifferentiableString> subList(int fromIndex, int toIndex) {
         return stringList.subList(fromIndex, toIndex);
     }
 
