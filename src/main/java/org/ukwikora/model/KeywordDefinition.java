@@ -2,7 +2,6 @@ package org.ukwikora.model;
 
 import org.apache.commons.lang3.StringUtils;
 import org.ukwikora.analytics.Action;
-import org.ukwikora.analytics.FindTestCaseVisitor;
 import org.ukwikora.utils.LevenshteinDistance;
 
 
@@ -99,20 +98,6 @@ public abstract class KeywordDefinition implements Keyword, Iterable<Step> {
 
     public Set<String> getTags() {
         return tags;
-    }
-
-    @Override
-    public List<String> getSuites() {
-        List<String> suites = new ArrayList<>();
-
-        FindTestCaseVisitor visitor = new FindTestCaseVisitor();
-        accept(visitor);
-
-        for(TestCase testCase: visitor.getTestCases()){
-            suites.add(testCase.getFile().getName());
-        }
-
-        return suites;
     }
 
     @Override

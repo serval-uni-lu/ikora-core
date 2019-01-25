@@ -2,6 +2,7 @@ package org.ukwikora.compiler;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ukwikora.analytics.FindSuiteVisitor;
 import org.ukwikora.analytics.FindTestCaseVisitor;
 import org.ukwikora.model.*;
 
@@ -216,8 +217,11 @@ class Linker {
             return visitor.getTestCases();
         }
 
-        List<String> getSuites(){
-            return this.keyword.getSuites();
+        Set<String> getSuites(){
+            FindSuiteVisitor visitor = new FindSuiteVisitor();
+            this.keyword.accept(visitor);
+
+            return visitor.getSuites();
         }
     }
 }

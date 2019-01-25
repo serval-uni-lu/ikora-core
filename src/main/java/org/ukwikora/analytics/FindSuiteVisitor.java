@@ -6,21 +6,24 @@ import org.ukwikora.utils.VisitorUtils;
 import java.util.HashSet;
 import java.util.Set;
 
-public class FindTestCaseVisitor implements StatementVisitor {
-    private Set<TestCase> testCases;
+public class FindSuiteVisitor implements StatementVisitor {
+    private Set<String> suites;
     private Set<Statement> memory;
 
-    public FindTestCaseVisitor(){
-        testCases = new HashSet<>();
+    public FindSuiteVisitor() {
+        suites = new HashSet<>();
+        memory = new HashSet<>();
     }
 
-    public Set<TestCase> getTestCases(){
-        return testCases;
+    public Set<String> getSuites() {
+        return suites;
     }
 
     @Override
     public void visit(TestCase testCase) {
-        testCases.add(testCase);
+        if(testCase != null){
+            suites.add(testCase.getFileName());
+        }
     }
 
     @Override

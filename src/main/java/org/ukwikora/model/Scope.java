@@ -33,7 +33,7 @@ public class Scope {
         return globalScope.findStatement(name);
     }
 
-    public Optional<Variable> findInScope(Set<TestCase> testCases, List<String> suites, String name){
+    public Optional<Variable> findInScope(Set<TestCase> testCases, Set<String> suites, String name){
         for(TestCase testCase: testCases){
             Optional<Variable> variable = findTestVariable(testCase, name);
             if(variable.isPresent()){

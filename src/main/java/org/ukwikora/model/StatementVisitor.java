@@ -10,4 +10,7 @@ public interface StatementVisitor {
     void visit(ScalarVariable scalar);
     void visit(DictionaryVariable dictionary);
     void visit(ListVariable list);
+
+    boolean isAcceptable(Statement statement);
+    void process(Statement statement);
 }

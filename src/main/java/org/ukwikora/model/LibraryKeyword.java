@@ -49,20 +49,6 @@ public abstract class LibraryKeyword implements Keyword {
     }
 
     @Override
-    public List<String> getSuites() {
-        List<String> suites = new ArrayList<>();
-
-        FindTestCaseVisitor visitor = new FindTestCaseVisitor();
-        accept(visitor);
-
-        for(TestCase testCase: visitor.getTestCases()){
-            suites.add(testCase.getFile().getName());
-        }
-
-        return suites;
-    }
-
-    @Override
     public int getConnectivity(int distance){
         if(distance == 0){
             return 0;
