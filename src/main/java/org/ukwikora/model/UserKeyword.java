@@ -5,11 +5,11 @@ import java.util.List;
 
 public class UserKeyword extends KeywordDefinition {
     private List<String> parameters;
-    private ElementTable<Variable> localVariables;
+    private StatementTable<Variable> localVariables;
 
     public UserKeyword() {
         parameters = new ArrayList<>();
-        localVariables = new ElementTable<>();
+        localVariables = new StatementTable<>();
     }
 
     @Override

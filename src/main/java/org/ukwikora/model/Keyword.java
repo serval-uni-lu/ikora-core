@@ -4,7 +4,7 @@ import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Set;
 
-public interface Keyword extends Element {
+public interface Keyword extends Statement {
     enum Type{
         User, ControlFlow, Assertion, Action, Log, Error, Synchronisation, Get,  Unknown, Set
     }

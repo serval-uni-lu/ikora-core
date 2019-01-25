@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public abstract class Variable implements Element {
+public abstract class Variable implements Statement {
     private TestCaseFile file;
     private String name;
     private LineRange lineRange;

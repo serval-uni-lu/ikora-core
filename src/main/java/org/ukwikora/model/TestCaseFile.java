@@ -15,13 +15,13 @@ public class TestCaseFile implements Iterable<UserKeyword> {
 
     private String name;
     private Settings settings;
-    private ElementTable<TestCase> testCaseTable;
-    private ElementTable<UserKeyword> userKeywordTable;
-    private ElementTable<Variable> variableTable;
+    private StatementTable<TestCase> testCaseTable;
+    private StatementTable<UserKeyword> userKeywordTable;
+    private StatementTable<Variable> variableTable;
 
-    private ElementTable<UserKeyword> userKeywordCache;
-    private ElementTable<UserKeyword> externalKeywordCache;
-    private ElementTable<Variable> variableCache;
+    private StatementTable<UserKeyword> userKeywordCache;
+    private StatementTable<UserKeyword> externalKeywordCache;
+    private StatementTable<Variable> variableCache;
 
     public TestCaseFile(Project project, File file){
         this.project = project;
@@ -30,9 +30,9 @@ public class TestCaseFile implements Iterable<UserKeyword> {
         this.lines = new ArrayList<>();
 
         setSettings(new Settings());
-        setTestCaseTable(new ElementTable<>());
-        setKeywordTable(new ElementTable<>());
-        setVariableTable(new ElementTable<>());
+        setTestCaseTable(new StatementTable<>());
+        setKeywordTable(new StatementTable<>());
+        setVariableTable(new StatementTable<>());
     }
 
     public void setName(String name) {
@@ -67,18 +67,18 @@ public class TestCaseFile implements Iterable<UserKeyword> {
         this.settings.setFile(this);
     }
 
-    public void setTestCaseTable(ElementTable<TestCase> testCaseTable) {
+    public void setTestCaseTable(StatementTable<TestCase> testCaseTable) {
         this.testCaseTable = testCaseTable;
         this.testCaseTable.setFile(this);
     }
 
-    public void setKeywordTable(ElementTable<UserKeyword> elementTable) {
-        this.userKeywordTable = elementTable;
+    public void setKeywordTable(StatementTable<UserKeyword> statementTable) {
+        this.userKeywordTable = statementTable;
         this.userKeywordTable.setFile(this);
         this.userKeywordCache = null;
     }
 
-    public void setVariableTable(ElementTable<Variable> variableTable) {
+    public void setVariableTable(StatementTable<Variable> variableTable) {
         this.variableTable = variableTable;
         this.variableTable.setFile(this);
         this.variableCache = null;
@@ -112,40 +112,40 @@ public class TestCaseFile implements Iterable<UserKeyword> {
         return testCaseTable.asList();
     }
 
-    public <T extends Element> ElementTable<T> getElements(Class<T> type) {
+    public <T extends Statement> StatementTable<T> getStatements(Class<T> type) {
         Set<TestCaseFile> files = new HashSet<>();
-        return getElements(type, files);
+        return getStatements(type, files);
     }
 
-    private <T extends Element> ElementTable<T> getElements(Class<T> type, Set<TestCaseFile> files) {
-        ElementTable<T> keywords = new ElementTable<>();
+    private <T extends Statement> StatementTable<T> getStatements(Class<T> type, Set<TestCaseFile> files) {
+        StatementTable<T> keywords = new StatementTable<>();
 
         if(type == UserKeyword.class){
-            keywords.extend((ElementTable<T>) userKeywordTable);
+            keywords.extend((StatementTable<T>) userKeywordTable);
         }
         else if(type == TestCase.class){
-            keywords.extend((ElementTable<T>) testCaseTable);
+            keywords.extend((StatementTable<T>) testCaseTable);
         }
         else if(type == Variable.class){
-            keywords.extend((ElementTable<T>) variableTable);
+            keywords.extend((StatementTable<T>) variableTable);
         }
 
         files.add(this);
 
         for(Resources resources: settings.getResources()){
             if(!files.contains(resources.getTestCaseFile())) {
-                keywords.extend(resources.getTestCaseFile().getElements(type, files));
+                keywords.extend(resources.getTestCaseFile().getStatements(type, files));
             }
         }
 
         return keywords;
     }
 
-    public <T extends Element> ElementTable<T> getExternalElements(Class<T> type) {
-        ElementTable<T> keywords = new ElementTable<>();
+    public <T extends Statement> StatementTable<T> getExternalElements(Class<T> type) {
+        StatementTable<T> keywords = new StatementTable<>();
 
         for(Resources resources: settings.getExternalResources()){
-            keywords.extend(resources.getTestCaseFile().getElements(type));
+            keywords.extend(resources.getTestCaseFile().getStatements(type));
         }
 
         return keywords;
@@ -166,7 +166,7 @@ public class TestCaseFile implements Iterable<UserKeyword> {
 
     public KeywordDefinition findUserKeyword(String name) {
         if(userKeywordCache == null){
-            userKeywordCache = getElements(UserKeyword.class);
+            userKeywordCache = getStatements(UserKeyword.class);
         }
 
         KeywordDefinition userKeyword = userKeywordCache.findElement(name);
@@ -182,7 +182,7 @@ public class TestCaseFile implements Iterable<UserKeyword> {
 
     public Variable findVariable(String name) {
         if(variableCache == null){
-            variableCache = getElements(Variable.class);
+            variableCache = getStatements(Variable.class);
         }
 
         return variableCache.findElement(name);

@@ -3,7 +3,7 @@ package org.ukwikora.model;
 
 import javax.annotation.Nonnull;
 
-public interface Element extends Differentiable {
+public interface Statement extends Differentiable {
     void setFile(@Nonnull TestCaseFile file);
     TestCaseFile getFile();
     String getFileName();

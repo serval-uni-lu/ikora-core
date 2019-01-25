@@ -71,11 +71,11 @@ public class Project implements Comparable<Project> {
         return gitUrl;
     }
 
-    public <T extends Element> ElementTable<T> getElements(Class<T> type) {
-        ElementTable<T> keywords = new ElementTable<>();
+    public <T extends Statement> StatementTable<T> getStatements(Class<T> type) {
+        StatementTable<T> keywords = new StatementTable<>();
 
         for(TestCaseFile testCaseFile: testCaseFiles){
-            keywords.extend(testCaseFile.getElements(type));
+            keywords.extend(testCaseFile.getStatements(type));
         }
 
         return keywords;
