@@ -12,6 +12,7 @@ public class FindTestCaseVisitor implements StatementVisitor {
 
     public FindTestCaseVisitor(){
         testCases = new HashSet<>();
+        memory = new HashSet<>();
     }
 
     public Set<TestCase> getTestCases(){
