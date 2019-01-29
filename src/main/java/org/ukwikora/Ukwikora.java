@@ -18,7 +18,7 @@ import org.apache.commons.cli.*;
 import java.io.IOException;
 
 public class Ukwikora {
-    private final static Logger logger = LogManager.getLogger(Ukwikora.class);
+    private static boolean loggerInitialized = false;
 
     public static void main(String[] args) throws Exception {
         try {
@@ -49,14 +49,14 @@ public class Ukwikora {
             }
 
         } catch (ParseException e) {
-            logger.error(String.format("Parse Exception: argument '%s' is missing", e.getMessage()));
+            getLogger().error(String.format("Parse Exception: argument '%s' is missing", e.getMessage()));
         } catch (DuplicateNodeException e) {
-            logger.error(String.format("Duplicate Node Exception: %s", e.getMessage()));
+            getLogger().error(String.format("Duplicate Node Exception: %s", e.getMessage()));
         } catch (IOException e) {
-            logger.error(String.format("IO Exception: %s", e.getMessage()));
+            getLogger().error(String.format("IO Exception: %s", e.getMessage()));
         }
 
-        logger.info("program finished");
+        getLogger().info("program finished");
     }
 
     private static void initializeLogger(Configuration config){
@@ -73,10 +73,20 @@ public class Ukwikora {
         loggerConfig.setLevel(getLoggerLevel(config));
 
         context.updateLoggers();
+
+        loggerInitialized = true;
+    }
+
+    private static Logger getLogger(){
+        if(!loggerInitialized){
+            initializeLogger(null);
+        }
+
+        return LogManager.getLogger(Ukwikora.class);
     }
 
     private static Level getLoggerLevel(Configuration config){
-        String level = config.getLoggerLevel().toUpperCase();
+        String level = config != null ? config.getLoggerLevel().toUpperCase() : "";
 
         Level loggerLevel;
 
