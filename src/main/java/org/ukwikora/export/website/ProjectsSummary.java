@@ -63,14 +63,4 @@ public class ProjectsSummary {
             return "[]";
         }
     }
-
-    class Link{
-        String text;
-        String url;
-
-        Link(String name) throws UnsupportedEncodingException {
-            text = StringUtils.lineTruncate(StringUtils.toBeautifulName(name), 20);
-            url = StringUtils.toBeautifulUrl(name, "html");
-        }
-    }
 }
