@@ -33,7 +33,7 @@ public class Compiler {
                     projects.add(project);
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.info(String.format("Failed to parse project located at %s: %s", folder, e.getMessage()));
             }
         }
 
@@ -55,7 +55,7 @@ public class Compiler {
                 loadLibraries(runtime);
                 link(runtime);
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.info(String.format("Failed to link project %s: %s", project.getName(), e.getMessage()));
             }
         }
 
@@ -98,23 +98,24 @@ public class Compiler {
     static public Project compile(String filePath) {
         logger.info("Start compilation...");
 
-        Instant start = Instant.now();
-
-        Project project = null;
+        Project project;
         try {
+            Instant start = Instant.now();
+
             project = parse(filePath);
             StaticRuntime runtime = new StaticRuntime(project);
             loadLibraries(runtime);
             link(runtime);
 
+            Instant finish = Instant.now();
+            long timeElapsed = Duration.between(start, finish).toMillis();
+
+            logger.info(String.format("Project %s compiled in %d ms", project.getName(), timeElapsed));
+
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(String.format("Failed to compile project located at %s: %s", filePath, e.getMessage()));
+            project = null;
         }
-
-        Instant finish = Instant.now();
-        long timeElapsed = Duration.between(start, finish).toMillis();
-
-        logger.info(String.format("Project compiled in %d ms", timeElapsed));
 
         return project;
     }
