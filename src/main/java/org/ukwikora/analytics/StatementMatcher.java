@@ -1,9 +1,7 @@
 package org.ukwikora.analytics;
 
 import org.apache.commons.lang3.tuple.Pair;
-import org.ukwikora.model.Statement;
-import org.ukwikora.model.StatementTable;
-import org.ukwikora.model.Project;
+import org.ukwikora.model.*;
 
 import java.io.File;
 import java.util.*;
@@ -16,8 +14,8 @@ public class StatementMatcher {
     public static <T extends Statement> List<Pair<T,T>> getPairs(Class<T> type, Project project1, Project project2) {
         List<Pair<T,T>> pairs = new ArrayList<>();
 
-        StatementTable<T> statement1 = project1.getStatements(type);
-        StatementTable<T> statement2 = project2.getStatements(type);
+        StatementTable<T> statement1 = createStatementTable(project1, type);
+        StatementTable<T> statement2 = createStatementTable(project2, type);
 
         List<T> unmatched = new ArrayList<>();
 
@@ -52,6 +50,16 @@ public class StatementMatcher {
         }
 
         return pairs;
+    }
+
+    private static <T extends Statement> StatementTable<T> createStatementTable(Project project, Class<T> type) {
+        StatementTable<T> table = new StatementTable<>();
+
+        for (Statement statements: project.getStatements(type)) {
+            table.add((T)statements);
+        }
+
+        return table;
     }
 
     private static <T extends Statement> Map<Edit, List<T>> findPotentialCandidates(T keyword, List<T> unmatched) {

@@ -38,7 +38,7 @@ class Linker {
                 unresolvedArguments.addAll(linkSteps(testCase, testCaseFile));
             }
 
-            for(UserKeyword userKeyword: testCaseFile.getStatements(UserKeyword.class)) {
+            for(UserKeyword userKeyword: testCaseFile.getUserKeywords()) {
                 unresolvedArguments.addAll(linkSteps(userKeyword, testCaseFile));
             }
         }

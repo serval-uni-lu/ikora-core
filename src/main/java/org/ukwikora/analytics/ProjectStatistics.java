@@ -14,8 +14,8 @@ public class ProjectStatistics {
 
     final private Project project;
 
-    private StatementTable<UserKeyword> userKeywords;
-    private StatementTable<TestCase> testCases;
+    private Set<Statement> userKeywords;
+    private Set<Statement> testCases;
 
     public ProjectStatistics(Project project){
         this.project = project;
@@ -32,7 +32,7 @@ public class ProjectStatistics {
     }
 
     public <T extends KeywordDefinition> int getNumberKeywords(Class<T> type){
-        StatementTable keywords = getKeywords(type);
+        Set<T> keywords = getKeywords(type);
 
         if(keywords != null){
             return keywords.size();
@@ -44,12 +44,12 @@ public class ProjectStatistics {
     public int getDocumentationLength() {
         int length = 0;
 
-        Set<KeywordDefinition> keywords = new HashSet<>();
-        keywords.addAll(userKeywords.toSet());
-        keywords.addAll(testCases.toSet());
+        Set<Statement> keywords = new HashSet<>();
+        keywords.addAll(userKeywords);
+        keywords.addAll(testCases);
 
-        for (KeywordDefinition keyword: keywords){
-            length += StringUtils.countLines(keyword.getDocumentation());
+        for (Statement keyword: keywords){
+            length += StringUtils.countLines(((KeywordDefinition)keyword).getDocumentation());
         }
 
         return length;
@@ -96,12 +96,12 @@ public class ProjectStatistics {
         return distribution;
     }
 
-    private <T extends KeywordDefinition> StatementTable<T> getKeywords(Class<T> type){
+    private <T extends Statement> Set<T> getKeywords(Class<T> type){
         if(type == UserKeyword.class){
-            return (StatementTable<T>) userKeywords;
+            return (Set<T>)userKeywords;
         }
         else if(type == TestCase.class){
-            return (StatementTable<T>) testCases;
+            return (Set<T>)testCases;
         }
 
         throw new ParameterException("Unhandled type " + type.getName());

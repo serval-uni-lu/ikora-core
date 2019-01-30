@@ -207,7 +207,13 @@ public class EvolutionResults {
         int total = 0;
 
         for(Project project: projects){
-            for (Statement statement : project.getStatements(statementType)){
+            Set<Statement> statements = project.getStatements(statementType);
+
+            if(statements == null){
+                continue;
+            }
+
+            for (Statement statement : statements){
                 if(!checkCloneCriterion(project, statement, cloneType)){
                     continue;
                 }

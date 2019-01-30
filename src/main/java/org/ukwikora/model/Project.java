@@ -71,14 +71,48 @@ public class Project implements Comparable<Project> {
         return gitUrl;
     }
 
-    public <T extends Statement> StatementTable<T> getStatements(Class<T> type) {
-        StatementTable<T> keywords = new StatementTable<>();
+    public Set<TestCase> getTestCases(){
+        Set<TestCase> testCases = new HashSet<>();
 
         for(TestCaseFile testCaseFile: testCaseFiles){
-            keywords.extend(testCaseFile.getStatements(type));
+            testCases.addAll(testCaseFile.getTestCases());
         }
 
-        return keywords;
+        return testCases;
+    }
+
+    public Set<UserKeyword> getUserKeywords(){
+        Set<UserKeyword> userKeywords = new HashSet<>();
+
+        for(TestCaseFile testCaseFile: testCaseFiles){
+            userKeywords.addAll(testCaseFile.getUserKeywords());
+        }
+
+        return userKeywords;
+    }
+
+    public Set<Variable> getVariables(){
+        Set<Variable> variables = new HashSet<>();
+
+        for(TestCaseFile testCaseFile: testCaseFiles){
+            variables.addAll(testCaseFile.getVariables());
+        }
+
+        return variables;
+    }
+
+    public Set<Statement> getStatements(Class<? extends Statement> statementType) {
+        if(statementType == TestCase.class){
+            return new HashSet<>(getTestCases());
+        }
+        else if(statementType == UserKeyword.class) {
+            return new HashSet<>(getUserKeywords());
+        }
+        else if(statementType == Variable.class) {
+            return new HashSet<>(getVariables());
+        }
+
+        return null;
     }
 
     public Set<Resources> getExternalResources() {

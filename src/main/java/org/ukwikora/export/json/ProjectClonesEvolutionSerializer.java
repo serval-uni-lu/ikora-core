@@ -24,8 +24,8 @@ public class ProjectClonesEvolutionSerializer extends JsonSerializer<EvolutionRe
     }
 
     private void writeClones(JsonGenerator jsonGenerator, Project project, EvolutionResults results) throws IOException {
-        int numberKeyword = project.getStatements(UserKeyword.class).size();
-        int numberTestCase = project.getStatements(TestCase.class).size();
+        int numberKeyword = project.getUserKeywords().size();
+        int numberTestCase = project.getTestCases().size();
 
         int numberKeywordClonesTypeI = results.getKeywordClones(project).size(Clones.Type.TypeI);
         int numberTestCaseClonesTypeI = results.getTestCaseClones(project).size(Clones.Type.TypeI);

@@ -19,10 +19,6 @@ public class TestCaseFile implements Iterable<UserKeyword> {
     private StatementTable<UserKeyword> userKeywordTable;
     private StatementTable<Variable> variableTable;
 
-    private StatementTable<UserKeyword> userKeywordCache;
-    private StatementTable<UserKeyword> externalKeywordCache;
-    private StatementTable<Variable> variableCache;
-
     public TestCaseFile(Project project, File file){
         this.project = project;
         this.file = file;
@@ -75,13 +71,11 @@ public class TestCaseFile implements Iterable<UserKeyword> {
     public void setKeywordTable(StatementTable<UserKeyword> statementTable) {
         this.userKeywordTable = statementTable;
         this.userKeywordTable.setFile(this);
-        this.userKeywordCache = null;
     }
 
     public void setVariableTable(StatementTable<Variable> variableTable) {
         this.variableTable = variableTable;
         this.variableTable.setFile(this);
-        this.variableCache = null;
     }
 
     public Project getProject() {
@@ -112,43 +106,12 @@ public class TestCaseFile implements Iterable<UserKeyword> {
         return testCaseTable.asList();
     }
 
-    public <T extends Statement> StatementTable<T> getStatements(Class<T> type) {
-        Set<TestCaseFile> files = new HashSet<>();
-        return getStatements(type, files);
+    public List<UserKeyword> getUserKeywords() {
+        return userKeywordTable.asList();
     }
 
-    private <T extends Statement> StatementTable<T> getStatements(Class<T> type, Set<TestCaseFile> files) {
-        StatementTable<T> keywords = new StatementTable<>();
-
-        if(type == UserKeyword.class){
-            keywords.extend((StatementTable<T>) userKeywordTable);
-        }
-        else if(type == TestCase.class){
-            keywords.extend((StatementTable<T>) testCaseTable);
-        }
-        else if(type == Variable.class){
-            keywords.extend((StatementTable<T>) variableTable);
-        }
-
-        files.add(this);
-
-        for(Resources resources: settings.getResources()){
-            if(!files.contains(resources.getTestCaseFile())) {
-                keywords.extend(resources.getTestCaseFile().getStatements(type, files));
-            }
-        }
-
-        return keywords;
-    }
-
-    public <T extends Statement> StatementTable<T> getExternalElements(Class<T> type) {
-        StatementTable<T> keywords = new StatementTable<>();
-
-        for(Resources resources: settings.getExternalResources()){
-            keywords.extend(resources.getTestCaseFile().getStatements(type));
-        }
-
-        return keywords;
+    public List<Variable> getVariables() {
+        return variableTable.asList();
     }
 
     public long getEpoch() {
@@ -165,21 +128,7 @@ public class TestCaseFile implements Iterable<UserKeyword> {
     }
 
     public KeywordDefinition findUserKeyword(String name) {
-        if(userKeywordCache == null){
-            userKeywordCache = getStatements(UserKeyword.class);
-        }
-
-        KeywordDefinition userKeyword = userKeywordCache.findStatement(name);
-
-        if(userKeyword != null){
-            return userKeyword;
-        }
-
-        if(externalKeywordCache == null) {
-            externalKeywordCache = getExternalElements(UserKeyword.class);
-        }
-
-        return externalKeywordCache.findStatement(name);
+        return (KeywordDefinition) findStatement(name, new HashSet<>(), UserKeyword.class);
     }
 
     public KeywordDefinition findUserKeyword(String library, String name) {
@@ -192,12 +141,41 @@ public class TestCaseFile implements Iterable<UserKeyword> {
     }
 
     public Variable findVariable(String name) {
-        if(variableCache == null){
-            variableCache = getStatements(Variable.class);
+        return (Variable) findStatement(name, new HashSet<>(), Variable.class);
+    }
+
+    private <T> Statement findStatement(String name, Set<TestCaseFile> memory, Class<T> type){
+        Statement statement = null;
+
+        if(type == UserKeyword.class){
+            statement = userKeywordTable.findStatement(name);
         }
 
-        return variableCache.findStatement(name);
+        if(statement == null &&type == TestCase.class){
+            statement = testCaseTable.findStatement(name);
+        }
+
+        if(statement == null && type == Variable.class){
+            statement = variableTable.findStatement(name);
+        }
+
+        if(statement != null){
+            return statement;
+        }
+
+        for(Resources resources: settings.getResources()){
+            if(!memory.add(resources.getTestCaseFile())) {
+                statement = resources.getTestCaseFile().findStatement(name, memory, type);
+            }
+
+            if(statement != null){
+                return statement;
+            }
+        }
+
+        return null;
     }
+
 
     public void addLine(Line line) {
         lines.add(line);

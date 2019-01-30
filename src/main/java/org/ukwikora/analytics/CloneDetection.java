@@ -71,14 +71,16 @@ class CloneDetection<T extends Statement> {
     }
 
     private Clones<T> run(Class<T> type){
-        List<T> statements = project.getStatements(type).asList();
+        List<Statement> statements = new ArrayList<>();
+        statements.addAll(project.getStatements(type));
+
         int size = statements.size();
 
         for(int i = 0; i < size; ++i){
-            T t1 = statements.get(i);
+            T t1 = (T)statements.get(i);
 
             for(int j = i + 1; j < size; ++j){
-                T t2 = statements.get(j);
+                T t2 = (T)statements.get(j);
                 clones.update(t1, t2, getCloneType(t1, t2));
             }
         }

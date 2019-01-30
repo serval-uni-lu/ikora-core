@@ -7,6 +7,7 @@ import org.ukwikora.analytics.EvolutionResults;
 import org.ukwikora.model.*;
 
 import java.io.IOException;
+import java.util.Set;
 
 public class KeywordsNamesSerializer extends JsonSerializer<EvolutionResults> {
     @Override
@@ -20,8 +21,8 @@ public class KeywordsNamesSerializer extends JsonSerializer<EvolutionResults> {
             jsonGenerator.writeStringField("time", project.getDateTime().toString());
 
             jsonGenerator.writeArrayFieldStart("keywords");
-            writeKeywords(jsonGenerator, project.getStatements(UserKeyword.class));
-            writeKeywords(jsonGenerator, project.getStatements(TestCase.class));
+            writeKeywords(jsonGenerator, project.getUserKeywords());
+            writeKeywords(jsonGenerator, project.getTestCases());
             jsonGenerator.writeEndArray();
 
             jsonGenerator.writeEndObject();
@@ -30,7 +31,7 @@ public class KeywordsNamesSerializer extends JsonSerializer<EvolutionResults> {
         jsonGenerator.writeEndArray();
     }
 
-    private void writeKeywords(JsonGenerator jsonGenerator, StatementTable<? extends KeywordDefinition> keywords) throws IOException {
+    private void writeKeywords(JsonGenerator jsonGenerator, Set<? extends KeywordDefinition> keywords) throws IOException {
         for(KeywordDefinition keyword: keywords){
             jsonGenerator.writeStartObject();
 
