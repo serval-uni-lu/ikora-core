@@ -8,16 +8,16 @@ public class Link {
     private String text;
     private String url;
 
-    Link(String name) throws UnsupportedEncodingException {
+    public Link(String name) throws UnsupportedEncodingException {
         text = StringUtils.lineTruncate(StringUtils.toBeautifulName(name), 20);
         url = StringUtils.toBeautifulUrl(name, "html");
     }
 
-    String getText(){
+    public String getText(){
         return text;
     }
 
-    String getUrl(){
+    public String getUrl(){
         return url;
     }
 }

@@ -18,10 +18,10 @@ import org.apache.commons.cli.*;
 import java.io.IOException;
 
 public class Ukwikora {
-    private static boolean loggerInitialized = false;
-
     public static void main(String[] args) throws Exception {
         try {
+            initializeLogger();
+
             Options options = new Options();
 
             options.addOption("config", true, "path to the json configuration file");
@@ -36,7 +36,7 @@ public class Ukwikora {
             Configuration.initialize(cmd.getOptionValue("config"));
             Configuration config = Configuration.getInstance();
 
-            initializeLogger(config);
+            setLoggerLevel(config);
 
             if(config.hasPlugin("evolution analytics")) {
                 EvolutionAnalyticsCli evolutionAnalyticsCli = new EvolutionAnalyticsCli();
@@ -59,29 +59,23 @@ public class Ukwikora {
         getLogger().info("program finished");
     }
 
-    private static void initializeLogger(Configuration config){
+    private static void initializeLogger(){
         ConfigurationBuilder<BuiltConfiguration> builder = ConfigurationBuilderFactory.newConfigurationBuilder();
 
-        // configure appender to send the output
         AppenderComponentBuilder console = builder.newAppender("stdout", "Console");
         builder.add(console);
+    }
 
-        // set logger level
+    private static void setLoggerLevel(Configuration config){
         LoggerContext context = (LoggerContext) LogManager.getContext(false);
         org.apache.logging.log4j.core.config.Configuration log4jConfig = context.getConfiguration();
         LoggerConfig loggerConfig = log4jConfig.getLoggerConfig(LogManager.ROOT_LOGGER_NAME);
         loggerConfig.setLevel(getLoggerLevel(config));
 
         context.updateLoggers();
-
-        loggerInitialized = true;
     }
 
     private static Logger getLogger(){
-        if(!loggerInitialized){
-            initializeLogger(null);
-        }
-
         return LogManager.getLogger(Ukwikora.class);
     }
 

@@ -8,7 +8,7 @@ var ctx = document.getElementById("myBarChart");
 var myLineChart = new Chart(ctx, {
   type: 'bar',
   data: {
-    labels: ${summary.jsonNames},
+    labels: ${summary.jsonLabels},
     datasets: [{
       label: "Revenue",
       backgroundColor: "rgba(2,117,216,1)",
@@ -28,6 +28,7 @@ var myLineChart = new Chart(ctx, {
     },
     scales: {
       xAxes: [{
+        display: false,
         time: {
           unit: ''
         },
