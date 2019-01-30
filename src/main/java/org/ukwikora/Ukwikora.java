@@ -4,10 +4,12 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
+import org.apache.logging.log4j.core.config.Configurator;
 import org.apache.logging.log4j.core.config.LoggerConfig;
 import org.apache.logging.log4j.core.config.builder.api.AppenderComponentBuilder;
 import org.apache.logging.log4j.core.config.builder.api.ConfigurationBuilder;
 import org.apache.logging.log4j.core.config.builder.api.ConfigurationBuilderFactory;
+import org.apache.logging.log4j.core.config.builder.api.LayoutComponentBuilder;
 import org.apache.logging.log4j.core.config.builder.impl.BuiltConfiguration;
 import org.ukwikora.analytics.EvolutionAnalyticsCli;
 import org.ukwikora.analytics.ProjectAnalyticsCli;
@@ -64,6 +66,13 @@ public class Ukwikora {
 
         AppenderComponentBuilder console = builder.newAppender("stdout", "Console");
         builder.add(console);
+
+        LayoutComponentBuilder standard = builder.newLayout("PatternLayout");
+        standard.addAttribute("pattern", "%d [%t] %-5level: %msg%n%throwable");
+
+        console.add(standard);
+
+        Configurator.initialize(builder.build());
     }
 
     private static void setLoggerLevel(Configuration config){
