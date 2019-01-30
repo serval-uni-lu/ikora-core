@@ -171,7 +171,11 @@ public class TestCaseFile implements Iterable<UserKeyword> {
 
         KeywordDefinition userKeyword = userKeywordCache.findStatement(name);
 
-        if(userKeyword == null && externalKeywordCache == null) {
+        if(userKeyword != null){
+            return userKeyword;
+        }
+
+        if(externalKeywordCache == null) {
             externalKeywordCache = getExternalElements(UserKeyword.class);
         }
 
