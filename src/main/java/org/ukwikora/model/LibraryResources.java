@@ -38,6 +38,15 @@ public class LibraryResources {
         return keyword.getObject();
     }
 
+    public Keyword findKeyword(String library, String name) throws IllegalAccessException, InstantiationException {
+        if(library.isEmpty()){
+            return findKeyword(name);
+        }
+
+        //TODO: define a way to a set of library names;
+        return findKeyword(name);
+    }
+
     public Variable findVariable(String name) {
         for(LibraryVariable variable: variables){
             if(variable.matches(name)){

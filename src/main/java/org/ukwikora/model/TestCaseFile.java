@@ -171,13 +171,20 @@ public class TestCaseFile implements Iterable<UserKeyword> {
 
         KeywordDefinition userKeyword = userKeywordCache.findStatement(name);
 
-        if(userKeyword == null) {
-            if(externalKeywordCache == null) {
-                externalKeywordCache = getExternalElements(UserKeyword.class);
-            }
+        if(userKeyword == null && externalKeywordCache == null) {
+            externalKeywordCache = getExternalElements(UserKeyword.class);
         }
 
-        return userKeyword;
+        return externalKeywordCache.findStatement(name);
+    }
+
+    public KeywordDefinition findUserKeyword(String library, String name) {
+        if(library.isEmpty()){
+            return findUserKeyword(name);
+        }
+
+        //TODO: find a way to reduce the scope with the scoped keywords
+        return findUserKeyword(name);
     }
 
     public Variable findVariable(String name) {

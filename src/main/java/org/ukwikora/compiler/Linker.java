@@ -6,10 +6,7 @@ import org.ukwikora.analytics.FindSuiteVisitor;
 import org.ukwikora.analytics.FindTestCaseVisitor;
 import org.ukwikora.model.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -62,13 +59,7 @@ class Linker {
             Matcher matcher = gherkinPattern.matcher(step.getName());
             String name = matcher.replaceAll("").trim();
 
-            Keyword keyword = getKeyword(name, testCaseFile);
-
-            if(keyword != null) {
-                call.setKeyword(keyword);
-
-                unresolvedArguments.addAll(linkCall(testCase, testCaseFile, call));
-            }
+            unresolvedArguments.addAll(resolveCall(testCase, testCaseFile, call, name));
         }
 
         return unresolvedArguments;
@@ -92,15 +83,21 @@ class Linker {
 
             String name = call.getName().trim();
 
-            Keyword keyword = getKeyword(name, testCaseFile);
-
-            if(keyword != null) {
-                call.setKeyword(keyword);
-                unresolvedArguments.addAll(linkCall(userKeyword, testCaseFile, call));
-            }
+            unresolvedArguments.addAll(resolveCall(userKeyword, testCaseFile, call, name));
         }
 
         return unresolvedArguments;
+    }
+
+    private List<ScopeValue> resolveCall(KeywordDefinition parentKeyword, TestCaseFile testCaseFile, KeywordCall call, String name) throws Exception {
+        Keyword keyword = getKeyword(name, testCaseFile);
+
+        if(keyword != null) {
+            call.setKeyword(keyword);
+            return linkCall(parentKeyword, testCaseFile, call);
+        }
+
+        return Collections.emptyList();
     }
 
     private List<ScopeValue> linkCall(KeywordDefinition parentKeyword, TestCaseFile testCaseFile, KeywordCall call) {
@@ -137,11 +134,15 @@ class Linker {
         }
     }
 
-    private Keyword getKeyword(String name, TestCaseFile testCaseFile) throws Exception{
-        Keyword keyword = testCaseFile.findUserKeyword(name);
+    private Keyword getKeyword(String fullName, TestCaseFile testCaseFile) throws Exception{
+        List<String> particles = Arrays.asList(fullName.split("\\."));
+        String library = particles.size() > 1 ? String.join(".", particles.subList(0, particles.size() - 1)) : "";
+        String name = particles.get(particles.size() - 1);
+
+        Keyword keyword = testCaseFile.findUserKeyword(library, name);
 
         if(keyword == null) {
-            keyword = runtime.getLibraries().findKeyword(name);
+            keyword = runtime.getLibraries().findKeyword(library, name);
         }
 
         if(keyword == null) {
