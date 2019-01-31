@@ -1,10 +1,7 @@
 package org.ukwikora.model;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 public abstract class Variable implements Statement {
     private TestCaseFile file;
@@ -15,6 +12,7 @@ public abstract class Variable implements Statement {
 
     public Variable() {
         this.assignment = null;
+        this.dependencies = new HashSet<>();
     }
 
     public void setName(String name) {
