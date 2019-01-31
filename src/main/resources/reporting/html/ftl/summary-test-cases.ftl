@@ -3,6 +3,7 @@ Chart.defaults.global.defaultFontFamily = '-apple-system,system-ui,BlinkMacSyste
 Chart.defaults.global.defaultFontColor = '#292b2c';
 
 var ctx = document.getElementById("testCasesChart");
+var testCases = ${summary.jsonTestCases};
 
 var testCasesChart = new Chart(ctx, {
   type: 'bar',
@@ -12,7 +13,7 @@ var testCasesChart = new Chart(ctx, {
       label: "Test Cases",
       backgroundColor: "rgba(2,117,216,1)",
       borderColor: "rgba(2,117,216,1)",
-      data: ${summary.jsonTestCases},
+      data: testCases,
     }],
   },
   options: {
@@ -41,7 +42,7 @@ var testCasesChart = new Chart(ctx, {
       yAxes: [{
         ticks: {
           min: 0,
-          max: 15000,
+          max: Math.max.apply(this, testCases) + 10,
           maxTicksLimit: 5
         },
         gridLines: {

@@ -157,36 +157,33 @@
               </div>
             </div>
           </div>
-        </div>
-        <!-- /.container-fluid -->
 
-        <!-- Area Chart -->
-        <div class="card border-0 shadow mb-4">
-          <div class="card-header border-0 py-3 d-flex flex-row align-items-center justify-content-between">
-            <h6 class="m-0 font-weight-bold text-primary">Test cases per project</h6>
-          </div>
-          <div class="card-body">
-            <div class="chart-area">
-              <canvas id="testCasesChart"></canvas>
+          <!-- Area Chart -->
+          <div class="card border-0 shadow mb-4">
+            <div class="card-header border-0 py-3 d-flex flex-row align-items-center justify-content-between">
+              <h6 class="m-0 font-weight-bold text-primary">Test cases per project</h6>
+            </div>
+            <div class="card-body">
+              <div class="chart-area">
+                <canvas id="testCasesChart"></canvas>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
-      <!-- /.container-fluid -->
 
-      <!-- Area Chart -->
-      <div class="card border-0 shadow mb-4">
-        <div class="card-header border-0 py-3 d-flex flex-row align-items-center justify-content-between">
-          <h6 class="m-0 font-weight-bold text-primary">User keyword per project</h6>
-        </div>
-        <div class="card-body">
-          <div class="chart-area">
-            <canvas id="userKeywordsChart"></canvas>
+          <!-- Area Chart -->
+          <div class="card border-0 shadow mb-4">
+            <div class="card-header border-0 py-3 d-flex flex-row align-items-center justify-content-between">
+              <h6 class="m-0 font-weight-bold text-primary">User keyword per project</h6>
+            </div>
+            <div class="card-body">
+              <div class="chart-area">
+                <canvas id="userKeywordsChart"></canvas>
+              </div>
+            </div>
           </div>
+
         </div>
-      </div>
-    </div>
-    <!-- /.container-fluid -->
+        <!-- /.container-fluid -->
 
       </div>
       <!-- End of Main Content -->

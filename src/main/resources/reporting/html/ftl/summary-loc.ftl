@@ -3,6 +3,7 @@ Chart.defaults.global.defaultFontFamily = '-apple-system,system-ui,BlinkMacSyste
 Chart.defaults.global.defaultFontColor = '#292b2c';
 
 var ctx = document.getElementById("locChart");
+var lines = ${summary.jsonLines};
 
 var locChart = new Chart(ctx, {
   type: 'bar',
@@ -12,7 +13,7 @@ var locChart = new Chart(ctx, {
       label: "Lines of code",
       backgroundColor: "rgba(2,117,216,1)",
       borderColor: "rgba(2,117,216,1)",
-      data: ${summary.jsonLines},
+      data: lines,
     }],
   },
   options: {
@@ -41,7 +42,7 @@ var locChart = new Chart(ctx, {
       yAxes: [{
         ticks: {
           min: 0,
-          max: 15000,
+          max: Math.max.apply(this, lines) + 10,
           maxTicksLimit: 5
         },
         gridLines: {
