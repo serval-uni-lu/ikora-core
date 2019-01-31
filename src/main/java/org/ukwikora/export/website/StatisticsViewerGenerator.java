@@ -41,6 +41,8 @@ public class StatisticsViewerGenerator {
 
         processTemplate("summary.ftl", input, new File(destination, "index.html"));
         processTemplate("summary-loc.ftl", input, new File(destination, "js/summary-loc.js"));
+        processTemplate("summary-user-keywords.ftl", input, new File(destination, "js/summary-user-keywords.js"));
+        processTemplate("summary-test-cases.ftl", input, new File(destination, "js/summary-test-cases.js"));
     }
 
     Template getTemplate(String name) throws IOException, URISyntaxException {
