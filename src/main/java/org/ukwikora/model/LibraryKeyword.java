@@ -58,7 +58,7 @@ public abstract class LibraryKeyword implements Keyword {
     }
 
     @Override
-    public Value getNameAsArgument(){
+    public Value getNameAsValue(){
         return new Value(toKeyword(this.getClass()));
     }
 

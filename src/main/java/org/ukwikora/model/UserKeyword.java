@@ -16,7 +16,7 @@ public class UserKeyword extends KeywordDefinition {
     public void setName(String name) {
         super.setName(name);
 
-        for(String argument: getNameAsArgument().findVariables()){
+        for(String argument: getNameAsValue().findVariables()){
             addParameter(argument);
         }
     }

@@ -15,7 +15,7 @@ public interface Statement extends Differentiable {
 
     long getEpoch();
 
-    Value getNameAsArgument();
+    Value getNameAsValue();
 
     void accept(StatementVisitor visitor);
 

@@ -87,7 +87,7 @@ public abstract class KeywordDefinition implements Keyword, Iterable<Step> {
     }
 
     @Override
-    public Value getNameAsArgument() {
+    public Value getNameAsValue() {
         return name;
     }
 

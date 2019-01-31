@@ -54,7 +54,7 @@ public abstract class Variable implements Statement {
     }
 
     @Override
-    public Value getNameAsArgument() {
+    public Value getNameAsValue() {
         return new Value(this.name);
     }
 

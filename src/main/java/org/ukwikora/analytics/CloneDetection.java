@@ -71,8 +71,7 @@ class CloneDetection<T extends Statement> {
     }
 
     private Clones<T> run(Class<T> type){
-        List<Statement> statements = new ArrayList<>();
-        statements.addAll(project.getStatements(type));
+        List<Statement> statements = new ArrayList<>(project.getStatements(type));
 
         int size = statements.size();
 

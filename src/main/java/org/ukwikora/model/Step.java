@@ -20,7 +20,7 @@ public abstract class Step implements Keyword {
         this.name = new Value(name);
     }
 
-    public Value getNameAsArgument() {
+    public Value getNameAsValue() {
         return this.name;
     }
 
