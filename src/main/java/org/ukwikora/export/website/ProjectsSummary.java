@@ -17,6 +17,8 @@ public class ProjectsSummary {
     private List<Link> links;
     private List<String> labels;
     private List<Integer> lines;
+    private List<Integer> userKeywords;
+    private List<Integer> testCases;
 
     public ProjectsSummary(List<Project> projects){
         try {
@@ -25,6 +27,8 @@ public class ProjectsSummary {
             links = new ArrayList<>(size);
             labels = new ArrayList<>(size);
             lines = new ArrayList<>(size);
+            userKeywords = new ArrayList<>(size);
+            testCases = new ArrayList<>(size);
 
             for(Project project: projects){
                 String name = project.getName();
@@ -32,6 +36,8 @@ public class ProjectsSummary {
                 links.add(new Link(name));
                 labels.add(StringUtils.toBeautifulName(name));
                 lines.add(project.getLoc());
+                userKeywords.add(project.getUserKeywords().size());
+                testCases.add(project.getTestCases().size());
             }
         } catch (UnsupportedEncodingException e) {
             logger.error(String.format("Failed to retrieve data from projects to build ProjectSummary: %s", e.getMessage()));
@@ -47,19 +53,26 @@ public class ProjectsSummary {
     }
 
     public String getJsonLabels(){
-        try {
-            return JsonUtils.convertToJsonArray(labels);
-        } catch (IOException e) {
-            logger.error(String.format("Failed to get json names project summary: %s", e.getMessage()));
-            return "[]";
-        }
+        return getJsonArray("labels", labels);
     }
 
     public String getJsonLines(){
+        return getJsonArray("lines", lines);
+    }
+
+    public String getJsonUserKeywords(){
+        return getJsonArray("user keywords", userKeywords);
+    }
+
+    public String getJsonTestCases(){
+        return getJsonArray("test cases", testCases);
+    }
+
+    private String getJsonArray(String name, List<?> list){
         try {
-            return JsonUtils.convertToJsonArray(lines);
+            return JsonUtils.convertToJsonArray(list);
         } catch (IOException e) {
-            logger.error(String.format("Failed to get json lines for project summary: %s", e.getMessage()));
+            logger.error(String.format("Failed to get json %s for project summary: %s", name, e.getMessage()));
             return "[]";
         }
     }

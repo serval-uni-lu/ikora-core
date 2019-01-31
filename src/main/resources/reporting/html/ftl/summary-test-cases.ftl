@@ -2,17 +2,17 @@
 Chart.defaults.global.defaultFontFamily = '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
 Chart.defaults.global.defaultFontColor = '#292b2c';
 
-var ctx = document.getElementById("locChart");
+var ctx = document.getElementById("testCasesChart");
 
-var locChart = new Chart(ctx, {
+var testCasesChart = new Chart(ctx, {
   type: 'bar',
   data: {
     labels: ${summary.jsonLabels},
     datasets: [{
-      label: "Lines of code",
+      label: "Test Cases",
       backgroundColor: "rgba(2,117,216,1)",
       borderColor: "rgba(2,117,216,1)",
-      data: ${summary.jsonLines},
+      data: ${summary.jsonTestCases},
     }],
   },
   options: {
