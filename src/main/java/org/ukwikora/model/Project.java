@@ -176,7 +176,14 @@ public class Project implements Comparable<Project> {
     }
 
     public String generateFileName(File file) {
-        Path base = Paths.get(this.getRootFolder().getAbsolutePath().trim());
+        File rootFolder = this.getRootFolder();
+
+        if(rootFolder.isFile()){
+            rootFolder = rootFolder.getParentFile();
+        }
+
+        Path base = Paths.get(rootFolder.getAbsolutePath().trim());
+
         Path path = Paths.get(file.getAbsolutePath().trim()).normalize();
 
         return base.relativize(path).toString();
