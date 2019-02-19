@@ -1,7 +1,7 @@
 <#include "lib/base.ftl">
 
 <#macro page_title>
-  Ukwikora - Dashboard
+  ${summary.title}
 </#macro>
 
 <#macro js_imports>

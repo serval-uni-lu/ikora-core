@@ -1,6 +1,5 @@
 package org.ukwikora.export.website.model;
 
-import org.ukwikora.export.website.model.BarChart;
 import org.ukwikora.model.Project;
 import org.ukwikora.utils.StringUtils;
 
@@ -74,5 +73,9 @@ public class Summary {
 
     public List<String> getScripts() {
         return scripts;
+    }
+
+    public String getTitle(){
+        return "Ukwikora - Dashboard";
     }
 }
