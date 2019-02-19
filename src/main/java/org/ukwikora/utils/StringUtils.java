@@ -42,6 +42,11 @@ public class StringUtils {
         String url = toBeautifulName(raw).toLowerCase();
         url = url.replaceAll("\\s+", "-");
         url = URLEncoder.encode(url, "UTF-8");
+
+        if(extension.isEmpty()){
+            return url;
+        }
+
         return String.format("%s.%s", url, extension);
     }
 

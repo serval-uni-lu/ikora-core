@@ -1,18 +1,15 @@
 package org.ukwikora.export.website;
 
 import freemarker.template.*;
+import org.ukwikora.export.website.model.SideBar;
+import org.ukwikora.export.website.model.Summary;
 import org.ukwikora.model.Project;
 import org.ukwikora.utils.FileUtils;
 
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.io.Writer;
-import java.net.URISyntaxException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 public class StatisticsViewerGenerator {
     private List<Project> projects;
@@ -23,29 +20,38 @@ public class StatisticsViewerGenerator {
         this.destination = destination;
     }
 
-    public void generate() throws IOException, URISyntaxException, TemplateException {
+    public void generate() throws Exception {
+        SideBar sideBar = new SideBar(projects);
+        Map<String, Object> input = new HashMap<>();
+        input.put("sidebar", sideBar);
+
         copyResources();
-        generateSummaryPage();
+        generateSummaryPage(new HashMap<>(input));
     }
 
-    void copyResources() throws IOException, URISyntaxException {
+    private void copyResources() throws Exception {
         File source = FileUtils.getResourceFile("reporting/html/project_analytics");
         org.apache.commons.io.FileUtils.copyDirectory(source, destination);
     }
 
-    void generateSummaryPage() throws IOException, URISyntaxException, TemplateException {
-        ProjectsSummary summary = new ProjectsSummary(projects);
+    private void generateSummaryPage(Map<String, Object> input) throws Exception {
+        Summary summary = new Summary(projects);
 
-        Map<String, Object> input = new HashMap<>();
         input.put("summary", summary);
 
         processTemplate("summary.ftl", input, new File(destination, "index.html"));
-        processTemplate("summary-loc.ftl", input, new File(destination, "js/summary-loc.js"));
-        processTemplate("summary-user-keywords.ftl", input, new File(destination, "js/summary-user-keywords.js"));
-        processTemplate("summary-test-cases.ftl", input, new File(destination, "js/summary-test-cases.js"));
+
+        processTemplate("lib/bar-chart.ftl", Collections.singletonMap("chart", summary.getLinesChart()),
+                new File(destination, summary.getLinesChart().getUrl()));
+
+        processTemplate("lib/bar-chart.ftl",  Collections.singletonMap("chart", summary.getUserKeywordsChart()),
+                new File(destination, summary.getUserKeywordsChart().getUrl()));
+
+        processTemplate("lib/bar-chart.ftl", Collections.singletonMap("chart", summary.getTestCasesChart()),
+                new File(destination, summary.getUserKeywordsChart().getUrl()));
     }
 
-    Template getTemplate(String name) throws IOException, URISyntaxException {
+    private Template getTemplate(String name) throws Exception {
         Configuration cfg = new Configuration();
 
         File templateDirectory = FileUtils.getResourceFile("reporting/html/ftl");
@@ -59,7 +65,7 @@ public class StatisticsViewerGenerator {
         return cfg.getTemplate(name);
     }
 
-    void processTemplate(String name, Map<String, Object> input, File output) throws IOException, URISyntaxException, TemplateException {
+    private void processTemplate(String name, Map<String, Object> input, File output) throws Exception {
         try(Writer fileWriter = new FileWriter(output)) {
             Template template = getTemplate(name);
             template.process(input, fileWriter);

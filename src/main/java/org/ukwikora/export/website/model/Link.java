@@ -1,4 +1,4 @@
-package org.ukwikora.export.website;
+package org.ukwikora.export.website.model;
 
 import org.ukwikora.utils.StringUtils;
 

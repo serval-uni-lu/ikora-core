@@ -95,7 +95,7 @@ public class Compiler {
         external.setTestCaseFile(testCaseFile);
     }
 
-    static public Project compile(String filePath) {
+    public static Project compile(String filePath) {
         logger.info("Start compilation...");
 
         Project project;
@@ -120,7 +120,7 @@ public class Compiler {
         return project;
     }
 
-    static private void loadLibraries(StaticRuntime runtime) {
+    private static void loadLibraries(StaticRuntime runtime) {
         LibraryResources libraries = LibraryLoader.load();
         runtime.setLibraries(libraries);
     }
@@ -129,7 +129,7 @@ public class Compiler {
         Linker.link(runtime);
     }
 
-    static private Project parse(String filePath) {
+    private static Project parse(String filePath) {
         return ProjectParser.parse(filePath);
     }
 }
