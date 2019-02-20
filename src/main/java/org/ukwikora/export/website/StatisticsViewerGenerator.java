@@ -3,6 +3,7 @@ package org.ukwikora.export.website;
 import freemarker.template.*;
 import org.ukwikora.export.website.model.DependencyGraph;
 import org.ukwikora.export.website.model.SideBar;
+import org.ukwikora.export.website.model.SingleProject;
 import org.ukwikora.export.website.model.Summary;
 import org.ukwikora.model.Project;
 import org.ukwikora.utils.FileUtils;
@@ -29,6 +30,10 @@ public class StatisticsViewerGenerator {
         copyResources();
         generateSummaryPage(new HashMap<>(input));
         generateDependenciesPage(new HashMap<>(input));
+
+        for(Project project: projects){
+            generateSingleProjectPage(project, new HashMap<>(input));
+        }
     }
 
     void copyResources() throws Exception {
@@ -40,7 +45,6 @@ public class StatisticsViewerGenerator {
         Summary summary = new Summary(projects);
 
         input.put("summary", summary);
-
         processTemplate("summary.ftl", input, new File(destination, "index.html"));
 
         processTemplate("lib/bar-chart.ftl", Collections.singletonMap("chart", summary.getLinesChart()),
@@ -64,6 +68,14 @@ public class StatisticsViewerGenerator {
 
         processTemplate("lib/dependency-graph.ftl", Collections.singletonMap("dependencies", dependencies),
                 new File(destination, dependencies.getUrl()));
+    }
+
+    void generateSingleProjectPage(Project project, Map<String, Object> input) throws Exception {
+        SingleProject singleProject = new SingleProject(project);
+
+        input.put("project", singleProject);
+
+        processTemplate("project.ftl", input, new File(destination, singleProject.getLink().getUrl()));
     }
 
     private Template getTemplate(String name) throws Exception {
