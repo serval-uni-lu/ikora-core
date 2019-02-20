@@ -56,8 +56,8 @@
                 <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Dashboard</h6>
-                        <a class="collapse-item" href="index.html">Dependencies</a>
-                        <a class="collapse-item" href="#">Summary</a>
+                        <a class="collapse-item" href="dependencies.html">Dependencies</a>
+                        <a class="collapse-item" href="index.html">Summary</a>
                     </div>
                 </div>
             </li>
