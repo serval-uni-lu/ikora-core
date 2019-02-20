@@ -1,6 +1,7 @@
 package org.ukwikora.export.website;
 
 import freemarker.template.*;
+import org.ukwikora.export.website.model.DependencyGraph;
 import org.ukwikora.export.website.model.SideBar;
 import org.ukwikora.export.website.model.Summary;
 import org.ukwikora.model.Project;
@@ -27,14 +28,15 @@ public class StatisticsViewerGenerator {
 
         copyResources();
         generateSummaryPage(new HashMap<>(input));
+        generateDependenciesPage(new HashMap<>(input));
     }
 
-    private void copyResources() throws Exception {
+    void copyResources() throws Exception {
         File source = FileUtils.getResourceFile("reporting/html/project_analytics");
         org.apache.commons.io.FileUtils.copyDirectory(source, destination);
     }
 
-    private void generateSummaryPage(Map<String, Object> input) throws Exception {
+    void generateSummaryPage(Map<String, Object> input) throws Exception {
         Summary summary = new Summary(projects);
 
         input.put("summary", summary);
@@ -49,6 +51,19 @@ public class StatisticsViewerGenerator {
 
         processTemplate("lib/bar-chart.ftl", Collections.singletonMap("chart", summary.getTestCasesChart()),
                 new File(destination, summary.getUserKeywordsChart().getUrl()));
+    }
+
+    void generateDependenciesPage(Map<String, Object> input) throws Exception {
+        DependencyGraph dependencies = new DependencyGraph("projects-dependency-graph",
+                "Dependency Graph", projects);
+
+        input.put("dependencies", dependencies);
+        input.put("dependency-graph-url", dependencies.getUrl());
+
+        processTemplate("dependencies.ftl", input, new File(destination, "dependencies.html"));
+
+        processTemplate("lib/dependency-graph.ftl", Collections.singletonMap("dependencies", dependencies),
+                new File(destination, dependencies.getUrl()));
     }
 
     private Template getTemplate(String name) throws Exception {

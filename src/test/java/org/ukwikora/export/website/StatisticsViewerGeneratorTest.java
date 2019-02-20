@@ -23,7 +23,7 @@ public class StatisticsViewerGeneratorTest {
         try {
             StatisticsViewerGenerator generator = new StatisticsViewerGenerator(Collections.emptyList(), destination);
             generator.copyResources();
-        } catch (IOException | URISyntaxException e) {
+        } catch (Exception e) {
             fail("exception was raised: " + e.getMessage());
         }
 
