@@ -9,7 +9,7 @@ var chart = new Chart(ctx, {
   data: {
     labels: ${chart.jsonLabels},
     datasets: [{
-      label: "${chart.yLabel}",
+      label: "${chart.YLabel}",
       backgroundColor: "rgba(2,117,216,1)",
       borderColor: "rgba(2,117,216,1)",
       data: ${chart.jsonValues},

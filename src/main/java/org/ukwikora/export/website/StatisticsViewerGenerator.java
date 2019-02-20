@@ -62,7 +62,7 @@ public class StatisticsViewerGenerator {
                 "Dependency Graph", projects);
 
         input.put("dependencies", dependencies);
-        input.put("dependency-graph-url", dependencies.getUrl());
+        input.put("dependencyGraphUrl", dependencies.getUrl());
 
         processTemplate("dependencies.ftl", input, new File(destination, "dependencies.html"));
 

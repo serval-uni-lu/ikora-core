@@ -5,7 +5,7 @@
 </#macro>
 
 <#macro js_imports>
-        <script src="${dependency-graph-url}"></script>
+        <script src="${dependencyGraphUrl}"></script>
 </#macro>
 
 <#macro page_content>
