@@ -30,7 +30,7 @@ class TestCaseFileParser {
                 String text = reader.getCurrent().getText();
 
                 if(isSettings(text)){
-                    Settings settings = SettingsTableParser.parse(reader);
+                    Settings settings = SettingsTableParser.parse(reader, testCaseFile);
                     testCaseFile.setSettings(settings);
                 }
                 else if(isTestCases(text)){

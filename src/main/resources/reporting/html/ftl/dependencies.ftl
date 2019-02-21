@@ -15,8 +15,7 @@
             <h6 class="m-0 font-weight-bold text-primary">${dependencies.name}</h6>
         </div>
         <div class="card-body">
-            <div class="chart-area">
-                <canvas id="${dependencies.id}"></canvas>
+            <div class="chart-area" id="${dependencies.id}">
             </div>
         </div>
     </div>

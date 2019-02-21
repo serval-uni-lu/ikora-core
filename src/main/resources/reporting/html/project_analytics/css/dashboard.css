@@ -10366,3 +10366,15 @@ footer.sticky-footer .copyright {
 body.sidebar-toggled footer.sticky-footer {
   width: 100%;
 }
+
+.graph-link {
+  fill: none;
+  stroke: #3d3e47;
+  stroke-width: 1.5px;
+}
+
+.circle {
+  fill: #2e59d9;
+  stroke: #3d3e47;
+  stroke-width: 1px;
+}

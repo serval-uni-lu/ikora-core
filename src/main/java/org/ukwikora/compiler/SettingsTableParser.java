@@ -3,6 +3,7 @@ package org.ukwikora.compiler;
 import org.ukwikora.model.Library;
 import org.ukwikora.model.Resources;
 import org.ukwikora.model.Settings;
+import org.ukwikora.model.TestCaseFile;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,8 +12,9 @@ import java.util.ArrayList;
 class SettingsTableParser {
     private SettingsTableParser(){ }
 
-    static public Settings parse(LineReader reader) throws IOException {
+    static public Settings parse(LineReader reader, TestCaseFile testCaseFile) throws IOException {
         Settings settings = new Settings();
+        settings.setFile(testCaseFile);
 
         Line line = reader.readLine();
 
