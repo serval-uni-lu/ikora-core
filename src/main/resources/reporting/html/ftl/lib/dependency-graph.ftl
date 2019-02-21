@@ -7,6 +7,9 @@ link.source = nodes[link.source] || (nodes[link.source] = { name: link.source })
 link.target = nodes[link.target] || (nodes[link.target] = { name: link.target });
 });
 
+var width = d3.select(".chart-area").node().offsetHeight;
+var height = d3.select(".chart-area").node().offsetWidth;
+
 var force = d3.layout.force()
 .nodes(d3.values(nodes))
 .links(links)
@@ -17,8 +20,13 @@ var force = d3.layout.force()
 .start();
 
 var svg = d3.select("#${dependencies.id}").append("svg")
-.attr("width", "100%")
-.attr("height", "100%");
+.attr("width", width)
+.attr("height", height)
+.attr("display", "block")
+.attr("position", "absolute")
+.attr("top", 0)
+.attr("left", 0);
+
 
 // Per-type markers, as they don't inherit styles.
 svg.append("defs").selectAll("marker")
@@ -37,7 +45,7 @@ svg.append("defs").selectAll("marker")
 var path = svg.append("g").selectAll("path")
 .data(force.links())
 .enter().append("path")
-.attr("class", function (d) { return "graph-link " + d.type; })
+.attr("class", function (d) { return "link " + d.type; })
 .attr("marker-end", function (d) { return "url(#" + d.type + ")"; });
 
 var circle = svg.append("g").selectAll("circle")
