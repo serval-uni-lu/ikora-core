@@ -12,7 +12,15 @@ public class Summary {
     private BarChart testCasesChart;
     private List<String> scripts;
 
+    private int linesOfCodes;
+    private int numberKeywords;
+    private int numberTestCases;
+
     public Summary(List<Project> projects) throws Exception {
+        linesOfCodes = 0;
+        numberKeywords = 0;
+        numberTestCases = 0;
+
         int size = projects.size();
 
         List<String> labels = new ArrayList<>(size);
@@ -21,6 +29,10 @@ public class Summary {
         List<Integer> testCases = new ArrayList<>(size);
 
         for(Project project: projects){
+            linesOfCodes += project.getLoc();
+            numberKeywords += project.getUserKeywords().size();
+            numberTestCases += project.getTestCases().size();
+
             String name = project.getName();
 
             labels.add(StringUtils.toBeautifulName(name));
@@ -77,5 +89,17 @@ public class Summary {
 
     public String getTitle(){
         return "Ukwikora - Dashboard";
+    }
+
+    public int getLinesOfCodes() {
+        return linesOfCodes;
+    }
+
+    public int getNumberKeywords() {
+        return numberKeywords;
+    }
+
+    public int getNumberTestCases() {
+        return numberTestCases;
     }
 }
