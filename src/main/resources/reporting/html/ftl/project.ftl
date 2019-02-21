@@ -20,7 +20,7 @@
     <div class="col-sm">
         <div class="card border-0 bg-primary text-white shadow">
             <div class="card-body">
-                ${project.numberKeyword} Keywords
+                ${project.numberKeywords} Keywords
             </div>
         </div>
     </div>
