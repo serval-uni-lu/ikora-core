@@ -17,8 +17,8 @@ var force = d3.layout.force()
 .start();
 
 var svg = d3.select("#${dependencies.id}").append("svg")
-.attr("width", 100%")
-.attr("height", 100%");
+.attr("width", "100%")
+.attr("height", "100%");
 
 // Per-type markers, as they don't inherit styles.
 svg.append("defs").selectAll("marker")
