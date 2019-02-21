@@ -31,7 +31,7 @@ public class Summary {
 
         linesChart = new BarChart(
                 "summary-lines-of-code-chart",
-                "User Keywords",
+                "Lines of Code",
                 lines,
                 labels);
 
@@ -43,7 +43,7 @@ public class Summary {
                 userKeywords,
                 labels);
 
-        linesChart.setYLabel("Number Lines of Code");
+        userKeywordsChart.setYLabel("Number Lines of Code");
 
         testCasesChart = new BarChart(
                 "summary-test-cases-chart",
