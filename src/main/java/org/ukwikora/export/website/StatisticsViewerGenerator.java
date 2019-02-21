@@ -54,7 +54,7 @@ public class StatisticsViewerGenerator {
                 new File(destination, summary.getUserKeywordsChart().getUrl()));
 
         processTemplate("lib/bar-chart.ftl", Collections.singletonMap("chart", summary.getTestCasesChart()),
-                new File(destination, summary.getUserKeywordsChart().getUrl()));
+                new File(destination, summary.getTestCasesChart().getUrl()));
     }
 
     void generateDependenciesPage(Map<String, Object> input) throws Exception {
