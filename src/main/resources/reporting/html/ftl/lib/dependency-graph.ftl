@@ -7,8 +7,8 @@ link.source = nodes[link.source] || (nodes[link.source] = { name: link.source })
 link.target = nodes[link.target] || (nodes[link.target] = { name: link.target });
 });
 
-var width = d3.select(".chart-area").node().offsetHeight;
-var height = d3.select(".chart-area").node().offsetWidth;
+var width = d3.select("#${dependencies.id}").node().offsetWidth;
+var height = d3.select("#${dependencies.id}").node().offsetHeight;
 
 var force = d3.layout.force()
 .nodes(d3.values(nodes))
@@ -45,7 +45,7 @@ svg.append("defs").selectAll("marker")
 var path = svg.append("g").selectAll("path")
 .data(force.links())
 .enter().append("path")
-.attr("class", function (d) { return "link " + d.type; })
+.attr("class", function (d) { return "graph-link " + d.type; })
 .attr("marker-end", function (d) { return "url(#" + d.type + ")"; });
 
 var circle = svg.append("g").selectAll("circle")
