@@ -3,6 +3,7 @@ package org.ukwikora.compiler;
 import org.ukwikora.model.TestCaseFile;
 
 import java.io.*;
+import java.nio.charset.Charset;
 
 public class LineReader {
     private LineNumberReader reader;
@@ -15,7 +16,7 @@ public class LineReader {
         this.file = file;
         loc = 0;
 
-        FileReader input = new FileReader(this.file);
+        InputStreamReader input = new InputStreamReader(new FileInputStream(file), Charset.forName("UTF-8"));
         this.reader = new LineNumberReader(input);
 
         this.testCaseFile = null;
@@ -33,7 +34,7 @@ public class LineReader {
         this.file = testCaseFile.getFile();
         loc = 0;
 
-        FileReader input = new FileReader(this.file);
+        InputStreamReader input = new InputStreamReader(new FileInputStream(this.file), Charset.forName("UTF-8"));
         this.reader = new LineNumberReader(input);
 
         this.testCaseFile = testCaseFile;
