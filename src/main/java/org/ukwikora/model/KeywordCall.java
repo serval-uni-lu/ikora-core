@@ -294,7 +294,7 @@ public class KeywordCall extends Step {
 
     @Override
     public List<KeywordCall> getKeywordParameter() {
-        return (List<KeywordCall>) stepParameters.values();
+        return new ArrayList<>(stepParameters.values());
     }
 
     @Override
