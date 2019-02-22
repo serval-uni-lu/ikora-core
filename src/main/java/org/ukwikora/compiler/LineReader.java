@@ -11,6 +11,16 @@ public class LineReader {
     private TestCaseFile testCaseFile;
     private int loc;
 
+    public LineReader(File file) throws FileNotFoundException {
+        this.file = file;
+        loc = 0;
+
+        FileReader input = new FileReader(this.file);
+        this.reader = new LineNumberReader(input);
+
+        this.testCaseFile = null;
+    }
+
     public LineReader(Reader reader) {
         this.file = new File("/");
         loc = 0;
