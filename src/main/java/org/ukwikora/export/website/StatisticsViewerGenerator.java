@@ -76,6 +76,18 @@ public class StatisticsViewerGenerator {
         input.put("project", singleProject);
 
         processTemplate("project.ftl", input, new File(destination, singleProject.getLink().getUrl()));
+
+        processTemplate("lib/bar-chart.ftl", Collections.singletonMap("chart", singleProject.getConnectivityChart()),
+                new File(destination, singleProject.getConnectivityChart().getUrl()));
+
+        processTemplate("lib/bar-chart.ftl", Collections.singletonMap("chart", singleProject.getSizeChart()),
+                new File(destination, singleProject.getSizeChart().getUrl()));
+
+        processTemplate("lib/bar-chart.ftl", Collections.singletonMap("chart", singleProject.getDepthChart()),
+                new File(destination, singleProject.getDepthChart().getUrl()));
+
+        processTemplate("lib/bar-chart.ftl", Collections.singletonMap("chart", singleProject.getSequenceChart()),
+                new File(destination, singleProject.getSequenceChart().getUrl()));
     }
 
     private Template getTemplate(String name) throws Exception {

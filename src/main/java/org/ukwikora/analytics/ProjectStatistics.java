@@ -4,8 +4,7 @@ import com.beust.jcommander.ParameterException;
 import org.ukwikora.model.*;
 import org.ukwikora.utils.StringUtils;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class ProjectStatistics {
     enum Metric{
@@ -55,30 +54,29 @@ public class ProjectStatistics {
         return length;
     }
 
-    public <T extends KeywordDefinition> int[] getSizeDistribution(Class<T> type){
+    public <T extends KeywordDefinition> Map<Integer, Integer> getSizeDistribution(Class<T> type){
         return getDistribution(type, Metric.Size);
     }
 
-    public <T extends KeywordDefinition> int[] getConnectivityDistribution(Class<T> type){
+    public <T extends KeywordDefinition> Map<Integer, Integer> getConnectivityDistribution(Class<T> type){
         return getDistribution(type, Metric.Connectivity);
     }
 
-    public <T extends KeywordDefinition> int[] getSequenceDistribution(Class<T> type){
+    public <T extends KeywordDefinition> Map<Integer, Integer> getSequenceDistribution(Class<T> type){
         return getDistribution(type, Metric.Sequence);
     }
 
-    public <T extends KeywordDefinition> int[] getDepthDistribution(Class<T> type){
+    public <T extends KeywordDefinition> Map<Integer, Integer> getDepthDistribution(Class<T> type){
         return getDistribution(type, Metric.Depth);
     }
 
-    <T extends KeywordDefinition> int[] getBranchIndex(Class<T> type){
+    <T extends KeywordDefinition> Map<Integer, Integer> getBranchIndex(Class<T> type){
         return getDistribution(type, Metric.BranchIndex);
     }
 
-    private <T extends KeywordDefinition> int[] getDistribution(Class<T> type, Metric metric){
-        int[] distribution = new int[getNumberKeywords(type)];
+    private <T extends KeywordDefinition> Map<Integer, Integer> getDistribution(Class<T> type, Metric metric){
+        Map<Integer, Integer> distribution = new TreeMap<>();
 
-        int index = 0;
         for(KeywordDefinition keyword: getKeywords(type)){
             int value = -1;
 
@@ -90,7 +88,7 @@ public class ProjectStatistics {
                 case BranchIndex: value = keyword.getBranchIndex(); break;
             }
 
-            distribution[index++] = value;
+            distribution.merge(value, 1, Integer::sum);
         }
 
         return distribution;
