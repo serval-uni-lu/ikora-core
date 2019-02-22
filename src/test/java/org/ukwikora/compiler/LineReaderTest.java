@@ -20,7 +20,7 @@ public class LineReaderTest {
 
             line = reader.readLine();
             assertTrue(line.isValid());
-            assertEquals("Ligne avec des caractères spéciaux!", line.getText());
+            assertEquals("Line with special characters: êôçàéèù!", line.getText());
 
             line = reader.readLine();
             assertFalse(line.isValid());

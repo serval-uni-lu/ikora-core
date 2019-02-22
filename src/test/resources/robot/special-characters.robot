@@ -1,2 +1,2 @@
 Line without special characters
-Ligne avec des caractères spéciaux!
+Line with special characters: êôçàéèù!
