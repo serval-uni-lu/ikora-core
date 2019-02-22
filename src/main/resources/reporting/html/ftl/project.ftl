@@ -5,7 +5,9 @@
 </#macro>
 
 <#macro js_imports>
-
+    <#list project.scripts as url>
+        <script src="${url}"></script>
+    </#list>
 </#macro>
 
 <#macro page_content>

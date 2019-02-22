@@ -15,6 +15,8 @@ public class SingleProject {
     private final String id;
 
     private final Link link;
+    private final List<String> scripts;
+
     private final int numberKeywords;
     private final int numberTestCases;
     private final int linesOfCode;
@@ -38,6 +40,12 @@ public class SingleProject {
         this.connectivityChart = createConnectivityChart(statistics);
         this.depthChart = createDepthChart(statistics);
         this.sequenceChart = createSequenceChart(statistics);
+
+        this.scripts = new ArrayList<>(4);
+        this.scripts.add(this.sizeChart.getUrl());
+        this.scripts.add(this.connectivityChart.getUrl());
+        this.scripts.add(this.depthChart.getUrl());
+        this.scripts.add(this.sequenceChart.getUrl());
     }
 
     private BarChart createConnectivityChart(ProjectStatistics statistics) throws IOException {
@@ -130,6 +138,10 @@ public class SingleProject {
 
     public BarChart getSequenceChart() {
         return sequenceChart;
+    }
+
+    public List<String> getScripts() {
+        return scripts;
     }
 
     private List<String> getKeys(Map<Integer, Integer> map){
