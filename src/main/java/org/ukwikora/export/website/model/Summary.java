@@ -12,12 +12,12 @@ public class Summary {
     private BarChart testCasesChart;
     private List<String> scripts;
 
-    private int linesOfCodes;
+    private int linesOfCode;
     private int numberKeywords;
     private int numberTestCases;
 
     public Summary(List<Project> projects) throws Exception {
-        linesOfCodes = 0;
+        linesOfCode = 0;
         numberKeywords = 0;
         numberTestCases = 0;
 
@@ -29,7 +29,7 @@ public class Summary {
         List<Integer> testCases = new ArrayList<>(size);
 
         for(Project project: projects){
-            linesOfCodes += project.getLoc();
+            linesOfCode += project.getLoc();
             numberKeywords += project.getUserKeywords().size();
             numberTestCases += project.getTestCases().size();
 
@@ -91,8 +91,8 @@ public class Summary {
         return "Ukwikora - Dashboard";
     }
 
-    public int getLinesOfCodes() {
-        return linesOfCodes;
+    public int getLinesOfCode() {
+        return linesOfCode;
     }
 
     public int getNumberKeywords() {
