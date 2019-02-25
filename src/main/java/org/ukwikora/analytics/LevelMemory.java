@@ -3,26 +3,26 @@ package org.ukwikora.analytics;
 import org.ukwikora.model.Statement;
 
 public class LevelMemory extends PathMemory {
-    private int depth;
+    private int level;
 
     public LevelMemory() {
-        this.depth = 0;
+        this.level = 0;
     }
 
     private LevelMemory(LevelMemory other) {
         super(other);
-        this.depth = other.depth;
+        this.level = other.level;
     }
 
     @Override
     public VisitorMemory getUpdated(Statement statement) {
         LevelMemory updated = new LevelMemory(this);
-        updated.depth++;
+        updated.level++;
 
         return updated;
     }
 
-    public int getDepth() {
-        return depth;
+    public int getLevel() {
+        return level;
     }
 }

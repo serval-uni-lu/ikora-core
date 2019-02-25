@@ -7,8 +7,8 @@ public class LevelVisitor implements StatementVisitor {
 
     private void updateLevel(VisitorMemory memory){
         if(memory instanceof LevelMemory){
-            int size = ((LevelMemory)memory).getDepth();
-            this.level = Math.max(size, this.level);
+            int level = ((LevelMemory)memory).getLevel();
+            this.level = Math.max(level, this.level);
         }
     }
 
