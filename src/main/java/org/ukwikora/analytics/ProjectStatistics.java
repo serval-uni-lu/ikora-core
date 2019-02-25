@@ -84,7 +84,7 @@ public class ProjectStatistics {
                 case Size: value = getSize(keyword); break;
                 case Connectivity: value = getConnectivity(keyword); break;
                 case Sequence: value = keyword.getMaxSequenceSize(); break;
-                case Depth: value = keyword.getLevel(); break;
+                case Depth: value = getLevel(keyword); break;
                 case BranchIndex: value = keyword.getBranchIndex(); break;
             }
 
@@ -105,17 +105,24 @@ public class ProjectStatistics {
         throw new ParameterException("Unhandled type " + type.getName());
     }
 
-    private int getConnectivity(Statement statement){
+    public static int getConnectivity(Statement statement){
         ConnectivityVisitor visitor = new ConnectivityVisitor();
         statement.accept(visitor, new PathMemory());
 
         return visitor.getConnectivity();
     }
 
-    private int getSize(Statement statement){
+    public static int getSize(Statement statement){
         SizeVisitor visitor = new SizeVisitor();
         statement.accept(visitor, new PathMemory());
 
         return visitor.getSize();
+    }
+
+    public static int getLevel(Statement statement){
+        LevelVisitor visitor = new LevelVisitor();
+        statement.accept(visitor, new LevelMemory());
+
+        return visitor.getLevel();
     }
 }

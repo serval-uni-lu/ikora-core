@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import org.ukwikora.analytics.EvolutionResults;
+import org.ukwikora.analytics.ProjectStatistics;
 import org.ukwikora.model.*;
 
 import java.io.IOException;
@@ -36,7 +37,7 @@ public class KeywordsNamesSerializer extends JsonSerializer<EvolutionResults> {
             jsonGenerator.writeStartObject();
 
             jsonGenerator.writeStringField("type", keyword.getClass().getSimpleName());
-            jsonGenerator.writeNumberField("depth", keyword.getLevel());
+            jsonGenerator.writeNumberField("depth", ProjectStatistics.getLevel(keyword));
             jsonGenerator.writeStringField("name", keyword.getName());
 
             jsonGenerator.writeEndObject();

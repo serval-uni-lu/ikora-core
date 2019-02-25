@@ -106,28 +106,6 @@ public class KeywordCall extends Step {
     }
 
     @Override
-    public int getLevel() {
-        if(this.keyword == null){
-            return 0;
-        }
-        else if(stepParameters.size() > 0){
-            int depth = 0;
-
-            for (Step step: stepParameters.values()){
-                if(step == null){
-                    continue;
-                }
-
-                depth = Math.max(step.getLevel(), depth);
-            }
-
-            return depth;
-        }
-
-        return this.keyword.getLevel();
-    }
-
-    @Override
     public void getSequences(List<Sequence> sequences) {
         if(this.keyword == null){
             return;

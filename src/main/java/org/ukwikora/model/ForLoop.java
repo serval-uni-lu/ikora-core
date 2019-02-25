@@ -88,17 +88,6 @@ public class ForLoop extends Step {
     }
 
     @Override
-    public int getLevel(){
-        int depth = 0;
-
-        for(Step step: steps){
-            depth = Math.max(step.getLevel(), depth);
-        }
-
-        return depth;
-    }
-
-    @Override
     public int[] getKeywordsLaunchedPosition() {
         return new int[0];
     }

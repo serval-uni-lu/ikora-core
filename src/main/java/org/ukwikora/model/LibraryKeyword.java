@@ -29,11 +29,6 @@ public abstract class LibraryKeyword implements Keyword {
     }
 
     @Override
-    public int getLevel(){
-        return 0;
-    }
-
-    @Override
     public Set<Statement> getDependencies() {
         return dependencies;
     }

@@ -86,9 +86,9 @@ public class KeywordsEvolutionSerializer extends JsonSerializer<EvolutionResults
         jsonGenerator.writeNumberField("number steps", keyword.getSteps().size());
         jsonGenerator.writeNumberField("sequence size", keyword.getMaxSequenceSize());
         jsonGenerator.writeNumberField("number branches", keyword.getBranchIndex());
-        jsonGenerator.writeNumberField("size", getSize(keyword));
-        jsonGenerator.writeNumberField("depth", keyword.getLevel());
-        jsonGenerator.writeNumberField("connectivity", getConnectivity(keyword));
+        jsonGenerator.writeNumberField("size", ProjectStatistics.getSize(keyword));
+        jsonGenerator.writeNumberField("depth", ProjectStatistics.getLevel(keyword));
+        jsonGenerator.writeNumberField("connectivity", ProjectStatistics.getConnectivity(keyword));
 
         writeChanges(jsonGenerator, difference);
 
@@ -138,19 +138,5 @@ public class KeywordsEvolutionSerializer extends JsonSerializer<EvolutionResults
         }
 
         return StringUtils.countLines(keyword.getDocumentation());
-    }
-
-    private int getConnectivity(Statement statement){
-        ConnectivityVisitor visitor = new ConnectivityVisitor();
-        statement.accept(visitor, new PathMemory());
-
-        return visitor.getConnectivity();
-    }
-
-    private int getSize(Statement statement){
-        SizeVisitor visitor = new SizeVisitor();
-        statement.accept(visitor, new PathMemory());
-
-        return visitor.getSize();
     }
 }

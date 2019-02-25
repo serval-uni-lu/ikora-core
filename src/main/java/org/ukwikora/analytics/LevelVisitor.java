@@ -2,49 +2,49 @@ package org.ukwikora.analytics;
 
 import org.ukwikora.model.*;
 
-public class DepthVisitor implements StatementVisitor {
-    int depth = 0;
+public class LevelVisitor implements StatementVisitor {
+    int level = 0;
 
-    private void updateDepth(VisitorMemory memory){
-        if(memory instanceof DepthMemory){
-            int size = ((DepthMemory)memory).getDepth();
-            this.depth = Math.max(size, this.depth);
+    private void updateLevel(VisitorMemory memory){
+        if(memory instanceof LevelMemory){
+            int size = ((LevelMemory)memory).getDepth();
+            this.level = Math.max(size, this.level);
         }
     }
 
     @Override
     public void visit(TestCase testCase, VisitorMemory memory) {
-        updateDepth(memory);
+        updateLevel(memory);
         VisitorUtils.traverseSteps(this, testCase, memory);
     }
 
     @Override
     public void visit(UserKeyword keyword, VisitorMemory memory) {
-        updateDepth(memory);
+        updateLevel(memory);
         VisitorUtils.traverseSteps(this, keyword, memory);
     }
 
     @Override
     public void visit(KeywordCall call, VisitorMemory memory) {
-        updateDepth(memory);
+        updateLevel(memory);
         VisitorUtils.traverseKeywordCall(this, call, memory);
     }
 
     @Override
     public void visit(Assignment assignment, VisitorMemory memory) {
-        updateDepth(memory);
+        updateLevel(memory);
         VisitorUtils.traverseAssignmentCall(this, assignment, memory);
     }
 
     @Override
     public void visit(ForLoop forLoop, VisitorMemory memory) {
-        updateDepth(memory);
+        updateLevel(memory);
         VisitorUtils.traverseForLoopSteps(this, forLoop, memory);
     }
 
     @Override
     public void visit(LibraryKeyword keyword, VisitorMemory memory) {
-        updateDepth(memory);
+        updateLevel(memory);
     }
 
     @Override
@@ -60,5 +60,9 @@ public class DepthVisitor implements StatementVisitor {
     @Override
     public void visit(ListVariable list, VisitorMemory memory) {
 
+    }
+
+    public int getLevel() {
+        return level;
     }
 }

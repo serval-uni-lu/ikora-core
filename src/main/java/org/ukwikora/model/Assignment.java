@@ -108,11 +108,6 @@ public class Assignment extends Step {
     }
 
     @Override
-    public int getLevel() {
-        return getExpression().getLevel();
-    }
-
-    @Override
     public void getSequences(List<Sequence> sequences) {
         getExpression().getSequences(sequences);
     }
