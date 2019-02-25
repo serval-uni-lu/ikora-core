@@ -142,14 +142,14 @@ public class KeywordsEvolutionSerializer extends JsonSerializer<EvolutionResults
 
     private int getConnectivity(Statement statement){
         ConnectivityVisitor visitor = new ConnectivityVisitor();
-        statement.accept(visitor);
+        statement.accept(visitor, new PathMemory());
 
         return visitor.getConnectivity();
     }
 
     private int getSize(Statement statement){
         SizeVisitor visitor = new SizeVisitor();
-        statement.accept(visitor);
+        statement.accept(visitor, new PathMemory());
 
         return visitor.getSize();
     }

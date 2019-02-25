@@ -1,6 +1,7 @@
 package org.ukwikora.model;
 
 import org.ukwikora.analytics.Action;
+import org.ukwikora.analytics.VisitorMemory;
 import org.ukwikora.utils.LevenshteinDistance;
 
 import javax.annotation.Nonnull;
@@ -147,7 +148,7 @@ public class ForLoop extends Step {
     }
 
     @Override
-    public void accept(StatementVisitor visitor){
-        visitor.visit(this);
+    public void accept(StatementVisitor visitor, VisitorMemory memory){
+        visitor.visit(this, memory);
     }
 }

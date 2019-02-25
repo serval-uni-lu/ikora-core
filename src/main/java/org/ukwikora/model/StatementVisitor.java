@@ -1,15 +1,15 @@
 package org.ukwikora.model;
 
-public interface StatementVisitor {
-    void visit(TestCase testCase);
-    void visit(UserKeyword keyword);
-    void visit(KeywordCall call);
-    void visit(Assignment assignment);
-    void visit(ForLoop forLoop);
-    void visit(LibraryKeyword keyword);
-    void visit(ScalarVariable scalar);
-    void visit(DictionaryVariable dictionary);
-    void visit(ListVariable list);
+import org.ukwikora.analytics.VisitorMemory;
 
-    boolean isAcceptable(Statement statement);
+public interface StatementVisitor {
+    void visit(TestCase testCase, VisitorMemory memory);
+    void visit(UserKeyword keyword, VisitorMemory memory);
+    void visit(KeywordCall call, VisitorMemory memory);
+    void visit(Assignment assignment, VisitorMemory memory);
+    void visit(ForLoop forLoop, VisitorMemory memory);
+    void visit(LibraryKeyword keyword, VisitorMemory memory);
+    void visit(ScalarVariable scalar, VisitorMemory memory);
+    void visit(DictionaryVariable dictionary, VisitorMemory memory);
+    void visit(ListVariable list, VisitorMemory memory);
 }

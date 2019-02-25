@@ -1,5 +1,7 @@
 package org.ukwikora.model;
 
+import org.ukwikora.analytics.VisitorMemory;
+
 public class TestCase extends KeywordDefinition {
     private Step setup;
     private Step tearDown;
@@ -21,7 +23,7 @@ public class TestCase extends KeywordDefinition {
     }
 
     @Override
-    public void accept(StatementVisitor visitor){
-        visitor.visit(this);
+    public void accept(StatementVisitor visitor, VisitorMemory memory){
+        visitor.visit(this, memory);
     }
 }

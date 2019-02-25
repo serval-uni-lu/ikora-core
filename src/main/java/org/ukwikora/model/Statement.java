@@ -1,6 +1,8 @@
 package org.ukwikora.model;
 
 
+import org.ukwikora.analytics.VisitorMemory;
+
 import javax.annotation.Nonnull;
 import java.util.Set;
 
@@ -17,7 +19,7 @@ public interface Statement extends Differentiable {
 
     Value getNameAsValue();
 
-    void accept(StatementVisitor visitor);
+    void accept(StatementVisitor visitor, VisitorMemory memory);
 
     boolean matches(@Nonnull String name);
 

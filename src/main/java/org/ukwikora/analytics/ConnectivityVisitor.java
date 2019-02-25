@@ -1,18 +1,14 @@
 package org.ukwikora.analytics;
 
 import org.ukwikora.model.*;
-import org.ukwikora.utils.VisitorUtils;
 
-import java.util.HashSet;
 import java.util.Set;
 
 public class ConnectivityVisitor implements StatementVisitor {
     private int connectivity;
-    private Set<Statement> memory;
 
     public ConnectivityVisitor() {
         this.connectivity = 0;
-        this.memory = new HashSet<>();
     }
 
     public int getConnectivity(){
@@ -20,54 +16,49 @@ public class ConnectivityVisitor implements StatementVisitor {
     }
 
     @Override
-    public void visit(TestCase testCase) {
+    public void visit(TestCase testCase, VisitorMemory memory) {
 
     }
 
     @Override
-    public void visit(UserKeyword keyword) {
+    public void visit(UserKeyword keyword, VisitorMemory memory) {
         connectivity += keyword.getDependencies().size() > 0 ? 1 : 0;
-        VisitorUtils.traverseDependencies(this, keyword);
+        VisitorUtils.traverseDependencies(this, keyword, memory);
     }
 
     @Override
-    public void visit(LibraryKeyword keyword) {
+    public void visit(LibraryKeyword keyword, VisitorMemory memory) {
         connectivity += keyword.getDependencies().size() > 0 ? 1 : 0;
-        VisitorUtils.traverseDependencies(this, keyword);
+        VisitorUtils.traverseDependencies(this, keyword, memory);
     }
 
     @Override
-    public void visit(KeywordCall call) {
-        VisitorUtils.traverseDependencies(this, call);
+    public void visit(KeywordCall call, VisitorMemory memory) {
+        VisitorUtils.traverseDependencies(this, call, memory);
     }
 
     @Override
-    public void visit(Assignment assignment) {
-        VisitorUtils.traverseDependencies(this, assignment);
+    public void visit(Assignment assignment, VisitorMemory memory) {
+        VisitorUtils.traverseDependencies(this, assignment, memory);
     }
 
     @Override
-    public void visit(ForLoop forLoop) {
-        VisitorUtils.traverseDependencies(this, forLoop);
+    public void visit(ForLoop forLoop, VisitorMemory memory) {
+        VisitorUtils.traverseDependencies(this, forLoop, memory);
     }
 
     @Override
-    public void visit(ScalarVariable scalar) {
-        VisitorUtils.traverseDependencies(this, scalar);
+    public void visit(ScalarVariable scalar, VisitorMemory memory) {
+        VisitorUtils.traverseDependencies(this, scalar, memory);
     }
 
     @Override
-    public void visit(DictionaryVariable dictionary) {
-        VisitorUtils.traverseDependencies(this, dictionary);
+    public void visit(DictionaryVariable dictionary, VisitorMemory memory) {
+        VisitorUtils.traverseDependencies(this, dictionary, memory);
     }
 
     @Override
-    public void visit(ListVariable list) {
-        VisitorUtils.traverseDependencies(this, list);
-    }
-
-    @Override
-    public boolean isAcceptable(Statement statement) {
-        return memory.add(statement);
+    public void visit(ListVariable list, VisitorMemory memory) {
+        VisitorUtils.traverseDependencies(this, list, memory);
     }
 }

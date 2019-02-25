@@ -1,6 +1,7 @@
 package org.ukwikora.model;
 
 import org.ukwikora.analytics.Action;
+import org.ukwikora.analytics.VisitorMemory;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -46,7 +47,7 @@ public class ListVariable extends Variable {
     }
 
     @Override
-    public void accept(StatementVisitor visitor){
-        visitor.visit(this);
+    public void accept(StatementVisitor visitor, VisitorMemory memory){
+        visitor.visit(this, memory);
     }
 }

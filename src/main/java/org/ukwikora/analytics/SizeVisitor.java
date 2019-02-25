@@ -1,18 +1,12 @@
 package org.ukwikora.analytics;
 
 import org.ukwikora.model.*;
-import org.ukwikora.utils.VisitorUtils;
-
-import java.util.HashSet;
-import java.util.Set;
 
 public class SizeVisitor implements StatementVisitor {
     private int size;
-    private Set<Statement> memory;
 
     public SizeVisitor(){
         size = 0;
-        memory = new HashSet<>();
     }
 
     public int getSize(){
@@ -20,24 +14,24 @@ public class SizeVisitor implements StatementVisitor {
     }
 
     @Override
-    public void visit(TestCase testCase) {
+    public void visit(TestCase testCase, VisitorMemory memory) {
         ++size;
-        VisitorUtils.traverseSteps(this, testCase);
+        VisitorUtils.traverseSteps(this, testCase, memory);
     }
 
     @Override
-    public void visit(UserKeyword keyword) {
+    public void visit(UserKeyword keyword, VisitorMemory memory) {
         ++size;
-        VisitorUtils.traverseSteps(this, keyword);
+        VisitorUtils.traverseSteps(this, keyword, memory);
     }
 
     @Override
-    public void visit(LibraryKeyword keyword) {
+    public void visit(LibraryKeyword keyword, VisitorMemory memory) {
         ++size;
     }
 
     @Override
-    public void visit(KeywordCall call) {
+    public void visit(KeywordCall call, VisitorMemory memory) {
         if(call.getKeyword() == null){
             return;
         }
@@ -48,42 +42,37 @@ public class SizeVisitor implements StatementVisitor {
                     continue;
                 }
 
-                step.accept(this);
+                step.accept(this, memory.getUpdated(step));
             }
         }
 
-        call.getKeyword().accept(this);
+        call.getKeyword().accept(this, memory.getUpdated(call.getKeyword()));
     }
 
     @Override
-    public void visit(Assignment assignment) {
+    public void visit(Assignment assignment, VisitorMemory memory) {
         if(assignment.getExpression() != null && assignment.getExpression().getKeyword() != null){
-            assignment.getExpression().getKeyword().accept(this);
+            assignment.getExpression().getKeyword().accept(this, memory);
         }
     }
 
     @Override
-    public void visit(ForLoop forLoop) {
-        VisitorUtils.traverseForLoopSteps(this, forLoop);
+    public void visit(ForLoop forLoop, VisitorMemory memory) {
+        VisitorUtils.traverseForLoopSteps(this, forLoop, memory);
     }
 
     @Override
-    public void visit(ScalarVariable scalar) {
-
-    }
-
-    @Override
-    public void visit(DictionaryVariable dictionary) {
+    public void visit(ScalarVariable scalar, VisitorMemory memory) {
 
     }
 
     @Override
-    public void visit(ListVariable list) {
+    public void visit(DictionaryVariable dictionary, VisitorMemory memory) {
 
     }
 
     @Override
-    public boolean isAcceptable(Statement statement) {
-        return memory.add(statement);
+    public void visit(ListVariable list, VisitorMemory memory) {
+
     }
 }

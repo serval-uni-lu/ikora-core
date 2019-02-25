@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ukwikora.analytics.FindSuiteVisitor;
 import org.ukwikora.analytics.FindTestCaseVisitor;
+import org.ukwikora.analytics.PathMemory;
 import org.ukwikora.model.*;
 
 import java.util.*;
@@ -213,14 +214,14 @@ class Linker {
 
         Set<TestCase> getTestCases(){
             FindTestCaseVisitor visitor = new FindTestCaseVisitor();
-            this.keyword.accept(visitor);
+            this.keyword.accept(visitor, new PathMemory());
 
             return visitor.getTestCases();
         }
 
         Set<String> getSuites(){
             FindSuiteVisitor visitor = new FindSuiteVisitor();
-            this.keyword.accept(visitor);
+            this.keyword.accept(visitor, new PathMemory());
 
             return visitor.getSuites();
         }

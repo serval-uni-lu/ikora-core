@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ukwikora.analytics.FindSuiteVisitor;
 import org.ukwikora.analytics.FindTestCaseVisitor;
+import org.ukwikora.analytics.PathMemory;
 import org.ukwikora.libraries.builtin.SetGlobalVariable;
 import org.ukwikora.libraries.builtin.SetSuiteVariable;
 import org.ukwikora.libraries.builtin.SetTestVariable;
@@ -39,7 +40,7 @@ public class StaticRuntime extends Runtime {
             call.getParameter(0, false).ifPresent(value ->
                     createVariable(value).ifPresent(variable -> {
                         FindSuiteVisitor visitor = new FindSuiteVisitor();
-                        call.accept(visitor);
+                        call.accept(visitor, new PathMemory());
 
                         for(String suite: visitor.getSuites()){
                             this.scope.setSuiteScope(suite, variable);
@@ -51,7 +52,7 @@ public class StaticRuntime extends Runtime {
             call.getParameter(0, false).ifPresent(value ->
                     createVariable(value).ifPresent(variable -> {
                         FindTestCaseVisitor visitor = new FindTestCaseVisitor();
-                        call.accept(visitor);
+                        call.accept(visitor, new PathMemory());
 
                         for(TestCase testCase: visitor.getTestCases()){
                             this.scope.setTestScope(testCase, variable);
