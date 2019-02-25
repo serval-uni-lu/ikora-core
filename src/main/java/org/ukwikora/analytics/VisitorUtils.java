@@ -26,4 +26,28 @@ public class VisitorUtils {
             }
         }
     }
+
+    public static void traverseAssignmentCall(StatementVisitor visitor, Assignment assignment, VisitorMemory memory){
+        if(assignment.getExpression() != null && assignment.getExpression().getKeyword() != null){
+            assignment.getExpression().getKeyword().accept(visitor, memory);
+        }
+    }
+
+    public static void traverseKeywordCall(StatementVisitor visitor, KeywordCall call, VisitorMemory memory){
+        if(call.getKeyword() == null){
+            return;
+        }
+
+        if(call.hasKeywordParameters()){
+            for(Step step: call.getKeywordParameter()){
+                if(step == null){
+                    continue;
+                }
+
+                step.accept(visitor, memory.getUpdated(step));
+            }
+        }
+
+        call.getKeyword().accept(visitor, memory.getUpdated(call.getKeyword()));
+    }
 }
