@@ -129,7 +129,7 @@ public class Compiler {
         Linker.link(runtime);
     }
 
-    private static Project parse(String filePath) {
+    private static Project parse(String filePath) throws Exception {
         return ProjectParser.parse(filePath);
     }
 }
