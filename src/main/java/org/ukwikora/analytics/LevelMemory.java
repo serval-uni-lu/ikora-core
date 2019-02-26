@@ -22,12 +22,13 @@ public class LevelMemory extends PathMemory {
         }
 
         LevelMemory updated = new LevelMemory(this);
+        updated.add(statement);
         updated.level++;
 
         return updated;
     }
 
     public int getLevel() {
-        return level;
+        return level - 1;
     }
 }

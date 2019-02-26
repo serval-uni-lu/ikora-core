@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.ukwikora.Globals;
 import org.ukwikora.model.Project;
+import org.ukwikora.model.TestCase;
 import org.ukwikora.model.UserKeyword;
 
 import java.util.Map;
@@ -57,11 +58,32 @@ public class ProjectStatisticsTest {
 
         int connectivity3 = userKeywordConnectivity.getOrDefault(3,0);
         assertEquals(1, connectivity3);
+
+        Map<Integer, Integer> testCaseConnectivity = statistics.getConnectivityDistribution(TestCase.class);
+        assertFalse(testCaseConnectivity.isEmpty());
+
+        connectivity0 = testCaseConnectivity.getOrDefault(0,0);
+        assertEquals(1, connectivity0);
     }
 
     @Test
     public void checkLevelDistributionWithSimpleProject(){
         Map<Integer, Integer> userKeywordLevels = statistics.getLevelDistribution(UserKeyword.class);
         assertFalse(userKeywordLevels.isEmpty());
+
+        int level1 = userKeywordLevels.getOrDefault(1,0);
+        assertEquals(5, level1);
+
+        int level2 = userKeywordLevels.getOrDefault(2,0);
+        assertEquals(3, level2);
+
+        int level3 = userKeywordLevels.getOrDefault(3,0);
+        assertEquals(1, level3);
+
+        Map<Integer, Integer> testCaseLevel = statistics.getLevelDistribution(TestCase.class);
+        assertFalse(userKeywordLevels.isEmpty());
+
+        int level4 = testCaseLevel.getOrDefault(4,0);
+        assertEquals(1, level4);
     }
 }

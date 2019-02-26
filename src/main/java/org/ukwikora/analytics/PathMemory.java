@@ -19,9 +19,13 @@ public class PathMemory implements VisitorMemory{
     @Override
     public VisitorMemory getUpdated(Statement statement) {
         PathMemory updated = new PathMemory(this);
-        updated.visited.add(statement);
+        updated.add(statement);
 
         return updated;
+    }
+
+    protected void add(Statement statement){
+        visited.add(statement);
     }
 
     @Override
