@@ -10,28 +10,23 @@ import org.ukwikora.model.TestCaseFile;
 import java.io.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 class ProjectParser {
     private ProjectParser(){}
 
-    static public Project parse(String filePath){
+    static public Project parse(String filePath) throws Exception {
         Project project = new Project(filePath);
+        File file = new File(filePath);
 
-        try {
-            File file = new File(filePath);
-
-            if(file.isDirectory()){
-                file = addRobotFiles(file, project);
-            }
-
-            parseFiles(file, project);
-            resolveResources(project);
-
-        } catch (Exception e) {
-            e.printStackTrace();
+        if(file.isDirectory()){
+            file = addRobotFiles(file, project);
         }
+
+        parseFiles(file, project);
+        resolveResources(project);
 
         return project;
     }
@@ -89,6 +84,10 @@ class ProjectParser {
     static private List<File> getIgnoreList(Project project){
         Configuration configuration = Configuration.getInstance();
         Plugin plugin = configuration.getPlugin("project analytics");
+
+        if(plugin == null){
+            return Collections.emptyList();
+        }
 
         List<String> paths = (List<String>) plugin.getAdditionalProperty("exclude folders", new ArrayList<String>());
         List<File> ignoreList = new ArrayList<>();
