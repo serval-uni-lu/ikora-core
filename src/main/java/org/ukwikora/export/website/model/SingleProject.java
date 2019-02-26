@@ -63,7 +63,7 @@ public class SingleProject {
     }
 
     private BarChart createDepthChart(ProjectStatistics statistics) throws IOException {
-        Map<Integer, Integer> depth = statistics.getDepthDistribution(UserKeyword.class);
+        Map<Integer, Integer> depth = statistics.getLevelDistribution(UserKeyword.class);
 
         BarChart chart = new BarChart(
                 String.format("%s-depth-chart", getId()),

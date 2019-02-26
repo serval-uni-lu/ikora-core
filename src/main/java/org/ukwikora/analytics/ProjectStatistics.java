@@ -8,7 +8,7 @@ import java.util.*;
 
 public class ProjectStatistics {
     enum Metric{
-        Size, Connectivity, Sequence, Depth, BranchIndex
+        Size, Connectivity, Sequence, Level, BranchIndex
     }
 
     final private Project project;
@@ -66,8 +66,8 @@ public class ProjectStatistics {
         return getDistribution(type, Metric.Sequence);
     }
 
-    public <T extends KeywordDefinition> Map<Integer, Integer> getDepthDistribution(Class<T> type){
-        return getDistribution(type, Metric.Depth);
+    public <T extends KeywordDefinition> Map<Integer, Integer> getLevelDistribution(Class<T> type){
+        return getDistribution(type, Metric.Level);
     }
 
     <T extends KeywordDefinition> Map<Integer, Integer> getBranchIndex(Class<T> type){
@@ -84,7 +84,7 @@ public class ProjectStatistics {
                 case Size: value = getSize(keyword); break;
                 case Connectivity: value = getConnectivity(keyword); break;
                 case Sequence: value = keyword.getMaxSequenceSize(); break;
-                case Depth: value = getLevel(keyword); break;
+                case Level: value = getLevel(keyword); break;
                 case BranchIndex: value = keyword.getBranchIndex(); break;
             }
 

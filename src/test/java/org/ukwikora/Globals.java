@@ -1,5 +1,8 @@
 package org.ukwikora;
 
+import org.ukwikora.compiler.Compiler;
+import org.ukwikora.model.Project;
+
 import java.io.File;
 import java.net.URL;
 import java.nio.file.Paths;
@@ -22,5 +25,10 @@ public class Globals {
         }
 
         return file;
+    }
+
+    public static Project compileProject(String resourcesPath) {
+        File projectFolder = getResourceFile(resourcesPath);
+        return Compiler.compile(projectFolder.getAbsolutePath());
     }
 }

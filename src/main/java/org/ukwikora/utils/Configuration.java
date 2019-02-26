@@ -22,7 +22,7 @@ public class Configuration {
     @JsonProperty("logger level")
     private String loggerLevel;
     @JsonIgnore
-    private Map<String, Plugin> plugins = null;
+    private Map<String, Plugin> plugins = new HashMap<>();
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<>();
     @JsonIgnore
