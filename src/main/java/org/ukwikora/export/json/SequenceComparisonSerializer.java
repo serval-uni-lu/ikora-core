@@ -151,7 +151,7 @@ public class SequenceComparisonSerializer extends JsonSerializer<EvolutionResult
             return "0";
         }
 
-        int depth = ProjectStatistics.getLevel((KeywordDefinition)last);
+        int depth = KeywordStatistics.getLevel((KeywordDefinition)last);
 
         return String.valueOf(depth);
     }

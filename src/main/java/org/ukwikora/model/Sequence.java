@@ -8,13 +8,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Sequence implements Differentiable {
-    private List<Keyword> steps;
+    private List<Step> steps;
 
     public Sequence(){
         this.steps = new ArrayList<>();
     }
 
-    public void addStep(Keyword step){
+    public void addStep(Step step){
         steps.add(step);
     }
 

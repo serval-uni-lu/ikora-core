@@ -50,8 +50,8 @@ public class EvolutionAnalyzer {
                 TestCase testCase1 = getElement(testCasePair, project1);
                 TestCase testCase2 = getElement(testCasePair, project2);
 
-                Sequence sequence1 = testCase1 != null ? testCase1.getMaxSequence() : null;
-                Sequence sequence2 = testCase2 != null ? testCase2.getMaxSequence() : null;
+                Sequence sequence1 = testCase1 != null ? KeywordStatistics.getSequence(testCase1) : null;
+                Sequence sequence2 = testCase2 != null ? KeywordStatistics.getSequence(testCase2) : null;
 
                 results.addDifference(project1, Difference.of(testCase1, testCase2), Difference.of(sequence1, sequence2));
 

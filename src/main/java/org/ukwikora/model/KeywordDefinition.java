@@ -134,44 +134,6 @@ public abstract class KeywordDefinition implements Keyword, Iterable<Step> {
 
     }
 
-    public List<Sequence> getSequences() {
-        List<Sequence> sequences = new ArrayList<>();
-        sequences.add(new Sequence());
-
-        getSequences(sequences);
-
-        return sequences;
-    }
-
-    public int getMaxSequenceSize(){
-        Sequence maxSequence = getMaxSequence();
-
-        if(maxSequence == null){
-            return 0;
-        }
-
-        return maxSequence.size();
-    }
-
-    public Sequence getMaxSequence() {
-        Sequence maxSequence = null;
-
-        for(Sequence sequence: getSequences()){
-            if(maxSequence == null){
-                maxSequence = sequence;
-            }
-            else if (maxSequence.size() < sequence.size()){
-                maxSequence = sequence;
-            }
-        }
-
-        return maxSequence;
-    }
-
-    public int getBranchIndex(){
-        return (int)Math.round(Math.log(getSequences().size()) / Math.log(2));
-    }
-
     void getSequences(List<Sequence> sequences){
         for(Step step: steps){
             step.getSequences(sequences);

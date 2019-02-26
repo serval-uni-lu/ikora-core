@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import org.ukwikora.analytics.*;
-import org.ukwikora.model.Statement;
 import org.ukwikora.model.UserKeyword;
 import org.ukwikora.utils.StringUtils;
 import org.ukwikora.model.KeywordDefinition;
@@ -84,11 +83,11 @@ public class KeywordsEvolutionSerializer extends JsonSerializer<EvolutionResults
         jsonGenerator.writeNumberField("lines of code", keyword.getLoc());
         jsonGenerator.writeNumberField("document length", getDocumentationLength(keyword));
         jsonGenerator.writeNumberField("number steps", keyword.getSteps().size());
-        jsonGenerator.writeNumberField("sequence size", keyword.getMaxSequenceSize());
-        jsonGenerator.writeNumberField("number branches", keyword.getBranchIndex());
-        jsonGenerator.writeNumberField("size", ProjectStatistics.getSize(keyword));
-        jsonGenerator.writeNumberField("depth", ProjectStatistics.getLevel(keyword));
-        jsonGenerator.writeNumberField("connectivity", ProjectStatistics.getConnectivity(keyword));
+        jsonGenerator.writeNumberField("sequence size", KeywordStatistics.getSequenceSize(keyword));
+        //jsonGenerator.writeNumberField("number branches", keyword.getBranchIndex());
+        jsonGenerator.writeNumberField("size", KeywordStatistics.getSize(keyword));
+        jsonGenerator.writeNumberField("depth", KeywordStatistics.getLevel(keyword));
+        jsonGenerator.writeNumberField("connectivity", KeywordStatistics.getConnectivity(keyword));
 
         writeChanges(jsonGenerator, difference);
 

@@ -86,4 +86,22 @@ public class ProjectStatisticsTest {
         int level4 = testCaseLevel.getOrDefault(4,0);
         assertEquals(1, level4);
     }
+
+    @Test
+    public void checkSequenceDistributionSimpleProject(){
+        Map<Integer, Integer> userKeywordSequence = statistics.getSequenceDistribution(UserKeyword.class);
+        assertFalse(userKeywordSequence.isEmpty());
+
+        int sequence1 = userKeywordSequence.getOrDefault(1,0);
+        assertEquals(4, sequence1);
+
+        int sequence2 = userKeywordSequence.getOrDefault(2,0);
+        assertEquals(2, sequence2);
+
+        int sequence3 = userKeywordSequence.getOrDefault(3,0);
+        assertEquals(1, sequence3);
+
+        int sequence4 = userKeywordSequence.getOrDefault(4,0);
+        assertEquals(2, sequence4);
+    }
 }
