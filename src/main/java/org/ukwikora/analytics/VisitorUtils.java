@@ -29,7 +29,7 @@ public class VisitorUtils {
 
     public static void traverseAssignmentCall(StatementVisitor visitor, Assignment assignment, VisitorMemory memory){
         if(assignment.getExpression() != null && assignment.getExpression().getKeyword() != null){
-            assignment.getExpression().getKeyword().accept(visitor, memory);
+            assignment.getExpression().getKeyword().accept(visitor, memory.getUpdated(assignment));
         }
     }
 

@@ -22,7 +22,7 @@ public class SequenceVisitor implements StatementVisitor {
 
     @Override
     public void visit(KeywordCall call, VisitorMemory memory) {
-        if(LibraryKeyword.class.isAssignableFrom(call.getKeyword().getClass())){
+        if(call.getKeyword() != null && LibraryKeyword.class.isAssignableFrom(call.getKeyword().getClass())){
             sequence.addStep(call);
         }
 
