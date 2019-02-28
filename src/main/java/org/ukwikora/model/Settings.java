@@ -6,6 +6,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Settings {
     private List<Resources> resourcesTable;
@@ -36,6 +38,11 @@ public class Settings {
 
     public List<Resources> getExternalResources() {
         return externalResourcesTable;
+    }
+
+    public List<Resources> getAllResources() {
+        return Stream.concat(resourcesTable.stream(), externalResourcesTable.stream())
+                .collect(Collectors.toList());
     }
 
     public List<Library> getLibraries() {
@@ -82,5 +89,4 @@ public class Settings {
     public void addDefaultTag(String defaultTag){
         defaultTags.add(defaultTag);
     }
-
 }
