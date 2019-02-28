@@ -12,21 +12,21 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 class Linker {
-    private final static Logger logger = LogManager.getLogger(Linker.class);
+    private static final Logger logger = LogManager.getLogger(Linker.class);
 
-    final private StaticRuntime runtime;
+    private final StaticRuntime runtime;
 
     private Linker(StaticRuntime runtime) {
         this.runtime = runtime;
     }
 
-    static final private Pattern gherkinPattern;
+    private static final Pattern gherkinPattern;
 
     static {
         gherkinPattern =  Pattern.compile("^(\\s*)(Given|When|Then|And|But)", Pattern.CASE_INSENSITIVE);
     }
 
-    static public void link(StaticRuntime runtime) throws Exception {
+    public static void link(StaticRuntime runtime) throws Exception {
         Linker linker = new Linker(runtime);
         linker.link();
     }

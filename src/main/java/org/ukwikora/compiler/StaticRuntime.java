@@ -16,7 +16,7 @@ import java.util.Set;
 
 
 public class StaticRuntime extends Runtime {
-    private final static Logger logger = LogManager.getLogger(StaticRuntime.class);
+    private static final Logger logger = LogManager.getLogger(StaticRuntime.class);
 
     public StaticRuntime(Project project) {
         super(project);

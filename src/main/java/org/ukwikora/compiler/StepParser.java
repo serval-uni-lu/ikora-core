@@ -75,7 +75,7 @@ class StepParser {
         return assignment;
     }
 
-    static private Step parseKeywordCall(LineReader reader) throws IOException {
+    private static Step parseKeywordCall(LineReader reader) throws IOException {
 
         String[] tokens = LexerUtils.tokenize(reader.getCurrent().getText());
         tokens = LexerUtils.removeIndent(tokens);

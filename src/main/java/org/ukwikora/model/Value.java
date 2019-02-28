@@ -16,10 +16,10 @@ public class Value implements Differentiable {
         isVariable, hasVariable, findVariable
     }
 
-    static private Pattern isVariablePattern;
-    static private Pattern hasVariablePattern;
-    static private Pattern findVariablePattern;
-    static private Pattern escapePattern;
+    private static Pattern isVariablePattern;
+    private static Pattern hasVariablePattern;
+    private static Pattern findVariablePattern;
+    private static Pattern escapePattern;
 
     static {
         isVariablePattern = Pattern.compile("^(([@$&])\\{)(.*?)(})$");
@@ -73,7 +73,7 @@ public class Value implements Differentiable {
         return matcher.matches();
     }
 
-    static public boolean hasVariable(String text) {
+    public static boolean hasVariable(String text) {
         Value value = new Value(text);
         return value.hasVariable();
     }

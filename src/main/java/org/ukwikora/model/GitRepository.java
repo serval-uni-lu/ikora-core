@@ -23,7 +23,7 @@ import java.time.ZoneId;
 import java.util.*;
 
 public class GitRepository {
-    private final static Logger logger = LogManager.getLogger(GitRepository.class);
+    private static final Logger logger = LogManager.getLogger(GitRepository.class);
 
     private Git git;
     private String url;

@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ProjectAnalyticsCli implements CommandRunner {
-    private final static Logger logger = LogManager.getLogger(ProjectAnalyticsCli.class);
+    private static final Logger logger = LogManager.getLogger(ProjectAnalyticsCli.class);
 
     @Override
     public void run() throws Exception {

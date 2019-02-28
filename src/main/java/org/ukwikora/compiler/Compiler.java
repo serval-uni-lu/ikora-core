@@ -17,9 +17,9 @@ import java.util.List;
 import java.util.Set;
 
 public class Compiler {
-    private final static Logger logger = LogManager.getLogger(Compiler.class);
+    private static final Logger logger = LogManager.getLogger(Compiler.class);
 
-    static public List<Project> compile(String[] paths){
+    public static List<Project> compile(String[] paths){
         List<Project> projects = new ArrayList<>();
 
         logger.info("Start compilation...");

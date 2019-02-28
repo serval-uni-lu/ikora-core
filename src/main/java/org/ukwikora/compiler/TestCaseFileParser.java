@@ -8,9 +8,9 @@ import java.io.File;
 import java.io.IOException;
 
 class TestCaseFileParser {
-    private final static Logger logger = LogManager.getLogger(TestCaseFileParser.class);
+    private static final Logger logger = LogManager.getLogger(TestCaseFileParser.class);
 
-    static public void parse(File file, Project project) {
+    public static void parse(File file, Project project) {
         LineReader reader = null;
 
         try {
@@ -73,19 +73,19 @@ class TestCaseFileParser {
         testCaseFile.setName(name);
     }
 
-    static private boolean isSettings(String line){
+    private static boolean isSettings(String line){
         return LexerUtils.isBlock(line, "setting(s?)");
     }
 
-    static private boolean isTestCases(String line){
+    private static boolean isTestCases(String line){
         return LexerUtils.isBlock(line, "test case(s?)");
     }
 
-    static private boolean isKeywords(String line){
+    private static boolean isKeywords(String line){
         return LexerUtils.isBlock(line, "keyword(s?)");
     }
 
-    static private boolean isVariable(String line){
+    private static boolean isVariable(String line){
         return LexerUtils.isBlock(line, "variable(s?)");
     }
 }

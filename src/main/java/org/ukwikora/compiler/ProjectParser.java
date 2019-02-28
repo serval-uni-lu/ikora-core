@@ -17,7 +17,7 @@ import java.util.Map;
 class ProjectParser {
     private ProjectParser(){}
 
-    static public Project parse(String filePath) throws Exception {
+    public static Project parse(String filePath) throws Exception {
         Project project = new Project(filePath);
         File file = new File(filePath);
 
@@ -46,7 +46,7 @@ class ProjectParser {
         return getNextNotParsedFile(project);
     }
 
-    static private void parseFiles(File file, Project project){
+    private static void parseFiles(File file, Project project){
         if(file == null){
             return;
         }
@@ -56,7 +56,7 @@ class ProjectParser {
         parseFiles(getNextNotParsedFile(project), project);
     }
 
-    static private void resolveResources(Project project) throws Exception {
+    private static void resolveResources(Project project) throws Exception {
         for(TestCaseFile testCaseFile: project.getTestCaseFiles()) {
             for (Resources resources: testCaseFile.getSettings().getResources()) {
                 String name = project.generateFileName(resources.getFile());
@@ -71,7 +71,7 @@ class ProjectParser {
         }
     }
 
-    static private File getNextNotParsedFile(Project project){
+    private static File getNextNotParsedFile(Project project){
         for (Map.Entry<String, TestCaseFile> file: project.getFiles().entrySet()){
             if(file.getValue() == null){
                 return new File(project.getRootFolder(), file.getKey());
@@ -81,7 +81,7 @@ class ProjectParser {
         return null;
     }
 
-    static private List<File> getIgnoreList(Project project){
+    private static List<File> getIgnoreList(Project project){
         Configuration configuration = Configuration.getInstance();
         Plugin plugin = configuration.getPlugin("project analytics");
 
@@ -99,7 +99,7 @@ class ProjectParser {
         return ignoreList;
     }
 
-    static private boolean isIgnored(File file, List<File> ignoreList){
+    private static boolean isIgnored(File file, List<File> ignoreList){
         for(File ignoreFolder: ignoreList){
             if(isInSubDirectory(ignoreFolder, file)){
                 return true;

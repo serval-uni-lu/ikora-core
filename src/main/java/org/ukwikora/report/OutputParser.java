@@ -22,7 +22,7 @@ public class OutputParser {
         factory = DocumentBuilderFactory.newInstance();
     }
 
-    static public ReportAnalyzer parse(String reportFolderPath, String gitUrl, String branch, String username, String password) throws Exception {
+    public static ReportAnalyzer parse(String reportFolderPath, String gitUrl, String branch, String username, String password) throws Exception {
         List<File> xmlFiles = getXmlPaths(reportFolderPath);
 
         GitRepository gitRepository = new GitRepository(gitUrl, branch, username, password);

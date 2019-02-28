@@ -11,7 +11,7 @@ import java.util.Optional;
 class VariableTableParser {
     private VariableTableParser() {}
 
-    static public StatementTable<Variable> parse(LineReader reader) throws IOException {
+    public static StatementTable<Variable> parse(LineReader reader) throws IOException {
         StatementTable<Variable> variableTable = new StatementTable<>();
 
         reader.readLine();

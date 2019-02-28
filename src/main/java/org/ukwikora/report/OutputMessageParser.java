@@ -7,9 +7,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class OutputMessageParser {
-    final static private Set<EasyPair<String, String>> ignoreSet;
-    final static private Map<EasyPair<String, String>, EasyPair<String, Integer>> successDictionary;
-    final static private Map<EasyPair<String, String>, EasyPair<String, Integer>> errorDictionary;
+    private static final Set<EasyPair<String, String>> ignoreSet;
+    private static final Map<EasyPair<String, String>, EasyPair<String, Integer>> successDictionary;
+    private static final Map<EasyPair<String, String>, EasyPair<String, Integer>> errorDictionary;
 
     static {
         ignoreSet = initializeIgnoreSet();

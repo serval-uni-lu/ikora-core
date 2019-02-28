@@ -30,7 +30,7 @@ public class Configuration {
     @JsonIgnore
     private static File configurationFolder;
     @JsonIgnore
-    private final static Logger logger = LogManager.getLogger(Configuration.class);
+    private static final Logger logger = LogManager.getLogger(Configuration.class);
 
     private Configuration(){
         verbose = true;

@@ -8,7 +8,7 @@ import java.io.IOException;
 class KeywordTableParser {
     private KeywordTableParser() {}
 
-    static public StatementTable<UserKeyword> parse(LineReader reader) throws IOException {
+    public static StatementTable<UserKeyword> parse(LineReader reader) throws IOException {
         StatementTable<UserKeyword> statementTable = new StatementTable<>();
 
         reader.readLine();

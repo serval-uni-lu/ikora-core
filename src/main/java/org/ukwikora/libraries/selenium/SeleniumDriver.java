@@ -7,7 +7,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 
 public class SeleniumDriver {
-    static public final String name = "Selenium2";
+    public static final String name = "Selenium2";
 
     public enum Drivers{
         Firefox, Chrome, Unknown

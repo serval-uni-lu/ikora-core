@@ -13,7 +13,7 @@ import org.ukwikora.utils.Plugin;
 import java.io.*;
 
 public class EvolutionAnalyticsCli implements CommandRunner {
-    private final static Logger logger = LogManager.getLogger(EvolutionAnalyticsCli.class);
+    private static final Logger logger = LogManager.getLogger(EvolutionAnalyticsCli.class);
 
     @Override
     public void run() throws Exception {

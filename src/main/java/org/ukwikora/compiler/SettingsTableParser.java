@@ -12,7 +12,7 @@ import java.util.ArrayList;
 class SettingsTableParser {
     private SettingsTableParser(){ }
 
-    static public Settings parse(LineReader reader, TestCaseFile testCaseFile) throws IOException {
+    public static Settings parse(LineReader reader, TestCaseFile testCaseFile) throws IOException {
         Settings settings = new Settings();
         settings.setFile(testCaseFile);
 

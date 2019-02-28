@@ -6,9 +6,9 @@ import org.ukwikora.model.*;
 import org.ukwikora.utils.LevenshteinDistance;
 
 class CloneDetection<T extends Statement> {
-    static private Set<Action.Type> ignoreForTypeI;
-    static private Set<Action.Type> ignoreForTypeII;
-    static private Set<Action.Type> ignoreForTypeIIExtended;
+    private static Set<Action.Type> ignoreForTypeI;
+    private static Set<Action.Type> ignoreForTypeII;
+    private static Set<Action.Type> ignoreForTypeIIExtended;
 
     static {
         Set<Action.Type> typeI = new HashSet<>(4);

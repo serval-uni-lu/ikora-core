@@ -10,7 +10,7 @@ import java.util.Set;
 public class LibraryLoader {
     private LibraryLoader() {}
 
-    static public LibraryResources load() {
+    public static LibraryResources load() {
         Reflections reflections = new Reflections("org.ukwikora.libraries");
         Set<Class<? extends LibraryKeyword>> keywordClasses = reflections.getSubTypesOf(LibraryKeyword.class);
         Set<Class<? extends LibraryVariable>> variableClasses = reflections.getSubTypesOf(LibraryVariable.class);
