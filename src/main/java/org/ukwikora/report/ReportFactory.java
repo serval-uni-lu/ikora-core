@@ -60,11 +60,6 @@ public class ReportFactory {
             String tagName = child.getTagName();
             if(tagName.equalsIgnoreCase("suite")){
                 Suite subSuite = parseSuite(child);
-
-                if(subSuite == null){
-                    continue;
-                }
-
                 suite.addSuite(subSuite);
             }
             else if(tagName.equalsIgnoreCase("test")){
