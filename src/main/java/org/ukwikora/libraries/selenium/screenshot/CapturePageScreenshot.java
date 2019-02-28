@@ -3,8 +3,8 @@ package org.ukwikora.libraries.selenium.screenshot;
 import org.ukwikora.model.LibraryKeyword;
 import org.ukwikora.model.Runtime;
 
-public class CapturePageScreenShot extends LibraryKeyword {
-    public CapturePageScreenShot(){
+public class CapturePageScreenshot extends LibraryKeyword {
+    public CapturePageScreenshot(){
         this.type = Type.Log;
     }
 
