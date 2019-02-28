@@ -3,6 +3,7 @@ package org.ukwikora.model;
 import org.ukwikora.analytics.Action;
 
 import javax.annotation.Nonnull;
+import java.security.InvalidParameterException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -126,7 +127,7 @@ public class Value implements Differentiable {
     }
 
     private static Matcher getVariableMatcher(String value, Matching matching) {
-        Matcher matcher = null;
+        Matcher matcher;
 
         switch (matching) {
             case isVariable:
@@ -138,6 +139,9 @@ public class Value implements Differentiable {
             case findVariable:
                 matcher = findVariablePattern.matcher(value);
                 break;
+
+            default:
+                throw new InvalidParameterException(String.format("Matcher of type %s not supported", matching.name()));
         }
 
         return matcher;

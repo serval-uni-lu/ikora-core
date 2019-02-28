@@ -40,11 +40,6 @@ public class ReportFactory {
 
         for(Element suiteElement: getChildren(robotElement, types)){
             Suite suite = parseSuite(suiteElement);
-
-            if(suite == null){
-                continue;
-            }
-
             report.addSuite(suite);
         }
 
@@ -65,20 +60,10 @@ public class ReportFactory {
             String tagName = child.getTagName();
             if(tagName.equalsIgnoreCase("suite")){
                 Suite subSuite = parseSuite(child);
-
-                if(subSuite == null){
-                    continue;
-                }
-
                 suite.addSuite(subSuite);
             }
             else if(tagName.equalsIgnoreCase("test")){
                 KeywordStatus keyword = parseKeyword(child);
-
-                if(keyword == null){
-                    continue;
-                }
-
                 suite.addKeyword(keyword);
             }
         }

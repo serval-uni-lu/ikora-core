@@ -10,10 +10,6 @@ public abstract class Step implements Keyword {
     private TestCaseFile file;
     private LineRange lineRange;
 
-    public Step() {
-
-    }
-
     public abstract void getSequences(List<Sequence> sequences);
 
     public void setName(@Nonnull String name) {
