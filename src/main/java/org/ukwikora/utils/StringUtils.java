@@ -8,7 +8,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class StringUtils {
-    public static Pattern lineBreak;
+    public final static Pattern lineBreak;
 
     static {
         lineBreak = Pattern.compile("\r\n|\r|\n");
