@@ -42,7 +42,7 @@ class LexerUtils {
     }
 
     static boolean isBlock(String line, String block){
-        String regex = String.format("^\\*\\*\\*(\\s*)%s(\\s*)\\*\\*\\*", block);
+        String regex = String.format("^\\*\\*\\*(\\s*)%s(\\s*)(\\**)", block);
         return LexerUtils.compareNoCase(line, regex);
     }
 

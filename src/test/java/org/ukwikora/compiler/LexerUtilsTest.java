@@ -81,6 +81,24 @@ public class LexerUtilsTest {
         assertEquals("Third line", lines[2]);
     }
 
+    @Test
+    public void checkIsBlockWithoutBlockName(){
+        assertTrue(LexerUtils.isBlock("***Block***"));
+        assertTrue(LexerUtils.isBlock("***Block"));
+        assertTrue(LexerUtils.isBlock("*** Block***"));
+        assertTrue(LexerUtils.isBlock("***Block ***"));
+        assertFalse(LexerUtils.isBlock("**Block***"));
+        assertFalse(LexerUtils.isBlock("*Block***"));
+        assertFalse(LexerUtils.isBlock("Block***"));
+    }
+
+    @Test
+    public void checkIsBlockWithBlockName(){
+        assertTrue(LexerUtils.isBlock("***Block***", "Block"));
+        assertTrue(LexerUtils.isBlock("***BLOCK***", "Block"));
+        assertTrue(LexerUtils.isBlock("*** BLOCK***", "Block"));
+    }
+
     private LineReader createReader(String text){
         LineReader reader = null;
 
