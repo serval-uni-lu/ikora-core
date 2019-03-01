@@ -151,7 +151,7 @@ public class TestCaseFile implements Iterable<UserKeyword> {
     private <T> Statement findStatement(String library, String name, Set<TestCaseFile> memory, Class<T> type){
         Statement statement = null;
 
-        if(library == null || getLibraryName().equalsIgnoreCase(library)){
+        if(library == null || library.isEmpty() || getLibraryName().equalsIgnoreCase(library)){
             if(type == UserKeyword.class){
                 statement = userKeywordTable.findStatement(name);
             }
