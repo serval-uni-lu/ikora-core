@@ -6,11 +6,13 @@ import org.ukwikora.utils.LevenshteinDistance;
 
 import javax.annotation.Nonnull;
 import java.util.*;
+import java.util.regex.Pattern;
 
 public class ScalarVariable extends Variable {
     private Value value;
 
-    public ScalarVariable(){
+    public ScalarVariable(String name){
+        super(name);
         this.value = Value.empty();
     }
 
@@ -73,5 +75,11 @@ public class ScalarVariable extends Variable {
     @Override
     public void accept(StatementVisitor visitor, VisitorMemory memory){
         visitor.visit(this, memory);
+    }
+
+    @Override
+    protected void setName(String name) {
+        this.name = name;
+        this.pattern = Pattern.compile(Value.escape(name), Pattern.CASE_INSENSITIVE);
     }
 }

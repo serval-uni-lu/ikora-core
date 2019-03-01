@@ -6,11 +6,14 @@ import org.ukwikora.analytics.VisitorMemory;
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class DictionaryVariable extends Variable {
     private List<Value> values;
 
-    public DictionaryVariable(){
+    public DictionaryVariable(String name){
+        super(name);
         this.values = new ArrayList<>();
     }
 
@@ -31,14 +34,7 @@ public class DictionaryVariable extends Variable {
 
     @Override
     public String getValueAsString() {
-        StringBuilder builder = new StringBuilder();
-
-        for(Value value: values){
-            builder.append(value.toString());
-            builder.append("\t");
-        }
-
-        return builder.toString().trim();
+        return values.stream().map(Value::toString).collect(Collectors.joining("\t"));
     }
 
     @Override
@@ -49,5 +45,11 @@ public class DictionaryVariable extends Variable {
     @Override
     public void accept(StatementVisitor visitor, VisitorMemory memory){
         visitor.visit(this, memory);
+    }
+
+    @Override
+    protected void setName(String name) {
+        this.name = name;
+        this.pattern = Pattern.compile(Value.escape(name), Pattern.CASE_INSENSITIVE);
     }
 }

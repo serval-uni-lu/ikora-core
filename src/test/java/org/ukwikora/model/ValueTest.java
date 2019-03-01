@@ -67,10 +67,10 @@ public class ValueTest {
 
     @Test
     public void checkResolvedSimpleValues(){
-        ScalarVariable name = new ScalarVariable();
+        ScalarVariable name = new ScalarVariable("${name}");
         name.addElement("John Smith");
 
-        ScalarVariable password = new ScalarVariable();
+        ScalarVariable password = new ScalarVariable("${password}");
         password.addElement("secret");
 
         Value value = new Value("Login with ${name} and ${password}");
@@ -86,16 +86,16 @@ public class ValueTest {
 
     @Test
     public void checkResolveCompositeValues(){
-        ScalarVariable name = new ScalarVariable();
+        ScalarVariable name = new ScalarVariable("${name}");
         name.addElement("John Smith");
 
-        ScalarVariable environment = new ScalarVariable();
+        ScalarVariable environment = new ScalarVariable("${ENV}");
         environment.addElement("testing");
 
-        ScalarVariable passwordProduction = new ScalarVariable();
+        ScalarVariable passwordProduction = new ScalarVariable("${password-testing}");
         passwordProduction.addElement("secret1");
 
-        ScalarVariable passwordTesting = new ScalarVariable();
+        ScalarVariable passwordTesting = new ScalarVariable("${password-production}");
         passwordTesting.addElement("secret2");
 
         Value value = new Value("Login with ${name} and ${password-${ENV}}");

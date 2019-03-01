@@ -2,21 +2,25 @@ package org.ukwikora.model;
 
 import javax.annotation.Nonnull;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public abstract class Variable implements Statement {
     private TestCaseFile file;
-    private String name;
     private LineRange lineRange;
     private Assignment assignment;
     private Set<Statement> dependencies;
 
-    public Variable() {
+    protected String name;
+    protected Pattern pattern;
+
+    protected Variable() {}
+
+    public Variable(String name) {
         this.assignment = null;
         this.dependencies = new HashSet<>();
-    }
 
-    public void setName(String name) {
-        this.name = name;
+        setName(name);
     }
 
     public void setAssignment(Assignment assignment) {
@@ -64,11 +68,6 @@ public abstract class Variable implements Statement {
     }
 
     @Override
-    public boolean matches(@Nonnull String name) {
-        return this.name.equalsIgnoreCase(name);
-    }
-
-    @Override
     public void setLineRange(@Nonnull LineRange lineRange){
         this.lineRange = lineRange;
     }
@@ -109,6 +108,13 @@ public abstract class Variable implements Statement {
         return Optional.of(values);
     }
 
+    @Override
+    public boolean matches(@Nonnull String name) {
+        Matcher matcher = pattern.matcher(name);
+        return matcher.matches();
+    }
+
+    protected abstract void setName(String name);
     public abstract void addElement(String element);
     public abstract List<Value> getValues();
 }

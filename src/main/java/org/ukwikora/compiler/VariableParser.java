@@ -11,14 +11,10 @@ class VariableParser {
     public static Optional<Variable> parse(String name){
         Variable variable;
         switch (name.trim().substring(0, 1)) {
-            case "$":  variable = new ScalarVariable(); break;
-            case "@":  variable = new ListVariable(); break;
-            case "&": variable = new DictionaryVariable(); break;
+            case "$":  variable = new ScalarVariable(name); break;
+            case "@":  variable = new ListVariable(name); break;
+            case "&": variable = new DictionaryVariable(name); break;
             default: variable = null;
-        }
-
-        if(variable != null){
-            variable.setName(name);
         }
 
         return Optional.ofNullable(variable);

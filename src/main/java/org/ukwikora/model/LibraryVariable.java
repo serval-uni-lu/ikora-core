@@ -6,7 +6,6 @@ import org.ukwikora.analytics.VisitorMemory;
 import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public abstract class LibraryVariable extends Variable {
@@ -18,11 +17,16 @@ public abstract class LibraryVariable extends Variable {
 
     public LibraryVariable(){
         this.format = Format.scalar;
-        super.setName(toVariable(this.getClass()));
+        setName(toVariable(this.getClass()));
     }
 
     @Override
-    public void setName(String name){
+    protected void setName(String name){
+        this.name = name;
+
+        String patternString = Value.escape(getName());
+        patternString = patternString.replaceAll("\\s", "(\\\\s|_)");
+        this.pattern = Pattern.compile(patternString, Pattern.CASE_INSENSITIVE);
     }
 
     @Override
@@ -64,15 +68,5 @@ public abstract class LibraryVariable extends Variable {
         name = name.replaceAll("([A-Z])", " $1").trim().toUpperCase();
 
         return String.format("${%s}", name);
-    }
-
-    @Override
-    public boolean matches(@Nonnull String name) {
-        String patternString = Value.escape(getName());
-        patternString = patternString.replaceAll("\\s", "(\\\\s|_)");
-        Pattern pattern = Pattern.compile(patternString, Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(name);
-
-        return matcher.matches();
     }
 }
