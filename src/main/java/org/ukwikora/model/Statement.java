@@ -10,6 +10,7 @@ public interface Statement extends Differentiable {
     void setFile(@Nonnull TestCaseFile file);
     TestCaseFile getFile();
     String getFileName();
+    String getLibraryName();
 
     void setLineRange(@Nonnull LineRange range);
     LineRange getLineRange();

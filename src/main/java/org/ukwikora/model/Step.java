@@ -1,5 +1,7 @@
 package org.ukwikora.model;
 
+import org.apache.commons.io.FilenameUtils;
+
 import javax.annotation.Nonnull;
 import java.util.*;
 
@@ -77,6 +79,15 @@ public abstract class Step implements Keyword {
         }
 
         return this.file.getName();
+    }
+
+    @Override
+    public String getLibraryName(){
+        if(this.file == null){
+            return "";
+        }
+
+        return this.file.getLibraryName();
     }
 
     @Override

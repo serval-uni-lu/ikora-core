@@ -88,6 +88,19 @@ public abstract class LibraryKeyword implements Keyword {
     }
 
     @Override
+    public String getLibraryName(){
+        String[] packages = this.getClass().getCanonicalName().split("\\.");
+
+        for(int i = 0; i < packages.length; ++i){
+            if(packages[i].equalsIgnoreCase("libraries") && i < packages.length - 1){
+                return packages[i + 1];
+            }
+        }
+
+        return "";
+    }
+
+    @Override
     public void setFile(@Nonnull TestCaseFile file){
         this.file = file;
     }

@@ -1,5 +1,7 @@
 package org.ukwikora.model;
 
+import org.apache.commons.io.FilenameUtils;
+
 import javax.annotation.Nonnull;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -50,6 +52,15 @@ public abstract class Variable implements Statement {
         }
 
         return this.file.getName();
+    }
+
+    @Override
+    public String getLibraryName(){
+        if(this.file == null){
+            return "";
+        }
+
+        return this.file.getLibraryName();
     }
 
     @Override

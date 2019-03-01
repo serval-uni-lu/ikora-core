@@ -1,5 +1,6 @@
 package org.ukwikora.model;
 
+import org.apache.commons.io.FilenameUtils;
 import org.ukwikora.compiler.Line;
 
 import javax.annotation.Nonnull;
@@ -98,6 +99,10 @@ public class TestCaseFile implements Iterable<UserKeyword> {
         return this.name;
     }
 
+    public String getLibraryName() {
+        return FilenameUtils.getBaseName(getPath());
+    }
+
     public Settings getSettings() {
         return this.settings;
     }
@@ -127,45 +132,46 @@ public class TestCaseFile implements Iterable<UserKeyword> {
         return userKeywordTable.iterator();
     }
 
-    public KeywordDefinition findUserKeyword(String name) {
-        return (KeywordDefinition) findStatement(name, new HashSet<>(), UserKeyword.class);
+    public UserKeyword findUserKeyword(String name) {
+        return (UserKeyword)findStatement(null, name, new HashSet<>(), UserKeyword.class);
     }
 
-    public KeywordDefinition findUserKeyword(String library, String name) {
-        if(library.isEmpty()){
-            return findUserKeyword(name);
-        }
-
-        //TODO: find a way to reduce the scope with the scoped keywords
-        return findUserKeyword(name);
+    public UserKeyword findUserKeyword(String library, String name) {
+        return (UserKeyword)findStatement(library, name, new HashSet<>(), UserKeyword.class);
     }
 
     public Variable findVariable(String name) {
-        return (Variable) findStatement(name, new HashSet<>(), Variable.class);
+        return (Variable) findStatement(null, name, new HashSet<>(), Variable.class);
     }
 
-    private <T> Statement findStatement(String name, Set<TestCaseFile> memory, Class<T> type){
+    public Variable findVariable(String library, String name) {
+        return (Variable) findStatement(library, name, new HashSet<>(), Variable.class);
+    }
+
+    private <T> Statement findStatement(String library, String name, Set<TestCaseFile> memory, Class<T> type){
         Statement statement = null;
 
-        if(type == UserKeyword.class){
-            statement = userKeywordTable.findStatement(name);
-        }
+        if(library == null || getLibraryName().equalsIgnoreCase(library)){
+            if(type == UserKeyword.class){
+                statement = userKeywordTable.findStatement(name);
+            }
 
-        if(statement == null &&type == TestCase.class){
-            statement = testCaseTable.findStatement(name);
-        }
+            if(statement == null &&type == TestCase.class){
+                statement = testCaseTable.findStatement(name);
+            }
 
-        if(statement == null && type == Variable.class){
-            statement = variableTable.findStatement(name);
-        }
+            if(statement == null && type == Variable.class){
+                statement = variableTable.findStatement(name);
+            }
 
-        if(statement != null){
-            return statement;
+            if(statement != null){
+                return statement;
+            }
         }
 
         for(Resources resources: settings.getAllResources()){
             if(memory.add(resources.getTestCaseFile())) {
-                statement = resources.getTestCaseFile().findStatement(name, memory, type);
+                statement = resources.getTestCaseFile().findStatement(library, name, memory, type);
             }
 
             if(statement != null){

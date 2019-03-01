@@ -1,5 +1,6 @@
 package org.ukwikora.utils;
 
+import org.apache.commons.io.FilenameUtils;
 import org.junit.BeforeClass;
 import org.junit.Test;
 

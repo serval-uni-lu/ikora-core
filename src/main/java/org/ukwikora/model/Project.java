@@ -91,6 +91,30 @@ public class Project implements Comparable<Project> {
         return userKeywords;
     }
 
+    public Optional<UserKeyword> findUserKeyword(String name) {
+        for(TestCaseFile testCaseFile: testCaseFiles){
+            UserKeyword userkeyword = testCaseFile.findUserKeyword(name);
+
+            if(userkeyword != null){
+                return Optional.of(userkeyword);
+            }
+        }
+
+        return Optional.empty();
+    }
+
+    public Optional<UserKeyword> findUserKeyword(String library, String name) {
+        for(TestCaseFile testCaseFile: testCaseFiles){
+            UserKeyword userkeyword = testCaseFile.findUserKeyword(library, name);
+
+            if(userkeyword != null){
+                return Optional.of(userkeyword);
+            }
+        }
+
+        return Optional.empty();
+    }
+
     public Set<Variable> getVariables(){
         Set<Variable> variables = new HashSet<>();
 

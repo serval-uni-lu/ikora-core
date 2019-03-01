@@ -33,4 +33,22 @@ public class CompilerTest {
         assertTrue(resolvedValues.isPresent());
         assertEquals(1, resolvedValues.get().size());
     }
+
+    @Test
+    public void checkScopedByPrefixResolution(){
+        final File robot = Globals.getResourceFile("robot/scope-testing");
+        final Project project = Compiler.compile(robot.getAbsolutePath());
+
+        assertNotNull(project);
+
+        Optional<UserKeyword> fromResources1 = project.findUserKeyword("Load keyword from resource1");
+        assertTrue(fromResources1.isPresent());
+        Keyword resources1Step0 = ((KeywordCall)fromResources1.get().getStep(0)).getKeyword();
+        assertEquals("resources1", resources1Step0.getLibraryName());
+
+        Optional<UserKeyword> fromResources2 = project.findUserKeyword("Load keyword from resource2");
+        assertTrue(fromResources2.isPresent());
+        Keyword resources2Step0 = ((KeywordCall)fromResources2.get().getStep(0)).getKeyword();
+        assertEquals("resources2", resources2Step0.getLibraryName());
+    }
 }

@@ -1,7 +1,9 @@
 package org.ukwikora.model;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.ukwikora.analytics.Action;
+import org.ukwikora.utils.FileUtils;
 import org.ukwikora.utils.LevenshteinDistance;
 
 
@@ -69,6 +71,15 @@ public abstract class KeywordDefinition implements Keyword, Iterable<Step> {
     }
 
     @Override
+    public String getLibraryName(){
+        if(this.file == null){
+            return "";
+        }
+
+        return this.file.getLibraryName();
+    }
+
+    @Override
     public long getEpoch() {
         return file.getEpoch();
     }
@@ -101,7 +112,7 @@ public abstract class KeywordDefinition implements Keyword, Iterable<Step> {
     }
 
     @Override
-    public Keyword getStep(int position) {
+    public Step getStep(int position) {
         if(steps.size() <= position  || 0 > position){
             return null;
         }
