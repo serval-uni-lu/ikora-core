@@ -1,7 +1,5 @@
 package org.ukwikora.model;
 
-import org.apache.commons.io.FilenameUtils;
-
 import javax.annotation.Nonnull;
 import java.util.*;
 import java.util.regex.Matcher;

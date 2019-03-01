@@ -1,9 +1,7 @@
 package org.ukwikora.model;
 
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.ukwikora.analytics.Action;
-import org.ukwikora.utils.FileUtils;
 import org.ukwikora.utils.LevenshteinDistance;
 
 
