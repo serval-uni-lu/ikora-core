@@ -31,7 +31,7 @@ public class ProjectStatistics {
     }
 
     public <T extends KeywordDefinition> int getNumberKeywords(Class<T> type){
-        Set<T> keywords = getKeywords(type);
+        Set<T> keywords = getStatements(type);
 
         if(keywords != null){
             return keywords.size();
@@ -54,37 +54,52 @@ public class ProjectStatistics {
         return length;
     }
 
-    public <T extends KeywordDefinition> Map<Integer, Integer> getSizeDistribution(Class<T> type){
+    public <T extends Statement> Map<Integer, Integer> getSizeDistribution(Class<T> type){
         return getDistribution(type, Metric.Size);
     }
 
-    public <T extends KeywordDefinition> Map<Integer, Integer> getConnectivityDistribution(Class<T> type){
+    public <T extends Statement> Map<Integer, Integer> getConnectivityDistribution(Class<T> type){
         return getDistribution(type, Metric.Connectivity);
     }
 
-    public <T extends KeywordDefinition> Map<Integer, Integer> getSequenceDistribution(Class<T> type){
+    public <T extends Statement> Map<Integer, Integer> getSequenceDistribution(Class<T> type){
         return getDistribution(type, Metric.Sequence);
     }
 
-    public <T extends KeywordDefinition> Map<Integer, Integer> getLevelDistribution(Class<T> type){
+    public <T extends Statement> Map<Integer, Integer> getLevelDistribution(Class<T> type){
         return getDistribution(type, Metric.Level);
     }
 
-    <T extends KeywordDefinition> Map<Integer, Integer> getBranchIndex(Class<T> type){
+    public <T extends Statement> Map<String, Integer> getDeadCodeDistriburation(Class<T> type){
+        Map<String, Integer> deadCode = new HashMap<>(2);
+
+        for(Map.Entry<Integer, Integer> entry: getConnectivityDistribution(type).entrySet()){
+            if(entry.getKey() == 0){
+                deadCode.merge("Dead", entry.getValue(), Integer::sum);
+            }
+            else{
+                deadCode.merge("Used", entry.getValue(), Integer::sum);
+            }
+        }
+
+        return deadCode;
+    }
+
+    <T extends Statement> Map<Integer, Integer> getBranchIndex(Class<T> type){
         return getDistribution(type, Metric.BranchIndex);
     }
 
-    private <T extends KeywordDefinition> Map<Integer, Integer> getDistribution(Class<T> type, Metric metric){
+    private <T extends Statement> Map<Integer, Integer> getDistribution(Class<T> type, Metric metric){
         Map<Integer, Integer> distribution = new TreeMap<>();
 
-        for(KeywordDefinition keyword: getKeywords(type)){
+        for(Statement statement: getStatements(type)){
             int value = -1;
 
             switch (metric){
-                case Size: value = KeywordStatistics.getSize(keyword); break;
-                case Connectivity: value = KeywordStatistics.getConnectivity(keyword); break;
-                case Sequence: value = KeywordStatistics.getSequenceSize(keyword); break;
-                case Level: value = KeywordStatistics.getLevel(keyword); break;
+                case Size: value = KeywordStatistics.getSize(statement); break;
+                case Connectivity: value = KeywordStatistics.getConnectivity(statement); break;
+                case Sequence: value = KeywordStatistics.getSequenceSize(statement); break;
+                case Level: value = KeywordStatistics.getLevel(statement); break;
                 //case BranchIndex: value = keyword.getBranchIndex(); break;
             }
 
@@ -94,7 +109,7 @@ public class ProjectStatistics {
         return distribution;
     }
 
-    private <T extends Statement> Set<T> getKeywords(Class<T> type){
+    private <T extends Statement> Set<T> getStatements(Class<T> type){
         if(type == UserKeyword.class){
             return (Set<T>)userKeywords;
         }
