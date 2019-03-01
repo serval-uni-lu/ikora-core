@@ -110,4 +110,32 @@ public class ValueTest {
         assertEquals(1, resolvedValues.get().size());
         assertEquals("Login with John Smith and secret2", resolvedValues.get().get(0).toString());
     }
+
+    @Test
+    public void checkScalarBareNameExtraction(){
+        String scalar = "${scalar}";
+        String bareScalar = Value.getBareName(scalar);
+        assertEquals("scalar", bareScalar);
+    }
+
+    @Test
+    public void checkListBareNameExtraction(){
+        String list = "@{list}";
+        String bareList = Value.getBareName(list);
+        assertEquals("list", bareList);
+    }
+
+    @Test
+    public void checkDictionaryBareNameExtraction(){
+        String dictionary = "${dictionary}";
+        String bareDictionary = Value.getBareName(dictionary);
+        assertEquals("dictionary", bareDictionary);
+    }
+
+    @Test
+    public void checkCompositeBareNameExtraction(){
+        String composite = "${ENV-${env}}";
+        String bareComposite = Value.getBareName(composite);
+        assertEquals("ENV-${env}", bareComposite);
+    }
 }

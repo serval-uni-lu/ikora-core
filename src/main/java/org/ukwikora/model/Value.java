@@ -151,6 +151,10 @@ public class Value implements Differentiable {
         return escapePattern.matcher(s).replaceAll("\\\\$0");
     }
 
+    public static String getBareName(String s){
+        return s.replaceAll("(^[&@$]\\{)|(}$)", "");
+    }
+
     @Override
     public double distance(@Nonnull Differentiable other) {
         if(other == this){
