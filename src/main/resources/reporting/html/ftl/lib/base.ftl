@@ -80,7 +80,7 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <#list sidebar.links as link>
                         <a class="collapse-item" href="${link.url}">${link.text}</a>
-                        </#list>a>
+                        </#list>
                     </div>
                 </div>
             </li>

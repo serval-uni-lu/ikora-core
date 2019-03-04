@@ -125,15 +125,15 @@ public class Project implements Comparable<Project> {
         return variables;
     }
 
-    public Set<Statement> getStatements(Class<? extends Statement> statementType) {
-        if(statementType == TestCase.class){
-            return new HashSet<>(getTestCases());
+    public <T> Set<T> getStatements(T type) {
+        if(type == TestCase.class){
+            return (Set<T>)new HashSet<>(getTestCases());
         }
-        else if(statementType == UserKeyword.class) {
-            return new HashSet<>(getUserKeywords());
+        else if(type == UserKeyword.class) {
+            return (Set<T>)new HashSet<>(getUserKeywords());
         }
-        else if(statementType == Variable.class) {
-            return new HashSet<>(getVariables());
+        else if(type == Variable.class) {
+            return (Set<T>)new HashSet<>(getVariables());
         }
 
         return null;

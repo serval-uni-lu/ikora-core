@@ -1,10 +1,7 @@
 package org.ukwikora.export.website;
 
 import freemarker.template.*;
-import org.ukwikora.export.website.model.DependencyGraph;
-import org.ukwikora.export.website.model.SideBar;
-import org.ukwikora.export.website.model.SingleProject;
-import org.ukwikora.export.website.model.Summary;
+import org.ukwikora.export.website.model.*;
 import org.ukwikora.model.Project;
 import org.ukwikora.utils.FileUtils;
 
@@ -30,6 +27,7 @@ public class StatisticsViewerGenerator {
         copyResources();
         generateSummaryPage(new HashMap<>(input));
         generateDependenciesPage(new HashMap<>(input));
+        generateDeadCodePage(new HashMap<>(input));
 
         for(Project project: projects){
             generateSingleProjectPage(project, new HashMap<>(input));
@@ -68,6 +66,14 @@ public class StatisticsViewerGenerator {
 
         processTemplate("lib/dependency-graph.ftl", Collections.singletonMap("dependencies", dependencies),
                 new File(destination, dependencies.getUrl()));
+    }
+
+    void generateDeadCodePage(Map<String, Object> input) throws Exception {
+        DeadCode deadCode = new DeadCode("dead-code", "Dead Code", projects);
+
+        input.put("deadCode", deadCode);
+
+        processTemplate("dead-code.ftl", input, new File(destination, "dead-code.html"));
     }
 
     void generateSingleProjectPage(Project project, Map<String, Object> input) throws Exception {

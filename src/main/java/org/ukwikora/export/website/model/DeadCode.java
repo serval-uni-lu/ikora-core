@@ -8,15 +8,18 @@ import org.ukwikora.utils.StringUtils;
 import java.util.List;
 
 public class DeadCode {
+    private final String id;
+    private final String name;
     private final Table table;
 
-    public DeadCode(List<Project> projects) throws Exception {
-        String[] labels = {"Type", "Name", "File", "Line", "Project"};
+    public DeadCode(String id, String name, List<Project> projects) throws Exception {
+        this.id = id;
+        this.name = name;
 
         this.table = new Table(
                 "dead-code-table",
                 "Dead Code",
-                labels
+                new String[]{"Type", "Name", "File", "Lines", "Project"}
         );
 
         String userKeywordType = StringUtils.toBeautifulName(UserKeyword.class.getSimpleName());
@@ -49,6 +52,14 @@ public class DeadCode {
                 }
             }
         }
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public Table getTable() {
