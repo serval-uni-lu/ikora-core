@@ -1,11 +1,11 @@
 <#include "lib/base.ftl">
 
 <#macro page_title>
-  ${summary.title}
+  ${summaryPage.title}
 </#macro>
 
 <#macro js_imports>
-  <#list summary.scripts as url>
+  <#list summaryPage.scripts as url>
     <script src="${url}"></script>
   </#list>
 </#macro>
@@ -15,21 +15,21 @@
     <div class="col-sm">
       <div class="card border-0 bg-primary text-white shadow">
         <div class="card-body">
-          ${summary.linesOfCode} Lines of Code
+          ${summaryPage.linesOfCode} Lines of Code
         </div>
       </div>
     </div>
     <div class="col-sm">
       <div class="card border-0 bg-primary text-white shadow">
         <div class="card-body">
-          ${summary.numberKeywords} Keywords
+          ${summaryPage.numberKeywords} Keywords
         </div>
       </div>
     </div>
     <div class="col-sm">
       <div class="card border-0 bg-primary text-white shadow">
         <div class="card-body">
-          ${summary.numberTestCases} Test Cases
+          ${summaryPage.numberTestCases} Test Cases
         </div>
       </div>
     </div>
@@ -40,11 +40,11 @@
       <!-- Area Chart -->
       <div class="card border-0 shadow mb-4">
         <div class="card-header border-0 py-3 d-flex flex-row align-items-center justify-content-between">
-          <h6 class="m-0 font-weight-bold text-primary">${summary.linesChart.name}</h6>
+          <h6 class="m-0 font-weight-bold text-primary">${summaryPage.linesChart.name}</h6>
         </div>
         <div class="card-body">
           <div class="chart-area">
-            <canvas id="${summary.linesChart.id}"></canvas>
+            <canvas id="${summaryPage.linesChart.id}"></canvas>
           </div>
         </div>
       </div>
@@ -56,11 +56,11 @@
       <!-- Area Chart -->
       <div class="card border-0 shadow mb-4">
         <div class="card-header border-0 py-3 d-flex flex-row align-items-center justify-content-between">
-          <h6 class="m-0 font-weight-bold text-primary">${summary.testCasesChart.name}</h6>
+          <h6 class="m-0 font-weight-bold text-primary">${summaryPage.testCasesChart.name}</h6>
         </div>
         <div class="card-body">
           <div class="chart-area">
-            <canvas id="${summary.testCasesChart.id}"></canvas>
+            <canvas id="${summaryPage.testCasesChart.id}"></canvas>
           </div>
         </div>
       </div>
@@ -72,11 +72,11 @@
       <!-- Area Chart -->
       <div class="card border-0 shadow mb-4">
         <div class="card-header border-0 py-3 d-flex flex-row align-items-center justify-content-between">
-          <h6 class="m-0 font-weight-bold text-primary">${summary.userKeywordsChart.name}</h6>
+          <h6 class="m-0 font-weight-bold text-primary">${summaryPage.userKeywordsChart.name}</h6>
         </div>
         <div class="card-body">
           <div class="chart-area">
-            <canvas id="${summary.userKeywordsChart.id}"></canvas>
+            <canvas id="${summaryPage.userKeywordsChart.id}"></canvas>
           </div>
         </div>
       </div>

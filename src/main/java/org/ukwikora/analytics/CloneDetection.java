@@ -5,7 +5,7 @@ import java.util.*;
 import org.ukwikora.model.*;
 import org.ukwikora.utils.LevenshteinDistance;
 
-class CloneDetection<T extends Statement> {
+public class CloneDetection<T extends Statement> {
     private static Set<Action.Type> ignoreForTypeI;
     private static Set<Action.Type> ignoreForTypeII;
     private static Set<Action.Type> ignoreForTypeIIExtended;
@@ -28,12 +28,22 @@ class CloneDetection<T extends Statement> {
         ignoreForTypeIIExtended = Collections.unmodifiableSet(typeIIExtended);
     }
 
-    private Project project;
+    private Set<Project> projects;
     private Clones<T> clones;
 
     private CloneDetection(Project project){
-        this.project = project;
+        this.projects = Collections.singleton(project);
         this.clones = new Clones<>();
+    }
+
+    private CloneDetection(Set<Project> projects){
+        this.projects = projects;
+        this.clones = new Clones<>();
+    }
+
+    public static <T extends Statement> Clones<T> findClones(Set<Project> projects, Class<T> type){
+        CloneDetection<T> detection = new CloneDetection<>(projects);
+        return detection.run(type);
     }
 
     public static <T extends Statement> Clones<T> findClones(Project project, Class<T> type){
@@ -67,15 +77,19 @@ class CloneDetection<T extends Statement> {
     }
 
     private Clones<T> run(Class<T> type){
-        List<Statement> statements = new ArrayList<>(project.getStatements(type));
+        List<T> statements = new ArrayList<>();
+
+        for(Project project: projects){
+            statements.addAll(project.getStatements(type));
+        }
 
         int size = statements.size();
 
         for(int i = 0; i < size; ++i){
-            T t1 = (T)statements.get(i);
+            T t1 = statements.get(i);
 
             for(int j = i + 1; j < size; ++j){
-                T t2 = (T)statements.get(j);
+                T t2 = statements.get(j);
                 clones.update(t1, t2, getCloneType(t1, t2));
             }
         }

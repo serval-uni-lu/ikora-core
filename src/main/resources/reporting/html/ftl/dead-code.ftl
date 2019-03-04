@@ -2,11 +2,11 @@
 <#include "lib/table.ftl">
 
 <#macro page_title>
-    ${deadCode.name}
+    ${deadCodePage.name}
 </#macro>
 
 <#macro page_content>
-    <@table deadCode.table/>
+    <@table deadCodePage.table/>
 </#macro>
 
 <@display_page sidebar=sidebar/>

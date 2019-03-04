@@ -125,7 +125,7 @@ public class Project implements Comparable<Project> {
         return variables;
     }
 
-    public <T> Set<T> getStatements(T type) {
+    public <T> Set<T> getStatements(Class<T> type) {
         if(type == TestCase.class){
             return (Set<T>)new HashSet<>(getTestCases());
         }

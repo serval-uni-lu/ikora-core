@@ -7,12 +7,12 @@ import org.ukwikora.utils.StringUtils;
 
 import java.util.List;
 
-public class DeadCode {
+public class DeadCodePage {
     private final String id;
     private final String name;
     private final Table table;
 
-    public DeadCode(String id, String name, List<Project> projects) throws Exception {
+    public DeadCodePage(String id, String name, List<Project> projects) throws Exception {
         this.id = id;
         this.name = name;
 

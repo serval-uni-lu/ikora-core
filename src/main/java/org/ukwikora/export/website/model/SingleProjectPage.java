@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class SingleProject {
+public class SingleProjectPage {
     private final String id;
 
     private final Link link;
@@ -26,7 +26,7 @@ public class SingleProject {
     private final BarChart depthChart;
     private final BarChart sequenceChart;
 
-    public SingleProject(Project project) throws Exception {
+    public SingleProjectPage(Project project) throws Exception {
         this.id = StringUtils.toBeautifulUrl(project.getName(), "");
         this.link = new Link(project.getName());
 

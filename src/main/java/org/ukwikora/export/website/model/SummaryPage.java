@@ -6,7 +6,7 @@ import org.ukwikora.utils.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Summary {
+public class SummaryPage {
     private BarChart linesChart;
     private BarChart userKeywordsChart;
     private BarChart testCasesChart;
@@ -16,7 +16,7 @@ public class Summary {
     private int numberKeywords;
     private int numberTestCases;
 
-    public Summary(List<Project> projects) throws Exception {
+    public SummaryPage(List<Project> projects) throws Exception {
         linesOfCode = 0;
         numberKeywords = 0;
         numberTestCases = 0;

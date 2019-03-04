@@ -40,23 +40,23 @@ public class StatisticsViewerGenerator {
     }
 
     void generateSummaryPage(Map<String, Object> input) throws Exception {
-        Summary summary = new Summary(projects);
+        SummaryPage summaryPage = new SummaryPage(projects);
 
-        input.put("summary", summary);
-        processTemplate("summary.ftl", input, new File(destination, "index.html"));
+        input.put("summaryPage", summaryPage);
+        processTemplate("summaryPage.ftl", input, new File(destination, "index.html"));
 
-        processTemplate("lib/bar-chart.ftl", Collections.singletonMap("chart", summary.getLinesChart()),
-                new File(destination, summary.getLinesChart().getUrl()));
+        processTemplate("lib/bar-chart.ftl", Collections.singletonMap("chart", summaryPage.getLinesChart()),
+                new File(destination, summaryPage.getLinesChart().getUrl()));
 
-        processTemplate("lib/bar-chart.ftl",  Collections.singletonMap("chart", summary.getUserKeywordsChart()),
-                new File(destination, summary.getUserKeywordsChart().getUrl()));
+        processTemplate("lib/bar-chart.ftl",  Collections.singletonMap("chart", summaryPage.getUserKeywordsChart()),
+                new File(destination, summaryPage.getUserKeywordsChart().getUrl()));
 
-        processTemplate("lib/bar-chart.ftl", Collections.singletonMap("chart", summary.getTestCasesChart()),
-                new File(destination, summary.getTestCasesChart().getUrl()));
+        processTemplate("lib/bar-chart.ftl", Collections.singletonMap("chart", summaryPage.getTestCasesChart()),
+                new File(destination, summaryPage.getTestCasesChart().getUrl()));
     }
 
     void generateDependenciesPage(Map<String, Object> input) throws Exception {
-        DependencyGraph dependencies = new DependencyGraph("projects-dependency-graph",
+        DependencyPage dependencies = new DependencyPage("projects-dependency-graph",
                 "Dependency Graph", projects);
 
         input.put("dependencies", dependencies);
@@ -69,31 +69,31 @@ public class StatisticsViewerGenerator {
     }
 
     void generateDeadCodePage(Map<String, Object> input) throws Exception {
-        DeadCode deadCode = new DeadCode("dead-code", "Dead Code", projects);
+        DeadCodePage deadCodePage = new DeadCodePage("dead-code", "Dead Code", projects);
 
-        input.put("deadCode", deadCode);
+        input.put("deadCodePage", deadCodePage);
 
         processTemplate("dead-code.ftl", input, new File(destination, "dead-code.html"));
     }
 
     void generateSingleProjectPage(Project project, Map<String, Object> input) throws Exception {
-        SingleProject singleProject = new SingleProject(project);
+        SingleProjectPage singleProjectPage = new SingleProjectPage(project);
 
-        input.put("project", singleProject);
+        input.put("project", singleProjectPage);
 
-        processTemplate("project.ftl", input, new File(destination, singleProject.getLink().getUrl()));
+        processTemplate("project.ftl", input, new File(destination, singleProjectPage.getLink().getUrl()));
 
-        processTemplate("lib/bar-chart.ftl", Collections.singletonMap("chart", singleProject.getConnectivityChart()),
-                new File(destination, singleProject.getConnectivityChart().getUrl()));
+        processTemplate("lib/bar-chart.ftl", Collections.singletonMap("chart", singleProjectPage.getConnectivityChart()),
+                new File(destination, singleProjectPage.getConnectivityChart().getUrl()));
 
-        processTemplate("lib/bar-chart.ftl", Collections.singletonMap("chart", singleProject.getSizeChart()),
-                new File(destination, singleProject.getSizeChart().getUrl()));
+        processTemplate("lib/bar-chart.ftl", Collections.singletonMap("chart", singleProjectPage.getSizeChart()),
+                new File(destination, singleProjectPage.getSizeChart().getUrl()));
 
-        processTemplate("lib/bar-chart.ftl", Collections.singletonMap("chart", singleProject.getDepthChart()),
-                new File(destination, singleProject.getDepthChart().getUrl()));
+        processTemplate("lib/bar-chart.ftl", Collections.singletonMap("chart", singleProjectPage.getDepthChart()),
+                new File(destination, singleProjectPage.getDepthChart().getUrl()));
 
-        processTemplate("lib/bar-chart.ftl", Collections.singletonMap("chart", singleProject.getSequenceChart()),
-                new File(destination, singleProject.getSequenceChart().getUrl()));
+        processTemplate("lib/bar-chart.ftl", Collections.singletonMap("chart", singleProjectPage.getSequenceChart()),
+                new File(destination, singleProjectPage.getSequenceChart().getUrl()));
     }
 
     private Template getTemplate(String name) throws Exception {
