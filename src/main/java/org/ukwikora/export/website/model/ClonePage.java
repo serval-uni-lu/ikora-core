@@ -1,7 +1,7 @@
 package org.ukwikora.export.website.model;
 
+import org.ukwikora.analytics.Clone;
 import org.ukwikora.analytics.CloneDetection;
-import org.ukwikora.analytics.Clones;
 import org.ukwikora.model.Project;
 import org.ukwikora.model.UserKeyword;
 
@@ -20,6 +20,8 @@ public class ClonePage extends Page {
                 new String[]{"Group", "Type", "Name", "File", "Lines", "Project"}
         );
 
-        Clones<UserKeyword> UserKewordClones = CloneDetection.findClones(new HashSet<>(projects), UserKeyword.class);
+        for(Clone<UserKeyword> clone: CloneDetection.findClones(new HashSet<>(projects), UserKeyword.class)){
+            //TODO: fill in the table with the clone values
+        }
     }
 }

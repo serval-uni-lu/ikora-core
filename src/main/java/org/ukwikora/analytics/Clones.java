@@ -7,49 +7,114 @@ import org.ukwikora.model.Statement;
 import java.util.*;
 
 @JsonSerialize(using = CloneResultSerializer.class)
-public class Clones<T extends Statement> {
-    public enum Type{
-        TypeI, TypeII, TypeIII, TypeIV, None
-    }
-
-    private Map<Type, Map<T, Set<T>>> clones;
+public class Clones<T extends Statement> implements Iterable<Clone<T>> {
+    private Map<Clone.Type, Map<T, Clone<T>>> clones;
 
     public Clones(){
-        this.clones = new HashMap<>();
+        this.clones = new EnumMap<>(Clone.Type.class);
+
+        for(Clone.Type type: Clone.Type.values()){
+            this.clones.put(type, new HashMap<>());
+        }
     }
 
-    public void update(T t1, T t2, Type cloneType){
+    public void update(T t1, T t2, Clone.Type cloneType){
         set(t1, t2, cloneType);
         set(t2, t1, cloneType);
     }
 
-    private void set(T t1, T t2, Type clone){
-        Map<T, Set<T>> values = this.clones.getOrDefault(clone, new HashMap<>());
-        Set<T> clones = values.getOrDefault(t1, new HashSet<>());
-        clones.add(t2);
+    private void set(T t1, T t2, Clone.Type type){
+        Map<T, Clone<T>> clones = this.clones.get(type);
 
-        values.put(t1, clones);
-        this.clones.put(clone, values);
+        Clone<T> clone = clones.getOrDefault(t1, new Clone<>(t1, type));
+        clone.addClone(t2);
+        clones.put(t1, clone);
     }
 
-    public Type getCloneType(T element) {
-        if(clones.getOrDefault(Type.TypeI, new HashMap<>()).get(element) != null){
-            return Type.TypeI;
+    public Clone.Type getCloneType(T element) {
+        if(clones.getOrDefault(Clone.Type.TypeI, new HashMap<>()).get(element) != null){
+            return Clone.Type.TypeI;
         }
-        else if(clones.getOrDefault(Type.TypeII, new HashMap<>()).get(element) != null){
-            return Type.TypeII;
+        else if(clones.getOrDefault(Clone.Type.TypeII, new HashMap<>()).get(element) != null){
+            return Clone.Type.TypeII;
         }
 
-        return Type.None;
+        return Clone.Type.None;
     }
 
-    public int size(Type clone) {
-        Map<T, Set<T>> types = this.clones.get(clone);
+    public int size(Clone.Type type) {
+        Map<T, Clone<T>> clones = this.clones.getOrDefault(type, Collections.emptyMap());
+        return clones.size();
+    }
 
-        if(types == null){
-            return 0;
+    @Override
+    public Iterator<Clone<T>> iterator() {
+        return new CloneIterator();
+    }
+
+    class CloneIterator implements Iterator<Clone<T>>{
+        private Clone.Type currentType;
+        private Iterator<Map.Entry<T, Clone<T>>> currentIterator;
+
+        CloneIterator(){
+            this.currentType = Clone.Type.TypeI;
+            this.currentIterator = getIterator(this.currentType);
         }
 
-        return types.size();
+        @Override
+        public boolean hasNext() {
+            if(currentIterator.hasNext()){
+                return true;
+            }
+
+            Clone.Type type = getNextType(currentType);
+            Iterator<Map.Entry<T, Clone<T>>> iterator = getIterator(this.currentType);
+
+            while (type != Clone.Type.None){
+                if(iterator.hasNext()){
+                    return true;
+                }
+
+                type = getNextType(type);
+                iterator = getIterator(type);
+            }
+
+            return false;
+        }
+
+        @Override
+        public Clone<T> next() {
+            if(currentIterator.hasNext()){
+                return currentIterator.next().getValue();
+            }
+
+            currentType = getNextType(currentType);
+            currentIterator = getIterator(this.currentType);
+
+            while (currentType != Clone.Type.None){
+                if(currentIterator.hasNext()){
+                    return currentIterator.next().getValue();
+                }
+
+                currentType = getNextType(currentType);
+                currentIterator = getIterator(currentType);
+            }
+
+            return null;
+        }
+
+        private Iterator<Map.Entry<T, Clone<T>>> getIterator(Clone.Type type){
+            return Clones.this.clones.get(type).entrySet().iterator();
+        }
+
+        private Clone.Type getNextType(Clone.Type type){
+            switch (type){
+                case TypeI: return Clone.Type.TypeII;
+                case TypeII: return Clone.Type.TypeIII;
+                case TypeIII: return Clone.Type.TypeIV;
+            }
+
+            return Clone.Type.None;
+        }
     }
 }
