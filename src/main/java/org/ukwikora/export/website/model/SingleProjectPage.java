@@ -11,9 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class SingleProjectPage {
-    private final String id;
-
+public class SingleProjectPage extends Page {
     private final Link link;
     private final List<String> scripts;
 
@@ -27,7 +25,11 @@ public class SingleProjectPage {
     private final BarChart sequenceChart;
 
     public SingleProjectPage(Project project) throws Exception {
-        this.id = StringUtils.toBeautifulUrl(project.getName(), "");
+        super(
+            StringUtils.toBeautifulUrl(project.getName(), ""),
+            StringUtils.toBeautifulName(project.getName())
+         );
+
         this.link = new Link(project.getName());
 
         ProjectStatistics statistics = new ProjectStatistics(project);
@@ -102,10 +104,6 @@ public class SingleProjectPage {
         chart.setYLabel("Number of Keywords");
 
         return chart;
-    }
-
-    public String getId(){
-        return id;
     }
 
     public Link getLink() {

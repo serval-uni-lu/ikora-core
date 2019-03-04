@@ -6,7 +6,7 @@ import org.ukwikora.utils.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SummaryPage {
+public class SummaryPage extends Page {
     private BarChart linesChart;
     private BarChart userKeywordsChart;
     private BarChart testCasesChart;
@@ -16,7 +16,9 @@ public class SummaryPage {
     private int numberKeywords;
     private int numberTestCases;
 
-    public SummaryPage(List<Project> projects) throws Exception {
+    public SummaryPage(String id, String name, List<Project> projects) throws Exception {
+        super(id, name);
+
         linesOfCode = 0;
         numberKeywords = 0;
         numberTestCases = 0;
@@ -33,9 +35,9 @@ public class SummaryPage {
             numberKeywords += project.getUserKeywords().size();
             numberTestCases += project.getTestCases().size();
 
-            String name = project.getName();
+            String projectName = project.getName();
 
-            labels.add(StringUtils.toBeautifulName(name));
+            labels.add(StringUtils.toBeautifulName(projectName));
             lines.add(project.getLoc());
             userKeywords.add(project.getUserKeywords().size());
             testCases.add(project.getTestCases().size());
@@ -85,10 +87,6 @@ public class SummaryPage {
 
     public List<String> getScripts() {
         return scripts;
-    }
-
-    public String getTitle(){
-        return "Ukwikora - Dashboard";
     }
 
     public int getLinesOfCode() {

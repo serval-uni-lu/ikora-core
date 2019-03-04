@@ -6,17 +6,13 @@ import org.ukwikora.model.Project;
 import org.ukwikora.model.UserKeyword;
 
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 
-public class ClonePage {
-    private final String id;
-    private final String name;
+public class ClonePage extends Page {
     private final Table table;
 
     public ClonePage(String id, String name, List<Project> projects) {
-        this.id = id;
-        this.name = name;
+        super(id, name);
 
         this.table = new Table(
                 "clones",

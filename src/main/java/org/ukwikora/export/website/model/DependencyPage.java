@@ -8,14 +8,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DependencyPage {
-    private final String id;
-    private final String name;
+public class DependencyPage extends Page {
     private final List<Dependency> dependencies;
 
     public DependencyPage(String id, String name, List<Project> projects) {
-        this.id = id;
-        this.name = name;
+        super(id, name);
+
         this.dependencies = new ArrayList<>();
 
         for(Project target: projects){
@@ -29,14 +27,6 @@ public class DependencyPage {
 
     public String getJsonDependencies() throws IOException {
         return JsonUtils.convertToJsonArray(dependencies);
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public String getUrl(){

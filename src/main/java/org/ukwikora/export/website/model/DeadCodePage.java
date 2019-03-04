@@ -7,14 +7,12 @@ import org.ukwikora.utils.StringUtils;
 
 import java.util.List;
 
-public class DeadCodePage {
-    private final String id;
-    private final String name;
+public class DeadCodePage extends Page {
+
     private final Table table;
 
     public DeadCodePage(String id, String name, List<Project> projects) throws Exception {
-        this.id = id;
-        this.name = name;
+        super(id, name);
 
         this.table = new Table(
                 "dead-code-table",
@@ -52,14 +50,6 @@ public class DeadCodePage {
                 }
             }
         }
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public Table getTable() {
