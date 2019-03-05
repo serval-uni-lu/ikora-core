@@ -138,4 +138,13 @@ public class ValueTest {
         String bareComposite = Value.getBareName(composite);
         assertEquals("ENV-${env}", bareComposite);
     }
+
+    @Test
+    public void checkEscape(){
+        String simple = "${simple}";
+        String parenthesis = "${test(with_parenthesis)}";
+
+        assertEquals("\\$\\{simple\\}", Value.escape(simple));
+        assertEquals("\\$\\{test\\(with_parenthesis\\)\\}", Value.escape(parenthesis));
+    }
 }
