@@ -26,7 +26,7 @@ public class Value implements Differentiable {
         isVariablePattern = Pattern.compile("^(([@$&])\\{)(.*?)(})$");
         hasVariablePattern = Pattern.compile("(.*)(([@$&])\\{)(.*?)(})(.*)");
         findVariablePattern = Pattern.compile("(([@$&])\\{)(.*?)(})");
-        escapePattern = Pattern.compile("[{}()\\[\\].+*?^$\\\\|]");
+        escapePattern = Pattern.compile("[{}()\\[]\\.\\+\\*\\?\\^\\$\\\\|]");
     }
 
     private String value;
