@@ -22,7 +22,7 @@ public class TestCaseFileParserTest {
         assertTrue(TestCaseFileParser.isKeywords("*** keywords ***"));
         assertTrue(TestCaseFileParser.isKeywords("*** Keyword ***"));
         assertTrue(TestCaseFileParser.isKeywords("*** Keywords"));
-        assertFalse(TestCaseFileParser.isSettings("***Wrong***"));
+        assertFalse(TestCaseFileParser.isKeywords("***Wrong***"));
     }
 
     @Test
@@ -32,7 +32,7 @@ public class TestCaseFileParserTest {
         assertTrue(TestCaseFileParser.isTestCases("*** test cases ***"));
         assertTrue(TestCaseFileParser.isTestCases("*** Test Case ***"));
         assertTrue(TestCaseFileParser.isTestCases("*** Test Cases"));
-        assertFalse(TestCaseFileParser.isSettings("***Wrong***"));
+        assertFalse(TestCaseFileParser.isTestCases("***Wrong***"));
     }
 
     @Test
@@ -42,6 +42,6 @@ public class TestCaseFileParserTest {
         assertTrue(TestCaseFileParser.isVariable("*** variables ***"));
         assertTrue(TestCaseFileParser.isVariable("*** Variable ***"));
         assertTrue(TestCaseFileParser.isVariable("*** Variables"));
-        assertFalse(TestCaseFileParser.isSettings("***Wrong***"));
+        assertFalse(TestCaseFileParser.isVariable("***Wrong***"));
     }
 }
