@@ -73,19 +73,19 @@ class TestCaseFileParser {
         testCaseFile.setName(name);
     }
 
-    private static boolean isSettings(String line){
+    static boolean isSettings(String line){
         return LexerUtils.isBlock(line, "setting(s?)");
     }
 
-    private static boolean isTestCases(String line){
+    static boolean isTestCases(String line){
         return LexerUtils.isBlock(line, "test case(s?)");
     }
 
-    private static boolean isKeywords(String line){
+    static boolean isKeywords(String line){
         return LexerUtils.isBlock(line, "keyword(s?)");
     }
 
-    private static boolean isVariable(String line){
+    static boolean isVariable(String line){
         return LexerUtils.isBlock(line, "variable(s?)");
     }
 }
