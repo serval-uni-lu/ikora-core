@@ -73,6 +73,7 @@ public class Ukwikora {
         console.add(standard);
 
         Configurator.initialize(builder.build());
+        Configurator.setLevel("org.reflections", Level.OFF);
     }
 
     private static void setLoggerLevel(Configuration config){
