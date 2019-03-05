@@ -81,7 +81,7 @@ public class ScalarVariable extends Variable {
     protected void setName(String name) {
         this.name = name;
 
-        String patternString = String.format("^[\\$@]\\{%s(\\[\\d+\\])*}$", Value.getBareName(this.name));
+        String patternString = String.format("^\\$\\{%s(((\\[\\d+\\])*)|([\\+\\-\\*/]\\d+))}$", Value.getBareName(this.name));
         this.pattern = Pattern.compile(patternString, Pattern.CASE_INSENSITIVE);
     }
 }
