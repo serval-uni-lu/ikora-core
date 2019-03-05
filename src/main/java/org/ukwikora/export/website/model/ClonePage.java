@@ -11,7 +11,7 @@ import java.util.List;
 public class ClonePage extends Page {
     private final Table table;
 
-    public ClonePage(String id, String name, List<Project> projects) {
+    public ClonePage(String id, String name, List<Project> projects) throws Exception {
         super(id, name);
 
         this.table = new Table(
@@ -21,7 +21,14 @@ public class ClonePage extends Page {
         );
 
         for(Clone<UserKeyword> clone: CloneDetection.findClones(new HashSet<>(projects), UserKeyword.class)){
-            //TODO: fill in the table with the clone values
+            this.table.addRow(new String[]{
+                    "n/a",
+                    clone.getType().name(),
+                    clone.getStatement().getName(),
+                    clone.getStatement().getFileName(),
+                    clone.getStatement().getLineRange().toString(),
+                    clone.getStatement().getFile().getProject().getName()
+            });
         }
     }
 }
