@@ -31,4 +31,8 @@ public class ClonePage extends Page {
             });
         }
     }
+
+    public Table getTable() {
+        return table;
+    }
 }
