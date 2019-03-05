@@ -96,11 +96,11 @@ public class TimeLine implements Differentiable, Iterable<Difference> {
         return lastValid;
     }
 
-    public Clones.Type getCloneType(TimeLine other) {
+    public Clone.Type getCloneType(TimeLine other) {
         String commit = findFirstCommonCommit(other);
 
         if(commit.isEmpty()){
-            return Clones.Type.None;
+            return Clone.Type.None;
         }
 
         Statement thisItem = (Statement)this.findItemByCommit(commit);

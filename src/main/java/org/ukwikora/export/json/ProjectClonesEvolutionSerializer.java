@@ -3,11 +3,9 @@ package org.ukwikora.export.json;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
-import org.ukwikora.analytics.Clones;
+import org.ukwikora.analytics.Clone;
 import org.ukwikora.analytics.EvolutionResults;
 import org.ukwikora.model.Project;
-import org.ukwikora.model.TestCase;
-import org.ukwikora.model.UserKeyword;
 
 import java.io.IOException;
 
@@ -27,11 +25,11 @@ public class ProjectClonesEvolutionSerializer extends JsonSerializer<EvolutionRe
         int numberKeyword = project.getUserKeywords().size();
         int numberTestCase = project.getTestCases().size();
 
-        int numberKeywordClonesTypeI = results.getKeywordClones(project).size(Clones.Type.TypeI);
-        int numberTestCaseClonesTypeI = results.getTestCaseClones(project).size(Clones.Type.TypeI);
+        int numberKeywordClonesTypeI = results.getKeywordClones(project).size(Clone.Type.TypeI);
+        int numberTestCaseClonesTypeI = results.getTestCaseClones(project).size(Clone.Type.TypeI);
 
-        int numberKeywordClonesTypeII = results.getKeywordClones(project).size(Clones.Type.TypeII);
-        int numberTestCaseClonesTypeII = results.getTestCaseClones(project).size(Clones.Type.TypeII);
+        int numberKeywordClonesTypeII = results.getKeywordClones(project).size(Clone.Type.TypeII);
+        int numberTestCaseClonesTypeII = results.getTestCaseClones(project).size(Clone.Type.TypeII);
 
         jsonGenerator.writeStartObject();
 

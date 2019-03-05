@@ -13,8 +13,8 @@ public class ProjectStatistics {
 
     final private Project project;
 
-    private Set<Statement> userKeywords;
-    private Set<Statement> testCases;
+    private Set<UserKeyword> userKeywords;
+    private Set<TestCase> testCases;
 
     public ProjectStatistics(Project project){
         this.project = project;

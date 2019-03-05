@@ -39,8 +39,8 @@ public class StatisticsViewerGenerator {
         org.apache.commons.io.FileUtils.copyDirectory(source, destination);
     }
 
-    void generateSummaryPage(Map<String, Object> input) throws Exception {
-        SummaryPage summaryPage = new SummaryPage(projects);
+    private void generateSummaryPage(Map<String, Object> input) throws Exception {
+        SummaryPage summaryPage = new SummaryPage("index", "Summary", projects);
 
         input.put("summaryPage", summaryPage);
         processTemplate("summaryPage.ftl", input, new File(destination, "index.html"));
@@ -55,7 +55,7 @@ public class StatisticsViewerGenerator {
                 new File(destination, summaryPage.getTestCasesChart().getUrl()));
     }
 
-    void generateDependenciesPage(Map<String, Object> input) throws Exception {
+    private void generateDependenciesPage(Map<String, Object> input) throws Exception {
         DependencyPage dependencies = new DependencyPage("projects-dependency-graph",
                 "Dependency Graph", projects);
 
@@ -68,7 +68,7 @@ public class StatisticsViewerGenerator {
                 new File(destination, dependencies.getUrl()));
     }
 
-    void generateDeadCodePage(Map<String, Object> input) throws Exception {
+    private void generateDeadCodePage(Map<String, Object> input) throws Exception {
         DeadCodePage deadCodePage = new DeadCodePage("dead-code", "Dead Code", projects);
 
         input.put("deadCodePage", deadCodePage);
@@ -76,7 +76,7 @@ public class StatisticsViewerGenerator {
         processTemplate("dead-code.ftl", input, new File(destination, "dead-code.html"));
     }
 
-    void generateSingleProjectPage(Project project, Map<String, Object> input) throws Exception {
+    private void generateSingleProjectPage(Project project, Map<String, Object> input) throws Exception {
         SingleProjectPage singleProjectPage = new SingleProjectPage(project);
 
         input.put("project", singleProjectPage);

@@ -102,13 +102,13 @@ public class SequenceComparisonSerializer extends JsonSerializer<EvolutionResult
         statementTypes.add(TestCase.class);
         statementTypes.add(UserKeyword.class);
 
-        Clones.Type[] cloneTypes = {Clones.Type.TypeI, Clones.Type.TypeII, Clones.Type.None};
+        Clone.Type[] cloneTypes = {Clone.Type.TypeI, Clone.Type.TypeII, Clone.Type.None};
         EvolutionResults.CoEvolutionType[] coEvolutionTypes = {EvolutionResults.CoEvolutionType.CoEvolution, EvolutionResults.CoEvolutionType.NoCoEvolution, EvolutionResults.CoEvolutionType.NoChange};
 
         for(Class<? extends Statement> statementType: statementTypes){
             jsonGenerator.writeObjectFieldStart(statementType.getSimpleName());
 
-            for(Clones.Type cloneType: cloneTypes){
+            for(Clone.Type cloneType: cloneTypes){
                 jsonGenerator.writeObjectFieldStart(cloneType.name());
 
                 for(EvolutionResults.CoEvolutionType coEvolutionType: coEvolutionTypes){

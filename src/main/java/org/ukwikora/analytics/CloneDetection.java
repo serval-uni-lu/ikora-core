@@ -51,8 +51,8 @@ public class CloneDetection<T extends Statement> {
         return detection.run(type);
     }
 
-    public static  <T extends Statement> Clones.Type getCloneType(T t1, T t2){
-        Clones.Type clone = Clones.Type.None;
+    public static  <T extends Statement> Clone.Type getCloneType(T t1, T t2){
+        Clone.Type clone = Clone.Type.None;
 
         if(isTooShort(t1, t2)){
             return clone;
@@ -62,15 +62,15 @@ public class CloneDetection<T extends Statement> {
 
         if(isSameSize(t1, t2)){
             if(isCloneTypeI(t1.getClass(), difference)){
-                clone = Clones.Type.TypeI;
+                clone = Clone.Type.TypeI;
             }
             else if(isCloneTypeII(t1.getClass(), difference)){
-                clone = Clones.Type.TypeII;
+                clone = Clone.Type.TypeII;
             }
         }
 
-        if(clone == Clones.Type.None && isCloneTypeIV(t1.getClass(), difference)){
-            clone = Clones.Type.TypeIV;
+        if(clone == Clone.Type.None && isCloneTypeIV(t1.getClass(), difference)){
+            clone = Clone.Type.TypeIV;
         }
 
         return clone;

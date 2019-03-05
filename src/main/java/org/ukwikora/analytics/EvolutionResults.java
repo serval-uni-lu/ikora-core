@@ -203,11 +203,11 @@ public class EvolutionResults {
         return testCaseClones.get(project);
     }
 
-    public int getTotalElement(Class<? extends Statement> statementType, Clones.Type cloneType, CoEvolutionType coEvolutionType){
+    public <T extends Statement> int getTotalElement(Class<T> statementType, Clone.Type cloneType, CoEvolutionType coEvolutionType){
         int total = 0;
 
         for(Project project: projects){
-            Set<Statement> statements = project.getStatements(statementType);
+            Set<T> statements = project.getStatements(statementType);
 
             if(statements == null){
                 continue;
@@ -229,8 +229,8 @@ public class EvolutionResults {
         return total;
     }
 
-    private boolean checkCloneCriterion(Project project, Statement statement, Clones.Type cloneType){
-        Clones clones = null;
+    private <T extends Statement> boolean checkCloneCriterion(Project project, T statement, Clone.Type cloneType){
+        Clones<T> clones = null;
         if(statement.getClass() == UserKeyword.class){
             clones = getKeywordClones(project);
         }
