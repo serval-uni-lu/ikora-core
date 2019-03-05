@@ -3,7 +3,7 @@ package org.ukwikora.libraries.string;
 import org.ukwikora.model.LibraryKeyword;
 import org.ukwikora.model.Runtime;
 
-public class ConvertToLowerCase extends LibraryKeyword {
+public class ConvertToLowercase extends LibraryKeyword {
     @Override
     public void execute(Runtime runtime) {
 
