@@ -43,7 +43,7 @@ public class StatisticsViewerGenerator {
         SummaryPage summaryPage = new SummaryPage("index", "Summary", projects);
 
         input.put("summaryPage", summaryPage);
-        processTemplate("summaryPage.ftl", input, new File(destination, "index.html"));
+        processTemplate("summary.ftl", input, new File(destination, "index.html"));
 
         processTemplate("lib/bar-chart.ftl", Collections.singletonMap("chart", summaryPage.getLinesChart()),
                 new File(destination, summaryPage.getLinesChart().getUrl()));

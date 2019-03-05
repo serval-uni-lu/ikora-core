@@ -1,7 +1,7 @@
 <#include "lib/base.ftl">
 
 <#macro page_title>
-  ${summaryPage.title}
+  ${summaryPage.name}
 </#macro>
 
 <#macro js_imports>
