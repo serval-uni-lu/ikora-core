@@ -80,6 +80,8 @@ public class ScalarVariable extends Variable {
     @Override
     protected void setName(String name) {
         this.name = name;
-        this.pattern = Pattern.compile(Value.escape(name), Pattern.CASE_INSENSITIVE);
+
+        String patternString = String.format("^[\\$@]\\{%s(\\[\\d+\\])*}$", Value.getBareName(this.name));
+        this.pattern = Pattern.compile(patternString, Pattern.CASE_INSENSITIVE);
     }
 }
