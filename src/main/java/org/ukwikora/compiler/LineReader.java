@@ -1,6 +1,7 @@
 package org.ukwikora.compiler;
 
 import org.ukwikora.model.TestCaseFile;
+import org.ukwikora.utils.FileUtils;
 
 import java.io.*;
 import java.nio.charset.Charset;
@@ -34,7 +35,8 @@ public class LineReader {
         this.file = testCaseFile.getFile();
         loc = 0;
 
-        InputStreamReader input = new InputStreamReader(new FileInputStream(this.file), Charset.forName("UTF-8"));
+        Charset charset = FileUtils.detectCharset(this.file, Charset.forName("UTF-8"));
+        InputStreamReader input = new InputStreamReader(new FileInputStream(this.file), charset);
         this.reader = new LineNumberReader(input);
 
         this.testCaseFile = testCaseFile;
