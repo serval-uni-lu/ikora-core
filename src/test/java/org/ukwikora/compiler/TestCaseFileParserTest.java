@@ -10,7 +10,7 @@ public class TestCaseFileParserTest {
         assertTrue(TestCaseFileParser.isSettings("***Settings***"));
         assertTrue(TestCaseFileParser.isSettings("***Setting***"));
         assertTrue(TestCaseFileParser.isSettings("*** settings ***"));
-        assertTrue(TestCaseFileParser.isSettings("*** Setting ***"));
+        assertTrue(TestCaseFileParser.isSettings("*** Setting ***  "));
         assertTrue(TestCaseFileParser.isSettings("*** Setting"));
         assertFalse(TestCaseFileParser.isSettings("***Wrong***"));
     }
