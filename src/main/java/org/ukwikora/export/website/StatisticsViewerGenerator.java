@@ -28,6 +28,7 @@ public class StatisticsViewerGenerator {
         generateSummaryPage(new HashMap<>(input));
         generateDependenciesPage(new HashMap<>(input));
         generateDeadCodePage(new HashMap<>(input));
+        generateClonePage(new HashMap<>(input));
 
         for(Project project: projects){
             generateSingleProjectPage(project, new HashMap<>(input));
@@ -74,6 +75,14 @@ public class StatisticsViewerGenerator {
         input.put("deadCodePage", deadCodePage);
 
         processTemplate("dead-code.ftl", input, new File(destination, "dead-code.html"));
+    }
+
+    private void generateClonePage(Map<String, Object> input) throws Exception {
+        ClonePage clonePage = new ClonePage("clones", "Duplicated Code", projects);
+
+        input.put("clones", clonePage);
+
+        processTemplate("clones.ftl", input, new File(destination, "clones.html"));
     }
 
     private void generateSingleProjectPage(Project project, Map<String, Object> input) throws Exception {
