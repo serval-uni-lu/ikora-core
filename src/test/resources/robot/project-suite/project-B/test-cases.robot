@@ -19,9 +19,9 @@ Unused Keyword from project B
     Log    Never called
 
 Clone from project B
-    ${time}=   Get Time
-    ${secs}=    Get Time    epoch
-    ${year}=    Get Time    return year
-    Log    ${time}
-    Log    ${secs}
-    Log    ${year}
+    ${other_time}=   Get Time
+    ${other_secs}=    Get Time    epoch
+    ${other_year}=    Get Time    return year
+    Log    ${other_time}
+    Log    ${other_secs}
+    Log    ${other_year}
