@@ -67,10 +67,20 @@ public class SummaryPage extends Page {
 
         testCasesChart.setYLabel("Number of Test Cases");
 
+        setChartsHeight();
+
         scripts = new ArrayList<>(3);
         scripts.add(linesChart.getUrl());
         scripts.add(userKeywordsChart.getUrl());
         scripts.add(testCasesChart.getUrl());
+    }
+
+    private void setChartsHeight(){
+        int height = 600;
+
+        linesChart.setHeight(height);
+        userKeywordsChart.setHeight(height);
+        testCasesChart.setHeight(height);
     }
 
     public BarChart getLinesChart() {

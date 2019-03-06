@@ -7,7 +7,7 @@
 </#macro>
 
 <#macro page_content>
-    <div class="row">
+    <div class="row mb-4">
         <div class="col-sm">
             <div class="card border-0 bg-primary text-white shadow">
                 <div class="card-body">

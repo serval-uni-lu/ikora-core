@@ -3,6 +3,7 @@ Chart.defaults.global.defaultFontFamily = '-apple-system,system-ui,BlinkMacSyste
 Chart.defaults.global.defaultFontColor = '#292b2c';
 
 var ctx = document.getElementById("${chart.id}");
+ctx.height = ${chart.height};
 
 var chart = new Chart(ctx, {
   type: 'bar',
@@ -27,7 +28,7 @@ var chart = new Chart(ctx, {
     },
     scales: {
       xAxes: [{
-        display: false,
+        display: true,
         time: {
           unit: ''
         },
@@ -35,13 +36,15 @@ var chart = new Chart(ctx, {
           display: false
         },
         ticks: {
-          maxTicksLimit: 6
+          autoSkip: false,
+          maxRotation: 90,
+          minRotation: 0
         }
       }],
       yAxes: [{
         ticks: {
           min: 0,
-          max: Math.max.apply(this, ${chart.jsonValues}) + 10,
+          max: Math.max.apply(this, ${chart.jsonValues}),
           maxTicksLimit: 5
         },
         gridLines: {

@@ -14,6 +14,8 @@ public class BarChart {
     private String yLabel;
     private String xLabel;
 
+    private int height;
+
     public BarChart(String id, String name, List<Integer> values, List<String> labels) throws IOException {
         this.id = id;
         this.name = name;
@@ -22,6 +24,8 @@ public class BarChart {
 
         this.yLabel = "";
         this.xLabel = "";
+
+        this.height = 300;
     }
 
     public String getId() {
@@ -58,5 +62,13 @@ public class BarChart {
 
     public String getUrl(){
         return String.format("js/%s.js", getId());
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
     }
 }

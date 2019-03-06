@@ -10275,13 +10275,12 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
 
 .chart-area {
   position: relative;
-  height: 10rem;
   width: 100%;
 }
 
 @media (min-width: 768px) {
   .chart-area {
-    height: 20rem;
+    min-height: 20rem;
   }
 }
 
