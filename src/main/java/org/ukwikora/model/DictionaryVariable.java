@@ -29,7 +29,7 @@ public class DictionaryVariable extends Variable {
 
     @Override
     public void addElement(String element) {
-        values.add(new Value(element));
+        values.add(new Value(this, element));
     }
 
     @Override

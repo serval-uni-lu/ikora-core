@@ -27,7 +27,7 @@ public class ScalarVariable extends Variable {
 
     @Override
     public void addElement(String element){
-        this.value = new Value(element);
+        this.value = new Value(this, element);
     }
 
     @Override

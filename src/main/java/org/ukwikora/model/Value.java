@@ -29,19 +29,29 @@ public class Value implements Differentiable {
         escapePattern = Pattern.compile("[[{}()\\[\\].+*?^$\\\\|]]");
     }
 
+    private Statement parent;
     private String value;
     private Pattern match;
     private Map<String, Variable> variables;
 
-    Value(String value) {
+    Value(Statement parent, String value) {
+        this.parent = parent;
         this.value = value;
         this.variables = new HashMap<>();
 
         buildRegex();
     }
 
-    public void setVariable(String name, Variable value) {
-        this.variables.put(name, value);
+    Value(String value){
+        this(null, value);
+    }
+
+    public void setVariable(String name, Variable variable) {
+        this.variables.put(name, variable);
+
+        if(parent != null){
+            variable.addDependency(parent);
+        }
     }
 
     @Override
