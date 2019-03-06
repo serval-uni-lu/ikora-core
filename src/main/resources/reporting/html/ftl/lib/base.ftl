@@ -127,8 +127,8 @@
             <div id="content">
 
                 <!-- Topbar -->
-                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-                    <h1>${title}</h1>
+                <nav class="navbar navbar-expand navbar-dark bg-dark topbar mb-4 static-top shadow">
+                    <a class="navbar-brand mr-1" href="#">${title}</a>
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav mr-auto ml-md-auto">
