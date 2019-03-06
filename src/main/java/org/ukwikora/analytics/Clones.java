@@ -68,7 +68,7 @@ public class Clones<T extends Statement> implements Iterable<Clone<T>> {
             }
 
             Clone.Type type = getNextType(currentType);
-            Iterator<Map.Entry<T, Clone<T>>> iterator = getIterator(this.currentType);
+            Iterator<Map.Entry<T, Clone<T>>> iterator = getIterator(type);
 
             while (type != Clone.Type.None){
                 if(iterator.hasNext()){
