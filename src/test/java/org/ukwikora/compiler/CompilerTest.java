@@ -13,8 +13,7 @@ import static org.junit.Assert.*;
 public class CompilerTest {
     @Test
     public void checkParseLibraryVariable(){
-        final File robot = Globals.getResourceFile("robot/library-variable.robot");
-        final Project project = Compiler.compile(robot.getAbsolutePath());
+        final Project project = Globals.compileProject("robot/library-variable.robot");
 
         assertEquals(1, project.getTestCases().size());
 

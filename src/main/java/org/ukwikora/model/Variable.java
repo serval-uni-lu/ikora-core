@@ -14,7 +14,9 @@ public abstract class Variable implements Statement {
     protected String name;
     protected Pattern pattern;
 
-    protected Variable() {}
+    protected Variable() {
+        this.dependencies = new HashSet<>();
+    }
 
     public Variable(String name) {
         this.assignment = null;
