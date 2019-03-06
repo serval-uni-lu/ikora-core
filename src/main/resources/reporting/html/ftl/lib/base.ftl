@@ -2,12 +2,14 @@
 </#macro>
 
 <#macro page_content>
+
 </#macro>
 
-<#macro page_title>
+<#macro page_title title>
+
 </#macro>
 
-<#macro display_page sidebar>
+<#macro display_page sidebar title>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -18,7 +20,7 @@
     <meta name="description" content="">
     <meta name="author" content="Kabinja">
 
-    <@page_title/>
+    <title>${title}</title>
 
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">

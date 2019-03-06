@@ -1,9 +1,5 @@
 <#include "lib/base.ftl">
 
-<#macro page_title>
-  ${summaryPage.name}
-</#macro>
-
 <#macro js_imports>
   <#list summaryPage.scripts as url>
     <script src="${url}"></script>
@@ -84,4 +80,4 @@
   </div>
 </#macro>
 
-<@display_page sidebar=sidebar/>
+<@display_page sidebar=sidebar title=summaryPage.name/>

@@ -1,9 +1,5 @@
 <#include "lib/base.ftl">
 
-<#macro page_title>
-    ${project.link.text}
-</#macro>
-
 <#macro js_imports>
     <#list project.scripts as url>
         <script src="${url}"></script>
@@ -92,4 +88,4 @@
     </div>
 </#macro>
 
-<@display_page sidebar=sidebar/>
+<@display_page sidebar=sidebar title=project.link.text/>

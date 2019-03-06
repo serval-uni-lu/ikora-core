@@ -1,9 +1,5 @@
 <#include "lib/base.ftl">
 
-<#macro page_title>
-    ${dependencies.name}
-</#macro>
-
 <#macro js_imports>
         <script src="${dependencyGraphUrl}"></script>
 </#macro>
@@ -21,4 +17,4 @@
     </div>
 </#macro>
 
-<@display_page sidebar=sidebar/>
+<@display_page sidebar=sidebar title=dependencies.name/>
