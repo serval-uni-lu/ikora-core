@@ -35,6 +35,10 @@ var chart = new Chart(ctx, {
         gridLines: {
           display: false
         },
+        scaleLabel: {
+          display: true,
+          labelString: "${chart.XLabel}"
+        },
         ticks: {
           autoSkip: false,
           maxRotation: 90,
@@ -46,6 +50,10 @@ var chart = new Chart(ctx, {
           min: 0,
           max: Math.max.apply(this, ${chart.jsonValues}),
           maxTicksLimit: 5
+        },
+        scaleLabel: {
+          display: true,
+          labelString: "${chart.YLabel}"
         },
         gridLines: {
           display: true

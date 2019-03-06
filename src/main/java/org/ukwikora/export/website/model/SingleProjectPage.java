@@ -60,6 +60,7 @@ public class SingleProjectPage extends Page {
                 getKeys(connectivity));
 
         chart.setYLabel("Number of Keywords");
+        chart.setXLabel("Number of keywords depending on the keyword");
 
         return chart;
     }
@@ -74,6 +75,7 @@ public class SingleProjectPage extends Page {
                 getKeys(depth));
 
         chart.setYLabel("Number of Keywords");
+        chart.setXLabel("Longest distance to a library keyword");
 
         return chart;
     }
@@ -87,7 +89,8 @@ public class SingleProjectPage extends Page {
                 getValues(sequence),
                 getKeys(sequence));
 
-        chart.setYLabel("Number of Keywords");
+        chart.setYLabel("Number of Test Cases");
+        chart.setXLabel("Number of actions performed");
 
         return chart;
     }
@@ -102,6 +105,7 @@ public class SingleProjectPage extends Page {
                 getKeys(size));
 
         chart.setYLabel("Number of Keywords");
+        chart.setXLabel("Number of keywords composing the keyword");
 
         return chart;
     }
