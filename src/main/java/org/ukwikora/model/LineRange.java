@@ -16,4 +16,9 @@ public class LineRange {
     public int getEnd() {
         return end;
     }
+
+    @Override
+    public String toString() {
+        return String.format("%d - %d", this.start, this.end);
+    }
 }
