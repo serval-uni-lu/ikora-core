@@ -1,10 +1,12 @@
 *** Settings ***
-Resource   ../project-C/resources.robot
+Resource    ../project-C/resources.robot
 
 *** Test Cases ***
 Test from project A
     First Keyword from project A
     Second Keyword from project A
+    Clone from project A
+    Clone from project C
 
 *** Keywords ***
 First Keyword from project A
@@ -12,3 +14,12 @@ First Keyword from project A
 
 Second Keyword from project A
     Keyword from resrouces    ${everwhere}
+
+
+Clone from project A
+    ${time}=   Get Time
+    ${secs}=    Get Time    epoch
+    ${year}=    Get Time    return year
+    Log    ${time}
+    Log    ${secs}
+    Log    ${year}
