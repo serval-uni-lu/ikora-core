@@ -13,12 +13,17 @@ public class Clones<T extends Statement> implements Iterable<Clone<T>> {
     public Clones(){
         this.clones = new EnumMap<>(Clone.Type.class);
 
-        for(Clone.Type type: Clone.Type.values()){
-            this.clones.put(type, new HashMap<>());
-        }
+        this.clones.put(Clone.Type.TypeI, new HashMap<>());
+        this.clones.put(Clone.Type.TypeII, new HashMap<>());
+        this.clones.put(Clone.Type.TypeIII, new HashMap<>());
+        this.clones.put(Clone.Type.TypeIV, new HashMap<>());
     }
 
     public void update(T t1, T t2, Clone.Type cloneType){
+        if(Clone.Type.None == cloneType){
+            return;
+        }
+
         set(t1, t2, cloneType);
         set(t2, t1, cloneType);
     }
@@ -70,7 +75,7 @@ public class Clones<T extends Statement> implements Iterable<Clone<T>> {
             Clone.Type type = getNextType(currentType);
             Iterator<Map.Entry<T, Clone<T>>> iterator = getIterator(type);
 
-            while (type != Clone.Type.None){
+            while (iterator != null){
                 if(iterator.hasNext()){
                     return true;
                 }
@@ -91,7 +96,7 @@ public class Clones<T extends Statement> implements Iterable<Clone<T>> {
             currentType = getNextType(currentType);
             currentIterator = getIterator(this.currentType);
 
-            while (currentType != Clone.Type.None){
+            while (currentIterator != null){
                 if(currentIterator.hasNext()){
                     return currentIterator.next().getValue();
                 }
@@ -104,6 +109,10 @@ public class Clones<T extends Statement> implements Iterable<Clone<T>> {
         }
 
         private Iterator<Map.Entry<T, Clone<T>>> getIterator(Clone.Type type){
+            if(Clone.Type.None == type){
+                return null;
+            }
+
             return Clones.this.clones.get(type).entrySet().iterator();
         }
 
