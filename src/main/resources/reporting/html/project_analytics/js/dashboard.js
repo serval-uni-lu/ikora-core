@@ -1,6 +1,12 @@
 (function($) {
   "use strict"; // Start of use strict
 
+  // Call the dataTables jQuery plugin
+  $(document).ready(function() {
+    $('.dataTable').DataTable();
+  });
+
+
   // Toggle the side navigation
   $("#sidebarToggle, #sidebarToggleTop").on('click',function(e) {
     e.preventDefault();

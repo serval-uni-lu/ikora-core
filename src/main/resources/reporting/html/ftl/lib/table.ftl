@@ -1,6 +1,6 @@
 <#macro table data>
     <div class="table-responsive">
-        <table class="table table-bordered" id="${data.id}" width="100%" cellpadding="0">
+        <table class="dataTable table table-bordered" id="${data.id}" width="100%" cellpadding="0">
             <thead>
                 <tr>
                     <#list data.labels as label>

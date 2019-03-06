@@ -22,6 +22,9 @@
 
     <title>${title}</title>
 
+    <!-- Page level plugin CSS-->
+    <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link href="vendor/googleapis/fonts.css" rel="stylesheet">
@@ -178,10 +181,16 @@
     <!-- Core plugin JavaScript-->
     <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
 
-    <!-- Custom scripts for all pages-->
-    <script src="js/dashboard.js"></script>
+    <!-- Table plugins-->
+    <script src="vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+    <!-- Charts plugins-->
     <script src="vendor/chart.js/Chart.min.js"></script>
     <script src="vendor/d3.js/d3.v3.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="js/dashboard.js"></script>
 
     <!-- Page level custom scripts -->
     <@js_imports/>
