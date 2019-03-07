@@ -18,7 +18,7 @@ public class Scope {
             return Optional.empty();
         }
 
-        return Optional.of(testScope.get(testCase).findStatement(name));
+        return Optional.ofNullable(testScope.get(testCase).findStatement(name));
     }
 
     public Optional<Variable> findSuiteVariable(String suite, String name) {
@@ -26,7 +26,7 @@ public class Scope {
             return Optional.empty();
         }
 
-        return Optional.of(suiteScope.get(suite).findStatement(name));
+        return Optional.ofNullable(suiteScope.get(suite).findStatement(name));
     }
 
     public Variable findGlobalVariable(String name) {
