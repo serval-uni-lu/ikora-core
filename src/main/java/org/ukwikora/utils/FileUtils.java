@@ -2,6 +2,7 @@ package org.ukwikora.utils;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.tika.parser.txt.CharsetDetector;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -9,10 +10,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.ByteBuffer;
-import java.nio.charset.CharacterCodingException;
 import java.nio.charset.Charset;
-import java.nio.charset.CharsetDecoder;
 import java.nio.file.Paths;
 
 public class FileUtils {
@@ -86,34 +84,13 @@ public class FileUtils {
         try {
             BufferedInputStream input = new BufferedInputStream(new FileInputStream(f));
 
-            CharsetDecoder decoder = charset.newDecoder();
-            decoder.reset();
+            CharsetDetector detector = new CharsetDetector();
+            detector.setText(input);
 
-            byte[] buffer = new byte[512];
-            boolean identified = false;
-            while ((input.read(buffer) != -1) && (!identified)) {
-                identified = identify(buffer, decoder);
-            }
-
-            input.close();
-
-            if (identified) {
-                return charset;
-            } else {
-                return null;
-            }
-
+            String match = detector.detect().getName();
+            return Charset.forName(match);
         } catch (Exception e) {
             return null;
         }
-    }
-
-    private static boolean identify(byte[] bytes, CharsetDecoder decoder) {
-        try {
-            decoder.decode(ByteBuffer.wrap(bytes));
-        } catch (CharacterCodingException e) {
-            return false;
-        }
-        return true;
     }
 }

@@ -1,11 +1,12 @@
 package org.ukwikora.utils;
 
-import org.apache.commons.io.FilenameUtils;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.ukwikora.Globals;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 
 import static org.junit.Assert.*;
 
@@ -40,5 +41,21 @@ public class FileUtilsTest {
         } catch (IOException e) {
             fail("Io exception raised: " + e.getMessage());
         }
+    }
+
+    @Test
+    public void checkDetectCharsetWithUTF8(){
+        File utf8 = Globals.getResourceFile("files/file-in-utf8.txt");
+        Charset charset = FileUtils.detectCharset(utf8, null);
+        assertNotNull(charset);
+        assertEquals(Charset.forName("UTF-8"), charset);
+    }
+
+    @Test
+    public void checkDetectCharsetWithISO88591(){
+        File utf8 = Globals.getResourceFile("files/file-in-ISO-8859-1.txt");
+        Charset charset = FileUtils.detectCharset(utf8, null);
+        assertNotNull(charset);
+        assertEquals(Charset.forName("ISO-8859-1"), charset);
     }
 }
