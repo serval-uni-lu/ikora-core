@@ -33,4 +33,8 @@ public class Resources {
     public void setTestCaseFile(TestCaseFile testCasefile) {
         this.testCasefile = testCasefile;
     }
+
+    public boolean isValid() {
+        return file != null && testCasefile != null;
+    }
 }

@@ -170,7 +170,7 @@ public class TestCaseFile implements Iterable<UserKeyword> {
         }
 
         for(Resources resources: settings.getAllResources()){
-            if(memory.add(resources.getTestCaseFile())) {
+            if(resources.isValid() && memory.add(resources.getTestCaseFile())) {
                 statement = resources.getTestCaseFile().findStatement(library, name, memory, type);
             }
 
