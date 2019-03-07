@@ -131,18 +131,18 @@ class Linker {
                             step.getFileName()));
                 }
 
-                final Value keywordParameter = parameter.get();
-                final String parameterName = step.getParameter(position, false).toString();
-                Keyword keyword = getKeyword(parameterName, testCaseFile);
+                final String keywordParameter = parameter.get().getName();
+                Keyword keyword = getKeyword(keywordParameter, testCaseFile);
 
                 if(keyword == null) {
-                    throw new MissingKeywordException(String.format("Failed to find keyword parameter: %s", keywordParameter.getName()));
+                    throw new MissingKeywordException(String.format("Failed to find keyword parameter: %s", keywordParameter));
                 }
 
-                KeywordCall call = step.setKeywordParameter(keywordParameter, keyword);
+                final Optional<Value> parameterName = step.getParameter(position, false);
+                KeywordCall call = step.setKeywordParameter(parameterName.get(), keyword);
 
                 if(call == null){
-                    throw new MissingKeywordException(String.format("Failed to set keyword parameter: %s", keywordParameter.getName()));
+                    throw new MissingKeywordException(String.format("Failed to set keyword parameter: %s", keywordParameter));
                 }
 
                 linkStepArguments(call, testCaseFile);
