@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.ukwikora.analytics.FindSuiteVisitor;
 import org.ukwikora.analytics.FindTestCaseVisitor;
 import org.ukwikora.analytics.PathMemory;
+import org.ukwikora.exception.MissingKeywordException;
 import org.ukwikora.model.*;
 
 import java.util.*;
@@ -120,18 +121,34 @@ class Linker {
         }
 
         for(int position: step.getKeywordsLaunchedPosition()){
-            step.getParameter(position, true).ifPresent(keywordParameter ->{
-                try {
-                    Keyword keyword = getKeyword(keywordParameter.toString(), testCaseFile);
+            try {
+                final Optional<Value> parameter = step.getParameter(position, true);
 
-                    if(keyword != null) {
-                        KeywordCall call = step.setKeywordParameter(keywordParameter, keyword);
-                        linkStepArguments(call, testCaseFile);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
+                if(!parameter.isPresent()){
+                    throw new MissingKeywordException(String.format("Failed to get keyword at position %d for step %s in file %s",
+                            position,
+                            step.getName(),
+                            step.getFileName()));
                 }
-            });
+
+                final Value keywordParameter = parameter.get();
+                final String parameterName = step.getParameter(position, false).toString();
+                Keyword keyword = getKeyword(parameterName, testCaseFile);
+
+                if(keyword == null) {
+                    throw new MissingKeywordException(String.format("Failed to find keyword parameter: %s", keywordParameter.getName()));
+                }
+
+                KeywordCall call = step.setKeywordParameter(keywordParameter, keyword);
+
+                if(call == null){
+                    throw new MissingKeywordException(String.format("Failed to set keyword parameter: %s", keywordParameter.getName()));
+                }
+
+                linkStepArguments(call, testCaseFile);
+            } catch (Exception e) {
+                logger.error(e.getMessage());
+            }
         }
     }
 
