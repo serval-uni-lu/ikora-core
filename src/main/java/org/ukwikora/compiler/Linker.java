@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.ukwikora.analytics.FindSuiteVisitor;
 import org.ukwikora.analytics.FindTestCaseVisitor;
 import org.ukwikora.analytics.PathMemory;
+import org.ukwikora.exception.MalformedTestCaseException;
 import org.ukwikora.exception.MissingKeywordException;
 import org.ukwikora.model.*;
 
@@ -53,7 +54,7 @@ class Linker {
 
         for(Step step: testCase) {
             if(!(step instanceof KeywordCall)) {
-                throw new Exception("expecting a step of type keyword call");
+                throw new MalformedTestCaseException("expecting a step of type keyword call");
             }
 
             KeywordCall call = (KeywordCall)step;
