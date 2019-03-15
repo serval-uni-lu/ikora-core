@@ -3,6 +3,7 @@ package org.ukwikora.utils;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.ukwikora.Globals;
+import org.ukwikora.compiler.LineReader;
 
 import java.io.File;
 import java.io.IOException;
@@ -57,5 +58,13 @@ public class FileUtilsTest {
         Charset charset = FileUtils.detectCharset(utf8, null);
         assertNotNull(charset);
         assertEquals(Charset.forName("ISO-8859-1"), charset);
+    }
+
+    @Test
+    public void checkDetectCharsetWithUTF8BOM(){
+        File utf8 = Globals.getResourceFile("files/file-in-utf8-bom.txt");
+        Charset charset = FileUtils.detectCharset(utf8, null);
+        assertNotNull(charset);
+        assertEquals(Charset.forName("UTF8"), charset);
     }
 }

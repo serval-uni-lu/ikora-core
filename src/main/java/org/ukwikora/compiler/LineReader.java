@@ -1,5 +1,6 @@
 package org.ukwikora.compiler;
 
+import org.apache.commons.io.input.BOMInputStream;
 import org.ukwikora.model.TestCaseFile;
 import org.ukwikora.utils.FileUtils;
 
@@ -17,7 +18,8 @@ public class LineReader {
         this.file = file;
         loc = 0;
 
-        InputStreamReader input = new InputStreamReader(new FileInputStream(file), Charset.forName("UTF-8"));
+        Charset charset = FileUtils.detectCharset(file,  Charset.forName("UTF-8"));
+        InputStreamReader input = new InputStreamReader(new BOMInputStream(new FileInputStream(file)), charset);
         this.reader = new LineNumberReader(input);
 
         this.testCaseFile = null;
