@@ -6,7 +6,7 @@ Test from project B
     First Keyword from project B
     Second Keyword from project B
     Clone from project B
-    Clone from project C
+    Clone from project C with spécial character
 
 *** Keywords ***
 First Keyword from project B

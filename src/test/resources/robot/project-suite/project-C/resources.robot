@@ -9,7 +9,7 @@ Keyword from resrouces
     [Arguments]  ${arg1}
     Log    ${arg1}
 
-Clone from project C
+Clone from project C with spécial character
     ${time}=   Get Time
     ${secs}=    Get Time    epoch
     ${year}=    Get Time    return year
