@@ -82,7 +82,7 @@ public class FileUtils {
         return charset;
     }
 
-    private static Charset validateCharset(File f, Charset charset) {
+    private static Charset validateCharset(File f, Charset defaultValue) {
         try {
             BufferedInputStream input = new BufferedInputStream(new FileInputStream(f));
 
@@ -92,7 +92,7 @@ public class FileUtils {
             String match = detector.detect().getName();
             return Charset.forName(match);
         } catch (Exception e) {
-            return null;
+            return defaultValue;
         }
     }
 }
