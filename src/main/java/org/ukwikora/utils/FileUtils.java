@@ -14,6 +14,8 @@ import java.nio.charset.Charset;
 import java.nio.file.Paths;
 
 public class FileUtils {
+    private FileUtils() {}
+
     public static String[] getSubFolders(File folder) {
         if(!folder.exists() || !folder.isDirectory()){
             return ArrayUtils.EMPTY_STRING_ARRAY;
