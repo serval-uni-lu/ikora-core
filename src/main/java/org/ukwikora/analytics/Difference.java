@@ -31,7 +31,7 @@ public class Difference implements Differentiable {
             return true;
         }
 
-        if(ignore.size() == 0){
+        if(ignore.isEmpty()){
             return isEmpty();
         }
 
