@@ -61,7 +61,7 @@ public class Settings {
         this.documentation = documentation;
     }
 
-    public void addResources(Resources resources) {
+    public void addResources(Resources resources) throws IOException {
         if(this.file == null){
             resourcesTable.add(resources);
         }
@@ -69,15 +69,11 @@ public class Settings {
             Project project = this.file.getProject();
             File rootFolder = project.getRootFolder();
 
-            try {
-                if(FileUtils.isSubDirectory(rootFolder, resources.getFile())){
-                    resourcesTable.add(resources);
-                }
-                else{
-                    externalResourcesTable.add(resources);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
+            if(FileUtils.isSubDirectory(rootFolder, resources.getFile())){
+                resourcesTable.add(resources);
+            }
+            else{
+                externalResourcesTable.add(resources);
             }
         }
     }
