@@ -8,15 +8,15 @@ import java.util.*;
 
 @JsonSerialize(using = CloneResultSerializer.class)
 public class Clones<T extends Statement> implements Iterable<Clone<T>> {
-    private Map<Clone.Type, Map<T, Clone<T>>> clones;
+    private Map<Clone.Type, Map<T, Clone<T>>> cloneMap;
 
     public Clones(){
-        this.clones = new EnumMap<>(Clone.Type.class);
+        this.cloneMap = new EnumMap<>(Clone.Type.class);
 
-        this.clones.put(Clone.Type.TypeI, new HashMap<>());
-        this.clones.put(Clone.Type.TypeII, new HashMap<>());
-        this.clones.put(Clone.Type.TypeIII, new HashMap<>());
-        this.clones.put(Clone.Type.TypeIV, new HashMap<>());
+        this.cloneMap.put(Clone.Type.TypeI, new HashMap<>());
+        this.cloneMap.put(Clone.Type.TypeII, new HashMap<>());
+        this.cloneMap.put(Clone.Type.TypeIII, new HashMap<>());
+        this.cloneMap.put(Clone.Type.TypeIV, new HashMap<>());
     }
 
     public void update(T t1, T t2, Clone.Type cloneType){
@@ -29,7 +29,7 @@ public class Clones<T extends Statement> implements Iterable<Clone<T>> {
     }
 
     private void set(T t1, T t2, Clone.Type type){
-        Map<T, Clone<T>> clones = this.clones.get(type);
+        Map<T, Clone<T>> clones = this.cloneMap.get(type);
 
         Clone<T> clone = clones.getOrDefault(t1, new Clone<>(t1, type));
         clone.addClone(t2);
@@ -37,10 +37,10 @@ public class Clones<T extends Statement> implements Iterable<Clone<T>> {
     }
 
     public Clone.Type getCloneType(T element) {
-        if(clones.getOrDefault(Clone.Type.TypeI, new HashMap<>()).get(element) != null){
+        if(cloneMap.getOrDefault(Clone.Type.TypeI, new HashMap<>()).get(element) != null){
             return Clone.Type.TypeI;
         }
-        else if(clones.getOrDefault(Clone.Type.TypeII, new HashMap<>()).get(element) != null){
+        else if(cloneMap.getOrDefault(Clone.Type.TypeII, new HashMap<>()).get(element) != null){
             return Clone.Type.TypeII;
         }
 
@@ -48,7 +48,7 @@ public class Clones<T extends Statement> implements Iterable<Clone<T>> {
     }
 
     public int size(Clone.Type type) {
-        Map<T, Clone<T>> clones = this.clones.getOrDefault(type, Collections.emptyMap());
+        Map<T, Clone<T>> clones = this.cloneMap.getOrDefault(type, Collections.emptyMap());
         return clones.size();
     }
 
@@ -113,7 +113,7 @@ public class Clones<T extends Statement> implements Iterable<Clone<T>> {
                 return null;
             }
 
-            return Clones.this.clones.get(type).entrySet().iterator();
+            return Clones.this.cloneMap.get(type).entrySet().iterator();
         }
 
         private Clone.Type getNextType(Clone.Type type){
