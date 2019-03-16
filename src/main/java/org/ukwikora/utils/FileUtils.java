@@ -83,9 +83,7 @@ public class FileUtils {
     }
 
     private static Charset validateCharset(File f, Charset defaultValue) {
-        try {
-            BufferedInputStream input = new BufferedInputStream(new FileInputStream(f));
-
+        try(BufferedInputStream input = new BufferedInputStream(new FileInputStream(f))) {
             CharsetDetector detector = new CharsetDetector();
             detector.setText(input);
 
