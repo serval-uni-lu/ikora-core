@@ -151,7 +151,7 @@ public class Difference implements Differentiable {
 
     @Override
     public List<Action> differences(@Nonnull Differentiable other) {
-        return null;
+        return Collections.emptyList();
     }
 
     @Override
