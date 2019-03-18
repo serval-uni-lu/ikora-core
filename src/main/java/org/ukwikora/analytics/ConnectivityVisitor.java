@@ -22,13 +22,13 @@ public class ConnectivityVisitor implements StatementVisitor {
 
     @Override
     public void visit(UserKeyword keyword, VisitorMemory memory) {
-        connectivity += keyword.getDependencies().size() > 0 ? 1 : 0;
+        connectivity += keyword.getDependencies().isEmpty() ? 0 : 1;
         VisitorUtils.traverseDependencies(this, keyword, memory);
     }
 
     @Override
     public void visit(LibraryKeyword keyword, VisitorMemory memory) {
-        connectivity += keyword.getDependencies().size() > 0 ? 1 : 0;
+        connectivity += keyword.getDependencies().isEmpty() ? 0 : 1;
         VisitorUtils.traverseDependencies(this, keyword, memory);
     }
 

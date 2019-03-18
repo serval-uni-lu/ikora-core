@@ -19,7 +19,7 @@ public class StatementMatcher {
 
         List<T> unmatched = new ArrayList<>();
 
-        while(statement1.size() > 0){
+        while(!statement1.isEmpty()){
             T keyword1 = statement1.iterator().next();
             T keyword2 = statement2.findStatement(keyword1);
 
@@ -34,7 +34,7 @@ public class StatementMatcher {
             statement1.remove(keyword1);
         }
 
-        while(statement2.size() > 0){
+        while(!statement2.isEmpty()){
             T keyword2 = statement2.iterator().next();
             T keyword1 = findBestCandidate(keyword2, unmatched);
 
@@ -42,7 +42,7 @@ public class StatementMatcher {
             statement2.remove(keyword2);
         }
 
-        while(unmatched.size() > 0){
+        while(!unmatched.isEmpty()){
             T keyword1 = unmatched.iterator().next();
 
             pairs.add(Pair.of(keyword1, null));

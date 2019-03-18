@@ -3,6 +3,7 @@ package org.ukwikora.model;
 import org.ukwikora.analytics.Action;
 import org.ukwikora.analytics.VisitorMemory;
 import org.ukwikora.utils.LevenshteinDistance;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -84,7 +85,7 @@ public class ForLoop extends Step {
 
     @Override
     public void execute(Runtime runtime) {
-
+        throw new NotImplementedException();
     }
 
     @Override

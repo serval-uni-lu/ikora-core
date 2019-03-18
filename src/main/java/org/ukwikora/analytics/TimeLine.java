@@ -27,7 +27,7 @@ public class TimeLine implements Differentiable, Iterable<Difference> {
             return false;
         }
 
-        if(this.sequence.size() > 0 && this.last != difference.getLeft()){
+        if(!this.sequence.isEmpty() && this.last != difference.getLeft()){
             return false;
         }
 
