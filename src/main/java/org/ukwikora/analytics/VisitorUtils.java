@@ -28,9 +28,11 @@ public class VisitorUtils {
     }
 
     public static void traverseAssignmentCall(StatementVisitor visitor, Assignment assignment, VisitorMemory memory){
-        if(assignment.getExpression() != null && assignment.getExpression().getKeyword() != null){
-            assignment.getExpression().getKeyword().accept(visitor, memory.getUpdated(assignment));
-        }
+        assignment.getKeywordCall().ifPresent(call -> {
+            if(call.getKeyword() != null){
+                call.getKeyword().accept(visitor, memory.getUpdated(assignment));
+            }
+        });
     }
 
     public static void traverseKeywordCall(StatementVisitor visitor, KeywordCall call, VisitorMemory memory){

@@ -12,6 +12,7 @@ import org.ukwikora.model.*;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 public class DifferenceSerializer extends JsonSerializer<Difference> {
     static final Logger logger = LogManager.getLogger(DifferenceSerializer.class);
@@ -101,15 +102,18 @@ public class DifferenceSerializer extends JsonSerializer<Difference> {
 
                 case CHANGE_STEP_EXPRESSION:
                 {
-                    jsonGenerator.writeStringField("type", "change step expression");
-
                     Assignment assignmentBefore = (Assignment) action.getLeft();
-                    jsonGenerator.writeStringField("before", assignmentBefore.getExpression().toString());
-
                     Assignment assignmentAfter = (Assignment) action.getRight();
-                    jsonGenerator.writeStringField("after", assignmentAfter.getExpression().toString());
 
-                    writeKeywordInfo(jsonGenerator, difference.getLeft(), "keyword", false);
+                    Optional<KeywordCall> before = assignmentBefore.getKeywordCall();
+                    Optional<KeywordCall> after = assignmentAfter.getKeywordCall();
+
+                    if(before.isPresent() && after.isPresent()){
+                        jsonGenerator.writeStringField("type", "change step expression");
+                        jsonGenerator.writeStringField("before", before.get().toString());
+                        jsonGenerator.writeStringField("after", after.get().toString());
+                        writeKeywordInfo(jsonGenerator, difference.getLeft(), "keyword", false);
+                    }
                 }
                 break;
 
