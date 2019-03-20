@@ -281,4 +281,9 @@ public class KeywordCall extends Step {
     public void accept(StatementVisitor visitor, VisitorMemory memory){
         visitor.visit(this, memory);
     }
+
+    @Override
+    public Optional<KeywordCall> getKeywordCall() {
+        return Optional.of(this);
+    }
 }

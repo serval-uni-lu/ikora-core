@@ -175,21 +175,6 @@ public class CloneDetection<T extends Statement> {
     }
 
     private static Keyword getKeywordFromStep(Step step){
-        if(step instanceof ForLoop){
-            return null;
-        }
-        else if(step instanceof KeywordCall){
-            return ((KeywordCall)step).getKeyword();
-        }
-        else if(step instanceof Assignment){
-            KeywordCall call = ((Assignment)step).getExpression();
-            if(call == null){
-                return null;
-            }
-
-            return call.getKeyword();
-        }
-
-        return null;
+        return step.getKeywordCall().map(KeywordCall::getKeyword).orElse(null);
     }
 }

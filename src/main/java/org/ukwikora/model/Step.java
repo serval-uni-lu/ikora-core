@@ -6,7 +6,7 @@ import java.util.*;
 
 public abstract class Step implements Keyword {
     private Value name;
-    private Statement parent;
+    private Keyword parent;
     private TestCaseFile file;
     private LineRange lineRange;
 
@@ -24,7 +24,7 @@ public abstract class Step implements Keyword {
         return this.name.toString();
     }
 
-    public Statement getParent() {
+    public Keyword getParent() {
         return parent;
     }
 
@@ -45,7 +45,7 @@ public abstract class Step implements Keyword {
     @Override
     public void addDependency(@Nonnull Statement dependency) {
         if(dependency instanceof Keyword){
-            this.parent = dependency;
+            this.parent = (Keyword) dependency;
         }
     }
 
@@ -131,4 +131,6 @@ public abstract class Step implements Keyword {
     public abstract boolean hasKeywordParameters();
 
     public abstract List<KeywordCall> getKeywordParameter();
+
+    public abstract Optional<KeywordCall> getKeywordCall();
 }

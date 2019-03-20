@@ -84,6 +84,11 @@ public class ForLoop extends Step {
     }
 
     @Override
+    public Optional<KeywordCall> getKeywordCall() {
+        return Optional.empty();
+    }
+
+    @Override
     public void execute(Runtime runtime) {
         throw new NotImplementedException();
     }

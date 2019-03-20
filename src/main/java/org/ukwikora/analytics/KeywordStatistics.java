@@ -1,7 +1,10 @@
 package org.ukwikora.analytics;
 
+import org.ukwikora.model.KeywordDefinition;
 import org.ukwikora.model.Sequence;
 import org.ukwikora.model.Statement;
+
+import java.util.Set;
 
 public class KeywordStatistics {
     public static int getConnectivity(Statement statement){
@@ -37,5 +40,12 @@ public class KeywordStatistics {
         statement.accept(visitor, new PathMemory());
 
         return visitor.getSequence();
+    }
+
+    public static Set<KeywordDefinition> getDependencies(Statement statement, Set<KeywordDefinition> filter){
+        DependencyCheckerVisitor visitor = new DependencyCheckerVisitor(filter);
+        statement.accept(visitor, new PathMemory());
+
+        return visitor.getDependencies();
     }
 }

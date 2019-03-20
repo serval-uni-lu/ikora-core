@@ -23,18 +23,28 @@ public class ProjectAnalyticsCli implements CommandRunner {
 
     @Override
     public void run() throws Exception {
-        // read configuration and setup system
-        Configuration config = Configuration.getInstance();
-        Plugin analytics = config.getPlugin("project analytics");
-        String tmpLocation = loadProjects(analytics);
-        File outputDir = new File(analytics.getPropertyAsString("output directory"));
+        String tmpLocation = "";
 
-        // analyze projects
-        List<Project> projects = compileProjects(tmpLocation);
+        try{
+            // read configuration and setup system
+            Configuration config = Configuration.getInstance();
+            Plugin analytics = config.getPlugin("project analytics");
+            tmpLocation = loadProjects(analytics);
+            File outputDir = new File(analytics.getPropertyAsString("output directory"));
 
-        // export to static website
-        StatisticsViewerGenerator generator = new StatisticsViewerGenerator(projects, outputDir);
-        generator.generate();
+            // analyze projects
+            List<Project> projects = compileProjects(tmpLocation);
+
+            // export to static website
+            StatisticsViewerGenerator generator = new StatisticsViewerGenerator(projects, outputDir);
+            generator.generate();
+        }
+        finally {
+            if(tmpLocation.isEmpty()) {
+                File tmp = new File(tmpLocation);
+                tmp.deleteOnExit();
+            }
+        }
     }
 
     private String loadProjects(Plugin analytics) {

@@ -68,25 +68,18 @@ class Linker {
         return unresolvedArguments;
     }
 
-    private List<ScopeValue> linkSteps(UserKeyword userKeyword, TestCaseFile testCaseFile) throws Exception {
+    private List<ScopeValue> linkSteps(UserKeyword userKeyword, TestCaseFile testCaseFile) throws RuntimeException {
         List<ScopeValue> unresolvedArguments = new ArrayList<>();
 
         for (Step step: userKeyword) {
-            KeywordCall call;
-
-            if(step instanceof KeywordCall){
-                call = (KeywordCall)step;
-            }
-            else if(step instanceof Assignment){
-                call = ((Assignment)step).getExpression();
-            }
-            else{
-                continue;
-            }
-
-            String name = call.getName().trim();
-
-            unresolvedArguments.addAll(resolveCall(userKeyword, testCaseFile, call, name));
+            step.getKeywordCall().ifPresent(call -> {
+                try {
+                    String name = call.getName().trim();
+                    unresolvedArguments.addAll(resolveCall(userKeyword, testCaseFile, call, name));
+                } catch (Exception e) {
+                    throw new RuntimeException(e.getMessage());
+                }
+            });
         }
 
         return unresolvedArguments;

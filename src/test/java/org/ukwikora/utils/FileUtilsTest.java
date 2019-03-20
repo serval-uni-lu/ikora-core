@@ -1,22 +1,21 @@
 package org.ukwikora.utils;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.ukwikora.Globals;
-import org.ukwikora.compiler.LineReader;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class FileUtilsTest {
     private static File base;
     private static File child1;
     private static File child2;
 
-    @BeforeClass
+    @BeforeAll
     public static void initializeFiles() {
         base = new File("/test/root/");
         child1 = new File("/test/root/testCases.robot");

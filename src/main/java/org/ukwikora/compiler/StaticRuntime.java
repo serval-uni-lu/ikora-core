@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.ukwikora.analytics.FindSuiteVisitor;
 import org.ukwikora.analytics.FindTestCaseVisitor;
 import org.ukwikora.analytics.PathMemory;
+import org.ukwikora.libraries.builtin.ImportLibrary;
 import org.ukwikora.libraries.builtin.SetGlobalVariable;
 import org.ukwikora.libraries.builtin.SetSuiteVariable;
 import org.ukwikora.libraries.builtin.SetTestVariable;
@@ -60,10 +61,37 @@ public class StaticRuntime extends Runtime {
                     })
             );
         }
+        else if(keyword.getClass() == ImportLibrary.class){
+            KeywordDefinition parent = null;
+            Keyword current = call.getParent();
+
+            while(current != null){
+                 if(current.getClass() == Step.class) {
+                    current = ((Step) current).getParent();
+                 }
+                 else if(current.getClass() == KeywordDefinition.class){
+                    parent = (KeywordDefinition) current;
+                    break;
+                 }
+                 else{
+                     throw new RuntimeException(String.format("Failed to resolve dynamic import in file %s, lines %s",
+                             call.getFileName(),
+                             call.getLineRange().toString()));
+                 }
+            }
+
+            if(parent != null){
+                this.scope.setDynamicResources(parent, call.getParameters());
+            }
+        }
     }
 
     public Optional<Variable> findInScope(Set<TestCase> testCases, Set<String> suites, String name){
         return scope.findInScope(testCases, suites, name);
+    }
+
+    public ResourcesTable getDynamicResources(KeywordDefinition keyword){
+        return scope.getDynamicResources(keyword);
     }
 
     private Optional<Variable> createVariable(Value value){

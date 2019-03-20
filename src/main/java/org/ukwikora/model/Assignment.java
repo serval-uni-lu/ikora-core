@@ -18,10 +18,6 @@ public class Assignment extends Step {
         returnValues = new ArrayList<>();
     }
 
-    public KeywordCall getExpression() {
-        return expression;
-    }
-
     public List<Variable> getReturnValues() {
         return returnValues;
     }
@@ -54,17 +50,16 @@ public class Assignment extends Step {
 
     @Override
     public boolean hasKeywordParameters() {
-        if(getExpression() != null){
-            return getExpression().hasKeywordParameters();
-        }
+        return getKeywordCall().map(KeywordCall::hasKeywordParameters).orElse(false);
 
-        return false;
     }
 
     @Override
     public List<KeywordCall> getKeywordParameter() {
-        if(getExpression() != null){
-            return getExpression().getKeywordParameter();
+        Optional<KeywordCall> call = getKeywordCall();
+
+        if(call.isPresent()){
+            return call.get().getKeywordParameter();
         }
 
         return Collections.emptyList();
@@ -109,7 +104,7 @@ public class Assignment extends Step {
 
     @Override
     public void getSequences(List<Sequence> sequences) {
-        getExpression().getSequences(sequences);
+        getKeywordCall().ifPresent(call -> call.getSequences(sequences));
     }
 
     @Override
@@ -165,13 +160,19 @@ public class Assignment extends Step {
         else{
             Assignment assignment = (Assignment)other;
 
-            if(this.getExpression().distance(assignment.getExpression()) > 0){
-                actions.add(Action.changeStepExpression(this, assignment));
-            }
+            getKeywordCall().ifPresent(call -> {
+                assignment.getKeywordCall().ifPresent(otherCall -> {
 
-            if(LevenshteinDistance.index(this.getReturnValues(), assignment.getReturnValues()) > 0){
-                actions.add(Action.changeStepReturnValues(this, assignment));
-            }
+                    if(call.distance(otherCall) > 0){
+                        actions.add(Action.changeStepExpression(this, assignment));
+                    }
+
+                    if(LevenshteinDistance.index(this.getReturnValues(), assignment.getReturnValues()) > 0){
+                        actions.add(Action.changeStepReturnValues(this, assignment));
+                    }
+                });
+            });
+
         }
 
         return actions;
@@ -187,7 +188,8 @@ public class Assignment extends Step {
         }
 
         builder.append("\t=\t");
-        builder.append(getExpression().toString());
+
+        getKeywordCall().ifPresent(call -> builder.append(call.toString()));
 
         return builder.toString();
     }
@@ -218,5 +220,10 @@ public class Assignment extends Step {
     @Override
     public void accept(StatementVisitor visitor, VisitorMemory memory){
         visitor.visit(this, memory);
+    }
+
+    @Override
+    public Optional<KeywordCall> getKeywordCall() {
+        return Optional.ofNullable(expression);
     }
 }

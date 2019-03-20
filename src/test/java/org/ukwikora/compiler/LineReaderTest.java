@@ -1,11 +1,11 @@
 package org.ukwikora.compiler;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.ukwikora.Globals;
 
 import java.io.File;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class LineReaderTest {
     @Test
