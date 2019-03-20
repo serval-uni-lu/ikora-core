@@ -1,6 +1,6 @@
 package org.ukwikora.compiler;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.ukwikora.Globals;
 import org.ukwikora.model.*;
 
@@ -8,7 +8,7 @@ import java.io.File;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class CompilerTest {
     @Test

@@ -10,7 +10,7 @@ import java.net.URL;
 import java.nio.file.Paths;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class Globals {
     public static double epsilon = 0.0001;

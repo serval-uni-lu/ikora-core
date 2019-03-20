@@ -1,6 +1,6 @@
 package org.ukwikora.export.website;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.ukwikora.Globals;
 import org.ukwikora.model.Project;
 
@@ -8,7 +8,7 @@ import java.io.File;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class StatisticsViewerGeneratorTest {
     @Test

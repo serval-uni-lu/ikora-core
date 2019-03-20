@@ -1,13 +1,13 @@
 package org.ukwikora.export.website.model;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.ukwikora.utils.JsonUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class DependencyTest {
     public static List<Dependency> createDependencies(){

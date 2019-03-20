@@ -1,7 +1,7 @@
 package org.ukwikora.analytics;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.ukwikora.Globals;
 import org.ukwikora.model.Project;
 import org.ukwikora.model.TestCase;
@@ -9,14 +9,14 @@ import org.ukwikora.model.UserKeyword;
 
 import java.util.Map;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ProjectStatisticsTest {
-    private Project project;
-    private ProjectStatistics statistics;
+    private static Project project;
+    private static ProjectStatistics statistics;
 
-    @Before
-    public void setup(){
+    @BeforeAll
+    public static void setup(){
         project = Globals.compileProject("robot/web-demo");
         statistics = new ProjectStatistics(project);
     }
