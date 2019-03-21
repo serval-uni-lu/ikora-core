@@ -2,10 +2,7 @@ package org.ukwikora.compiler;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ukwikora.model.LibraryResources;
-import org.ukwikora.model.Project;
-import org.ukwikora.model.Resources;
-import org.ukwikora.model.TestCaseFile;
+import org.ukwikora.model.*;
 import org.ukwikora.utils.FileUtils;
 
 import java.io.File;
@@ -25,9 +22,10 @@ public class Compiler {
         logger.info("Start compilation...");
         Instant start = Instant.now();
 
+        DynamicImports dynamicImports = new DynamicImports();
         for(String folder: paths) {
             try {
-                Project project = parse(folder);
+                Project project = parse(folder, dynamicImports);
 
                 if(project != null){
                     projects.add(project);
@@ -38,7 +36,7 @@ public class Compiler {
         }
 
         long stopParsing = Duration.between(start, Instant.now()).toMillis();
-        logger.info(String.format("\t- Projects parsed in %d ms", stopParsing));
+        logger.info(String.format("Projects parsed in %d ms", stopParsing));
 
         Instant startDependencies = Instant.now();
 
@@ -51,7 +49,7 @@ public class Compiler {
 
         for(Project project: projects) {
             try {
-                StaticRuntime runtime = new StaticRuntime(project);
+                StaticRuntime runtime = new StaticRuntime(project, dynamicImports);
                 loadLibraries(runtime);
                 link(runtime);
             } catch (Exception e) {
@@ -60,7 +58,7 @@ public class Compiler {
         }
 
         long stopLinking = Duration.between(startLinking, Instant.now()).toMillis();
-        logger.info(String.format("\n- Projects linked in %d ms", stopLinking));
+        logger.info(String.format("Projects linked in %d ms", stopLinking));
 
         long total = Duration.between(start, Instant.now()).toMillis();
         logger.info(String.format("Projects compiled in %d ms", total));
@@ -102,8 +100,10 @@ public class Compiler {
         try {
             Instant start = Instant.now();
 
-            project = parse(filePath);
-            StaticRuntime runtime = new StaticRuntime(project);
+            DynamicImports dynamicImports = new DynamicImports();
+            project = parse(filePath, dynamicImports);
+
+            StaticRuntime runtime = new StaticRuntime(project, dynamicImports);
             loadLibraries(runtime);
             link(runtime);
 
@@ -129,7 +129,7 @@ public class Compiler {
         Linker.link(runtime);
     }
 
-    private static Project parse(String filePath) throws Exception {
-        return ProjectParser.parse(filePath);
+    private static Project parse(String filePath, DynamicImports dynamicImports) throws Exception {
+        return ProjectParser.parse(filePath, dynamicImports);
     }
 }

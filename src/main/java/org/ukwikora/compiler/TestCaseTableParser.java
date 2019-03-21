@@ -8,7 +8,7 @@ import java.io.IOException;
 class TestCaseTableParser {
     private TestCaseTableParser() {}
 
-    public static StatementTable<TestCase> parse(LineReader reader) throws IOException {
+    public static StatementTable<TestCase> parse(LineReader reader, DynamicImports dynamicImports) throws IOException {
         StatementTable<TestCase> testCaseTable = new StatementTable<>();
 
         reader.readLine();
@@ -19,7 +19,7 @@ class TestCaseTableParser {
                 continue;
             }
 
-            TestCase testCase = TestCaseParser.parse(reader);
+            TestCase testCase = TestCaseParser.parse(reader, dynamicImports);
             testCaseTable.add(testCase);
         }
 

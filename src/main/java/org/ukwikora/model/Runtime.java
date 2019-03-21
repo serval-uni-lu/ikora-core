@@ -17,10 +17,6 @@ public abstract class Runtime {
         this.libraries = libraries;
     }
 
-    public LibraryResources getLibraries() {
-        return libraries;
-    }
-
     public Variable findLibraryVariable(String name){
         return this.libraries.findVariable(name);
     }
@@ -40,4 +36,6 @@ public abstract class Runtime {
     public List<TestCaseFile> getTestCaseFiles(){
         return project.getTestCaseFiles();
     }
+
+    public abstract Keyword findKeyword(String library, String name) throws InstantiationException, IllegalAccessException;
 }

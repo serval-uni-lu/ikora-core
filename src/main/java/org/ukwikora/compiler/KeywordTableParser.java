@@ -8,7 +8,7 @@ import java.io.IOException;
 class KeywordTableParser {
     private KeywordTableParser() {}
 
-    public static StatementTable<UserKeyword> parse(LineReader reader) throws IOException {
+    public static StatementTable<UserKeyword> parse(LineReader reader, DynamicImports dynamicImports) throws IOException {
         StatementTable<UserKeyword> statementTable = new StatementTable<>();
 
         reader.readLine();
@@ -19,7 +19,7 @@ class KeywordTableParser {
                 continue;
             }
 
-            UserKeyword userKeyword = UserKeywordParser.parse(reader);
+            UserKeyword userKeyword = UserKeywordParser.parse(reader, dynamicImports);
             statementTable.add(userKeyword);
         }
 

@@ -17,7 +17,7 @@ import java.util.Map;
 class ProjectParser {
     private ProjectParser(){}
 
-    public static Project parse(String filePath) throws Exception {
+    public static Project parse(String filePath, DynamicImports dynamicImports) throws Exception {
         Project project = new Project(filePath);
         File file = new File(filePath);
 
@@ -25,7 +25,7 @@ class ProjectParser {
             file = addRobotFiles(file, project);
         }
 
-        parseFiles(file, project);
+        parseFiles(file, project, dynamicImports);
         resolveResources(project);
 
         return project;
@@ -46,14 +46,14 @@ class ProjectParser {
         return getNextNotParsedFile(project);
     }
 
-    private static void parseFiles(File file, Project project){
+    private static void parseFiles(File file, Project project, DynamicImports dynamicImports){
         if(file == null){
             return;
         }
 
-        TestCaseFileParser.parse(file, project);
+        TestCaseFileParser.parse(file, project, dynamicImports);
 
-        parseFiles(getNextNotParsedFile(project), project);
+        parseFiles(getNextNotParsedFile(project), project, dynamicImports);
     }
 
     private static void resolveResources(Project project) throws Exception {

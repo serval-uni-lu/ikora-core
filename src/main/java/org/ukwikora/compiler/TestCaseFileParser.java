@@ -10,7 +10,7 @@ import java.io.IOException;
 class TestCaseFileParser {
     private static final Logger logger = LogManager.getLogger(TestCaseFileParser.class);
 
-    public static void parse(File file, Project project) {
+    public static void parse(File file, Project project, DynamicImports dynamicImports) {
         LineReader reader = null;
 
         try {
@@ -34,11 +34,11 @@ class TestCaseFileParser {
                     testCaseFile.setSettings(settings);
                 }
                 else if(isTestCases(text)){
-                    StatementTable<TestCase> testCaseTable = TestCaseTableParser.parse(reader);
+                    StatementTable<TestCase> testCaseTable = TestCaseTableParser.parse(reader, dynamicImports);
                     testCaseFile.setTestCaseTable(testCaseTable);
                 }
                 else if(isKeywords(text)){
-                    StatementTable<UserKeyword> statementTable = KeywordTableParser.parse(reader);
+                    StatementTable<UserKeyword> statementTable = KeywordTableParser.parse(reader, dynamicImports);
                     testCaseFile.setKeywordTable(statementTable);
                 }
                 else if(isVariable(text)){

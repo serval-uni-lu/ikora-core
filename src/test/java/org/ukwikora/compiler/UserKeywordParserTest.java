@@ -51,7 +51,7 @@ public class UserKeywordParserTest {
             LineReader reader = new LineReader(targetReader);
             reader.readLine();
 
-            keyword = UserKeywordParser.parse(reader);
+            keyword = UserKeywordParser.parse(reader, dynamicImports);
         } catch (IOException e) {
             fail("exception caught: " + e.getMessage());
         }

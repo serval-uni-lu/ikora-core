@@ -1,8 +1,9 @@
-package org.ukwikora.model;
+package org.ukwikora.compiler;
 
 import org.ukwikora.libraries.builtin.ImportLibrary;
 import org.ukwikora.libraries.builtin.ImportResource;
 import org.ukwikora.libraries.builtin.ImportVariables;
+import org.ukwikora.model.*;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.File;
@@ -10,13 +11,13 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class DynamicImports {
-    private ResourcesTable resources;
-    private Set<Library> libraries;
-    private Map<Resources, Set<String>> variables;
+    private Map<KeywordDefinition, ResourcesTable> resources;
+    private Map<KeywordDefinition, Set<Library>> libraries;
+    private Map<KeywordDefinition, Map<Resources, Set<String>>> variables;
 
     public DynamicImports(){
-        resources = new ResourcesTable();
-        libraries = new HashSet<>();
+        resources = new HashMap<>();
+        libraries = new HashMap<>();
         variables = new HashMap<>();
     }
 
@@ -25,50 +26,59 @@ public class DynamicImports {
     }
 
 
-    public void add(Step step){
+    public void add(KeywordDefinition parent, Step step){
         step.getKeywordCall().ifPresent(call -> {
             if(!call.getClass().isAssignableFrom(LibraryKeyword.class)){
                 return;
             }
 
             if(call.getClass().isAssignableFrom(ImportLibrary.class)){
-                addLibrary(call.getParameters());
+                addLibrary(parent, call.getParameters());
             }
             else if(call.getClass().isAssignableFrom(ImportResource.class)){
-                addResources(call.getParameters());
+                addResources(parent, call.getParameters());
             }
             else if(call.getClass().isAssignableFrom(ImportVariables.class)){
-                addVariables(call.getParameters());
+                addVariables(parent, call.getParameters());
             }
         });
     }
 
-    private void addLibrary(List<Value> values){
+    private void addLibrary(KeywordDefinition parent, List<Value> values){
         if(!values.isEmpty()){
+            libraries.putIfAbsent(parent, new HashSet<>());
+            Set<Library> current = libraries.get(parent);
+
             Library library = new Library(values.get(0).getName(), getParams(values), "");
-            libraries.add(library);
+            current.add(library);
         }
     }
 
-    private void addResources(List<Value> values){
+    private void addResources(KeywordDefinition parent, List<Value> values){
         if(!values.isEmpty()){
+            resources.putIfAbsent(parent, new ResourcesTable());
+            ResourcesTable current = resources.get(parent);
+
             String name = values.get(0).getName();
             File file = new File(name);
 
             Resources resource = new Resources(name, file, Collections.emptyList(), "");
-            resources.add(resource);
+            current.add(resource);
         }
     }
 
-    private void addVariables(List<Value> values){
+    private void addVariables(KeywordDefinition parent, List<Value> values){
         if(!values.isEmpty()){
+            variables.putIfAbsent(parent, new HashMap<>());
+            Map<Resources, Set<String>> current = variables.get(parent);
+
             String name = values.get(0).getName();
             File file = new File(name);
 
             Resources resource = new Resources(name, file, Collections.emptyList(), "");
 
-            variables.putIfAbsent(resource, new HashSet<>());
-            Set<String> args = variables.get(resource);
+            current.putIfAbsent(resource, new HashSet<>());
+            Set<String> args = current.get(resource);
             List<String> params = getParams(values);
 
             if(params.isEmpty()){

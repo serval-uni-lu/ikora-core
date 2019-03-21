@@ -8,7 +8,7 @@ import java.io.IOException;
 
 class UserKeywordParser {
 
-    public static UserKeyword parse(LineReader reader) throws IOException {
+    public static UserKeyword parse(LineReader reader, DynamicImports dynamicImports) throws IOException {
         UserKeyword userKeyword = new UserKeyword();
         int startLine = reader.getCurrent().getNumber();
 
@@ -51,7 +51,7 @@ class UserKeywordParser {
                  parseTimeout(reader, tokens, userKeyword);
             }
             else {
-                parseStep(reader, userKeyword);
+                parseStep(reader, userKeyword, dynamicImports);
             }
         }
 
@@ -100,9 +100,11 @@ class UserKeywordParser {
         reader.readLine();
     }
 
-    private static void parseStep(LineReader reader, UserKeyword userKeyword) throws IOException {
+    private static void parseStep(LineReader reader, UserKeyword userKeyword, DynamicImports dynamicImports) throws IOException {
         Step step = StepParser.parse(reader);
         userKeyword.addStep(step);
+
+        dynamicImports.add(userKeyword, step);
     }
 
 }

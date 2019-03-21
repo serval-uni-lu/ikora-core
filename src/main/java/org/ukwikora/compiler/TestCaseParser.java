@@ -10,7 +10,7 @@ class TestCaseParser {
     private TestCaseParser() {}
 
 
-    public static TestCase parse(LineReader reader) throws IOException {
+    public static TestCase parse(LineReader reader, DynamicImports dynamicImports) throws IOException {
         TestCase testCase = new TestCase();
         int startLine = reader.getCurrent().getNumber();
 
@@ -49,7 +49,7 @@ class TestCaseParser {
                 parseTimeout(reader, tokens, testCase);
             }
             else {
-                parseStep(reader, testCase);
+                parseStep(reader, testCase, dynamicImports);
             }
 
             line = reader.getCurrent();
@@ -94,8 +94,10 @@ class TestCaseParser {
         testCase.setDocumentation(builder.toString());
     }
 
-    private static void parseStep(LineReader reader, TestCase testCase) throws IOException {
+    private static void parseStep(LineReader reader, TestCase testCase, DynamicImports dynamicImports) throws IOException {
         Step step = StepParser.parse(reader);
         testCase.addStep(step);
+
+        dynamicImports.add(testCase, step);
     }
 }
