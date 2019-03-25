@@ -158,7 +158,7 @@ class Linker {
         Keyword keyword = testCaseFile.findUserKeyword(library, name);
 
         if(keyword == null) {
-            keyword = runtime.getLibraries().findKeyword(library, name);
+            keyword = runtime.findKeyword(library, name);
         }
 
         if(keyword == null) {

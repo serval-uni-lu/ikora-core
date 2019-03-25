@@ -18,9 +18,11 @@ import java.util.Set;
 
 public class StaticRuntime extends Runtime {
     private static final Logger logger = LogManager.getLogger(StaticRuntime.class);
+    private final DynamicImports dynamicImports;
 
-    public StaticRuntime(Project project) {
+    public StaticRuntime(Project project, DynamicImports dynamicImports) {
         super(project);
+        this.dynamicImports = dynamicImports;
     }
 
     public void resolveGlobal(KeywordCall call){
@@ -105,5 +107,10 @@ public class StaticRuntime extends Runtime {
         }
 
         return variable;
+    }
+
+    @Override
+    public Keyword findKeyword(String library, String name) throws InstantiationException, IllegalAccessException {
+        return libraries.findKeyword(library, name);
     }
 }
