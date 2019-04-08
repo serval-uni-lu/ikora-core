@@ -47,6 +47,7 @@ public class UserKeywordParserTest {
         UserKeyword keyword = null;
 
         try {
+            DynamicImports dynamicImports = new DynamicImports();
             Reader targetReader = new StringReader(text);
             LineReader reader = new LineReader(targetReader);
             reader.readLine();
