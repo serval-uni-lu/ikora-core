@@ -91,28 +91,24 @@ public class Project implements Comparable<Project> {
         return userKeywords;
     }
 
-    public Optional<UserKeyword> findUserKeyword(String name) {
-        for(TestCaseFile testCaseFile: testCaseFiles){
-            UserKeyword userkeyword = testCaseFile.findUserKeyword(name);
+    public Set<UserKeyword> findUserKeyword(String name) {
+        Set<UserKeyword> userKeywordsFound = new HashSet<>();
 
-            if(userkeyword != null){
-                return Optional.of(userkeyword);
-            }
+        for(TestCaseFile testCaseFile: testCaseFiles){
+            userKeywordsFound.addAll(testCaseFile.findUserKeyword(name));
         }
 
-        return Optional.empty();
+        return userKeywordsFound;
     }
 
-    public Optional<UserKeyword> findUserKeyword(String library, String name) {
-        for(TestCaseFile testCaseFile: testCaseFiles){
-            UserKeyword userkeyword = testCaseFile.findUserKeyword(library, name);
+    public Set<UserKeyword> findUserKeyword(String library, String name) {
+        Set<UserKeyword> userKeywordsFound = new HashSet<>();
 
-            if(userkeyword != null){
-                return Optional.of(userkeyword);
-            }
+        for(TestCaseFile testCaseFile: testCaseFiles){
+            userKeywordsFound.addAll(testCaseFile.findUserKeyword(library, name));
         }
 
-        return Optional.empty();
+        return userKeywordsFound;
     }
 
     public Set<Variable> getVariables(){
@@ -136,7 +132,7 @@ public class Project implements Comparable<Project> {
             return (Set<T>)new HashSet<>(getVariables());
         }
 
-        return null;
+        return Collections.emptySet();
     }
 
     public Set<Resources> getExternalResources() {

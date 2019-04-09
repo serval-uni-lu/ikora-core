@@ -5,6 +5,8 @@ import java.util.*;
 import org.ukwikora.model.*;
 import org.ukwikora.utils.LevenshteinDistance;
 
+import javax.swing.text.html.Option;
+
 public class CloneDetection<T extends Statement> {
     private static Set<Action.Type> ignoreForTypeI;
     private static Set<Action.Type> ignoreForTypeII;
@@ -150,14 +152,14 @@ public class CloneDetection<T extends Statement> {
                 continue;
             }
 
-            Keyword left = getKeywordFromStep((Step)action.getLeft());
-            Keyword right = getKeywordFromStep((Step)action.getRight());
+            Optional<Keyword> left = getKeywordFromStep((Step)action.getLeft());
+            Optional<Keyword> right = getKeywordFromStep((Step)action.getRight());
 
-            if(left == null || right == null){
+            if(!left.isPresent() || !right.isPresent()){
                 return false;
             }
 
-            Difference stepDifference = Difference.of(left, right);
+            Difference stepDifference = Difference.of(left.get(), right.get());
 
             if(!isCloneTypeI(Keyword.class, stepDifference)){
                 return false;
@@ -174,7 +176,11 @@ public class CloneDetection<T extends Statement> {
         return LevenshteinDistance.index(left.getSteps(), right.getSteps()) == 0.0;
     }
 
-    private static Keyword getKeywordFromStep(Step step){
-        return step.getKeywordCall().map(KeywordCall::getKeyword).orElse(null);
+    private static Optional<Keyword> getKeywordFromStep(Step step){
+        if(step.getKeywordCall().isPresent()){
+            return  step.getKeywordCall().get().getKeyword();
+        }
+
+        return Optional.empty();
     }
 }

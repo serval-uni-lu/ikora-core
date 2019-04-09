@@ -28,28 +28,26 @@ public class VisitorUtils {
     }
 
     public static void traverseAssignmentCall(StatementVisitor visitor, Assignment assignment, VisitorMemory memory){
-        assignment.getKeywordCall().ifPresent(call -> {
-            if(call.getKeyword() != null){
-                call.getKeyword().accept(visitor, memory.getUpdated(assignment));
-            }
-        });
+        assignment.getKeywordCall().ifPresent(call ->
+                call.getKeyword().ifPresent(keyword ->
+                        keyword.accept(visitor, memory.getUpdated(assignment))
+                )
+        );
     }
 
     public static void traverseKeywordCall(StatementVisitor visitor, KeywordCall call, VisitorMemory memory){
-        if(call.getKeyword() == null){
-            return;
-        }
+        call.getKeyword().ifPresent(keyword ->{
+            if(call.hasKeywordParameters()){
+                for(Step step: call.getKeywordParameter()){
+                    if(step == null){
+                        continue;
+                    }
 
-        if(call.hasKeywordParameters()){
-            for(Step step: call.getKeywordParameter()){
-                if(step == null){
-                    continue;
+                    step.accept(visitor, memory.getUpdated(step));
                 }
-
-                step.accept(visitor, memory.getUpdated(step));
             }
-        }
 
-        call.getKeyword().accept(visitor, memory.getUpdated(call.getKeyword()));
+            keyword.accept(visitor, memory.getUpdated(keyword));
+        });
     }
 }

@@ -163,7 +163,14 @@ public class ReportFactory {
     }
 
     private void linkTestCase(KeywordStatus keywordStatus) throws Exception {
-        TestCase testCase = gitRepository.findTestCase(keywordStatus.getName());
+        Set<TestCase> testCasesFound = gitRepository.findTestCase(keywordStatus.getName());
+
+        if(testCasesFound.size() != 1){
+            throw new Exception("Too many matches found");
+        }
+
+        TestCase testCase = testCasesFound.iterator().next();
+
         keywordStatus.setKeyword(testCase);
 
         for(KeywordStatus child: keywordStatus.getChildren()){

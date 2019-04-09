@@ -35,22 +35,24 @@ public class StatementTable<T extends Statement> implements Iterable<T> {
         file = other.file;
     }
 
-    public T findStatement(T statement){
+    public Set<T> findStatement(T statement){
         return findStatement(statement.getFileName(), statement.getName());
     }
 
-    public T findStatement(String name){
+    public Set<T> findStatement(String name){
         return findStatement(null, name);
     }
 
-    public T findStatement(String file, String name){
-        for(T keyword: statementSet){
-            if(matches(file, name, keyword)){
-                return keyword;
+    public Set<T> findStatement(String file, String name){
+        Set<T> statments = new HashSet<>();
+
+        for(T statement: statementSet){
+            if(matches(file, name, statement)){
+                statments.add(statement);
             }
         }
 
-        return null;
+        return statments;
     }
 
     private boolean matches(String file, String name, T statement){

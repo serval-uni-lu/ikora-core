@@ -32,7 +32,7 @@ public class Value implements Differentiable {
     private Statement parent;
     private String value;
     private Pattern match;
-    private Map<String, Variable> variables;
+    private Map<String, Set<Variable>> variables;
 
     Value(Statement parent, String value) {
         this.parent = parent;
@@ -47,10 +47,22 @@ public class Value implements Differentiable {
     }
 
     public void setVariable(String name, Variable variable) {
-        this.variables.put(name, variable);
+        if(variable == null){
+            return;
+        }
+
+        this.variables.putIfAbsent(name, new HashSet<>());
+        Set<Variable> variables = this.variables.get(name);
+        variables.add(variable);
 
         if(parent != null){
             variable.addDependency(parent);
+        }
+    }
+
+    public void setVariable(String name, Set<Variable> variables) {
+        for(Variable variable: variables){
+            setVariable(name, variable);
         }
     }
 
@@ -108,14 +120,27 @@ public class Value implements Differentiable {
 
     public Optional<List<Value>> getResolvedValues() {
         if(isVariable()){
-            return this.variables.get(this.value).getResolvedValues();
+            Set<Variable> variables = this.variables.get(this.value);
+
+            if(variables.size() != 1){
+                return Optional.empty();
+            }
+
+            return variables.iterator().next().getResolvedValues();
         }
 
         if(hasVariable()){
             String resolvedValue = this.value;
 
-            for(Map.Entry<String, Variable> entry: this.variables.entrySet()){
-                resolvedValue = resolvedValue.replace(entry.getKey(), entry.getValue().getValueAsString());
+            for(Map.Entry<String, Set<Variable>> entry: this.variables.entrySet()){
+                String name = entry.getKey();
+                Set<Variable> variables = entry.getValue();
+
+                if(variables.size() != 1){
+                    return Optional.empty();
+                }
+
+                resolvedValue = resolvedValue.replace(name, variables.iterator().next().getValueAsString());
             }
 
             return Optional.of(Collections.singletonList(new Value(resolvedValue)));

@@ -1,7 +1,9 @@
 package org.ukwikora.model;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public abstract class Runtime {
     protected Scope scope;
@@ -17,19 +19,19 @@ public abstract class Runtime {
         this.libraries = libraries;
     }
 
-    public Variable findLibraryVariable(String name){
-        return this.libraries.findVariable(name);
+    public Set<Variable> findLibraryVariable(String name){
+        return Collections.singleton(this.libraries.findVariable(name));
     }
 
-    public Optional<Variable> findTestVariable(TestCase test, String name) {
+    public Set<Variable> findTestVariable(TestCase test, String name) {
         return this.scope.findTestVariable(test, name);
     }
 
-    public Optional<Variable> findSuiteVariable(String suite, String name) {
+    public Set<Variable> findSuiteVariable(String suite, String name) {
         return this.scope.findSuiteVariable(suite, name);
     }
 
-    public Variable findGlobalVariable(String name) {
+    public Set<Variable> findGlobalVariable(String name) {
         return this.scope.findGlobalVariable(name);
     }
 

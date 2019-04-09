@@ -9,7 +9,7 @@ import javax.annotation.Nonnull;
 import java.util.*;
 
 public class KeywordCall extends Step {
-    private Keyword keyword;
+    private Set<? super Keyword> keywords;
     private List<Value> parameters;
     private Map<Value, KeywordCall> stepParameters;
 
@@ -18,11 +18,15 @@ public class KeywordCall extends Step {
         this.stepParameters = new HashMap<>();
     }
 
-    public void setKeyword(Keyword keyword){
-        this.keyword = keyword;
+    public void setKeywords(Set<? super Keyword> keywords){
+        this.keywords = keywords;
 
-        if(this.keyword != null && getParent() != null) {
-            this.keyword.addDependency(getParent());
+        for (Object o : this.keywords) {
+            Keyword keyword = (Keyword) o;
+
+            if (keyword != null && getParent() != null) {
+                keyword.addDependency(getParent());
+            }
         }
     }
 
@@ -71,13 +75,25 @@ public class KeywordCall extends Step {
         return !this.parameters.isEmpty();
     }
 
-    public Keyword getKeyword() {
-        return keyword;
+    public Set<? super Keyword> getKeywords() {
+        return keywords;
+    }
+
+    public Optional<Keyword> getKeyword() {
+        if(this.keywords.size() != 1){
+            return Optional.empty();
+        }
+
+        return Optional.ofNullable((Keyword)keywords.iterator().next());
     }
 
     @Override
     public Keyword getStep(int position) {
-        return keyword.getStep(position);
+        if(!getKeyword().isPresent()) {
+            return null;
+        }
+
+        return getKeyword().get().getStep(position);
     }
 
     @Override
@@ -108,14 +124,20 @@ public class KeywordCall extends Step {
 
     @Override
     public void getSequences(List<Sequence> sequences) {
-        if(this.keyword == null){
+        if(this.keywords.size() != 1){
             return;
         }
 
-        if(this.keyword instanceof LibraryKeyword){
-            getLibrarySequence((LibraryKeyword)this.keyword, sequences);
+        Keyword keyword = (Keyword)keywords.iterator().next();
+
+        if(keyword == null){
+            return;
         }
-        else if(this.keyword instanceof KeywordDefinition){
+
+        if(keyword instanceof LibraryKeyword){
+            getLibrarySequence((LibraryKeyword)keyword, sequences);
+        }
+        else if(keyword instanceof KeywordDefinition){
             ((KeywordDefinition)keyword).getSequences(sequences);
         }
     }
@@ -156,20 +178,20 @@ public class KeywordCall extends Step {
 
     @Override
     public Value.Type[] getArgumentTypes() {
-        if(this.keyword == null){
+        if(!getKeyword().isPresent()){
             return new Value.Type[0];
         }
 
-        return this.keyword.getArgumentTypes();
+        return getKeyword().get().getArgumentTypes();
     }
 
     @Override
     public int[] getKeywordsLaunchedPosition() {
-        if(this.keyword == null){
+        if(!getKeyword().isPresent()){
             return new int[0];
         }
 
-        int[] positions = this.keyword.getKeywordsLaunchedPosition();
+        int[] positions = getKeyword().get().getKeywordsLaunchedPosition();
 
         if(positions.length == 1 && positions[0] == -1){
             positions = new int[getParameters().size()];
@@ -244,7 +266,7 @@ public class KeywordCall extends Step {
 
         KeywordCall step = new KeywordCall();
         step.addDependency(this.getParent());
-        step.setKeyword(keyword);
+        step.setKeywords(Collections.singleton(keyword));
         step.setFile(this.getFile());
         step.setName(keywordParameter.toString());
 
@@ -260,11 +282,11 @@ public class KeywordCall extends Step {
 
     @Override
     public Type getType(){
-        if(this.keyword == null){
+        if(!getKeyword().isPresent()){
             return Type.Unknown;
         }
 
-        return this.keyword.getType();
+        return getKeyword().get().getType();
     }
 
     @Override

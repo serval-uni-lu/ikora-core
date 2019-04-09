@@ -26,69 +26,71 @@ public class StaticRuntime extends Runtime {
     }
 
     public void resolveGlobal(KeywordCall call){
-        Keyword keyword = call.getKeyword();
+        call.getKeyword().ifPresent(
+            keyword -> {
+                if(!(keyword instanceof LibraryKeyword)){
+                    return;
+                }
 
-        if(!(keyword instanceof LibraryKeyword)){
-            return;
-        }
+                if(keyword.getClass() == SetGlobalVariable.class){
+                    call.getParameter(0, false).ifPresent(value ->
+                            createVariable(value).ifPresent(variable ->
+                                    this.scope.setGlobalScope(variable)
+                            )
+                    );
+                }
+                else if(keyword.getClass() == SetSuiteVariable.class){
+                    call.getParameter(0, false).ifPresent(value ->
+                            createVariable(value).ifPresent(variable -> {
+                                FindSuiteVisitor visitor = new FindSuiteVisitor();
+                                call.accept(visitor, new PathMemory());
 
-        if(keyword.getClass() == SetGlobalVariable.class){
-            call.getParameter(0, false).ifPresent(value ->
-                createVariable(value).ifPresent(variable ->
-                    this.scope.setGlobalScope(variable)
-                )
-            );
-        }
-        else if(keyword.getClass() == SetSuiteVariable.class){
-            call.getParameter(0, false).ifPresent(value ->
-                    createVariable(value).ifPresent(variable -> {
-                        FindSuiteVisitor visitor = new FindSuiteVisitor();
-                        call.accept(visitor, new PathMemory());
+                                for(String suite: visitor.getSuites()){
+                                    this.scope.setSuiteScope(suite, variable);
+                                }
+                            })
+                    );
+                }
+                else if(keyword.getClass() == SetTestVariable.class){
+                    call.getParameter(0, false).ifPresent(value ->
+                            createVariable(value).ifPresent(variable -> {
+                                FindTestCaseVisitor visitor = new FindTestCaseVisitor();
+                                call.accept(visitor, new PathMemory());
 
-                        for(String suite: visitor.getSuites()){
-                            this.scope.setSuiteScope(suite, variable);
+                                for(TestCase testCase: visitor.getTestCases()){
+                                    this.scope.setTestScope(testCase, variable);
+                                }
+                            })
+                    );
+                }
+                else if(keyword.getClass() == ImportLibrary.class){
+                    KeywordDefinition parent = null;
+                    Keyword current = call.getParent();
+
+                    while(current != null){
+                        if(current.getClass() == Step.class) {
+                            current = ((Step) current).getParent();
                         }
-                    })
-            );
-        }
-        else if(keyword.getClass() == SetTestVariable.class){
-            call.getParameter(0, false).ifPresent(value ->
-                    createVariable(value).ifPresent(variable -> {
-                        FindTestCaseVisitor visitor = new FindTestCaseVisitor();
-                        call.accept(visitor, new PathMemory());
-
-                        for(TestCase testCase: visitor.getTestCases()){
-                            this.scope.setTestScope(testCase, variable);
+                        else if(current.getClass() == KeywordDefinition.class){
+                            parent = (KeywordDefinition) current;
+                            break;
                         }
-                    })
-            );
-        }
-        else if(keyword.getClass() == ImportLibrary.class){
-            KeywordDefinition parent = null;
-            Keyword current = call.getParent();
+                        else{
+                            throw new RuntimeException(String.format("Failed to resolve dynamic import in file %s, lines %s",
+                                    call.getFileName(),
+                                    call.getLineRange().toString()));
+                        }
+                    }
 
-            while(current != null){
-                 if(current.getClass() == Step.class) {
-                    current = ((Step) current).getParent();
-                 }
-                 else if(current.getClass() == KeywordDefinition.class){
-                    parent = (KeywordDefinition) current;
-                    break;
-                 }
-                 else{
-                     throw new RuntimeException(String.format("Failed to resolve dynamic import in file %s, lines %s",
-                             call.getFileName(),
-                             call.getLineRange().toString()));
-                 }
+                    if(parent != null){
+                        this.scope.setDynamicResources(parent, call.getParameters());
+                    }
+                }
             }
-
-            if(parent != null){
-                this.scope.setDynamicResources(parent, call.getParameters());
-            }
-        }
+        );
     }
 
-    public Optional<Variable> findInScope(Set<TestCase> testCases, Set<String> suites, String name){
+    public Set<Variable> findInScope(Set<TestCase> testCases, Set<String> suites, String name){
         return scope.findInScope(testCases, suites, name);
     }
 

@@ -4,6 +4,7 @@ import org.ukwikora.analytics.VisitorMemory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class UserKeyword extends KeywordDefinition {
     private List<String> parameters;
@@ -61,7 +62,7 @@ public class UserKeyword extends KeywordDefinition {
         return parameters;
     }
 
-    public Variable findLocalVariable(String name) {
+    public Set<Variable> findLocalVariable(String name) {
         return localVariables.findStatement(name);
     }
 

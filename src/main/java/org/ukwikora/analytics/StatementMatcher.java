@@ -21,14 +21,15 @@ public class StatementMatcher {
 
         while(!statement1.isEmpty()){
             T keyword1 = statement1.iterator().next();
-            T keyword2 = statement2.findStatement(keyword1);
+            Set<T> keyword2 = statement2.findStatement(keyword1);
 
-            if(keyword2 == null){
+            if(keyword2.isEmpty()){
                 unmatched.add(keyword1);
             }
             else{
-                pairs.add(Pair.of(keyword1, keyword2));
-                statement2.remove(keyword2);
+                //TODO: Find best match if multiple hits
+                pairs.add(Pair.of(keyword1, keyword2.iterator().next()));
+                statement2.remove(keyword2.iterator().next());
             }
 
             statement1.remove(keyword1);
