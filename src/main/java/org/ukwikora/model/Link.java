@@ -1,11 +1,13 @@
 package org.ukwikora.model;
 
 import java.util.*;
+import org.ukwikora.exception.InvalidImportTypeException;
 
 public class Link<K extends Statement,T extends Statement> {
     public enum Import{
         STATIC,
-        DYNAMIC
+        DYNAMIC,
+        BOTH
     }
 
     private final K source;
@@ -34,7 +36,26 @@ public class Link<K extends Statement,T extends Statement> {
         return Optional.empty();
     }
 
-    public void addStatement(T destination, Import importType){
+    public Set<T> getAllLinks(Import importType){
+        Set<T> allLinks = new HashSet<>();
+
+        switch (importType) {
+            case STATIC:
+                allLinks.addAll(staticCallee);
+                break;
+            case DYNAMIC:
+                allLinks.addAll(dynamicCallee);
+                break;
+            case BOTH:
+                allLinks.addAll(staticCallee);
+                allLinks.addAll(dynamicCallee);
+                break;
+        }
+
+        return allLinks;
+    }
+
+    public void addStatement(T destination, Import importType) throws InvalidImportTypeException {
         switch (importType) {
             case STATIC:
                 addStatement(destination, staticCallee);
@@ -42,6 +63,8 @@ public class Link<K extends Statement,T extends Statement> {
             case DYNAMIC:
                 addStatement(destination, dynamicCallee);
                 break;
+            case BOTH:
+                throw new InvalidImportTypeException("Was expecting a STATIC or DYNAMIC import type, got BOTH instead");
         }
     }
 

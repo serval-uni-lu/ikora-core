@@ -2,6 +2,7 @@ package org.ukwikora.model;
 
 import org.ukwikora.analytics.Action;
 import org.ukwikora.analytics.VisitorMemory;
+import org.ukwikora.exception.InvalidImportTypeException;
 import org.ukwikora.utils.LevenshteinDistance;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
@@ -19,7 +20,7 @@ public class KeywordCall extends Step {
         this.link = new Link<>(this);
     }
 
-    public void linkKeyword(Keyword keyword, Link.Import importLink){
+    public void linkKeyword(Keyword keyword, Link.Import importLink) throws InvalidImportTypeException {
         link.addStatement(keyword, importLink);
     }
 
@@ -70,6 +71,10 @@ public class KeywordCall extends Step {
 
     public Optional<Keyword> getKeyword() {
         return link.getStatement();
+    }
+
+    public Set<Keyword> getAllPentialKeywords(Link.Import importType){
+        return link.getAllLinks(importType);
     }
 
     @Override
@@ -229,18 +234,24 @@ public class KeywordCall extends Step {
             return null;
         }
 
-        KeywordCall step = new KeywordCall();
-        step.addDependency(this.getParent());
-        step.linkKeyword(keyword, Link.Import.STATIC);
-        step.setFile(this.getFile());
-        step.setName(keywordParameter.toString());
+        KeywordCall step;
 
-        int j = keyword.getMaxArgument() == -1 ? parameters.size() : keyword.getMaxArgument();
-        for(int i = index + 1; i < parameters.size() && j > 0; ++i, --j){
-            step.parameters.add(parameters.get(i));
+        try {
+            step = new KeywordCall();
+            step.addDependency(this.getParent());
+            step.linkKeyword(keyword, Link.Import.STATIC);
+            step.setFile(this.getFile());
+            step.setName(keywordParameter.toString());
+
+            int j = keyword.getMaxArgument() == -1 ? parameters.size() : keyword.getMaxArgument();
+            for(int i = index + 1; i < parameters.size() && j > 0; ++i, --j){
+                step.parameters.add(parameters.get(i));
+            }
+
+            stepParameters.put(keywordParameter, step);
+        } catch (InvalidImportTypeException e) {
+            step = null;
         }
-
-        stepParameters.put(keywordParameter, step);
 
         return step;
     }

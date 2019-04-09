@@ -44,12 +44,34 @@ public class CompilerTest {
         Set<UserKeyword> fromResources1 = project.findUserKeyword("Load keyword from resource1");
         assertEquals(1, fromResources1.size());
 
-        //Keyword resources1Step0 = ((KeywordCall)fromResources1.get().getStep(0)).getKeyword();
-        //assertEquals("resources1", resources1Step0.getLibraryName());
+        Optional<Keyword> resources1Step0 = ((KeywordCall)fromResources1.iterator().next().getStep(0)).getKeyword();
+        assertTrue(resources1Step0.isPresent());
+        assertEquals("resources1", resources1Step0.get().getLibraryName());
 
         Set<UserKeyword> fromResources2 = project.findUserKeyword("Load keyword from resource2");
         assertEquals(1, fromResources2.size());
-        //Keyword resources2Step0 = ((KeywordCall)fromResources2.get().getStep(0)).getKeyword();
-        //assertEquals("resources2", resources2Step0.getLibraryName());
+
+        Optional<Keyword> resources2Step0 = ((KeywordCall)fromResources2.iterator().next().getStep(0)).getKeyword();
+        assertTrue(resources2Step0.isPresent());
+        assertEquals("resources2", resources2Step0.get().getLibraryName());
+    }
+
+    @Test
+    public void checkDuplicatedStaticallyImportedKeywordsAreDetectedTwice(){
+        final File robot = Globals.getResourceFile("robot/duplicated-keyword");
+        final Project project = Compiler.compile(robot.getAbsolutePath());
+
+        assertNotNull(project);
+
+        Set<TestCase> mainTest = project.getTestCases();
+        assertEquals(1, mainTest.size());
+
+        KeywordCall simpleCall = (KeywordCall) mainTest.iterator().next().getStep(0);
+        assertNotNull(simpleCall);
+        assertEquals(1, simpleCall.getAllPentialKeywords(Link.Import.BOTH).size());
+
+        KeywordCall duplicateCall = (KeywordCall) mainTest.iterator().next().getStep(1);
+        assertNotNull(duplicateCall);
+        assertEquals(2, duplicateCall.getAllPentialKeywords(Link.Import.BOTH).size());
     }
 }

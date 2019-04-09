@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.ukwikora.analytics.FindSuiteVisitor;
 import org.ukwikora.analytics.FindTestCaseVisitor;
 import org.ukwikora.analytics.PathMemory;
+import org.ukwikora.exception.InvalidImportTypeException;
 import org.ukwikora.exception.MalformedTestCaseException;
 import org.ukwikora.exception.MissingKeywordException;
 import org.ukwikora.model.*;
@@ -87,7 +88,13 @@ class Linker {
 
     private List<ScopeValue> resolveCall(KeywordDefinition parentKeyword, TestCaseFile testCaseFile, KeywordCall call, String name) throws Exception {
         for(Object keyword: getKeywords(name, testCaseFile)){
-            call.linkKeyword((Keyword)keyword, Link.Import.STATIC);
+            try {
+                call.linkKeyword((Keyword)keyword, Link.Import.STATIC);
+            }
+            catch (InvalidImportTypeException e){
+                logger.error(e.getMessage());
+            }
+
         }
 
         return linkCall(parentKeyword, testCaseFile, call);
