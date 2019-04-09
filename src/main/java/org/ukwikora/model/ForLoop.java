@@ -99,13 +99,6 @@ public class ForLoop extends Step {
     }
 
     @Override
-    public void getSequences(List<Sequence> sequences) {
-        for(Step step: steps){
-            step.getSequences(sequences);
-        }
-    }
-
-    @Override
     public double distance(@Nonnull Differentiable other) {
         if(!(other instanceof ForLoop)){
             return 1;

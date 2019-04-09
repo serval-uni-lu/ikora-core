@@ -144,12 +144,6 @@ public abstract class KeywordDefinition implements Keyword, Iterable<Step> {
 
     }
 
-    void getSequences(List<Sequence> sequences){
-        for(Step step: steps){
-            step.getSequences(sequences);
-        }
-    }
-
     @Override
     public double distance(@Nonnull Differentiable other) {
         if(other == this){

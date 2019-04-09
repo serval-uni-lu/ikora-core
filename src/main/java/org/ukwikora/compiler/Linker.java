@@ -86,7 +86,10 @@ class Linker {
     }
 
     private List<ScopeValue> resolveCall(KeywordDefinition parentKeyword, TestCaseFile testCaseFile, KeywordCall call, String name) throws Exception {
-        call.setKeywords(getKeywords(name, testCaseFile));
+        for(Object keyword: getKeywords(name, testCaseFile)){
+            call.linkKeyword((Keyword)keyword, Link.Import.STATIC);
+        }
+
         return linkCall(parentKeyword, testCaseFile, call);
     }
 

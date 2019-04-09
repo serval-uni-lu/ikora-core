@@ -9,25 +9,18 @@ import javax.annotation.Nonnull;
 import java.util.*;
 
 public class KeywordCall extends Step {
-    private Set<? super Keyword> keywords;
+    private Link<KeywordCall, Keyword> link;
     private List<Value> parameters;
     private Map<Value, KeywordCall> stepParameters;
 
     public KeywordCall() {
         this.parameters = new ArrayList<>();
         this.stepParameters = new HashMap<>();
+        this.link = new Link<>(this);
     }
 
-    public void setKeywords(Set<? super Keyword> keywords){
-        this.keywords = keywords;
-
-        for (Object o : this.keywords) {
-            Keyword keyword = (Keyword) o;
-
-            if (keyword != null && getParent() != null) {
-                keyword.addDependency(getParent());
-            }
-        }
+    public void linkKeyword(Keyword keyword, Link.Import importLink){
+        link.addStatement(keyword, importLink);
     }
 
     public void addParameter(String value) {
@@ -75,16 +68,8 @@ public class KeywordCall extends Step {
         return !this.parameters.isEmpty();
     }
 
-    public Set<? super Keyword> getKeywords() {
-        return keywords;
-    }
-
     public Optional<Keyword> getKeyword() {
-        if(this.keywords.size() != 1){
-            return Optional.empty();
-        }
-
-        return Optional.ofNullable((Keyword)keywords.iterator().next());
+        return link.getStatement();
     }
 
     @Override
@@ -120,26 +105,6 @@ public class KeywordCall extends Step {
     @Override
     public void execute(Runtime runtime) {
         throw new NotImplementedException();
-    }
-
-    @Override
-    public void getSequences(List<Sequence> sequences) {
-        if(this.keywords.size() != 1){
-            return;
-        }
-
-        Keyword keyword = (Keyword)keywords.iterator().next();
-
-        if(keyword == null){
-            return;
-        }
-
-        if(keyword instanceof LibraryKeyword){
-            getLibrarySequence((LibraryKeyword)keyword, sequences);
-        }
-        else if(keyword instanceof KeywordDefinition){
-            ((KeywordDefinition)keyword).getSequences(sequences);
-        }
     }
 
     private void getLibrarySequence(LibraryKeyword keyword, List<Sequence> sequences) {
@@ -266,7 +231,7 @@ public class KeywordCall extends Step {
 
         KeywordCall step = new KeywordCall();
         step.addDependency(this.getParent());
-        step.setKeywords(Collections.singleton(keyword));
+        step.linkKeyword(keyword, Link.Import.STATIC);
         step.setFile(this.getFile());
         step.setName(keywordParameter.toString());
 

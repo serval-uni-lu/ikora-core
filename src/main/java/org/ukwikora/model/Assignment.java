@@ -103,11 +103,6 @@ public class Assignment extends Step {
     }
 
     @Override
-    public void getSequences(List<Sequence> sequences) {
-        getKeywordCall().ifPresent(call -> call.getSequences(sequences));
-    }
-
-    @Override
     public boolean equals(Object other) {
         if (!(other instanceof Assignment)){
             return false;
