@@ -49,8 +49,6 @@ public class ProjectAnalyticsCli implements CommandRunner {
 
     private String loadProjects(Plugin analytics) {
         String url = analytics.getPropertyAsString("git url", "");
-        String username = analytics.getPropertyAsString("git user", "");
-        String password = analytics.getPropertyAsString("git password", "");
         String token = analytics.getPropertyAsString("git token", "");
         String group = analytics.getPropertyAsString("git group");
         String location = analytics.getPropertyAsString("project location");
@@ -59,7 +57,7 @@ public class ProjectAnalyticsCli implements CommandRunner {
 
         location = createTmpFolder(location);
 
-        Gitlab gitlab = new Gitlab().setCredentials(username, password).setToken(token).setUrl(url);
+        Gitlab gitlab = new Gitlab().setToken(token).setUrl(url);
         List<org.gitlabloader.api.Project> projects = gitlab.findProjectsByGroupName(group);
         gitlab.cloneProjects(projects, location, defaultBranch, branchExceptions);
 
