@@ -9,4 +9,4 @@
     <@table clones.table/>
 </#macro>
 
-<@display_page sidebar=sidebar title=clones.name/>
+<@display_page sidebar=sidebar title=clones.name generated_date=generated_date/>

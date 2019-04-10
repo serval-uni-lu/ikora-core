@@ -88,4 +88,4 @@
     </div>
 </#macro>
 
-<@display_page sidebar=sidebar title=project.link.text/>
+<@display_page sidebar=sidebar title=project.link.text generated_date=generated_date/>

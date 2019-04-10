@@ -17,4 +17,4 @@
     </div>
 </#macro>
 
-<@display_page sidebar=sidebar title=dependencies.name/>
+<@display_page sidebar=sidebar title=dependencies.name generated_date=generated_date/>

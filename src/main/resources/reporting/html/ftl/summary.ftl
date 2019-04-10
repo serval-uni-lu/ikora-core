@@ -80,4 +80,4 @@
   </div>
 </#macro>
 
-<@display_page sidebar=sidebar title=summaryPage.name/>
+<@display_page sidebar=sidebar title=summaryPage.name generated_date=generated_date/>

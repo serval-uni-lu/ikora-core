@@ -1,6 +1,7 @@
 package org.ukwikora.export.website;
 
 import freemarker.template.*;
+import org.joda.time.DateTime;
 import org.ukwikora.export.website.model.*;
 import org.ukwikora.model.Project;
 import org.ukwikora.utils.FileUtils;
@@ -8,6 +9,7 @@ import org.ukwikora.utils.FileUtils;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.Writer;
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class StatisticsViewerGenerator {
@@ -23,6 +25,7 @@ public class StatisticsViewerGenerator {
         SideBar sideBar = new SideBar(projects);
         Map<String, Object> input = new HashMap<>();
         input.put("sidebar", sideBar);
+        input.put("generated_date", DateTime.now().toLocalDate().toString());
 
         copyResources();
         generateSummaryPage(new HashMap<>(input));
