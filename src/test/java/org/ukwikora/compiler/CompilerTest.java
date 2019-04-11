@@ -74,4 +74,23 @@ public class CompilerTest {
         assertNotNull(duplicateCall);
         assertEquals(2, duplicateCall.getAllPotentialKeywords(Link.Import.BOTH).size());
     }
+
+    @Test
+    public void checkAssignmentFromRealLife(){
+        final File robot = Globals.getResourceFile("robot/assignment");
+        final Project project = Compiler.compile(robot.getAbsolutePath());
+
+        assertNotNull(project);
+
+        Set<UserKeyword> userKeywords = project.getUserKeywords();
+        assertEquals(3, userKeywords.size());
+
+        Set<UserKeyword> ofInterest = project.findUserKeyword("Test with a simple test case to see how assignment works");
+        assertEquals(1, ofInterest.size());
+
+        Keyword keyword = ofInterest.iterator().next();
+        Assignment step0 = (Assignment) keyword.getStep(0);
+        assertEquals(1, step0.getReturnValues().size());
+        assertEquals("${EtatRun}", step0.getReturnValues().get(0).getName());
+    }
 }

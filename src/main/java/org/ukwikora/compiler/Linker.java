@@ -123,10 +123,11 @@ class Linker {
                 final Optional<Value> parameter = step.getParameter(position, true);
 
                 if(!parameter.isPresent()){
-                    throw new MissingKeywordException(String.format("Failed to get keyword at position %d for step %s in file %s",
+                    throw new MissingKeywordException(String.format("Failed to get keyword at position %d for step %s in file %s from project %s",
                             position,
                             step.getName(),
-                            step.getFileName()));
+                            step.getFileName(),
+                            step.getFile().getProject().getName()));
                 }
 
                 final String keywordParameter = parameter.get().getName();
