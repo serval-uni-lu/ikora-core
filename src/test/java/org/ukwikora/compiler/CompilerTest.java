@@ -68,10 +68,10 @@ public class CompilerTest {
 
         KeywordCall simpleCall = (KeywordCall) mainTest.iterator().next().getStep(0);
         assertNotNull(simpleCall);
-        assertEquals(1, simpleCall.getAllPentialKeywords(Link.Import.BOTH).size());
+        assertEquals(1, simpleCall.getAllPotentialKeywords(Link.Import.BOTH).size());
 
         KeywordCall duplicateCall = (KeywordCall) mainTest.iterator().next().getStep(1);
         assertNotNull(duplicateCall);
-        assertEquals(2, duplicateCall.getAllPentialKeywords(Link.Import.BOTH).size());
+        assertEquals(2, duplicateCall.getAllPotentialKeywords(Link.Import.BOTH).size());
     }
 }

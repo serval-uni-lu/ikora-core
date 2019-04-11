@@ -73,7 +73,7 @@ public class KeywordCall extends Step {
         return link.getStatement();
     }
 
-    public Set<Keyword> getAllPentialKeywords(Link.Import importType){
+    public Set<Keyword> getAllPotentialKeywords(Link.Import importType){
         return link.getAllLinks(importType);
     }
 
