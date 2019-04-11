@@ -1,6 +1,8 @@
 package org.ukwikora.model;
 
 import java.util.*;
+
+import org.ukwikora.exception.InvalidDependencyException;
 import org.ukwikora.exception.InvalidImportTypeException;
 
 public class Link<K extends Statement,T extends Statement> {
@@ -55,7 +57,8 @@ public class Link<K extends Statement,T extends Statement> {
         return allLinks;
     }
 
-    public void addStatement(T destination, Import importType) throws InvalidImportTypeException {
+    public void addStatement(T destination, Import importType)
+            throws InvalidImportTypeException, InvalidDependencyException {
         switch (importType) {
             case STATIC:
                 addStatement(destination, staticCallee);
@@ -68,7 +71,7 @@ public class Link<K extends Statement,T extends Statement> {
         }
     }
 
-    private void addStatement(T destination, Set<T> destinations){
+    private void addStatement(T destination, Set<T> destinations) throws InvalidDependencyException {
         if(destination == null){
             return;
         }

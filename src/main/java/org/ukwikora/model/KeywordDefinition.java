@@ -2,6 +2,7 @@ package org.ukwikora.model;
 
 import org.apache.commons.lang3.StringUtils;
 import org.ukwikora.analytics.Action;
+import org.ukwikora.exception.InvalidDependencyException;
 import org.ukwikora.utils.LevenshteinDistance;
 
 
@@ -28,7 +29,7 @@ public abstract class KeywordDefinition implements Keyword, Iterable<Step> {
         this.name = new Value(name);
     }
 
-    public void addStep(Step step){
+    public void addStep(Step step) throws Exception {
         this.steps.add(step);
         step.addDependency(this);
     }

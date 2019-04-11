@@ -10,7 +10,7 @@ class TestCaseParser {
     private TestCaseParser() {}
 
 
-    public static TestCase parse(LineReader reader, DynamicImports dynamicImports) throws IOException {
+    public static TestCase parse(LineReader reader, DynamicImports dynamicImports) throws Exception {
         TestCase testCase = new TestCase();
         int startLine = reader.getCurrent().getNumber();
 
@@ -94,7 +94,7 @@ class TestCaseParser {
         testCase.setDocumentation(builder.toString());
     }
 
-    private static void parseStep(LineReader reader, TestCase testCase, DynamicImports dynamicImports) throws IOException {
+    private static void parseStep(LineReader reader, TestCase testCase, DynamicImports dynamicImports) throws Exception {
         Step step = StepParser.parse(reader);
         testCase.addStep(step);
 

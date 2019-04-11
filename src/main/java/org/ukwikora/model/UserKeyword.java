@@ -25,7 +25,7 @@ public class UserKeyword extends KeywordDefinition {
     }
 
     @Override
-    public void addStep(Step step){
+    public void addStep(Step step) throws Exception {
         super.addStep(step);
 
         if(Assignment.class.isAssignableFrom(step.getClass())){

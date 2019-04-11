@@ -2,6 +2,7 @@ package org.ukwikora.compiler;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ukwikora.exception.InvalidDependencyException;
 import org.ukwikora.model.*;
 
 import java.io.File;
@@ -60,8 +61,11 @@ class TestCaseFileParser {
             project.addTestCaseFile(testCaseFile);
 
             logger.error("failed to parse: " + file.getAbsolutePath());
-        }
-        finally {
+        } catch (InvalidDependencyException e) {
+            logger.error("Oops, something in the link between keywords call and definition went really bad: " + file.getAbsolutePath());
+        } catch (Exception e) {
+            logger.error(String.format("Oops, something went really wrong during parsing!: %s", e.getMessage()));
+        } finally {
             if(reader != null){
                 reader.close();
             }

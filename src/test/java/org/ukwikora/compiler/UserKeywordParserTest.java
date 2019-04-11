@@ -53,7 +53,7 @@ public class UserKeywordParserTest {
             reader.readLine();
 
             keyword = UserKeywordParser.parse(reader, dynamicImports);
-        } catch (IOException e) {
+        } catch (Exception e) {
             fail("exception caught: " + e.getMessage());
         }
 

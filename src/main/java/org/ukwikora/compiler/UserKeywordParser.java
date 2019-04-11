@@ -8,7 +8,7 @@ import java.io.IOException;
 
 class UserKeywordParser {
 
-    public static UserKeyword parse(LineReader reader, DynamicImports dynamicImports) throws IOException {
+    public static UserKeyword parse(LineReader reader, DynamicImports dynamicImports) throws Exception {
         UserKeyword userKeyword = new UserKeyword();
         int startLine = reader.getCurrent().getNumber();
 
@@ -100,7 +100,7 @@ class UserKeywordParser {
         reader.readLine();
     }
 
-    private static void parseStep(LineReader reader, UserKeyword userKeyword, DynamicImports dynamicImports) throws IOException {
+    private static void parseStep(LineReader reader, UserKeyword userKeyword, DynamicImports dynamicImports) throws Exception {
         Step step = StepParser.parse(reader);
         userKeyword.addStep(step);
 

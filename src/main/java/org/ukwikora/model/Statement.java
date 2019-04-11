@@ -2,6 +2,7 @@ package org.ukwikora.model;
 
 
 import org.ukwikora.analytics.VisitorMemory;
+import org.ukwikora.exception.InvalidDependencyException;
 
 import javax.annotation.Nonnull;
 import java.util.Set;
@@ -25,5 +26,5 @@ public interface Statement extends Differentiable {
     boolean matches(@Nonnull String name);
 
     Set<Statement> getDependencies();
-    void addDependency(@Nonnull Statement dependency);
+    void addDependency(@Nonnull Statement dependency) throws InvalidDependencyException, InvalidDependencyException;
 }

@@ -2,6 +2,7 @@ package org.ukwikora.model;
 
 import org.ukwikora.analytics.Action;
 import org.ukwikora.analytics.VisitorMemory;
+import org.ukwikora.exception.InvalidDependencyException;
 import org.ukwikora.exception.InvalidImportTypeException;
 import org.ukwikora.utils.LevenshteinDistance;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
@@ -20,7 +21,8 @@ public class KeywordCall extends Step {
         this.link = new Link<>(this);
     }
 
-    public void linkKeyword(Keyword keyword, Link.Import importLink) throws InvalidImportTypeException {
+    public void linkKeyword(Keyword keyword, Link.Import importLink)
+            throws InvalidImportTypeException, InvalidDependencyException {
         link.addStatement(keyword, importLink);
     }
 
@@ -110,40 +112,6 @@ public class KeywordCall extends Step {
     @Override
     public void execute(Runtime runtime) {
         throw new NotImplementedException();
-    }
-
-    private void getLibrarySequence(LibraryKeyword keyword, List<Sequence> sequences) {
-        switch (keyword.getType()){
-            case Action:
-            case Assertion:
-            case Synchronisation:
-            case ControlFlow:
-            {
-                for(Sequence sequence: sequences){
-                    sequence.addStep(this);
-                }
-            }
-            break;
-/*
-            case ControlFlow:
-            {
-                //TODO: properly handle case where there is no forking
-
-                List<List<Keyword>> alternates = new ArrayList<>();
-
-                for(List<Keyword> sequence: sequences) {
-                    alternates.add(new ArrayList<>(sequence));
-                }
-
-                for(KeywordCall call: stepParameters.values()){
-                    call.getTimeLines(alternates);
-                }
-
-                sequences.addAll(alternates);
-            }
-            break;
-*/
-        }
     }
 
     @Override
@@ -238,7 +206,7 @@ public class KeywordCall extends Step {
 
         try {
             step = new KeywordCall();
-            step.addDependency(this.getParent());
+            step.addDependency(this);
             step.linkKeyword(keyword, Link.Import.STATIC);
             step.setFile(this.getFile());
             step.setName(keywordParameter.toString());
@@ -249,7 +217,7 @@ public class KeywordCall extends Step {
             }
 
             stepParameters.put(keywordParameter, step);
-        } catch (InvalidImportTypeException e) {
+        } catch (Exception e) {
             step = null;
         }
 
