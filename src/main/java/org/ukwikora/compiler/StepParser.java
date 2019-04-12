@@ -24,7 +24,7 @@ class StepParser {
             step = parseAssignment(reader);
         }
         else {
-            step = parseKeywordCall(reader);
+            step = parseKeywordCall(reader, tokens);
         }
 
         int endLine = reader.getCurrent().getNumber();
@@ -79,13 +79,8 @@ class StepParser {
         return assignment;
     }
 
-    private static Step parseKeywordCall(LineReader reader) throws IOException {
-
-        String[] tokens = LexerUtils.tokenize(reader.getCurrent().getText());
-        tokens = LexerUtils.removeIndent(tokens);
-
+    private static Step parseKeywordCall(LineReader reader, String[] tokens) throws IOException {
         KeywordCall call = getKeywordCall(tokens);
-
         reader.readLine();
 
         return call;

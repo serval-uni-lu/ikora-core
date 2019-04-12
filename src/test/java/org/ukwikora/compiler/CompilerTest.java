@@ -11,9 +11,9 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class CompilerTest {
+class CompilerTest {
     @Test
-    public void checkParseLibraryVariable(){
+    void checkParseLibraryVariable(){
         final Project project = Globals.compileProject("robot/library-variable.robot");
 
         assertEquals(1, project.getTestCases().size());
@@ -35,7 +35,7 @@ public class CompilerTest {
     }
 
     @Test
-    public void checkScopedByPrefixResolution(){
+    void checkScopedByPrefixResolution(){
         final File robot = Globals.getResourceFile("robot/scope-testing");
         final Project project = Compiler.compile(robot.getAbsolutePath());
 
@@ -57,7 +57,7 @@ public class CompilerTest {
     }
 
     @Test
-    public void checkDuplicatedStaticallyImportedKeywordsAreDetectedTwice(){
+    void checkDuplicatedStaticallyImportedKeywordsAreDetectedTwice(){
         final File robot = Globals.getResourceFile("robot/duplicated-keyword");
         final Project project = Compiler.compile(robot.getAbsolutePath());
 
@@ -76,7 +76,7 @@ public class CompilerTest {
     }
 
     @Test
-    public void checkAssignmentFromRealLife(){
+    void checkAssignmentFromRealLife(){
         final File robot = Globals.getResourceFile("robot/assignment");
         final Project project = Compiler.compile(robot.getAbsolutePath());
 
@@ -93,5 +93,41 @@ public class CompilerTest {
         assertEquals(1, step0.getReturnValues().size());
         assertEquals("${EtatRun}", step0.getReturnValues().get(0).getName());
         assertEquals(1, step0.getReturnValues().get(0).getDependencies().size());
+    }
+
+    @Test
+    void checkTestCaseSetupWithCall() {
+        final File robot = Globals.getResourceFile("robot/setup-and-teardown.robot");
+        final Project project = Compiler.compile(robot.getAbsolutePath());
+
+        assertNotNull(project);
+
+        Set<UserKeyword> ofInterest = project.findUserKeyword("Setup the test case");
+        assertEquals(1, ofInterest.size());
+        Keyword keyword = ofInterest.iterator().next();
+
+        TestCase testCase = project.getTestCases().iterator().next();
+        assertTrue(testCase.getSetup().getKeyword().isPresent());
+        Keyword setup = testCase.getSetup().getKeyword().get();
+
+        assertEquals(setup, keyword);
+    }
+
+    @Test
+    void checkTestCaseTeardownWithCall() {
+        final File robot = Globals.getResourceFile("robot/setup-and-teardown.robot");
+        final Project project = Compiler.compile(robot.getAbsolutePath());
+
+        assertNotNull(project);
+
+        Set<UserKeyword> ofInterest = project.findUserKeyword("Clean the environment");
+        assertEquals(1, ofInterest.size());
+        Keyword keyword = ofInterest.iterator().next();
+
+        TestCase testCase = project.getTestCases().iterator().next();
+        assertTrue(testCase.getTearDown().getKeyword().isPresent());
+        Keyword setup = testCase.getTearDown().getKeyword().get();
+
+        assertEquals(setup, keyword);
     }
 }
