@@ -120,14 +120,20 @@ class Linker {
 
         for(int position: step.getKeywordsLaunchedPosition()){
             try {
-                final Optional<Value> parameter = step.getParameter(position, true);
+                // try to resolve parameters
+                Optional<Value> parameter = step.getParameter(position, true);
 
                 if(!parameter.isPresent()){
-                    throw new MissingKeywordException(String.format("Failed to get keyword at position %d for step %s in file %s from project %s",
-                            position,
-                            step.getName(),
-                            step.getFileName(),
-                            step.getFile().getProject().getName()));
+                    // if not working try without resolving them
+                    parameter = step.getParameter(position, false);
+
+                    if(!parameter.isPresent()){
+                        throw new MissingKeywordException(String.format("Failed to get keyword at position %d for step %s in file %s from project %s",
+                                position,
+                                step.getName(),
+                                testCaseFile.getName(),
+                                testCaseFile.getProject().getName()));
+                    }
                 }
 
                 final String keywordParameter = parameter.get().getName();
