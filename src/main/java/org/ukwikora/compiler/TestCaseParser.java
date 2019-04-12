@@ -1,6 +1,5 @@
 package org.ukwikora.compiler;
 
-import org.ukwikora.model.KeywordCall;
 import org.ukwikora.model.LineRange;
 import org.ukwikora.model.Step;
 import org.ukwikora.model.TestCase;
@@ -32,7 +31,7 @@ class TestCaseParser {
             String label = tokens[0].trim();
 
             if (LexerUtils.compareNoCase(label, "\\[documentation\\]")) {
-                parseDocumentation(reader, tokens, testCase);
+                parseDocumentation(reader, testCase);
             }
             else if (LexerUtils.compareNoCase(label, "\\[tags\\]")) {
                 parseTags(reader, tokens, testCase);
@@ -94,7 +93,7 @@ class TestCaseParser {
         reader.readLine();
     }
 
-    private static void parseDocumentation(LineReader reader, String[] tokens, TestCase testCase) throws IOException {
+    private static void parseDocumentation(LineReader reader, TestCase testCase) throws IOException {
         StringBuilder builder = new StringBuilder();
         LexerUtils.parseDocumentation(reader, builder);
 
