@@ -5,8 +5,6 @@ import java.util.*;
 import org.ukwikora.model.*;
 import org.ukwikora.utils.LevenshteinDistance;
 
-import javax.swing.text.html.Option;
-
 public class CloneDetection<T extends Statement> {
     private static Set<Action.Type> ignoreForTypeI;
     private static Set<Action.Type> ignoreForTypeII;

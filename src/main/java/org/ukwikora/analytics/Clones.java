@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.ukwikora.export.json.CloneResultSerializer;
 import org.ukwikora.model.Statement;
 
+import javax.annotation.Nonnull;
 import java.util.*;
 
 @JsonSerialize(using = CloneResultSerializer.class)
@@ -53,6 +54,7 @@ public class Clones<T extends Statement> implements Iterable<Clone<T>> {
     }
 
     @Override
+    @Nonnull
     public Iterator<Clone<T>> iterator() {
         return new CloneIterator();
     }
@@ -121,9 +123,10 @@ public class Clones<T extends Statement> implements Iterable<Clone<T>> {
                 case TypeI: return Clone.Type.TypeII;
                 case TypeII: return Clone.Type.TypeIII;
                 case TypeIII: return Clone.Type.TypeIV;
+                case TypeIV:
+                case None:
+                default: return Clone.Type.None;
             }
-
-            return Clone.Type.None;
         }
     }
 }
