@@ -23,4 +23,9 @@ public class WaitUntilKeywordSucceeds extends LibraryKeyword {
     public void execute(Runtime runtime) {
 
     }
+
+    @Override
+    public int[] getKeywordsLaunchedPosition() {
+        return new int[]{2};
+    }
 }
