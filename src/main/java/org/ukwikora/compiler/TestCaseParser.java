@@ -1,5 +1,6 @@
 package org.ukwikora.compiler;
 
+import org.ukwikora.model.KeywordCall;
 import org.ukwikora.model.LineRange;
 import org.ukwikora.model.Step;
 import org.ukwikora.model.TestCase;
@@ -71,7 +72,7 @@ class TestCaseParser {
 
     private static void parseTeardown(LineReader reader, String[] tokens, TestCase testCase, DynamicImports dynamicImports) throws IOException {
         Step step = StepParser.parse(reader, tokens, "\\[teardown\\]");
-        testCase.setTeadDown(step);
+        testCase.setTearDown(step);
 
         dynamicImports.add(testCase, step);
     }

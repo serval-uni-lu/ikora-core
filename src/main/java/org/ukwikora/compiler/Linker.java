@@ -53,6 +53,11 @@ class Linker {
     private List<ScopeValue> linkSteps(TestCase testCase, TestCaseFile testCaseFile) throws Exception {
         List<ScopeValue> unresolvedArguments = new ArrayList<>();
 
+        KeywordCall setup = testCase.getSetup();
+        if(setup != null){
+            unresolvedArguments.addAll(resolveCall(testCase, testCaseFile, setup, setup.getName().trim()));
+        }
+
         for(Step step: testCase) {
             if(!(step instanceof KeywordCall)) {
                 throw new MalformedTestCaseException("expecting a step of type keyword call");
@@ -64,6 +69,11 @@ class Linker {
             String name = matcher.replaceAll("").trim();
 
             unresolvedArguments.addAll(resolveCall(testCase, testCaseFile, call, name));
+        }
+
+        KeywordCall teardown = testCase.getTearDown();
+        if(teardown != null){
+            unresolvedArguments.addAll(resolveCall(testCase, testCaseFile, teardown, teardown.getName().trim()));
         }
 
         return unresolvedArguments;
