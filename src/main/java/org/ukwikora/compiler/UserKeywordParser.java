@@ -51,7 +51,7 @@ class UserKeywordParser {
                  parseTimeout(reader, tokens, userKeyword);
             }
             else {
-                parseStep(reader, userKeyword, dynamicImports);
+                parseStep(reader, tokens, userKeyword, dynamicImports);
             }
         }
 
@@ -100,8 +100,8 @@ class UserKeywordParser {
         reader.readLine();
     }
 
-    private static void parseStep(LineReader reader, UserKeyword userKeyword, DynamicImports dynamicImports) throws Exception {
-        Step step = StepParser.parse(reader);
+    private static void parseStep(LineReader reader, String[] tokens, UserKeyword userKeyword, DynamicImports dynamicImports) throws Exception {
+        Step step = StepParser.parse(reader, tokens);
         userKeyword.addStep(step);
 
         dynamicImports.add(userKeyword, step);

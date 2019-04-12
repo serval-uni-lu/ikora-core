@@ -6,12 +6,16 @@ import java.io.IOException;
 import java.util.Arrays;
 
 class StepParser {
-    public static Step parse(LineReader reader) throws IOException {
+    public static Step parse(LineReader reader, String[] tokens) throws IOException {
+        return parse(reader, tokens, "");
+    }
+
+    public static Step parse(LineReader reader, String[] tokens, String ignoreTag) throws IOException {
         Step step;
         int startLine = reader.getCurrent().getNumber();
 
-        String[] tokens = LexerUtils.tokenize(reader.getCurrent().getText());
         tokens = LexerUtils.removeIndent(tokens);
+        tokens = LexerUtils.removeTag(tokens, ignoreTag);
 
         if(isForLoop(tokens)) {
             step = parseForLoop(reader);

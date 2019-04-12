@@ -23,6 +23,18 @@ class LexerUtils {
         return tokens;
     }
 
+    static String[] removeTag(String[] tokens, String tag) {
+        if(tag.isEmpty()){
+            return tokens;
+        }
+
+        if(compareNoCase(tokens[0], tag)){
+            tokens = Arrays.copyOfRange(tokens, 1, tokens.length);
+        }
+
+        return tokens;
+    }
+
     static void parseDocumentation(LineReader reader, StringBuilder builder) throws IOException {
         String[] tokens = tokenize(reader.getCurrent().getText());
         tokens = LexerUtils.removeIndent(tokens);
