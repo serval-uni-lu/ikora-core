@@ -9,10 +9,23 @@ import java.util.Set;
 public class UserKeyword extends KeywordDefinition {
     private List<String> parameters;
     private StatementTable<Variable> localVariables;
+    private KeywordCall tearDown;
 
     public UserKeyword() {
         parameters = new ArrayList<>();
         localVariables = new StatementTable<>();
+    }
+
+    public KeywordCall getTearDown() {
+        return tearDown;
+    }
+
+    public void setTearDown(KeywordCall tearDown) {
+        this.tearDown = tearDown;
+    }
+
+    public void setTearDown(Step tearDown){
+        setTearDown(toCall(tearDown));
     }
 
     @Override

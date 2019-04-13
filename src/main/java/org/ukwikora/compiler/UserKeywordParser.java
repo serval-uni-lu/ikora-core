@@ -93,6 +93,9 @@ class UserKeywordParser {
     }
 
     private static void parseTeardown(LineReader reader, String[] tokens, UserKeyword userKeyword) throws IOException {
+        Step step = StepParser.parse(reader, tokens, "\\[teardown\\]");
+        userKeyword.setTearDown(step);
+
         reader.readLine();
     }
 

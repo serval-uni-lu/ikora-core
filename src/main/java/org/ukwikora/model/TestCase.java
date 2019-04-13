@@ -34,16 +34,4 @@ public class TestCase extends KeywordDefinition {
     public void accept(StatementVisitor visitor, VisitorMemory memory){
         visitor.visit(this, memory);
     }
-
-    private KeywordCall toCall(Step step){
-        if(step == null){
-            return null;
-        }
-
-        if(KeywordCall.class.isAssignableFrom(step.getClass())){
-            return (KeywordCall) step;
-        }
-
-        return null;
-    }
 }
