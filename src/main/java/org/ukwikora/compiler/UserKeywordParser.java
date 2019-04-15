@@ -89,6 +89,11 @@ class UserKeywordParser {
     }
 
     private static void parseReturn(LineReader reader, String[] tokens, UserKeyword userKeyword) throws IOException {
+        tokens = LexerUtils.removeIndent(tokens);
+        String[] returnValue = LexerUtils.removeTag(tokens, "\\[return\\]");
+
+        userKeyword.setReturn(returnValue);
+
         reader.readLine();
     }
 

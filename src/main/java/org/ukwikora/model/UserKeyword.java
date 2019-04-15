@@ -10,10 +10,12 @@ public class UserKeyword extends KeywordDefinition {
     private List<String> parameters;
     private StatementTable<Variable> localVariables;
     private KeywordCall tearDown;
+    private List<Value> returnValues;
 
     public UserKeyword() {
         parameters = new ArrayList<>();
         localVariables = new StatementTable<>();
+        returnValues = new ArrayList<>();
     }
 
     public KeywordCall getTearDown() {
@@ -26,6 +28,18 @@ public class UserKeyword extends KeywordDefinition {
 
     public void setTearDown(Step tearDown){
         setTearDown(toCall(tearDown));
+    }
+
+    public List<Value> getReturn(){
+        return returnValues;
+    }
+
+    public void setReturn(String[] returnString) {
+        returnValues.clear();
+
+        for (String string : returnString) {
+            returnValues.add(new Value(string));
+        }
     }
 
     @Override
