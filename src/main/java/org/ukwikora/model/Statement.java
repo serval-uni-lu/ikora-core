@@ -26,5 +26,5 @@ public interface Statement extends Differentiable {
     boolean matches(@Nonnull String name);
 
     Set<Statement> getDependencies();
-    void addDependency(@Nonnull Statement dependency) throws InvalidDependencyException, InvalidDependencyException;
+    void addDependency(@Nonnull Statement dependency) throws InvalidDependencyException;
 }

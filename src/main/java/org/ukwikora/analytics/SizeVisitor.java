@@ -59,4 +59,9 @@ public class SizeVisitor implements StatementVisitor {
     public void visit(ListVariable list, VisitorMemory memory) {
 
     }
+
+    @Override
+    public void visit(TimeOut timeOut, VisitorMemory memory) {
+
+    }
 }

@@ -61,6 +61,11 @@ public class SequenceVisitor implements StatementVisitor {
 
     }
 
+    @Override
+    public void visit(TimeOut timeOut, VisitorMemory memory) {
+
+    }
+
     public Sequence getSequence(){
         return sequence;
     }

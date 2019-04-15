@@ -11,11 +11,13 @@ public class UserKeyword extends KeywordDefinition {
     private StatementTable<Variable> localVariables;
     private KeywordCall tearDown;
     private List<Value> returnValues;
+    private TimeOut timeOut;
 
     public UserKeyword() {
         parameters = new ArrayList<>();
         localVariables = new StatementTable<>();
         returnValues = new ArrayList<>();
+        timeOut = null;
     }
 
     public KeywordCall getTearDown() {
@@ -39,6 +41,18 @@ public class UserKeyword extends KeywordDefinition {
 
         for (String string : returnString) {
             returnValues.add(new Value(string));
+        }
+    }
+
+    public TimeOut getTimeOut() {
+        return timeOut;
+    }
+
+    public void setTimeOut(TimeOut timeOut){
+        this.timeOut = timeOut;
+
+        if(this.timeOut != null){
+
         }
     }
 

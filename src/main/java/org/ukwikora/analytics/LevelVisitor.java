@@ -62,6 +62,11 @@ public class LevelVisitor implements StatementVisitor {
 
     }
 
+    @Override
+    public void visit(TimeOut timeOut, VisitorMemory memory) {
+
+    }
+
     public int getLevel() {
         return level;
     }
