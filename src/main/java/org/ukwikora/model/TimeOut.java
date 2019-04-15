@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Set;
 
 public class TimeOut implements Statement {
-    private final Variable variable;
+    private final Value variable;
     private final TimeValue value;
 
     private TestCaseFile file;
@@ -18,20 +18,25 @@ public class TimeOut implements Statement {
     private String name;
     private KeywordDefinition parent;
 
-    public TimeOut(String name, Variable variable){
+    public TimeOut(String name){
         this.name = name;
-        this.variable = variable;
-        this.value = null;
 
-        if(this.variable != null){
-            this.variable.addDependency(this);
+        if(Value.isVariable(this.name)){
+            this.variable = new Value(this, this.name);
+            this.value = null;
+        }
+        else if(TimeValue.isValid(this.name)){
+            this.variable = null;
+            this.value = new TimeValue(this.name);
+        }
+        else{
+            this.variable = null;
+            this.value = null;
         }
     }
 
-    public TimeOut(String name, TimeValue value){
-        this.name = name;
-        this.variable = null;
-        this.value = value;
+    public boolean isValid(){
+        return this.variable != null || this.value != null;
     }
 
     public KeywordDefinition getParent() {

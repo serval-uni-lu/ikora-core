@@ -1,6 +1,17 @@
 package org.ukwikora.model;
 
+import java.util.regex.Pattern;
+import org.apache.commons.lang.math.NumberUtils;
+
 public class TimeValue {
+    private static final Pattern stringPattern;
+    private static final Pattern timerPattern;
+
+    static {
+        stringPattern = Pattern.compile("-?\\s*(\\d+(\\.\\d+)?\\s*(days|day|d))?\\s*(\\d+(\\.\\d+)?\\s*(hours|hour|h))?\\s*(\\d+(\\.\\d+)?\\s*(minutes|minute|mins|min|m))?\\s*(\\d+(\\.\\d+)?\\s*(seconds|second|secs|sec|s))?\\s*(\\d+(\\.\\d+)?\\s*(milliseconds|millisecond|millis|ms))?", Pattern.CASE_INSENSITIVE);
+        timerPattern = Pattern.compile("-?\\s*(\\d+:)?\\d\\d:\\d\\d(\\.\\d+)?", Pattern.CASE_INSENSITIVE);
+    }
+
     public enum Sign{
         POSITIVE, NEGATIVE
     }
@@ -16,6 +27,10 @@ public class TimeValue {
     private int minutes;
     private int seconds;
     private int milliseconds;
+
+    public TimeValue(String text){
+
+    }
 
     public TimeValue(Sign sign, int days, int hours, int minutes, int seconds, int milliseconds){
         this.sign = sign;
@@ -46,5 +61,17 @@ public class TimeValue {
 
     public double getTimeInMilliseconds(){
         return getTimeInSeconds() / SECONDS_IN_MILLISECOND;
+    }
+
+    public static boolean isValid(String text) {
+        if(text.isEmpty()){
+            return false;
+        }
+
+        if(NumberUtils.isNumber(text)){
+            return true;
+        }
+
+        return stringPattern.matcher(text).matches() || timerPattern.matcher(text).matches();
     }
 }

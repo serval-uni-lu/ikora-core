@@ -34,7 +34,7 @@ public class Value implements Differentiable {
     private Pattern match;
     private Map<String, Set<Variable>> variables;
 
-    Value(Statement parent, String value) {
+    public Value(Statement parent, String value) {
         this.parent = parent;
         this.value = value;
         this.variables = new HashMap<>();
@@ -42,7 +42,7 @@ public class Value implements Differentiable {
         buildRegex();
     }
 
-    Value(String value){
+    public Value(String value){
         this(null, value);
     }
 
