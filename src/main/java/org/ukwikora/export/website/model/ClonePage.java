@@ -1,7 +1,8 @@
 package org.ukwikora.export.website.model;
 
-import org.ukwikora.analytics.Clone;
+import org.ukwikora.analytics.CloneCluster;
 import org.ukwikora.analytics.CloneDetection;
+import org.ukwikora.analytics.Clones;
 import org.ukwikora.model.Project;
 import org.ukwikora.model.UserKeyword;
 
@@ -20,15 +21,22 @@ public class ClonePage extends Page {
                 new String[]{"Group", "Type", "Name", "File", "Lines", "Project"}
         );
 
-        for(Clone<UserKeyword> clone: CloneDetection.findClones(new HashSet<>(projects), UserKeyword.class)){
-            this.table.addRow(new String[]{
-                    "n/a",
-                    clone.getType().name(),
-                    clone.getStatement().getName(),
-                    clone.getStatement().getFileName(),
-                    clone.getStatement().getLineRange().toString(),
-                    clone.getStatement().getFile().getProject().getName()
-            });
+        Clones<UserKeyword> clones = CloneDetection.findClones(new HashSet<>(projects), UserKeyword.class);
+
+        int i = 0;
+        for(CloneCluster<UserKeyword> cluster: clones.getClusters()){
+            for(UserKeyword clone: cluster.getClones()){
+                this.table.addRow(new String[]{
+                        String.valueOf(i),
+                        cluster.getType().name(),
+                        clone.getName(),
+                        clone.getFileName(),
+                        clone.getLineRange().toString(),
+                        clone.getFile().getProject().getName()
+                });
+
+            }
+            ++i;
         }
     }
 

@@ -1,12 +1,15 @@
 package org.ukwikora.analytics;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.apache.commons.math3.ml.clustering.Cluster;
 import org.ukwikora.export.json.CloneResultSerializer;
 import org.ukwikora.model.Statement;
 
 import javax.annotation.Nonnull;
 import java.util.*;
 
+
+//TODO: Review this class to make it a proper graph
 @JsonSerialize(using = CloneResultSerializer.class)
 public class Clones<T extends Statement> implements Iterable<Clone<T>> {
     private Map<Clone.Type, Map<T, Clone<T>>> clones;
@@ -35,6 +38,36 @@ public class Clones<T extends Statement> implements Iterable<Clone<T>> {
         Clone<T> clone = clones.getOrDefault(t1, new Clone<>(t1, type));
         clone.addClone(t2);
         clones.put(t1, clone);
+    }
+
+    public Set<CloneCluster<T>> getClusters(){
+        Set<CloneCluster<T>> clusters = new HashSet<>();
+
+        for (Clone<T> clones : this) {
+            clusters.add(new CloneCluster<>(clones.getType(), clones.getAll()));
+        }
+
+        Set<CloneCluster<T>> toRemove = new HashSet<>();
+        Iterator<CloneCluster<T>> i = clusters.iterator();
+        while(i.hasNext()){
+            CloneCluster<T> cluster1 = i.next();
+
+            Iterator<CloneCluster<T>> j = clusters.iterator();
+            while(j.hasNext()){
+                CloneCluster<T> cluster2 = j.next();
+
+                if(cluster1 == cluster2){
+                    continue;
+                }
+
+                if(cluster1.containsAll(cluster2)){
+                    toRemove.add(cluster2);
+                }
+            }
+        }
+        clusters.removeAll(toRemove);
+
+        return clusters;
     }
 
     public Clone.Type getCloneType(T element) {
