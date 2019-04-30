@@ -66,8 +66,9 @@ public class Link<K extends Statement,T extends Statement> {
             case DYNAMIC:
                 addStatement(destination, dynamicCallee);
                 break;
-            case BOTH:
-                throw new InvalidImportTypeException("Was expecting a STATIC or DYNAMIC import type, got BOTH instead");
+            default:
+                throw new InvalidImportTypeException(
+                        String.format("Was expecting a STATIC or DYNAMIC import type, got %s instead", importType.name()));
         }
     }
 

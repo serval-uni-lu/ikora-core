@@ -16,3 +16,7 @@ Clone from project C with spécial character
     Log    ${time}
     Log    ${secs}
     Log    ${year}
+
+
+Duplicated keyword
+    Log    I am a duplicated keyword in project B

@@ -88,6 +88,14 @@ public class StatisticsViewerGenerator {
         processTemplate("clones.ftl", input, new File(destination, "clones.html"));
     }
 
+    private void generateViolationsPage(Map<String, Object> input) throws  Exception{
+        ViolationsPage violationPage = new ViolationsPage("violations", "Violations", projects);
+
+        input.put("violations", violationPage);
+
+        processTemplate("violations.ftl", input, new File(destination, "violations.html"));
+    }
+
     private void generateSingleProjectPage(Project project, Map<String, Object> input) throws Exception {
         SingleProjectPage singleProjectPage = new SingleProjectPage(project);
 

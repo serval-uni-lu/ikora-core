@@ -25,3 +25,6 @@ Clone from project B
     Log    ${other_time}
     Log    ${other_secs}
     Log    ${other_year}
+
+Duplicated keyword
+    Log    I am a duplicated keyword in project B
