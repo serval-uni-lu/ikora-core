@@ -4,7 +4,16 @@ import org.ukwikora.model.Project;
 
 import java.util.List;
 
-public class ViolationsPage {
-    public ViolationsPage(String violations, String violations1, List<Project> projects) {
+public class ViolationsPage extends Page{
+    private final Table table;
+
+    public ViolationsPage(String id, String name, List<Project> projects) {
+        super(id, name);
+
+        this.table = new Table(
+          "violations",
+          "Violations",
+          new String[]{"Type", "Name", "File", "Line", "Message"}
+        );
     }
 }
