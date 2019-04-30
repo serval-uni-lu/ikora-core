@@ -18,16 +18,18 @@ public class ClonePage extends Page {
         this.table = new Table(
                 "clones",
                 "Duplicated Code",
-                new String[]{"Group", "Type", "Name", "File", "Lines", "Project"}
+                new String[]{"Group", "Size", "Type", "Name", "File", "Lines", "Project"}
         );
 
         Clones<UserKeyword> clones = CloneDetection.findClones(new HashSet<>(projects), UserKeyword.class);
 
         int i = 0;
         for(CloneCluster<UserKeyword> cluster: clones.getClusters()){
+            int size = cluster.size();
             for(UserKeyword clone: cluster.getClones()){
                 this.table.addRow(new String[]{
                         String.valueOf(i),
+                        String.valueOf(size),
                         cluster.getType().name(),
                         clone.getName(),
                         clone.getFileName(),

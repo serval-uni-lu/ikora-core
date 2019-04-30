@@ -48,4 +48,8 @@ public class CloneCluster<T extends Statement> {
 
         return hash;
     }
+
+    public int size() {
+        return clones.size();
+    }
 }
