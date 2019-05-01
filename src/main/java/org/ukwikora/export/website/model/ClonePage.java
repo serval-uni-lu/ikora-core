@@ -1,18 +1,13 @@
 package org.ukwikora.export.website.model;
 
 import org.ukwikora.analytics.CloneCluster;
-import org.ukwikora.analytics.CloneDetection;
 import org.ukwikora.analytics.Clones;
-import org.ukwikora.model.Project;
 import org.ukwikora.model.UserKeyword;
-
-import java.util.HashSet;
-import java.util.List;
 
 public class ClonePage extends Page {
     private final Table table;
 
-    public ClonePage(String id, String name, List<Project> projects) throws Exception {
+    public ClonePage(String id, String name, Clones<UserKeyword> clones) throws Exception {
         super(id, name);
 
         this.table = new Table(
@@ -20,8 +15,6 @@ public class ClonePage extends Page {
                 "Duplicated Code",
                 new String[]{"Group", "Size", "Type", "Name", "File", "Lines", "Project"}
         );
-
-        Clones<UserKeyword> clones = CloneDetection.findClones(new HashSet<>(projects), UserKeyword.class);
 
         int i = 0;
         for(CloneCluster<UserKeyword> cluster: clones.getClusters()){
@@ -44,5 +37,9 @@ public class ClonePage extends Page {
 
     public Table getTable() {
         return table;
+    }
+
+    public BarChart getChart() {
+        return null;
     }
 }

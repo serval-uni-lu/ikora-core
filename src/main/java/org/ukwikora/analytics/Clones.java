@@ -70,6 +70,10 @@ public class Clones<T extends Statement> implements Iterable<Clone<T>> {
         return clusters;
     }
 
+    public Set<T> getClones(Clone.Type type){
+        return clones.getOrDefault(Clone.Type.TypeI, new HashMap<>()).keySet();
+    }
+
     public Clone.Type getCloneType(T element) {
         if(clones.getOrDefault(Clone.Type.TypeI, new HashMap<>()).get(element) != null){
             return Clone.Type.TypeI;

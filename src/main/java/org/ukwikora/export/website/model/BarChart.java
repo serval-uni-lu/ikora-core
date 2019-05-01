@@ -16,7 +16,7 @@ public class BarChart {
 
     private int height;
 
-    public BarChart(String id, String name, List<Integer> values, List<String> labels) throws IOException {
+    public BarChart(String id, String name, List<? extends Number> values, List<String> labels) throws IOException {
         this.id = id;
         this.name = name;
         this.jsonValues = JsonUtils.convertToJsonArray(values);
