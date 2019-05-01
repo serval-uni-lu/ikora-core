@@ -32,6 +32,7 @@ public class StatisticsViewerGenerator {
         generateDependenciesPage(new HashMap<>(input));
         generateDeadCodePage(new HashMap<>(input));
         generateClonePage(new HashMap<>(input));
+        generateViolationsPage(new HashMap<>(input));
 
         for(Project project: projects){
             generateSingleProjectPage(project, new HashMap<>(input));

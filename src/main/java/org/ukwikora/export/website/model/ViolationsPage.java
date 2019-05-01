@@ -16,4 +16,8 @@ public class ViolationsPage extends Page{
           new String[]{"Type", "Name", "File", "Line", "Message"}
         );
     }
+
+    public Table getTable() {
+        return table;
+    }
 }
