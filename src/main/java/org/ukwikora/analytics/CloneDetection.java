@@ -8,7 +8,6 @@ import org.ukwikora.utils.LevenshteinDistance;
 public class CloneDetection<T extends Statement> {
     private static Set<Action.Type> ignoreForTypeI;
     private static Set<Action.Type> ignoreForTypeII;
-    private static Set<Action.Type> ignoreForTypeIIExtended;
 
     static {
         Set<Action.Type> typeI = new HashSet<>(4);
@@ -22,10 +21,6 @@ public class CloneDetection<T extends Statement> {
         typeII.add(Action.Type.CHANGE_STEP_ARGUMENTS);
         typeII.add(Action.Type.CHANGE_STEP_RETURN_VALUES);
         ignoreForTypeII = Collections.unmodifiableSet(typeII);
-
-        Set<Action.Type> typeIIExtended = new HashSet<>(ignoreForTypeII);
-        typeIIExtended.add(Action.Type.CHANGE_STEP);
-        ignoreForTypeIIExtended = Collections.unmodifiableSet(typeIIExtended);
     }
 
     private Set<Project> projects;
@@ -123,9 +118,9 @@ public class CloneDetection<T extends Statement> {
     public static boolean isCloneTypeII(Class<?> type, Difference difference){
         boolean isTypeII = difference.isEmpty(ignoreForTypeII);
 
-        if(!isTypeII && KeywordDefinition.class.isAssignableFrom(type)){
-            isTypeII = isStepsClones(difference);
-        }
+        //if(!isTypeII && KeywordDefinition.class.isAssignableFrom(type)){
+        //    isTypeII = isStepsClones(difference);
+        //}
 
         return isTypeII;
     }
@@ -139,7 +134,7 @@ public class CloneDetection<T extends Statement> {
 
         return isTypeIV;
     }
-
+/*
     private static boolean isStepsClones(Difference difference){
         if(!difference.isEmpty(ignoreForTypeIIExtended)){
             return false;
@@ -166,7 +161,7 @@ public class CloneDetection<T extends Statement> {
 
         return true;
     }
-
+*/
     private static boolean isSameSequence(Difference difference) {
         KeywordDefinition left = (KeywordDefinition) difference.getLeft();
         KeywordDefinition right = (KeywordDefinition) difference.getRight();
