@@ -12,7 +12,8 @@ public class Violation {
         MULTIPLE_DEFINITIONS,
         INFINITE_LOOP,
         LITERAL_LOCATOR,
-        TRANSITIVE_DEPENDENCY
+        TRANSITIVE_DEPENDENCY,
+        NO_DEFINITION_FOUND
     }
 
     private final Level level;
