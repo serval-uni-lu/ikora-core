@@ -13,9 +13,10 @@ class TestCaseFileParser {
 
     public static void parse(File file, Project project, DynamicImports dynamicImports) {
         LineReader reader = null;
+        TestCaseFile testCaseFile = null;
 
         try {
-            TestCaseFile testCaseFile = new TestCaseFile(project, file);
+            testCaseFile = new TestCaseFile(project, file);
             reader = new LineReader(testCaseFile);
 
             setName(project, testCaseFile);
@@ -51,11 +52,9 @@ class TestCaseFileParser {
                 }
             }
 
-            project.addTestCaseFile(testCaseFile);
             logger.trace("file parse: " + file.getAbsolutePath());
-
         } catch (IOException e) {
-            TestCaseFile testCaseFile = new TestCaseFile(project, file);
+            testCaseFile = new TestCaseFile(project, file);
             setName(project, testCaseFile);
 
             project.addTestCaseFile(testCaseFile);
@@ -66,6 +65,8 @@ class TestCaseFileParser {
         } catch (Exception e) {
             logger.error(String.format("Oops, something went really wrong during parsing!: %s", e.getMessage()));
         } finally {
+            project.addTestCaseFile(testCaseFile);
+
             if(reader != null){
                 reader.close();
             }

@@ -183,6 +183,10 @@ public class Project implements Comparable<Project> {
     }
 
     public void addTestCaseFile(TestCaseFile testCaseFile){
+        if(testCaseFile == null){
+            return;
+        }
+
         testCaseFiles.add(testCaseFile);
 
         String key = generateFileName(testCaseFile.getFile());
