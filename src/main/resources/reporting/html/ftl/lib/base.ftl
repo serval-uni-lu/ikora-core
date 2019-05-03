@@ -111,6 +111,13 @@
                     <span>Dead Code</span></a>
             </li>
 
+            <!-- Nav Item - Tables -->
+            <li class="nav-item">
+                <a class="nav-link" href="violations.html">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Violations</span></a>
+            </li>
+
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
 
