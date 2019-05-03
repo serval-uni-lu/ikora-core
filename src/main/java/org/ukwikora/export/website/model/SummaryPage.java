@@ -32,6 +32,7 @@ public class SummaryPage extends Page {
 
         List<String> labels = new ArrayList<>(size);
         List<Integer> lines = new ArrayList<>(size);
+        List<Integer> deadLines = new ArrayList<>(size);
         List<Integer> userKeywords = new ArrayList<>(size);
         List<Integer> testCases = new ArrayList<>(size);
 
@@ -43,12 +44,17 @@ public class SummaryPage extends Page {
             String projectName = project.getName();
 
             labels.add(StringUtils.toBeautifulName(projectName));
-            lines.add(project.getLoc());
             userKeywords.add(project.getUserKeywords().size());
             testCases.add(project.getTestCases().size());
+
+            int deadLoc = project.getDeadLoc();
+            int executedLoc = project.getLoc() - deadLoc;
+
+            lines.add(executedLoc);
+            deadLines.add(deadLoc);
         }
 
-        createLinesChart(labels, lines);
+        createLinesChart(labels, lines, deadLines);
         createUserKeywordsChart(labels, userKeywords);
         createTestCasesChart(labels, testCases);
         createCloneChart(clones);
@@ -63,30 +69,38 @@ public class SummaryPage extends Page {
     }
 
     private void createTestCasesChart(List<String> labels, List<Integer> testCases) throws IOException {
+        ChartDataset dataset = new ChartDataset("Number of Test Cases", testCases, ChartDataset.Color.BLUE);
+
         testCasesChart = new BarChart(
                 "summary-test-cases-chart",
                 "Test Cases",
-                testCases,
+                dataset,
                 labels);
 
         testCasesChart.setYLabel("Number of Test Cases");
     }
 
     private void createUserKeywordsChart(List<String> labels, List<Integer> userKeywords) throws IOException {
+        ChartDataset dataset = new ChartDataset("Number of User Keywords", userKeywords, ChartDataset.Color.BLUE);
+
         userKeywordsChart = new BarChart(
                 "summary-user-keywords-chart",
                 "User Keywords",
-                userKeywords,
+                dataset,
                 labels);
 
-        userKeywordsChart.setYLabel("Number User Keywords");
+        userKeywordsChart.setYLabel("Number of User Keywords");
     }
 
-    private void createLinesChart(List<String> labels, List<Integer> lines) throws IOException {
+    private void createLinesChart(List<String> labels, List<Integer> lines, List<Integer> deadLines) throws IOException {
+        List<ChartDataset> dataSets = new ArrayList<>(2);
+        dataSets.add(new ChartDataset("Dead", deadLines, ChartDataset.Color.RED));
+        dataSets.add(new ChartDataset("Executed", lines, ChartDataset.Color.BLUE));
+
         linesChart = new BarChart(
                 "summary-lines-of-code-chart",
                 "Lines of Code",
-                lines,
+                dataSets,
                 labels);
 
         linesChart.setYLabel("Number Lines of Code");
@@ -142,11 +156,15 @@ public class SummaryPage extends Page {
         labels.add("Type I");
         labels.add("Type II");
 
+        ChartDataset dataset = new ChartDataset("Clones", values, ChartDataset.Color.BLUE);
+
         cloneChart = new BarChart(
                 "summary-clones-chart",
                 "Percentage of line duplicated",
-                values,
+                dataset,
                 labels);
+
+        cloneChart.setYLabel("Percent");
     }
 
     private double getPercentageClones(Clone.Type type, Clones<UserKeyword> clones){

@@ -154,6 +154,16 @@ public class Project implements Comparable<Project> {
         return loc;
     }
 
+    public int getDeadLoc() {
+        int deadLoc = 0;
+
+        for(TestCaseFile testCaseFile: testCaseFiles){
+            deadLoc += testCaseFile.getDeadLoc();
+        }
+
+        return deadLoc;
+    }
+
     public Set<Project> getDependencies() {
         return this.dependencies;
     }

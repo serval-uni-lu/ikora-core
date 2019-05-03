@@ -49,6 +49,24 @@ public class TestCaseFile implements Iterable<UserKeyword> {
         return this.loc;
     }
 
+    public int getDeadLoc() {
+        int deadLoc = 0;
+
+        for(UserKeyword keyword: userKeywordTable){
+            if(keyword.getDependencies().isEmpty()){
+                deadLoc += keyword.getLoc();
+            }
+        }
+
+        for(Variable variable: variableTable){
+            if(variable.getDependencies().isEmpty()){
+                deadLoc += variable.getLoc();
+            }
+        }
+
+        return deadLoc;
+    }
+
     public int getLoc(LineRange lineRange) {
         int loc = 0;
 
