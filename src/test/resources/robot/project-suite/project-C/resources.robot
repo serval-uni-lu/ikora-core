@@ -1,5 +1,6 @@
 *** Settings ***
 Resource    variables.robot
+Resource    indirectDependency.robot
 
 *** Keywords ***
 Keyword from resources without arguments

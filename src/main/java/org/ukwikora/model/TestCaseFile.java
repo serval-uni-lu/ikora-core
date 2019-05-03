@@ -197,4 +197,22 @@ public class TestCaseFile implements Iterable<UserKeyword> {
     public void addLine(Line line) {
         lines.add(line);
     }
+
+    public boolean isDirectDependency(TestCaseFile file) {
+        if(file == null){
+            return false;
+        }
+
+        if(this == file){
+            return true;
+        }
+
+        for(Resources resources: settings.getAllResources()){
+            if(resources.getTestCaseFile() == file){
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

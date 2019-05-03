@@ -2,8 +2,6 @@ package org.ukwikora.analytics;
 
 import org.ukwikora.model.Statement;
 
-import java.util.Set;
-
 public class Violation {
     public enum Level{
         WARNING,
@@ -11,18 +9,19 @@ public class Violation {
     }
 
     public enum Cause {
-        DOUBLE_DEFINITION,
+        MULTIPLE_DEFINITIONS,
         INFINITE_LOOP,
-        LITERAL_LOCATOR
+        LITERAL_LOCATOR,
+        TRANSITIVE_DEPENDENCY
     }
 
     private final Level level;
-    private final Set<Statement> statements;
+    private final Statement statement;
     private final Cause cause;
 
-    public Violation(Level level, Set<Statement> statements, Cause cause) {
+    public Violation(Level level, Statement statement, Cause cause) {
         this.level = level;
-        this.statements = statements;
+        this.statement = statement;
         this.cause = cause;
     }
 
@@ -30,8 +29,8 @@ public class Violation {
         return level;
     }
 
-    public Set<Statement> getStatements() {
-        return statements;
+    public Statement getStatement() {
+        return statement;
     }
 
     public Cause getCause() {

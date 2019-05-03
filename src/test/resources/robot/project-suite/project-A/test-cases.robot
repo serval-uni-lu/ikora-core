@@ -7,6 +7,8 @@ Test from project A
     Second Keyword from project A
     Clone from project A
     Clone from project C with spécial character
+    Indirect dependency
+    Duplicated keyword
 
 *** Keywords ***
 First Keyword from project A

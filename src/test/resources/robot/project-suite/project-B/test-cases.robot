@@ -5,6 +5,7 @@ Resource   ../project-C/resources.robot
 Test from project B
     First Keyword from project B
     Second Keyword from project B
+    Duplicated keyword
     Clone from project B
     Clone from project C with spécial character
 
