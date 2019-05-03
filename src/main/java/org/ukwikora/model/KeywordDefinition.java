@@ -48,6 +48,11 @@ public abstract class KeywordDefinition implements Keyword, Iterable<Step> {
     }
 
     @Override
+    public String toString() {
+        return String.format("%s - %s", getFileName(), getName());
+    }
+
+    @Override
     public void setFile(@Nonnull TestCaseFile file) {
         this.file = file;
 

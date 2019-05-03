@@ -151,10 +151,14 @@ public class SummaryPage extends Page {
         List<Double> values = new ArrayList<>();
         values.add(getPercentageClones(Clone.Type.TypeI, clones));
         values.add(getPercentageClones(Clone.Type.TypeII, clones));
+        values.add(getPercentageClones(Clone.Type.TypeIII, clones));
+        values.add(getPercentageClones(Clone.Type.TypeIV, clones));
 
         List<String> labels = new ArrayList<>();
         labels.add("Type I");
         labels.add("Type II");
+        labels.add("Type III");
+        labels.add("Type IV");
 
         ChartDataset dataset = new ChartDataset("Clones", values, ChartDataset.Color.BLUE);
 

@@ -64,8 +64,13 @@ public class CloneDetection<T extends Statement> {
             }
         }
 
-        if(clone == Clone.Type.None && isCloneTypeIV(t1.getClass(), difference)){
-            clone = Clone.Type.TypeIV;
+        if(clone == Clone.Type.None){
+            if(isCloneTypeIII(t1.getClass(), difference)){
+                clone = Clone.Type.TypeIII;
+            }
+            else if (isCloneTypeIV(t1.getClass(), difference)){
+                clone = Clone.Type.TypeIV;
+            }
         }
 
         return clone;
@@ -123,6 +128,42 @@ public class CloneDetection<T extends Statement> {
         //}
 
         return isTypeII;
+    }
+
+    public static boolean isCloneTypeIII(Class<?> type, Difference difference){
+        for(Action action: difference.getActions()){
+            if (!ignoreForTypeII.contains(action.getType())
+            && !canIgnoreForTypeIII(action)){
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private static boolean canIgnoreForTypeIII(Action action) {
+
+        switch (action.getType()){
+            case CHANGE_STEP_ARGUMENTS:
+            case CHANGE_STEP: return isLogStep(action.getLeft()) && isLogStep(action.getRight());
+            case ADD_STEP:
+            case REMOVE_STEP: return isLogStep(action.getValue());
+            default: return false;
+        }
+    }
+
+    private static boolean isLogStep(Differentiable differentiable){
+        if(differentiable == null){
+            return false;
+        }
+
+        if(!KeywordCall.class.isAssignableFrom(differentiable.getClass())){
+            return false;
+        }
+
+        Optional<Keyword> optionalKeyword = ((KeywordCall)differentiable).getKeyword();
+
+        return optionalKeyword.filter(keyword -> keyword.getType() == Keyword.Type.Log).isPresent();
     }
 
     public static boolean isCloneTypeIV(Class<?> type, Difference difference){
