@@ -71,7 +71,7 @@ public class Clones<T extends Statement> implements Iterable<Clone<T>> {
     }
 
     public Set<T> getClones(Clone.Type type){
-        return clones.getOrDefault(Clone.Type.TypeI, new HashMap<>()).keySet();
+        return clones.getOrDefault(type, new HashMap<>()).keySet();
     }
 
     public Clone.Type getCloneType(T element) {
