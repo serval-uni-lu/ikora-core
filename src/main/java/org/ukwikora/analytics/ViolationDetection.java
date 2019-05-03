@@ -32,12 +32,10 @@ public class ViolationDetection {
 
     private static void duplicatedKeyword(Step step, List<Violation> violations) {
         step.getKeywordCall().ifPresent(call->{
-            Set<Keyword> keywords = call.getAllPotentialKeywords(Link.Import.STATIC);
-
-            if(keywords.size() > 1){
+            if(call.getAllPotentialKeywords(Link.Import.STATIC).size() > 1){
                 violations.add(new Violation(Violation.Level.ERROR, call, Violation.Cause.MULTIPLE_DEFINITIONS));
             }
-            else if(keywords.isEmpty()){
+            else if(call.getAllPotentialKeywords(Link.Import.BOTH).isEmpty()){
                 violations.add(new Violation(Violation.Level.ERROR, call, Violation.Cause.NO_DEFINITION_FOUND));
             }
         });
