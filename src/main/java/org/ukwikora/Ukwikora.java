@@ -12,7 +12,6 @@ import org.apache.logging.log4j.core.config.builder.api.ConfigurationBuilderFact
 import org.apache.logging.log4j.core.config.builder.api.LayoutComponentBuilder;
 import org.apache.logging.log4j.core.config.builder.impl.BuiltConfiguration;
 import org.ukwikora.analytics.EvolutionAnalyticsCli;
-import org.ukwikora.analytics.ProjectAnalyticsCli;
 import org.ukwikora.utils.Configuration;
 import org.ukwikora.exception.DuplicateNodeException;
 import org.apache.commons.cli.*;
@@ -46,12 +45,6 @@ public class Ukwikora {
                 EvolutionAnalyticsCli evolutionAnalyticsCli = new EvolutionAnalyticsCli();
                 evolutionAnalyticsCli.run();
             }
-
-            if(config.hasPlugin("project analytics")){
-                ProjectAnalyticsCli projectAnalyticsCli = new ProjectAnalyticsCli();
-                projectAnalyticsCli.run();
-            }
-
         } catch (ParseException e) {
             getLogger().error(String.format("Parse Exception: argument '%s' is missing", e.getMessage()));
             returnValue = -1;
