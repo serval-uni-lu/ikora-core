@@ -2,6 +2,7 @@ package org.ukwikora.model;
 
 import org.apache.commons.lang3.StringUtils;
 import org.ukwikora.analytics.Action;
+import org.ukwikora.exception.InvalidDependencyException;
 import org.ukwikora.utils.LevenshteinDistance;
 
 
@@ -28,7 +29,7 @@ public abstract class KeywordDefinition implements Keyword, Iterable<Step> {
         this.name = new Value(name);
     }
 
-    public void addStep(Step step){
+    public void addStep(Step step) throws Exception {
         this.steps.add(step);
         step.addDependency(this);
     }
@@ -44,6 +45,11 @@ public abstract class KeywordDefinition implements Keyword, Iterable<Step> {
         if(keyword != null) {
             this.dependencies.add(keyword);
         }
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s - %s", getFileName(), getName());
     }
 
     @Override
@@ -144,12 +150,6 @@ public abstract class KeywordDefinition implements Keyword, Iterable<Step> {
 
     }
 
-    void getSequences(List<Sequence> sequences){
-        for(Step step: steps){
-            step.getSequences(sequences);
-        }
-    }
-
     @Override
     public double distance(@Nonnull Differentiable other) {
         if(other == this){
@@ -241,5 +241,17 @@ public abstract class KeywordDefinition implements Keyword, Iterable<Step> {
     @Override
     public int getLoc() {
         return this.file.getLoc(this.lineRange);
+    }
+
+    protected KeywordCall toCall(Step step){
+        if(step == null){
+            return null;
+        }
+
+        if(KeywordCall.class.isAssignableFrom(step.getClass())){
+            return (KeywordCall) step;
+        }
+
+        return null;
     }
 }

@@ -1,5 +1,7 @@
 package org.ukwikora.model;
 
+import org.ukwikora.exception.InvalidDependencyException;
+
 import javax.annotation.Nonnull;
 import java.util.*;
 
@@ -9,8 +11,6 @@ public abstract class Step implements Keyword {
     private Keyword parent;
     private TestCaseFile file;
     private LineRange lineRange;
-
-    public abstract void getSequences(List<Sequence> sequences);
 
     public void setName(@Nonnull String name) {
         this.name = new Value(name);
@@ -33,21 +33,6 @@ public abstract class Step implements Keyword {
     public abstract Optional<Value> getParameter(int position, boolean resolved);
 
     public abstract boolean hasParameters();
-
-    @Override
-    public Set<Statement> getDependencies() {
-        Set<Statement> dependencies = new HashSet<>();
-        dependencies.add(this.parent);
-
-        return dependencies;
-    }
-
-    @Override
-    public void addDependency(@Nonnull Statement dependency) {
-        if(dependency instanceof Keyword){
-            this.parent = (Keyword) dependency;
-        }
-    }
 
     @Override
     public boolean equals(Object other) {
@@ -133,4 +118,23 @@ public abstract class Step implements Keyword {
     public abstract List<KeywordCall> getKeywordParameter();
 
     public abstract Optional<KeywordCall> getKeywordCall();
+
+    @Override
+    public Set<Statement> getDependencies() {
+        if(getParent() == null){
+            return Collections.emptySet();
+        }
+
+        return Collections.singleton(getParent());
+    }
+
+    @Override
+    public void addDependency(@Nonnull Statement dependency) throws InvalidDependencyException{
+        //steps always have their parent as dependency
+        if(!Keyword.class.isAssignableFrom(dependency.getClass())){
+            throw new InvalidDependencyException();
+        }
+
+        this.parent = (Keyword)dependency;
+    }
 }

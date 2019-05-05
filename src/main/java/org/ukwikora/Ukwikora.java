@@ -21,6 +21,8 @@ import java.io.IOException;
 
 public class Ukwikora {
     public static void main(String[] args) throws Exception {
+        int returnValue = 0;
+
         try {
             initializeLogger();
 
@@ -52,13 +54,18 @@ public class Ukwikora {
 
         } catch (ParseException e) {
             getLogger().error(String.format("Parse Exception: argument '%s' is missing", e.getMessage()));
+            returnValue = -1;
         } catch (DuplicateNodeException e) {
             getLogger().error(String.format("Duplicate Node Exception: %s", e.getMessage()));
+            returnValue = 1;
         } catch (IOException e) {
             getLogger().error(String.format("IO Exception: %s", e.getMessage()));
+            returnValue = 1;
         }
 
         getLogger().info("program finished");
+
+        System.exit(returnValue);
     }
 
     private static void initializeLogger(){
@@ -96,13 +103,13 @@ public class Ukwikora {
 
         switch (level){
             case "ALL": loggerLevel = Level.ALL; break;
-            case "TRACE": loggerLevel = Level.ALL; break;
+            case "TRACE": loggerLevel = Level.TRACE; break;
             case "DEBUG": loggerLevel = Level.DEBUG; break;
-            case "INFO": loggerLevel = Level.INFO; break;
             case "WARN": loggerLevel = Level.WARN; break;
             case "ERROR": loggerLevel = Level.ERROR; break;
             case "FATAL": loggerLevel = Level.FATAL; break;
             case "OFF": loggerLevel = Level.OFF; break;
+            case "INFO":
             default: loggerLevel = Level.INFO; break;
         }
 

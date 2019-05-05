@@ -3,22 +3,30 @@ package org.ukwikora.model;
 import org.ukwikora.analytics.VisitorMemory;
 
 public class TestCase extends KeywordDefinition {
-    private Step setup;
-    private Step tearDown;
+    private KeywordCall setup;
+    private KeywordCall tearDown;
 
-    public void setSetup(Step setup){
+    public void setSetup(KeywordCall setup){
         this.setup = setup;
     }
 
-    public void setTeadDown(Step tearDown){
+    public void setSetup(Step step){
+        setSetup(toCall(step));
+    }
+
+    public void setTearDown(KeywordCall tearDown){
         this.tearDown = tearDown;
     }
 
-    public Step getSetup(){
+    public void setTearDown(Step tearDown){
+        setTearDown(toCall(tearDown));
+    }
+
+    public KeywordCall getSetup(){
         return setup;
     }
 
-    public Step getTeadDown(){
+    public KeywordCall getTearDown(){
         return tearDown;
     }
 

@@ -12,4 +12,5 @@ public interface StatementVisitor {
     void visit(ScalarVariable scalar, VisitorMemory memory);
     void visit(DictionaryVariable dictionary, VisitorMemory memory);
     void visit(ListVariable list, VisitorMemory memory);
+    void visit(TimeOut timeOut, VisitorMemory memory);
 }

@@ -1,11 +1,15 @@
 package org.ukwikora.analytics;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.apache.commons.math3.ml.clustering.Cluster;
 import org.ukwikora.export.json.CloneResultSerializer;
 import org.ukwikora.model.Statement;
 
+import javax.annotation.Nonnull;
 import java.util.*;
 
+
+//TODO: Review this class to make it a proper graph
 @JsonSerialize(using = CloneResultSerializer.class)
 public class Clones<T extends Statement> implements Iterable<Clone<T>> {
     private Map<Clone.Type, Map<T, Clone<T>>> cloneMap;
@@ -36,6 +40,40 @@ public class Clones<T extends Statement> implements Iterable<Clone<T>> {
         clones.put(t1, clone);
     }
 
+    public Set<CloneCluster<T>> getClusters(){
+        Set<CloneCluster<T>> clusters = new HashSet<>();
+
+        for (Clone<T> clones : this) {
+            clusters.add(new CloneCluster<>(clones.getType(), clones.getAll()));
+        }
+
+        Set<CloneCluster<T>> toRemove = new HashSet<>();
+        Iterator<CloneCluster<T>> i = clusters.iterator();
+        while(i.hasNext()){
+            CloneCluster<T> cluster1 = i.next();
+
+            Iterator<CloneCluster<T>> j = clusters.iterator();
+            while(j.hasNext()){
+                CloneCluster<T> cluster2 = j.next();
+
+                if(cluster1 == cluster2){
+                    continue;
+                }
+
+                if(cluster1.containsAll(cluster2)){
+                    toRemove.add(cluster2);
+                }
+            }
+        }
+        clusters.removeAll(toRemove);
+
+        return clusters;
+    }
+
+    public Set<T> getClones(Clone.Type type){
+        return clones.getOrDefault(type, new HashMap<>()).keySet();
+    }
+
     public Clone.Type getCloneType(T element) {
         if(cloneMap.getOrDefault(Clone.Type.TypeI, new HashMap<>()).get(element) != null){
             return Clone.Type.TypeI;
@@ -53,6 +91,7 @@ public class Clones<T extends Statement> implements Iterable<Clone<T>> {
     }
 
     @Override
+    @Nonnull
     public Iterator<Clone<T>> iterator() {
         return new CloneIterator();
     }
@@ -121,9 +160,10 @@ public class Clones<T extends Statement> implements Iterable<Clone<T>> {
                 case TypeI: return Clone.Type.TypeII;
                 case TypeII: return Clone.Type.TypeIII;
                 case TypeIII: return Clone.Type.TypeIV;
+                case TypeIV:
+                case None:
+                default: return Clone.Type.None;
             }
-
-            return Clone.Type.None;
         }
     }
 }

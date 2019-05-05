@@ -2,14 +2,12 @@
 </#macro>
 
 <#macro page_content>
-
 </#macro>
 
 <#macro page_title title>
-
 </#macro>
 
-<#macro display_page sidebar title>
+<#macro display_page sidebar title generated_date>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -42,6 +40,7 @@
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
+            <div class="sidebar-heading">Generated on ${generated_date}</div>
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
                 <div class="sidebar-brand-icon">
                     <i class="fas fa-android"></i>
@@ -110,6 +109,13 @@
                 <a class="nav-link" href="dead-code.html">
                     <i class="fas fa-fw fa-table"></i>
                     <span>Dead Code</span></a>
+            </li>
+
+            <!-- Nav Item - Tables -->
+            <li class="nav-item">
+                <a class="nav-link" href="violations.html">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Violations</span></a>
             </li>
 
             <!-- Divider -->

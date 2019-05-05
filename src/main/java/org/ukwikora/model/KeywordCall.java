@@ -2,6 +2,8 @@ package org.ukwikora.model;
 
 import org.ukwikora.analytics.Action;
 import org.ukwikora.analytics.VisitorMemory;
+import org.ukwikora.exception.InvalidDependencyException;
+import org.ukwikora.exception.InvalidImportTypeException;
 import org.ukwikora.utils.LevenshteinDistance;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
@@ -9,21 +11,19 @@ import javax.annotation.Nonnull;
 import java.util.*;
 
 public class KeywordCall extends Step {
-    private Keyword keyword;
+    private Link<KeywordCall, Keyword> link;
     private List<Value> parameters;
     private Map<Value, KeywordCall> stepParameters;
 
     public KeywordCall() {
         this.parameters = new ArrayList<>();
         this.stepParameters = new HashMap<>();
+        this.link = new Link<>(this);
     }
 
-    public void setKeyword(Keyword keyword){
-        this.keyword = keyword;
-
-        if(this.keyword != null && getParent() != null) {
-            this.keyword.addDependency(getParent());
-        }
+    public void linkKeyword(Keyword keyword, Link.Import importLink)
+            throws InvalidImportTypeException, InvalidDependencyException {
+        link.addStatement(keyword, importLink);
     }
 
     public void addParameter(String value) {
@@ -71,13 +71,21 @@ public class KeywordCall extends Step {
         return !this.parameters.isEmpty();
     }
 
-    public Keyword getKeyword() {
-        return keyword;
+    public Optional<Keyword> getKeyword() {
+        return link.getStatement();
+    }
+
+    public Set<Keyword> getAllPotentialKeywords(Link.Import importType){
+        return link.getAllLinks(importType);
     }
 
     @Override
     public Keyword getStep(int position) {
-        return keyword.getStep(position);
+        if(!getKeyword().isPresent()) {
+            return null;
+        }
+
+        return getKeyword().get().getStep(position);
     }
 
     @Override
@@ -107,69 +115,21 @@ public class KeywordCall extends Step {
     }
 
     @Override
-    public void getSequences(List<Sequence> sequences) {
-        if(this.keyword == null){
-            return;
-        }
-
-        if(this.keyword instanceof LibraryKeyword){
-            getLibrarySequence((LibraryKeyword)this.keyword, sequences);
-        }
-        else if(this.keyword instanceof KeywordDefinition){
-            ((KeywordDefinition)keyword).getSequences(sequences);
-        }
-    }
-
-    private void getLibrarySequence(LibraryKeyword keyword, List<Sequence> sequences) {
-        switch (keyword.getType()){
-            case Action:
-            case Assertion:
-            case Synchronisation:
-            case ControlFlow:
-            {
-                for(Sequence sequence: sequences){
-                    sequence.addStep(this);
-                }
-            }
-            break;
-/*
-            case ControlFlow:
-            {
-                //TODO: properly handle case where there is no forking
-
-                List<List<Keyword>> alternates = new ArrayList<>();
-
-                for(List<Keyword> sequence: sequences) {
-                    alternates.add(new ArrayList<>(sequence));
-                }
-
-                for(KeywordCall call: stepParameters.values()){
-                    call.getTimeLines(alternates);
-                }
-
-                sequences.addAll(alternates);
-            }
-            break;
-*/
-        }
-    }
-
-    @Override
     public Value.Type[] getArgumentTypes() {
-        if(this.keyword == null){
+        if(!getKeyword().isPresent()){
             return new Value.Type[0];
         }
 
-        return this.keyword.getArgumentTypes();
+        return getKeyword().get().getArgumentTypes();
     }
 
     @Override
     public int[] getKeywordsLaunchedPosition() {
-        if(this.keyword == null){
+        if(!getKeyword().isPresent()){
             return new int[0];
         }
 
-        int[] positions = this.keyword.getKeywordsLaunchedPosition();
+        int[] positions = getKeyword().get().getKeywordsLaunchedPosition();
 
         if(positions.length == 1 && positions[0] == -1){
             positions = new int[getParameters().size()];
@@ -242,29 +202,35 @@ public class KeywordCall extends Step {
             return null;
         }
 
-        KeywordCall step = new KeywordCall();
-        step.addDependency(this.getParent());
-        step.setKeyword(keyword);
-        step.setFile(this.getFile());
-        step.setName(keywordParameter.toString());
+        KeywordCall step;
 
-        int j = keyword.getMaxArgument() == -1 ? parameters.size() : keyword.getMaxArgument();
-        for(int i = index + 1; i < parameters.size() && j > 0; ++i, --j){
-            step.parameters.add(parameters.get(i));
+        try {
+            step = new KeywordCall();
+            step.addDependency(this);
+            step.linkKeyword(keyword, Link.Import.STATIC);
+            step.setFile(this.getFile());
+            step.setName(keywordParameter.toString());
+
+            int j = keyword.getMaxArgument() == -1 ? parameters.size() : keyword.getMaxArgument();
+            for(int i = index + 1; i < parameters.size() && j > 0; ++i, --j){
+                step.parameters.add(parameters.get(i));
+            }
+
+            stepParameters.put(keywordParameter, step);
+        } catch (Exception e) {
+            step = null;
         }
-
-        stepParameters.put(keywordParameter, step);
 
         return step;
     }
 
     @Override
     public Type getType(){
-        if(this.keyword == null){
+        if(!getKeyword().isPresent()){
             return Type.Unknown;
         }
 
-        return this.keyword.getType();
+        return getKeyword().get().getType();
     }
 
     @Override

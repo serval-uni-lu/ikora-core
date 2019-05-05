@@ -5,6 +5,7 @@ Resource   ../project-C/resources.robot
 Test from project B
     First Keyword from project B
     Second Keyword from project B
+    Duplicated keyword
     Clone from project B
     Clone from project C with spécial character
 
@@ -25,3 +26,6 @@ Clone from project B
     Log    ${other_time}
     Log    ${other_secs}
     Log    ${other_year}
+
+Duplicated keyword
+    Log    I am a duplicated keyword in project B

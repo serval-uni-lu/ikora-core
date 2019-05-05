@@ -6,6 +6,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public abstract class Variable implements Statement {
+    public enum Type{
+        SCALAR, LIST, DICTIONARY
+    }
+
     private TestCaseFile file;
     private LineRange lineRange;
     private Assignment assignment;

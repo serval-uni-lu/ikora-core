@@ -8,7 +8,7 @@ import java.io.IOException;
 
 class UserKeywordParser {
 
-    public static UserKeyword parse(LineReader reader, DynamicImports dynamicImports) throws IOException {
+    public static UserKeyword parse(LineReader reader, DynamicImports dynamicImports) throws Exception {
         UserKeyword userKeyword = new UserKeyword();
         int startLine = reader.getCurrent().getNumber();
 
@@ -51,7 +51,7 @@ class UserKeywordParser {
                  parseTimeout(reader, tokens, userKeyword);
             }
             else {
-                parseStep(reader, userKeyword, dynamicImports);
+                parseStep(reader, tokens, userKeyword, dynamicImports);
             }
         }
 
@@ -89,10 +89,18 @@ class UserKeywordParser {
     }
 
     private static void parseReturn(LineReader reader, String[] tokens, UserKeyword userKeyword) throws IOException {
+        tokens = LexerUtils.removeIndent(tokens);
+        String[] returnValue = LexerUtils.removeTag(tokens, "\\[return\\]");
+
+        userKeyword.setReturn(returnValue);
+
         reader.readLine();
     }
 
     private static void parseTeardown(LineReader reader, String[] tokens, UserKeyword userKeyword) throws IOException {
+        Step step = StepParser.parse(reader, tokens, "\\[teardown\\]");
+        userKeyword.setTearDown(step);
+
         reader.readLine();
     }
 
@@ -100,8 +108,8 @@ class UserKeywordParser {
         reader.readLine();
     }
 
-    private static void parseStep(LineReader reader, UserKeyword userKeyword, DynamicImports dynamicImports) throws IOException {
-        Step step = StepParser.parse(reader);
+    private static void parseStep(LineReader reader, String[] tokens, UserKeyword userKeyword, DynamicImports dynamicImports) throws Exception {
+        Step step = StepParser.parse(reader, tokens);
         userKeyword.addStep(step);
 
         dynamicImports.add(userKeyword, step);

@@ -47,12 +47,13 @@ public class UserKeywordParserTest {
         UserKeyword keyword = null;
 
         try {
+            DynamicImports dynamicImports = new DynamicImports();
             Reader targetReader = new StringReader(text);
             LineReader reader = new LineReader(targetReader);
             reader.readLine();
 
             keyword = UserKeywordParser.parse(reader, dynamicImports);
-        } catch (IOException e) {
+        } catch (Exception e) {
             fail("exception caught: " + e.getMessage());
         }
 

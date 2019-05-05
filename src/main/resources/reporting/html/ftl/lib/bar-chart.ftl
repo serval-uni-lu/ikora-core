@@ -9,12 +9,7 @@ var chart = new Chart(ctx, {
   type: 'bar',
   data: {
     labels: ${chart.jsonLabels},
-    datasets: [{
-      label: "${chart.YLabel}",
-      backgroundColor: "rgba(2,117,216,1)",
-      borderColor: "rgba(2,117,216,1)",
-      data: ${chart.jsonValues},
-    }],
+    datasets: ${chart.jsonDatasets}
   },
   options: {
     maintainAspectRatio: false,
@@ -29,6 +24,7 @@ var chart = new Chart(ctx, {
     scales: {
       xAxes: [{
         display: true,
+        stacked: true,
         time: {
           unit: ''
         },
@@ -46,9 +42,9 @@ var chart = new Chart(ctx, {
         }
       }],
       yAxes: [{
+        stacked: true,
         ticks: {
           min: 0,
-          max: Math.max.apply(this, ${chart.jsonValues}),
           maxTicksLimit: 5
         },
         scaleLabel: {
@@ -61,7 +57,7 @@ var chart = new Chart(ctx, {
       }],
     },
     legend: {
-      display: false
+      display: <#if chart.isDisplayLegend()>true<#else>false</#if>
     }
   }
 });

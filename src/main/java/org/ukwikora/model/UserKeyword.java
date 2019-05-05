@@ -4,14 +4,56 @@ import org.ukwikora.analytics.VisitorMemory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class UserKeyword extends KeywordDefinition {
     private List<String> parameters;
     private StatementTable<Variable> localVariables;
+    private KeywordCall tearDown;
+    private List<Value> returnValues;
+    private TimeOut timeOut;
 
     public UserKeyword() {
         parameters = new ArrayList<>();
         localVariables = new StatementTable<>();
+        returnValues = new ArrayList<>();
+        timeOut = null;
+    }
+
+    public KeywordCall getTearDown() {
+        return tearDown;
+    }
+
+    public void setTearDown(KeywordCall tearDown) {
+        this.tearDown = tearDown;
+    }
+
+    public void setTearDown(Step tearDown){
+        setTearDown(toCall(tearDown));
+    }
+
+    public List<Value> getReturn(){
+        return returnValues;
+    }
+
+    public void setReturn(String[] returnString) {
+        returnValues.clear();
+
+        for (String string : returnString) {
+            returnValues.add(new Value(string));
+        }
+    }
+
+    public TimeOut getTimeOut() {
+        return timeOut;
+    }
+
+    public void setTimeOut(TimeOut timeOut){
+        this.timeOut = timeOut;
+
+        if(this.timeOut != null){
+
+        }
     }
 
     @Override
@@ -24,7 +66,7 @@ public class UserKeyword extends KeywordDefinition {
     }
 
     @Override
-    public void addStep(Step step){
+    public void addStep(Step step) throws Exception {
         super.addStep(step);
 
         if(Assignment.class.isAssignableFrom(step.getClass())){
@@ -61,7 +103,7 @@ public class UserKeyword extends KeywordDefinition {
         return parameters;
     }
 
-    public Variable findLocalVariable(String name) {
+    public Set<Variable> findLocalVariable(String name) {
         return localVariables.findStatement(name);
     }
 

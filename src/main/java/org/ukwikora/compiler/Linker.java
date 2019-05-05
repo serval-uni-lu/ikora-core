@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.ukwikora.analytics.FindSuiteVisitor;
 import org.ukwikora.analytics.FindTestCaseVisitor;
 import org.ukwikora.analytics.PathMemory;
+import org.ukwikora.exception.InvalidImportTypeException;
 import org.ukwikora.exception.MalformedTestCaseException;
 import org.ukwikora.exception.MissingKeywordException;
 import org.ukwikora.model.*;
@@ -52,6 +53,11 @@ class Linker {
     private List<ScopeValue> linkSteps(TestCase testCase, TestCaseFile testCaseFile) throws Exception {
         List<ScopeValue> unresolvedArguments = new ArrayList<>();
 
+        KeywordCall setup = testCase.getSetup();
+        if(setup != null){
+            unresolvedArguments.addAll(resolveCall(testCase, testCaseFile, setup, setup.getName().trim()));
+        }
+
         for(Step step: testCase) {
             if(!(step instanceof KeywordCall)) {
                 throw new MalformedTestCaseException("expecting a step of type keyword call");
@@ -63,6 +69,11 @@ class Linker {
             String name = matcher.replaceAll("").trim();
 
             unresolvedArguments.addAll(resolveCall(testCase, testCaseFile, call, name));
+        }
+
+        KeywordCall teardown = testCase.getTearDown();
+        if(teardown != null){
+            unresolvedArguments.addAll(resolveCall(testCase, testCaseFile, teardown, teardown.getName().trim()));
         }
 
         return unresolvedArguments;
@@ -86,14 +97,17 @@ class Linker {
     }
 
     private List<ScopeValue> resolveCall(KeywordDefinition parentKeyword, TestCaseFile testCaseFile, KeywordCall call, String name) throws Exception {
-        Keyword keyword = getKeyword(name, testCaseFile);
+        for(Object keyword: getKeywords(name, testCaseFile)){
+            try {
+                call.linkKeyword((Keyword)keyword, Link.Import.STATIC);
+            }
+            catch (InvalidImportTypeException e){
+                logger.error(e.getMessage());
+            }
 
-        if(keyword != null) {
-            call.setKeyword(keyword);
-            return linkCall(parentKeyword, testCaseFile, call);
         }
 
-        return Collections.emptyList();
+        return linkCall(parentKeyword, testCaseFile, call);
     }
 
     private List<ScopeValue> linkCall(KeywordDefinition parentKeyword, TestCaseFile testCaseFile, KeywordCall call) {
@@ -116,21 +130,33 @@ class Linker {
 
         for(int position: step.getKeywordsLaunchedPosition()){
             try {
-                final Optional<Value> parameter = step.getParameter(position, true);
+                // try to resolve parameters
+                Optional<Value> parameter = step.getParameter(position, true);
 
                 if(!parameter.isPresent()){
-                    throw new MissingKeywordException(String.format("Failed to get keyword at position %d for step %s in file %s",
-                            position,
-                            step.getName(),
-                            step.getFileName()));
+                    // if not working try without resolving them
+                    parameter = step.getParameter(position, false);
+
+                    if(!parameter.isPresent()){
+                        throw new MissingKeywordException(String.format("Failed to get keyword at position %d for step %s in file %s from project %s",
+                                position,
+                                step.getName(),
+                                testCaseFile.getName(),
+                                testCaseFile.getProject().getName()));
+                    }
                 }
 
                 final String keywordParameter = parameter.get().getName();
-                Keyword keyword = getKeyword(keywordParameter, testCaseFile);
+                Set<? super Keyword> keywords = getKeywords(keywordParameter, testCaseFile);
 
-                if(keyword == null) {
+                if(keywords.isEmpty()) {
                     throw new MissingKeywordException(String.format("Failed to find keyword parameter: %s", keywordParameter));
                 }
+                else if(keywords.size() > 1){
+                    throw new MissingKeywordException(String.format("Found multiple definitions for : %s", keywordParameter));
+                }
+
+                Keyword keyword = (Keyword) keywords.iterator().next();
 
                 step.getParameter(position, false).ifPresent(
                         parameterName -> {
@@ -150,22 +176,28 @@ class Linker {
         }
     }
 
-    private Keyword getKeyword(String fullName, TestCaseFile testCaseFile) throws Exception{
+    private Set<? super Keyword> getKeywords(String fullName, TestCaseFile testCaseFile) throws Exception{
         List<String> particles = Arrays.asList(fullName.split("\\."));
         String library = particles.size() > 1 ? String.join(".", particles.subList(0, particles.size() - 1)) : "";
         String name = particles.get(particles.size() - 1);
 
-        Keyword keyword = testCaseFile.findUserKeyword(library, name);
+        Set<? super Keyword> keywordsFound = new HashSet<>(testCaseFile.findUserKeyword(library, name));
 
-        if(keyword == null) {
-            keyword = runtime.findKeyword(library, name);
+        if(keywordsFound.isEmpty()){
+            Keyword runtimeKeyword = runtime.findKeyword(library, name);
+            if(runtimeKeyword != null){
+                keywordsFound.add(runtimeKeyword);
+            }
         }
 
-        if(keyword == null) {
+        if(keywordsFound.isEmpty()) {
             logger.error("Keyword definition for \"" + name + "\" in \"" + testCaseFile.getName() + "\" not found!");
         }
+        else if(keywordsFound.size() > 1){
+            logger.error("Multiple definition found for \"" + name + "\" in \"" + testCaseFile.getName() + "\"!");
+        }
 
-        return keyword;
+        return keywordsFound;
     }
 
     private  List<ScopeValue> resolveArgument(Value value, TestCaseFile testCaseFile, KeywordDefinition keyword) {
@@ -174,30 +206,21 @@ class Linker {
         List<String> variables = value.findVariables();
 
         for(String name: variables){
-            Variable variable;
+            Set<Variable> variablesFound = new HashSet<>();
 
             if(keyword.getClass() == UserKeyword.class){
-                variable = ((UserKeyword)keyword).findLocalVariable(name);
-
-                if(variable != null){
-                    value.setVariable(name, variable);
-                    continue;
-                }
+                variablesFound.addAll(((UserKeyword)keyword).findLocalVariable(name));
             }
 
-            variable = testCaseFile.findVariable(name);
-            if(variable != null){
-                value.setVariable(name, variable);
-                continue;
-            }
+            variablesFound.addAll(testCaseFile.findVariable(name));
+            variablesFound.addAll(runtime.findLibraryVariable(name));
 
-            variable = runtime.findLibraryVariable(name);
-            if(variable != null){
-                value.setVariable(name, variable);
-                continue;
+            if(variablesFound.isEmpty()){
+                unresolvedArguments.add(new ScopeValue(keyword, value, name));
             }
-
-            unresolvedArguments.add(new ScopeValue(keyword, value, name));
+            else{
+                value.setVariable(name, variablesFound);
+            }
         }
 
         return unresolvedArguments;
@@ -205,12 +228,13 @@ class Linker {
 
     private void processUnresolvedArguments(List<ScopeValue> unresolvedArguments) {
         for(ScopeValue valueScope: unresolvedArguments){
-            Optional<Variable> variable = runtime.findInScope(valueScope.getTestCases(), valueScope.getSuites(), valueScope.variableName);
+            Set<Variable> variables = runtime.findInScope(valueScope.getTestCases(), valueScope.getSuites(), valueScope.variableName);
 
-            if(variable.isPresent()){
-                valueScope.value.setVariable(valueScope.variableName, variable.get());
+            if(!variables.isEmpty()){
+                for(Variable variable: variables)
+                valueScope.value.setVariable(valueScope.variableName, variable);
             }
-            else{
+            else {
                 logger.error("Variable for value \"" + valueScope.variableName + "\" in \"" + valueScope.keyword.getName() + "\" not found!");
             }
         }

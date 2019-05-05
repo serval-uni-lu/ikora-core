@@ -18,42 +18,40 @@ public class Scope {
         dynamicResourcesScope = new HashMap<>();
     }
 
-    public Optional<Variable> findTestVariable(TestCase testCase, String name) {
+    public Set<Variable> findTestVariable(TestCase testCase, String name) {
         if(!testScope.containsKey(testCase)){
-            return Optional.empty();
+            return Collections.emptySet();
         }
 
-        return Optional.ofNullable(testScope.get(testCase).findStatement(name));
+        return testScope.get(testCase).findStatement(name);
     }
 
-    public Optional<Variable> findSuiteVariable(String suite, String name) {
+    public Set<Variable> findSuiteVariable(String suite, String name) {
         if(!suiteScope.containsKey(suite)){
-            return Optional.empty();
+            return Collections.emptySet();
         }
 
-        return Optional.ofNullable(suiteScope.get(suite).findStatement(name));
+        return suiteScope.get(suite).findStatement(name);
     }
 
-    public Variable findGlobalVariable(String name) {
+    public Set<Variable> findGlobalVariable(String name) {
         return globalScope.findStatement(name);
     }
 
-    public Optional<Variable> findInScope(Set<TestCase> testCases, Set<String> suites, String name){
+    public Set<Variable> findInScope(Set<TestCase> testCases, Set<String> suites, String name){
+        Set<Variable> variablesFound = new HashSet<>();
+
         for(TestCase testCase: testCases){
-            Optional<Variable> variable = findTestVariable(testCase, name);
-            if(variable.isPresent()){
-                return variable;
-            }
+            variablesFound.addAll(findTestVariable(testCase, name));
         }
 
         for(String suite: suites){
-            Optional<Variable> variable = findSuiteVariable(suite, name);
-            if(variable.isPresent()){
-                return variable;
-            }
+            variablesFound.addAll(findSuiteVariable(suite, name));
         }
 
-        return Optional.ofNullable(findGlobalVariable(name));
+        variablesFound.addAll(findGlobalVariable(name));
+
+        return variablesFound;
     }
 
     public void setGlobalScope(Variable variable) {

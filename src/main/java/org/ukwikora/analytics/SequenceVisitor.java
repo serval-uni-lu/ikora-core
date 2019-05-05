@@ -22,9 +22,11 @@ public class SequenceVisitor implements StatementVisitor {
 
     @Override
     public void visit(KeywordCall call, VisitorMemory memory) {
-        if(call.getKeyword() != null && LibraryKeyword.class.isAssignableFrom(call.getKeyword().getClass())){
-            sequence.addStep(call);
-        }
+        call.getKeyword().ifPresent(keyword -> {
+            if(LibraryKeyword.class.isAssignableFrom(keyword.getClass())){
+                sequence.addStep(call);
+            }
+        });
 
         VisitorUtils.traverseKeywordCall(this, call, memory);
     }
@@ -56,6 +58,11 @@ public class SequenceVisitor implements StatementVisitor {
 
     @Override
     public void visit(ListVariable list, VisitorMemory memory) {
+
+    }
+
+    @Override
+    public void visit(TimeOut timeOut, VisitorMemory memory) {
 
     }
 

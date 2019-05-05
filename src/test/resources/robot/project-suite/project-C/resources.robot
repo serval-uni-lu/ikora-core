@@ -1,5 +1,6 @@
 *** Settings ***
 Resource    variables.robot
+Resource    indirectDependency.robot
 
 *** Keywords ***
 Keyword from resources without arguments
@@ -16,3 +17,7 @@ Clone from project C with spécial character
     Log    ${time}
     Log    ${secs}
     Log    ${year}
+
+
+Duplicated keyword
+    Log    I am a duplicated keyword in project B

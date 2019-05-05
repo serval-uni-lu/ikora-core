@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Clone<T extends Statement> {
+
     public enum Type{
         TypeI, TypeII, TypeIII, TypeIV, None
     }
@@ -30,6 +31,13 @@ public class Clone<T extends Statement> {
 
     public Set<T> getClones() {
         return clones;
+    }
+
+    public Set<T> getAll() {
+        Set<T> all = new HashSet<>(clones);
+        all.add(statement);
+
+        return all;
     }
 
     public int getNumberClones() {

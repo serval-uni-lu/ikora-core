@@ -1,13 +1,18 @@
 package org.ukwikora.export.website;
 
 import freemarker.template.*;
+import org.joda.time.DateTime;
+import org.ukwikora.analytics.CloneDetection;
+import org.ukwikora.analytics.Clones;
 import org.ukwikora.export.website.model.*;
 import org.ukwikora.model.Project;
+import org.ukwikora.model.UserKeyword;
 import org.ukwikora.utils.FileUtils;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.Writer;
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class StatisticsViewerGenerator {
@@ -20,15 +25,19 @@ public class StatisticsViewerGenerator {
     }
 
     public void generate() throws Exception {
+        Clones<UserKeyword> clones = computeClones();
+
         SideBar sideBar = new SideBar(projects);
         Map<String, Object> input = new HashMap<>();
         input.put("sidebar", sideBar);
+        input.put("generated_date", DateTime.now().toLocalDate().toString());
 
         copyResources();
-        generateSummaryPage(new HashMap<>(input));
+        generateSummaryPage(new HashMap<>(input), clones);
         generateDependenciesPage(new HashMap<>(input));
         generateDeadCodePage(new HashMap<>(input));
-        generateClonePage(new HashMap<>(input));
+        generateClonePage(new HashMap<>(input), clones);
+        generateViolationsPage(new HashMap<>(input));
 
         for(Project project: projects){
             generateSingleProjectPage(project, new HashMap<>(input));
@@ -40,8 +49,12 @@ public class StatisticsViewerGenerator {
         org.apache.commons.io.FileUtils.copyDirectory(source, destination);
     }
 
-    private void generateSummaryPage(Map<String, Object> input) throws Exception {
-        SummaryPage summaryPage = new SummaryPage("index", "Summary", projects);
+    private Clones<UserKeyword> computeClones(){
+        return CloneDetection.findClones(new HashSet<>(projects), UserKeyword.class);
+    }
+
+    private void generateSummaryPage(Map<String, Object> input, Clones<UserKeyword> clones) throws Exception {
+        SummaryPage summaryPage = new SummaryPage("index", "Summary", projects, clones);
 
         input.put("summaryPage", summaryPage);
         processTemplate("summary.ftl", input, new File(destination, "index.html"));
@@ -54,6 +67,9 @@ public class StatisticsViewerGenerator {
 
         processTemplate("lib/bar-chart.ftl", Collections.singletonMap("chart", summaryPage.getTestCasesChart()),
                 new File(destination, summaryPage.getTestCasesChart().getUrl()));
+
+        processTemplate("lib/bar-chart.ftl", Collections.singletonMap("chart", summaryPage.getCloneChart()),
+                new File(destination, summaryPage.getCloneChart().getUrl()));
     }
 
     private void generateDependenciesPage(Map<String, Object> input) throws Exception {
@@ -77,12 +93,20 @@ public class StatisticsViewerGenerator {
         processTemplate("dead-code.ftl", input, new File(destination, "dead-code.html"));
     }
 
-    private void generateClonePage(Map<String, Object> input) throws Exception {
-        ClonePage clonePage = new ClonePage("clones", "Duplicated Code", projects);
+    private void generateClonePage(Map<String, Object> input, Clones<UserKeyword> clones) throws Exception {
+        ClonePage clonePage = new ClonePage("clones", "Duplicated Code", clones);
 
         input.put("clones", clonePage);
 
         processTemplate("clones.ftl", input, new File(destination, "clones.html"));
+    }
+
+    private void generateViolationsPage(Map<String, Object> input) throws  Exception{
+        ViolationsPage violationPage = new ViolationsPage("violations", "Violations", projects);
+
+        input.put("violations", violationPage);
+
+        processTemplate("violations.ftl", input, new File(destination, "violations.html"));
     }
 
     private void generateSingleProjectPage(Project project, Map<String, Object> input) throws Exception {

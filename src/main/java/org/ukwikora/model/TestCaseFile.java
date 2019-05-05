@@ -49,6 +49,24 @@ public class TestCaseFile implements Iterable<UserKeyword> {
         return this.loc;
     }
 
+    public int getDeadLoc() {
+        int deadLoc = 0;
+
+        for(UserKeyword keyword: userKeywordTable){
+            if(keyword.getDependencies().isEmpty()){
+                deadLoc += keyword.getLoc();
+            }
+        }
+
+        for(Variable variable: variableTable){
+            if(variable.getDependencies().isEmpty()){
+                deadLoc += variable.getLoc();
+            }
+        }
+
+        return deadLoc;
+    }
+
     public int getLoc(LineRange lineRange) {
         int loc = 0;
 
@@ -123,7 +141,7 @@ public class TestCaseFile implements Iterable<UserKeyword> {
         return this.project.getEpoch();
     }
 
-    TestCase getTestCase(String name) {
+    Set<TestCase> getTestCase(String name) {
         return testCaseTable.findStatement(name);
     }
 
@@ -132,58 +150,69 @@ public class TestCaseFile implements Iterable<UserKeyword> {
         return userKeywordTable.iterator();
     }
 
-    public UserKeyword findUserKeyword(String name) {
-        return (UserKeyword)findStatement(null, name, new HashSet<>(), UserKeyword.class);
+    public Set<UserKeyword> findUserKeyword(String name) {
+        return findStatement(null, name, new HashSet<>(), UserKeyword.class);
     }
 
-    public UserKeyword findUserKeyword(String library, String name) {
-        return (UserKeyword)findStatement(library, name, new HashSet<>(), UserKeyword.class);
+    public Set<UserKeyword> findUserKeyword(String library, String name) {
+        return findStatement(library, name, new HashSet<>(), UserKeyword.class);
     }
 
-    public Variable findVariable(String name) {
-        return (Variable) findStatement(null, name, new HashSet<>(), Variable.class);
+    public Set<Variable> findVariable(String name) {
+        return findStatement(null, name, new HashSet<>(), Variable.class);
     }
 
-    public Variable findVariable(String library, String name) {
-        return (Variable) findStatement(library, name, new HashSet<>(), Variable.class);
+    public Set<Variable> findVariable(String library, String name) {
+        return findStatement(library, name, new HashSet<>(), Variable.class);
     }
 
-    private <T> Statement findStatement(String library, String name, Set<TestCaseFile> memory, Class<T> type){
-        Statement statement = null;
+    private <T> Set<T> findStatement(String library, String name, Set<TestCaseFile> memory, Class<T> type){
+        HashSet<T> statements = new HashSet<>();
 
         if(library == null || library.isEmpty() || getLibraryName().equalsIgnoreCase(library)){
             if(type == UserKeyword.class){
-                statement = userKeywordTable.findStatement(name);
+                statements.addAll((Collection<? extends T>) userKeywordTable.findStatement(name));
             }
 
-            if(statement == null &&type == TestCase.class){
-                statement = testCaseTable.findStatement(name);
+            if(type == TestCase.class){
+                statements.addAll((Collection<? extends T>) testCaseTable.findStatement(name));
             }
 
-            if(statement == null && type == Variable.class){
-                statement = variableTable.findStatement(name);
-            }
-
-            if(statement != null){
-                return statement;
+            if(type == Variable.class){
+                statements.addAll((Collection<? extends T>) variableTable.findStatement(name));
             }
         }
 
         for(Resources resources: settings.getAllResources()){
             if(resources.isValid() && memory.add(resources.getTestCaseFile())) {
-                statement = resources.getTestCaseFile().findStatement(library, name, memory, type);
-            }
-
-            if(statement != null){
-                return statement;
+                TestCaseFile file = resources.getTestCaseFile();
+                statements.addAll(file.findStatement(library, name, memory, type));
             }
         }
 
-        return null;
+        return statements;
     }
 
 
     public void addLine(Line line) {
         lines.add(line);
+    }
+
+    public boolean isDirectDependency(TestCaseFile file) {
+        if(file == null){
+            return false;
+        }
+
+        if(this == file){
+            return true;
+        }
+
+        for(Resources resources: settings.getAllResources()){
+            if(resources.getTestCaseFile() == file){
+                return true;
+            }
+        }
+
+        return false;
     }
 }

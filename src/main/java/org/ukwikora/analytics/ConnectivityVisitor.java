@@ -61,4 +61,9 @@ public class ConnectivityVisitor implements StatementVisitor {
     public void visit(ListVariable list, VisitorMemory memory) {
         VisitorUtils.traverseDependencies(this, list, memory);
     }
+
+    @Override
+    public void visit(TimeOut timeOut, VisitorMemory memory) {
+        VisitorUtils.traverseDependencies(this, timeOut, memory);
+    }
 }

@@ -5,4 +5,4 @@
     <@table deadCodePage.table/>
 </#macro>
 
-<@display_page sidebar=sidebar title=deadCodePage.name/>
+<@display_page sidebar=sidebar title=deadCodePage.name generated_date=generated_date/>

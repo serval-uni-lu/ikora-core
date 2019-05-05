@@ -65,7 +65,7 @@ public class GitRepository {
         return project;
     }
 
-    public TestCase findTestCase(String name) {
+    public Set<TestCase> findTestCase(String name) {
         TestCaseFile testCaseFile = project.getTestCaseFile(name);
 
         if(testCaseFile == null){

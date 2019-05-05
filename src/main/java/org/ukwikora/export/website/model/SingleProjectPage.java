@@ -53,10 +53,12 @@ public class SingleProjectPage extends Page {
     private BarChart createConnectivityChart(ProjectStatistics statistics) throws IOException {
         Map<Integer, Integer> connectivity = statistics.getConnectivityDistribution(UserKeyword.class);
 
+        ChartDataset dataset = new ChartDataset("Number of Keywords", getValues(connectivity), ChartDataset.Color.BLUE);
+
         BarChart chart = new BarChart(
                 String.format("%s-connectivity-chart", getId()),
                 "Keywords Connectivity",
-                getValues(connectivity),
+                dataset,
                 getKeys(connectivity));
 
         chart.setYLabel("Number of Keywords");
@@ -68,10 +70,12 @@ public class SingleProjectPage extends Page {
     private BarChart createDepthChart(ProjectStatistics statistics) throws IOException {
         Map<Integer, Integer> depth = statistics.getLevelDistribution(UserKeyword.class);
 
+        ChartDataset dataset = new ChartDataset("Number of Keywords", getValues(depth), ChartDataset.Color.BLUE);
+
         BarChart chart = new BarChart(
                 String.format("%s-depth-chart", getId()),
                 "Keywords Depth",
-                getValues(depth),
+                dataset,
                 getKeys(depth));
 
         chart.setYLabel("Number of Keywords");
@@ -83,10 +87,12 @@ public class SingleProjectPage extends Page {
     private BarChart createSequenceChart(ProjectStatistics statistics) throws IOException {
         Map<Integer, Integer> sequence = statistics.getSequenceDistribution(TestCase.class);
 
+        ChartDataset dataset = new ChartDataset("Number of Test Cases", getValues(sequence), ChartDataset.Color.BLUE);
+
         BarChart chart = new BarChart(
                 String.format("%s-sequence-chart", getId()),
                 "Test Cases Sequence",
-                getValues(sequence),
+                dataset,
                 getKeys(sequence));
 
         chart.setYLabel("Number of Test Cases");
@@ -98,10 +104,12 @@ public class SingleProjectPage extends Page {
     private BarChart createSizeChart(ProjectStatistics statistics) throws IOException {
         Map<Integer, Integer> size = statistics.getSizeDistribution(UserKeyword.class);
 
+        ChartDataset dataset = new ChartDataset("Number of Keywords", getValues(size), ChartDataset.Color.BLUE);
+
         BarChart chart = new BarChart(
                 String.format("%s-size-chart", getId()),
                 "Keywords Size",
-                getValues(size),
+                dataset,
                 getKeys(size));
 
         chart.setYLabel("Number of Keywords");

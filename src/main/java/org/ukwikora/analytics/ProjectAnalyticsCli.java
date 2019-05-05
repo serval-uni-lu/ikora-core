@@ -14,6 +14,8 @@ import org.gitlabloader.api.Gitlab;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +28,9 @@ public class ProjectAnalyticsCli implements CommandRunner {
         String tmpLocation = "";
 
         try{
+            logger.info("Start analysis...");
+            Instant start = Instant.now();
+
             // read configuration and setup system
             Configuration config = Configuration.getInstance();
             Plugin analytics = config.getPlugin("project analytics");
@@ -38,6 +43,9 @@ public class ProjectAnalyticsCli implements CommandRunner {
             // export to static website
             StatisticsViewerGenerator generator = new StatisticsViewerGenerator(projects, outputDir);
             generator.generate();
+
+            long end = Duration.between(start, Instant.now()).toMillis();
+            logger.info(String.format("Analysis performed in %d ms", end));
         }
         finally {
             if(tmpLocation.isEmpty()) {
@@ -49,8 +57,6 @@ public class ProjectAnalyticsCli implements CommandRunner {
 
     private String loadProjects(Plugin analytics) {
         String url = analytics.getPropertyAsString("git url", "");
-        String username = analytics.getPropertyAsString("git user", "");
-        String password = analytics.getPropertyAsString("git password", "");
         String token = analytics.getPropertyAsString("git token", "");
         String group = analytics.getPropertyAsString("git group");
         String location = analytics.getPropertyAsString("project location");
@@ -59,7 +65,7 @@ public class ProjectAnalyticsCli implements CommandRunner {
 
         location = createTmpFolder(location);
 
-        Gitlab gitlab = new Gitlab().setCredentials(username, password).setToken(token).setUrl(url);
+        Gitlab gitlab = new Gitlab().setToken(token).setUrl(url);
         List<org.gitlabloader.api.Project> projects = gitlab.findProjectsByGroupName(group);
         gitlab.cloneProjects(projects, location, defaultBranch, branchExceptions);
 
