@@ -140,11 +140,17 @@ public class ValueTest {
     }
 
     @Test
-    public void checkEscape(){
+    public void checkEscapeParenthesis(){
         String simple = "${simple}";
         String parenthesis = "${test(with_parenthesis)}";
 
         assertEquals("\\$\\{simple\\}", Value.escape(simple));
         assertEquals("\\$\\{test\\(with_parenthesis\\)\\}", Value.escape(parenthesis));
+    }
+
+    @Test
+    void checkEscapeDash(){
+        String dash = "${30-0931-450-32}";
+        assertEquals("\\$\\{30\\-0931\\-450\\-32\\}", Value.escape(dash));
     }
 }
