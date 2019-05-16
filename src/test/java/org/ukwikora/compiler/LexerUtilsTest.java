@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class LexerUtilsTest {
 
     @Test
-    public void checkRemoveIndent(){
+    void checkRemoveIndent(){
         String[] twoIndents = {"","","Some text", "More text"};
         String[] oneIndent = {"","Some text", "More text"};
         String[] zeroIndents = {"Some text", "More text"};
@@ -26,7 +26,7 @@ public class LexerUtilsTest {
     }
 
     @Test
-    public void checkTokenizerWith2spaceIndent(){
+    void checkTokenizerWith2spaceIndent(){
         String line = "  Some text";
         String[] tokens = LexerUtils.tokenize(line);
 
@@ -36,7 +36,16 @@ public class LexerUtilsTest {
     }
 
     @Test
-    public void checkTokenizeWith4spaceIndent(){
+    void checkTokenizerWith1spaceIndent(){
+        String line = " Some text";
+        String[] tokens = LexerUtils.tokenize(line);
+
+        assertEquals(tokens.length, 1);
+        assertEquals(tokens[0], "Some text");
+    }
+
+    @Test
+    void checkTokenizeWith4spaceIndent(){
         String line = "    Some text";
 
         String[] tokens = LexerUtils.tokenize(line);
@@ -47,7 +56,7 @@ public class LexerUtilsTest {
     }
 
     @Test
-    public void checkTokenizeWithTabIndent(){
+    void checkTokenizeWithTabIndent(){
         String line = "\tSome text";
 
         String[] tokens = LexerUtils.tokenize(line);
@@ -58,7 +67,7 @@ public class LexerUtilsTest {
     }
 
     @Test
-    public void checkMultiLineDocumentation(){
+    void checkMultiLineDocumentation(){
         String documentation = "\t[Documentation]\tFirst line\n" +
                 "\t...\tSecond line\n" +
                 "\t...\tThird line\n" +

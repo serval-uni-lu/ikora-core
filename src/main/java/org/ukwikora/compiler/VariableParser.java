@@ -1,16 +1,18 @@
 package org.ukwikora.compiler;
 
-import org.ukwikora.model.DictionaryVariable;
-import org.ukwikora.model.ListVariable;
-import org.ukwikora.model.ScalarVariable;
-import org.ukwikora.model.Variable;
+import org.ukwikora.model.*;
 
 import java.util.Optional;
 
 class VariableParser {
     public static Optional<Variable> parse(String name){
+        if(!Value.isVariable(name)){
+            return Optional.empty();
+        }
+
         Variable variable;
-        switch (name.trim().substring(0, 1)) {
+
+        switch (name.substring(0, 1)) {
             case "$":  variable = new ScalarVariable(name); break;
             case "@":  variable = new ListVariable(name); break;
             case "&": variable = new DictionaryVariable(name); break;

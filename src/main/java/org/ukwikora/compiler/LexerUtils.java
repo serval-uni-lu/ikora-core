@@ -50,7 +50,7 @@ class LexerUtils {
         String tokens = line.replaceAll("\\s+$", "").replaceAll("\\s\\s(\\s*)", "\t");
         tokens = tokens.replaceAll("\\\\t", "\t");
 
-        return tokens.split("\t");
+        return Arrays.stream(tokens.split("\t")).map(String::trim).toArray(String[]::new);
     }
 
     static boolean isBlock(String line, String block){
