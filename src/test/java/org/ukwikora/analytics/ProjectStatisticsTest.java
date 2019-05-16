@@ -11,18 +11,17 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ProjectStatisticsTest {
-    private static Project project;
+class ProjectStatisticsTest {
     private static ProjectStatistics statistics;
 
     @BeforeAll
-    public static void setup(){
-        project = Globals.compileProject("robot/web-demo");
+    static void setup(){
+        Project project = Globals.compileProject("robot/web-demo");
         statistics = new ProjectStatistics(project);
     }
 
     @Test
-    public void checkSizeDistributionWithSimpleProject(){
+    void checkSizeDistributionWithSimpleProject(){
         Map<Integer, Integer> userKeywordSizes = statistics.getSizeDistribution(UserKeyword.class);
         assertFalse(userKeywordSizes.isEmpty());
 
@@ -43,7 +42,7 @@ public class ProjectStatisticsTest {
     }
 
     @Test
-    public void checkConnectivityDistributionWithSimpleProject(){
+    void checkConnectivityDistributionWithSimpleProject(){
         Map<Integer, Integer> userKeywordConnectivity = statistics.getConnectivityDistribution(UserKeyword.class);
         assertFalse(userKeywordConnectivity.isEmpty());
 
@@ -67,7 +66,7 @@ public class ProjectStatisticsTest {
     }
 
     @Test
-    public void checkLevelDistributionWithSimpleProject(){
+    void checkLevelDistributionWithSimpleProject(){
         Map<Integer, Integer> userKeywordLevels = statistics.getLevelDistribution(UserKeyword.class);
         assertFalse(userKeywordLevels.isEmpty());
 
@@ -88,7 +87,7 @@ public class ProjectStatisticsTest {
     }
 
     @Test
-    public void checkSequenceDistributionSimpleProject(){
+    void checkSequenceDistributionSimpleProject(){
         Map<Integer, Integer> userKeywordSequence = statistics.getSequenceDistribution(UserKeyword.class);
         assertFalse(userKeywordSequence.isEmpty());
 

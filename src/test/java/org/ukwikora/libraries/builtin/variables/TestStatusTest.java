@@ -4,9 +4,9 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class TestStatusTest {
+class TestStatusTest {
     @Test
-    public void checkVariableResolution(){
+    void checkVariableResolution(){
         TestStatus testStatus = new TestStatus();
 
         assertTrue(testStatus.matches("${TEST STATUS}"));

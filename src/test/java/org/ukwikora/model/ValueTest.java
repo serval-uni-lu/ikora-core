@@ -7,9 +7,9 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ValueTest {
+class ValueTest {
     @Test
-    public void checkSimpleMatch(){
+    void checkSimpleMatch(){
         Value value = new Value("Input password");
         String test = "Input password";
 
@@ -17,7 +17,7 @@ public class ValueTest {
     }
 
     @Test
-    public void checkVariableMatch(){
+    void checkVariableMatch(){
         Value value = new Value("Login \"${user}\" with password \"${password}\"");
         String test = "Login \"admin\" with password \"1234\"";
 
@@ -25,7 +25,7 @@ public class ValueTest {
     }
 
     @Test
-    public void checkFindVariables(){
+    void checkFindVariables(){
         String raw = "Login \"@{user}\" with password \"${password}\" with options \"&{options}\"";
         List<String> variables = Value.findVariables(raw);
 
@@ -36,7 +36,7 @@ public class ValueTest {
     }
 
     @Test
-    public void checkIsVariable() {
+    void checkIsVariable() {
         String scalar = "${ScalarVariable}";
         assertTrue(Value.isVariable(scalar));
 
@@ -51,7 +51,7 @@ public class ValueTest {
     }
 
     @Test
-    public void checkHasVariable() {
+    void checkHasVariable() {
         String scalar = "Some text \"${ScalarVariable}\" More text";
         assertTrue(Value.hasVariable(scalar));
 
@@ -66,7 +66,7 @@ public class ValueTest {
     }
 
     @Test
-    public void checkResolvedSimpleValues(){
+    void checkResolvedSimpleValues(){
         ScalarVariable name = new ScalarVariable("${name}");
         name.addElement("John Smith");
 
@@ -85,7 +85,7 @@ public class ValueTest {
     }
 
     @Test
-    public void checkResolveCompositeValues(){
+    void checkResolveCompositeValues(){
         ScalarVariable name = new ScalarVariable("${name}");
         name.addElement("John Smith");
 
@@ -112,35 +112,35 @@ public class ValueTest {
     }
 
     @Test
-    public void checkScalarBareNameExtraction(){
+    void checkScalarBareNameExtraction(){
         String scalar = "${scalar}";
         String bareScalar = Value.getBareName(scalar);
         assertEquals("scalar", bareScalar);
     }
 
     @Test
-    public void checkListBareNameExtraction(){
+    void checkListBareNameExtraction(){
         String list = "@{list}";
         String bareList = Value.getBareName(list);
         assertEquals("list", bareList);
     }
 
     @Test
-    public void checkDictionaryBareNameExtraction(){
+    void checkDictionaryBareNameExtraction(){
         String dictionary = "${dictionary}";
         String bareDictionary = Value.getBareName(dictionary);
         assertEquals("dictionary", bareDictionary);
     }
 
     @Test
-    public void checkCompositeBareNameExtraction(){
+    void checkCompositeBareNameExtraction(){
         String composite = "${ENV-${env}}";
         String bareComposite = Value.getBareName(composite);
         assertEquals("ENV-${env}", bareComposite);
     }
 
     @Test
-    public void checkEscapeParenthesis(){
+    void checkEscapeParenthesis(){
         String simple = "${simple}";
         String parenthesis = "${test(with_parenthesis)}";
 

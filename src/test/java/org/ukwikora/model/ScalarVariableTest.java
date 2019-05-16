@@ -4,9 +4,9 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ScalarVariableTest {
+class ScalarVariableTest {
     @Test
-    public void checkNameMatching(){
+    void checkNameMatching(){
         ScalarVariable test1 = new ScalarVariable("${test1}");
         assertTrue(test1.matches("${test1}"));
         assertTrue(test1.matches("${TEST1}"));

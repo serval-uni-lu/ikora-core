@@ -3,15 +3,14 @@ package org.ukwikora.compiler;
 import org.ukwikora.model.UserKeyword;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class UserKeywordParserTest {
+class UserKeywordParserTest {
     @Test
-    public void checkSimple() {
+    void checkSimple() {
         String text = "Keyword with cool name\n" +
                 "    Step one\tArg1\n" +
                 "    Step two without args\n" +
@@ -28,7 +27,7 @@ public class UserKeywordParserTest {
     }
 
     @Test
-    public void checkKeywordWithDocumentation() {
+    void checkKeywordWithDocumentation() {
         String text = "Keyword with cool name\n" +
                 "    [Documentation]\tSimple documentation\n" +
                 "    Step one\tArg1\n" +

@@ -4,9 +4,9 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class LineTest {
+class LineTest {
     @Test
-    public void checkSimpleLine(){
+    void checkSimpleLine(){
         Line simple = new Line("simple line", 4, false, false);
 
         assertTrue(simple.isValid());
@@ -18,7 +18,7 @@ public class LineTest {
     }
 
     @Test
-    public void checkInvalidLine(){
+    void checkInvalidLine(){
         Line invalid = new Line(null, 3, false, true);
 
         assertFalse(invalid.isValid());
@@ -30,7 +30,7 @@ public class LineTest {
     }
 
     @Test
-    public void checkEmptyLine(){
+    void checkEmptyLine(){
         Line invalid = new Line("", 12, false, true);
 
         assertTrue(invalid.isValid());

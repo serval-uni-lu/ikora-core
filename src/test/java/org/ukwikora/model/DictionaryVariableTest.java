@@ -4,9 +4,9 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class DictionaryVariableTest {
+class DictionaryVariableTest {
     @Test
-    public void checkNameMatching(){
+    void checkNameMatching(){
         DictionaryVariable test1 = new DictionaryVariable("&{test1}");
         assertTrue(test1.matches("&{test1}"));
         assertTrue(test1.matches("&{TEST1}"));

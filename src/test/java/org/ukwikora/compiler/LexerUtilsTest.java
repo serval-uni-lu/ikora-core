@@ -8,7 +8,7 @@ import java.io.StringReader;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class LexerUtilsTest {
+class LexerUtilsTest {
 
     @Test
     void checkRemoveIndent(){
@@ -91,7 +91,7 @@ public class LexerUtilsTest {
     }
 
     @Test
-    public void checkIsBlockWithoutBlockName(){
+    void checkIsBlockWithoutBlockName(){
         assertTrue(LexerUtils.isBlock("***Block***"));
         assertTrue(LexerUtils.isBlock("***Block"));
         assertTrue(LexerUtils.isBlock("*** Block***"));
@@ -102,7 +102,7 @@ public class LexerUtilsTest {
     }
 
     @Test
-    public void checkIsBlockWithBlockName(){
+    void checkIsBlockWithBlockName(){
         assertTrue(LexerUtils.isBlock("***Block***", "Block"));
         assertTrue(LexerUtils.isBlock("***BLOCK***", "Block"));
         assertTrue(LexerUtils.isBlock("*** BLOCK***", "Block"));

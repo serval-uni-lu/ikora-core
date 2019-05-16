@@ -4,9 +4,9 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ListVariableTest {
+class ListVariableTest {
     @Test
-    public void checkNameMatching(){
+    void checkNameMatching(){
         ListVariable test1 = new ListVariable("@{test1}");
         assertTrue(test1.matches("@{test1}"));
         assertTrue(test1.matches("@{TEST1}"));

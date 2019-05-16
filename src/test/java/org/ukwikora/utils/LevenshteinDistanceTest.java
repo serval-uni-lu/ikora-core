@@ -8,10 +8,10 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class LevenshteinDistanceTest {
+class LevenshteinDistanceTest {
 
     @Test
-    public void checkLevenshteinDistanceDifferentString() {
+    void checkLevenshteinDistanceDifferentString() {
         String string1 = "First String";
         String string2 = "Second String";
 
@@ -21,7 +21,7 @@ public class LevenshteinDistanceTest {
     }
 
     @Test
-    public void checkLevenshteinIndexDifferentString() {
+    void checkLevenshteinIndexDifferentString() {
         String string1 = "First String";
         String string2 = "Second String";
 
@@ -31,7 +31,7 @@ public class LevenshteinDistanceTest {
     }
 
     @Test
-    public void checkDistanceMatrix(){
+    void checkDistanceMatrix(){
         List<DifferentiableString> list1 = new ArrayList<>();
         list1.add(new DifferentiableString("Step 1"));
         list1.add(new DifferentiableString("Step 2"));

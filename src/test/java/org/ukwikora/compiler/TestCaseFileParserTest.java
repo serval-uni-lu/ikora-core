@@ -4,9 +4,9 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class TestCaseFileParserTest {
+class TestCaseFileParserTest {
     @Test
-    public void checkSettingsBlockResolution(){
+    void checkSettingsBlockResolution(){
         assertTrue(TestCaseFileParser.isSettings("***Settings***"));
         assertTrue(TestCaseFileParser.isSettings("***Setting***"));
         assertTrue(TestCaseFileParser.isSettings("*** settings ***"));
@@ -16,7 +16,7 @@ public class TestCaseFileParserTest {
     }
 
     @Test
-    public void checkKeywordsBlockResolution(){
+    void checkKeywordsBlockResolution(){
         assertTrue(TestCaseFileParser.isKeywords("***Keywords***"));
         assertTrue(TestCaseFileParser.isKeywords("***Keyword***"));
         assertTrue(TestCaseFileParser.isKeywords("*** keywords ***"));
@@ -26,7 +26,7 @@ public class TestCaseFileParserTest {
     }
 
     @Test
-    public void checkTestCasesBlockResolution(){
+    void checkTestCasesBlockResolution(){
         assertTrue(TestCaseFileParser.isTestCases("***Test Cases***"));
         assertTrue(TestCaseFileParser.isTestCases("***Test Case***"));
         assertTrue(TestCaseFileParser.isTestCases("*** test cases ***"));
@@ -36,7 +36,7 @@ public class TestCaseFileParserTest {
     }
 
     @Test
-    public void checkVariableBlockResolution(){
+    void checkVariableBlockResolution(){
         assertTrue(TestCaseFileParser.isVariable("***Variables***"));
         assertTrue(TestCaseFileParser.isVariable("***Variable***"));
         assertTrue(TestCaseFileParser.isVariable("*** variables ***"));

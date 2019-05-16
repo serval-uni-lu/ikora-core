@@ -7,9 +7,9 @@ import java.io.File;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class LineReaderTest {
+class LineReaderTest {
     @Test
-    public void checkReadLine_SpecialCharacterReading(){
+    void checkReadLine_SpecialCharacterReading(){
         try {
             final File robot = Globals.getResourceFile("robot/special-characters.robot");
             LineReader reader = new LineReader(robot);
@@ -30,7 +30,7 @@ public class LineReaderTest {
     }
 
     @Test
-    public void checkReadLine_FileEncodedInUTF8WithBom(){
+    void checkReadLine_FileEncodedInUTF8WithBom(){
         try {
             final File utf8bom = Globals.getResourceFile("files/file-in-utf8-bom.txt");
             LineReader reader = new LineReader(utf8bom);

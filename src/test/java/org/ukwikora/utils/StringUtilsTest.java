@@ -6,9 +6,9 @@ import java.io.UnsupportedEncodingException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class StringUtilsTest {
+class StringUtilsTest {
     @Test
-    public void checkCountLines(){
+    void checkCountLines(){
         String emptyBlock = "\n";
         String trailingBlock = "Trailing\n";
         String forwardBlock = "\nForward";
@@ -23,7 +23,7 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void checkBeautifyName(){
+    void checkBeautifyName(){
         assertEquals("Lower", StringUtils.toBeautifulName("lower"));
         assertEquals("Upper", StringUtils.toBeautifulName("UPPER"));
         assertEquals("Test Lower Underline", StringUtils.toBeautifulName("test_lower_underline"));
@@ -36,7 +36,7 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void checkBeautifyUrl(){
+    void checkBeautifyUrl(){
         try {
             assertEquals("page-1.html", StringUtils.toBeautifulUrl("PAGE-1_", "html"));
             assertEquals("page-1.html", StringUtils.toBeautifulUrl("Page 1", "html"));
@@ -48,7 +48,7 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void checkLineTruncate(){
+    void checkLineTruncate(){
         assertEquals("Some random line", StringUtils.lineTruncate("Some random line", -1));
         assertEquals("", StringUtils.lineTruncate("Some random line", 0));
         assertEquals(".", StringUtils.lineTruncate("Some random line", 1));
