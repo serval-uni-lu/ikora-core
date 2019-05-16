@@ -66,4 +66,18 @@ class FileUtilsTest {
         assertNotNull(charset);
         assertEquals(Charset.forName("UTF8"), charset);
     }
+
+    @Test
+    void checkCopyResource(){
+        File destination = Globals.getNewTmpFolder("with sépcial and space/ukwikora-copy-resources-test");
+
+        try {
+            FileUtils.copyResources("robot/web-demo", destination);
+        } catch (Exception e) {
+            fail("exception was raised: " + e.getMessage());
+        }
+
+        assertTrue(destination.exists());
+        Globals.deleteDirectory(destination);
+    }
 }

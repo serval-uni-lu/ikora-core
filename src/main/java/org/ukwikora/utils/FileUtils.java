@@ -4,14 +4,16 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.tika.parser.txt.CharsetDetector;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
+import java.net.JarURLConnection;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.nio.charset.Charset;
 import java.nio.file.Paths;
+import java.util.Enumeration;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 public class FileUtils {
     private FileUtils() {}
@@ -54,14 +56,60 @@ public class FileUtils {
         return false;
     }
 
+    public static boolean copyResources(final String resources, final File destination) throws IOException, URISyntaxException {
+        File resourceFile = getResourceFile(resources);
+        return copyResourcesRecursively(resourceFile.toURI().toURL(), destination);
+    }
+
+    private static boolean copyResourcesRecursively(final URL originUrl, final File destination) throws IOException {
+        final URLConnection urlConnection = originUrl.openConnection();
+
+        if (urlConnection instanceof JarURLConnection) {
+            return copyJarResourcesRecursively(destination, (JarURLConnection) urlConnection);
+        } else {
+            org.apache.commons.io.FileUtils.copyDirectory(new File(originUrl.getPath()), destination);
+            return true;
+        }
+    }
+
+    private static boolean copyJarResourcesRecursively(final File destDir, final JarURLConnection jarConnection) throws IOException {
+        final JarFile jarFile = jarConnection.getJarFile();
+
+        for (final Enumeration<JarEntry> e = jarFile.entries(); e.hasMoreElements();) {
+            final JarEntry entry = e.nextElement();
+            if (entry.getName().startsWith(jarConnection.getEntryName())) {
+                final String filename = StringUtils.removeStart(entry.getName(), //
+                        jarConnection.getEntryName());
+
+                final File f = new File(destDir, filename);
+                if (!entry.isDirectory()) {
+                    try(InputStream is = jarFile.getInputStream(entry); FileOutputStream os =  new FileOutputStream(f)){
+                        if(org.apache.commons.io.IOUtils.copy(is, os) <= 0){
+                            return false;
+                        }
+                    }
+                } else {
+                    if (!FileUtils.ensureDirectoryExists(f)) {
+                        throw new IOException("Could not create directory: "
+                                + f.getAbsolutePath());
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    private static boolean ensureDirectoryExists(final File f) {
+        return f.exists() || f.mkdir();
+    }
+
     public static File getResourceFile(String name) throws IOException, URISyntaxException {
         URL resource = FileUtils.class.getClassLoader().getResource(name);
-
-        if(resource == null){
+        if (resource == null) {
             throw new IOException("failed to locate resource template for project analytics");
+        } else {
+            return Paths.get(resource.toURI()).toFile();
         }
-
-        return Paths.get(resource.toURI()).toFile();
     }
 
     public static Charset detectCharset(File f, Charset defaultCharset) {

@@ -2,6 +2,7 @@ package org.ukwikora.utils;
 
 import org.apache.commons.lang3.text.WordUtils;
 
+import javax.annotation.Nonnull;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.regex.Matcher;
@@ -60,5 +61,15 @@ public class StringUtils {
         }
 
         return String.format("%s...", line.substring(0, maxSize - 3));
+    }
+
+    public static String removeStart(@Nonnull String str, @Nonnull String remove) {
+        if (str.isEmpty() || remove.isEmpty()) {
+            return str;
+        }
+        if (str.startsWith(remove)){
+            return str.substring(remove.length());
+        }
+        return str;
     }
 }

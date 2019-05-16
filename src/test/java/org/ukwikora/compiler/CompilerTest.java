@@ -3,6 +3,7 @@ package org.ukwikora.compiler;
 import org.junit.jupiter.api.Test;
 import org.ukwikora.Globals;
 import org.ukwikora.model.*;
+import org.ukwikora.utils.FileUtils;
 
 import java.io.File;
 import java.util.List;
@@ -58,7 +59,13 @@ class CompilerTest {
 
     @Test
     void checkDuplicatedStaticallyImportedKeywordsAreDetectedTwice(){
-        final File robot = Globals.getResourceFile("robot/duplicated-keyword");
+        File robot = null;
+
+        try{
+        robot = FileUtils.getResourceFile("robot/duplicated-keyword");
+        } catch (Exception e) {
+            fail(String.format("Failed to load 'robot/scope-testing' from resources: %s", e.getMessage()));
+        }
         final Project project = Compiler.compile(robot.getAbsolutePath());
 
         assertNotNull(project);
