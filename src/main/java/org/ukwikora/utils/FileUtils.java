@@ -5,10 +5,8 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.tika.parser.txt.CharsetDetector;
 
 import java.io.*;
-import java.net.JarURLConnection;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.net.URLConnection;
 import java.nio.charset.Charset;
 import java.nio.file.Paths;
 import java.util.Enumeration;
@@ -56,51 +54,33 @@ public class FileUtils {
         return false;
     }
 
-    public static boolean copyResources(final String resources, final File destination) throws IOException, URISyntaxException {
-        File resourceFile = getResourceFile(resources);
-        return copyResourcesRecursively(resourceFile.toURI().toURL(), destination);
-    }
+    public static void copyResources(final String resources, final File destination) throws IOException, URISyntaxException {
+        final File jarFile = new File(FileUtils.class.getProtectionDomain().getCodeSource().getLocation().getPath());
 
-    private static boolean copyResourcesRecursively(final URL originUrl, final File destination) throws IOException {
-        final URLConnection urlConnection = originUrl.openConnection();
+        if(jarFile.isFile()) {
+            final JarFile jar = new JarFile(jarFile);
+            final Enumeration<JarEntry> entries = jar.entries();
 
-        if (urlConnection instanceof JarURLConnection) {
-            return copyJarResourcesRecursively(destination, (JarURLConnection) urlConnection);
+            while(entries.hasMoreElements()) {
+                final String name = entries.nextElement().getName();
+                if (name.startsWith(resources + "/")) {
+                    URL inputUrl = FileUtils.class.getResource(name);
+                    File destinationFile = new File(destination, StringUtils.removeStart(name, resources + "/"));
+                    org.apache.commons.io.FileUtils.copyURLToFile(inputUrl, destinationFile);
+                }
+            }
+            jar.close();
         } else {
-            org.apache.commons.io.FileUtils.copyDirectory(new File(originUrl.getPath()), destination);
-            return true;
-        }
-    }
-
-    private static boolean copyJarResourcesRecursively(final File destDir, final JarURLConnection jarConnection) throws IOException {
-        final JarFile jarFile = jarConnection.getJarFile();
-
-        for (final Enumeration<JarEntry> e = jarFile.entries(); e.hasMoreElements();) {
-            final JarEntry entry = e.nextElement();
-            if (entry.getName().startsWith(jarConnection.getEntryName())) {
-                final String filename = StringUtils.removeStart(entry.getName(), //
-                        jarConnection.getEntryName());
-
-                final File f = new File(destDir, filename);
-                if (!entry.isDirectory()) {
-                    try(InputStream is = jarFile.getInputStream(entry); FileOutputStream os =  new FileOutputStream(f)){
-                        if(org.apache.commons.io.IOUtils.copy(is, os) <= 0){
-                            return false;
-                        }
-                    }
-                } else {
-                    if (!FileUtils.ensureDirectoryExists(f)) {
-                        throw new IOException("Could not create directory: "
-                                + f.getAbsolutePath());
-                    }
+            File file = FileUtils.getResourceFile(resources);
+            if(file.exists()){
+                if(file.isDirectory()){
+                    org.apache.commons.io.FileUtils.copyDirectory(file, destination);
+                }
+                else{
+                    org.apache.commons.io.FileUtils.copyFile(file, destination);
                 }
             }
         }
-        return true;
-    }
-
-    private static boolean ensureDirectoryExists(final File f) {
-        return f.exists() || f.mkdir();
     }
 
     public static File getResourceFile(String name) throws IOException, URISyntaxException {

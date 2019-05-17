@@ -74,10 +74,11 @@ class FileUtilsTest {
         try {
             FileUtils.copyResources("robot/web-demo", destination);
         } catch (Exception e) {
+            System.out.println(e.getClass().getName());
             fail("exception was raised: " + e.getMessage());
         }
 
         assertTrue(destination.exists());
-        Globals.deleteDirectory(destination);
+        Globals.deleteDirectory(destination.getParentFile());
     }
 }
