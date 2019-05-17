@@ -54,19 +54,24 @@ public class FileUtils {
         return false;
     }
 
-    public static void copyResources(final String resources, final File destination) throws IOException, URISyntaxException {
-        final File jarFile = new File(FileUtils.class.getProtectionDomain().getCodeSource().getLocation().getPath());
+    public static void copyResources(Class<?> caller, final String resources, final File destination) throws IOException, URISyntaxException {
+        final File jarFile = new File(caller.getProtectionDomain().getCodeSource().getLocation().getPath());
 
         if(jarFile.isFile()) {
             final JarFile jar = new JarFile(jarFile);
             final Enumeration<JarEntry> entries = jar.entries();
 
             while(entries.hasMoreElements()) {
-                final String name = entries.nextElement().getName();
+                final JarEntry entry = entries.nextElement();
+                final String name = entry.getName();
+
                 if (name.startsWith(resources + "/")) {
-                    URL inputUrl = FileUtils.class.getResource(name);
-                    File destinationFile = new File(destination, StringUtils.removeStart(name, resources + "/"));
-                    org.apache.commons.io.FileUtils.copyURLToFile(inputUrl, destinationFile);
+                    try(InputStream is = jar.getInputStream(entry)){
+                        File destinationFile = new File(destination, StringUtils.removeStart(name, resources + "/"));
+                        ensureExistFolder(destinationFile);
+
+                        org.apache.commons.io.FileUtils.copyInputStreamToFile(is, destinationFile);
+                    }
                 }
             }
             jar.close();
@@ -119,6 +124,18 @@ public class FileUtils {
             return Charset.forName(match);
         } catch (Exception e) {
             return defaultValue;
+        }
+    }
+
+    public static void ensureExistFolder(File file) throws IOException {
+        if(file.isFile()){
+            file = file.getParentFile();
+        }
+
+        if(!file.exists()){
+            if(!file.mkdirs()){
+                throw new IOException(String.format("Failed to create folder '%s'", file.getAbsolutePath()));
+            }
         }
     }
 }

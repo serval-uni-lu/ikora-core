@@ -72,7 +72,7 @@ class FileUtilsTest {
         File destination = Globals.getNewTmpFolder("with sépcial and space/ukwikora-copy-resources-test");
 
         try {
-            FileUtils.copyResources("robot/web-demo", destination);
+            FileUtils.copyResources(getClass(), "robot/web-demo", destination);
         } catch (Exception e) {
             System.out.println(e.getClass().getName());
             fail("exception was raised: " + e.getMessage());
