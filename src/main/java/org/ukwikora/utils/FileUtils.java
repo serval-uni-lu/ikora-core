@@ -2,6 +2,8 @@ package org.ukwikora.utils;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.tika.parser.txt.CharsetDetector;
 
 import java.io.*;
@@ -14,6 +16,8 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 public class FileUtils {
+    private static final Logger logger = LogManager.getLogger(FileUtils.class);
+
     private FileUtils() {}
 
     public static String[] getSubFolders(File folder) {
@@ -58,24 +62,41 @@ public class FileUtils {
         final File jarFile = new File(caller.getProtectionDomain().getCodeSource().getLocation().getPath());
 
         if(jarFile.isFile()) {
+            logger.info("Extracting resources from Jar File.");
+
             final JarFile jar = new JarFile(jarFile);
             final Enumeration<JarEntry> entries = jar.entries();
 
             while(entries.hasMoreElements()) {
-                final JarEntry entry = entries.nextElement();
-                final String name = entry.getName();
+                JarEntry file = entries.nextElement();
 
-                if (name.startsWith(resources + "/")) {
-                    try(InputStream is = jar.getInputStream(entry)){
-                        File destinationFile = new File(destination, StringUtils.removeStart(name, resources + "/"));
-                        ensureExistFolder(destinationFile);
-
-                        org.apache.commons.io.FileUtils.copyInputStreamToFile(is, destinationFile);
-                    }
+                if(!file.getName().startsWith(resources + "/")){
+                    continue;
                 }
+
+                logger.info(String.format("Extracting %s", file.getName()));
+
+                File f = new java.io.File(destination, StringUtils.removeStart(file.getName(), resources + "/"));
+
+                if (file.isDirectory()) {
+                    f.mkdir();
+                    continue;
+                }
+
+                InputStream is = jar.getInputStream(file);
+                FileOutputStream fos = new java.io.FileOutputStream(f);
+
+                while (is.available() > 0) {
+                    fos.write(is.read());
+                }
+
+                fos.close();
+                is.close();
             }
             jar.close();
         } else {
+            logger.info("Extracting resources from folder.");
+
             File file = FileUtils.getResourceFile(resources);
             if(file.exists()){
                 if(file.isDirectory()){
@@ -93,6 +114,7 @@ public class FileUtils {
         if (resource == null) {
             throw new IOException("failed to locate resource template for project analytics");
         } else {
+            logger.info(resource.getPath());
             return Paths.get(resource.toURI()).toFile();
         }
     }
@@ -124,18 +146,6 @@ public class FileUtils {
             return Charset.forName(match);
         } catch (Exception e) {
             return defaultValue;
-        }
-    }
-
-    public static void ensureExistFolder(File file) throws IOException {
-        if(file.isFile()){
-            file = file.getParentFile();
-        }
-
-        if(!file.exists()){
-            if(!file.mkdirs()){
-                throw new IOException(String.format("Failed to create folder '%s'", file.getAbsolutePath()));
-            }
         }
     }
 }
