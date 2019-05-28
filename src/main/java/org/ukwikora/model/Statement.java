@@ -27,4 +27,12 @@ public interface Statement extends Differentiable {
 
     Set<Statement> getDependencies();
     void addDependency(@Nonnull Statement dependency) throws InvalidDependencyException;
+
+    default Project getProject(){
+        if(getFile() == null){
+            return null;
+        }
+
+        return getFile().getProject();
+    }
 }
