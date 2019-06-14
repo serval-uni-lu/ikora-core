@@ -10,10 +10,14 @@ import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Enumeration;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 public class FileUtils {
     private static final Logger logger = LogManager.getLogger(FileUtils.class);
@@ -64,36 +68,24 @@ public class FileUtils {
         if(jarFile.isFile()) {
             logger.info("Extracting resources from Jar File.");
 
-            final JarFile jar = new JarFile(jarFile);
-            final Enumeration<JarEntry> entries = jar.entries();
+            try(ZipFile jar = new ZipFile(jarFile)){
+                List<? extends ZipEntry> entries = jar.stream()
+                        .filter(e -> e.getName().startsWith(resources + "/"))
+                        .sorted(Comparator.comparing(ZipEntry::getName))
+                        .collect(Collectors.toList());
 
-            while(entries.hasMoreElements()) {
-                JarEntry file = entries.nextElement();
+                for (ZipEntry entry : entries) {
+                    String name = StringUtils.removeStart(entry.getName(), resources + "/");
+                    Path entryDest = destination.toPath().resolve(name);
 
-                if(!file.getName().startsWith(resources + "/")){
-                    continue;
+                    if (entry.isDirectory()) {
+                        Files.createDirectory(entryDest);
+                        continue;
+                    }
+
+                    Files.copy(jar.getInputStream(entry), entryDest);
                 }
-
-                logger.info(String.format("Extracting %s", file.getName()));
-
-                File f = new java.io.File(destination, StringUtils.removeStart(file.getName(), resources + "/"));
-
-                if (file.isDirectory()) {
-                    f.mkdir();
-                    continue;
-                }
-
-                InputStream is = jar.getInputStream(file);
-                FileOutputStream fos = new java.io.FileOutputStream(f);
-
-                while (is.available() > 0) {
-                    fos.write(is.read());
-                }
-
-                fos.close();
-                is.close();
             }
-            jar.close();
         } else {
             logger.info("Extracting resources from folder.");
 
