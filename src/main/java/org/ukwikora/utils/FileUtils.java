@@ -63,12 +63,12 @@ public class FileUtils {
     }
 
     public static void copyResources(Class<?> caller, final String resources, final File destination) throws IOException, URISyntaxException {
-        final File jarFile = new File(caller.getProtectionDomain().getCodeSource().getLocation().getPath());
+        final File file = new File(caller.getProtectionDomain().getCodeSource().getLocation().getPath());
 
-        if(jarFile.isFile()) {
+        if(isJarFile(file)) {
             logger.info("Extracting resources from Jar File.");
 
-            try(ZipFile jar = new ZipFile(jarFile)){
+            try(ZipFile jar = new ZipFile(file)){
                 List<? extends ZipEntry> entries = jar.stream()
                         .filter(e -> e.getName().startsWith(resources + "/"))
                         .sorted(Comparator.comparing(ZipEntry::getName))
@@ -86,18 +86,21 @@ public class FileUtils {
                     Files.copy(jar.getInputStream(entry), entryDest);
                 }
             }
-        } else {
+        } else if(file.isDirectory()) {
             logger.info("Extracting resources from folder.");
 
-            File file = FileUtils.getResourceFile(resources);
-            if(file.exists()){
-                if(file.isDirectory()){
-                    org.apache.commons.io.FileUtils.copyDirectory(file, destination);
+            File resourceFile = FileUtils.getResourceFile(resources);
+            if(resourceFile.exists()){
+                if(resourceFile.isDirectory()){
+                    org.apache.commons.io.FileUtils.copyDirectory(resourceFile, destination);
                 }
                 else{
-                    org.apache.commons.io.FileUtils.copyFile(file, destination);
+                    org.apache.commons.io.FileUtils.copyFile(resourceFile, destination);
                 }
             }
+        }
+        else{
+            throw new IOException(String.format("Try to extract resources from unsupported file type: %s", file.getAbsolutePath()));
         }
     }
 
@@ -139,5 +142,35 @@ public class FileUtils {
         } catch (Exception e) {
             return defaultValue;
         }
+    }
+
+    public static boolean isJarFile(File file) throws IOException {
+        if (!isZipFile(file)) {
+            return false;
+        }
+
+        ZipFile zip = new ZipFile(file);
+        boolean manifest = zip.getEntry("META-INF/MANIFEST.MF") != null;
+        zip.close();
+
+        return manifest;
+    }
+
+    public static boolean isZipFile(File file) throws IOException {
+        if(file.isDirectory()) {
+            return false;
+        }
+        if(!file.canRead()) {
+            throw new IOException("Cannot read file "+file.getAbsolutePath());
+        }
+        if(file.length() < 4) {
+            return false;
+        }
+
+        DataInputStream in = new DataInputStream(new BufferedInputStream(new FileInputStream(file)));
+        int test = in.readInt();
+        in.close();
+
+        return test == 0x504b0304;
     }
 }
