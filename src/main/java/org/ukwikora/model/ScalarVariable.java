@@ -80,8 +80,10 @@ public class ScalarVariable extends Variable {
     @Override
     protected void setName(String name) {
         this.name = name;
+        String generic = Value.getGenericVariableName(this.name);
+        String bareName = Value.escape(Value.getBareVariableName(generic));
 
-        String patternString = String.format("^\\$\\{%s(((\\[\\d+\\])*)|([\\+\\-\\*/]\\d+))}$", Value.getBareName(this.name));
+        String patternString = String.format("^\\$\\{%s(((\\[\\d+\\])*)|([\\+\\-\\*/]\\d+))}$", bareName);
         this.pattern = Pattern.compile(patternString, Pattern.CASE_INSENSITIVE);
     }
 }

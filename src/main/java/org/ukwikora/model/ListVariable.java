@@ -50,7 +50,8 @@ public class ListVariable extends Variable {
     @Override
     protected void setName(String name){
         this.name = name;
-        String bareName = Value.escape(Value.getBareName(this.name));
+        String generic = Value.getGenericVariableName(this.name);
+        String bareName = Value.escape(Value.getBareVariableName(generic));
 
         String patternString = String.format("^[\\$@]\\{%s(\\[\\d+\\])*}$", bareName);
         this.pattern = Pattern.compile(patternString, Pattern.CASE_INSENSITIVE);

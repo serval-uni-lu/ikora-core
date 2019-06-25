@@ -10,6 +10,8 @@ class DictionaryVariableTest {
         DictionaryVariable test1 = new DictionaryVariable("&{test1}");
         assertTrue(test1.matches("&{test1}"));
         assertTrue(test1.matches("&{TEST1}"));
+        assertTrue(test1.matches("&{TEST_1}"));
+        assertTrue(test1.matches("&{TEST 1}"));
         assertFalse(test1.matches("${test1}"));
         assertFalse(test1.matches("@{test1}"));
     }

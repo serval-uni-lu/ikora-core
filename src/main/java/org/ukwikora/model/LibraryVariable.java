@@ -25,7 +25,7 @@ public abstract class LibraryVariable extends Variable {
         this.name = name;
 
         String patternString = Value.escape(getName());
-        patternString = patternString.replaceAll("\\s", "(\\\\s|_)");
+        patternString = Value.getGenericVariableName(patternString);
         this.pattern = Pattern.compile(patternString, Pattern.CASE_INSENSITIVE);
     }
 
@@ -64,9 +64,6 @@ public abstract class LibraryVariable extends Variable {
     }
 
     private static String toVariable(Class<? extends LibraryVariable> variableClass) {
-        String name = variableClass.getSimpleName();
-        name = name.replaceAll("([A-Z])", " $1").trim().toUpperCase();
-
-        return String.format("${%s}", name);
+        return String.format("${%s}", variableClass.getSimpleName());
     }
 }

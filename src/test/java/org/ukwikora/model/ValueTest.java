@@ -114,28 +114,42 @@ class ValueTest {
     @Test
     void checkScalarBareNameExtraction(){
         String scalar = "${scalar}";
-        String bareScalar = Value.getBareName(scalar);
+        String bareScalar = Value.getBareVariableName(scalar);
         assertEquals("scalar", bareScalar);
     }
 
     @Test
     void checkListBareNameExtraction(){
         String list = "@{list}";
-        String bareList = Value.getBareName(list);
+        String bareList = Value.getBareVariableName(list);
         assertEquals("list", bareList);
     }
 
     @Test
     void checkDictionaryBareNameExtraction(){
         String dictionary = "${dictionary}";
-        String bareDictionary = Value.getBareName(dictionary);
+        String bareDictionary = Value.getBareVariableName(dictionary);
         assertEquals("dictionary", bareDictionary);
+    }
+
+    @Test
+    void checkVariableWithSpaceToGeneric(){
+        String variable = "this is a variable with space";
+        String generic = Value.getGenericVariableName(variable);
+        assertEquals("thisisavariablewithspace", generic);
+    }
+
+    @Test
+    void checkVariableWithUnderscoreToGeneric(){
+        String variable = "this_is_a_variable_with_underscore";
+        String generic = Value.getGenericVariableName(variable);
+        assertEquals("thisisavariablewithunderscore", generic);
     }
 
     @Test
     void checkCompositeBareNameExtraction(){
         String composite = "${ENV-${env}}";
-        String bareComposite = Value.getBareName(composite);
+        String bareComposite = Value.getBareVariableName(composite);
         assertEquals("ENV-${env}", bareComposite);
     }
 

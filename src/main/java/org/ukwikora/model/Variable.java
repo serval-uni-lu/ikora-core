@@ -125,7 +125,9 @@ public abstract class Variable implements Statement {
 
     @Override
     public boolean matches(@Nonnull String name) {
-        Matcher matcher = pattern.matcher(name);
+        String generic = Value.getGenericVariableName(name);
+
+        Matcher matcher = pattern.matcher(generic);
         return matcher.matches();
     }
 

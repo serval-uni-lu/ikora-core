@@ -10,6 +10,8 @@ class ListVariableTest {
         ListVariable test1 = new ListVariable("@{test1}");
         assertTrue(test1.matches("@{test1}"));
         assertTrue(test1.matches("@{TEST1}"));
+        assertTrue(test1.matches("@{TEST 1}"));
+        assertTrue(test1.matches("@{TEST_1}"));
         assertTrue(test1.matches("${test1}"));
         assertTrue(test1.matches("@{test1[0]}"));
         assertTrue(test1.matches("@{test1[10]}"));

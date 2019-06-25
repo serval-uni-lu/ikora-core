@@ -186,8 +186,12 @@ public class Value implements Differentiable {
         return escapePattern.matcher(s).replaceAll("\\\\$0");
     }
 
-    public static String getBareName(String s){
-        return s.replaceAll("(^[&@$]\\{)|(}$)", "");
+    public static String getBareVariableName(String s){
+        return s.replaceAll("(^[&@$]\\{)|(}$)", "").trim();
+    }
+
+    public static String getGenericVariableName(String s){
+        return s.replaceAll("[\\s_]", "").toLowerCase().trim();
     }
 
     @Override

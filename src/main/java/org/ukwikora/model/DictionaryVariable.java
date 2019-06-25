@@ -50,6 +50,8 @@ public class DictionaryVariable extends Variable {
     @Override
     protected void setName(String name) {
         this.name = name;
-        this.pattern = Pattern.compile(Value.escape(name), Pattern.CASE_INSENSITIVE);
+        String generic = Value.escape(Value.getGenericVariableName(this.name));
+
+        this.pattern = Pattern.compile(generic, Pattern.CASE_INSENSITIVE);
     }
 }
