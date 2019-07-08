@@ -11,7 +11,7 @@ class Utils {
         return LocalDateTime.parse(dateTime, dateFormatter);
     }
 
-    public static boolean toBoolean(String text) throws IOException {
+    static boolean toBoolean(String text) throws IOException {
         if(text.equalsIgnoreCase("yes")
         || text.equalsIgnoreCase("true")){
             return true;
@@ -21,6 +21,6 @@ class Utils {
             return false;
         }
 
-        throw new IOException(String.format("Could not convert %s to boolean value", text));
+        throw new IOException(String.format("Could not convert '%s' to boolean value", text));
     }
 }
