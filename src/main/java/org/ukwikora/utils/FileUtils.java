@@ -7,14 +7,15 @@ import org.apache.logging.log4j.Logger;
 import org.apache.tika.parser.txt.CharsetDetector;
 
 import java.io.*;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -160,9 +161,11 @@ public class FileUtils {
         if(file.isDirectory()) {
             return false;
         }
+
         if(!file.canRead()) {
             throw new IOException("Cannot read file "+file.getAbsolutePath());
         }
+
         if(file.length() < 4) {
             return false;
         }
@@ -172,5 +175,19 @@ public class FileUtils {
         in.close();
 
         return test == 0x504b0304;
+    }
+
+    private static FileSystem initFileSystem(URI uri) throws IOException
+    {
+        try
+        {
+            return FileSystems.getFileSystem(uri);
+        }
+        catch( FileSystemNotFoundException e )
+        {
+            Map<String, String> env = new HashMap<>();
+            env.put("create", "true");
+            return FileSystems.newFileSystem(uri, env);
+        }
     }
 }

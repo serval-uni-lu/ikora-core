@@ -1,23 +1,26 @@
 package org.ukwikora.report;
 
-import java.util.List;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
-public class Utils {
-    public static <T> int getElementPosition(List<T> list, T element, boolean ignoreNull){
-        int ignored = 0;
+class Utils {
+    private static final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyyMMdd HH:mm:ss.SSS");
 
-        for(int i = 0; i < list.size(); ++i){
-            T child = list.get(i);
+    static LocalDateTime toLocalDateTime(String dateTime){
+        return LocalDateTime.parse(dateTime, dateFormatter);
+    }
 
-            if(!ignoreNull && child == null){
-                ++ignored;
-            }
-
-            if(child == element){
-                return i - ignored;
-            }
+    public static boolean toBoolean(String text) throws IOException {
+        if(text.equalsIgnoreCase("yes")
+        || text.equalsIgnoreCase("true")){
+            return true;
+        }
+        else if(text.equalsIgnoreCase("no")
+                || text.equalsIgnoreCase("false")){
+            return false;
         }
 
-        return -1;
+        throw new IOException(String.format("Could not convert %s to boolean value", text));
     }
 }

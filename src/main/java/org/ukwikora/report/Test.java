@@ -3,39 +3,23 @@ package org.ukwikora.report;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class Suite {
-    @JacksonXmlProperty(localName = "source", isAttribute = true)
-    private String source;
+public class Test {
     @JacksonXmlProperty(localName = "id", isAttribute = true)
     private String id;
     @JacksonXmlProperty(localName = "name", isAttribute = true)
     private String name;
+    @JacksonXmlElementWrapper(localName = "tags")
+    @JacksonXmlProperty(localName = "tag")
+    private List<String> tags;
     @JacksonXmlElementWrapper(useWrapping = false)
-    @JacksonXmlProperty(localName = "suite")
-    private List<Suite> suites;
-    @JacksonXmlElementWrapper(useWrapping = false)
-    @JacksonXmlProperty(localName = "test")
-    private List<Test> tests;
-    @JacksonXmlProperty(localName = "status")
+    @JacksonXmlProperty(localName = "kw")
+    private List<Keyword> keywords;
+    @JacksonXmlProperty
     private Status status;
     @JacksonXmlProperty(localName = "doc")
     private String documentation;
-
-    public Suite(){
-        this.suites = new ArrayList<>();
-        this.tests = new ArrayList<>();
-    }
-
-    public String getSource() {
-        return source;
-    }
-
-    public void setSource(String source) {
-        this.source = source;
-    }
 
     public String getId() {
         return id;
@@ -53,28 +37,20 @@ public class Suite {
         this.name = name;
     }
 
-    public List<Suite> getSuites() {
-        return suites;
+    public List<String> getTags() {
+        return tags;
     }
 
-    public void setSuites(List<Suite> suites) {
-        this.suites = suites;
+    public void setTags(List<String> tags) {
+        this.tags = tags;
     }
 
-    public void addSuite(Suite suite){
-        this.suites.add(suite);
+    public List<Keyword> getKeywords() {
+        return keywords;
     }
 
-    public List<Test> getTests() {
-        return tests;
-    }
-
-    public void setTests(List<Test> tests) {
-        this.tests = tests;
-    }
-
-    public void addTest(Test test) {
-        this.tests.add(test);
+    public void setKeywords(List<Keyword> keywords) {
+        this.keywords = keywords;
     }
 
     public Status getStatus() {
