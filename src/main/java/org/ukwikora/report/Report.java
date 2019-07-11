@@ -1,5 +1,6 @@
 package org.ukwikora.report;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
@@ -9,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @JacksonXmlRootElement(localName = "robot")
+@JsonIgnoreProperties(value ={"statistics", "errors"})
 public class Report {
     @JacksonXmlProperty(localName = "generated", isAttribute = true)
     private LocalDateTime generated;

@@ -23,6 +23,9 @@ public class Keyword {
     @JacksonXmlElementWrapper(localName = "arguments")
     @JacksonXmlProperty(localName = "arg")
     private List<String> arguments;
+    @JacksonXmlElementWrapper(localName = "assign")
+    @JacksonXmlProperty(localName = "var")
+    private List<String> assigments;
     @JacksonXmlElementWrapper(localName = "tags")
     @JacksonXmlProperty(localName = "tag")
     private List<String> tags;
@@ -86,6 +89,14 @@ public class Keyword {
 
     public void setArguments(List<String> arguments) {
         this.arguments = arguments;
+    }
+
+    public List<String> getAssigments() {
+        return assigments;
+    }
+
+    public void setAssigments(List<String> assigments) {
+        this.assigments = assigments;
     }
 
     public List<String> getTags() {
