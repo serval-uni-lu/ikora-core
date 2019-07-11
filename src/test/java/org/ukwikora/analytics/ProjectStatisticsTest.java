@@ -2,7 +2,7 @@ package org.ukwikora.analytics;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.ukwikora.Globals;
+import org.ukwikora.Helpers;
 import org.ukwikora.model.Project;
 import org.ukwikora.model.TestCase;
 import org.ukwikora.model.UserKeyword;
@@ -16,7 +16,7 @@ class ProjectStatisticsTest {
 
     @BeforeAll
     static void setup(){
-        Project project = Globals.compileProject("robot/web-demo");
+        Project project = Helpers.compileProject("robot/web-demo");
         statistics = new ProjectStatistics(project);
     }
 

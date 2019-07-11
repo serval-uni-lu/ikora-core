@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 public class Status {
     public enum Type{
-        PASSED, FAILED, NOT_EXECUTED, UNKNOWN
+        PASSED, FAILED, NOT_EXECUTED, UNKNOWN, ANY
     }
 
     @JacksonXmlProperty(localName = "status", isAttribute = true)
@@ -28,6 +28,10 @@ public class Status {
 
     public Type getType() {
         return type;
+    }
+
+    public boolean isType(Type type){
+        return this.type == type;
     }
 
     public void setType(Type type) {

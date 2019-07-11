@@ -53,4 +53,26 @@ public class Report {
     public void addSuite(Suite suite) {
         suites.add(suite);
     }
+
+    public int getNumberTests(){
+        return getNumberTests(Status.Type.ANY);
+    }
+
+    public int getNumberPassingTests(){
+        return getNumberTests(Status.Type.PASSED);
+    }
+
+    public int getNumberFailingTests(){
+        return getNumberTests(Status.Type.FAILED);
+    }
+
+    public int getNumberTests(Status.Type status){
+        int number = 0;
+
+        for(Suite suite: suites){
+            number += suite.getNumberTests(status);
+        }
+
+        return number;
+    }
 }

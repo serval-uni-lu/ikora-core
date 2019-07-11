@@ -9,7 +9,7 @@ import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class Globals {
+public class Helpers {
     public static double epsilon = 0.0001;
 
     public static Project compileProject(String resourcesPath) {

@@ -1,7 +1,7 @@
 package org.ukwikora.compiler;
 
 import org.junit.jupiter.api.Test;
-import org.ukwikora.Globals;
+import org.ukwikora.Helpers;
 import org.ukwikora.model.*;
 import org.ukwikora.utils.FileUtils;
 
@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class CompilerTest {
     @Test
     void checkParseLibraryVariable(){
-        final Project project = Globals.compileProject("robot/library-variable.robot");
+        final Project project = Helpers.compileProject("robot/library-variable.robot");
 
         assertEquals(1, project.getTestCases().size());
 
@@ -37,7 +37,7 @@ class CompilerTest {
 
     @Test
     void checkScopedByPrefixResolution(){
-        final File robot = Globals.getResourceFile("robot/scope-testing");
+        final File robot = Helpers.getResourceFile("robot/scope-testing");
         final Project project = Compiler.compile(robot.getAbsolutePath());
 
         assertNotNull(project);
@@ -84,7 +84,7 @@ class CompilerTest {
 
     @Test
     void checkAssignmentFromRealLife(){
-        final File robot = Globals.getResourceFile("robot/assignment");
+        final File robot = Helpers.getResourceFile("robot/assignment");
         final Project project = Compiler.compile(robot.getAbsolutePath());
 
         assertNotNull(project);
@@ -104,7 +104,7 @@ class CompilerTest {
 
     @Test
     void checkTestCaseSetupWithCall() {
-        final File robot = Globals.getResourceFile("robot/setup-and-teardown.robot");
+        final File robot = Helpers.getResourceFile("robot/setup-and-teardown.robot");
         final Project project = Compiler.compile(robot.getAbsolutePath());
 
         assertNotNull(project);
@@ -122,7 +122,7 @@ class CompilerTest {
 
     @Test
     void checkTestCaseTeardownWithCall() {
-        final File robot = Globals.getResourceFile("robot/setup-and-teardown.robot");
+        final File robot = Helpers.getResourceFile("robot/setup-and-teardown.robot");
         final Project project = Compiler.compile(robot.getAbsolutePath());
 
         assertNotNull(project);

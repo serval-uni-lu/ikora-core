@@ -1,7 +1,7 @@
 package org.ukwikora.utils;
 
 import org.junit.jupiter.api.Test;
-import org.ukwikora.Globals;
+import org.ukwikora.Helpers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +27,7 @@ class LevenshteinDistanceTest {
 
         double index = LevenshteinDistance.stringIndex(string1, string2);
 
-        assertEquals(0.461538461538, index, Globals.epsilon);
+        assertEquals(0.461538461538, index, Helpers.epsilon);
     }
 
     @Test

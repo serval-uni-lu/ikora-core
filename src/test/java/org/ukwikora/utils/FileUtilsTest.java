@@ -2,7 +2,7 @@ package org.ukwikora.utils;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.ukwikora.Globals;
+import org.ukwikora.Helpers;
 
 import java.io.File;
 import java.io.IOException;
@@ -45,7 +45,7 @@ class FileUtilsTest {
 
     @Test
     void checkDetectCharsetWithUTF8(){
-        File utf8 = Globals.getResourceFile("files/file-in-utf8.txt");
+        File utf8 = Helpers.getResourceFile("files/file-in-utf8.txt");
         Charset charset = FileUtils.detectCharset(utf8, null);
         assertNotNull(charset);
         assertEquals(Charset.forName("UTF-8"), charset);
@@ -53,7 +53,7 @@ class FileUtilsTest {
 
     @Test
     void checkDetectCharsetWithISO88591(){
-        File utf8 = Globals.getResourceFile("files/file-in-ISO-8859-1.txt");
+        File utf8 = Helpers.getResourceFile("files/file-in-ISO-8859-1.txt");
         Charset charset = FileUtils.detectCharset(utf8, null);
         assertNotNull(charset);
         assertEquals(Charset.forName("ISO-8859-1"), charset);
@@ -61,7 +61,7 @@ class FileUtilsTest {
 
     @Test
     void checkDetectCharsetWithUTF8BOM(){
-        File utf8 = Globals.getResourceFile("files/file-in-utf8-bom.txt");
+        File utf8 = Helpers.getResourceFile("files/file-in-utf8-bom.txt");
         Charset charset = FileUtils.detectCharset(utf8, null);
         assertNotNull(charset);
         assertEquals(Charset.forName("UTF8"), charset);
@@ -69,7 +69,7 @@ class FileUtilsTest {
 
     @Test
     void checkCopyResource(){
-        File destination = Globals.getNewTmpFolder("with sépcial and space/ukwikora-copy-resources-test");
+        File destination = Helpers.getNewTmpFolder("with sépcial and space/ukwikora-copy-resources-test");
 
         try {
             FileUtils.copyResources(getClass(), "robot/web-demo", destination);
@@ -79,6 +79,6 @@ class FileUtilsTest {
         }
 
         assertTrue(destination.exists());
-        Globals.deleteDirectory(destination.getParentFile());
+        Helpers.deleteDirectory(destination.getParentFile());
     }
 }
