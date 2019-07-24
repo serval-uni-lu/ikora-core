@@ -4,7 +4,7 @@ import org.ukwikora.libraries.builtin.ImportLibrary;
 import org.ukwikora.libraries.builtin.ImportResource;
 import org.ukwikora.libraries.builtin.ImportVariables;
 import org.ukwikora.model.*;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import org.apache.commons.lang3.NotImplementedException;
 
 import java.io.File;
 import java.util.*;
@@ -22,7 +22,7 @@ public class DynamicImports {
     }
 
     public Statement findStatement(String value){
-        throw new NotImplementedException();
+        throw new NotImplementedException("Need to get some more work on the imports");
     }
 
 

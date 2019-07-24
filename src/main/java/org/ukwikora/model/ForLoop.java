@@ -4,7 +4,7 @@ import org.ukwikora.analytics.Action;
 import org.ukwikora.analytics.VisitorMemory;
 import org.ukwikora.runner.Runtime;
 import org.ukwikora.utils.LevenshteinDistance;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import org.apache.commons.lang3.NotImplementedException;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -91,7 +91,7 @@ public class ForLoop extends Step {
 
     @Override
     public void execute(Runtime runtime) {
-        throw new NotImplementedException();
+        throw new NotImplementedException("Didn't implemented the execution module yet");
     }
 
     @Override

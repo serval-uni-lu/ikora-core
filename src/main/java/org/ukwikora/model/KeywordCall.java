@@ -1,12 +1,12 @@
 package org.ukwikora.model;
 
+import org.apache.commons.lang3.NotImplementedException;
 import org.ukwikora.analytics.Action;
 import org.ukwikora.analytics.VisitorMemory;
 import org.ukwikora.exception.InvalidDependencyException;
 import org.ukwikora.exception.InvalidImportTypeException;
 import org.ukwikora.runner.Runtime;
 import org.ukwikora.utils.LevenshteinDistance;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.annotation.Nonnull;
 import java.util.*;
@@ -112,7 +112,7 @@ public class KeywordCall extends Step {
 
     @Override
     public void execute(Runtime runtime) {
-        throw new NotImplementedException();
+        throw new NotImplementedException("Didn't implemented the execution module yet");
     }
 
     @Override
