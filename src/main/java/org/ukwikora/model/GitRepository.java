@@ -2,7 +2,7 @@ package org.ukwikora.model;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ukwikora.compiler.Compiler;
+import org.ukwikora.builder.Builder;
 import org.ukwikora.utils.Configuration;
 import org.ukwikora.utils.Plugin;
 import org.apache.commons.io.FileUtils;
@@ -93,7 +93,7 @@ public class GitRepository {
                     .setStartPoint(commitId)
                     .call();
 
-            project = Compiler.compile(localFolder.getAbsolutePath());
+            project = Builder.compile(localFolder.getAbsolutePath());
 
             project.setGitUrl(url);
             project.setCommitId(commitId);

@@ -1,7 +1,7 @@
 package org.ukwikora;
 
 import org.apache.commons.io.FileUtils;
-import org.ukwikora.compiler.Compiler;
+import org.ukwikora.builder.Builder;
 import org.ukwikora.model.Project;
 
 import java.io.File;
@@ -20,7 +20,7 @@ public class Helpers {
             fail(String.format("Failed to load '%s': %s", resourcesPath, e.getMessage()));
         }
 
-        return Compiler.compile(projectFolder.getAbsolutePath());
+        return Builder.compile(projectFolder.getAbsolutePath());
     }
 
     public static File getNewTmpFolder(String name){

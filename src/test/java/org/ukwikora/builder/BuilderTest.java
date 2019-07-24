@@ -1,4 +1,4 @@
-package org.ukwikora.compiler;
+package org.ukwikora.builder;
 
 import org.junit.jupiter.api.Test;
 import org.ukwikora.Helpers;
@@ -12,7 +12,7 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class CompilerTest {
+class BuilderTest {
     @Test
     void checkParseLibraryVariable(){
         final Project project = Helpers.compileProject("robot/library-variable.robot");
@@ -38,7 +38,7 @@ class CompilerTest {
     @Test
     void checkScopedByPrefixResolution(){
         final File robot = Helpers.getResourceFile("robot/scope-testing");
-        final Project project = Compiler.compile(robot.getAbsolutePath());
+        final Project project = Builder.compile(robot.getAbsolutePath());
 
         assertNotNull(project);
 
@@ -66,7 +66,7 @@ class CompilerTest {
         } catch (Exception e) {
             fail(String.format("Failed to load 'robot/scope-testing' from resources: %s", e.getMessage()));
         }
-        final Project project = Compiler.compile(robot.getAbsolutePath());
+        final Project project = Builder.compile(robot.getAbsolutePath());
 
         assertNotNull(project);
 
@@ -85,7 +85,7 @@ class CompilerTest {
     @Test
     void checkAssignmentFromRealLife(){
         final File robot = Helpers.getResourceFile("robot/assignment");
-        final Project project = Compiler.compile(robot.getAbsolutePath());
+        final Project project = Builder.compile(robot.getAbsolutePath());
 
         assertNotNull(project);
 
@@ -105,7 +105,7 @@ class CompilerTest {
     @Test
     void checkTestCaseSetupWithCall() {
         final File robot = Helpers.getResourceFile("robot/setup-and-teardown.robot");
-        final Project project = Compiler.compile(robot.getAbsolutePath());
+        final Project project = Builder.compile(robot.getAbsolutePath());
 
         assertNotNull(project);
 
@@ -123,7 +123,7 @@ class CompilerTest {
     @Test
     void checkTestCaseTeardownWithCall() {
         final File robot = Helpers.getResourceFile("robot/setup-and-teardown.robot");
-        final Project project = Compiler.compile(robot.getAbsolutePath());
+        final Project project = Builder.compile(robot.getAbsolutePath());
 
         assertNotNull(project);
 

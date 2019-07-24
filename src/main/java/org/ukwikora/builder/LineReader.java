@@ -1,4 +1,4 @@
-package org.ukwikora.compiler;
+package org.ukwikora.builder;
 
 import org.apache.commons.io.input.BOMInputStream;
 import org.ukwikora.model.TestCaseFile;

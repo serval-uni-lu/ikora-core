@@ -1,4 +1,4 @@
-package org.ukwikora.compiler;
+package org.ukwikora.builder;
 
 import org.ukwikora.libraries.builtin.ImportLibrary;
 import org.ukwikora.libraries.builtin.ImportResource;

@@ -1,9 +1,7 @@
-package org.ukwikora.compiler;
+package org.ukwikora.builder;
 
 import org.ukwikora.model.StatementTable;
 import org.ukwikora.model.UserKeyword;
-
-import java.io.IOException;
 
 class KeywordTableParser {
     private KeywordTableParser() {}

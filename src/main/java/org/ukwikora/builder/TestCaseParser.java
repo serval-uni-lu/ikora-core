@@ -1,4 +1,4 @@
-package org.ukwikora.compiler;
+package org.ukwikora.builder;
 
 import org.ukwikora.model.LineRange;
 import org.ukwikora.model.Step;

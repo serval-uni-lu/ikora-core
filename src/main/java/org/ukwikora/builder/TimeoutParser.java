@@ -1,4 +1,4 @@
-package org.ukwikora.compiler;
+package org.ukwikora.builder;
 
 import org.ukwikora.exception.InvalidNumberArgumentException;
 import org.ukwikora.model.LineRange;

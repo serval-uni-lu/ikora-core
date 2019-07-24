@@ -1,7 +1,7 @@
 package org.ukwikora.model;
 
 import org.apache.commons.io.FilenameUtils;
-import org.ukwikora.compiler.Line;
+import org.ukwikora.builder.Line;
 
 import javax.annotation.Nonnull;
 import java.io.File;

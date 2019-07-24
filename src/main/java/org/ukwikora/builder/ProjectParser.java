@@ -1,4 +1,4 @@
-package org.ukwikora.compiler;
+package org.ukwikora.builder;
 
 import org.ukwikora.utils.Configuration;
 import org.ukwikora.utils.Plugin;

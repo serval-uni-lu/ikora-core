@@ -1,4 +1,4 @@
-package org.ukwikora.compiler;
+package org.ukwikora.builder;
 
 import org.ukwikora.model.LibraryKeyword;
 import org.ukwikora.model.LibraryResources;
