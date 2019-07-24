@@ -71,8 +71,8 @@ public class Project implements Comparable<Project> {
         return gitUrl;
     }
 
-    public Set<TestCase> getTestCases(){
-        Set<TestCase> testCases = new HashSet<>();
+    public List<TestCase> getTestCases(){
+        List<TestCase> testCases = new ArrayList<>();
 
         for(TestCaseFile testCaseFile: testCaseFiles){
             testCases.addAll(testCaseFile.getTestCases());

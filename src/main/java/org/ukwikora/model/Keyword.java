@@ -1,5 +1,7 @@
 package org.ukwikora.model;
 
+import org.ukwikora.runner.Runtime;
+
 public interface Keyword extends Statement {
     enum Type{
         User, ControlFlow, Assertion, Action, Log, Error, Synchronisation, Get,  Unknown, Set

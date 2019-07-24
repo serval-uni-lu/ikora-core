@@ -2,7 +2,7 @@ package org.ukwikora.libraries.selenium.element;
 
 import org.ukwikora.model.Value;
 import org.ukwikora.model.LibraryKeyword;
-import org.ukwikora.model.Runtime;
+import org.ukwikora.runner.Runtime;
 
 public class ClickLink extends LibraryKeyword {
     public ClickLink(){

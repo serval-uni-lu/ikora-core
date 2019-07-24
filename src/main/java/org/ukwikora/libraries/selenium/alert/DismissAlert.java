@@ -1,7 +1,7 @@
 package org.ukwikora.libraries.selenium.alert;
 
 import org.ukwikora.model.LibraryKeyword;
-import org.ukwikora.model.Runtime;
+import org.ukwikora.runner.Runtime;
 
 public class DismissAlert extends LibraryKeyword {
     public DismissAlert(){

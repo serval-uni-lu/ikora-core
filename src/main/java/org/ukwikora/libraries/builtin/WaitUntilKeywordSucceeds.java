@@ -1,7 +1,7 @@
 package org.ukwikora.libraries.builtin;
 
 import org.ukwikora.model.LibraryKeyword;
-import org.ukwikora.model.Runtime;
+import org.ukwikora.runner.Runtime;
 import org.ukwikora.model.Value;
 
 public class WaitUntilKeywordSucceeds extends LibraryKeyword {

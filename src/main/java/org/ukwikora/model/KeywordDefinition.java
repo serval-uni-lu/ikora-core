@@ -2,7 +2,7 @@ package org.ukwikora.model;
 
 import org.apache.commons.lang3.StringUtils;
 import org.ukwikora.analytics.Action;
-import org.ukwikora.exception.InvalidDependencyException;
+import org.ukwikora.runner.Runtime;
 import org.ukwikora.utils.LevenshteinDistance;
 
 

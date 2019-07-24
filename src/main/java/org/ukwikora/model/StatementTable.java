@@ -6,19 +6,19 @@ import java.util.*;
 
 public class StatementTable<T extends Statement> implements Iterable<T> {
     private HashMap<String, T> statementMap;
-    private Set<T> statementSet;
+    private List<T> statementList;
     private TestCaseFile file;
 
     public StatementTable() {
         this.statementMap = new HashMap<>();
-        this.statementSet = new HashSet<>();
+        this.statementList = new ArrayList<>();
     }
 
     public void setFile(TestCaseFile file) {
         this.file = file;
 
         statementMap = new HashMap<>();
-        for (T statement: statementSet){
+        for (T statement: statementList){
             statement.setFile(this.file);
             statementMap.put(getKey(statement), statement);
         }
@@ -30,7 +30,7 @@ public class StatementTable<T extends Statement> implements Iterable<T> {
 
     public StatementTable(StatementTable<T> other){
         statementMap = other.statementMap;
-        statementSet = other.statementSet;
+        statementList = other.statementList;
 
         file = other.file;
     }
@@ -44,15 +44,15 @@ public class StatementTable<T extends Statement> implements Iterable<T> {
     }
 
     public Set<T> findStatement(String file, String name){
-        Set<T> statments = new HashSet<>();
+        Set<T> statements = new HashSet<>();
 
-        for(T statement: statementSet){
+        for(T statement: statementList){
             if(matches(file, name, statement)){
-                statments.add(statement);
+                statements.add(statement);
             }
         }
 
-        return statments;
+        return statements;
     }
 
     private boolean matches(String file, String name, T statement){
@@ -64,11 +64,11 @@ public class StatementTable<T extends Statement> implements Iterable<T> {
     }
 
     public int size() {
-        return this.statementSet.size();
+        return this.statementList.size();
     }
 
     public boolean isEmpty() {
-        return this.statementSet.isEmpty();
+        return this.statementList.isEmpty();
     }
 
     public boolean contains(T statement) {
@@ -76,17 +76,17 @@ public class StatementTable<T extends Statement> implements Iterable<T> {
             return false;
         }
 
-        return this.statementSet.contains(statement);
+        return this.statementList.contains(statement);
     }
 
     @Override
     @Nonnull
     public Iterator<T> iterator() {
-        return this.statementSet.iterator();
+        return this.statementList.iterator();
     }
 
     public List<T> asList() {
-        return new ArrayList<>(statementSet);
+        return statementList;
     }
 
     public boolean add(T statement) {
@@ -94,11 +94,11 @@ public class StatementTable<T extends Statement> implements Iterable<T> {
             return false;
         }
 
-        if(statementSet.contains(statement)){
+        if(statementList.contains(statement)){
             return false;
         }
 
-        statementSet.add(statement);
+        statementList.add(statement);
         statementMap.put(getKey(statement), statement);
 
         return true;
@@ -110,28 +110,24 @@ public class StatementTable<T extends Statement> implements Iterable<T> {
         }
 
         this.statementMap.remove(getKey(statement));
-        this.statementSet.remove(statement);
+        this.statementList.remove(statement);
 
         return true;
     }
 
     public void extend(StatementTable<T> table) {
         for(T statement: table){
-            if(statementSet.contains(statement)){
+            if(statementList.contains(statement)){
                 continue;
             }
 
-            this.statementSet.add(statement);
+            this.statementList.add(statement);
             this.statementMap.put(getKey(statement), statement);
         }
     }
 
-    public Set<T> toSet(){
-        return this.statementSet;
-    }
-
     public void clear() {
-        this.statementSet.clear();
+        this.statementList.clear();
         this.statementMap.clear();
     }
 

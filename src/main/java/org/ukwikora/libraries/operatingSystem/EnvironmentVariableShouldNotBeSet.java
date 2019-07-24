@@ -1,7 +1,7 @@
 package org.ukwikora.libraries.operatingSystem;
 
 import org.ukwikora.model.LibraryKeyword;
-import org.ukwikora.model.Runtime;
+import org.ukwikora.runner.Runtime;
 
 public class EnvironmentVariableShouldNotBeSet extends LibraryKeyword {
     @Override

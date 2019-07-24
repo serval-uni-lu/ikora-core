@@ -1,7 +1,7 @@
 package org.ukwikora.libraries.datetime;
 
 import org.ukwikora.model.LibraryKeyword;
-import org.ukwikora.model.Runtime;
+import org.ukwikora.runner.Runtime;
 
 public class SubtractDateFromDate extends LibraryKeyword {
     @Override

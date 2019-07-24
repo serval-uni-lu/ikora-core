@@ -10,7 +10,7 @@ import org.ukwikora.libraries.builtin.SetGlobalVariable;
 import org.ukwikora.libraries.builtin.SetSuiteVariable;
 import org.ukwikora.libraries.builtin.SetTestVariable;
 import org.ukwikora.model.*;
-import org.ukwikora.model.Runtime;
+import org.ukwikora.runner.Runtime;
 
 import java.util.Optional;
 import java.util.Set;

@@ -1,6 +1,7 @@
-package org.ukwikora.model;
+package org.ukwikora.runner;
 
 import org.ukwikora.analytics.KeywordStatistics;
+import org.ukwikora.model.*;
 
 import java.io.File;
 import java.util.*;
