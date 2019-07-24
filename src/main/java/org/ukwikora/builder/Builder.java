@@ -16,7 +16,7 @@ import java.util.Set;
 public class Builder {
     private static final Logger logger = LogManager.getLogger(Builder.class);
 
-    public static List<Project> compile(String[] paths){
+    public static List<Project> build(String[] paths, boolean link){
         List<Project> projects = new ArrayList<>();
 
         logger.info("Start compilation...");
@@ -51,7 +51,7 @@ public class Builder {
             try {
                 StaticRuntime runtime = new StaticRuntime(project, dynamicImports);
                 loadLibraries(runtime);
-                link(runtime);
+                link(runtime, link);
             } catch (Exception e) {
                 logger.info(String.format("Failed to link project %s: %s", project.getName(), e.getMessage()));
             }
@@ -93,7 +93,7 @@ public class Builder {
         external.setTestCaseFile(testCaseFile);
     }
 
-    public static Project compile(String filePath) {
+    public static Project build(String filePath, boolean link) {
         logger.info("Start compilation...");
 
         Project project;
@@ -105,7 +105,7 @@ public class Builder {
 
             StaticRuntime runtime = new StaticRuntime(project, dynamicImports);
             loadLibraries(runtime);
-            link(runtime);
+            link(runtime, link);
 
             Instant finish = Instant.now();
             long timeElapsed = Duration.between(start, finish).toMillis();
@@ -113,7 +113,7 @@ public class Builder {
             logger.info(String.format("Project %s compiled in %d ms", project.getName(), timeElapsed));
 
         } catch (Exception e) {
-            logger.error(String.format("Failed to compile project located at %s: %s", filePath, e.getMessage()));
+            logger.error(String.format("Failed to build project located at %s: %s", filePath, e.getMessage()));
             project = null;
         }
 
@@ -125,7 +125,11 @@ public class Builder {
         runtime.setLibraries(libraries);
     }
 
-    private static void link(StaticRuntime runtime) throws Exception {
+    private static void link(StaticRuntime runtime, boolean link) throws Exception {
+        if(!link){
+            return;
+        }
+
         Linker.link(runtime);
     }
 

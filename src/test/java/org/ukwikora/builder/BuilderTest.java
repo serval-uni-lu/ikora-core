@@ -38,8 +38,9 @@ class BuilderTest {
     @Test
     void checkScopedByPrefixResolution(){
         final File robot = Helpers.getResourceFile("robot/scope-testing");
-        final Project project = Builder.compile(robot.getAbsolutePath());
+        assertNotNull(robot);
 
+        final Project project = Builder.build(robot.getAbsolutePath(), true);
         assertNotNull(project);
 
         Set<UserKeyword> fromResources1 = project.findUserKeyword("Load keyword from resource1");
@@ -66,11 +67,11 @@ class BuilderTest {
         } catch (Exception e) {
             fail(String.format("Failed to load 'robot/scope-testing' from resources: %s", e.getMessage()));
         }
-        final Project project = Builder.compile(robot.getAbsolutePath());
+        final Project project = Builder.build(robot.getAbsolutePath(), true);
 
         assertNotNull(project);
 
-        Set<TestCase> mainTest = project.getTestCases();
+        List<TestCase> mainTest = project.getTestCases();
         assertEquals(1, mainTest.size());
 
         KeywordCall simpleCall = (KeywordCall) mainTest.iterator().next().getStep(0);
@@ -85,8 +86,9 @@ class BuilderTest {
     @Test
     void checkAssignmentFromRealLife(){
         final File robot = Helpers.getResourceFile("robot/assignment");
-        final Project project = Builder.compile(robot.getAbsolutePath());
+        assertNotNull(robot);
 
+        final Project project = Builder.build(robot.getAbsolutePath(), true);
         assertNotNull(project);
 
         Set<UserKeyword> userKeywords = project.getUserKeywords();
@@ -105,8 +107,9 @@ class BuilderTest {
     @Test
     void checkTestCaseSetupWithCall() {
         final File robot = Helpers.getResourceFile("robot/setup-and-teardown.robot");
-        final Project project = Builder.compile(robot.getAbsolutePath());
+        assertNotNull(robot);
 
+        final Project project = Builder.build(robot.getAbsolutePath(), true);
         assertNotNull(project);
 
         Set<UserKeyword> ofInterest = project.findUserKeyword("Setup the test case");
@@ -123,8 +126,9 @@ class BuilderTest {
     @Test
     void checkTestCaseTeardownWithCall() {
         final File robot = Helpers.getResourceFile("robot/setup-and-teardown.robot");
-        final Project project = Builder.compile(robot.getAbsolutePath());
+        assertNotNull(robot);
 
+        final Project project = Builder.build(robot.getAbsolutePath(), true);
         assertNotNull(project);
 
         Set<UserKeyword> ofInterest = project.findUserKeyword("Clean the environment");

@@ -32,7 +32,7 @@ public class KeywordsNamesSerializer extends JsonSerializer<EvolutionResults> {
         jsonGenerator.writeEndArray();
     }
 
-    private void writeKeywords(JsonGenerator jsonGenerator, Set<? extends KeywordDefinition> keywords) throws IOException {
+    private void writeKeywords(JsonGenerator jsonGenerator, Iterable<? extends KeywordDefinition> keywords) throws IOException {
         for(KeywordDefinition keyword: keywords){
             jsonGenerator.writeStartObject();
 

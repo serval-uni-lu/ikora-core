@@ -19,7 +19,7 @@ public class EvolutionAnalyzer {
         List<GitCommit> commits = repository.getRevisions();
 
         for(GitCommit commit: commits){
-            repository.checkout(commit.getId());
+            repository.checkout(commit.getId(), true);
             Project project = repository.getProject();
 
             analyzer.projects.add(project);

@@ -75,12 +75,12 @@ public class GitRepository {
         return testCaseFile.getTestCase(name);
     }
 
-    public void checkout(LocalDateTime dateTime) {
+    public void checkout(LocalDateTime dateTime, boolean link) {
         GitCommit commit = getMostRecentCommit(dateTime);
-        checkout(commit.getId());
+        checkout(commit.getId(), link);
     }
 
-    public void checkout(String commitId){
+    public void checkout(String commitId, boolean link){
         logger.info("checkout and parse project for commit ID: " + commitId);
         try {
             if(git == null){
@@ -93,7 +93,7 @@ public class GitRepository {
                     .setStartPoint(commitId)
                     .call();
 
-            project = Builder.compile(localFolder.getAbsolutePath());
+            project = Builder.build(localFolder.getAbsolutePath(), link);
 
             project.setGitUrl(url);
             project.setCommitId(commitId);
