@@ -6,7 +6,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import java.io.IOException;
 import java.util.List;
 
-public class Keyword {
+public class Keyword extends ReportNode {
     public enum Type{
         Setup, Execution, TearDown
     }

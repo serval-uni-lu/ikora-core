@@ -147,7 +147,13 @@ public abstract class KeywordDefinition implements Keyword, Iterable<Step> {
 
     @Override
     public void execute(Runtime runtime) {
+        runtime.enterState(this);
 
+        for(Step step: this.steps){
+            step.execute(runtime);
+        }
+
+        runtime.exitState(this);
     }
 
     @Override

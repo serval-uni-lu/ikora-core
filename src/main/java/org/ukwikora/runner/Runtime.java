@@ -41,4 +41,7 @@ public abstract class Runtime {
     }
 
     public abstract Keyword findKeyword(String library, String name) throws InstantiationException, IllegalAccessException;
+
+    public abstract void enterKeyword(Keyword keyword);
+    public abstract void exitKeyword(Keyword step);
 }

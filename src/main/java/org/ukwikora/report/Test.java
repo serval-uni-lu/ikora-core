@@ -5,7 +5,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 import java.util.List;
 
-public class Test {
+public class Test extends ReportNode {
     @JacksonXmlProperty(localName = "id", isAttribute = true)
     private String id;
     @JacksonXmlProperty(localName = "name", isAttribute = true)

@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class Helpers {
     public static double epsilon = 0.0001;
 
-    public static Project compileProject(String resourcesPath) {
+    public static Project compileProject(String resourcesPath, boolean link) {
         File projectFolder = null;
         try {
             projectFolder = org.ukwikora.utils.FileUtils.getResourceFile(resourcesPath);
@@ -20,7 +20,7 @@ public class Helpers {
             fail(String.format("Failed to load '%s': %s", resourcesPath, e.getMessage()));
         }
 
-        return Builder.build(projectFolder.getAbsolutePath(), true);
+        return Builder.build(projectFolder.getAbsolutePath(), link);
     }
 
     public static File getNewTmpFolder(String name){

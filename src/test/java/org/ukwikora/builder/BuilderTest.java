@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class BuilderTest {
     @Test
     void checkParseLibraryVariable(){
-        final Project project = Helpers.compileProject("robot/library-variable.robot");
+        final Project project = Helpers.compileProject("robot/library-variable.robot", true);
 
         assertEquals(1, project.getTestCases().size());
 
