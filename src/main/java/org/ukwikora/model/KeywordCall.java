@@ -111,8 +111,19 @@ public class KeywordCall extends Step {
     }
 
     @Override
-    public void execute(Runtime runtime) {
-        throw new NotImplementedException("Didn't implemented the execution module yet");
+    public void execute(Runtime runtime) throws Exception{
+        runtime.enterKeyword(this);
+
+        Optional<Keyword> callee = link.getStatement();
+
+        if(callee.isPresent()){
+            callee.get().execute(runtime);
+        }
+        else{
+            throw new Exception("Need to have a better exception");
+        }
+
+        runtime.exitKeyword(this);
     }
 
     @Override

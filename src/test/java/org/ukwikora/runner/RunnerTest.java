@@ -16,6 +16,10 @@ class RunnerTest {
 
         Runner runner = new Runner(project, filter);
 
-        runner.execute();
+        try {
+            runner.execute();
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
     }
 }

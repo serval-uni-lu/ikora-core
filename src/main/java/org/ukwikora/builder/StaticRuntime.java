@@ -115,4 +115,14 @@ public class StaticRuntime extends Runtime {
     public Keyword findKeyword(String library, String name) throws InstantiationException, IllegalAccessException {
         return libraries.findKeyword(library, name);
     }
+
+    @Override
+    public void enterKeyword(Keyword keyword) {
+
+    }
+
+    @Override
+    public void exitKeyword(Keyword step) {
+
+    }
 }

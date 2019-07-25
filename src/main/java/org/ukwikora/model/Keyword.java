@@ -13,7 +13,7 @@ public interface Keyword extends Statement {
     int getMaxArgument();
     int[] getKeywordsLaunchedPosition();
 
-    void execute(Runtime runtime);
+    void execute(Runtime runtime) throws Exception;
 
     Type getType();
 }

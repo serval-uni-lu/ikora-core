@@ -146,14 +146,14 @@ public abstract class KeywordDefinition implements Keyword, Iterable<Step> {
     }
 
     @Override
-    public void execute(Runtime runtime) {
-        runtime.enterState(this);
+    public void execute(Runtime runtime) throws Exception{
+        runtime.enterKeyword(this);
 
         for(Step step: this.steps){
             step.execute(runtime);
         }
 
-        runtime.exitState(this);
+        runtime.exitKeyword(this);
     }
 
     @Override
@@ -249,7 +249,7 @@ public abstract class KeywordDefinition implements Keyword, Iterable<Step> {
         return this.file.getLoc(this.lineRange);
     }
 
-    protected KeywordCall toCall(Step step){
+    KeywordCall toCall(Step step){
         if(step == null){
             return null;
         }

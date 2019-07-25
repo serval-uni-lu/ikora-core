@@ -16,7 +16,7 @@ public class Runner {
         this.runtime = new DynamicRuntime(this.project);
     }
 
-    public Report execute(){
+    public Report execute() throws Exception{
         for(TestCase testCase: filter.filter(project.getTestCases())){
             testCase.execute(runtime);
         }
