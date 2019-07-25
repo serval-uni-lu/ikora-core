@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ukwikora.model.*;
 import org.ukwikora.runner.Runtime;
+import org.ukwikora.runner.StaticScope;
 import org.ukwikora.utils.FileUtils;
 
 import java.io.File;
@@ -51,7 +52,7 @@ public class Builder {
         for(Project project: projects) {
             try {
                 Runtime runtime;
-                runtime = new Runtime(project);
+                runtime = new Runtime(project, new StaticScope());
                 loadLibraries(runtime);
                 link(runtime, link);
             } catch (Exception e) {
@@ -105,7 +106,7 @@ public class Builder {
             DynamicImports dynamicImports = new DynamicImports();
             project = parse(filePath, dynamicImports);
 
-            Runtime runtime = new Runtime(project);
+            Runtime runtime = new Runtime(project, new StaticScope());
             loadLibraries(runtime);
             link(runtime, link);
 

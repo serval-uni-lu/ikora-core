@@ -1,16 +1,17 @@
 package org.ukwikora.builder;
 
+import org.ukwikora.exception.InvalidDependencyException;
 import org.ukwikora.model.*;
 
 import java.io.IOException;
 import java.util.Arrays;
 
 class StepParser {
-    public static Step parse(LineReader reader, String[] tokens) throws IOException {
+    public static Step parse(LineReader reader, String[] tokens) throws IOException, InvalidDependencyException {
         return parse(reader, tokens, "");
     }
 
-    public static Step parse(LineReader reader, String[] tokens, String ignoreTag) throws IOException {
+    public static Step parse(LineReader reader, String[] tokens, String ignoreTag) throws IOException, InvalidDependencyException {
         Step step;
         int startLine = reader.getCurrent().getNumber();
 
@@ -47,7 +48,7 @@ class StepParser {
         return forLoop;
     }
 
-    private static Step parseAssignment(LineReader reader) throws IOException {
+    private static Step parseAssignment(LineReader reader) throws IOException, InvalidDependencyException {
         Assignment assignment = new Assignment();
         assignment.setName(reader.getCurrent().getText());
 

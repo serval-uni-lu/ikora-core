@@ -15,9 +15,9 @@ public class Runtime {
     private Project project;
     private ReportBuilder reportBuilder;
 
-    public Runtime(Project project){
+    public Runtime(Project project, Scope scope){
         this.project = project;
-        this.scope = new Scope();
+        this.scope = scope;
         this.reportBuilder = new ReportBuilder();
     }
 
@@ -58,7 +58,7 @@ public class Runtime {
     }
 
     public void reset(){
-        this.scope = new Scope();
+        this.scope.reset();
         this.reportBuilder.reset();
     }
 
@@ -77,5 +77,9 @@ public class Runtime {
 
     Optional<Report> getReport(){
         return reportBuilder.getReport();
+    }
+
+    public KeywordDefinition getTestCase() {
+        return scope.getTestCase();
     }
 }

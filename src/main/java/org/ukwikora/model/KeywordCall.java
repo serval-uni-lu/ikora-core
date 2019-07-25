@@ -2,6 +2,7 @@ package org.ukwikora.model;
 
 import org.ukwikora.analytics.Action;
 import org.ukwikora.analytics.VisitorMemory;
+import org.ukwikora.builder.Linker;
 import org.ukwikora.exception.InvalidDependencyException;
 import org.ukwikora.exception.InvalidImportTypeException;
 import org.ukwikora.runner.Runtime;
@@ -112,6 +113,8 @@ public class KeywordCall extends Step {
     @Override
     public void execute(Runtime runtime) throws Exception{
         runtime.enterKeyword(this);
+
+        Linker.link(this, runtime);
 
         Optional<Keyword> callee = link.getStatement();
 

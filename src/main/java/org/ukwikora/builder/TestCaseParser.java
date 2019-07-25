@@ -1,5 +1,6 @@
 package org.ukwikora.builder;
 
+import org.ukwikora.exception.InvalidDependencyException;
 import org.ukwikora.model.LineRange;
 import org.ukwikora.model.Step;
 import org.ukwikora.model.TestCase;
@@ -70,17 +71,26 @@ class TestCaseParser {
     }
 
     private static void parseTeardown(LineReader reader, String[] tokens, TestCase testCase, DynamicImports dynamicImports) throws IOException {
-        Step step = StepParser.parse(reader, tokens, "\\[teardown\\]");
-        testCase.setTearDown(step);
+        try {
+            Step step = StepParser.parse(reader, tokens, "\\[teardown\\]");
+            testCase.setTearDown(step);
 
-        dynamicImports.add(testCase, step);
+            dynamicImports.add(testCase, step);
+        } catch (InvalidDependencyException e) {
+            e.printStackTrace();
+        }
     }
 
     private static void parseSetup(LineReader reader, String[] tokens, TestCase testCase, DynamicImports dynamicImports) throws IOException {
-        Step step = StepParser.parse(reader, tokens, "\\[setup\\]");
-        testCase.setSetup(step);
+        try {
+            Step step = StepParser.parse(reader, tokens, "\\[setup\\]");
+            testCase.setSetup(step);
 
-        dynamicImports.add(testCase, step);
+            dynamicImports.add(testCase, step);
+        } catch (InvalidDependencyException e) {
+            e.printStackTrace();
+        }
+
     }
 
     private static void parseTags(LineReader reader, String[] tokens, TestCase testCase) throws IOException {

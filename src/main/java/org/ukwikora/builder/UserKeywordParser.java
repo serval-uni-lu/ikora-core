@@ -1,5 +1,6 @@
 package org.ukwikora.builder;
 
+import org.ukwikora.exception.InvalidDependencyException;
 import org.ukwikora.model.LineRange;
 import org.ukwikora.model.Step;
 import org.ukwikora.model.UserKeyword;
@@ -98,8 +99,12 @@ class UserKeywordParser {
     }
 
     private static void parseTeardown(LineReader reader, String[] tokens, UserKeyword userKeyword) throws IOException {
-        Step step = StepParser.parse(reader, tokens, "\\[teardown\\]");
-        userKeyword.setTearDown(step);
+        try {
+            Step step = StepParser.parse(reader, tokens, "\\[teardown\\]");
+            userKeyword.setTearDown(step);
+        } catch (InvalidDependencyException e) {
+            e.printStackTrace();
+        }
 
         reader.readLine();
     }

@@ -2,6 +2,7 @@ package org.ukwikora.runner;
 
 import org.ukwikora.model.TestCase;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -15,10 +16,18 @@ public class TestFilter {
         this.names = names;
     }
 
-    Set<TestCase> filter(List<TestCase> testCases){
-        Set<TestCase> filtered = new HashSet<>();
+    List<TestCase> filter(List<TestCase> testCases){
+        List<TestCase> filtered = new ArrayList<>(testCases.size());
 
         for(TestCase testCase: testCases){
+            if(!tags.isEmpty() && !tags.retainAll(testCase.getTags())){
+                continue;
+            }
+
+            if(!names.isEmpty() && !names.contains(testCase.getName().toLowerCase())){
+                continue;
+            }
+
             filtered.add(testCase);
         }
 

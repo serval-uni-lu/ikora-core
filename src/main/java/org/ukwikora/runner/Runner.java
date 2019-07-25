@@ -13,7 +13,7 @@ public class Runner {
         this.filter = filter;
         this.project = project;
 
-        this.runtime = new Runtime(this.project);
+        this.runtime = new Runtime(this.project, new DynamicScope());
     }
 
     public Report execute() throws Exception{
