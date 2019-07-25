@@ -109,4 +109,10 @@ public class Scope {
 
         return resourcesTable;
     }
+
+    public void enterKeyword(Keyword keyword) {
+    }
+
+    public void exitKeyword(Keyword keyword) {
+    }
 }

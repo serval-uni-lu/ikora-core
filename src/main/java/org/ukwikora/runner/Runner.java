@@ -17,6 +17,8 @@ public class Runner {
     }
 
     public Report execute() throws Exception{
+        runtime.reset();
+
         for(TestCase testCase: filter.filter(project.getTestCases())){
             testCase.execute(runtime);
         }
@@ -24,6 +26,8 @@ public class Runner {
         if(!runtime.getReport().isPresent()){
             throw new Exception("Failed to create report during execution");
         }
+
+        runtime.finish();
 
         return runtime.getReport().get();
     }

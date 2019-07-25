@@ -11,6 +11,10 @@ class Utils {
         return LocalDateTime.parse(dateTime, dateFormatter);
     }
 
+    static String fromDateTIme(LocalDateTime dateTime){
+        return dateTime.format(dateFormatter);
+    }
+
     static boolean toBoolean(String text) throws IOException {
         if(text.equalsIgnoreCase("yes")
         || text.equalsIgnoreCase("true")){

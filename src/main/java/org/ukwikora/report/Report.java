@@ -11,7 +11,7 @@ import java.util.List;
 
 @JacksonXmlRootElement(localName = "robot")
 @JsonIgnoreProperties(value ={"statistics", "errors"})
-public class Report extends ReportNode {
+public class Report implements ReportElement {
     @JacksonXmlProperty(localName = "generated", isAttribute = true)
     private LocalDateTime generated;
     @JacksonXmlProperty(localName = "generator", isAttribute = true)

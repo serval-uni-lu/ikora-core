@@ -2,6 +2,7 @@ package org.ukwikora.runner;
 
 import org.ukwikora.model.*;
 import org.ukwikora.report.Report;
+import org.ukwikora.report.ReportBuilder;
 
 import java.util.Collections;
 import java.util.List;
@@ -9,15 +10,15 @@ import java.util.Optional;
 import java.util.Set;
 
 public class Runtime {
-    protected Scope scope;
-    protected LibraryResources libraries;
-    protected Project project;
-    protected Report report;
+    private Scope scope;
+    private LibraryResources libraries;
+    private Project project;
+    private ReportBuilder reportBuilder;
 
     public Runtime(Project project){
         this.project = project;
         this.scope = new Scope();
-        this.report = null;
+        this.reportBuilder = new ReportBuilder();
     }
 
     public void setLibraries(LibraryResources libraries) {
@@ -26,18 +27,6 @@ public class Runtime {
 
     public Set<Variable> findLibraryVariable(String name){
         return Collections.singleton(this.libraries.findVariable(name));
-    }
-
-    public Set<Variable> findTestVariable(TestCase test, String name) {
-        return this.scope.findTestVariable(test, name);
-    }
-
-    public Set<Variable> findSuiteVariable(String suite, String name) {
-        return this.scope.findSuiteVariable(suite, name);
-    }
-
-    public Set<Variable> findGlobalVariable(String name) {
-        return this.scope.findGlobalVariable(name);
     }
 
     public List<TestCaseFile> getTestCaseFiles(){
@@ -68,15 +57,25 @@ public class Runtime {
         this.scope.addDynamicLibrary(keyword, parameters);
     }
 
-    public void enterKeyword(Keyword keyword){
-
+    public void reset(){
+        this.scope = new Scope();
+        this.reportBuilder.reset();
     }
 
-    public void exitKeyword(Keyword step){
+    public void enterKeyword(Keyword keyword){
+        this.scope.enterKeyword(keyword);
+        this.reportBuilder.enterKeyword(keyword);
+    }
 
+    public void exitKeyword(Keyword keyword){
+        this.scope.exitKeyword(keyword);
+        this.reportBuilder.exitKeyword(keyword);
+    }
+
+    public void finish() {
     }
 
     Optional<Report> getReport(){
-        return Optional.ofNullable(report);
+        return reportBuilder.getReport();
     }
 }

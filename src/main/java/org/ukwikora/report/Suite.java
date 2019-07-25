@@ -6,7 +6,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Suite extends ReportNode {
+public class Suite implements ReportElement {
     @JacksonXmlProperty(localName = "source", isAttribute = true)
     private String source;
     @JacksonXmlProperty(localName = "id", isAttribute = true)

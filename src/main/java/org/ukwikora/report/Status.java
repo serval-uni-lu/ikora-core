@@ -6,7 +6,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlText;
 import java.io.IOException;
 import java.time.LocalDateTime;
 
-public class Status {
+public class Status implements ReportElement {
     public enum Type{
         PASSED, FAILED, NOT_EXECUTED, UNKNOWN, ANY
     }
