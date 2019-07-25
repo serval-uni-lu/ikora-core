@@ -2,6 +2,7 @@ package org.ukwikora.model;
 
 import org.ukwikora.analytics.Action;
 import org.ukwikora.analytics.VisitorMemory;
+import org.ukwikora.exception.InvalidDependencyException;
 import org.ukwikora.runner.Runtime;
 import org.ukwikora.utils.LevenshteinDistance;
 
@@ -27,8 +28,9 @@ public class Assignment extends Step {
         returnValues.add(variable);
     }
 
-    public void setExpression(@Nonnull KeywordCall call) {
+    public void setExpression(@Nonnull KeywordCall call) throws InvalidDependencyException {
         expression = call;
+        expression.addDependency(this);
     }
 
     @Override
@@ -38,6 +40,8 @@ public class Assignment extends Step {
         for(Variable variable: returnValues){
             variable.setFile(this.getFile());
         }
+
+        expression.setFile(this.getFile());
     }
 
     @Override
@@ -47,6 +51,8 @@ public class Assignment extends Step {
         for(Variable variable: returnValues){
             variable.setLineRange(this.getLineRange());
         }
+
+        expression.setLineRange(this.getLineRange());
     }
 
     @Override
