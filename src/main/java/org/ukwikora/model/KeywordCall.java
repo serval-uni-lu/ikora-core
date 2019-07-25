@@ -1,6 +1,5 @@
 package org.ukwikora.model;
 
-import org.apache.commons.lang3.NotImplementedException;
 import org.ukwikora.analytics.Action;
 import org.ukwikora.analytics.VisitorMemory;
 import org.ukwikora.exception.InvalidDependencyException;

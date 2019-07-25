@@ -4,7 +4,7 @@ import org.ukwikora.model.*;
 
 import java.util.Optional;
 
-class VariableParser {
+public class VariableParser {
     public static Optional<Variable> parse(String name){
         if(!Value.isVariable(name)){
             return Optional.empty();

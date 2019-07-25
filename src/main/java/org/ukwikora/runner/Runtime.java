@@ -1,19 +1,23 @@
 package org.ukwikora.runner;
 
 import org.ukwikora.model.*;
+import org.ukwikora.report.Report;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
-public abstract class Runtime {
+public class Runtime {
     protected Scope scope;
     protected LibraryResources libraries;
     protected Project project;
+    protected Report report;
 
     public Runtime(Project project){
         this.project = project;
         this.scope = new Scope();
+        this.report = null;
     }
 
     public void setLibraries(LibraryResources libraries) {
@@ -40,8 +44,39 @@ public abstract class Runtime {
         return project.getTestCaseFiles();
     }
 
-    public abstract Keyword findKeyword(String library, String name) throws InstantiationException, IllegalAccessException;
+    public Set<Variable> findInScope(Set<TestCase> testCases, Set<String> suites, String name){
+        return scope.findInScope(testCases, suites, name);
+    }
 
-    public abstract void enterKeyword(Keyword keyword);
-    public abstract void exitKeyword(Keyword step);
+    public Keyword findKeyword(String library, String name) throws InstantiationException, IllegalAccessException{
+        return libraries.findKeyword(library, name);
+    }
+
+    public void addToGlobalScope(Variable variable){
+        this.scope.addToGlobal(variable);
+    }
+
+    public void addToSuiteScope(String suite, Variable variable){
+        this.scope.addToSuite(suite, variable);
+    }
+
+    public void addToTestScope(TestCase testCase, Variable variable){
+        this.scope.addToTest(testCase, variable);
+    }
+
+    public void addDynamicLibrary(KeywordDefinition keyword, List<Value> parameters){
+        this.scope.addDynamicLibrary(keyword, parameters);
+    }
+
+    public void enterKeyword(Keyword keyword){
+
+    }
+
+    public void exitKeyword(Keyword step){
+
+    }
+
+    Optional<Report> getReport(){
+        return Optional.ofNullable(report);
+    }
 }

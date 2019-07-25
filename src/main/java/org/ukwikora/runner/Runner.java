@@ -7,13 +7,13 @@ import org.ukwikora.report.Report;
 public class Runner {
     private final Project project;
     private final TestFilter filter;
-    private final DynamicRuntime runtime;
+    private final Runtime runtime;
 
     Runner(Project project, TestFilter filter){
         this.filter = filter;
         this.project = project;
 
-        this.runtime = new DynamicRuntime(this.project);
+        this.runtime = new Runtime(this.project);
     }
 
     public Report execute() throws Exception{
@@ -21,6 +21,10 @@ public class Runner {
             testCase.execute(runtime);
         }
 
-        return runtime.getReport();
+        if(!runtime.getReport().isPresent()){
+            throw new Exception("Failed to create report during execution");
+        }
+
+        return runtime.getReport().get();
     }
 }

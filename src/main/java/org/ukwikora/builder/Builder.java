@@ -3,6 +3,7 @@ package org.ukwikora.builder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ukwikora.model.*;
+import org.ukwikora.runner.Runtime;
 import org.ukwikora.utils.FileUtils;
 
 import java.io.File;
@@ -49,7 +50,8 @@ public class Builder {
 
         for(Project project: projects) {
             try {
-                StaticRuntime runtime = new StaticRuntime(project, dynamicImports);
+                Runtime runtime;
+                runtime = new Runtime(project);
                 loadLibraries(runtime);
                 link(runtime, link);
             } catch (Exception e) {
@@ -103,7 +105,7 @@ public class Builder {
             DynamicImports dynamicImports = new DynamicImports();
             project = parse(filePath, dynamicImports);
 
-            StaticRuntime runtime = new StaticRuntime(project, dynamicImports);
+            Runtime runtime = new Runtime(project);
             loadLibraries(runtime);
             link(runtime, link);
 
@@ -120,12 +122,12 @@ public class Builder {
         return project;
     }
 
-    private static void loadLibraries(StaticRuntime runtime) {
+    private static void loadLibraries(Runtime runtime) {
         LibraryResources libraries = LibraryLoader.load();
         runtime.setLibraries(libraries);
     }
 
-    private static void link(StaticRuntime runtime, boolean link) throws Exception {
+    private static void link(Runtime runtime, boolean link) throws Exception {
         if(!link){
             return;
         }

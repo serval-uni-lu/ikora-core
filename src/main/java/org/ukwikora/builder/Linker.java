@@ -9,6 +9,7 @@ import org.ukwikora.exception.InvalidImportTypeException;
 import org.ukwikora.exception.MalformedTestCaseException;
 import org.ukwikora.exception.MissingKeywordException;
 import org.ukwikora.model.*;
+import org.ukwikora.runner.Runtime;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -17,9 +18,9 @@ import java.util.regex.Pattern;
 class Linker {
     private static final Logger logger = LogManager.getLogger(Linker.class);
 
-    private final StaticRuntime runtime;
+    private final Runtime runtime;
 
-    private Linker(StaticRuntime runtime) {
+    private Linker(Runtime runtime) {
         this.runtime = runtime;
     }
 
@@ -29,7 +30,7 @@ class Linker {
         gherkinPattern =  Pattern.compile("^(\\s*)(Given|When|Then|And|But)", Pattern.CASE_INSENSITIVE);
     }
 
-    public static void link(StaticRuntime runtime) throws Exception {
+    public static void link(Runtime runtime) throws Exception {
         Linker linker = new Linker(runtime);
         linker.link();
     }
@@ -110,7 +111,7 @@ class Linker {
         return linkCall(parentKeyword, testCaseFile, call);
     }
 
-    private List<ScopeValue> linkCall(KeywordDefinition parentKeyword, TestCaseFile testCaseFile, KeywordCall call) {
+    private List<ScopeValue> linkCall(KeywordDefinition parentKeyword, TestCaseFile testCaseFile, KeywordCall call) throws Exception {
         List<ScopeValue> unresolvedArguments = new ArrayList<>();
 
         for(Value value : call.getParameters()) {
@@ -118,9 +119,17 @@ class Linker {
         }
 
         linkStepArguments(call, testCaseFile);
-        runtime.resolveGlobal(call);
+        updateScope(call);
 
         return unresolvedArguments;
+    }
+
+    private void updateScope(KeywordCall call) throws Exception {
+        for(Keyword keyword: call.getAllPotentialKeywords(Link.Import.BOTH)){
+            if(keyword instanceof ScopeModifier){
+                ((ScopeModifier)keyword).addToScope(runtime, call);
+            }
+        }
     }
 
     private void linkStepArguments(KeywordCall step, TestCaseFile testCaseFile) {

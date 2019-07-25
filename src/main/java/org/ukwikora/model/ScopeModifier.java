@@ -1,5 +1,7 @@
 package org.ukwikora.model;
 
+import org.ukwikora.runner.Runtime;
+
 public interface ScopeModifier {
-    void updateScope(Runtime runtime);
+    void addToScope(Runtime runtime, KeywordCall call) throws Exception;
 }

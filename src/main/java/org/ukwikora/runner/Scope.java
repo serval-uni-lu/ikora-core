@@ -7,36 +7,37 @@ import java.io.File;
 import java.util.*;
 
 public class Scope {
-    private StatementTable<Variable> globalScope;
-    private Map<TestCase, StatementTable<Variable>> testScope;
-    private Map<String, StatementTable<Variable>> suiteScope;
-    private Map<KeywordDefinition, ResourcesTable> dynamicResourcesScope;
+    private StatementTable<Variable> global;
+    private Map<TestCase, StatementTable<Variable>> test;
+    private Map<String, StatementTable<Variable>> suite;
+
+    private Map<KeywordDefinition, ResourcesTable> dynamicLibrary;
 
     public Scope(){
-        globalScope = new StatementTable<>();
-        suiteScope = new HashMap<>();
-        testScope = new HashMap<>();
-        dynamicResourcesScope = new HashMap<>();
+        global = new StatementTable<>();
+        suite = new HashMap<>();
+        test = new HashMap<>();
+        dynamicLibrary = new HashMap<>();
     }
 
     public Set<Variable> findTestVariable(TestCase testCase, String name) {
-        if(!testScope.containsKey(testCase)){
+        if(!test.containsKey(testCase)){
             return Collections.emptySet();
         }
 
-        return testScope.get(testCase).findStatement(name);
+        return test.get(testCase).findStatement(name);
     }
 
     public Set<Variable> findSuiteVariable(String suite, String name) {
-        if(!suiteScope.containsKey(suite)){
+        if(!this.suite.containsKey(suite)){
             return Collections.emptySet();
         }
 
-        return suiteScope.get(suite).findStatement(name);
+        return this.suite.get(suite).findStatement(name);
     }
 
     public Set<Variable> findGlobalVariable(String name) {
-        return globalScope.findStatement(name);
+        return global.findStatement(name);
     }
 
     public Set<Variable> findInScope(Set<TestCase> testCases, Set<String> suites, String name){
@@ -55,21 +56,21 @@ public class Scope {
         return variablesFound;
     }
 
-    public void setGlobalScope(Variable variable) {
-        globalScope.add(variable);
+    public void addToGlobal(Variable variable) {
+        global.add(variable);
     }
 
-    public void setSuiteScope(String suite, Variable variable) {
-        suiteScope.putIfAbsent(suite, new StatementTable<>());
-        suiteScope.get(suite).add(variable);
+    public void addToSuite(String suite, Variable variable) {
+        this.suite.putIfAbsent(suite, new StatementTable<>());
+        this.suite.get(suite).add(variable);
     }
 
-    public void setTestScope(TestCase testCase, Variable variable) {
-        testScope.putIfAbsent(testCase, new StatementTable<>());
-        testScope.get(testCase).add(variable);
+    public void addToTest(TestCase testCase, Variable variable) {
+        test.putIfAbsent(testCase, new StatementTable<>());
+        test.get(testCase).add(variable);
     }
 
-    public void setDynamicResources(KeywordDefinition keyword, List<Value> parameters) {
+    public void addDynamicLibrary(KeywordDefinition keyword, List<Value> parameters) {
         if(keyword == null){
             return;
         }
@@ -84,7 +85,7 @@ public class Scope {
             filePath = new File(keyword.getFile().getFile(), filePath.getPath());
         }
 
-        dynamicResourcesScope.putIfAbsent(keyword, new ResourcesTable());
+        dynamicLibrary.putIfAbsent(keyword, new ResourcesTable());
 
         List<String> resourcesParameters = new ArrayList<>();
         for(int i = 1; i < parameters.size(); ++i){
@@ -92,16 +93,16 @@ public class Scope {
         }
 
         Resources resources = new Resources(parameters.get(0).getName(), filePath, resourcesParameters, "");
-        dynamicResourcesScope.get(keyword).add(resources);
+        dynamicLibrary.get(keyword).add(resources);
     }
 
     public ResourcesTable getDynamicResources(Statement statement) {
-        Set<KeywordDefinition> dependencies = KeywordStatistics.getDependencies(statement, dynamicResourcesScope.keySet());
+        Set<KeywordDefinition> dependencies = KeywordStatistics.getDependencies(statement, dynamicLibrary.keySet());
 
         ResourcesTable resourcesTable = new ResourcesTable();
 
         for(KeywordDefinition dependency: dependencies){
-            for(Resources resources: dynamicResourcesScope.get(dependency)){
+            for(Resources resources: dynamicLibrary.get(dependency)){
                 resourcesTable.add(resources);
             }
         }

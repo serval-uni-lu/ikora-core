@@ -1,5 +1,7 @@
 package org.ukwikora.model;
 
+import org.ukwikora.builder.VariableParser;
+
 import javax.annotation.Nonnull;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -129,6 +131,19 @@ public abstract class Variable implements Statement {
 
         Matcher matcher = pattern.matcher(generic);
         return matcher.matches();
+    }
+
+    public static Variable create(Value value) throws Exception {
+        Optional<Variable> variable = VariableParser.parse(value.toString());
+
+        if(variable.isPresent()){
+            value.setVariable(value.toString(), variable.get());
+        }
+        else{
+            throw new Exception(String.format("Failed to create variable from value '%s'", value.getName()));
+        }
+
+        return variable.get();
     }
 
     protected abstract void setName(String name);
