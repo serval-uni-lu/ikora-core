@@ -38,6 +38,10 @@ public class Runtime {
     }
 
     public Keyword findKeyword(String library, String name) throws InstantiationException, IllegalAccessException{
+        if(library == null){
+            return null;
+        }
+
         return libraries.findKeyword(library, name);
     }
 

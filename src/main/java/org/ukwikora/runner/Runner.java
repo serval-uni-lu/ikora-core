@@ -1,5 +1,6 @@
 package org.ukwikora.runner;
 
+import org.ukwikora.builder.LibraryLoader;
 import org.ukwikora.model.Project;
 import org.ukwikora.model.TestCase;
 import org.ukwikora.report.Report;
@@ -14,6 +15,7 @@ public class Runner {
         this.project = project;
 
         this.runtime = new Runtime(this.project, new DynamicScope());
+        runtime.setLibraries(LibraryLoader.load());
     }
 
     public Report execute() throws Exception{

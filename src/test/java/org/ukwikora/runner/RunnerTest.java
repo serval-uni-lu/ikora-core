@@ -3,6 +3,8 @@ package org.ukwikora.runner;
 import org.junit.jupiter.api.Test;
 import org.ukwikora.Helpers;
 import org.ukwikora.model.Project;
+import org.ukwikora.report.Report;
+import org.ukwikora.utils.Globals;
 
 import java.util.Collections;
 
@@ -17,7 +19,8 @@ class RunnerTest {
         Runner runner = new Runner(project, filter);
 
         try {
-            runner.execute();
+            Report report = runner.execute();
+            assertEquals(Globals.applicationCanonical, report.getGenerator());
         } catch (Exception e) {
             fail(e.getMessage());
         }
