@@ -2,16 +2,15 @@ package org.ukwikora.runner;
 
 import org.ukwikora.builder.LibraryLoader;
 import org.ukwikora.model.Project;
+import org.ukwikora.model.Suite;
 import org.ukwikora.model.TestCase;
 import org.ukwikora.report.Report;
 
 public class Runner {
     private final Project project;
-    private final TestFilter filter;
     private final Runtime runtime;
 
-    Runner(Project project, TestFilter filter){
-        this.filter = filter;
+    Runner(Project project){
         this.project = project;
 
         this.runtime = new Runtime(this.project, new DynamicScope());
@@ -21,15 +20,15 @@ public class Runner {
     public Report execute() throws Exception{
         runtime.reset();
 
-        for(TestCase testCase: filter.filter(project.getTestCases())){
-            testCase.execute(runtime);
+        for(Suite suite: project.getSuites()){
+            suite.execute(runtime);
         }
+
+        runtime.finish();
 
         if(!runtime.getReport().isPresent()){
             throw new Exception("Failed to create report during execution");
         }
-
-        runtime.finish();
 
         return runtime.getReport().get();
     }

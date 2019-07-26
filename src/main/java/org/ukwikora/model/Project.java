@@ -9,7 +9,7 @@ import java.time.ZoneId;
 import java.util.*;
 
 public class Project implements Comparable<Project> {
-    private List<TestCaseFile> testCaseFiles;
+    private List<Suite> suites;
     private Map<String, TestCaseFile> files;
     private Set<Project> dependencies;
 
@@ -21,7 +21,7 @@ public class Project implements Comparable<Project> {
 
     public Project(String file){
         rootFolder = new File(file.trim());
-        testCaseFiles = new ArrayList<>();
+        suites = new ArrayList<>();
         files = new HashMap<>();
         dependencies = new HashSet<>();
         loc = 0;
@@ -47,12 +47,16 @@ public class Project implements Comparable<Project> {
         return rootFolder;
     }
 
+    public List<Suite> getSuites(){
+        return suites;
+    }
+
     public LocalDateTime getDateTime() {
         return dateTime;
     }
 
-    public List<TestCaseFile> getTestCaseFiles(){
-        return testCaseFiles;
+    public List<Suite> getTestCaseFiles(){
+        return suites;
     }
 
     public TestCaseFile getTestCaseFile(String name) {
@@ -74,8 +78,8 @@ public class Project implements Comparable<Project> {
     public List<TestCase> getTestCases(){
         List<TestCase> testCases = new ArrayList<>();
 
-        for(TestCaseFile testCaseFile: testCaseFiles){
-            testCases.addAll(testCaseFile.getTestCases());
+        for(Suite suite: suites){
+            testCases.addAll(suite.getTestCases());
         }
 
         return testCases;
@@ -84,8 +88,8 @@ public class Project implements Comparable<Project> {
     public Set<UserKeyword> getUserKeywords(){
         Set<UserKeyword> userKeywords = new HashSet<>();
 
-        for(TestCaseFile testCaseFile: testCaseFiles){
-            userKeywords.addAll(testCaseFile.getUserKeywords());
+        for(Suite suite: suites){
+            userKeywords.addAll(suite.getUserKeywords());
         }
 
         return userKeywords;
@@ -94,8 +98,8 @@ public class Project implements Comparable<Project> {
     public Set<UserKeyword> findUserKeyword(String name) {
         Set<UserKeyword> userKeywordsFound = new HashSet<>();
 
-        for(TestCaseFile testCaseFile: testCaseFiles){
-            userKeywordsFound.addAll(testCaseFile.findUserKeyword(name));
+        for(Suite suite: suites){
+            userKeywordsFound.addAll(suite.findUserKeyword(name));
         }
 
         return userKeywordsFound;
@@ -104,8 +108,8 @@ public class Project implements Comparable<Project> {
     public Set<UserKeyword> findUserKeyword(String library, String name) {
         Set<UserKeyword> userKeywordsFound = new HashSet<>();
 
-        for(TestCaseFile testCaseFile: testCaseFiles){
-            userKeywordsFound.addAll(testCaseFile.findUserKeyword(library, name));
+        for(Suite suite: suites){
+            userKeywordsFound.addAll(suite.findUserKeyword(library, name));
         }
 
         return userKeywordsFound;
@@ -114,8 +118,8 @@ public class Project implements Comparable<Project> {
     public Set<Variable> getVariables(){
         Set<Variable> variables = new HashSet<>();
 
-        for(TestCaseFile testCaseFile: testCaseFiles){
-            variables.addAll(testCaseFile.getVariables());
+        for(Suite suite: suites){
+            variables.addAll(suite.getVariables());
         }
 
         return variables;
@@ -138,8 +142,8 @@ public class Project implements Comparable<Project> {
     public Set<Resources> getExternalResources() {
         Set<Resources> externalResources = new HashSet<>();
 
-        for(TestCaseFile testCaseFile: testCaseFiles){
-            externalResources.addAll(testCaseFile.getSettings().getExternalResources());
+        for(Suite suite: suites){
+            externalResources.addAll(suite.getSettings());
         }
 
         return externalResources;
@@ -157,8 +161,8 @@ public class Project implements Comparable<Project> {
     public int getDeadLoc() {
         int deadLoc = 0;
 
-        for(TestCaseFile testCaseFile: testCaseFiles){
-            deadLoc += testCaseFile.getDeadLoc();
+        for(Suite suite: suites){
+            deadLoc += suite.getDeadLoc();
         }
 
         return deadLoc;
@@ -187,7 +191,7 @@ public class Project implements Comparable<Project> {
             return;
         }
 
-        testCaseFiles.add(testCaseFile);
+        updateSuites(testCaseFile);
 
         String key = generateFileName(testCaseFile.getFile());
         files.put(key, testCaseFile);
@@ -195,6 +199,10 @@ public class Project implements Comparable<Project> {
         updateFiles(testCaseFile.getSettings());
 
         this.loc += testCaseFile.getLoc();
+    }
+
+    private void updateSuites(TestCaseFile testCaseFile){
+
     }
 
     private void updateFiles(Settings settings){

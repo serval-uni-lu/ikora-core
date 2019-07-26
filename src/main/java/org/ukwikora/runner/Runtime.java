@@ -66,9 +66,19 @@ public class Runtime {
         this.reportBuilder.reset();
     }
 
+    public void enterSuite(Suite suite) {
+        this.scope.enterSuite(suite);
+        this.reportBuilder.enterSuite(suite);
+    }
+
     public void enterKeyword(Keyword keyword) throws Exception {
         this.scope.enterKeyword(keyword);
         this.reportBuilder.enterKeyword(keyword);
+    }
+
+    public void exitSuite(Suite suite) {
+        this.scope.exitSuite(suite);
+        this.reportBuilder.exitSuite(suite);
     }
 
     public void exitKeyword(Keyword keyword){
