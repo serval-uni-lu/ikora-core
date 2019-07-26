@@ -1,9 +1,6 @@
 package org.ukwikora.report;
 
 import org.ukwikora.model.Keyword;
-import org.ukwikora.model.KeywordDefinition;
-import org.ukwikora.model.LibraryKeyword;
-import org.ukwikora.model.TestCase;
 import org.ukwikora.utils.Globals;
 
 import java.time.LocalDateTime;
@@ -22,15 +19,7 @@ public class ReportBuilder {
         return Optional.ofNullable(report);
     }
 
-    public void enterKeyword(Keyword keyword) throws Exception {
-        if(TestCase.class.isAssignableFrom(keyword.getClass())){
-            updateSuite((TestCase)keyword);
-            stack.peek().addElement(createTestNode((TestCase)keyword));
-        }
-        else if(KeywordDefinition.class.isAssignableFrom(keyword.getClass())
-        || LibraryKeyword.class.isAssignableFrom(keyword.getClass())){
-            stack.peek().addElement(createKeywordNode(keyword));
-        }
+    public void enterKeyword(Keyword keyword) {
     }
 
     public void exitKeyword(Keyword keyword) {
@@ -46,27 +35,5 @@ public class ReportBuilder {
 
     public void finish(){
         report.setGenerated(LocalDateTime.now());
-    }
-
-    private void updateSuite(TestCase testCase) {
-    }
-
-    private Test createTestNode(TestCase testCase){
-        Test test = new Test();
-
-        test.setName(testCase.getName());
-        test.setDocumentation(testCase.getDocumentation());
-        test.setTags(testCase.getTags());
-
-        return test;
-    }
-
-    private org.ukwikora.report.Keyword createKeywordNode(Keyword keyword){
-        org.ukwikora.report.Keyword keywordNode = new org.ukwikora.report.Keyword();
-
-        keywordNode.setName(keyword.getName());
-        keywordNode.setDocumentation(keyword.getDocumentation());
-
-        return keywordNode;
     }
 }

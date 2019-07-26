@@ -16,7 +16,7 @@ public interface Scope {
     void addDynamicLibrary(KeywordDefinition keyword, List<Value> parameters);
     ResourcesTable getDynamicResources(Statement statement);
 
-    void enterKeyword(Keyword keyword);
+    void enterKeyword(Keyword keyword) throws Exception;
     void exitKeyword(Keyword keyword);
 
     void reset();
