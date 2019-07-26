@@ -1,9 +1,11 @@
 package org.ukwikora.report;
 
 import org.ukwikora.model.Keyword;
+import org.ukwikora.model.TestCase;
 import org.ukwikora.utils.Globals;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.Stack;
 
@@ -20,6 +22,10 @@ public class ReportBuilder {
     }
 
     public void enterKeyword(Keyword keyword) {
+        if(TestCase.class.isAssignableFrom(keyword.getClass())){
+            //TODO: Create nodes for suites
+            System.out.println(((TestCase)keyword).getSuites());
+        }
     }
 
     public void exitKeyword(Keyword keyword) {
