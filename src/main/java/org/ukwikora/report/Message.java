@@ -6,7 +6,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlText;
 import java.io.IOException;
 import java.time.LocalDateTime;
 
-public class Message implements ReportElement{
+public class Message {
     @JacksonXmlProperty(localName = "timestamp", isAttribute = true)
     private LocalDateTime timestamp;
     @JacksonXmlProperty(localName = "level", isAttribute = true)

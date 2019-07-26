@@ -137,4 +137,9 @@ public abstract class Step implements Keyword {
 
         this.parent = (Keyword)dependency;
     }
+
+    @Override
+    public String getDocumentation(){
+        return "";
+    }
 }

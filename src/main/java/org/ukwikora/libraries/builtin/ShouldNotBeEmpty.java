@@ -9,7 +9,7 @@ public class ShouldNotBeEmpty extends LibraryKeyword {
     }
 
     @Override
-    public void execute(Runtime runtime) {
+    public void run(Runtime runtime) {
 
     }
 }

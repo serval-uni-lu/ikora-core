@@ -16,4 +16,5 @@ public interface Keyword extends Statement {
     void execute(Runtime runtime) throws Exception;
 
     Type getType();
+    String getDocumentation();
 }

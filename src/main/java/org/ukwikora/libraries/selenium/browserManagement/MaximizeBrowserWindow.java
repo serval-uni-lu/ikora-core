@@ -9,7 +9,7 @@ public class MaximizeBrowserWindow extends LibraryKeyword {
     }
 
     @Override
-    public void execute(Runtime runtime) {
+    public void run(Runtime runtime) {
         java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
         int width = (int)Math.round(screenSize.getWidth());
         int height = (int)Math.round(screenSize.getHeight());

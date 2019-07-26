@@ -10,7 +10,7 @@ public class WaitUntilPageContains extends LibraryKeyword {
     }
 
     @Override
-    public void execute(Runtime runtime) {
+    public void run(Runtime runtime) {
 
     }
 

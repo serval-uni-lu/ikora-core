@@ -9,7 +9,7 @@ public class CloseBrowser extends LibraryKeyword {
     }
 
     @Override
-    public void execute(Runtime runtime) {
+    public void run(Runtime runtime) {
 
     }
 }

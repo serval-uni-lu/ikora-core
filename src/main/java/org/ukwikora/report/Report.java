@@ -77,4 +77,17 @@ public class Report implements ReportElement {
 
         return number;
     }
+
+    @Override
+    public void addElement(ReportElement element) throws Exception {
+        if(!Suite.class.isAssignableFrom(element.getClass())){
+            throw new BadElementException(Suite.class, element.getClass());
+        }
+
+        if(suites == null){
+            suites = new ArrayList<>();
+        }
+
+        suites.add((Suite)element);
+    }
 }

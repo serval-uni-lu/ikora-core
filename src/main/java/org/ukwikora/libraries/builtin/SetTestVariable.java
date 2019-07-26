@@ -13,7 +13,7 @@ public class SetTestVariable extends LibraryKeyword implements ScopeModifier {
     }
 
     @Override
-    public void execute(Runtime runtime) {
+    public void run(Runtime runtime) {
 
     }
 

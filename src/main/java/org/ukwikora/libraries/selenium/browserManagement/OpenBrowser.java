@@ -9,7 +9,7 @@ public class OpenBrowser extends LibraryKeyword {
     }
 
     @Override
-    public void execute(Runtime runtime) {
+    public void run(Runtime runtime) {
         String browser = "browser";
         String url = "url";
 

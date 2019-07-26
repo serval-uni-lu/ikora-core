@@ -9,7 +9,7 @@ public class ContinueForLoopIf extends LibraryKeyword {
     }
 
     @Override
-    public void execute(Runtime runtime) {
+    public void run(Runtime runtime) {
 
     }
 }

@@ -120,4 +120,17 @@ public class Suite implements ReportElement {
 
         return number;
     }
+
+    @Override
+    public void addElement(ReportElement element) throws Exception {
+        if(Suite.class.isAssignableFrom(element.getClass())){
+            addSuite((Suite)element);
+        }
+        else if(Test.class.isAssignableFrom(element.getClass())){
+            addTest((Test)element);
+        }
+        else {
+            throw new BadElementException(Test.class, element.getClass());
+        }
+    }
 }

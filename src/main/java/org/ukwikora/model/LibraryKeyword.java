@@ -2,6 +2,7 @@ package org.ukwikora.model;
 
 import org.ukwikora.analytics.Action;
 import org.ukwikora.analytics.VisitorMemory;
+import org.ukwikora.runner.Runtime;
 
 import javax.annotation.Nonnull;
 import java.util.*;
@@ -148,5 +149,21 @@ public abstract class LibraryKeyword implements Keyword {
     @Override
     public int getLoc() {
         return 1;
+    }
+
+    @Override
+    public void execute(Runtime runtime) throws Exception{
+        runtime.enterKeyword(this);
+
+        run(runtime);
+
+        runtime.exitKeyword(this);
+    }
+
+    protected abstract void run(Runtime runtime);
+
+    @Override
+    public String getDocumentation(){
+        return "";
     }
 }

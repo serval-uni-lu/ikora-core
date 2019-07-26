@@ -4,6 +4,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Keyword implements ReportElement {
@@ -129,5 +130,18 @@ public class Keyword implements ReportElement {
 
     public void setDocumentation(String documentation) {
         this.documentation = documentation;
+    }
+
+    @Override
+    public void addElement(ReportElement element) throws Exception {
+        if(!Keyword.class.isAssignableFrom(element.getClass())){
+            throw new BadElementException(Keyword.class, element.getClass());
+        }
+
+        if(keywords == null){
+            keywords = new ArrayList<>();
+        }
+
+        keywords.add((Keyword)element);
     }
 }

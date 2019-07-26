@@ -10,7 +10,7 @@ public class SetSeleniumSpeed extends LibraryKeyword {
     }
 
     @Override
-    public void execute(Runtime runtime) {
+    public void run(Runtime runtime) {
         int sec = 0;
 
         //TODO: properly convert time

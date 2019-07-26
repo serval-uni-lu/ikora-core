@@ -66,7 +66,7 @@ public class Runtime {
         this.reportBuilder.reset();
     }
 
-    public void enterKeyword(Keyword keyword){
+    public void enterKeyword(Keyword keyword) throws Exception {
         this.scope.enterKeyword(keyword);
         this.reportBuilder.enterKeyword(keyword);
     }
@@ -77,6 +77,7 @@ public class Runtime {
     }
 
     public void finish() {
+        this.reportBuilder.finish();
     }
 
     Optional<Report> getReport(){

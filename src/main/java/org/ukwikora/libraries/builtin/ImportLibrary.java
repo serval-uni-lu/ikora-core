@@ -5,7 +5,7 @@ import org.ukwikora.runner.Runtime;
 
 public class ImportLibrary extends LibraryKeyword implements ScopeModifier {
     @Override
-    public void execute(Runtime runtime) {
+    public void run(Runtime runtime) {
 
     }
 

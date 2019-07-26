@@ -5,7 +5,7 @@ import org.ukwikora.runner.Runtime;
 
 public class GetEnvironmentVariables extends LibraryKeyword {
     @Override
-    public void execute(Runtime runtime) {
+    public void run(Runtime runtime) {
 
     }
 }
