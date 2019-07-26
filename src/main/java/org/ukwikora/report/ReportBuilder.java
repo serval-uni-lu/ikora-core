@@ -3,6 +3,7 @@ package org.ukwikora.report;
 import org.ukwikora.model.Keyword;
 import org.ukwikora.model.KeywordDefinition;
 import org.ukwikora.model.LibraryKeyword;
+import org.ukwikora.model.Suite;
 import org.ukwikora.model.TestCase;
 import org.ukwikora.utils.Globals;
 
@@ -22,13 +23,29 @@ public class ReportBuilder {
         return Optional.ofNullable(report);
     }
 
+    public void enterSuite(Suite suite) throws Exception {
+        ReportElement element = createSuiteNode(suite);
+        stack.peek().addElement(element);
+    }
+
+    public void exitSuite(Suite suite) {
+        stack.pop();
+    }
+
     public void enterKeyword(Keyword keyword) throws Exception {
+        ReportElement element = null;
+
         if(TestCase.class.isAssignableFrom(keyword.getClass())){
-            stack.peek().addElement(createTestNode((TestCase)keyword));
+            element = createTestNode((TestCase)keyword);
         }
         else if(KeywordDefinition.class.isAssignableFrom(keyword.getClass())
         || LibraryKeyword.class.isAssignableFrom(keyword.getClass())){
-            stack.peek().addElement(createKeywordNode(keyword));
+            element =  createKeywordNode(keyword);
+        }
+
+        if(element != null){
+            ReportElement parent = stack.push(element);
+            parent.addElement(element);
         }
     }
 
@@ -65,5 +82,15 @@ public class ReportBuilder {
         keywordNode.setDocumentation(keyword.getDocumentation());
 
         return keywordNode;
+    }
+
+    private ReportElement createSuiteNode(Suite suite) {
+        org.ukwikora.report.Suite suiteNode = new org.ukwikora.report.Suite();
+
+        suiteNode.setName(suite.getName());
+        suiteNode.setDocumentation(suite.getDocumentation());
+        suiteNode.setSource(suite.getSource().getAbsolutePath());
+
+        return suiteNode;
     }
 }

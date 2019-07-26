@@ -19,6 +19,9 @@ public interface Scope {
     void enterKeyword(Keyword keyword) throws Exception;
     void exitKeyword(Keyword keyword);
 
+    void enterSuite(Suite suite);
+    void exitSuite(Suite suite);
+
     void reset();
 
     TestCase getTestCase();

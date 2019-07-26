@@ -7,13 +7,15 @@ import java.util.*;
 
 public class Suite {
     private String name;
+    private String documentation;
     private File source;
     private List<Suite> suites;
     private TestCaseFile testCaseFile;
 
-    Suite(String name, File source){
+    Suite(String name, File source, String documentation){
         this.name = name;
         this.source = source;
+        this.documentation = documentation;
         this.suites = new ArrayList<>();
     }
 
@@ -23,6 +25,10 @@ public class Suite {
 
     public File getSource() {
         return source;
+    }
+
+    public String getDocumentation() {
+        return documentation;
     }
 
     public void addSuite(Suite suite){
