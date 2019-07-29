@@ -70,7 +70,7 @@ public class UserKeyword extends KeywordDefinition {
         super.addStep(step);
 
         if(Assignment.class.isAssignableFrom(step.getClass())){
-            for (Variable variable: ((Assignment)step).getReturnValues()){
+            for (Variable variable: ((Assignment)step).getReturnVariables()){
                 localVariables.add(variable);
             }
         }
@@ -90,6 +90,11 @@ public class UserKeyword extends KeywordDefinition {
     @Override
     public int getMaxArgument(){
         return parameters.size();
+    }
+
+    @Override
+    public List<Value> getReturnValues() {
+        return returnValues;
     }
 
     public void addParameter(String parameter){

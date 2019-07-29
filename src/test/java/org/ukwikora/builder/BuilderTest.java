@@ -99,9 +99,9 @@ class BuilderTest {
 
         Keyword keyword = ofInterest.iterator().next();
         Assignment step0 = (Assignment) keyword.getStep(0);
-        assertEquals(1, step0.getReturnValues().size());
-        assertEquals("${EtatRun}", step0.getReturnValues().get(0).getName());
-        assertEquals(1, step0.getReturnValues().get(0).getDependencies().size());
+        assertEquals(1, step0.getReturnVariables().size());
+        assertEquals("${EtatRun}", step0.getReturnVariables().get(0).getName());
+        assertEquals(1, step0.getReturnVariables().get(0).getDependencies().size());
     }
 
     @Test

@@ -8,8 +8,9 @@ public class DynamicScope implements Scope {
     private StatementTable<Variable> global;
     private Stack<Block<Suite, Variable>> suiteStack;
     private Stack<Block<TestCase, Variable>> testStack;
-    private Stack<Block<KeywordDefinition, Variable>> keywordStack;
+    private Stack<Block<Keyword, Variable>> keywordStack;
     private Stack<Block<Step, Value>> parametersStack;
+    private List<Value> returnValues;
 
     public DynamicScope(){
         global = new StatementTable<>();
@@ -17,6 +18,14 @@ public class DynamicScope implements Scope {
         testStack = new Stack<>();
         keywordStack = new Stack<>();
         parametersStack = new Stack<>();
+        returnValues = Collections.emptyList();
+    }
+
+    @Override
+    public void addToKeyword(Keyword keyword, Variable variable) {
+        if(keywordStack.peek().is(keyword)){
+            keywordStack.peek().add(variable);
+        }
     }
 
     @Override
@@ -58,8 +67,9 @@ public class DynamicScope implements Scope {
         if (TestCase.class.isAssignableFrom(keyword.getClass())){
             testStack.push(new Block<>((TestCase) keyword));
         }
-        else if(KeywordDefinition.class.isAssignableFrom(keyword.getClass())){
-            keywordStack.push(new Block<>((KeywordDefinition)keyword));
+        else if(KeywordDefinition.class.isAssignableFrom(keyword.getClass())
+                || LibraryKeyword.class.isAssignableFrom(keyword.getClass())){
+            keywordStack.push(new Block<>(keyword));
         }
         else if(KeywordCall.class.isAssignableFrom(keyword.getClass())){
             parametersStack.push(new Block<>((Step)keyword));
@@ -85,11 +95,14 @@ public class DynamicScope implements Scope {
         if (TestCase.class.isAssignableFrom(keyword.getClass())){
             testStack.pop();
         }
-        else if(KeywordDefinition.class.isAssignableFrom(keyword.getClass())){
+        else if(KeywordDefinition.class.isAssignableFrom(keyword.getClass())
+                || LibraryKeyword.class.isAssignableFrom(keyword.getClass())){
             keywordStack.pop();
+            returnValues = keyword.getReturnValues();
         }
         else if(KeywordCall.class.isAssignableFrom(keyword.getClass())){
             parametersStack.pop();
+            returnValues = keyword.getReturnValues();
         }
     }
 
@@ -114,6 +127,11 @@ public class DynamicScope implements Scope {
     @Override
     public TestCase getTestCase() {
         return testStack.peek().scope;
+    }
+
+    @Override
+    public List<Value> getReturnValues() {
+        return returnValues;
     }
 
     class Block<T, U>{

@@ -49,6 +49,11 @@ public class StaticScope implements Scope{
     }
 
     @Override
+    public void addToKeyword(Keyword keyword, Variable variable) {
+
+    }
+
+    @Override
     public void addToTest(TestCase testCase, Variable variable) {
         test.putIfAbsent(testCase, new StatementTable<>());
         test.get(testCase).add(variable);
@@ -122,6 +127,11 @@ public class StaticScope implements Scope{
 
     @Override
     public TestCase getTestCase() {
+        return null;
+    }
+
+    @Override
+    public List<Value> getReturnValues() {
         return null;
     }
 

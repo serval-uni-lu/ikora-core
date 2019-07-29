@@ -23,4 +23,17 @@ class RunnerTest {
             fail(e.getMessage());
         }
     }
+
+    @Test
+    void ExecuteWithSuiteWithAssignment(){
+        Project project = Helpers.compileProject("robot/assignment", false);
+        Runner runner = new Runner(project);
+
+        try {
+            Report report = runner.execute();
+            assertEquals(Globals.applicationCanonical, report.getGenerator());
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
+    }
 }

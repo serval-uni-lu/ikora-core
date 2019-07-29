@@ -140,4 +140,9 @@ public class ForLoop extends Step {
     public void accept(StatementVisitor visitor, VisitorMemory memory){
         visitor.visit(this, memory);
     }
+
+    @Override
+    public List<Value> getReturnValues() {
+        return Collections.emptyList();
+    }
 }

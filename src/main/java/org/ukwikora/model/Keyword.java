@@ -2,6 +2,8 @@ package org.ukwikora.model;
 
 import org.ukwikora.runner.Runtime;
 
+import java.util.List;
+
 public interface Keyword extends Statement {
     enum Type{
         User, ControlFlow, Assertion, Action, Log, Error, Synchronisation, Get,  Unknown, Set
@@ -17,4 +19,6 @@ public interface Keyword extends Statement {
 
     Type getType();
     String getDocumentation();
+
+    List<Value> getReturnValues();
 }

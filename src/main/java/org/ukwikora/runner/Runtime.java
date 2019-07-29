@@ -57,6 +57,10 @@ public class Runtime {
         this.scope.addToTest(testCase, variable);
     }
 
+    public void addToKeywordScope(Keyword keyword, Variable variable) {
+        this.scope.addToKeyword(keyword, variable);
+    }
+
     public void addDynamicLibrary(KeywordDefinition keyword, List<Value> parameters){
         this.scope.addDynamicLibrary(keyword, parameters);
     }
@@ -96,5 +100,9 @@ public class Runtime {
 
     public KeywordDefinition getTestCase() {
         return scope.getTestCase();
+    }
+
+    public List<Value> getReturnValues() {
+        return scope.getReturnValues();
     }
 }

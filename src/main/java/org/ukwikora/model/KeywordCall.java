@@ -14,6 +14,7 @@ import java.util.*;
 public class KeywordCall extends Step {
     private Link<KeywordCall, Keyword> link;
     private List<Value> parameters;
+    private List<Value> returnValues;
     private Map<Value, KeywordCall> stepParameters;
 
     public KeywordCall() {
@@ -120,6 +121,7 @@ public class KeywordCall extends Step {
 
         if(callee.isPresent()){
             callee.get().execute(runtime);
+            returnValues = runtime.getReturnValues();
         }
         else{
             throw new Exception("Need to have a better exception");
@@ -245,6 +247,11 @@ public class KeywordCall extends Step {
         }
 
         return getKeyword().get().getType();
+    }
+
+    @Override
+    public List<Value> getReturnValues() {
+        return this.returnValues;
     }
 
     @Override

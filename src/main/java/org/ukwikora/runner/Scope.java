@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 public interface Scope {
+    void addToKeyword(Keyword keyword, Variable variable);
     void addToTest(TestCase testCase, Variable variable);
     void addToSuite(String suite, Variable variable);
     void addToGlobal(Variable variable);
@@ -25,4 +26,6 @@ public interface Scope {
     void reset();
 
     TestCase getTestCase();
+
+    List<Value> getReturnValues();
 }

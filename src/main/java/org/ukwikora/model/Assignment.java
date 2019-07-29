@@ -2,6 +2,7 @@ package org.ukwikora.model;
 
 import org.ukwikora.analytics.Action;
 import org.ukwikora.analytics.VisitorMemory;
+import org.ukwikora.builder.Linker;
 import org.ukwikora.exception.InvalidDependencyException;
 import org.ukwikora.runner.Runtime;
 import org.ukwikora.utils.LevenshteinDistance;
@@ -13,19 +14,19 @@ import java.util.List;
 import java.util.Optional;
 
 public class Assignment extends Step {
-    private List<Variable> returnValues;
+    private List<Variable> returnVariables;
     private KeywordCall expression;
 
     public Assignment(){
-        returnValues = new ArrayList<>();
+        returnVariables = new ArrayList<>();
     }
 
-    public List<Variable> getReturnValues() {
-        return returnValues;
+    public List<Variable> getReturnVariables() {
+        return returnVariables;
     }
 
     public void addReturnValue(@Nonnull Variable variable){
-        returnValues.add(variable);
+        returnVariables.add(variable);
     }
 
     public void setExpression(@Nonnull KeywordCall call) throws InvalidDependencyException {
@@ -37,7 +38,7 @@ public class Assignment extends Step {
     public void setFile(@Nonnull TestCaseFile file){
         super.setFile(file);
 
-        for(Variable variable: returnValues){
+        for(Variable variable: returnVariables){
             variable.setFile(this.getFile());
         }
 
@@ -48,7 +49,7 @@ public class Assignment extends Step {
     public void setLineRange(@Nonnull LineRange lineRange){
         super.setLineRange(lineRange);
 
-        for(Variable variable: returnValues){
+        for(Variable variable: returnVariables){
             variable.setLineRange(this.getLineRange());
         }
 
@@ -105,8 +106,27 @@ public class Assignment extends Step {
     }
 
     @Override
-    public void execute(Runtime runtime) {
+    public void execute(Runtime runtime) throws Exception {
+        runtime.enterKeyword(this);
 
+        if(expression != null){
+            Linker.link(expression, runtime);
+            Optional<Keyword> callee = expression.getKeyword();
+
+            if(callee.isPresent()){
+                callee.get().execute(runtime);
+                assignVariables(runtime.getReturnValues());
+            }
+            else{
+                throw new Exception("Need to have a better exception");
+            }
+        }
+
+        runtime.exitKeyword(this);
+
+        for(Variable variable: returnVariables){
+            runtime.addToKeywordScope(this.getParent(), variable);
+        }
     }
 
     @Override
@@ -123,8 +143,8 @@ public class Assignment extends Step {
 
         boolean same = this.expression.equals(assignment.expression);
 
-        for(int i = 0; same && i < this.returnValues.size(); ++i) {
-            same &= this.returnValues.get(i).getName().equalsIgnoreCase(assignment.returnValues.get(i).getName());
+        for(int i = 0; same && i < this.returnVariables.size(); ++i) {
+            same &= this.returnVariables.get(i).getName().equalsIgnoreCase(assignment.returnVariables.get(i).getName());
         }
 
         return  same;
@@ -143,7 +163,7 @@ public class Assignment extends Step {
         Assignment assignment = (Assignment)other;
 
         double expressionIndex = expression.distance(assignment.expression);
-        double returnValuesIndex = LevenshteinDistance.index(returnValues, assignment.returnValues);
+        double returnValuesIndex = LevenshteinDistance.index(returnVariables, assignment.returnVariables);
 
         return (0.5 * expressionIndex) + (0.5 * returnValuesIndex);
     }
@@ -169,7 +189,7 @@ public class Assignment extends Step {
                         actions.add(Action.changeStepExpression(this, assignment));
                     }
 
-                    if(LevenshteinDistance.index(this.getReturnValues(), assignment.getReturnValues()) > 0){
+                    if(LevenshteinDistance.index(this.getReturnVariables(), assignment.getReturnVariables()) > 0){
                         actions.add(Action.changeStepReturnValues(this, assignment));
                     }
                 });
@@ -184,7 +204,7 @@ public class Assignment extends Step {
     public String toString(){
         StringBuilder builder = new StringBuilder();
 
-        for (Variable variable: returnValues){
+        for (Variable variable: returnVariables){
             builder.append(variable.getName());
             builder.append("\t");
         }
@@ -220,6 +240,11 @@ public class Assignment extends Step {
     }
 
     @Override
+    public List<Value> getReturnValues() {
+        return Collections.emptyList();
+    }
+
+    @Override
     public void accept(StatementVisitor visitor, VisitorMemory memory){
         visitor.visit(this, memory);
     }
@@ -227,5 +252,9 @@ public class Assignment extends Step {
     @Override
     public Optional<KeywordCall> getKeywordCall() {
         return Optional.ofNullable(expression);
+    }
+
+    private void assignVariables(List<Value> returnValues){
+
     }
 }

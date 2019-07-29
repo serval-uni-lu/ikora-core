@@ -166,4 +166,9 @@ public abstract class LibraryKeyword implements Keyword {
     public String getDocumentation(){
         return "";
     }
+
+    @Override
+    public List<Value> getReturnValues(){
+        return Collections.emptyList();
+    }
 }

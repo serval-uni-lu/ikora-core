@@ -2,6 +2,9 @@ package org.ukwikora.model;
 
 import org.ukwikora.analytics.VisitorMemory;
 
+import java.util.Collections;
+import java.util.List;
+
 public class TestCase extends KeywordDefinition {
     private KeywordCall setup;
     private KeywordCall tearDown;
@@ -33,5 +36,10 @@ public class TestCase extends KeywordDefinition {
     @Override
     public void accept(StatementVisitor visitor, VisitorMemory memory){
         visitor.visit(this, memory);
+    }
+
+    @Override
+    public List<Value> getReturnValues() {
+        return Collections.emptyList();
     }
 }
