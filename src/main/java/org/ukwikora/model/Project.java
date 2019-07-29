@@ -55,8 +55,8 @@ public class Project implements Comparable<Project> {
         return dateTime;
     }
 
-    public List<Suite> getTestCaseFiles(){
-        return suites;
+    public List<TestCaseFile> getTestCaseFiles(){
+        return new ArrayList<>(files.values());
     }
 
     public TestCaseFile getTestCaseFile(String name) {
@@ -78,8 +78,8 @@ public class Project implements Comparable<Project> {
     public List<TestCase> getTestCases(){
         List<TestCase> testCases = new ArrayList<>();
 
-        for(Suite suite: suites){
-            testCases.addAll(suite.getTestCases());
+        for(TestCaseFile file: files.values()){
+            testCases.addAll(file.getTestCases());
         }
 
         return testCases;
@@ -88,8 +88,8 @@ public class Project implements Comparable<Project> {
     public Set<UserKeyword> getUserKeywords(){
         Set<UserKeyword> userKeywords = new HashSet<>();
 
-        for(Suite suite: suites){
-            userKeywords.addAll(suite.getUserKeywords());
+        for(TestCaseFile file: files.values()){
+            userKeywords.addAll(file.getUserKeywords());
         }
 
         return userKeywords;
@@ -98,8 +98,8 @@ public class Project implements Comparable<Project> {
     public Set<UserKeyword> findUserKeyword(String name) {
         Set<UserKeyword> userKeywordsFound = new HashSet<>();
 
-        for(Suite suite: suites){
-            userKeywordsFound.addAll(suite.findUserKeyword(name));
+        for(TestCaseFile file: files.values()){
+            userKeywordsFound.addAll(file.findUserKeyword(name));
         }
 
         return userKeywordsFound;
@@ -108,8 +108,8 @@ public class Project implements Comparable<Project> {
     public Set<UserKeyword> findUserKeyword(String library, String name) {
         Set<UserKeyword> userKeywordsFound = new HashSet<>();
 
-        for(Suite suite: suites){
-            userKeywordsFound.addAll(suite.findUserKeyword(library, name));
+        for(TestCaseFile file: files.values()){
+            userKeywordsFound.addAll(file.findUserKeyword(library, name));
         }
 
         return userKeywordsFound;
@@ -118,8 +118,8 @@ public class Project implements Comparable<Project> {
     public Set<Variable> getVariables(){
         Set<Variable> variables = new HashSet<>();
 
-        for(Suite suite: suites){
-            variables.addAll(suite.getVariables());
+        for(TestCaseFile file: files.values()){
+            variables.addAll(file.getVariables());
         }
 
         return variables;
@@ -142,8 +142,8 @@ public class Project implements Comparable<Project> {
     public Set<Resources> getExternalResources() {
         Set<Resources> externalResources = new HashSet<>();
 
-        for(Suite suite: suites){
-            externalResources.addAll(suite.getSettings());
+        for(TestCaseFile file: files.values()){
+            externalResources.addAll(file.getSettings().getExternalResources());
         }
 
         return externalResources;
@@ -161,8 +161,8 @@ public class Project implements Comparable<Project> {
     public int getDeadLoc() {
         int deadLoc = 0;
 
-        for(Suite suite: suites){
-            deadLoc += suite.getDeadLoc();
+        for(TestCaseFile file: files.values()){
+            deadLoc += file.getDeadLoc();
         }
 
         return deadLoc;
@@ -191,18 +191,27 @@ public class Project implements Comparable<Project> {
             return;
         }
 
+        files.put(testCaseFile.getName(), testCaseFile);
         updateSuites(testCaseFile);
-
-        String key = generateFileName(testCaseFile.getFile());
-        files.put(key, testCaseFile);
-
         updateFiles(testCaseFile.getSettings());
 
         this.loc += testCaseFile.getLoc();
     }
 
     private void updateSuites(TestCaseFile testCaseFile){
+        if(testCaseFile.getTestCases().isEmpty()){
+            return;
+        }
 
+        String name = SuiteFactory.computeName(testCaseFile, true);
+        Optional<Suite> suite = suites.stream().filter(s -> s.getName().equals(name)).findAny();
+
+        if(suite.isPresent()){
+            suite.get().addTestCaseFile(testCaseFile);
+        }
+        else {
+            suites.add(SuiteFactory.create(testCaseFile));
+        }
     }
 
     private void updateFiles(Settings settings){

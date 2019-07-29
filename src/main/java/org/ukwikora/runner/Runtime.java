@@ -66,7 +66,7 @@ public class Runtime {
         this.reportBuilder.reset();
     }
 
-    public void enterSuite(Suite suite) {
+    public void enterSuite(Suite suite) throws Exception {
         this.scope.enterSuite(suite);
         this.reportBuilder.enterSuite(suite);
     }

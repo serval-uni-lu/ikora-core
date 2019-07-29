@@ -6,7 +6,7 @@ import java.util.*;
 
 public class DynamicScope implements Scope {
     private StatementTable<Variable> global;
-    private Stack<Block<String, Variable>> suiteStack;
+    private Stack<Block<Suite, Variable>> suiteStack;
     private Stack<Block<TestCase, Variable>> testStack;
     private Stack<Block<KeywordDefinition, Variable>> keywordStack;
     private Stack<Block<Step, Value>> parametersStack;
@@ -91,6 +91,16 @@ public class DynamicScope implements Scope {
         else if(KeywordCall.class.isAssignableFrom(keyword.getClass())){
             parametersStack.pop();
         }
+    }
+
+    @Override
+    public void enterSuite(Suite suite) {
+        suiteStack.push(new Block<>(suite));
+    }
+
+    @Override
+    public void exitSuite(Suite suite) {
+        suiteStack.pop();
     }
 
     @Override

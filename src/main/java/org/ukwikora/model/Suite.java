@@ -12,11 +12,11 @@ public class Suite {
     private List<Suite> suites;
     private TestCaseFile testCaseFile;
 
-    Suite(String name, File source, String documentation){
+    Suite(String name, File source){
         this.name = name;
         this.source = source;
-        this.documentation = documentation;
         this.suites = new ArrayList<>();
+        this.documentation = "";
     }
 
     public String getName() {
@@ -31,12 +31,22 @@ public class Suite {
         return documentation;
     }
 
-    public void addSuite(Suite suite){
-        this.suites.add(suite);
+    public List<TestCaseFile> getTestCaseFiles() {
+        List<TestCaseFile> files = new ArrayList<>();
+
+        for(Suite suite: suites){
+            files.addAll(getTestCaseFiles());
+        }
+
+        if(testCaseFile != null){
+            files.add(testCaseFile);
+        }
+
+        return files;
     }
 
-    public void setTestCaseFile(TestCaseFile testCaseFile){
-        this.testCaseFile = testCaseFile;
+    public void addSuite(Suite suite){
+        this.suites.add(suite);
     }
 
     public List<TestCase> getTestCases() {
@@ -151,5 +161,14 @@ public class Suite {
         }
 
         runtime.exitSuite(this);
+    }
+
+    void addTestCaseFile(TestCaseFile testCaseFile) {
+        if(testCaseFile.getFile().equals(this.getSource())){
+            this.testCaseFile = testCaseFile;
+        }
+        else{
+            addSuite(SuiteFactory.create(this, testCaseFile));
+        }
     }
 }

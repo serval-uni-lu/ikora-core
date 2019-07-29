@@ -26,6 +26,7 @@ public class ReportBuilder {
     public void enterSuite(Suite suite) throws Exception {
         ReportElement element = createSuiteNode(suite);
         stack.peek().addElement(element);
+        stack.push(element);
     }
 
     public void exitSuite(Suite suite) {
@@ -44,8 +45,8 @@ public class ReportBuilder {
         }
 
         if(element != null){
-            ReportElement parent = stack.push(element);
-            parent.addElement(element);
+            stack.peek().addElement(element);
+            stack.push(element);
         }
     }
 

@@ -14,9 +14,7 @@ class RunnerTest {
     @Test
     void ExecuteSimpleTestSuite(){
         Project project = Helpers.compileProject("robot/library-variable.robot", false);
-        TestFilter filter = new TestFilter(Collections.emptySet(), Collections.emptySet());
-
-        Runner runner = new Runner(project, filter);
+        Runner runner = new Runner(project);
 
         try {
             Report report = runner.execute();

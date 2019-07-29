@@ -105,6 +105,14 @@ public class StaticScope implements Scope{
     }
 
     @Override
+    public void enterSuite(Suite suite) {
+    }
+
+    @Override
+    public void exitSuite(Suite suite) {
+    }
+
+    @Override
     public void reset() {
         global.clear();
         suite.clear();
