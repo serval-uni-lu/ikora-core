@@ -19,7 +19,7 @@ import org.apache.commons.cli.*;
 import java.io.IOException;
 
 public class Ukwikora {
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         int returnValue = 0;
 
         try {
@@ -47,13 +47,18 @@ public class Ukwikora {
             }
         } catch (ParseException e) {
             getLogger().error(String.format("Parse Exception: argument '%s' is missing", e.getMessage()));
-            returnValue = -1;
+            returnValue = -2;
         } catch (DuplicateNodeException e) {
             getLogger().error(String.format("Duplicate Node Exception: %s", e.getMessage()));
-            returnValue = 1;
+            returnValue = -3;
         } catch (IOException e) {
             getLogger().error(String.format("IO Exception: %s", e.getMessage()));
-            returnValue = 1;
+            returnValue = -4;
+        } catch (Exception e) {
+            getLogger().error(String.format("Unknown exception (%s): %s",
+                    e.getClass().getSimpleName(),
+                    e.getMessage()));
+            returnValue = -1;
         }
 
         getLogger().info("program finished");

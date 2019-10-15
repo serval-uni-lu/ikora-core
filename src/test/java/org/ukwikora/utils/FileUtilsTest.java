@@ -7,6 +7,7 @@ import org.ukwikora.Helpers;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -48,7 +49,7 @@ class FileUtilsTest {
         File utf8 = Helpers.getResourceFile("files/file-in-utf8.txt");
         Charset charset = FileUtils.detectCharset(utf8, null);
         assertNotNull(charset);
-        assertEquals(Charset.forName("UTF-8"), charset);
+        assertEquals(StandardCharsets.UTF_8, charset);
     }
 
     @Test
@@ -56,7 +57,7 @@ class FileUtilsTest {
         File utf8 = Helpers.getResourceFile("files/file-in-ISO-8859-1.txt");
         Charset charset = FileUtils.detectCharset(utf8, null);
         assertNotNull(charset);
-        assertEquals(Charset.forName("ISO-8859-1"), charset);
+        assertEquals(StandardCharsets.ISO_8859_1, charset);
     }
 
     @Test
@@ -64,7 +65,7 @@ class FileUtilsTest {
         File utf8 = Helpers.getResourceFile("files/file-in-utf8-bom.txt");
         Charset charset = FileUtils.detectCharset(utf8, null);
         assertNotNull(charset);
-        assertEquals(Charset.forName("UTF8"), charset);
+        assertEquals(StandardCharsets.UTF_8, charset);
     }
 
     @Test
