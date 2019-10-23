@@ -17,9 +17,8 @@ import java.util.Map;
 class ProjectParser {
     private ProjectParser(){}
 
-    public static Project parse(String filePath, DynamicImports dynamicImports) throws Exception {
-        Project project = new Project(filePath);
-        File file = new File(filePath);
+    public static Project parse(File file, DynamicImports dynamicImports) throws Exception {
+        Project project = new Project(file);
 
         if(file.isDirectory()){
             file = addRobotFiles(file, project);

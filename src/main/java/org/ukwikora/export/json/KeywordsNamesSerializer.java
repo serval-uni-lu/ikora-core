@@ -19,7 +19,7 @@ public class KeywordsNamesSerializer extends JsonSerializer<EvolutionResults> {
             jsonGenerator.writeStartObject();
 
             jsonGenerator.writeStringField("commit ID", project.getCommitId());
-            jsonGenerator.writeStringField("time", project.getDateTime().toString());
+            jsonGenerator.writeStringField("time", project.getDate().toString());
 
             jsonGenerator.writeArrayFieldStart("keywords");
             writeKeywords(jsonGenerator, project.getUserKeywords());

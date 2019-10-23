@@ -5,15 +5,16 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
-import java.time.LocalDateTime;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @JacksonXmlRootElement(localName = "robot")
 @JsonIgnoreProperties(value ={"statistics", "errors"})
 public class Report implements ReportElement {
     @JacksonXmlProperty(localName = "generated", isAttribute = true)
-    private LocalDateTime generated;
+    private Date generated;
     @JacksonXmlProperty(localName = "generator", isAttribute = true)
     private String generator;
     @JacksonXmlElementWrapper(useWrapping = false)
@@ -24,15 +25,15 @@ public class Report implements ReportElement {
         suites = new ArrayList<>();
     }
 
-    public LocalDateTime getGenerated() {
+    public Date getGenerated() {
         return generated;
     }
 
-    public void setGenerated(String generated) {
-        setGenerated(Utils.toLocalDateTime(generated));
+    public void setGenerated(String generated) throws ParseException {
+        setGenerated(Converter.toDate(generated));
     }
 
-    public void setGenerated(LocalDateTime generated) {
+    public void setGenerated(Date generated) {
         this.generated = generated;
     }
 

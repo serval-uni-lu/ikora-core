@@ -7,7 +7,9 @@ import org.ukwikora.model.Suite;
 import org.ukwikora.model.TestCase;
 import org.ukwikora.utils.Globals;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
+
+import java.util.Date;
 import java.util.Optional;
 import java.util.Stack;
 
@@ -63,7 +65,7 @@ public class ReportBuilder {
     }
 
     public void finish(){
-        report.setGenerated(LocalDateTime.now());
+        report.setGenerated(Date.from(Instant.now()));
     }
 
     private Test createTestNode(TestCase testCase){

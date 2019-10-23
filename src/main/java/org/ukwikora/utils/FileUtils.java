@@ -12,10 +12,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.file.*;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -25,27 +22,21 @@ public class FileUtils {
 
     private FileUtils() {}
 
-    public static String[] getSubFolders(File folder) {
+    public static Set<File> getSubFolders(File folder) {
         if(!folder.exists() || !folder.isDirectory()){
-            return ArrayUtils.EMPTY_STRING_ARRAY;
+            return Collections.emptySet();
         }
 
         File[] files = folder.listFiles( (File current, String name) -> new File(current, name).isDirectory() );
 
         if(files == null) {
-            return ArrayUtils.EMPTY_STRING_ARRAY;
+            return Collections.emptySet();
         }
 
-        String[] paths = new String[files.length];
-
-        for(int i = 0; i < files.length; ++i) {
-            paths[i] = FilenameUtils.normalize(files[i].getAbsolutePath());
-        }
-
-        return paths;
+        return new HashSet<>(Arrays.asList(files));
     }
 
-    public static String[] getSubFolders(String location) {
+    public static Set<File> getSubFolders(String location) {
         return getSubFolders(new File(location));
     }
 

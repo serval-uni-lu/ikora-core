@@ -23,7 +23,7 @@ public class ProjectEvolutionSerializer extends JsonSerializer<EvolutionResults>
             jsonGenerator.writeStartObject();
 
             jsonGenerator.writeStringField("commit ID", project.getCommitId());
-            jsonGenerator.writeStringField("time", project.getDateTime().toString());
+            jsonGenerator.writeStringField("time", project.getDate().toString());
 
             jsonGenerator.writeNumberField("number files", statistics.getNumberFiles());
             jsonGenerator.writeNumberField("number keywords", statistics.getNumberKeywords(UserKeyword.class));

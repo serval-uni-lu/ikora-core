@@ -3,8 +3,8 @@ package org.ukwikora.report;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlText;
 
-import java.io.IOException;
-import java.time.LocalDateTime;
+import java.text.ParseException;
+import java.util.Date;
 
 public class Status {
     public enum Type{
@@ -14,9 +14,9 @@ public class Status {
     @JacksonXmlProperty(localName = "status", isAttribute = true)
     private Type type;
     @JacksonXmlProperty(localName = "endtime", isAttribute = true)
-    private LocalDateTime endTime;
+    private Date endTime;
     @JacksonXmlProperty(localName = "starttime", isAttribute = true)
-    private LocalDateTime startTime;
+    private Date startTime;
     @JacksonXmlProperty(localName = "critical", isAttribute = true)
     private boolean critical;
     @JacksonXmlText
@@ -50,36 +50,36 @@ public class Status {
         }
     }
 
-    public LocalDateTime getEndTime() {
+    public Date getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(LocalDateTime endTime) {
+    public void setEndTime(Date endTime) {
         this.endTime = endTime;
     }
 
-    public void setEndTime(String endTime){
-        setEndTime(Utils.toLocalDateTime(endTime));
+    public void setEndTime(String endTime) throws ParseException {
+        setEndTime(Converter.toDate(endTime));
     }
 
-    public LocalDateTime getStartTime() {
+    public Date getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(LocalDateTime startTime) {
+    public void setStartTime(Date startTime) {
         this.startTime = startTime;
     }
 
-    public void setStartTime(String startTime){
-        setStartTime(Utils.toLocalDateTime(startTime));
+    public void setStartTime(String startTime) throws ParseException {
+        setStartTime(Converter.toDate(startTime));
     }
 
     public boolean isCritical() {
         return critical;
     }
 
-    public void setCritical(String critical) throws IOException {
-        updateCritical(Utils.toBoolean(critical));
+    public void setCritical(String critical) throws ParseException {
+        updateCritical(Converter.toBoolean(critical));
     }
 
     public void updateCritical(boolean critical) {

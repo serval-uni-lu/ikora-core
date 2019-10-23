@@ -18,8 +18,6 @@ import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 import java.io.File;
 import java.io.IOException;
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.*;
 
 public class GitRepository {
@@ -75,8 +73,8 @@ public class GitRepository {
         return testCaseFile.getTestCase(name);
     }
 
-    public void checkout(LocalDateTime dateTime, boolean link) {
-        GitCommit commit = getMostRecentCommit(dateTime);
+    public void checkout(Date date, boolean link) {
+        GitCommit commit = getMostRecentCommit(date);
         checkout(commit.getId(), link);
     }
 
@@ -93,16 +91,16 @@ public class GitRepository {
                     .setStartPoint(commitId)
                     .call();
 
-            project = Builder.build(localFolder.getAbsolutePath(), link);
+            project = Builder.build(localFolder, link);
 
             project.setGitUrl(url);
             project.setCommitId(commitId);
-            project.setDateTime(getCommitDate(ref.getObjectId()));
+            project.setDate(getCommitDate(ref.getObjectId()));
 
             git.checkout().setName(branch).call();
             git.branchDelete().setBranchNames(commitId).call();
 
-        } catch (GitAPIException e) {
+        } catch (GitAPIException | IOException e) {
             e.printStackTrace();
         }
     }
@@ -124,7 +122,7 @@ public class GitRepository {
                 .call();
     }
 
-    public GitCommit getMostRecentCommit(LocalDateTime dateTime){
+    public GitCommit getMostRecentCommit(Date date){
         GitCommit mostRecentCommit = null;
 
         try {
@@ -135,7 +133,7 @@ public class GitRepository {
             List<GitCommit> commits =  getRevisions();
 
             for (GitCommit commit: commits) {
-                if(commit.getDateTime().isAfter(dateTime)){
+                if(commit.getDate().after(date)){
                     break;
                 }
 
@@ -144,7 +142,7 @@ public class GitRepository {
         }
         catch (GitAPIException e){
             mostRecentCommit = null;
-            logger.error("Failed to retrieve most commit for " + dateTime.toString() + "because: " + e.getMessage());
+            logger.error("Failed to retrieve most commit for " + date.toString() + "because: " + e.getMessage());
         }
 
         return mostRecentCommit;
@@ -173,8 +171,8 @@ public class GitRepository {
             Plugin analytics = Configuration.getInstance().getPlugin("project analytics");
             List<String> ignoreList = (List<String>)analytics.getAdditionalProperty("ignore releases", new ArrayList<>());
 
-            LocalDateTime startDate = analytics.getPropertyAsDate("start date");
-            LocalDateTime endDate = analytics.getPropertyAsDate("end date");
+            Date startDate = analytics.getPropertyAsDate("start date");
+            Date endDate = analytics.getPropertyAsDate("end date");
 
             Set<String> ignoreSet = new HashSet<>(ignoreList);
 
@@ -184,14 +182,14 @@ public class GitRepository {
                 }
 
                 Instant instant = Instant.ofEpochSecond(revCommit.getCommitTime());
-                LocalDateTime commitDate = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
+                Date commitDate = Date.from(instant);
 
                 if(isInInterval(commitDate, startDate, endDate)){
                     commits.add(new GitCommit(revCommit.getName(), commitDate));
                 }
             }
 
-            commits.sort(Comparator.comparing(GitCommit::getDateTime));
+            commits.sort(Comparator.comparing(GitCommit::getDate));
 
             int releaseNb = (int) analytics.getAdditionalProperty("number of releases", 0);
 
@@ -208,32 +206,23 @@ public class GitRepository {
         }
     }
 
-    private LocalDateTime getCommitDate(ObjectId commitId){
-        LocalDateTime commitDate = null;
-
-        try {
-            if(git == null){
-                cloneRepository();
-            }
-
-            RevWalk revWalk = new RevWalk(git.getRepository());
-            RevCommit revCommit = revWalk.parseCommit(commitId);
-
-            Instant instant = Instant.ofEpochSecond(revCommit.getCommitTime());
-            commitDate = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
-        } catch (IOException|GitAPIException e) {
-            e.printStackTrace();
+    private Date getCommitDate(ObjectId commitId) throws GitAPIException, IOException {
+        if(git == null){
+            cloneRepository();
         }
 
-        return commitDate;
+        RevWalk revWalk = new RevWalk(git.getRepository());
+        RevCommit revCommit = revWalk.parseCommit(commitId);
+
+        return revCommit.getAuthorIdent().getWhen();
     }
 
-    private boolean isInInterval(LocalDateTime commitDate, LocalDateTime startDate, LocalDateTime endDate){
-        if(startDate != null && startDate.isAfter(commitDate)){
+    private boolean isInInterval(Date commitDate, Date startDate, Date endDate){
+        if(startDate != null && startDate.after(commitDate)){
             return false;
         }
 
-        if(endDate != null && endDate.isBefore(commitDate)){
+        if(endDate != null && endDate.before(commitDate)){
             return false;
         }
 

@@ -20,7 +20,7 @@ public class Helpers {
             fail(String.format("Failed to load '%s': %s", resourcesPath, e.getMessage()));
         }
 
-        return Builder.build(projectFolder.getAbsolutePath(), link);
+        return Builder.build(projectFolder, link);
     }
 
     public static File getNewTmpFolder(String name){

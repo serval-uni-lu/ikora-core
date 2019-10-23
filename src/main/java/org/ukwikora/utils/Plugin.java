@@ -2,9 +2,10 @@ package org.ukwikora.utils;
 
 import com.fasterxml.jackson.annotation.*;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -68,15 +69,19 @@ public class Plugin {
         return value;
     }
 
-    public LocalDateTime getPropertyAsDate(String name){
+    public Date getPropertyAsDate(String name) {
         if(!additionalProperties.containsKey(name)){
             return null;
         }
 
         String dateTime = (String)getAdditionalProperty(name);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-        return LocalDateTime.parse(dateTime, formatter);
+        try {
+            return formatter.parse(dateTime);
+        } catch (ParseException e) {
+            return null;
+        }
     }
 
     public String getPropertyAsString(String name){

@@ -4,8 +4,6 @@ import javax.annotation.Nonnull;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.*;
 
 public class Project implements Comparable<Project> {
@@ -16,26 +14,26 @@ public class Project implements Comparable<Project> {
     private File rootFolder;
     private String gitUrl;
     private String commitId;
-    private LocalDateTime dateTime;
+    private Date date;
     private int loc;
 
-    public Project(String file){
-        rootFolder = new File(file.trim());
+    public Project(File file){
+        rootFolder = file;
         suites = new ArrayList<>();
         files = new HashMap<>();
         dependencies = new HashSet<>();
         loc = 0;
     }
 
-    void setDateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
+    public void setDate(Date date) {
+        this.date = date;
     }
 
-    void setGitUrl(String gitUrl) {
+    public void setGitUrl(String gitUrl) {
         this.gitUrl = gitUrl;
     }
 
-    void setCommitId(String commitId) {
+    public void setCommitId(String commitId) {
         this.commitId = commitId;
     }
 
@@ -51,8 +49,8 @@ public class Project implements Comparable<Project> {
         return suites;
     }
 
-    public LocalDateTime getDateTime() {
-        return dateTime;
+    public Date getDate() {
+        return date;
     }
 
     public List<TestCaseFile> getTestCaseFiles(){
@@ -150,8 +148,7 @@ public class Project implements Comparable<Project> {
     }
 
     public long getEpoch() {
-        ZoneId zoneId = ZoneId.systemDefault();
-        return this.getDateTime().atZone(zoneId).toEpochSecond();
+        return this.getDate().toInstant().toEpochMilli();
     }
 
     public int getLoc() {
@@ -242,10 +239,6 @@ public class Project implements Comparable<Project> {
 
     @Override
     public int compareTo(@Nonnull Project other) {
-        if(dateTime == other.dateTime){
-            return 0;
-        }
-
-        return dateTime.isBefore(other.dateTime) ? -1 : 1;
+        return date.compareTo(other.date);
     }
 }

@@ -78,7 +78,7 @@
         <dependency>
             <groupId>org.eclipse.jgit</groupId>
             <artifactId>org.eclipse.jgit</artifactId>
-            <version>3.5.0.201409260305-r</version>
+            <version>5.5.1.201910021850-r</version>
         </dependency>
 
         <dependency>
@@ -91,12 +91,6 @@
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
             <version>2.11.1</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-slf4j-impl</artifactId>
-            <version>2.0.1</version>
         </dependency>
 
         <dependency>

@@ -40,7 +40,7 @@ class BuilderTest {
         final File robot = Helpers.getResourceFile("robot/scope-testing");
         assertNotNull(robot);
 
-        final Project project = Builder.build(robot.getAbsolutePath(), true);
+        final Project project = Builder.build(robot, true);
         assertNotNull(project);
 
         Set<UserKeyword> fromResources1 = project.findUserKeyword("Load keyword from resource1");
@@ -67,7 +67,7 @@ class BuilderTest {
         } catch (Exception e) {
             fail(String.format("Failed to load 'robot/scope-testing' from resources: %s", e.getMessage()));
         }
-        final Project project = Builder.build(robot.getAbsolutePath(), true);
+        final Project project = Builder.build(robot, true);
 
         assertNotNull(project);
 
@@ -88,7 +88,7 @@ class BuilderTest {
         final File robot = Helpers.getResourceFile("robot/assignment");
         assertNotNull(robot);
 
-        final Project project = Builder.build(robot.getAbsolutePath(), true);
+        final Project project = Builder.build(robot, true);
         assertNotNull(project);
 
         Set<UserKeyword> userKeywords = project.getUserKeywords();
@@ -109,7 +109,7 @@ class BuilderTest {
         final File robot = Helpers.getResourceFile("robot/setup-and-teardown.robot");
         assertNotNull(robot);
 
-        final Project project = Builder.build(robot.getAbsolutePath(), true);
+        final Project project = Builder.build(robot, true);
         assertNotNull(project);
 
         Set<UserKeyword> ofInterest = project.findUserKeyword("Setup the test case");
@@ -128,7 +128,7 @@ class BuilderTest {
         final File robot = Helpers.getResourceFile("robot/setup-and-teardown.robot");
         assertNotNull(robot);
 
-        final Project project = Builder.build(robot.getAbsolutePath(), true);
+        final Project project = Builder.build(robot, true);
         assertNotNull(project);
 
         Set<UserKeyword> ofInterest = project.findUserKeyword("Clean the environment");

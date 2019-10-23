@@ -18,22 +18,22 @@ import java.util.Set;
 public class Builder {
     private static final Logger logger = LogManager.getLogger(Builder.class);
 
-    public static List<Project> build(String[] paths, boolean link){
+    public static List<Project> build(Set<File> files, boolean link){
         List<Project> projects = new ArrayList<>();
 
         logger.info("Start compilation...");
         Instant start = Instant.now();
 
         DynamicImports dynamicImports = new DynamicImports();
-        for(String folder: paths) {
+        for(File file: files) {
             try {
-                Project project = parse(folder, dynamicImports);
+                Project project = parse(file, dynamicImports);
 
                 if(project != null){
                     projects.add(project);
                 }
             } catch (Exception e) {
-                logger.info(String.format("Failed to parse project located at %s: %s", folder, e.getMessage()));
+                logger.info(String.format("Failed to parse project located at %s: %s", file, e.getMessage()));
             }
         }
 
@@ -96,7 +96,7 @@ public class Builder {
         external.setTestCaseFile(testCaseFile);
     }
 
-    public static Project build(String filePath, boolean link) {
+    public static Project build(File file, boolean link) {
         logger.info("Start compilation...");
 
         Project project;
@@ -104,7 +104,7 @@ public class Builder {
             Instant start = Instant.now();
 
             DynamicImports dynamicImports = new DynamicImports();
-            project = parse(filePath, dynamicImports);
+            project = parse(file, dynamicImports);
 
             Runtime runtime = new Runtime(project, new StaticScope());
             loadLibraries(runtime);
@@ -116,7 +116,7 @@ public class Builder {
             logger.info(String.format("Project %s compiled in %d ms", project.getName(), timeElapsed));
 
         } catch (Exception e) {
-            logger.error(String.format("Failed to build project located at %s: %s", filePath, e.getMessage()));
+            logger.error(String.format("Failed to build project located at %s: %s", file, e.getMessage()));
             project = null;
         }
 
@@ -136,7 +136,7 @@ public class Builder {
         Linker.link(runtime);
     }
 
-    private static Project parse(String filePath, DynamicImports dynamicImports) throws Exception {
-        return ProjectParser.parse(filePath, dynamicImports);
+    private static Project parse(File file, DynamicImports dynamicImports) throws Exception {
+        return ProjectParser.parse(file, dynamicImports);
     }
 }

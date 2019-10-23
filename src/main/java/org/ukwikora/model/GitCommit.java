@@ -1,18 +1,18 @@
 package org.ukwikora.model;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 public class GitCommit {
     final private String id;
-    final private LocalDateTime dateTime;
+    final private Date date;
 
-    GitCommit(String id, LocalDateTime dateTime){
+    GitCommit(String id, Date date){
         this.id = id;
-        this.dateTime = dateTime;
+        this.date = date;
     }
 
-    public LocalDateTime getDateTime(){
-        return this.dateTime;
+    public Date getDate(){
+        return this.date;
     }
 
     public String getId(){

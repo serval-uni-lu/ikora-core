@@ -3,12 +3,12 @@ package org.ukwikora.report;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlText;
 
-import java.io.IOException;
-import java.time.LocalDateTime;
+import java.text.ParseException;
+import java.util.Date;
 
 public class Message {
     @JacksonXmlProperty(localName = "timestamp", isAttribute = true)
-    private LocalDateTime timestamp;
+    private Date timestamp;
     @JacksonXmlProperty(localName = "level", isAttribute = true)
     private String level;
     @JacksonXmlProperty(localName = "html", isAttribute = true)
@@ -16,15 +16,15 @@ public class Message {
     @JacksonXmlText
     private String text;
 
-    public LocalDateTime getTimestamp() {
+    public Date getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(String timestamp){
-        setTimestamp(Utils.toLocalDateTime(timestamp));
+    public void setTimestamp(String timestamp) throws ParseException{
+        setTimestamp(Converter.toDate(timestamp));
     }
 
-    public void setTimestamp(LocalDateTime timestamp) {
+    public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
     }
 
@@ -40,8 +40,8 @@ public class Message {
         return html;
     }
 
-    public void setHtml(String html) throws IOException {
-        updateHtml(Utils.toBoolean(html));
+    public void setHtml(String html) throws ParseException {
+        updateHtml(Converter.toBoolean(html));
     }
 
     public void updateHtml(boolean html) {
