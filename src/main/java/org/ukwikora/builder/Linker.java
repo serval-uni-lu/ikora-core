@@ -184,24 +184,43 @@ public class Linker {
     }
 
     private static Set<? super Keyword> getKeywords(String fullName, TestCaseFile testCaseFile, Runtime runtime) throws Exception{
-        List<String> particles = Arrays.asList(fullName.split("\\."));
-        String library = particles.size() > 1 ? String.join(".", particles.subList(0, particles.size() - 1)) : "";
-        String name = particles.get(particles.size() - 1);
+        Set<? super Keyword> keywordsFound = getKeywords(fullName, testCaseFile, runtime, false);
 
-        Set<? super Keyword> keywordsFound = new HashSet<>(testCaseFile.findUserKeyword(library, name));
+        if(keywordsFound.isEmpty()){
+            keywordsFound = getKeywords(fullName, testCaseFile, runtime, true);
+        }
+
+        if(keywordsFound.isEmpty()) {
+            logger.error("Keyword definition for \"" + fullName + "\" in \"" + testCaseFile.getName() + "\" not found!");
+        }
+        else if(keywordsFound.size() > 1){
+            logger.error("Multiple definition found for \"" + fullName + "\" in \"" + testCaseFile.getName() + "\"!");
+        }
+
+        return keywordsFound;
+    }
+
+    private static Set<? super Keyword> getKeywords(String fullName, TestCaseFile testCaseFile, Runtime runtime, boolean allowSplit) throws Exception{
+        String library;
+        String name;
+
+        if(allowSplit){
+            List<String> particles = Arrays.asList(fullName.split("\\."));
+            library = particles.size() > 1 ? String.join(".", particles.subList(0, particles.size() - 1)) : "";
+            name = particles.get(particles.size() - 1);
+        }
+        else {
+            library = "";
+            name = fullName;
+        }
+
+        final Set<? super Keyword> keywordsFound = new HashSet<>(testCaseFile.findUserKeyword(library, name));
 
         if(keywordsFound.isEmpty()){
             Keyword runtimeKeyword = runtime.findKeyword(library, name);
             if(runtimeKeyword != null){
                 keywordsFound.add(runtimeKeyword);
             }
-        }
-
-        if(keywordsFound.isEmpty()) {
-            logger.error("Keyword definition for \"" + name + "\" in \"" + testCaseFile.getName() + "\" not found!");
-        }
-        else if(keywordsFound.size() > 1){
-            logger.error("Multiple definition found for \"" + name + "\" in \"" + testCaseFile.getName() + "\"!");
         }
 
         return keywordsFound;
@@ -245,31 +264,5 @@ public class Linker {
                 logger.error("Variable for value \"" + valueScope.variableName + "\" in \"" + valueScope.keyword.getName() + "\" not found!");
             }
         }
-    }
-}
-
-class ScopeValue {
-    Value value;
-    String variableName;
-    KeywordDefinition keyword;
-
-    ScopeValue(KeywordDefinition keyword, Value value, String variableName){
-        this.value = value;
-        this.variableName = variableName;
-        this.keyword = keyword;
-    }
-
-    Set<TestCase> getTestCases(){
-        FindTestCaseVisitor visitor = new FindTestCaseVisitor();
-        this.keyword.accept(visitor, new PathMemory());
-
-        return visitor.getTestCases();
-    }
-
-    Set<String> getSuites(){
-        FindSuiteVisitor visitor = new FindSuiteVisitor();
-        this.keyword.accept(visitor, new PathMemory());
-
-        return visitor.getSuites();
     }
 }
