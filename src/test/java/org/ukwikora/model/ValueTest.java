@@ -20,7 +20,14 @@ class ValueTest {
     void checkVariableMatch(){
         Value value = new Value("Login \"${user}\" with password \"${password}\"");
         String test = "Login \"admin\" with password \"1234\"";
+        assertTrue(value.matches(test));
 
+        value = new Value("Cancel of withdraw of <${amount}> in USD : creditor <${name_creditor}> account # <${acount_number_creditor}> - beneficiary <${name_beneficiary}> account # <${account_number_beneficiary}>");
+        test = "Cancel of withdraw of <2.500,00> in USD : creditor <John> account # <LU00 1234 5678 9123 0000> - beneficiary <Jane> account # <LU22 4321 8765 3219 0000>";
+        assertTrue(value.matches(test));
+
+        value = new Value("N° Compte: <${account_number}>");
+        test = "N° Compte: <LU00 1234 5678 9123 0000>";
         assertTrue(value.matches(test));
     }
 

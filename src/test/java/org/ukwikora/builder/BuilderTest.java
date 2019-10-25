@@ -36,6 +36,24 @@ class BuilderTest {
     }
 
     @Test
+    void checkBuildWithLongKeyword(){
+        final File robot = Helpers.getResourceFile("robot/long-keyword.robot");
+        assertNotNull(robot);
+
+        final Project project = Builder.build(robot, true);
+        assertNotNull(project);
+
+        final Set<UserKeyword> keywords = project.findUserKeyword("Annuler un ordre permanent de <${Montant_virement}> : créditeur <${Nom_créditeur}> N°compte <${Numero_compte_créditeur}> - débiteur <${Nom_débiteur}> N°compte <${Numero_compte_débiteur}>");
+        assertEquals(1, keywords.size());
+
+        final TestCaseFile testCaseFile = project.getTestCaseFile("library-variable.robot");
+        assertNotNull(testCaseFile);
+
+        final TestCase testCase = testCaseFile.getTestCases().get(0);
+        assertEquals(1, testCase.getSteps().size());
+    }
+
+    @Test
     void checkScopedByPrefixResolution(){
         final File robot = Helpers.getResourceFile("robot/scope-testing");
         assertNotNull(robot);
