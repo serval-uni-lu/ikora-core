@@ -11,15 +11,14 @@ import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
 
 public class Builder {
     private static final Logger logger = LogManager.getLogger(Builder.class);
 
-    public static List<Project> build(Set<File> files, boolean link){
-        List<Project> projects = new ArrayList<>();
+    public static Set<Project> build(Set<File> files, boolean link){
+        Set<Project> projects = new HashSet<>();
 
         logger.info("Start compilation...");
         Instant start = Instant.now();
@@ -28,10 +27,7 @@ public class Builder {
         for(File file: files) {
             try {
                 Project project = parse(file, dynamicImports);
-
-                if(project != null){
-                    projects.add(project);
-                }
+                projects.add(project);
             } catch (Exception e) {
                 logger.info(String.format("Failed to parse project located at %s: %s", file, e.getMessage()));
             }
@@ -69,7 +65,7 @@ public class Builder {
         return projects;
     }
 
-    private static void resolveDependencies(List<Project> projects) {
+    private static void resolveDependencies(Set<Project> projects) {
         for(Project project: projects){
             Set<Resources> externals =  project.getExternalResources();
 

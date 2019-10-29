@@ -5,6 +5,7 @@ import org.apache.commons.lang3.text.WordUtils;
 import javax.annotation.Nonnull;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -42,7 +43,7 @@ public class StringUtils {
     public static String toBeautifulUrl(String raw, String extension) throws UnsupportedEncodingException {
         String url = toBeautifulName(raw).toLowerCase();
         url = url.replaceAll("\\s+", "-");
-        url = URLEncoder.encode(url, "UTF-8");
+        url = URLEncoder.encode(url, StandardCharsets.UTF_8.toString());
 
         if(extension.isEmpty()){
             return url;
