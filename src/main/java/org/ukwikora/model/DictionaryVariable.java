@@ -43,6 +43,11 @@ public class DictionaryVariable extends Variable {
     }
 
     @Override
+    public boolean isDeadCode(){
+        return getDependencies().size() == 0;
+    }
+
+    @Override
     public void accept(StatementVisitor visitor, VisitorMemory memory){
         visitor.visit(this, memory);
     }

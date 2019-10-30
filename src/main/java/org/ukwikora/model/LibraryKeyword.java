@@ -50,6 +50,11 @@ public abstract class LibraryKeyword implements Keyword {
     }
 
     @Override
+    public boolean isDeadCode(){
+        return false;
+    }
+
+    @Override
     public String getName(){
         return toKeyword(this.getClass());
     }

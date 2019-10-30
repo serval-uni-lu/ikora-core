@@ -33,6 +33,11 @@ public class ListVariable extends Variable {
     }
 
     @Override
+    public boolean isDeadCode(){
+        return getDependencies().size() == 0;
+    }
+
+    @Override
     public double distance(@Nonnull Differentiable other) {
         return 0;
     }

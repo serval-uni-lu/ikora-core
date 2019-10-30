@@ -101,6 +101,11 @@ public class TimeOut implements Statement {
     }
 
     @Override
+    public boolean isDeadCode(){
+        return false;
+    }
+
+    @Override
     public void accept(StatementVisitor visitor, VisitorMemory memory) {
         visitor.visit(this, memory);
     }

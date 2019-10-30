@@ -21,6 +21,8 @@ public interface Statement extends Differentiable {
 
     Value getNameAsValue();
 
+    boolean isDeadCode();
+
     void accept(StatementVisitor visitor, VisitorMemory memory);
 
     boolean matches(@Nonnull String name);

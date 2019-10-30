@@ -70,16 +70,11 @@ public class ProjectStatistics {
         return getDistribution(type, Metric.Level);
     }
 
-    public <T extends Statement> Map<String, Integer> getDeadCodeDistriburation(Class<T> type){
+    public <T extends Statement> Map<String, Integer> getDeadCodeDistribution(Class<T> type){
         Map<String, Integer> deadCode = new HashMap<>(2);
 
-        for(Map.Entry<Integer, Integer> entry: getConnectivityDistribution(type).entrySet()){
-            if(entry.getKey() == 0){
-                deadCode.merge("Dead", entry.getValue(), Integer::sum);
-            }
-            else{
-                deadCode.merge("Used", entry.getValue(), Integer::sum);
-            }
+        for(Statement statement: getStatements(type)){
+            deadCode.merge(statement.isDeadCode() ? "Dead" : "Executed", statement.getLoc(), Integer::sum);
         }
 
         return deadCode;

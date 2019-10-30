@@ -45,6 +45,11 @@ public abstract class LibraryVariable extends Variable {
     }
 
     @Override
+    public boolean isDeadCode(){
+        return false;
+    }
+
+    @Override
     public void accept(StatementVisitor visitor, VisitorMemory memory) {
 
     }

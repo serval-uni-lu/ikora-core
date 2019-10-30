@@ -120,6 +120,11 @@ public abstract class Step implements Keyword {
     public abstract Optional<KeywordCall> getKeywordCall();
 
     @Override
+    public boolean isDeadCode(){
+        return false;
+    }
+
+    @Override
     public Set<Statement> getDependencies() {
         if(getParent() == null){
             return Collections.emptySet();

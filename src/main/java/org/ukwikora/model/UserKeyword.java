@@ -66,6 +66,11 @@ public class UserKeyword extends KeywordDefinition {
     }
 
     @Override
+    public boolean isDeadCode(){
+        return getDependencies().size() == 0;
+    }
+
+    @Override
     public void addStep(Step step) throws Exception {
         super.addStep(step);
 

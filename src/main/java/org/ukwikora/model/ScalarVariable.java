@@ -45,6 +45,11 @@ public class ScalarVariable extends Variable {
     }
 
     @Override
+    public boolean isDeadCode(){
+        return getDependencies().size() == 0;
+    }
+
+    @Override
     public double distance(@Nonnull Differentiable other) {
         if(!(other instanceof ScalarVariable)){
             return 1;

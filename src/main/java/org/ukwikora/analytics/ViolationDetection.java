@@ -70,7 +70,7 @@ public class ViolationDetection {
 
 
 
-    public static List<Violation> detect(List<Project> projects){
+    public static List<Violation> detect(Set<Project> projects){
         List<Violation> violations = new ArrayList<>();
 
         for(Project project: projects){
