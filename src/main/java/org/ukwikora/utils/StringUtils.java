@@ -73,4 +73,8 @@ public class StringUtils {
         }
         return str;
     }
+
+    public static String trimLeft(String string, String remove) {
+        return org.apache.commons.lang3.StringUtils.stripEnd(string, remove);
+    }
 }

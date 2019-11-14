@@ -58,4 +58,12 @@ class StringUtilsTest {
         assertEquals("Some random ...", StringUtils.lineTruncate("Some random line", 15));
         assertEquals("Some random line", StringUtils.lineTruncate("Some random line", 16));
     }
+
+    @Test
+    void checkTrimLeft(){
+        assertEquals("${variable}", StringUtils.trimLeft("${variable}=", "="));
+        assertEquals("${variable}", StringUtils.trimLeft("${variable} =", " ="));
+        assertEquals("=${variable}", StringUtils.trimLeft("=${variable}", "="));
+        assertEquals("${variable}=", StringUtils.trimLeft("${variable}=", "<"));
+    }
 }
