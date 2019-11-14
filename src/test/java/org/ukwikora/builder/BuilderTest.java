@@ -36,14 +36,14 @@ class BuilderTest {
     }
 
     @Test
-    void checkBuildWithLongKeyword(){
+    void checkBuildWithValueForVariableContainingDot(){
         final File robot = Helpers.getResourceFile("robot/keyword-with-dot.robot");
         assertNotNull(robot);
 
         final Project project = Builder.build(robot, true);
         assertNotNull(project);
 
-        final Set<UserKeyword> keywords = project.findUserKeyword("Annuler un ordre permanent de <${Montant_virement}> : créditeur <${Nom_créditeur}> N°compte <${Numero_compte_créditeur}> - débiteur <${Nom_débiteur}> N°compte <${Numero_compte_débiteur}>");
+        final Set<UserKeyword> keywords = project.findUserKeyword("Show the content of ${value}");
         assertEquals(1, keywords.size());
 
         final TestCaseFile testCaseFile = project.getTestCaseFile("keyword-with-dot.robot");
@@ -102,8 +102,8 @@ class BuilderTest {
     }
 
     @Test
-    void checkAssignmentFromRealLife(){
-        final File robot = Helpers.getResourceFile("robot/assignment");
+    void checkAssignmentFromKeyword(){
+        final File robot = Helpers.getResourceFile("robot/assignment/keyword.robot");
         assertNotNull(robot);
 
         final Project project = Builder.build(robot, true);
