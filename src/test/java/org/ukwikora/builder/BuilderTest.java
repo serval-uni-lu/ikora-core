@@ -123,6 +123,18 @@ class BuilderTest {
     }
 
     @Test
+    void checkAssignmentFromVariableWithEqualSign(){
+        final File robot = Helpers.getResourceFile("robot/assignment/variable.robot");
+        assertNotNull(robot);
+
+        final Project project = Builder.build(robot, true);
+        assertNotNull(project);
+
+        Set<Variable> variables = project.getVariables();
+        assertEquals(1, variables.size());
+    }
+
+    @Test
     void checkTestCaseSetupWithCall() {
         final File robot = Helpers.getResourceFile("robot/setup-and-teardown.robot");
         assertNotNull(robot);
