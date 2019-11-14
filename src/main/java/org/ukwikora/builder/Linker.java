@@ -2,9 +2,6 @@ package org.ukwikora.builder;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ukwikora.analytics.FindSuiteVisitor;
-import org.ukwikora.analytics.FindTestCaseVisitor;
-import org.ukwikora.analytics.PathMemory;
 import org.ukwikora.exception.InvalidImportTypeException;
 import org.ukwikora.exception.MalformedTestCaseException;
 import org.ukwikora.exception.MissingKeywordException;

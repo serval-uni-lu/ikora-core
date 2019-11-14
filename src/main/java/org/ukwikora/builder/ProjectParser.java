@@ -98,25 +98,18 @@ class ProjectParser {
         return ignoreList;
     }
 
-    private static boolean isIgnored(File file, List<File> ignoreList){
-        for(File ignoreFolder: ignoreList){
-            if(isInSubDirectory(ignoreFolder, file)){
-                return true;
+    private static boolean isIgnored(File file, List<File> ignoreList) {
+        try {
+            for(File ignoreFolder: ignoreList){
+                if(org.ukwikora.utils.FileUtils.isSubDirectory(ignoreFolder, file)){
+                    return true;
+                }
             }
         }
-
-        return false;
-    }
-
-    public static boolean isInSubDirectory(File dir, File file) {
-        if (file == null || dir == null){
+        catch (IOException e){
             return false;
         }
 
-        if (file.equals(dir)){
-            return true;
-        }
-
-        return isInSubDirectory(dir, file.getParentFile());
+        return false;
     }
 }
