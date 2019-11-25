@@ -138,7 +138,7 @@ public class DifferenceSerializer extends JsonSerializer<Difference> {
                     jsonGenerator.writeStringField("before", difference.getLeft().getName());
                     jsonGenerator.writeStringField("after", difference.getRight().getName());
 
-                    jsonGenerator.writeStringField("file", ((Statement)difference.getRight()).getFileName());
+                    jsonGenerator.writeStringField("file", ((Node)difference.getRight()).getFileName());
                 }
                 break;
 
@@ -167,7 +167,7 @@ public class DifferenceSerializer extends JsonSerializer<Difference> {
                     jsonGenerator.writeStringField("before", ((Variable)difference.getLeft()).getValueAsString());
                     jsonGenerator.writeStringField("after", ((Variable)difference.getRight()).getValueAsString());
 
-                    jsonGenerator.writeStringField("file", ((Statement)difference.getRight()).getFileName());
+                    jsonGenerator.writeStringField("file", ((Node)difference.getRight()).getFileName());
                 }
                 break;
 

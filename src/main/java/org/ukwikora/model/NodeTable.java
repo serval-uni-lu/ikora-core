@@ -4,12 +4,12 @@ import javax.annotation.Nonnull;
 import java.io.File;
 import java.util.*;
 
-public class StatementTable<T extends Statement> implements Iterable<T> {
+public class NodeTable<T extends Node> implements Iterable<T> {
     private HashMap<String, T> statementMap;
     private List<T> statementList;
     private TestCaseFile file;
 
-    public StatementTable() {
+    public NodeTable() {
         this.statementMap = new HashMap<>();
         this.statementList = new ArrayList<>();
     }
@@ -28,7 +28,7 @@ public class StatementTable<T extends Statement> implements Iterable<T> {
         return file;
     }
 
-    public StatementTable(StatementTable<T> other){
+    public NodeTable(NodeTable<T> other){
         statementMap = other.statementMap;
         statementList = other.statementList;
 
@@ -115,7 +115,7 @@ public class StatementTable<T extends Statement> implements Iterable<T> {
         return true;
     }
 
-    public void extend(StatementTable<T> table) {
+    public void extend(NodeTable<T> table) {
         for(T statement: table){
             if(statementList.contains(statement)){
                 continue;

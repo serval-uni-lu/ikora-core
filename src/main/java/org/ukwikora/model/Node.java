@@ -7,7 +7,7 @@ import org.ukwikora.exception.InvalidDependencyException;
 import javax.annotation.Nonnull;
 import java.util.Set;
 
-public interface Statement extends Differentiable {
+public interface Node extends Differentiable {
     void setFile(@Nonnull TestCaseFile file);
     TestCaseFile getFile();
     String getFileName();
@@ -27,8 +27,8 @@ public interface Statement extends Differentiable {
 
     boolean matches(@Nonnull String name);
 
-    Set<Statement> getDependencies();
-    void addDependency(@Nonnull Statement dependency) throws InvalidDependencyException;
+    Set<Node> getDependencies();
+    void addDependency(@Nonnull Node dependency) throws InvalidDependencyException;
 
     default Project getProject(){
         if(getFile() == null){

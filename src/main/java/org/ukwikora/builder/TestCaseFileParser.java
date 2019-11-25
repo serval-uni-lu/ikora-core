@@ -36,15 +36,15 @@ class TestCaseFileParser {
                     testCaseFile.setSettings(settings);
                 }
                 else if(isTestCases(text)){
-                    StatementTable<TestCase> testCaseTable = TestCaseTableParser.parse(reader, dynamicImports);
+                    NodeTable<TestCase> testCaseTable = TestCaseTableParser.parse(reader, dynamicImports);
                     testCaseFile.setTestCaseTable(testCaseTable);
                 }
                 else if(isKeywords(text)){
-                    StatementTable<UserKeyword> statementTable = KeywordTableParser.parse(reader, dynamicImports);
-                    testCaseFile.setKeywordTable(statementTable);
+                    NodeTable<UserKeyword> nodeTable = KeywordTableParser.parse(reader, dynamicImports);
+                    testCaseFile.setKeywordTable(nodeTable);
                 }
                 else if(isVariable(text)){
-                    StatementTable<Variable> variableTable = VariableTableParser.parse(reader);
+                    NodeTable<Variable> variableTable = VariableTableParser.parse(reader);
                     testCaseFile.setVariableTable(variableTable);
                 }
                 else {

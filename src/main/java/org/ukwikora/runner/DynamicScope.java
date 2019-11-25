@@ -5,7 +5,7 @@ import org.ukwikora.model.*;
 import java.util.*;
 
 public class DynamicScope implements Scope {
-    private StatementTable<Variable> global;
+    private NodeTable<Variable> global;
     private Stack<Block<Suite, Variable>> suiteStack;
     private Stack<Block<TestCase, Variable>> testStack;
     private Stack<Block<Keyword, Variable>> keywordStack;
@@ -13,7 +13,7 @@ public class DynamicScope implements Scope {
     private List<Value> returnValues;
 
     public DynamicScope(){
-        global = new StatementTable<>();
+        global = new NodeTable<>();
         suiteStack = new Stack<>();
         testStack = new Stack<>();
         keywordStack = new Stack<>();
@@ -58,7 +58,7 @@ public class DynamicScope implements Scope {
     }
 
     @Override
-    public ResourcesTable getDynamicResources(Statement statement) {
+    public ResourcesTable getDynamicResources(Node node) {
         return null;
     }
 

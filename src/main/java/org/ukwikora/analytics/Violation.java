@@ -1,6 +1,6 @@
 package org.ukwikora.analytics;
 
-import org.ukwikora.model.Statement;
+import org.ukwikora.model.Node;
 
 public class Violation {
     public enum Level{
@@ -17,12 +17,12 @@ public class Violation {
     }
 
     private final Level level;
-    private final Statement statement;
+    private final Node node;
     private final Cause cause;
 
-    public Violation(Level level, Statement statement, Cause cause) {
+    public Violation(Level level, Node node, Cause cause) {
         this.level = level;
-        this.statement = statement;
+        this.node = node;
         this.cause = cause;
     }
 
@@ -30,8 +30,8 @@ public class Violation {
         return level;
     }
 
-    public Statement getStatement() {
-        return statement;
+    public Node getNode() {
+        return node;
     }
 
     public Cause getCause() {

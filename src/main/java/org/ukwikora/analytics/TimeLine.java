@@ -103,8 +103,8 @@ public class TimeLine implements Differentiable, Iterable<Difference> {
             return Clone.Type.None;
         }
 
-        Statement thisItem = (Statement)this.findItemByCommit(commit);
-        Statement otherItem = (Statement)other.findItemByCommit(commit);
+        Node thisItem = (Node)this.findItemByCommit(commit);
+        Node otherItem = (Node)other.findItemByCommit(commit);
 
         return CloneDetection.getCloneType(thisItem, otherItem);
     }
@@ -141,13 +141,13 @@ public class TimeLine implements Differentiable, Iterable<Difference> {
     }
 
     private String getItemCommit(Differentiable item) {
-        if(!Statement.class.isAssignableFrom(item.getClass())){
+        if(!Node.class.isAssignableFrom(item.getClass())){
             return "";
         }
 
-        Statement statement = (Statement)item;
+        Node node = (Node)item;
 
-        TestCaseFile file = statement.getFile();
+        TestCaseFile file = node.getFile();
         if(file == null){
             return "";
         }

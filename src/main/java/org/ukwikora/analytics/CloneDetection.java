@@ -5,7 +5,7 @@ import java.util.*;
 import org.ukwikora.model.*;
 import org.ukwikora.utils.LevenshteinDistance;
 
-public class CloneDetection<T extends Statement> {
+public class CloneDetection<T extends Node> {
     private static Set<Action.Type> ignoreForTypeI;
     private static Set<Action.Type> ignoreForTypeII;
 
@@ -36,17 +36,17 @@ public class CloneDetection<T extends Statement> {
         this.clones = new Clones<>();
     }
 
-    public static <T extends Statement> Clones<T> findClones(Set<Project> projects, Class<T> type){
+    public static <T extends Node> Clones<T> findClones(Set<Project> projects, Class<T> type){
         CloneDetection<T> detection = new CloneDetection<>(projects);
         return detection.run(type);
     }
 
-    public static <T extends Statement> Clones<T> findClones(Project project, Class<T> type){
+    public static <T extends Node> Clones<T> findClones(Project project, Class<T> type){
         CloneDetection<T> detection = new CloneDetection<>(project);
         return detection.run(type);
     }
 
-    public static  <T extends Statement> Clone.Type getCloneType(T t1, T t2){
+    public static  <T extends Node> Clone.Type getCloneType(T t1, T t2){
         Clone.Type clone = Clone.Type.None;
 
         if(isTooShort(t1, t2)){
@@ -97,7 +97,7 @@ public class CloneDetection<T extends Statement> {
         return clones;
     }
 
-    private static <T extends Statement> boolean isTooShort(T t1, T t2){
+    private static <T extends Node> boolean isTooShort(T t1, T t2){
         if(KeywordDefinition.class.isAssignableFrom(t1.getClass())){
             KeywordDefinition keyword1 = (KeywordDefinition)t1;
             KeywordDefinition keyword2 = (KeywordDefinition)t2;
@@ -108,7 +108,7 @@ public class CloneDetection<T extends Statement> {
         return false;
     }
 
-    private static <T extends Statement> boolean isSameSize(T t1, T t2){
+    private static <T extends Node> boolean isSameSize(T t1, T t2){
         if(!KeywordDefinition.class.isAssignableFrom(t1.getClass())){
             return true;
         }

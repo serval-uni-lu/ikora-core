@@ -43,58 +43,58 @@ public class ProjectStatistics {
     public int getDocumentationLength() {
         int length = 0;
 
-        Set<Statement> keywords = new HashSet<>();
+        Set<Node> keywords = new HashSet<>();
         keywords.addAll(userKeywords);
         keywords.addAll(testCases);
 
-        for (Statement keyword: keywords){
+        for (Node keyword: keywords){
             length += StringUtils.countLines(((KeywordDefinition)keyword).getDocumentation());
         }
 
         return length;
     }
 
-    public <T extends Statement> Map<Integer, Integer> getSizeDistribution(Class<T> type){
+    public <T extends Node> Map<Integer, Integer> getSizeDistribution(Class<T> type){
         return getDistribution(type, Metric.Size);
     }
 
-    public <T extends Statement> Map<Integer, Integer> getConnectivityDistribution(Class<T> type){
+    public <T extends Node> Map<Integer, Integer> getConnectivityDistribution(Class<T> type){
         return getDistribution(type, Metric.Connectivity);
     }
 
-    public <T extends Statement> Map<Integer, Integer> getSequenceDistribution(Class<T> type){
+    public <T extends Node> Map<Integer, Integer> getSequenceDistribution(Class<T> type){
         return getDistribution(type, Metric.Sequence);
     }
 
-    public <T extends Statement> Map<Integer, Integer> getLevelDistribution(Class<T> type){
+    public <T extends Node> Map<Integer, Integer> getLevelDistribution(Class<T> type){
         return getDistribution(type, Metric.Level);
     }
 
-    public <T extends Statement> Map<String, Integer> getDeadCodeDistribution(Class<T> type){
+    public <T extends Node> Map<String, Integer> getDeadCodeDistribution(Class<T> type){
         Map<String, Integer> deadCode = new HashMap<>(2);
 
-        for(Statement statement: getStatements(type)){
-            deadCode.merge(statement.isDeadCode() ? "Dead" : "Executed", statement.getLoc(), Integer::sum);
+        for(Node node : getStatements(type)){
+            deadCode.merge(node.isDeadCode() ? "Dead" : "Executed", node.getLoc(), Integer::sum);
         }
 
         return deadCode;
     }
 
-    <T extends Statement> Map<Integer, Integer> getBranchIndex(Class<T> type){
+    <T extends Node> Map<Integer, Integer> getBranchIndex(Class<T> type){
         return getDistribution(type, Metric.BranchIndex);
     }
 
-    private <T extends Statement> Map<Integer, Integer> getDistribution(Class<T> type, Metric metric){
+    private <T extends Node> Map<Integer, Integer> getDistribution(Class<T> type, Metric metric){
         Map<Integer, Integer> distribution = new TreeMap<>();
 
-        for(Statement statement: getStatements(type)){
+        for(Node node : getStatements(type)){
             int value = -1;
 
             switch (metric){
-                case Size: value = KeywordStatistics.getSize(statement); break;
-                case Connectivity: value = KeywordStatistics.getConnectivity(statement); break;
-                case Sequence: value = KeywordStatistics.getSequenceSize(statement); break;
-                case Level: value = KeywordStatistics.getLevel(statement); break;
+                case Size: value = KeywordStatistics.getSize(node); break;
+                case Connectivity: value = KeywordStatistics.getConnectivity(node); break;
+                case Sequence: value = KeywordStatistics.getSequenceSize(node); break;
+                case Level: value = KeywordStatistics.getLevel(node); break;
                 //case BranchIndex: value = keyword.getBranchIndex(); break;
             }
 
@@ -104,7 +104,7 @@ public class ProjectStatistics {
         return distribution;
     }
 
-    private <T extends Statement> Set<T> getStatements(Class<T> type){
+    private <T extends Node> Set<T> getStatements(Class<T> type){
         if(type == UserKeyword.class){
             return (Set<T>)userKeywords;
         }

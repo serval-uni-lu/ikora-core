@@ -16,9 +16,9 @@ public class TestCaseFile implements Iterable<UserKeyword> {
 
     private String name;
     private Settings settings;
-    private StatementTable<TestCase> testCaseTable;
-    private StatementTable<UserKeyword> userKeywordTable;
-    private StatementTable<Variable> variableTable;
+    private NodeTable<TestCase> testCaseTable;
+    private NodeTable<UserKeyword> userKeywordTable;
+    private NodeTable<Variable> variableTable;
 
     public TestCaseFile(Project project, File file){
         this.project = project;
@@ -27,9 +27,9 @@ public class TestCaseFile implements Iterable<UserKeyword> {
         this.lines = new ArrayList<>();
 
         setSettings(new Settings());
-        setTestCaseTable(new StatementTable<>());
-        setKeywordTable(new StatementTable<>());
-        setVariableTable(new StatementTable<>());
+        setTestCaseTable(new NodeTable<>());
+        setKeywordTable(new NodeTable<>());
+        setVariableTable(new NodeTable<>());
     }
 
     public void setName(String name) {
@@ -82,17 +82,17 @@ public class TestCaseFile implements Iterable<UserKeyword> {
         this.settings.setFile(this);
     }
 
-    public void setTestCaseTable(StatementTable<TestCase> testCaseTable) {
+    public void setTestCaseTable(NodeTable<TestCase> testCaseTable) {
         this.testCaseTable = testCaseTable;
         this.testCaseTable.setFile(this);
     }
 
-    public void setKeywordTable(StatementTable<UserKeyword> statementTable) {
-        this.userKeywordTable = statementTable;
+    public void setKeywordTable(NodeTable<UserKeyword> nodeTable) {
+        this.userKeywordTable = nodeTable;
         this.userKeywordTable.setFile(this);
     }
 
-    public void setVariableTable(StatementTable<Variable> variableTable) {
+    public void setVariableTable(NodeTable<Variable> variableTable) {
         this.variableTable = variableTable;
         this.variableTable.setFile(this);
     }

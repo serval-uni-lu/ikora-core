@@ -8,14 +8,14 @@ import java.util.Set;
 
 public class UserKeyword extends KeywordDefinition {
     private List<String> parameters;
-    private StatementTable<Variable> localVariables;
+    private NodeTable<Variable> localVariables;
     private KeywordCall tearDown;
     private List<Value> returnValues;
     private TimeOut timeOut;
 
     public UserKeyword() {
         parameters = new ArrayList<>();
-        localVariables = new StatementTable<>();
+        localVariables = new NodeTable<>();
         returnValues = new ArrayList<>();
         timeOut = null;
     }

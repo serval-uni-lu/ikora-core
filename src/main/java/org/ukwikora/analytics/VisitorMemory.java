@@ -1,8 +1,8 @@
 package org.ukwikora.analytics;
 
-import org.ukwikora.model.Statement;
+import org.ukwikora.model.Node;
 
 public interface VisitorMemory {
-    boolean isAcceptable(Statement statement);
-    VisitorMemory getUpdated(Statement statement);
+    boolean isAcceptable(Node node);
+    VisitorMemory getUpdated(Node node);
 }

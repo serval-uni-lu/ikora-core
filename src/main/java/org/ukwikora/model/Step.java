@@ -125,7 +125,7 @@ public abstract class Step implements Keyword {
     }
 
     @Override
-    public Set<Statement> getDependencies() {
+    public Set<Node> getDependencies() {
         if(getParent() == null){
             return Collections.emptySet();
         }
@@ -134,7 +134,7 @@ public abstract class Step implements Keyword {
     }
 
     @Override
-    public void addDependency(@Nonnull Statement dependency) throws InvalidDependencyException{
+    public void addDependency(@Nonnull Node dependency) throws InvalidDependencyException{
         //steps always have their parent as dependency
         if(!Keyword.class.isAssignableFrom(dependency.getClass())){
             throw new InvalidDependencyException();

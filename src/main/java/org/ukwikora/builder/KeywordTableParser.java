@@ -1,13 +1,13 @@
 package org.ukwikora.builder;
 
-import org.ukwikora.model.StatementTable;
+import org.ukwikora.model.NodeTable;
 import org.ukwikora.model.UserKeyword;
 
 class KeywordTableParser {
     private KeywordTableParser() {}
 
-    public static StatementTable<UserKeyword> parse(LineReader reader, DynamicImports dynamicImports) throws Exception {
-        StatementTable<UserKeyword> statementTable = new StatementTable<>();
+    public static NodeTable<UserKeyword> parse(LineReader reader, DynamicImports dynamicImports) throws Exception {
+        NodeTable<UserKeyword> nodeTable = new NodeTable<>();
 
         reader.readLine();
 
@@ -18,9 +18,9 @@ class KeywordTableParser {
             }
 
             UserKeyword userKeyword = UserKeywordParser.parse(reader, dynamicImports);
-            statementTable.add(userKeyword);
+            nodeTable.add(userKeyword);
         }
 
-        return statementTable;
+        return nodeTable;
     }
 }

@@ -1,11 +1,11 @@
 package org.ukwikora.analytics;
 
-import org.ukwikora.model.Statement;
+import org.ukwikora.model.Node;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class Clone<T extends Statement> {
+public class Clone<T extends Node> {
 
     public enum Type{
         TypeI, TypeII, TypeIII, TypeIV, None

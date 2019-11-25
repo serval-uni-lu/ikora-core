@@ -7,7 +7,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public abstract class Variable implements Statement {
+public abstract class Variable implements Node {
     public enum Type{
         SCALAR, LIST, DICTIONARY
     }
@@ -15,7 +15,7 @@ public abstract class Variable implements Statement {
     private TestCaseFile file;
     private LineRange lineRange;
     private Assignment assignment;
-    private Set<Statement> dependencies;
+    private Set<Node> dependencies;
 
     protected String name;
     protected Pattern pattern;
@@ -100,12 +100,12 @@ public abstract class Variable implements Statement {
     }
 
     @Override
-    public Set<Statement> getDependencies(){
+    public Set<Node> getDependencies(){
         return dependencies;
     }
 
     @Override
-    public void addDependency(@Nonnull Statement dependency){
+    public void addDependency(@Nonnull Node dependency){
         dependencies.add(dependency);
     }
 

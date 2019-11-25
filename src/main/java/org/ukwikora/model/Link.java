@@ -5,7 +5,7 @@ import java.util.*;
 import org.ukwikora.exception.InvalidDependencyException;
 import org.ukwikora.exception.InvalidImportTypeException;
 
-public class Link<K extends Statement,T extends Statement> {
+public class Link<K extends Node,T extends Node> {
     public enum Import{
         STATIC,
         DYNAMIC,

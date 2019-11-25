@@ -4,7 +4,7 @@ import org.ukwikora.runner.Runtime;
 
 import java.util.List;
 
-public interface Keyword extends Statement {
+public interface Keyword extends Node {
     enum Type{
         User, ControlFlow, Assertion, Action, Log, Error, Synchronisation, Get,  Unknown, Set
     }

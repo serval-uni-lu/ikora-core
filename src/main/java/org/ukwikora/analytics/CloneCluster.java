@@ -1,12 +1,12 @@
 package org.ukwikora.analytics;
 
 import org.ukwikora.model.Project;
-import org.ukwikora.model.Statement;
+import org.ukwikora.model.Node;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class CloneCluster<T extends Statement> {
+public class CloneCluster<T extends Node> {
     private final Clone.Type type;
     private final Set<T> clones;
     private final Set<Project> projects;

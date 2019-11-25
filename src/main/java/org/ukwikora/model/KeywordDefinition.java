@@ -15,7 +15,7 @@ public abstract class KeywordDefinition implements Keyword, Iterable<Step> {
     private String documentation;
     private Set<String> tags;
     private List<Step> steps;
-    private Set<Statement> dependencies;
+    private Set<Node> dependencies;
     private LineRange lineRange;
 
     KeywordDefinition(){
@@ -126,12 +126,12 @@ public abstract class KeywordDefinition implements Keyword, Iterable<Step> {
     }
 
     @Override
-    public Set<Statement> getDependencies() {
+    public Set<Node> getDependencies() {
         return dependencies;
     }
 
     @Override
-    public void addDependency(@Nonnull Statement dependency) {
+    public void addDependency(@Nonnull Node dependency) {
         this.dependencies.add(dependency);
     }
 

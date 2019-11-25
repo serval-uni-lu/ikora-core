@@ -1,13 +1,13 @@
 package org.ukwikora.builder;
 
-import org.ukwikora.model.StatementTable;
+import org.ukwikora.model.NodeTable;
 import org.ukwikora.model.TestCase;
 
 class TestCaseTableParser {
     private TestCaseTableParser() {}
 
-    public static StatementTable<TestCase> parse(LineReader reader, DynamicImports dynamicImports) throws Exception {
-        StatementTable<TestCase> testCaseTable = new StatementTable<>();
+    public static NodeTable<TestCase> parse(LineReader reader, DynamicImports dynamicImports) throws Exception {
+        NodeTable<TestCase> testCaseTable = new NodeTable<>();
 
         reader.readLine();
 

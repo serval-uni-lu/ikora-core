@@ -11,11 +11,11 @@ public class StatementMatcher {
         ChangeName, ChangeFolder, ChangeFile, ChangeAll
     }
 
-    public static <T extends Statement> List<Pair<T,T>> getPairs(Class<T> type, Project project1, Project project2) {
+    public static <T extends Node> List<Pair<T,T>> getPairs(Class<T> type, Project project1, Project project2) {
         List<Pair<T,T>> pairs = new ArrayList<>();
 
-        StatementTable<T> statement1 = createStatementTable(project1, type);
-        StatementTable<T> statement2 = createStatementTable(project2, type);
+        NodeTable<T> statement1 = createStatementTable(project1, type);
+        NodeTable<T> statement2 = createStatementTable(project2, type);
 
         List<T> unmatched = new ArrayList<>();
 
@@ -53,17 +53,17 @@ public class StatementMatcher {
         return pairs;
     }
 
-    private static <T extends Statement> StatementTable<T> createStatementTable(Project project, Class<T> type) {
-        StatementTable<T> table = new StatementTable<>();
+    private static <T extends Node> NodeTable<T> createStatementTable(Project project, Class<T> type) {
+        NodeTable<T> table = new NodeTable<>();
 
-        for (Statement statements: project.getStatements(type)) {
+        for (Node statements: project.getStatements(type)) {
             table.add((T)statements);
         }
 
         return table;
     }
 
-    private static <T extends Statement> Map<Edit, List<T>> findPotentialCandidates(T keyword, List<T> unmatched) {
+    private static <T extends Node> Map<Edit, List<T>> findPotentialCandidates(T keyword, List<T> unmatched) {
         String fileName = new File(keyword.getFileName()).getName();
         Map<Edit, List<T>> candidates = new HashMap<>();
 
@@ -99,7 +99,7 @@ public class StatementMatcher {
         return candidates;
     }
 
-    private static <T extends Statement> T findBestCandidate(T keyword, List<T> unmatched){
+    private static <T extends Node> T findBestCandidate(T keyword, List<T> unmatched){
         Map<Edit, List<T>> candidates = findPotentialCandidates(keyword, unmatched);
 
         T bestCandidate = null;

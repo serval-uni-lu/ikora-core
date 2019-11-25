@@ -7,14 +7,14 @@ import java.io.File;
 import java.util.*;
 
 public class StaticScope implements Scope{
-    private StatementTable<Variable> global;
-    private Map<TestCase, StatementTable<Variable>> test;
-    private Map<String, StatementTable<Variable>> suite;
+    private NodeTable<Variable> global;
+    private Map<TestCase, NodeTable<Variable>> test;
+    private Map<String, NodeTable<Variable>> suite;
 
     private Map<KeywordDefinition, ResourcesTable> dynamicLibrary;
 
     public StaticScope(){
-        global = new StatementTable<>();
+        global = new NodeTable<>();
         suite = new HashMap<>();
         test = new HashMap<>();
         dynamicLibrary = new HashMap<>();
@@ -44,7 +44,7 @@ public class StaticScope implements Scope{
 
     @Override
     public void addToSuite(String suite, Variable variable) {
-        this.suite.putIfAbsent(suite, new StatementTable<>());
+        this.suite.putIfAbsent(suite, new NodeTable<>());
         this.suite.get(suite).add(variable);
     }
 
@@ -55,7 +55,7 @@ public class StaticScope implements Scope{
 
     @Override
     public void addToTest(TestCase testCase, Variable variable) {
-        test.putIfAbsent(testCase, new StatementTable<>());
+        test.putIfAbsent(testCase, new NodeTable<>());
         test.get(testCase).add(variable);
     }
 
@@ -87,8 +87,8 @@ public class StaticScope implements Scope{
     }
 
     @Override
-    public ResourcesTable getDynamicResources(Statement statement) {
-        Set<KeywordDefinition> dependencies = KeywordStatistics.getDependencies(statement, dynamicLibrary.keySet());
+    public ResourcesTable getDynamicResources(Node node) {
+        Set<KeywordDefinition> dependencies = KeywordStatistics.getDependencies(node, dynamicLibrary.keySet());
 
         ResourcesTable resourcesTable = new ResourcesTable();
 

@@ -9,7 +9,7 @@ import java.util.*;
 
 public abstract class LibraryKeyword implements Keyword {
 
-    private Set<Statement> dependencies;
+    private Set<Node> dependencies;
     private TestCaseFile file;
     private LineRange lineRange;
 
@@ -30,7 +30,7 @@ public abstract class LibraryKeyword implements Keyword {
     }
 
     @Override
-    public Set<Statement> getDependencies() {
+    public Set<Node> getDependencies() {
         return dependencies;
     }
 
@@ -45,7 +45,7 @@ public abstract class LibraryKeyword implements Keyword {
     }
 
     @Override
-    public void addDependency(@Nonnull Statement dependency) {
+    public void addDependency(@Nonnull Node dependency) {
         this.dependencies.add(dependency);
     }
 

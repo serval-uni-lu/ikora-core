@@ -75,7 +75,7 @@ public class EvolutionAnalyzer {
         return results;
     }
 
-    private <T extends Statement> T getElement(Pair<T,T> pair, Project project){
+    private <T extends Node> T getElement(Pair<T,T> pair, Project project){
         if(pair.getRight() != null && pair.getRight().getFile() != null && pair.getRight().getFile().getProject() == project) {
             return pair.getRight();
         }

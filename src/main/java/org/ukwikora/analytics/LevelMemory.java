@@ -1,7 +1,7 @@
 package org.ukwikora.analytics;
 
 import org.ukwikora.model.KeywordDefinition;
-import org.ukwikora.model.Statement;
+import org.ukwikora.model.Node;
 
 public class LevelMemory extends PathMemory {
     private int level;
@@ -16,13 +16,13 @@ public class LevelMemory extends PathMemory {
     }
 
     @Override
-    public VisitorMemory getUpdated(Statement statement) {
-        if(KeywordDefinition.class.isAssignableFrom(statement.getClass())){
+    public VisitorMemory getUpdated(Node node) {
+        if(KeywordDefinition.class.isAssignableFrom(node.getClass())){
             return this;
         }
 
         LevelMemory updated = new LevelMemory(this);
-        updated.add(statement);
+        updated.add(node);
         updated.level++;
 
         return updated;

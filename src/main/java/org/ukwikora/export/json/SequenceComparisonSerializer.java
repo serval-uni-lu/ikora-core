@@ -98,14 +98,14 @@ public class SequenceComparisonSerializer extends JsonSerializer<EvolutionResult
     private void writeProportions(JsonGenerator jsonGenerator, EvolutionResults results) throws IOException {
         jsonGenerator.writeObjectFieldStart("proportions");
 
-        List<Class<? extends Statement>> statementTypes = new ArrayList<>();
+        List<Class<? extends Node>> statementTypes = new ArrayList<>();
         statementTypes.add(TestCase.class);
         statementTypes.add(UserKeyword.class);
 
         Clone.Type[] cloneTypes = {Clone.Type.TypeI, Clone.Type.TypeII, Clone.Type.None};
         EvolutionResults.CoEvolutionType[] coEvolutionTypes = {EvolutionResults.CoEvolutionType.CoEvolution, EvolutionResults.CoEvolutionType.NoCoEvolution, EvolutionResults.CoEvolutionType.NoChange};
 
-        for(Class<? extends Statement> statementType: statementTypes){
+        for(Class<? extends Node> statementType: statementTypes){
             jsonGenerator.writeObjectFieldStart(statementType.getSimpleName());
 
             for(Clone.Type cloneType: cloneTypes){
@@ -133,11 +133,11 @@ public class SequenceComparisonSerializer extends JsonSerializer<EvolutionResult
             return "";
         }
 
-        if(!Statement.class.isAssignableFrom(last.getClass())){
+        if(!Node.class.isAssignableFrom(last.getClass())){
             return "";
         }
 
-        return ((Statement)last).getFile().getName();
+        return ((Node)last).getFile().getName();
     }
 
     private String getDepth(TimeLine timeLine){

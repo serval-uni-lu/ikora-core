@@ -15,7 +15,7 @@ public interface Scope {
     Set<Variable> findInScope(Set<TestCase> testCases, Set<String> suites, String name);
     
     void addDynamicLibrary(KeywordDefinition keyword, List<Value> parameters);
-    ResourcesTable getDynamicResources(Statement statement);
+    ResourcesTable getDynamicResources(Node node);
 
     void enterKeyword(Keyword keyword) throws Exception;
     void exitKeyword(Keyword keyword);

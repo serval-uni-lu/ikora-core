@@ -29,12 +29,12 @@ public class Value implements Differentiable {
         escapePattern = Pattern.compile("[[<>!={}()\\[\\].+*?^$\\\\|-]]");
     }
 
-    private Statement parent;
+    private Node parent;
     private String value;
     private Pattern match;
     private Map<String, Set<Variable>> variables;
 
-    public Value(Statement parent, String value) {
+    public Value(Node parent, String value) {
         this.parent = parent;
         this.value = value;
         this.variables = new HashMap<>();

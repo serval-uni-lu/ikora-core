@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-public class TimeOut implements Statement {
+public class TimeOut implements Node {
     private final Value variable;
     private final TimeValue value;
 
@@ -116,7 +116,7 @@ public class TimeOut implements Statement {
     }
 
     @Override
-    public Set<Statement> getDependencies() {
+    public Set<Node> getDependencies() {
         if(parent == null){
             return Collections.emptySet();
         }
@@ -125,7 +125,7 @@ public class TimeOut implements Statement {
     }
 
     @Override
-    public void addDependency(@Nonnull Statement dependency) throws InvalidDependencyException {
+    public void addDependency(@Nonnull Node dependency) throws InvalidDependencyException {
         throw new InvalidDependencyException();
     }
 

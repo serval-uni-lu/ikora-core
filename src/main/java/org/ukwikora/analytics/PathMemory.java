@@ -1,12 +1,12 @@
 package org.ukwikora.analytics;
 
-import org.ukwikora.model.Statement;
+import org.ukwikora.model.Node;
 
 import java.util.HashSet;
 import java.util.Set;
 
 public class PathMemory implements VisitorMemory{
-    private Set<Statement> visited;
+    private Set<Node> visited;
 
     public PathMemory(){
         visited = new HashSet<>();
@@ -17,19 +17,19 @@ public class PathMemory implements VisitorMemory{
     }
 
     @Override
-    public VisitorMemory getUpdated(Statement statement) {
+    public VisitorMemory getUpdated(Node node) {
         PathMemory updated = new PathMemory(this);
-        updated.add(statement);
+        updated.add(node);
 
         return updated;
     }
 
-    protected void add(Statement statement){
-        visited.add(statement);
+    protected void add(Node node){
+        visited.add(node);
     }
 
     @Override
-    public boolean isAcceptable(Statement statement) {
-        return !visited.contains(statement);
+    public boolean isAcceptable(Node node) {
+        return !visited.contains(node);
     }
 }

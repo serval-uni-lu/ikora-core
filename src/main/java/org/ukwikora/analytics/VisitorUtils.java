@@ -3,8 +3,8 @@ import org.ukwikora.model.*;
 
 
 public class VisitorUtils {
-    public static void traverseDependencies(StatementVisitor visitor, Statement statement, VisitorMemory memory){
-        for(Statement dependency: statement.getDependencies()){
+    public static void traverseDependencies(StatementVisitor visitor, Node node, VisitorMemory memory){
+        for(Node dependency: node.getDependencies()){
             if(memory.isAcceptable(dependency)){
                 dependency.accept(visitor, memory.getUpdated(dependency));
             }
