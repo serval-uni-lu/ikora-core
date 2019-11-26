@@ -2,9 +2,7 @@ package org.ukwikora.analytics;
 
 import org.ukwikora.model.*;
 
-import java.util.Set;
-
-public class ConnectivityVisitor implements StatementVisitor {
+public class ConnectivityVisitor implements NodeVisitor {
     private int connectivity;
 
     public ConnectivityVisitor() {

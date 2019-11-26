@@ -2,7 +2,7 @@ package org.ukwikora.analytics;
 
 import org.ukwikora.model.*;
 
-public class SizeVisitor implements StatementVisitor {
+public class SizeVisitor implements NodeVisitor {
     private int size;
 
     public SizeVisitor(){

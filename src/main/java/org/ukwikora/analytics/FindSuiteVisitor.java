@@ -5,7 +5,7 @@ import org.ukwikora.model.*;
 import java.util.HashSet;
 import java.util.Set;
 
-public class FindSuiteVisitor implements StatementVisitor {
+public class FindSuiteVisitor implements NodeVisitor {
     private Set<String> suites;
 
     public FindSuiteVisitor() {

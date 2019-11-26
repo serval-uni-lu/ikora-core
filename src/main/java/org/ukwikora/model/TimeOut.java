@@ -1,6 +1,7 @@
 package org.ukwikora.model;
 
 import org.ukwikora.analytics.Action;
+import org.ukwikora.analytics.NodeVisitor;
 import org.ukwikora.analytics.VisitorMemory;
 import org.ukwikora.exception.InvalidDependencyException;
 
@@ -106,7 +107,7 @@ public class TimeOut implements Node {
     }
 
     @Override
-    public void accept(StatementVisitor visitor, VisitorMemory memory) {
+    public void accept(NodeVisitor visitor, VisitorMemory memory) {
         visitor.visit(this, memory);
     }
 

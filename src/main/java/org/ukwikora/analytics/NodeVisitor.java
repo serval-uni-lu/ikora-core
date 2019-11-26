@@ -1,8 +1,8 @@
-package org.ukwikora.model;
+package org.ukwikora.analytics;
 
-import org.ukwikora.analytics.VisitorMemory;
+import org.ukwikora.model.*;
 
-public interface StatementVisitor {
+public interface NodeVisitor {
     void visit(TestCase testCase, VisitorMemory memory);
     void visit(UserKeyword keyword, VisitorMemory memory);
     void visit(KeywordCall call, VisitorMemory memory);

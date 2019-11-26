@@ -3,7 +3,7 @@ package org.ukwikora.analytics;
 import org.ukwikora.model.*;
 
 
-public class SequenceVisitor implements StatementVisitor {
+public class SequenceVisitor implements NodeVisitor {
     private Sequence sequence;
 
     public SequenceVisitor(){

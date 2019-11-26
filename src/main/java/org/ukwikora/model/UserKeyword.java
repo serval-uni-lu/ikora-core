@@ -1,5 +1,6 @@
 package org.ukwikora.model;
 
+import org.ukwikora.analytics.NodeVisitor;
 import org.ukwikora.analytics.VisitorMemory;
 
 import java.util.ArrayList;
@@ -118,7 +119,7 @@ public class UserKeyword extends KeywordDefinition {
     }
 
     @Override
-    public void accept(StatementVisitor visitor, VisitorMemory memory){
+    public void accept(NodeVisitor visitor, VisitorMemory memory){
         visitor.visit(this, memory);
     }
 }

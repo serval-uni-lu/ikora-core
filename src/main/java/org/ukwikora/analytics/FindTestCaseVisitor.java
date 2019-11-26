@@ -5,7 +5,7 @@ import org.ukwikora.model.*;
 import java.util.HashSet;
 import java.util.Set;
 
-public class FindTestCaseVisitor implements StatementVisitor {
+public class FindTestCaseVisitor implements NodeVisitor {
     private Set<TestCase> testCases;
 
     public FindTestCaseVisitor(){

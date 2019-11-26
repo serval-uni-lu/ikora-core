@@ -2,8 +2,8 @@ package org.ukwikora.analytics;
 import org.ukwikora.model.*;
 
 
-public class VisitorUtils {
-    public static void traverseDependencies(StatementVisitor visitor, Node node, VisitorMemory memory){
+class VisitorUtils {
+    static void traverseDependencies(NodeVisitor visitor, Node node, VisitorMemory memory){
         for(Node dependency: node.getDependencies()){
             if(memory.isAcceptable(dependency)){
                 dependency.accept(visitor, memory.getUpdated(dependency));
@@ -11,7 +11,7 @@ public class VisitorUtils {
         }
     }
 
-    public static void traverseSteps(StatementVisitor visitor, KeywordDefinition keyword, VisitorMemory memory){
+    static void traverseSteps(NodeVisitor visitor, KeywordDefinition keyword, VisitorMemory memory){
         for(Step step: keyword.getSteps()){
             if(memory.isAcceptable(step)){
                 step.accept(visitor, memory.getUpdated(step));
@@ -19,7 +19,7 @@ public class VisitorUtils {
         }
     }
 
-    public static void traverseForLoopSteps(StatementVisitor visitor, ForLoop forLoop, VisitorMemory memory){
+    static void traverseForLoopSteps(NodeVisitor visitor, ForLoop forLoop, VisitorMemory memory){
         for(Step step: forLoop.getSteps()){
             if(memory.isAcceptable(step)){
                 step.accept(visitor, memory.getUpdated(step));
@@ -27,15 +27,13 @@ public class VisitorUtils {
         }
     }
 
-    public static void traverseAssignmentCall(StatementVisitor visitor, Assignment assignment, VisitorMemory memory){
-        assignment.getKeywordCall().ifPresent(call ->
-                call.getKeyword().ifPresent(keyword ->
-                        keyword.accept(visitor, memory.getUpdated(assignment))
-                )
+    static void traverseAssignmentCall(NodeVisitor visitor, Assignment assignment, VisitorMemory memory){
+        assignment.getKeywordCall().flatMap(KeywordCall::getKeyword).ifPresent(keyword ->
+                keyword.accept(visitor, memory.getUpdated(assignment))
         );
     }
 
-    public static void traverseKeywordCall(StatementVisitor visitor, KeywordCall call, VisitorMemory memory){
+    static void traverseKeywordCall(NodeVisitor visitor, KeywordCall call, VisitorMemory memory){
         call.getKeyword().ifPresent(keyword ->{
             if(call.hasKeywordParameters()){
                 for(Step step: call.getKeywordParameter()){

@@ -5,7 +5,7 @@ import org.ukwikora.model.*;
 import java.util.HashSet;
 import java.util.Set;
 
-public class DependencyCheckerVisitor implements StatementVisitor {
+public class DependencyCheckerVisitor implements NodeVisitor {
     private final Set<KeywordDefinition> keywords;
     private Set<KeywordDefinition> dependencies;
 

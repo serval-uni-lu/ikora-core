@@ -2,7 +2,7 @@ package org.ukwikora.analytics;
 
 import org.ukwikora.model.*;
 
-public class LevelVisitor implements StatementVisitor {
+public class LevelVisitor implements NodeVisitor {
     int level = 0;
 
     private void updateLevel(VisitorMemory memory){

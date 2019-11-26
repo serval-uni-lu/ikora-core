@@ -1,6 +1,7 @@
 package org.ukwikora.model;
 
 
+import org.ukwikora.analytics.NodeVisitor;
 import org.ukwikora.analytics.VisitorMemory;
 import org.ukwikora.exception.InvalidDependencyException;
 
@@ -23,7 +24,7 @@ public interface Node extends Differentiable {
 
     boolean isDeadCode();
 
-    void accept(StatementVisitor visitor, VisitorMemory memory);
+    void accept(NodeVisitor visitor, VisitorMemory memory);
 
     boolean matches(@Nonnull String name);
 
