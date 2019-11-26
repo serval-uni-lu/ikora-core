@@ -1,6 +1,8 @@
-package org.ukwikora.analytics;
+package org.ukwikora.export.json;
 
 import com.fasterxml.jackson.core.JsonGenerator;
+import org.ukwikora.analytics.Action;
+import org.ukwikora.analytics.Difference;
 import org.ukwikora.model.Differentiable;
 import org.ukwikora.model.Node;
 import org.ukwikora.model.Keyword;

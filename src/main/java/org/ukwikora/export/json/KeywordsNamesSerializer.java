@@ -8,7 +8,6 @@ import org.ukwikora.analytics.KeywordStatistics;
 import org.ukwikora.model.*;
 
 import java.io.IOException;
-import java.util.Set;
 
 public class KeywordsNamesSerializer extends JsonSerializer<EvolutionResults> {
     @Override
