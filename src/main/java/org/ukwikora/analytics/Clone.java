@@ -11,18 +11,18 @@ public class Clone<T extends Node> {
         TypeI, TypeII, TypeIII, TypeIV, None
     }
 
-    private final T statement;
+    private final T node;
     private final Type type;
     private Set<T> clones;
 
-    Clone(T statement, Type type){
-        this.statement = statement;
+    Clone(T node, Type type){
+        this.node = node;
         this.type = type;
         this.clones = new HashSet<>();
     }
 
-    public T getStatement() {
-        return statement;
+    public T getNode() {
+        return node;
     }
 
     public Type getType() {
@@ -35,7 +35,7 @@ public class Clone<T extends Node> {
 
     public Set<T> getAll() {
         Set<T> all = new HashSet<>(clones);
-        all.add(statement);
+        all.add(node);
 
         return all;
     }
@@ -44,7 +44,7 @@ public class Clone<T extends Node> {
         return clones.size();
     }
 
-    public boolean addClone(T statement){
-        return clones.add(statement);
+    public boolean addClone(T node){
+        return clones.add(node);
     }
 }

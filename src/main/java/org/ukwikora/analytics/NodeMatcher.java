@@ -6,7 +6,7 @@ import org.ukwikora.model.*;
 import java.io.File;
 import java.util.*;
 
-public class StatementMatcher {
+public class NodeMatcher {
     enum Edit{
         ChangeName, ChangeFolder, ChangeFile, ChangeAll
     }
@@ -14,14 +14,14 @@ public class StatementMatcher {
     public static <T extends Node> List<Pair<T,T>> getPairs(Class<T> type, Project project1, Project project2) {
         List<Pair<T,T>> pairs = new ArrayList<>();
 
-        NodeTable<T> statement1 = createStatementTable(project1, type);
-        NodeTable<T> statement2 = createStatementTable(project2, type);
+        NodeTable<T> node1 = createNodeTable(project1, type);
+        NodeTable<T> node2 = createNodeTable(project2, type);
 
         List<T> unmatched = new ArrayList<>();
 
-        while(!statement1.isEmpty()){
-            T keyword1 = statement1.iterator().next();
-            Set<T> keyword2 = statement2.findStatement(keyword1);
+        while(!node1.isEmpty()){
+            T keyword1 = node1.iterator().next();
+            Set<T> keyword2 = node2.findNode(keyword1);
 
             if(keyword2.isEmpty()){
                 unmatched.add(keyword1);
@@ -29,18 +29,18 @@ public class StatementMatcher {
             else{
                 //TODO: Find best match if multiple hits
                 pairs.add(Pair.of(keyword1, keyword2.iterator().next()));
-                statement2.remove(keyword2.iterator().next());
+                node2.remove(keyword2.iterator().next());
             }
 
-            statement1.remove(keyword1);
+            node1.remove(keyword1);
         }
 
-        while(!statement2.isEmpty()){
-            T keyword2 = statement2.iterator().next();
+        while(!node2.isEmpty()){
+            T keyword2 = node2.iterator().next();
             T keyword1 = findBestCandidate(keyword2, unmatched);
 
             pairs.add(Pair.of(keyword1, keyword2));
-            statement2.remove(keyword2);
+            node2.remove(keyword2);
         }
 
         while(!unmatched.isEmpty()){
@@ -53,11 +53,11 @@ public class StatementMatcher {
         return pairs;
     }
 
-    private static <T extends Node> NodeTable<T> createStatementTable(Project project, Class<T> type) {
+    private static <T extends Node> NodeTable<T> createNodeTable(Project project, Class<T> type) {
         NodeTable<T> table = new NodeTable<>();
 
-        for (Node statements: project.getStatements(type)) {
-            table.add((T)statements);
+        for (Node node: project.getNodes(type)) {
+            table.add((T)node);
         }
 
         return table;

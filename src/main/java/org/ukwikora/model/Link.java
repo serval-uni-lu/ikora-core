@@ -26,7 +26,7 @@ public class Link<K extends Node,T extends Node> {
         return source;
     }
 
-    public Optional<T> getStatement(){
+    public Optional<T> getNode(){
         if(dynamicCallee.size() == 1){
             return Optional.of(dynamicCallee.iterator().next());
         }
@@ -57,14 +57,14 @@ public class Link<K extends Node,T extends Node> {
         return allLinks;
     }
 
-    public void addStatement(T destination, Import importType)
+    public void addNode(T destination, Import importType)
             throws InvalidImportTypeException, InvalidDependencyException {
         switch (importType) {
             case STATIC:
-                addStatement(destination, staticCallee);
+                addNode(destination, staticCallee);
                 break;
             case DYNAMIC:
-                addStatement(destination, dynamicCallee);
+                addNode(destination, dynamicCallee);
                 break;
             default:
                 throw new InvalidImportTypeException(
@@ -72,7 +72,7 @@ public class Link<K extends Node,T extends Node> {
         }
     }
 
-    private void addStatement(T destination, Set<T> destinations) throws InvalidDependencyException {
+    private void addNode(T destination, Set<T> destinations) throws InvalidDependencyException {
         if(destination == null){
             return;
         }

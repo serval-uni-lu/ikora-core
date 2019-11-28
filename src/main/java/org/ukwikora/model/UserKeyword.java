@@ -115,7 +115,7 @@ public class UserKeyword extends KeywordDefinition {
     }
 
     public Set<Variable> findLocalVariable(String name) {
-        return localVariables.findStatement(name);
+        return localVariables.findNode(name);
     }
 
     @Override

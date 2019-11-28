@@ -18,8 +18,8 @@ public class ProjectStatistics {
 
     public ProjectStatistics(Project project){
         this.project = project;
-        userKeywords = this.project.getStatements(UserKeyword.class);
-        testCases = this.project.getStatements(TestCase.class);
+        userKeywords = this.project.getNodes(UserKeyword.class);
+        testCases = this.project.getNodes(TestCase.class);
     }
 
     public int getNumberFiles(){
@@ -31,7 +31,7 @@ public class ProjectStatistics {
     }
 
     public <T extends KeywordDefinition> int getNumberKeywords(Class<T> type){
-        Set<T> keywords = getStatements(type);
+        Set<T> keywords = getNodes(type);
 
         if(keywords != null){
             return keywords.size();
@@ -73,7 +73,7 @@ public class ProjectStatistics {
     public <T extends Node> Map<String, Integer> getDeadCodeDistribution(Class<T> type){
         Map<String, Integer> deadCode = new HashMap<>(2);
 
-        for(Node node : getStatements(type)){
+        for(Node node : getNodes(type)){
             deadCode.merge(node.isDeadCode() ? "Dead" : "Executed", node.getLoc(), Integer::sum);
         }
 
@@ -87,7 +87,7 @@ public class ProjectStatistics {
     private <T extends Node> Map<Integer, Integer> getDistribution(Class<T> type, Metric metric){
         Map<Integer, Integer> distribution = new TreeMap<>();
 
-        for(Node node : getStatements(type)){
+        for(Node node : getNodes(type)){
             int value = -1;
 
             switch (metric){
@@ -104,7 +104,7 @@ public class ProjectStatistics {
         return distribution;
     }
 
-    private <T extends Node> Set<T> getStatements(Class<T> type){
+    private <T extends Node> Set<T> getNodes(Class<T> type){
         if(type == UserKeyword.class){
             return (Set<T>)userKeywords;
         }

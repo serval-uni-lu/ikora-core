@@ -26,7 +26,7 @@ public class KeywordCall extends Step {
 
     public void linkKeyword(Keyword keyword, Link.Import importLink)
             throws InvalidImportTypeException, InvalidDependencyException {
-        link.addStatement(keyword, importLink);
+        link.addNode(keyword, importLink);
     }
 
     public void addParameter(String value) {
@@ -75,7 +75,7 @@ public class KeywordCall extends Step {
     }
 
     public Optional<Keyword> getKeyword() {
-        return link.getStatement();
+        return link.getNode();
     }
 
     public Set<Keyword> getAllPotentialKeywords(Link.Import importType){
@@ -118,7 +118,7 @@ public class KeywordCall extends Step {
 
         Linker.link(this, runtime);
 
-        Optional<Keyword> callee = link.getStatement();
+        Optional<Keyword> callee = link.getNode();
 
         if(callee.isPresent()){
             callee.get().execute(runtime);

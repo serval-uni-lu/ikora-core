@@ -142,7 +142,7 @@ public class TestCaseFile implements Iterable<UserKeyword> {
     }
 
     Set<TestCase> getTestCase(String name) {
-        return testCaseTable.findStatement(name);
+        return testCaseTable.findNode(name);
     }
 
     @Nonnull
@@ -151,46 +151,46 @@ public class TestCaseFile implements Iterable<UserKeyword> {
     }
 
     public Set<UserKeyword> findUserKeyword(String name) {
-        return findStatement(null, name, new HashSet<>(), UserKeyword.class);
+        return findNode(null, name, new HashSet<>(), UserKeyword.class);
     }
 
     public Set<UserKeyword> findUserKeyword(String library, String name) {
-        return findStatement(library, name, new HashSet<>(), UserKeyword.class);
+        return findNode(library, name, new HashSet<>(), UserKeyword.class);
     }
 
     public Set<Variable> findVariable(String name) {
-        return findStatement(null, name, new HashSet<>(), Variable.class);
+        return findNode(null, name, new HashSet<>(), Variable.class);
     }
 
     public Set<Variable> findVariable(String library, String name) {
-        return findStatement(library, name, new HashSet<>(), Variable.class);
+        return findNode(library, name, new HashSet<>(), Variable.class);
     }
 
-    private <T> Set<T> findStatement(String library, String name, Set<TestCaseFile> memory, Class<T> type){
-        HashSet<T> statements = new HashSet<>();
+    private <T> Set<T> findNode(String library, String name, Set<TestCaseFile> memory, Class<T> type){
+        HashSet<T> nodes = new HashSet<>();
 
         if(library == null || library.isEmpty() || getLibraryName().equalsIgnoreCase(library)){
             if(type == UserKeyword.class){
-                statements.addAll((Collection<? extends T>) userKeywordTable.findStatement(name));
+                nodes.addAll((Collection<? extends T>) userKeywordTable.findNode(name));
             }
 
             if(type == TestCase.class){
-                statements.addAll((Collection<? extends T>) testCaseTable.findStatement(name));
+                nodes.addAll((Collection<? extends T>) testCaseTable.findNode(name));
             }
 
             if(type == Variable.class){
-                statements.addAll((Collection<? extends T>) variableTable.findStatement(name));
+                nodes.addAll((Collection<? extends T>) variableTable.findNode(name));
             }
         }
 
         for(Resources resources: settings.getAllResources()){
             if(resources.isValid() && memory.add(resources.getTestCaseFile())) {
                 TestCaseFile file = resources.getTestCaseFile();
-                statements.addAll(file.findStatement(library, name, memory, type));
+                nodes.addAll(file.findNode(library, name, memory, type));
             }
         }
 
-        return statements;
+        return nodes;
     }
 
 

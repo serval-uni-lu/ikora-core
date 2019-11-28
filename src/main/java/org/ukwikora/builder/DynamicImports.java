@@ -21,7 +21,7 @@ public class DynamicImports {
         variables = new HashMap<>();
     }
 
-    public Node findStatement(String value){
+    public Node findNode(String value){
         throw new NotImplementedException("Need to get some more work on the imports");
     }
 

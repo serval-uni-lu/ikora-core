@@ -5,22 +5,22 @@ import java.io.File;
 import java.util.*;
 
 public class NodeTable<T extends Node> implements Iterable<T> {
-    private HashMap<String, T> statementMap;
-    private List<T> statementList;
+    private HashMap<String, T> nodeMap;
+    private List<T> nodeList;
     private TestCaseFile file;
 
     public NodeTable() {
-        this.statementMap = new HashMap<>();
-        this.statementList = new ArrayList<>();
+        this.nodeMap = new HashMap<>();
+        this.nodeList = new ArrayList<>();
     }
 
     public void setFile(TestCaseFile file) {
         this.file = file;
 
-        statementMap = new HashMap<>();
-        for (T statement: statementList){
-            statement.setFile(this.file);
-            statementMap.put(getKey(statement), statement);
+        nodeMap = new HashMap<>();
+        for (T node: nodeList){
+            node.setFile(this.file);
+            nodeMap.put(getKey(node), node);
         }
     }
 
@@ -29,109 +29,109 @@ public class NodeTable<T extends Node> implements Iterable<T> {
     }
 
     public NodeTable(NodeTable<T> other){
-        statementMap = other.statementMap;
-        statementList = other.statementList;
+        nodeMap = other.nodeMap;
+        nodeList = other.nodeList;
 
         file = other.file;
     }
 
-    public Set<T> findStatement(T statement){
-        return findStatement(statement.getFileName(), statement.getName());
+    public Set<T> findNode(T node){
+        return findNode(node.getFileName(), node.getName());
     }
 
-    public Set<T> findStatement(String name){
-        return findStatement(null, name);
+    public Set<T> findNode(String name){
+        return findNode(null, name);
     }
 
-    public Set<T> findStatement(String file, String name){
-        Set<T> statements = new HashSet<>();
+    public Set<T> findNode(String file, String name){
+        Set<T> nodes = new HashSet<>();
 
-        for(T statement: statementList){
-            if(matches(file, name, statement)){
-                statements.add(statement);
+        for(T node: nodeList){
+            if(matches(file, name, node)){
+                nodes.add(node);
             }
         }
 
-        return statements;
+        return nodes;
     }
 
-    private boolean matches(String file, String name, T statement){
+    private boolean matches(String file, String name, T node){
         if(file == null){
-            return statement.matches(name);
+            return node.matches(name);
         }
 
-        return file.equalsIgnoreCase(statement.getFileName()) && statement.matches(name);
+        return file.equalsIgnoreCase(node.getFileName()) && node.matches(name);
     }
 
     public int size() {
-        return this.statementList.size();
+        return this.nodeList.size();
     }
 
     public boolean isEmpty() {
-        return this.statementList.isEmpty();
+        return this.nodeList.isEmpty();
     }
 
-    public boolean contains(T statement) {
-        if(statement == null){
+    public boolean contains(T node) {
+        if(node == null){
             return false;
         }
 
-        return this.statementList.contains(statement);
+        return this.nodeList.contains(node);
     }
 
     @Override
     @Nonnull
     public Iterator<T> iterator() {
-        return this.statementList.iterator();
+        return this.nodeList.iterator();
     }
 
     public List<T> asList() {
-        return statementList;
+        return nodeList;
     }
 
-    public boolean add(T statement) {
-        if(statement == null){
+    public boolean add(T node) {
+        if(node == null){
             return false;
         }
 
-        if(statementList.contains(statement)){
+        if(nodeList.contains(node)){
             return false;
         }
 
-        statementList.add(statement);
-        statementMap.put(getKey(statement), statement);
+        nodeList.add(node);
+        nodeMap.put(getKey(node), node);
 
         return true;
     }
 
-    public boolean remove(T statement) {
-        if(statement == null){
+    public boolean remove(T node) {
+        if(node == null){
             return false;
         }
 
-        this.statementMap.remove(getKey(statement));
-        this.statementList.remove(statement);
+        this.nodeMap.remove(getKey(node));
+        this.nodeList.remove(node);
 
         return true;
     }
 
     public void extend(NodeTable<T> table) {
-        for(T statement: table){
-            if(statementList.contains(statement)){
+        for(T node: table){
+            if(nodeList.contains(node)){
                 continue;
             }
 
-            this.statementList.add(statement);
-            this.statementMap.put(getKey(statement), statement);
+            this.nodeList.add(node);
+            this.nodeMap.put(getKey(node), node);
         }
     }
 
     public void clear() {
-        this.statementList.clear();
-        this.statementMap.clear();
+        this.nodeList.clear();
+        this.nodeMap.clear();
     }
 
-    private String getKey(T statement){
-        return statement.getFile() + File.separator + statement.getName();
+    private String getKey(T node){
+        return node.getFile() + File.separator + node.getName();
     }
 }

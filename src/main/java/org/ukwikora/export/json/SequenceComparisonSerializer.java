@@ -98,21 +98,21 @@ public class SequenceComparisonSerializer extends JsonSerializer<EvolutionResult
     private void writeProportions(JsonGenerator jsonGenerator, EvolutionResults results) throws IOException {
         jsonGenerator.writeObjectFieldStart("proportions");
 
-        List<Class<? extends Node>> statementTypes = new ArrayList<>();
-        statementTypes.add(TestCase.class);
-        statementTypes.add(UserKeyword.class);
+        List<Class<? extends Node>> nodeTypes = new ArrayList<>();
+        nodeTypes.add(TestCase.class);
+        nodeTypes.add(UserKeyword.class);
 
         Clone.Type[] cloneTypes = {Clone.Type.TypeI, Clone.Type.TypeII, Clone.Type.None};
         EvolutionResults.CoEvolutionType[] coEvolutionTypes = {EvolutionResults.CoEvolutionType.CoEvolution, EvolutionResults.CoEvolutionType.NoCoEvolution, EvolutionResults.CoEvolutionType.NoChange};
 
-        for(Class<? extends Node> statementType: statementTypes){
-            jsonGenerator.writeObjectFieldStart(statementType.getSimpleName());
+        for(Class<? extends Node> nodeType: nodeTypes){
+            jsonGenerator.writeObjectFieldStart(nodeType.getSimpleName());
 
             for(Clone.Type cloneType: cloneTypes){
                 jsonGenerator.writeObjectFieldStart(cloneType.name());
 
                 for(EvolutionResults.CoEvolutionType coEvolutionType: coEvolutionTypes){
-                    int total = results.getTotalElement(statementType, cloneType, coEvolutionType);
+                    int total = results.getTotalElement(nodeType, cloneType, coEvolutionType);
 
                     jsonGenerator.writeNumberField(coEvolutionType.name(), total);
                 }

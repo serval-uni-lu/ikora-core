@@ -77,19 +77,19 @@ public class CloneDetection<T extends Node> {
     }
 
     private Clones<T> run(Class<T> type){
-        List<T> statements = new ArrayList<>();
+        List<T> nodes = new ArrayList<>();
 
         for(Project project: projects){
-            statements.addAll(project.getStatements(type));
+            nodes.addAll(project.getNodes(type));
         }
 
-        int size = statements.size();
+        int size = nodes.size();
 
         for(int i = 0; i < size; ++i){
-            T t1 = statements.get(i);
+            T t1 = nodes.get(i);
 
             for(int j = i + 1; j < size; ++j){
-                T t2 = statements.get(j);
+                T t2 = nodes.get(j);
                 clones.update(t1, t2, getCloneType(t1, t2));
             }
         }

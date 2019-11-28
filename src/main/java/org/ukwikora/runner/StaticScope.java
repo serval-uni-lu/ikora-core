@@ -140,7 +140,7 @@ public class StaticScope implements Scope{
             return Collections.emptySet();
         }
 
-        return test.get(testCase).findStatement(name);
+        return test.get(testCase).findNode(name);
     }
 
 
@@ -149,11 +149,11 @@ public class StaticScope implements Scope{
             return Collections.emptySet();
         }
 
-        return this.suite.get(suite).findStatement(name);
+        return this.suite.get(suite).findNode(name);
     }
 
 
     private Set<Variable> findGlobalVariable(String name) {
-        return global.findStatement(name);
+        return global.findNode(name);
     }
 }

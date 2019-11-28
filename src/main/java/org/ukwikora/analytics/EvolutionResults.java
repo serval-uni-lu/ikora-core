@@ -203,17 +203,17 @@ public class EvolutionResults {
         return testCaseClones.get(project);
     }
 
-    public <T extends Node> int getTotalElement(Class<T> statementType, Clone.Type cloneType, CoEvolutionType coEvolutionType){
+    public <T extends Node> int getTotalElement(Class<T> nodeType, Clone.Type cloneType, CoEvolutionType coEvolutionType){
         int total = 0;
 
         for(Project project: projects){
-            Set<T> statements = project.getStatements(statementType);
+            Set<T> nodes = project.getNodes(nodeType);
 
-            if(statements == null){
+            if(nodes == null){
                 continue;
             }
 
-            for (Node node : statements){
+            for (Node node : nodes){
                 if(!checkCloneCriterion(project, node, cloneType)){
                     continue;
                 }
@@ -229,12 +229,12 @@ public class EvolutionResults {
         return total;
     }
 
-    private <T extends Node> boolean checkCloneCriterion(Project project, T statement, Clone.Type cloneType){
+    private <T extends Node> boolean checkCloneCriterion(Project project, T node, Clone.Type cloneType){
         Clones<T> clones = null;
-        if(statement.getClass() == UserKeyword.class){
+        if(node.getClass() == UserKeyword.class){
             clones = getKeywordClones(project);
         }
-        else if(statement.getClass() == TestCase.class){
+        else if(node.getClass() == TestCase.class){
             clones = getTestCaseClones(project);
         }
 
@@ -242,7 +242,7 @@ public class EvolutionResults {
             return false;
         }
 
-        return clones.getCloneType(statement) == cloneType;
+        return clones.getCloneType(node) == cloneType;
     }
 
     private boolean checkCoEvolutionCriterion(Node node, CoEvolutionType type){

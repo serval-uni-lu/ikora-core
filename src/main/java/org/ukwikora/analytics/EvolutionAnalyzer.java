@@ -39,14 +39,14 @@ public class EvolutionAnalyzer {
                 continue;
             }
 
-            for(Pair<UserKeyword,UserKeyword> keywordPair: StatementMatcher.getPairs(UserKeyword.class, project1, project2)){
+            for(Pair<UserKeyword,UserKeyword> keywordPair: NodeMatcher.getPairs(UserKeyword.class, project1, project2)){
                 UserKeyword keyword1 = getElement(keywordPair, project1);
                 UserKeyword keyword2 = getElement(keywordPair, project2);
 
                 results.addDifference(project1, Difference.of(keyword1, keyword2));
             }
 
-            for(Pair<TestCase,TestCase> testCasePair: StatementMatcher.getPairs(TestCase.class, project1, project2)) {
+            for(Pair<TestCase,TestCase> testCasePair: NodeMatcher.getPairs(TestCase.class, project1, project2)) {
                 TestCase testCase1 = getElement(testCasePair, project1);
                 TestCase testCase2 = getElement(testCasePair, project2);
 
@@ -59,7 +59,7 @@ public class EvolutionAnalyzer {
                 results.addSequence(project2, sequence2);
             }
 
-            for(Pair<Variable,Variable> variablePair: StatementMatcher.getPairs(Variable.class, project1, project2)) {
+            for(Pair<Variable,Variable> variablePair: NodeMatcher.getPairs(Variable.class, project1, project2)) {
                 Variable variable1 = getElement(variablePair, project1);
                 Variable variable2 = getElement(variablePair, project2);
 
