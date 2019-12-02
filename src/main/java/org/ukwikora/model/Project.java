@@ -8,7 +8,7 @@ import java.util.*;
 
 public class Project implements Comparable<Project> {
     private List<Suite> suites;
-    private Map<String, TestCaseFile> files;
+    private Map<String, SourceFile> files;
     private Set<Project> dependencies;
 
     private File rootFolder;
@@ -53,15 +53,15 @@ public class Project implements Comparable<Project> {
         return date;
     }
 
-    public List<TestCaseFile> getTestCaseFiles(){
+    public List<SourceFile> getSourceFiles(){
         return new ArrayList<>(files.values());
     }
 
-    public TestCaseFile getTestCaseFile(String name) {
+    public SourceFile getSourceFile(String name) {
         return files.get(name);
     }
 
-    public Map<String, TestCaseFile> getFiles(){
+    public Map<String, SourceFile> getFiles(){
         return files;
     }
 
@@ -76,7 +76,7 @@ public class Project implements Comparable<Project> {
     public List<TestCase> getTestCases(){
         List<TestCase> testCases = new ArrayList<>();
 
-        for(TestCaseFile file: files.values()){
+        for(SourceFile file: files.values()){
             testCases.addAll(file.getTestCases());
         }
 
@@ -86,7 +86,7 @@ public class Project implements Comparable<Project> {
     public Set<UserKeyword> getUserKeywords(){
         Set<UserKeyword> userKeywords = new HashSet<>();
 
-        for(TestCaseFile file: files.values()){
+        for(SourceFile file: files.values()){
             userKeywords.addAll(file.getUserKeywords());
         }
 
@@ -96,7 +96,7 @@ public class Project implements Comparable<Project> {
     public Set<UserKeyword> findUserKeyword(String name) {
         Set<UserKeyword> userKeywordsFound = new HashSet<>();
 
-        for(TestCaseFile file: files.values()){
+        for(SourceFile file: files.values()){
             userKeywordsFound.addAll(file.findUserKeyword(name));
         }
 
@@ -106,7 +106,7 @@ public class Project implements Comparable<Project> {
     public Set<UserKeyword> findUserKeyword(String library, String name) {
         Set<UserKeyword> userKeywordsFound = new HashSet<>();
 
-        for(TestCaseFile file: files.values()){
+        for(SourceFile file: files.values()){
             userKeywordsFound.addAll(file.findUserKeyword(library, name));
         }
 
@@ -116,7 +116,7 @@ public class Project implements Comparable<Project> {
     public Set<Variable> getVariables(){
         Set<Variable> variables = new HashSet<>();
 
-        for(TestCaseFile file: files.values()){
+        for(SourceFile file: files.values()){
             variables.addAll(file.getVariables());
         }
 
@@ -140,7 +140,7 @@ public class Project implements Comparable<Project> {
     public Set<Resources> getExternalResources() {
         Set<Resources> externalResources = new HashSet<>();
 
-        for(TestCaseFile file: files.values()){
+        for(SourceFile file: files.values()){
             externalResources.addAll(file.getSettings().getExternalResources());
         }
 
@@ -158,7 +158,7 @@ public class Project implements Comparable<Project> {
     public int getDeadLoc() {
         int deadLoc = 0;
 
-        for(TestCaseFile file: files.values()){
+        for(SourceFile file: files.values()){
             deadLoc += file.getDeadLoc();
         }
 
@@ -183,31 +183,31 @@ public class Project implements Comparable<Project> {
         files.put(key, null);
     }
 
-    public void addTestCaseFile(TestCaseFile testCaseFile){
-        if(testCaseFile == null){
+    public void addSourceFile(SourceFile sourceFile){
+        if(sourceFile == null){
             return;
         }
 
-        files.put(testCaseFile.getName(), testCaseFile);
-        updateSuites(testCaseFile);
-        updateFiles(testCaseFile.getSettings());
+        files.put(sourceFile.getName(), sourceFile);
+        updateSuites(sourceFile);
+        updateFiles(sourceFile.getSettings());
 
-        this.loc += testCaseFile.getLoc();
+        this.loc += sourceFile.getLoc();
     }
 
-    private void updateSuites(TestCaseFile testCaseFile){
-        if(testCaseFile.getTestCases().isEmpty()){
+    private void updateSuites(SourceFile sourceFile){
+        if(sourceFile.getTestCases().isEmpty()){
             return;
         }
 
-        String name = SuiteFactory.computeName(testCaseFile, true);
+        String name = SuiteFactory.computeName(sourceFile, true);
         Optional<Suite> suite = suites.stream().filter(s -> s.getName().equals(name)).findAny();
 
         if(suite.isPresent()){
-            suite.get().addTestCaseFile(testCaseFile);
+            suite.get().addSourceFile(sourceFile);
         }
         else {
-            suites.add(SuiteFactory.create(testCaseFile));
+            suites.add(SuiteFactory.create(sourceFile));
         }
     }
 

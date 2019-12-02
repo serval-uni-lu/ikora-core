@@ -7,14 +7,14 @@ import java.util.*;
 public class NodeTable<T extends Node> implements Iterable<T> {
     private HashMap<String, T> nodeMap;
     private List<T> nodeList;
-    private TestCaseFile file;
+    private SourceFile file;
 
     public NodeTable() {
         this.nodeMap = new HashMap<>();
         this.nodeList = new ArrayList<>();
     }
 
-    public void setFile(TestCaseFile file) {
+    public void setFile(SourceFile file) {
         this.file = file;
 
         nodeMap = new HashMap<>();
@@ -24,7 +24,7 @@ public class NodeTable<T extends Node> implements Iterable<T> {
         }
     }
 
-    public TestCaseFile getFile() {
+    public SourceFile getFile() {
         return file;
     }
 

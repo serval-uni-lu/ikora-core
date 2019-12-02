@@ -11,7 +11,7 @@ import java.util.*;
 public abstract class LibraryKeyword implements Keyword {
 
     private Set<Node> dependencies;
-    private TestCaseFile file;
+    private SourceFile file;
     private LineRange lineRange;
 
     protected Type type;
@@ -85,7 +85,7 @@ public abstract class LibraryKeyword implements Keyword {
     }
 
     @Override
-    public TestCaseFile getFile(){
+    public SourceFile getFile(){
         return this.file;
     }
 
@@ -108,7 +108,7 @@ public abstract class LibraryKeyword implements Keyword {
     }
 
     @Override
-    public void setFile(@Nonnull TestCaseFile file){
+    public void setFile(@Nonnull SourceFile file){
         this.file = file;
     }
 

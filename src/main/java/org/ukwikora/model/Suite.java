@@ -10,7 +10,7 @@ public class Suite {
     private String documentation;
     private File source;
     private List<Suite> suites;
-    private TestCaseFile testCaseFile;
+    private SourceFile sourceFile;
 
     Suite(String name, File source){
         this.name = name;
@@ -31,15 +31,15 @@ public class Suite {
         return documentation;
     }
 
-    public List<TestCaseFile> getTestCaseFiles() {
-        List<TestCaseFile> files = new ArrayList<>();
+    public List<SourceFile> getSourceFiles() {
+        List<SourceFile> files = new ArrayList<>();
 
         for(Suite suite: suites){
-            files.addAll(getTestCaseFiles());
+            files.addAll(getSourceFiles());
         }
 
-        if(testCaseFile != null){
-            files.add(testCaseFile);
+        if(sourceFile != null){
+            files.add(sourceFile);
         }
 
         return files;
@@ -56,8 +56,8 @@ public class Suite {
             testCases.addAll(suite.getTestCases());
         }
 
-        if(testCaseFile != null){
-            testCases.addAll(testCaseFile.getTestCases());
+        if(sourceFile != null){
+            testCases.addAll(sourceFile.getTestCases());
         }
 
         return testCases;
@@ -70,8 +70,8 @@ public class Suite {
             keywords.addAll(suite.getUserKeywords());
         }
 
-        if(testCaseFile != null){
-            keywords.addAll(testCaseFile.getUserKeywords());
+        if(sourceFile != null){
+            keywords.addAll(sourceFile.getUserKeywords());
         }
 
         return keywords;
@@ -84,8 +84,8 @@ public class Suite {
             userKeywordsFound.addAll(suite.findUserKeyword(name));
         }
 
-        if(testCaseFile != null){
-            userKeywordsFound.addAll(testCaseFile.findUserKeyword(name));
+        if(sourceFile != null){
+            userKeywordsFound.addAll(sourceFile.findUserKeyword(name));
         }
 
         return userKeywordsFound;
@@ -98,8 +98,8 @@ public class Suite {
             userKeywordsFound.addAll(suite.findUserKeyword(library, name));
         }
 
-        if(testCaseFile != null){
-            userKeywordsFound.addAll(testCaseFile.findUserKeyword(library, name));
+        if(sourceFile != null){
+            userKeywordsFound.addAll(sourceFile.findUserKeyword(library, name));
         }
 
         return userKeywordsFound;
@@ -112,8 +112,8 @@ public class Suite {
             variables.addAll(suite.getVariables());
         }
 
-        if(testCaseFile != null){
-            variables.addAll(testCaseFile.getVariables());
+        if(sourceFile != null){
+            variables.addAll(sourceFile.getVariables());
         }
 
         return variables;
@@ -126,8 +126,8 @@ public class Suite {
             externalResources.addAll(suite.getSettings());
         }
 
-        if(testCaseFile != null){
-            externalResources.addAll(testCaseFile.getSettings().getExternalResources());
+        if(sourceFile != null){
+            externalResources.addAll(sourceFile.getSettings().getExternalResources());
         }
 
         return externalResources;
@@ -140,8 +140,8 @@ public class Suite {
             deadLoc += suite.getDeadLoc();
         }
 
-        if(testCaseFile != null){
-            deadLoc += testCaseFile.getDeadLoc();
+        if(sourceFile != null){
+            deadLoc += sourceFile.getDeadLoc();
         }
 
         return deadLoc;
@@ -154,8 +154,8 @@ public class Suite {
             suite.execute(runtime);
         }
 
-        if(testCaseFile != null){
-            for(TestCase testCase: testCaseFile.getTestCases()){
+        if(sourceFile != null){
+            for(TestCase testCase: sourceFile.getTestCases()){
                 testCase.execute(runtime);
             }
         }
@@ -163,12 +163,12 @@ public class Suite {
         runtime.exitSuite(this);
     }
 
-    void addTestCaseFile(TestCaseFile testCaseFile) {
-        if(testCaseFile.getFile().equals(this.getSource())){
-            this.testCaseFile = testCaseFile;
+    void addSourceFile(SourceFile sourceFile) {
+        if(sourceFile.getFile().equals(this.getSource())){
+            this.sourceFile = sourceFile;
         }
         else{
-            addSuite(SuiteFactory.create(this, testCaseFile));
+            addSuite(SuiteFactory.create(this, sourceFile));
         }
     }
 }

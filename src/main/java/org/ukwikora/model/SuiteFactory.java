@@ -8,30 +8,30 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 class SuiteFactory {
-    static Suite create(TestCaseFile testCaseFile){
-        return create(null, testCaseFile);
+    static Suite create(SourceFile sourceFile){
+        return create(null, sourceFile);
     }
 
-    static Suite create(Suite parent, TestCaseFile testCaseFile){
-        String name = computeName(parent, testCaseFile, true);
-        File source = computeSource(parent, testCaseFile);
+    static Suite create(Suite parent, SourceFile sourceFile){
+        String name = computeName(parent, sourceFile, true);
+        File source = computeSource(parent, sourceFile);
 
         Suite suite = new Suite(name, source);
-        suite.addTestCaseFile(testCaseFile);
+        suite.addSourceFile(sourceFile);
 
         return suite;
     }
 
-    public static String computeName(TestCaseFile testCaseFile, boolean beautiful){
-        return computeName(null, testCaseFile, beautiful);
+    public static String computeName(SourceFile sourceFile, boolean beautiful){
+        return computeName(null, sourceFile, beautiful);
     }
 
-    static String computeName(Suite parent, TestCaseFile testCaseFile, boolean beautiful){
-        String name = testCaseFile.getName();
+    static String computeName(Suite parent, SourceFile sourceFile, boolean beautiful){
+        String name = sourceFile.getName();
 
         if(parent != null){
             Path base = Paths.get(parent.getSource().getAbsolutePath().trim());
-            Path path = Paths.get(testCaseFile.getFile().getAbsolutePath().trim()).normalize();
+            Path path = Paths.get(sourceFile.getFile().getAbsolutePath().trim()).normalize();
 
             name = base.relativize(path).toString();
         }
@@ -46,20 +46,20 @@ class SuiteFactory {
         return name;
     }
 
-    private static File computeSource(Suite parent, TestCaseFile testCaseFile){
+    private static File computeSource(Suite parent, SourceFile sourceFile){
         File base;
 
         if(parent != null){
             base = parent.getSource();
         }
         else {
-            base = testCaseFile.getProject().getRootFolder();
+            base = sourceFile.getProject().getRootFolder();
 
             if(base.isFile()){
                 base = base.getParentFile();
             }
         }
 
-        return new File(base, computeName(parent, testCaseFile, false));
+        return new File(base, computeName(parent, sourceFile, false));
     }
 }

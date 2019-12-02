@@ -8,18 +8,18 @@ import org.ukwikora.model.*;
 import java.io.File;
 import java.io.IOException;
 
-class TestCaseFileParser {
-    private static final Logger logger = LogManager.getLogger(TestCaseFileParser.class);
+class SourceFileParser {
+    private static final Logger logger = LogManager.getLogger(SourceFileParser.class);
 
     public static void parse(File file, Project project, DynamicImports dynamicImports) {
         LineReader reader = null;
-        TestCaseFile testCaseFile = null;
+        SourceFile sourceFile = null;
 
         try {
-            testCaseFile = new TestCaseFile(project, file);
-            reader = new LineReader(testCaseFile);
+            sourceFile = new SourceFile(project, file);
+            reader = new LineReader(sourceFile);
 
-            setName(project, testCaseFile);
+            setName(project, sourceFile);
 
             reader.readLine();
 
@@ -32,20 +32,20 @@ class TestCaseFileParser {
                 String text = reader.getCurrent().getText();
 
                 if(isSettings(text)){
-                    Settings settings = SettingsTableParser.parse(reader, testCaseFile);
-                    testCaseFile.setSettings(settings);
+                    Settings settings = SettingsTableParser.parse(reader, sourceFile);
+                    sourceFile.setSettings(settings);
                 }
                 else if(isTestCases(text)){
                     NodeTable<TestCase> testCaseTable = TestCaseTableParser.parse(reader, dynamicImports);
-                    testCaseFile.setTestCaseTable(testCaseTable);
+                    sourceFile.setTestCaseTable(testCaseTable);
                 }
                 else if(isKeywords(text)){
                     NodeTable<UserKeyword> nodeTable = KeywordTableParser.parse(reader, dynamicImports);
-                    testCaseFile.setKeywordTable(nodeTable);
+                    sourceFile.setKeywordTable(nodeTable);
                 }
                 else if(isVariable(text)){
                     NodeTable<Variable> variableTable = VariableTableParser.parse(reader);
-                    testCaseFile.setVariableTable(variableTable);
+                    sourceFile.setVariableTable(variableTable);
                 }
                 else {
                     reader.readLine();
@@ -54,10 +54,10 @@ class TestCaseFileParser {
 
             logger.trace("file parse: " + file.getAbsolutePath());
         } catch (IOException e) {
-            testCaseFile = new TestCaseFile(project, file);
-            setName(project, testCaseFile);
+            sourceFile = new SourceFile(project, file);
+            setName(project, sourceFile);
 
-            project.addTestCaseFile(testCaseFile);
+            project.addSourceFile(sourceFile);
 
             logger.error("failed to parse: " + file.getAbsolutePath());
         } catch (InvalidDependencyException e) {
@@ -65,7 +65,7 @@ class TestCaseFileParser {
         } catch (Exception e) {
             logger.error(String.format("Oops, something went really wrong during parsing!: %s", e.getMessage()));
         } finally {
-            project.addTestCaseFile(testCaseFile);
+            project.addSourceFile(sourceFile);
 
             if(reader != null){
                 reader.close();
@@ -73,9 +73,9 @@ class TestCaseFileParser {
         }
     }
 
-    private static void setName(Project project, TestCaseFile testCaseFile) {
-        String name = project.generateFileName(testCaseFile.getFile());
-        testCaseFile.setName(name);
+    private static void setName(Project project, SourceFile sourceFile) {
+        String name = project.generateFileName(sourceFile.getFile());
+        sourceFile.setName(name);
     }
 
     static boolean isSettings(String line){

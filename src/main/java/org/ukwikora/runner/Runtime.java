@@ -29,8 +29,8 @@ public class Runtime {
         return Collections.singleton(this.libraries.findVariable(name));
     }
 
-    public List<TestCaseFile> getTestCaseFiles(){
-        return project.getTestCaseFiles();
+    public List<SourceFile> getSourceFiles(){
+        return project.getSourceFiles();
     }
 
     public Set<Variable> findInScope(Set<TestCase> testCases, Set<String> suites, String name){

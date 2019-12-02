@@ -64,13 +64,13 @@ public class GitRepository {
     }
 
     public Set<TestCase> findTestCase(String name) {
-        TestCaseFile testCaseFile = project.getTestCaseFile(name);
+        SourceFile sourceFile = project.getSourceFile(name);
 
-        if(testCaseFile == null){
+        if(sourceFile == null){
             return null;
         }
 
-        return testCaseFile.getTestCase(name);
+        return sourceFile.getTestCase(name);
     }
 
     public void checkout(Date date, boolean link) {

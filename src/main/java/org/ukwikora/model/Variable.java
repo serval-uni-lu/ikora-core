@@ -12,7 +12,7 @@ public abstract class Variable implements Node {
         SCALAR, LIST, DICTIONARY
     }
 
-    private TestCaseFile file;
+    private SourceFile file;
     private LineRange lineRange;
     private Assignment assignment;
     private Set<Node> dependencies;
@@ -36,7 +36,7 @@ public abstract class Variable implements Node {
     }
 
     @Override
-    public void setFile(@Nonnull TestCaseFile file) {
+    public void setFile(@Nonnull SourceFile file) {
         this.file = file;
     }
 
@@ -47,7 +47,7 @@ public abstract class Variable implements Node {
     }
 
     @Override
-    public TestCaseFile getFile() {
+    public SourceFile getFile() {
         return this.file;
     }
 

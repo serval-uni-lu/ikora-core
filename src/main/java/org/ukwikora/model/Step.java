@@ -9,7 +9,7 @@ import java.util.*;
 public abstract class Step implements Keyword {
     private Value name;
     private Keyword parent;
-    private TestCaseFile file;
+    private SourceFile file;
     private LineRange lineRange;
 
     public void setName(@Nonnull String name) {
@@ -46,12 +46,12 @@ public abstract class Step implements Keyword {
     }
 
     @Override
-    public void setFile(@Nonnull TestCaseFile file){
+    public void setFile(@Nonnull SourceFile file){
         this.file = file;
     }
 
     @Override
-    public TestCaseFile getFile() {
+    public SourceFile getFile() {
         return this.file;
     }
 

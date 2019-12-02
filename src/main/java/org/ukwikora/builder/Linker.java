@@ -26,12 +26,12 @@ public class Linker {
     public static void link(Runtime runtime) throws Exception {
         List<ScopeValue> unresolvedArguments = new ArrayList<>();
 
-        for (TestCaseFile testCaseFile: runtime.getTestCaseFiles()) {
-            for(TestCase testCase: testCaseFile.getTestCases()) {
+        for (SourceFile sourceFile : runtime.getSourceFiles()) {
+            for(TestCase testCase: sourceFile.getTestCases()) {
                 unresolvedArguments.addAll(linkSteps(testCase, runtime));
             }
 
-            for(UserKeyword userKeyword: testCaseFile.getUserKeywords()) {
+            for(UserKeyword userKeyword: sourceFile.getUserKeywords()) {
                 unresolvedArguments.addAll(linkSteps(userKeyword, runtime));
             }
         }
@@ -180,24 +180,24 @@ public class Linker {
         }
     }
 
-    private static Set<? super Keyword> getKeywords(String fullName, TestCaseFile testCaseFile, Runtime runtime) throws Exception{
-        Set<? super Keyword> keywordsFound = getKeywords(fullName, testCaseFile, runtime, false);
+    private static Set<? super Keyword> getKeywords(String fullName, SourceFile sourceFile, Runtime runtime) throws Exception{
+        Set<? super Keyword> keywordsFound = getKeywords(fullName, sourceFile, runtime, false);
 
         if(keywordsFound.isEmpty()){
-            keywordsFound = getKeywords(fullName, testCaseFile, runtime, true);
+            keywordsFound = getKeywords(fullName, sourceFile, runtime, true);
         }
 
         if(keywordsFound.isEmpty()) {
-            logger.error("Keyword definition for \"" + fullName + "\" in \"" + testCaseFile.getName() + "\" not found!");
+            logger.error("Keyword definition for \"" + fullName + "\" in \"" + sourceFile.getName() + "\" not found!");
         }
         else if(keywordsFound.size() > 1){
-            logger.error("Multiple definition found for \"" + fullName + "\" in \"" + testCaseFile.getName() + "\"!");
+            logger.error("Multiple definition found for \"" + fullName + "\" in \"" + sourceFile.getName() + "\"!");
         }
 
         return keywordsFound;
     }
 
-    private static Set<? super Keyword> getKeywords(String fullName, TestCaseFile testCaseFile, Runtime runtime, boolean allowSplit) throws Exception{
+    private static Set<? super Keyword> getKeywords(String fullName, SourceFile sourceFile, Runtime runtime, boolean allowSplit) throws Exception{
         String library;
         String name;
 
@@ -211,7 +211,7 @@ public class Linker {
             name = fullName;
         }
 
-        final Set<? super Keyword> keywordsFound = new HashSet<>(testCaseFile.findUserKeyword(library, name));
+        final Set<? super Keyword> keywordsFound = new HashSet<>(sourceFile.findUserKeyword(library, name));
 
         if(keywordsFound.isEmpty()){
             Keyword runtimeKeyword = runtime.findKeyword(library, name);
@@ -223,7 +223,7 @@ public class Linker {
         return keywordsFound;
     }
 
-    private static List<ScopeValue> resolveArgument(Value value, TestCaseFile testCaseFile, KeywordDefinition keyword, Runtime runtime) {
+    private static List<ScopeValue> resolveArgument(Value value, SourceFile sourceFile, KeywordDefinition keyword, Runtime runtime) {
         List<ScopeValue> unresolvedArguments = new ArrayList<>();
 
         List<String> variables = value.findVariables();
@@ -235,7 +235,7 @@ public class Linker {
                 variablesFound.addAll(((UserKeyword)keyword).findLocalVariable(name));
             }
 
-            variablesFound.addAll(testCaseFile.findVariable(name));
+            variablesFound.addAll(sourceFile.findVariable(name));
             variablesFound.addAll(runtime.findLibraryVariable(name));
 
             if(variablesFound.isEmpty()){

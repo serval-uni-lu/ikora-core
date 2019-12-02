@@ -9,8 +9,8 @@ import javax.annotation.Nonnull;
 import java.util.Set;
 
 public interface Node extends Differentiable {
-    void setFile(@Nonnull TestCaseFile file);
-    TestCaseFile getFile();
+    void setFile(@Nonnull SourceFile file);
+    SourceFile getFile();
     String getFileName();
     String getLibraryName();
 

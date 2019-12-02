@@ -7,7 +7,7 @@ import javax.annotation.Nonnull;
 import java.io.File;
 import java.util.*;
 
-public class TestCaseFile implements Iterable<UserKeyword> {
+public class SourceFile implements Iterable<UserKeyword> {
     final private Project project;
     final private File file;
 
@@ -20,7 +20,7 @@ public class TestCaseFile implements Iterable<UserKeyword> {
     private NodeTable<UserKeyword> userKeywordTable;
     private NodeTable<Variable> variableTable;
 
-    public TestCaseFile(Project project, File file){
+    public SourceFile(Project project, File file){
         this.project = project;
         this.file = file;
         this.loc = 0;
@@ -166,7 +166,7 @@ public class TestCaseFile implements Iterable<UserKeyword> {
         return findNode(library, name, new HashSet<>(), Variable.class);
     }
 
-    private <T> Set<T> findNode(String library, String name, Set<TestCaseFile> memory, Class<T> type){
+    private <T> Set<T> findNode(String library, String name, Set<SourceFile> memory, Class<T> type){
         HashSet<T> nodes = new HashSet<>();
 
         if(library == null || library.isEmpty() || getLibraryName().equalsIgnoreCase(library)){
@@ -184,8 +184,8 @@ public class TestCaseFile implements Iterable<UserKeyword> {
         }
 
         for(Resources resources: settings.getAllResources()){
-            if(resources.isValid() && memory.add(resources.getTestCaseFile())) {
-                TestCaseFile file = resources.getTestCaseFile();
+            if(resources.isValid() && memory.add(resources.getSourceFile())) {
+                SourceFile file = resources.getSourceFile();
                 nodes.addAll(file.findNode(library, name, memory, type));
             }
         }
@@ -198,7 +198,7 @@ public class TestCaseFile implements Iterable<UserKeyword> {
         lines.add(line);
     }
 
-    public boolean isDirectDependency(TestCaseFile file) {
+    public boolean isDirectDependency(SourceFile file) {
         if(file == null){
             return false;
         }
@@ -208,7 +208,7 @@ public class TestCaseFile implements Iterable<UserKeyword> {
         }
 
         for(Resources resources: settings.getAllResources()){
-            if(resources.getTestCaseFile() == file){
+            if(resources.getSourceFile() == file){
                 return true;
             }
         }

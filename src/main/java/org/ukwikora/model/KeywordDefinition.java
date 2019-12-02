@@ -10,7 +10,7 @@ import javax.annotation.Nonnull;
 import java.util.*;
 
 public abstract class KeywordDefinition implements Keyword, Iterable<Step> {
-    private TestCaseFile file;
+    private SourceFile file;
     private Value name;
     private String documentation;
     private Set<String> tags;
@@ -53,7 +53,7 @@ public abstract class KeywordDefinition implements Keyword, Iterable<Step> {
     }
 
     @Override
-    public void setFile(@Nonnull TestCaseFile file) {
+    public void setFile(@Nonnull SourceFile file) {
         this.file = file;
 
         for(Step step: this.steps){
@@ -62,7 +62,7 @@ public abstract class KeywordDefinition implements Keyword, Iterable<Step> {
     }
 
     @Override
-    public TestCaseFile getFile() {
+    public SourceFile getFile() {
         return file;
     }
 

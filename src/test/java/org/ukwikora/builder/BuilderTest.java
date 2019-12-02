@@ -19,10 +19,10 @@ class BuilderTest {
 
         assertEquals(1, project.getTestCases().size());
 
-        final TestCaseFile testCaseFile = project.getTestCaseFile("library-variable.robot");
-        assertNotNull(testCaseFile);
+        final SourceFile sourceFile = project.getSourceFile("library-variable.robot");
+        assertNotNull(sourceFile);
 
-        final TestCase testCase = testCaseFile.getTestCases().get(0);
+        final TestCase testCase = sourceFile.getTestCases().get(0);
         assertEquals(1, testCase.getSteps().size());
 
         final KeywordCall step = (KeywordCall)testCase.getSteps().get(0);
@@ -46,10 +46,10 @@ class BuilderTest {
         final Set<UserKeyword> keywords = project.findUserKeyword("Show the content of ${value}");
         assertEquals(1, keywords.size());
 
-        final TestCaseFile testCaseFile = project.getTestCaseFile("keyword-with-dot.robot");
-        assertNotNull(testCaseFile);
+        final SourceFile sourceFile = project.getSourceFile("keyword-with-dot.robot");
+        assertNotNull(sourceFile);
 
-        final TestCase testCase = testCaseFile.getTestCases().get(0);
+        final TestCase testCase = sourceFile.getTestCases().get(0);
         assertEquals(1, testCase.getSteps().size());
     }
 

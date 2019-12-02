@@ -147,7 +147,7 @@ public class TimeLine implements Differentiable, Iterable<Difference> {
 
         Node node = (Node)item;
 
-        TestCaseFile file = node.getFile();
+        SourceFile file = node.getFile();
         if(file == null){
             return "";
         }

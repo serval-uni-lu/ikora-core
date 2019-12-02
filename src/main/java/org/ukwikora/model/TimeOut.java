@@ -14,7 +14,7 @@ public class TimeOut implements Node {
     private final Value variable;
     private final TimeValue value;
 
-    private TestCaseFile file;
+    private SourceFile file;
     private LineRange lineRange;
     private String name;
     private KeywordDefinition parent;
@@ -49,12 +49,12 @@ public class TimeOut implements Node {
     }
 
     @Override
-    public void setFile(@Nonnull TestCaseFile file) {
+    public void setFile(@Nonnull SourceFile file) {
         this.file = file;
     }
 
     @Override
-    public TestCaseFile getFile() {
+    public SourceFile getFile() {
         return file;
     }
 

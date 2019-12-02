@@ -1,7 +1,7 @@
 package org.ukwikora.builder;
 
 import org.apache.commons.io.input.BOMInputStream;
-import org.ukwikora.model.TestCaseFile;
+import org.ukwikora.model.SourceFile;
 import org.ukwikora.utils.FileUtils;
 
 import java.io.*;
@@ -12,7 +12,7 @@ public class LineReader {
     private LineNumberReader reader;
     private Line current;
     private File file;
-    private TestCaseFile testCaseFile;
+    private SourceFile sourceFile;
     private int loc;
 
     public LineReader(File file) throws FileNotFoundException {
@@ -23,7 +23,7 @@ public class LineReader {
         InputStreamReader input = new InputStreamReader(new BOMInputStream(new FileInputStream(file)), charset);
         this.reader = new LineNumberReader(input);
 
-        this.testCaseFile = null;
+        this.sourceFile = null;
     }
 
     public LineReader(Reader reader) {
@@ -31,18 +31,18 @@ public class LineReader {
         loc = 0;
 
         this.reader = new LineNumberReader(reader);
-        this.testCaseFile = null;
+        this.sourceFile = null;
     }
 
-    public LineReader(TestCaseFile testCaseFile) throws FileNotFoundException {
-        this.file = testCaseFile.getFile();
+    public LineReader(SourceFile sourceFile) throws FileNotFoundException {
+        this.file = sourceFile.getFile();
         loc = 0;
 
         Charset charset = FileUtils.detectCharset(this.file, StandardCharsets.UTF_8);
         InputStreamReader input = new InputStreamReader(new FileInputStream(this.file), charset);
         this.reader = new LineNumberReader(input);
 
-        this.testCaseFile = testCaseFile;
+        this.sourceFile = sourceFile;
     }
 
     public Line readLine() throws IOException {
@@ -51,16 +51,16 @@ public class LineReader {
 
         current = new Line(currentText, currentNumber, LexerUtils.isComment(currentText), LexerUtils.isEmpty(currentText));
 
-        if(testCaseFile != null){
-            testCaseFile.addLine(current);
+        if(sourceFile != null){
+            sourceFile.addLine(current);
         }
 
         if(current.isValid() && !current.isEmpty()){
             ++loc;
         }
 
-        if(testCaseFile != null && !current.isValid()){
-            testCaseFile.setLoc(loc);
+        if(sourceFile != null && !current.isValid()){
+            sourceFile.setLoc(loc);
         }
 
         return current;

@@ -36,7 +36,7 @@ public class Assignment extends Step {
     }
 
     @Override
-    public void setFile(@Nonnull TestCaseFile file){
+    public void setFile(@Nonnull SourceFile file){
         super.setFile(file);
 
         for(Variable variable: returnVariables){

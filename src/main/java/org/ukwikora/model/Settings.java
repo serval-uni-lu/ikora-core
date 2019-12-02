@@ -15,7 +15,7 @@ public class Settings {
     private List<Library> libraryTable;
     private List<String> defaultTags;
     private String documentation;
-    private TestCaseFile file;
+    private SourceFile file;
 
     public Settings() {
         this.resourcesTable = new ArrayList<>();
@@ -24,7 +24,7 @@ public class Settings {
         this.defaultTags = new ArrayList<>();
     }
 
-    public TestCaseFile getFile() {
+    public SourceFile getFile() {
         return file;
     }
 
@@ -53,7 +53,7 @@ public class Settings {
         return defaultTags;
     }
 
-    public void setFile(TestCaseFile file) {
+    public void setFile(SourceFile file) {
         this.file = file;
     }
 

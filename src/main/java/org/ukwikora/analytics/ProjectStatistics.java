@@ -23,7 +23,7 @@ public class ProjectStatistics {
     }
 
     public int getNumberFiles(){
-        return this.project.getTestCaseFiles().size();
+        return this.project.getSourceFiles().size();
     }
 
     public int getLoc(){

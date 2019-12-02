@@ -88,8 +88,8 @@ public class Builder {
     private static void updateDependencies(Project project, Project dependency, Resources external) {
         project.addDependency(dependency);
         String name = dependency.generateFileName(external.getFile());
-        TestCaseFile testCaseFile = dependency.getTestCaseFile(name);
-        external.setTestCaseFile(testCaseFile);
+        SourceFile sourceFile = dependency.getSourceFile(name);
+        external.setSourceFile(sourceFile);
     }
 
     public static Project build(File file, boolean link) {

@@ -9,7 +9,7 @@ public class Resources {
     private String comment;
     private File file;
 
-    private TestCaseFile testCasefile;
+    private SourceFile sourceFile;
 
     public Resources(String name, File file, List<String> arguments, String comment) {
         this.name = name;
@@ -26,15 +26,15 @@ public class Resources {
         return file;
     }
 
-    public TestCaseFile getTestCaseFile() {
-        return this.testCasefile;
+    public SourceFile getSourceFile() {
+        return this.sourceFile;
     }
 
-    public void setTestCaseFile(TestCaseFile testCasefile) {
-        this.testCasefile = testCasefile;
+    public void setSourceFile(SourceFile sourceFile) {
+        this.sourceFile = sourceFile;
     }
 
     public boolean isValid() {
-        return file != null && testCasefile != null;
+        return file != null && sourceFile != null;
     }
 }

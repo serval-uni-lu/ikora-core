@@ -5,7 +5,7 @@ import org.ukwikora.utils.Plugin;
 import org.apache.commons.io.FileUtils;
 import org.ukwikora.model.Project;
 import org.ukwikora.model.Resources;
-import org.ukwikora.model.TestCaseFile;
+import org.ukwikora.model.SourceFile;
 
 import java.io.*;
 
@@ -50,28 +50,28 @@ class ProjectParser {
             return;
         }
 
-        TestCaseFileParser.parse(file, project, dynamicImports);
+        SourceFileParser.parse(file, project, dynamicImports);
 
         parseFiles(getNextNotParsedFile(project), project, dynamicImports);
     }
 
     private static void resolveResources(Project project) throws Exception {
-        for(TestCaseFile testCaseFile: project.getTestCaseFiles()) {
-            for (Resources resources: testCaseFile.getSettings().getResources()) {
+        for(SourceFile sourceFile : project.getSourceFiles()) {
+            for (Resources resources: sourceFile.getSettings().getResources()) {
                 String name = project.generateFileName(resources.getFile());
-                TestCaseFile resourceFile = project.getTestCaseFile(name);
+                SourceFile resourceFile = project.getSourceFile(name);
 
                 if(resourceFile == null) {
                     throw new Exception();
                 }
 
-                resources.setTestCaseFile(resourceFile);
+                resources.setSourceFile(resourceFile);
             }
         }
     }
 
     private static File getNextNotParsedFile(Project project){
-        for (Map.Entry<String, TestCaseFile> file: project.getFiles().entrySet()){
+        for (Map.Entry<String, SourceFile> file: project.getFiles().entrySet()){
             if(file.getValue() == null){
                 return new File(project.getRootFolder(), file.getKey());
             }
