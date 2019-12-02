@@ -96,7 +96,7 @@ public abstract class Variable implements Node {
 
     @Override
     public int getLoc() {
-        return file.getLoc(lineRange);
+        return file.getLinesOfCode(lineRange);
     }
 
     @Override

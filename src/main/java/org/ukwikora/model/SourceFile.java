@@ -11,7 +11,8 @@ public class SourceFile implements Iterable<UserKeyword> {
     final private Project project;
     final private File file;
 
-    private int loc;
+    private int linesOfCode;
+    private int commentLines;
     private List<Line> lines;
 
     private String name;
@@ -23,7 +24,8 @@ public class SourceFile implements Iterable<UserKeyword> {
     public SourceFile(Project project, File file){
         this.project = project;
         this.file = file;
-        this.loc = 0;
+        this.linesOfCode = 0;
+        this.commentLines = 0;
         this.lines = new ArrayList<>();
 
         setSettings(new Settings());
@@ -41,12 +43,16 @@ public class SourceFile implements Iterable<UserKeyword> {
         this.variableTable.setFile(this);
     }
 
-    public void setLoc(int loc) {
-        this.loc = loc;
+    public void setLinesOfCode(int linesOfCode) {
+        this.linesOfCode = linesOfCode;
     }
 
-    public int getLoc(){
-        return this.loc;
+    public void setCommentLines(int commentLines) {
+        this.commentLines = commentLines;
+    }
+
+    public int getLinesOfCode(){
+        return this.linesOfCode;
     }
 
     public int getDeadLoc() {
@@ -67,7 +73,11 @@ public class SourceFile implements Iterable<UserKeyword> {
         return deadLoc;
     }
 
-    public int getLoc(LineRange lineRange) {
+    public int getCommentLines(){
+        return commentLines;
+    }
+
+    public int getLinesOfCode(LineRange lineRange) {
         int loc = 0;
 
         for(int index = lineRange.getStart(); index < lineRange.getEnd(); ++index){

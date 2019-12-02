@@ -192,7 +192,7 @@ public class Project implements Comparable<Project> {
         updateSuites(sourceFile);
         updateFiles(sourceFile.getSettings());
 
-        this.loc += sourceFile.getLoc();
+        this.loc += sourceFile.getLinesOfCode();
     }
 
     private void updateSuites(SourceFile sourceFile){

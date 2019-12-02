@@ -14,10 +14,12 @@ public class LineReader {
     private File file;
     private SourceFile sourceFile;
     private int loc;
+    private int comments;
 
     public LineReader(File file) throws FileNotFoundException {
         this.file = file;
         loc = 0;
+        comments = 0;
 
         Charset charset = FileUtils.detectCharset(file, StandardCharsets.UTF_8);
         InputStreamReader input = new InputStreamReader(new BOMInputStream(new FileInputStream(file)), charset);
@@ -29,6 +31,7 @@ public class LineReader {
     public LineReader(Reader reader) {
         this.file = new File("/");
         loc = 0;
+        comments = 0;
 
         this.reader = new LineNumberReader(reader);
         this.sourceFile = null;
@@ -37,6 +40,7 @@ public class LineReader {
     public LineReader(SourceFile sourceFile) throws FileNotFoundException {
         this.file = sourceFile.getFile();
         loc = 0;
+        comments = 0;
 
         Charset charset = FileUtils.detectCharset(this.file, StandardCharsets.UTF_8);
         InputStreamReader input = new InputStreamReader(new FileInputStream(this.file), charset);
@@ -56,11 +60,17 @@ public class LineReader {
         }
 
         if(current.isValid() && !current.isEmpty()){
-            ++loc;
+            if(current.isComment()){
+                ++comments;
+            }
+            else{
+                ++loc;
+            }
         }
 
         if(sourceFile != null && !current.isValid()){
-            sourceFile.setLoc(loc);
+            sourceFile.setLinesOfCode(loc);
+            sourceFile.setCommentLines(comments);
         }
 
         return current;

@@ -88,7 +88,7 @@ public class TimeOut implements Node {
 
     @Override
     public int getLoc() {
-        return this.file.getLoc(this.lineRange);
+        return this.file.getLinesOfCode(this.lineRange);
     }
 
     @Override

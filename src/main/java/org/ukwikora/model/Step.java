@@ -110,7 +110,7 @@ public abstract class Step implements Keyword {
 
     @Override
     public int getLoc(){
-        return file.getLoc(lineRange);
+        return file.getLinesOfCode(lineRange);
     }
 
     public abstract boolean hasKeywordParameters();

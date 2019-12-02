@@ -246,7 +246,7 @@ public abstract class KeywordDefinition implements Keyword, Iterable<Step> {
 
     @Override
     public int getLoc() {
-        return this.file.getLoc(this.lineRange);
+        return this.file.getLinesOfCode(this.lineRange);
     }
 
     KeywordCall toCall(Step step){
