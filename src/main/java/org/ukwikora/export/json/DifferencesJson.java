@@ -3,6 +3,7 @@ package org.ukwikora.export.json;
 import com.fasterxml.jackson.core.JsonGenerator;
 import org.ukwikora.analytics.Action;
 import org.ukwikora.analytics.Difference;
+import org.ukwikora.exception.InvalidArgumentException;
 import org.ukwikora.model.Differentiable;
 import org.ukwikora.model.Node;
 import org.ukwikora.model.Keyword;
@@ -10,7 +11,6 @@ import org.ukwikora.model.KeywordDefinition;
 import org.ukwikora.utils.DifferentiableStringList;
 import org.ukwikora.utils.LevenshteinDistance;
 import org.ukwikora.utils.StringUtils;
-import org.openqa.selenium.InvalidArgumentException;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -111,7 +111,7 @@ public class DifferencesJson {
         }
     }
 
-    private int getDocumentationChanges(Action action) {
+    private int getDocumentationChanges(Action action) throws InvalidArgumentException {
         if(!KeywordDefinition.class.isAssignableFrom(action.getLeft().getClass())){
             throw new InvalidArgumentException("Expected a Keyword got " + action.getLeft().getClass() + " instead!");
         }

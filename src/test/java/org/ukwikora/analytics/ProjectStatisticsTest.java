@@ -3,6 +3,7 @@ package org.ukwikora.analytics;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.ukwikora.Helpers;
+import org.ukwikora.exception.InvalidTypeException;
 import org.ukwikora.model.Project;
 import org.ukwikora.model.TestCase;
 import org.ukwikora.model.UserKeyword;
@@ -21,7 +22,7 @@ class ProjectStatisticsTest {
     }
 
     @Test
-    void checkSizeDistributionWithSimpleProject(){
+    void checkSizeDistributionWithSimpleProject() throws InvalidTypeException {
         Map<Integer, Integer> userKeywordSizes = statistics.getSizeDistribution(UserKeyword.class);
         assertFalse(userKeywordSizes.isEmpty());
 
@@ -42,7 +43,7 @@ class ProjectStatisticsTest {
     }
 
     @Test
-    void checkConnectivityDistributionWithSimpleProject(){
+    void checkConnectivityDistributionWithSimpleProject() throws InvalidTypeException {
         Map<Integer, Integer> userKeywordConnectivity = statistics.getConnectivityDistribution(UserKeyword.class);
         assertFalse(userKeywordConnectivity.isEmpty());
 
@@ -66,7 +67,7 @@ class ProjectStatisticsTest {
     }
 
     @Test
-    void checkLevelDistributionWithSimpleProject(){
+    void checkLevelDistributionWithSimpleProject() throws InvalidTypeException {
         Map<Integer, Integer> userKeywordLevels = statistics.getLevelDistribution(UserKeyword.class);
         assertFalse(userKeywordLevels.isEmpty());
 
@@ -87,7 +88,7 @@ class ProjectStatisticsTest {
     }
 
     @Test
-    void checkSequenceDistributionSimpleProject(){
+    void checkSequenceDistributionSimpleProject() throws InvalidTypeException {
         Map<Integer, Integer> userKeywordSequence = statistics.getSequenceDistribution(UserKeyword.class);
         assertFalse(userKeywordSequence.isEmpty());
 

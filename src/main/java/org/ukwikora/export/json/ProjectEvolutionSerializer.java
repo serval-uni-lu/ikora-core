@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import org.ukwikora.analytics.*;
+import org.ukwikora.exception.InvalidTypeException;
 import org.ukwikora.model.Project;
 import org.ukwikora.model.Sequence;
 import org.ukwikora.model.TestCase;
@@ -18,24 +19,29 @@ public class ProjectEvolutionSerializer extends JsonSerializer<EvolutionResults>
         jsonGenerator.writeStartArray();
 
         for(Project project: results.getProjects()){
-            ProjectStatistics statistics = new ProjectStatistics(project);
+            try{
+                ProjectStatistics statistics = new ProjectStatistics(project);
 
-            jsonGenerator.writeStartObject();
+                jsonGenerator.writeStartObject();
 
-            jsonGenerator.writeStringField("commit ID", project.getCommitId());
-            jsonGenerator.writeStringField("time", project.getDate().toString());
+                jsonGenerator.writeStringField("commit ID", project.getCommitId());
+                jsonGenerator.writeStringField("time", project.getDate().toString());
 
-            jsonGenerator.writeNumberField("number files", statistics.getNumberFiles());
-            jsonGenerator.writeNumberField("number keywords", statistics.getNumberKeywords(UserKeyword.class));
-            jsonGenerator.writeNumberField("number test cases", statistics.getNumberKeywords(TestCase.class));
-            jsonGenerator.writeNumberField("documentation length", statistics.getDocumentationLength());
-            jsonGenerator.writeNumberField("lines of code", statistics.getLoc());
-            jsonGenerator.writeNumberField("sequence steps number", getSequenceStepNumber(results, project));
+                jsonGenerator.writeNumberField("number files", statistics.getNumberFiles());
+                jsonGenerator.writeNumberField("number keywords", statistics.getNumberKeywords(UserKeyword.class));
+                jsonGenerator.writeNumberField("number test cases", statistics.getNumberKeywords(TestCase.class));
+                jsonGenerator.writeNumberField("documentation length", statistics.getDocumentationLength());
+                jsonGenerator.writeNumberField("lines of code", statistics.getLoc());
+                jsonGenerator.writeNumberField("sequence steps number", getSequenceStepNumber(results, project));
 
-            jsonGenerator.writeNumberField("changes sequence steps", getSequenceDifferences(results, project));
-            writeDifferences(results, jsonGenerator, project);
+                jsonGenerator.writeNumberField("changes sequence steps", getSequenceDifferences(results, project));
+                writeDifferences(results, jsonGenerator, project);
 
-            jsonGenerator.writeEndObject();
+                jsonGenerator.writeEndObject();
+            } catch (InvalidTypeException e) {
+                jsonGenerator.writeStringField("ERROR", e.getMessage());
+            }
+
         }
 
         jsonGenerator.writeEndArray();

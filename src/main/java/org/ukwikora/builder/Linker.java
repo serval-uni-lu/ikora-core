@@ -1,9 +1,10 @@
 package org.ukwikora.builder;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.ukwikora.error.Error;
+import org.ukwikora.error.InternalError;
+import org.ukwikora.error.SyntaxError;
+import org.ukwikora.exception.InvalidDependencyException;
 import org.ukwikora.exception.InvalidImportTypeException;
-import org.ukwikora.exception.MalformedTestCaseException;
 import org.ukwikora.exception.MissingKeywordException;
 import org.ukwikora.model.*;
 import org.ukwikora.runner.Runtime;
@@ -13,9 +14,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Linker {
-    private static final Logger logger = LogManager.getLogger(Linker.class);
+    private final Runtime runtime;
+    private final List<Error> errors;
 
-    private Linker() {}
+    private Linker(Runtime runtime, List<Error> errors){
+        this.runtime = runtime;
+        this.errors = errors;
+    }
 
     private static final Pattern gherkinPattern;
 
@@ -23,66 +28,75 @@ public class Linker {
         gherkinPattern =  Pattern.compile("^(\\s*)(Given|When|Then|And|But)", Pattern.CASE_INSENSITIVE);
     }
 
-    public static void link(Runtime runtime) throws Exception {
+    public static void link(Runtime runtime, List<Error> errors) {
+        Linker linker = new Linker(runtime, errors);
+
         List<ScopeValue> unresolvedArguments = new ArrayList<>();
 
         for (SourceFile sourceFile : runtime.getSourceFiles()) {
             for(TestCase testCase: sourceFile.getTestCases()) {
-                unresolvedArguments.addAll(linkSteps(testCase, runtime));
+                unresolvedArguments.addAll(linker.linkSteps(testCase));
             }
 
             for(UserKeyword userKeyword: sourceFile.getUserKeywords()) {
-                unresolvedArguments.addAll(linkSteps(userKeyword, runtime));
+                unresolvedArguments.addAll(linker.linkSteps(userKeyword));
             }
         }
 
-        processUnresolvedArguments(unresolvedArguments, runtime);
+        linker.processUnresolvedArguments(unresolvedArguments);
     }
 
-    public static void link(KeywordCall call, Runtime runtime) throws Exception {
+    public static void link(KeywordCall call, Runtime runtime, List<Error> errors) {
+        Linker linker = new Linker(runtime, errors);
+
         Matcher matcher = gherkinPattern.matcher(call.getName());
         String name = matcher.replaceAll("").trim();
 
-        resolveCall(runtime.getTestCase(), call, name, runtime);
+        linker.resolveCall(runtime.getTestCase(), call, name);
     }
 
-    private static List<ScopeValue> linkSteps(TestCase testCase, Runtime runtime) throws Exception {
+    private List<ScopeValue> linkSteps(TestCase testCase) {
         List<ScopeValue> unresolvedArguments = new ArrayList<>();
 
         KeywordCall setup = testCase.getSetup();
         if(setup != null){
-            unresolvedArguments.addAll(resolveCall(testCase, setup, setup.getName().trim(), runtime));
+            unresolvedArguments.addAll(resolveCall(testCase, setup, setup.getName().trim()));
         }
 
         for(Step step: testCase) {
             if(!(step instanceof KeywordCall)) {
-                throw new MalformedTestCaseException("expecting a step of type keyword call");
+                SyntaxError error = new SyntaxError("Expecting a step of type keyword call",
+                        step.getFile().getFile(),
+                        step.getLineRange());
+
+                errors.add(error);
             }
+            else {
+                KeywordCall call = (KeywordCall)step;
 
-            KeywordCall call = (KeywordCall)step;
+                Matcher matcher = gherkinPattern.matcher(step.getName());
+                String name = matcher.replaceAll("").trim();
 
-            Matcher matcher = gherkinPattern.matcher(step.getName());
-            String name = matcher.replaceAll("").trim();
-
-            unresolvedArguments.addAll(resolveCall(testCase, call, name, runtime));
+                unresolvedArguments.addAll(resolveCall(testCase, call, name));
+            }
         }
 
         KeywordCall teardown = testCase.getTearDown();
         if(teardown != null){
-            unresolvedArguments.addAll(resolveCall(testCase, teardown, teardown.getName().trim(), runtime));
+            unresolvedArguments.addAll(resolveCall(testCase, teardown, teardown.getName().trim()));
         }
 
         return unresolvedArguments;
     }
 
-    private static List<ScopeValue> linkSteps(UserKeyword userKeyword, Runtime runtime) throws RuntimeException {
+    private List<ScopeValue> linkSteps(UserKeyword userKeyword) throws RuntimeException {
         List<ScopeValue> unresolvedArguments = new ArrayList<>();
 
         for (Step step: userKeyword) {
             step.getKeywordCall().ifPresent(call -> {
                 try {
                     String name = call.getName().trim();
-                    unresolvedArguments.addAll(resolveCall(userKeyword, call, name, runtime));
+                    unresolvedArguments.addAll(resolveCall(userKeyword, call, name));
                 } catch (Exception e) {
                     throw new RuntimeException(e.getMessage());
                 }
@@ -92,34 +106,37 @@ public class Linker {
         return unresolvedArguments;
     }
 
-    private static List<ScopeValue> resolveCall(KeywordDefinition parentKeyword, KeywordCall call, String name, Runtime runtime) throws Exception {
-        for(Object keyword: getKeywords(name, parentKeyword.getFile(), runtime)){
+    private List<ScopeValue> resolveCall(KeywordDefinition parentKeyword, KeywordCall call, String name) {
+        for(Object keyword: getKeywords(name, parentKeyword.getFile())){
             try {
                 call.linkKeyword((Keyword)keyword, Link.Import.STATIC);
             }
             catch (InvalidImportTypeException e){
-                logger.error(e.getMessage());
+                InternalError error = new InternalError("Should handle Static import at this point but didn't!", e);
+                errors.add(error);
+            } catch (InvalidDependencyException e) {
+                e.printStackTrace();
             }
 
         }
 
-        return linkCall(parentKeyword, call, runtime);
+        return linkCall(parentKeyword, call);
     }
 
-    private static List<ScopeValue> linkCall(KeywordDefinition parentKeyword, KeywordCall call, Runtime runtime) throws Exception {
+    private List<ScopeValue> linkCall(KeywordDefinition parentKeyword, KeywordCall call) throws Exception {
         List<ScopeValue> unresolvedArguments = new ArrayList<>();
 
         for(Value value : call.getParameters()) {
-            unresolvedArguments.addAll(resolveArgument(value, parentKeyword.getFile(), parentKeyword, runtime));
+            unresolvedArguments.addAll(resolveArgument(value, parentKeyword.getFile(), parentKeyword));
         }
 
-        linkStepArguments(call, runtime);
-        updateScope(call, runtime);
+        linkStepArguments(call);
+        updateScope(call);
 
         return unresolvedArguments;
     }
 
-    private static void updateScope(KeywordCall call, Runtime runtime) throws Exception {
+    private void updateScope(KeywordCall call) throws Exception {
         for(Keyword keyword: call.getAllPotentialKeywords(Link.Import.BOTH)){
             if(keyword instanceof ScopeModifier){
                 ((ScopeModifier)keyword).addToScope(runtime, call);
@@ -127,7 +144,7 @@ public class Linker {
         }
     }
 
-    private static void linkStepArguments(KeywordCall step, Runtime runtime) {
+    private void linkStepArguments(KeywordCall step) {
         if(!step.hasParameters()){
             return;
         }
@@ -151,7 +168,7 @@ public class Linker {
                 }
 
                 final String keywordParameter = parameter.get().getName();
-                Set<? super Keyword> keywords = getKeywords(keywordParameter, step.getParent().getFile(), runtime);
+                Set<? super Keyword> keywords = getKeywords(keywordParameter, step.getParent().getFile());
 
                 if(keywords.isEmpty()) {
                     throw new MissingKeywordException(String.format("Failed to find keyword parameter: %s", keywordParameter));
@@ -170,7 +187,7 @@ public class Linker {
                                 throw new RuntimeException(String.format("Failed to set keyword parameter: %s", keywordParameter));
                             }
 
-                            linkStepArguments(call, runtime);
+                            linkStepArguments(call);
                         }
                 );
 
@@ -180,11 +197,11 @@ public class Linker {
         }
     }
 
-    private static Set<? super Keyword> getKeywords(String fullName, SourceFile sourceFile, Runtime runtime) throws Exception{
-        Set<? super Keyword> keywordsFound = getKeywords(fullName, sourceFile, runtime, false);
+    private Set<? super Keyword> getKeywords(String fullName, SourceFile sourceFile) {
+        Set<? super Keyword> keywordsFound = getKeywords(fullName, sourceFile, false);
 
         if(keywordsFound.isEmpty()){
-            keywordsFound = getKeywords(fullName, sourceFile, runtime, true);
+            keywordsFound = getKeywords(fullName, sourceFile, true);
         }
 
         if(keywordsFound.isEmpty()) {
@@ -197,7 +214,7 @@ public class Linker {
         return keywordsFound;
     }
 
-    private static Set<? super Keyword> getKeywords(String fullName, SourceFile sourceFile, Runtime runtime, boolean allowSplit) throws Exception{
+    private Set<? super Keyword> getKeywords(String fullName, SourceFile sourceFile, boolean allowSplit) {
         String library;
         String name;
 
@@ -223,7 +240,7 @@ public class Linker {
         return keywordsFound;
     }
 
-    private static List<ScopeValue> resolveArgument(Value value, SourceFile sourceFile, KeywordDefinition keyword, Runtime runtime) {
+    private List<ScopeValue> resolveArgument(Value value, SourceFile sourceFile, KeywordDefinition keyword) {
         List<ScopeValue> unresolvedArguments = new ArrayList<>();
 
         List<String> variables = value.findVariables();
@@ -249,7 +266,7 @@ public class Linker {
         return unresolvedArguments;
     }
 
-    private static void processUnresolvedArguments(List<ScopeValue> unresolvedArguments, Runtime runtime) {
+    private void processUnresolvedArguments(List<ScopeValue> unresolvedArguments) {
         for(ScopeValue valueScope: unresolvedArguments){
             Set<Variable> variables = runtime.findInScope(valueScope.getTestCases(), valueScope.getSuites(), valueScope.variableName);
 

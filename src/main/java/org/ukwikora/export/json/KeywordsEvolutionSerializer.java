@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import org.ukwikora.analytics.*;
+import org.ukwikora.exception.InvalidArgumentException;
 import org.ukwikora.model.UserKeyword;
 import org.ukwikora.utils.StringUtils;
 import org.ukwikora.model.KeywordDefinition;
@@ -89,7 +90,12 @@ public class KeywordsEvolutionSerializer extends JsonSerializer<EvolutionResults
         jsonGenerator.writeNumberField("depth", KeywordStatistics.getLevel(keyword));
         jsonGenerator.writeNumberField("connectivity", KeywordStatistics.getConnectivity(keyword));
 
-        writeChanges(jsonGenerator, difference);
+
+        try {
+            writeChanges(jsonGenerator, difference);
+        } catch (InvalidArgumentException e) {
+            jsonGenerator.writeStringField("ERROR", e.getMessage());
+        }
 
         jsonGenerator.writeEndObject();
     }
@@ -106,7 +112,7 @@ public class KeywordsEvolutionSerializer extends JsonSerializer<EvolutionResults
         return type;
     }
 
-    private void writeChanges(JsonGenerator jsonGenerator, Difference difference) throws IOException {
+    private void writeChanges(JsonGenerator jsonGenerator, Difference difference) throws IOException, InvalidArgumentException {
         DifferencesJson differencesJson = new DifferencesJson();
         differencesJson.add(difference);
 

@@ -1,17 +1,15 @@
 package org.ukwikora.builder;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.ukwikora.error.Error;
 import org.ukwikora.exception.InvalidDependencyException;
 import org.ukwikora.model.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 class SourceFileParser {
-    private static final Logger logger = LogManager.getLogger(SourceFileParser.class);
-
-    public static void parse(File file, Project project, DynamicImports dynamicImports) {
+    public static void parse(File file, Project project, DynamicImports dynamicImports, List<Error> errors) {
         LineReader reader = null;
         SourceFile sourceFile = null;
 

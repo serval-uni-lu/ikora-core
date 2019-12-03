@@ -2,6 +2,7 @@ package org.ukwikora.model;
 
 import javax.annotation.Nonnull;
 import java.io.File;
+import java.net.URI;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -59,6 +60,11 @@ public class Project implements Comparable<Project> {
 
     public SourceFile getSourceFile(String name) {
         return files.get(name);
+    }
+
+    public SourceFile getSourceFile(URI uri){
+        String name = generateFileName(new File(uri.getPath()));
+        return getSourceFile(name);
     }
 
     public Map<String, SourceFile> getFiles(){

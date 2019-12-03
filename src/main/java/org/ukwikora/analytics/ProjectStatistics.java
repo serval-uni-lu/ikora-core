@@ -1,6 +1,6 @@
 package org.ukwikora.analytics;
 
-import com.beust.jcommander.ParameterException;
+import org.ukwikora.exception.InvalidTypeException;
 import org.ukwikora.model.*;
 import org.ukwikora.utils.StringUtils;
 
@@ -30,7 +30,7 @@ public class ProjectStatistics {
         return this.project.getLoc();
     }
 
-    public <T extends KeywordDefinition> int getNumberKeywords(Class<T> type){
+    public <T extends KeywordDefinition> int getNumberKeywords(Class<T> type) throws InvalidTypeException {
         Set<T> keywords = getNodes(type);
 
         if(keywords != null){
@@ -54,23 +54,23 @@ public class ProjectStatistics {
         return length;
     }
 
-    public <T extends Node> Map<Integer, Integer> getSizeDistribution(Class<T> type){
+    public <T extends Node> Map<Integer, Integer> getSizeDistribution(Class<T> type) throws InvalidTypeException {
         return getDistribution(type, Metric.Size);
     }
 
-    public <T extends Node> Map<Integer, Integer> getConnectivityDistribution(Class<T> type){
+    public <T extends Node> Map<Integer, Integer> getConnectivityDistribution(Class<T> type) throws InvalidTypeException {
         return getDistribution(type, Metric.Connectivity);
     }
 
-    public <T extends Node> Map<Integer, Integer> getSequenceDistribution(Class<T> type){
+    public <T extends Node> Map<Integer, Integer> getSequenceDistribution(Class<T> type) throws InvalidTypeException {
         return getDistribution(type, Metric.Sequence);
     }
 
-    public <T extends Node> Map<Integer, Integer> getLevelDistribution(Class<T> type){
+    public <T extends Node> Map<Integer, Integer> getLevelDistribution(Class<T> type) throws InvalidTypeException {
         return getDistribution(type, Metric.Level);
     }
 
-    public <T extends Node> Map<String, Integer> getDeadCodeDistribution(Class<T> type){
+    public <T extends Node> Map<String, Integer> getDeadCodeDistribution(Class<T> type) throws InvalidTypeException {
         Map<String, Integer> deadCode = new HashMap<>(2);
 
         for(Node node : getNodes(type)){
@@ -80,11 +80,11 @@ public class ProjectStatistics {
         return deadCode;
     }
 
-    <T extends Node> Map<Integer, Integer> getBranchIndex(Class<T> type){
+    <T extends Node> Map<Integer, Integer> getBranchIndex(Class<T> type) throws InvalidTypeException {
         return getDistribution(type, Metric.BranchIndex);
     }
 
-    private <T extends Node> Map<Integer, Integer> getDistribution(Class<T> type, Metric metric){
+    private <T extends Node> Map<Integer, Integer> getDistribution(Class<T> type, Metric metric) throws InvalidTypeException {
         Map<Integer, Integer> distribution = new TreeMap<>();
 
         for(Node node : getNodes(type)){
@@ -104,7 +104,7 @@ public class ProjectStatistics {
         return distribution;
     }
 
-    private <T extends Node> Set<T> getNodes(Class<T> type){
+    private <T extends Node> Set<T> getNodes(Class<T> type) throws InvalidTypeException {
         if(type == UserKeyword.class){
             return (Set<T>)userKeywords;
         }
@@ -112,6 +112,6 @@ public class ProjectStatistics {
             return (Set<T>)testCases;
         }
 
-        throw new ParameterException("Unhandled type " + type.getName());
+        throw new InvalidTypeException("Unhandled type " + type.getName());
     }
 }
