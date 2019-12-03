@@ -1,7 +1,12 @@
 package org.ukwikora.libraries.builtin;
 
+import org.ukwikora.error.Error;
+import org.ukwikora.error.SymbolError;
+import org.ukwikora.error.SyntaxError;
 import org.ukwikora.model.*;
 import org.ukwikora.runner.Runtime;
+
+import java.util.List;
 
 public class ImportLibrary extends LibraryKeyword implements ScopeModifier {
     @Override
@@ -10,7 +15,7 @@ public class ImportLibrary extends LibraryKeyword implements ScopeModifier {
     }
 
     @Override
-    public void addToScope(Runtime runtime, KeywordCall call) throws Exception {
+    public void addToScope(Runtime runtime, KeywordCall call, List<Error> errors) {
         KeywordDefinition parent = null;
         Keyword current = call.getParent();
 
@@ -23,9 +28,13 @@ public class ImportLibrary extends LibraryKeyword implements ScopeModifier {
                 break;
             }
             else{
-                throw new Exception(String.format("Failed to resolve dynamic import in file %s, lines %s",
-                        call.getFileName(),
-                        call.getLineRange().toString()));
+                SymbolError error = new SymbolError("Failed to resolve dynamic import",
+                        call.getFile().getFile(),
+                        call.getLineRange());
+
+                errors.add(error);
+
+                break;
             }
         }
 

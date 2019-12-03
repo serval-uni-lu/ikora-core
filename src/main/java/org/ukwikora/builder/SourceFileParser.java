@@ -1,10 +1,11 @@
 package org.ukwikora.builder;
 
 import org.ukwikora.error.Error;
-import org.ukwikora.exception.InvalidDependencyException;
+import org.ukwikora.error.IOError;
 import org.ukwikora.model.*;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
@@ -34,11 +35,11 @@ class SourceFileParser {
                     sourceFile.setSettings(settings);
                 }
                 else if(isTestCases(text)){
-                    NodeTable<TestCase> testCaseTable = TestCaseTableParser.parse(reader, dynamicImports);
+                    NodeTable<TestCase> testCaseTable = TestCaseTableParser.parse(reader, dynamicImports, errors);
                     sourceFile.setTestCaseTable(testCaseTable);
                 }
                 else if(isKeywords(text)){
-                    NodeTable<UserKeyword> nodeTable = KeywordTableParser.parse(reader, dynamicImports);
+                    NodeTable<UserKeyword> nodeTable = KeywordTableParser.parse(reader, dynamicImports, errors);
                     sourceFile.setKeywordTable(nodeTable);
                 }
                 else if(isVariable(text)){
@@ -49,19 +50,12 @@ class SourceFileParser {
                     reader.readLine();
                 }
             }
-
-            logger.trace("file parse: " + file.getAbsolutePath());
+        } catch (FileNotFoundException e) {
+            IOError error = new IOError("File not found", file);
+            errors.add(error);
         } catch (IOException e) {
-            sourceFile = new SourceFile(project, file);
-            setName(project, sourceFile);
-
-            project.addSourceFile(sourceFile);
-
-            logger.error("failed to parse: " + file.getAbsolutePath());
-        } catch (InvalidDependencyException e) {
-            logger.error("Oops, something in the link between keywords call and definition went really bad: " + file.getAbsolutePath());
-        } catch (Exception e) {
-            logger.error(String.format("Oops, something went really wrong during parsing!: %s", e.getMessage()));
+            IOError error = new IOError("Failed to read line", file);
+            errors.add(error);
         } finally {
             project.addSourceFile(sourceFile);
 

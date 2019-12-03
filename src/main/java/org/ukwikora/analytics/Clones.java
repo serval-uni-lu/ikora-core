@@ -1,7 +1,5 @@
 package org.ukwikora.analytics;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.ukwikora.export.json.CloneResultSerializer;
 import org.ukwikora.model.Node;
 
 import javax.annotation.Nonnull;
@@ -9,7 +7,6 @@ import java.util.*;
 
 
 //TODO: Review this class to make it a proper graph
-@JsonSerialize(using = CloneResultSerializer.class)
 public class Clones<T extends Node> implements Iterable<Clone<T>> {
     private Map<Clone.Type, Map<T, Clone<T>>> cloneMap;
 

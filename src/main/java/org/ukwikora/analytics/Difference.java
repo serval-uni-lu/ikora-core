@@ -1,7 +1,5 @@
 package org.ukwikora.analytics;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.ukwikora.export.json.DifferenceSerializer;
 import org.ukwikora.model.Differentiable;
 import org.ukwikora.utils.LevenshteinDistance;
 import org.ukwikora.model.KeywordDefinition;
@@ -9,7 +7,6 @@ import org.ukwikora.model.KeywordDefinition;
 import javax.annotation.Nonnull;
 import java.util.*;
 
-@JsonSerialize(using = DifferenceSerializer.class)
 public class Difference implements Differentiable {
     private Differentiable left;
     private Differentiable right;

@@ -1,11 +1,10 @@
 package org.ukwikora.builder;
 
+import org.ukwikora.error.*;
 import org.ukwikora.error.Error;
 import org.ukwikora.error.InternalError;
-import org.ukwikora.error.SyntaxError;
 import org.ukwikora.exception.InvalidDependencyException;
 import org.ukwikora.exception.InvalidImportTypeException;
-import org.ukwikora.exception.MissingKeywordException;
 import org.ukwikora.model.*;
 import org.ukwikora.runner.Runtime;
 
@@ -107,23 +106,28 @@ public class Linker {
     }
 
     private List<ScopeValue> resolveCall(KeywordDefinition parentKeyword, KeywordCall call, String name) {
-        for(Object keyword: getKeywords(name, parentKeyword.getFile())){
+        getKeywords(name, parentKeyword.getFile()).forEach(keyword -> {
             try {
-                call.linkKeyword((Keyword)keyword, Link.Import.STATIC);
-            }
-            catch (InvalidImportTypeException e){
-                InternalError error = new InternalError("Should handle Static import at this point but didn't!", e);
+                call.linkKeyword((Keyword) keyword, Link.Import.STATIC);
+            } catch (InvalidImportTypeException e) {
+                InternalError error = new InternalError("Should handle Static import at this point but didn't!",
+                        call.getFile().getFile(),
+                        call.getLineRange());
+
                 errors.add(error);
             } catch (InvalidDependencyException e) {
-                e.printStackTrace();
-            }
+                SymbolError error = new SymbolError("Invalid dependency",
+                        ((Keyword) keyword).getFile().getFile(),
+                        ((Keyword) keyword).getLineRange());
 
-        }
+                errors.add(error);
+            }
+        });
 
         return linkCall(parentKeyword, call);
     }
 
-    private List<ScopeValue> linkCall(KeywordDefinition parentKeyword, KeywordCall call) throws Exception {
+    private List<ScopeValue> linkCall(KeywordDefinition parentKeyword, KeywordCall call) {
         List<ScopeValue> unresolvedArguments = new ArrayList<>();
 
         for(Value value : call.getParameters()) {
@@ -136,10 +140,10 @@ public class Linker {
         return unresolvedArguments;
     }
 
-    private void updateScope(KeywordCall call) throws Exception {
+    private void updateScope(KeywordCall call) {
         for(Keyword keyword: call.getAllPotentialKeywords(Link.Import.BOTH)){
             if(keyword instanceof ScopeModifier){
-                ((ScopeModifier)keyword).addToScope(runtime, call);
+                ((ScopeModifier)keyword).addToScope(runtime, call, errors);
             }
         }
     }
@@ -150,50 +154,61 @@ public class Linker {
         }
 
         for(int position: step.getKeywordsLaunchedPosition()){
-            try {
-                // try to resolve parameters
-                Optional<Value> parameter = step.getParameter(position, true);
+            // try to resolve parameters
+            Optional<Value> parameter = step.getParameter(position, true);
+
+            if(!parameter.isPresent()){
+                // if not working try without resolving them
+                parameter = step.getParameter(position, false);
 
                 if(!parameter.isPresent()){
-                    // if not working try without resolving them
-                    parameter = step.getParameter(position, false);
+                    InternalError error = new InternalError("Failed to link keyword parameter",
+                            step.getFile().getFile(),
+                            step.getLineRange());
 
-                    if(!parameter.isPresent()){
-                        throw new MissingKeywordException(String.format("Failed to get keyword at position %d for step %s in file %s from project %s",
-                                position,
-                                step.getName(),
-                                step.getParent().getFile().getName(),
-                                step.getParent().getFile().getProject().getName()));
-                    }
+                    errors.add(error);
+                    continue;
                 }
+            }
 
-                final String keywordParameter = parameter.get().getName();
-                Set<? super Keyword> keywords = getKeywords(keywordParameter, step.getParent().getFile());
+            final String keywordParameter = parameter.get().getName();
+            Set<? super Keyword> keywords = getKeywords(keywordParameter, step.getParent().getFile());
 
-                if(keywords.isEmpty()) {
-                    throw new MissingKeywordException(String.format("Failed to find keyword parameter: %s", keywordParameter));
-                }
-                else if(keywords.size() > 1){
-                    throw new MissingKeywordException(String.format("Found multiple definitions for : %s", keywordParameter));
-                }
+            if(keywords.isEmpty()) {
+                SymbolError error = new SymbolError(String.format("Found no definition for keyword parameter: %s", keywordParameter),
+                        step.getFile().getFile(),
+                        step.getLineRange());
 
-                Keyword keyword = (Keyword) keywords.iterator().next();
+                errors.add(error);
+                continue;
+            }
+            else if(keywords.size() > 1){
+                SymbolError error = new SymbolError(String.format("Found multiple definitions for keyword parameter: %s", keywordParameter),
+                        step.getFile().getFile(),
+                        step.getLineRange());
 
-                step.getParameter(position, false).ifPresent(
-                        parameterName -> {
-                            KeywordCall call = step.setKeywordParameter(parameterName, keyword);
+                errors.add(error);
+                continue;
+            }
 
-                            if(call == null){
-                                throw new RuntimeException(String.format("Failed to set keyword parameter: %s", keywordParameter));
-                            }
+            Keyword keyword = (Keyword) keywords.iterator().next();
 
+            step.getParameter(position, false).ifPresent(
+                    parameterName -> {
+                        KeywordCall call = step.setKeywordParameter(parameterName, keyword);
+
+                        if(call == null){
+                            InternalError error = new InternalError(String.format("Failed to set keyword parameter: %s", keywordParameter),
+                                    step.getFile().getFile(),
+                                    step.getLineRange());
+
+                            errors.add(error);
+                        }
+                        else{
                             linkStepArguments(call);
                         }
-                );
-
-            } catch (Exception e) {
-                logger.error(e.getMessage());
-            }
+                    }
+            );
         }
     }
 
@@ -202,13 +217,6 @@ public class Linker {
 
         if(keywordsFound.isEmpty()){
             keywordsFound = getKeywords(fullName, sourceFile, true);
-        }
-
-        if(keywordsFound.isEmpty()) {
-            logger.error("Keyword definition for \"" + fullName + "\" in \"" + sourceFile.getName() + "\" not found!");
-        }
-        else if(keywordsFound.size() > 1){
-            logger.error("Multiple definition found for \"" + fullName + "\" in \"" + sourceFile.getName() + "\"!");
         }
 
         return keywordsFound;
@@ -231,9 +239,15 @@ public class Linker {
         final Set<? super Keyword> keywordsFound = new HashSet<>(sourceFile.findUserKeyword(library, name));
 
         if(keywordsFound.isEmpty()){
-            Keyword runtimeKeyword = runtime.findKeyword(library, name);
-            if(runtimeKeyword != null){
-                keywordsFound.add(runtimeKeyword);
+            try {
+                Keyword runtimeKeyword = runtime.findKeyword(library, name);
+
+                if(runtimeKeyword != null){
+                    keywordsFound.add(runtimeKeyword);
+                }
+            } catch (InstantiationException | IllegalAccessException e) {
+                UnhandledError error = new UnhandledError("Failed to locate runtime keyword", e);
+                errors.add(error);
             }
         }
 
@@ -275,7 +289,11 @@ public class Linker {
                 valueScope.value.setVariable(valueScope.variableName, variable);
             }
             else {
-                logger.error("Variable for value \"" + valueScope.variableName + "\" in \"" + valueScope.keyword.getName() + "\" not found!");
+                SymbolError error = new SymbolError(String.format("Found no definition for local variable: %s", valueScope.variableName),
+                        valueScope.keyword.getFile().getFile(),
+                        valueScope.keyword.getLineRange());
+
+                errors.add(error);
             }
         }
     }

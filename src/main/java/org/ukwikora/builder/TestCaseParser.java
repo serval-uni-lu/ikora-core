@@ -1,17 +1,19 @@
 package org.ukwikora.builder;
 
-import org.ukwikora.exception.InvalidDependencyException;
+import org.ukwikora.error.Error;
+import org.ukwikora.error.SyntaxError;
 import org.ukwikora.model.LineRange;
 import org.ukwikora.model.Step;
 import org.ukwikora.model.TestCase;
 
 import java.io.IOException;
+import java.util.List;
 
 class TestCaseParser {
     private TestCaseParser() {}
 
 
-    public static TestCase parse(LineReader reader, DynamicImports dynamicImports) throws Exception {
+    public static TestCase parse(LineReader reader, DynamicImports dynamicImports, List<Error> errors) throws IOException {
         TestCase testCase = new TestCase();
         int startLine = reader.getCurrent().getNumber();
 
@@ -38,10 +40,10 @@ class TestCaseParser {
                 parseTags(reader, tokens, testCase);
             }
             else if (LexerUtils.compareNoCase(label, "\\[setup\\]")) {
-                parseSetup(reader, tokens, testCase, dynamicImports);
+                parseSetup(reader, tokens, testCase, dynamicImports, errors);
             }
             else if (LexerUtils.compareNoCase(label, "\\[teardown\\]")) {
-                parseTeardown(reader, tokens, testCase, dynamicImports);
+                parseTeardown(reader, tokens, testCase, dynamicImports, errors);
             }
             else if (LexerUtils.compareNoCase(label, "\\[template\\]")) {
                 parseTemplate(reader, tokens, testCase);
@@ -50,7 +52,7 @@ class TestCaseParser {
                 parseTimeout(reader, tokens, testCase);
             }
             else {
-                parseStep(reader, tokens, testCase, dynamicImports);
+                parseStep(reader, tokens, testCase, dynamicImports, errors);
             }
 
             line = reader.getCurrent();
@@ -70,27 +72,18 @@ class TestCaseParser {
         reader.readLine();
     }
 
-    private static void parseTeardown(LineReader reader, String[] tokens, TestCase testCase, DynamicImports dynamicImports) throws IOException {
-        try {
-            Step step = StepParser.parse(reader, tokens, "\\[teardown\\]");
+    private static void parseTeardown(LineReader reader, String[] tokens, TestCase testCase, DynamicImports dynamicImports, List<Error> errors) throws IOException {
+            Step step = StepParser.parse(reader, tokens, "\\[teardown\\]", errors);
             testCase.setTearDown(step);
 
             dynamicImports.add(testCase, step);
-        } catch (InvalidDependencyException e) {
-            e.printStackTrace();
-        }
     }
 
-    private static void parseSetup(LineReader reader, String[] tokens, TestCase testCase, DynamicImports dynamicImports) throws IOException {
-        try {
-            Step step = StepParser.parse(reader, tokens, "\\[setup\\]");
+    private static void parseSetup(LineReader reader, String[] tokens, TestCase testCase, DynamicImports dynamicImports, List<Error> errors) throws IOException {
+            Step step = StepParser.parse(reader, tokens, "\\[setup\\]", errors);
             testCase.setSetup(step);
 
             dynamicImports.add(testCase, step);
-        } catch (InvalidDependencyException e) {
-            e.printStackTrace();
-        }
-
     }
 
     private static void parseTags(LineReader reader, String[] tokens, TestCase testCase) throws IOException {
@@ -110,9 +103,15 @@ class TestCaseParser {
         testCase.setDocumentation(builder.toString());
     }
 
-    private static void parseStep(LineReader reader, String[] tokens, TestCase testCase, DynamicImports dynamicImports) throws Exception {
-        Step step = StepParser.parse(reader, tokens);
-        testCase.addStep(step);
+    private static void parseStep(LineReader reader, String[] tokens, TestCase testCase, DynamicImports dynamicImports, List<Error> errors) throws IOException {
+        Step step = StepParser.parse(reader, tokens, errors);
+
+        try {
+            testCase.addStep(step);
+        } catch (Exception e) {
+            SyntaxError error = new SyntaxError("failed to add step to test case", step.getFile().getFile(), step.getLineRange());
+            errors.add(error);
+        }
 
         dynamicImports.add(testCase, step);
     }

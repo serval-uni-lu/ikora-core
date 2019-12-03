@@ -60,6 +60,23 @@ public class Builder {
         return projects;
     }
 
+    public Project build(File file, boolean link) {
+        Project project;
+        Instant start = Instant.now();
+
+        DynamicImports dynamicImports = new DynamicImports();
+        project = parse(file, dynamicImports);
+
+        Runtime runtime = new Runtime(project, new StaticScope());
+        loadLibraries(runtime);
+        link(runtime, link);
+
+        Instant finish = Instant.now();
+        buildTime = Duration.between(start, finish).toMillis();
+
+        return project;
+    }
+
     private void resolveDependencies(Set<Project> projects) {
         for(Project project: projects){
             Set<Resources> externals =  project.getExternalResources();
@@ -87,23 +104,6 @@ public class Builder {
         String name = dependency.generateFileName(external.getFile());
         SourceFile sourceFile = dependency.getSourceFile(name);
         external.setSourceFile(sourceFile);
-    }
-
-    public Project build(File file, boolean link) {
-        Project project;
-        Instant start = Instant.now();
-
-        DynamicImports dynamicImports = new DynamicImports();
-        project = parse(file, dynamicImports);
-
-        Runtime runtime = new Runtime(project, new StaticScope());
-        loadLibraries(runtime);
-        link(runtime, link);
-
-        Instant finish = Instant.now();
-        buildTime = Duration.between(start, finish).toMillis();
-
-        return project;
     }
 
     private void loadLibraries(Runtime runtime) {

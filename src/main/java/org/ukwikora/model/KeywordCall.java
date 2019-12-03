@@ -4,10 +4,12 @@ import org.ukwikora.analytics.Action;
 import org.ukwikora.analytics.NodeVisitor;
 import org.ukwikora.analytics.VisitorMemory;
 import org.ukwikora.builder.Linker;
+import org.ukwikora.exception.ExecutionException;
 import org.ukwikora.exception.InvalidDependencyException;
 import org.ukwikora.exception.InvalidImportTypeException;
 import org.ukwikora.runner.Runtime;
 import org.ukwikora.utils.LevenshteinDistance;
+import org.ukwikora.error.Error;
 
 import javax.annotation.Nonnull;
 import java.util.*;
@@ -116,7 +118,12 @@ public class KeywordCall extends Step {
     public void execute(Runtime runtime) throws Exception{
         runtime.enterKeyword(this);
 
-        Linker.link(this, runtime);
+        List<Error> errors = new ArrayList<>();
+        Linker.link(this, runtime, errors);
+
+        if(!errors.isEmpty()){
+            throw new ExecutionException(errors);
+        }
 
         Optional<Keyword> callee = link.getNode();
 

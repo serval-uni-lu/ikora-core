@@ -1,16 +1,20 @@
 package org.ukwikora.builder;
 
+import org.ukwikora.error.Error;
 import org.ukwikora.model.UserKeyword;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class UserKeywordParserTest {
     @Test
-    void checkSimple() {
+    void checkSimple() throws IOException {
         String text = "Keyword with cool name\n" +
                 "    Step one\tArg1\n" +
                 "    Step two without args\n" +
@@ -27,7 +31,7 @@ class UserKeywordParserTest {
     }
 
     @Test
-    void checkKeywordWithDocumentation() {
+    void checkKeywordWithDocumentation() throws IOException {
         String text = "Keyword with cool name\n" +
                 "    [Documentation]\tSimple documentation\n" +
                 "    Step one\tArg1\n" +
@@ -42,19 +46,16 @@ class UserKeywordParserTest {
         assertEquals("Simple documentation", keyword.getDocumentation());
     }
 
-    private UserKeyword createKeyword(String text) {
+    private UserKeyword createKeyword(String text) throws IOException {
         UserKeyword keyword = null;
 
-        try {
-            DynamicImports dynamicImports = new DynamicImports();
-            Reader targetReader = new StringReader(text);
-            LineReader reader = new LineReader(targetReader);
-            reader.readLine();
+        DynamicImports dynamicImports = new DynamicImports();
+        Reader targetReader = new StringReader(text);
+        LineReader reader = new LineReader(targetReader);
+        reader.readLine();
 
-            keyword = UserKeywordParser.parse(reader, dynamicImports);
-        } catch (Exception e) {
-            fail("exception caught: " + e.getMessage());
-        }
+        List<Error> errors = new ArrayList<>();
+        keyword = UserKeywordParser.parse(reader, dynamicImports, errors);
 
         return keyword;
     }

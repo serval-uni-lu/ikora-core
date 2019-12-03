@@ -1,7 +1,5 @@
 package org.ukwikora.utils;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.apache.tika.parser.txt.CharsetDetector;
 
 import java.io.*;
@@ -16,8 +14,6 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 public class FileUtils {
-    private static final Logger logger = LogManager.getLogger(FileUtils.class);
-
     private FileUtils() {}
 
     public static Set<File> getSubFolders(File folder) {
@@ -56,8 +52,6 @@ public class FileUtils {
         final File file = new File(caller.getProtectionDomain().getCodeSource().getLocation().getPath());
 
         if(isJarFile(file)) {
-            logger.info("Extracting resources from Jar File.");
-
             try(ZipFile jar = new ZipFile(file)){
                 List<? extends ZipEntry> entries = jar.stream()
                         .filter(e -> e.getName().startsWith(resources + "/"))
@@ -77,8 +71,6 @@ public class FileUtils {
                 }
             }
         } else if(file.isDirectory()) {
-            logger.info("Extracting resources from folder.");
-
             File resourceFile = FileUtils.getResourceFile(resources);
             if(resourceFile.exists()){
                 if(resourceFile.isDirectory()){
@@ -99,7 +91,6 @@ public class FileUtils {
         if (resource == null) {
             throw new IOException("failed to locate resource template for project analytics");
         } else {
-            logger.info(resource.getPath());
             return Paths.get(resource.toURI()).toFile();
         }
     }

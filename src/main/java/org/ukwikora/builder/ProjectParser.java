@@ -1,5 +1,7 @@
 package org.ukwikora.builder;
 
+import org.ukwikora.error.Error;
+import org.ukwikora.error.IOError;
 import org.ukwikora.utils.Configuration;
 import org.ukwikora.utils.Plugin;
 import org.apache.commons.io.FileUtils;
@@ -17,15 +19,15 @@ import java.util.Map;
 class ProjectParser {
     private ProjectParser(){}
 
-    public static Project parse(File file, DynamicImports dynamicImports) throws Exception {
+    public static Project parse(File file, DynamicImports dynamicImports, List<Error> errors) {
         Project project = new Project(file);
 
         if(file.isDirectory()){
             file = addRobotFiles(file, project);
         }
 
-        parseFiles(file, project, dynamicImports);
-        resolveResources(project);
+        parseFiles(file, project, dynamicImports, errors);
+        resolveResources(project, errors);
 
         return project;
     }
@@ -45,27 +47,29 @@ class ProjectParser {
         return getNextNotParsedFile(project);
     }
 
-    private static void parseFiles(File file, Project project, DynamicImports dynamicImports){
+    private static void parseFiles(File file, Project project, DynamicImports dynamicImports, List<Error> errors){
         if(file == null){
             return;
         }
 
-        SourceFileParser.parse(file, project, dynamicImports);
+        SourceFileParser.parse(file, project, dynamicImports, errors);
 
-        parseFiles(getNextNotParsedFile(project), project, dynamicImports);
+        parseFiles(getNextNotParsedFile(project), project, dynamicImports, errors);
     }
 
-    private static void resolveResources(Project project) throws Exception {
+    private static void resolveResources(Project project, List<Error> errors) {
         for(SourceFile sourceFile : project.getSourceFiles()) {
             for (Resources resources: sourceFile.getSettings().getResources()) {
                 String name = project.generateFileName(resources.getFile());
                 SourceFile resourceFile = project.getSourceFile(name);
 
                 if(resourceFile == null) {
-                    throw new Exception();
+                    IOError error = new IOError("File not found", new File(project.getRootFolder(), name));
+                    errors.add(error);
                 }
-
-                resources.setSourceFile(resourceFile);
+                else{
+                    resources.setSourceFile(resourceFile);
+                }
             }
         }
     }

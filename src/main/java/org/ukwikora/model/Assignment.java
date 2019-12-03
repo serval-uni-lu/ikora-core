@@ -4,6 +4,8 @@ import org.ukwikora.analytics.Action;
 import org.ukwikora.analytics.NodeVisitor;
 import org.ukwikora.analytics.VisitorMemory;
 import org.ukwikora.builder.Linker;
+import org.ukwikora.error.Error;
+import org.ukwikora.exception.ExecutionException;
 import org.ukwikora.exception.InvalidDependencyException;
 import org.ukwikora.runner.Runtime;
 import org.ukwikora.utils.LevenshteinDistance;
@@ -111,7 +113,13 @@ public class Assignment extends Step {
         runtime.enterKeyword(this);
 
         if(expression != null){
-            Linker.link(expression, runtime);
+            List<Error> errors = new ArrayList<>();
+            Linker.link(expression, runtime, errors);
+
+            if(!errors.isEmpty()){
+                throw new ExecutionException(errors);
+            }
+
             Optional<Keyword> callee = expression.getKeyword();
 
             if(callee.isPresent()){

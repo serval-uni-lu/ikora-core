@@ -1,17 +1,20 @@
 package org.ukwikora.builder;
 
+import org.ukwikora.error.Error;
+import org.ukwikora.error.SyntaxError;
 import org.ukwikora.exception.InvalidDependencyException;
 import org.ukwikora.model.*;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 
 class StepParser {
-    public static Step parse(LineReader reader, String[] tokens) throws IOException, InvalidDependencyException {
-        return parse(reader, tokens, "");
+    public static Step parse(LineReader reader, String[] tokens, List<Error> errors) throws IOException {
+        return parse(reader, tokens, "", errors);
     }
 
-    public static Step parse(LineReader reader, String[] tokens, String ignoreTag) throws IOException, InvalidDependencyException {
+    public static Step parse(LineReader reader, String[] tokens, String ignoreTag, List<Error> errors) throws IOException {
         Step step;
         int startLine = reader.getCurrent().getNumber();
 
@@ -22,7 +25,7 @@ class StepParser {
             step = parseForLoop(reader);
         }
         else if (isAssignment(tokens)){
-            step = parseAssignment(reader);
+            step = parseAssignment(reader, errors);
         }
         else {
             step = parseKeywordCall(reader, tokens);
@@ -48,7 +51,7 @@ class StepParser {
         return forLoop;
     }
 
-    private static Step parseAssignment(LineReader reader) throws IOException, InvalidDependencyException {
+    private static Step parseAssignment(LineReader reader, List<Error> errors) throws IOException {
         Assignment assignment = new Assignment();
         assignment.setName(reader.getCurrent().getText());
 
@@ -70,7 +73,13 @@ class StepParser {
             }
             else{
                 KeywordCall call = getKeywordCall(Arrays.copyOfRange(tokens, i, tokens.length));
-                assignment.setExpression(call);
+
+                try {
+                    assignment.setExpression(call);
+                } catch (InvalidDependencyException e) {
+                    SyntaxError error = new SyntaxError("", call.getFile().getFile(), call.getLineRange());
+                    errors.add(error);
+                }
                 break;
             }
         }
