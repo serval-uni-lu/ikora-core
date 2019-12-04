@@ -1,19 +1,17 @@
 package org.ukwikora.builder;
 
-import org.ukwikora.error.Error;
-import org.ukwikora.error.SyntaxError;
+import org.ukwikora.error.ErrorManager;
 import org.ukwikora.model.LineRange;
 import org.ukwikora.model.Step;
 import org.ukwikora.model.TestCase;
 
 import java.io.IOException;
-import java.util.List;
 
 class TestCaseParser {
     private TestCaseParser() {}
 
 
-    public static TestCase parse(LineReader reader, DynamicImports dynamicImports, List<Error> errors) throws IOException {
+    public static TestCase parse(LineReader reader, DynamicImports dynamicImports, ErrorManager errors) throws IOException {
         TestCase testCase = new TestCase();
         int startLine = reader.getCurrent().getNumber();
 
@@ -72,14 +70,14 @@ class TestCaseParser {
         reader.readLine();
     }
 
-    private static void parseTeardown(LineReader reader, String[] tokens, TestCase testCase, DynamicImports dynamicImports, List<Error> errors) throws IOException {
+    private static void parseTeardown(LineReader reader, String[] tokens, TestCase testCase, DynamicImports dynamicImports, ErrorManager errors) throws IOException {
             Step step = StepParser.parse(reader, tokens, "\\[teardown\\]", errors);
             testCase.setTearDown(step);
 
             dynamicImports.add(testCase, step);
     }
 
-    private static void parseSetup(LineReader reader, String[] tokens, TestCase testCase, DynamicImports dynamicImports, List<Error> errors) throws IOException {
+    private static void parseSetup(LineReader reader, String[] tokens, TestCase testCase, DynamicImports dynamicImports, ErrorManager errors) throws IOException {
             Step step = StepParser.parse(reader, tokens, "\\[setup\\]", errors);
             testCase.setSetup(step);
 
@@ -103,14 +101,17 @@ class TestCaseParser {
         testCase.setDocumentation(builder.toString());
     }
 
-    private static void parseStep(LineReader reader, String[] tokens, TestCase testCase, DynamicImports dynamicImports, List<Error> errors) throws IOException {
+    private static void parseStep(LineReader reader, String[] tokens, TestCase testCase, DynamicImports dynamicImports, ErrorManager errors) throws IOException {
         Step step = StepParser.parse(reader, tokens, errors);
 
         try {
             testCase.addStep(step);
         } catch (Exception e) {
-            SyntaxError error = new SyntaxError("failed to add step to test case", step.getFile().getFile(), step.getLineRange());
-            errors.add(error);
+            errors.registerSyntaxError(
+                    "Failed to add step to test case",
+                    step.getFile().getFile(),
+                    step.getLineRange()
+            );
         }
 
         dynamicImports.add(testCase, step);

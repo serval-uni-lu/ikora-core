@@ -1,16 +1,14 @@
 package org.ukwikora.builder;
 
-import org.ukwikora.error.Error;
-import org.ukwikora.error.IOError;
+import org.ukwikora.error.ErrorManager;
 import org.ukwikora.model.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.List;
 
 class SourceFileParser {
-    public static void parse(File file, Project project, DynamicImports dynamicImports, List<Error> errors) {
+    public static void parse(File file, Project project, DynamicImports dynamicImports, ErrorManager errors) {
         LineReader reader = null;
         SourceFile sourceFile = null;
 
@@ -51,11 +49,9 @@ class SourceFileParser {
                 }
             }
         } catch (FileNotFoundException e) {
-            IOError error = new IOError("File not found", file);
-            errors.add(error);
+            errors.registerIOError("File not found", file);
         } catch (IOException e) {
-            IOError error = new IOError("Failed to read line", file);
-            errors.add(error);
+            errors.registerIOError("Failed to read line", file);
         } finally {
             project.addSourceFile(sourceFile);
 

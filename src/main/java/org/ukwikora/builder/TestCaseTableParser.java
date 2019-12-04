@@ -1,16 +1,15 @@
 package org.ukwikora.builder;
 
-import org.ukwikora.error.Error;
+import org.ukwikora.error.ErrorManager;
 import org.ukwikora.model.NodeTable;
 import org.ukwikora.model.TestCase;
 
 import java.io.IOException;
-import java.util.List;
 
 class TestCaseTableParser {
     private TestCaseTableParser() {}
 
-    public static NodeTable<TestCase> parse(LineReader reader, DynamicImports dynamicImports, List<Error> errors) throws IOException {
+    public static NodeTable<TestCase> parse(LineReader reader, DynamicImports dynamicImports, ErrorManager errors) throws IOException {
         NodeTable<TestCase> testCaseTable = new NodeTable<>();
 
         reader.readLine();

@@ -1,7 +1,6 @@
 package org.ukwikora.builder;
 
-import org.ukwikora.error.Error;
-import org.ukwikora.error.IOError;
+import org.ukwikora.error.ErrorManager;
 import org.ukwikora.model.*;
 import org.ukwikora.runner.Runtime;
 import org.ukwikora.runner.StaticScope;
@@ -11,13 +10,11 @@ import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class Builder {
-    private List<Error> errors;
+    private ErrorManager errors;
 
     private long parsingTime;
     private long dependencyResolutionTime;
@@ -25,7 +22,7 @@ public class Builder {
     private long buildTime;
 
     public Builder(){
-        errors = new ArrayList<>();
+        errors = new ErrorManager();
     }
 
     public Set<Project> build(Set<File> files, boolean link){
@@ -77,6 +74,26 @@ public class Builder {
         return project;
     }
 
+    public ErrorManager getErrors() {
+        return errors;
+    }
+
+    public long getParsingTime() {
+        return parsingTime;
+    }
+
+    public long getLinkingTime() {
+        return linkingTime;
+    }
+
+    public long getDependencyResolutionTime() {
+        return dependencyResolutionTime;
+    }
+
+    public long getBuildTime() {
+        return buildTime;
+    }
+
     private void resolveDependencies(Set<Project> projects) {
         for(Project project: projects){
             Set<Resources> externals =  project.getExternalResources();
@@ -91,8 +108,10 @@ public class Builder {
                             break;
                         }
                     } catch (IOException e) {
-                        String message = String.format("Failed to resolve dependency: %s", e.getMessage());
-                        errors.add(new IOError(message, base));
+                        errors.registerIOError(
+                                String.format("Failed to resolve dependency: %s", e.getMessage()),
+                                base
+                        );
                     }
                 }
             }

@@ -1,6 +1,7 @@
 package org.ukwikora.builder;
 
 import org.ukwikora.error.Error;
+import org.ukwikora.error.ErrorManager;
 import org.ukwikora.error.IOError;
 import org.ukwikora.utils.Configuration;
 import org.ukwikora.utils.Plugin;
@@ -19,7 +20,7 @@ import java.util.Map;
 class ProjectParser {
     private ProjectParser(){}
 
-    public static Project parse(File file, DynamicImports dynamicImports, List<Error> errors) {
+    public static Project parse(File file, DynamicImports dynamicImports, ErrorManager errors) {
         Project project = new Project(file);
 
         if(file.isDirectory()){
@@ -47,7 +48,7 @@ class ProjectParser {
         return getNextNotParsedFile(project);
     }
 
-    private static void parseFiles(File file, Project project, DynamicImports dynamicImports, List<Error> errors){
+    private static void parseFiles(File file, Project project, DynamicImports dynamicImports, ErrorManager errors){
         if(file == null){
             return;
         }
@@ -57,15 +58,14 @@ class ProjectParser {
         parseFiles(getNextNotParsedFile(project), project, dynamicImports, errors);
     }
 
-    private static void resolveResources(Project project, List<Error> errors) {
+    private static void resolveResources(Project project, ErrorManager errors) {
         for(SourceFile sourceFile : project.getSourceFiles()) {
             for (Resources resources: sourceFile.getSettings().getResources()) {
                 String name = project.generateFileName(resources.getFile());
                 SourceFile resourceFile = project.getSourceFile(name);
 
                 if(resourceFile == null) {
-                    IOError error = new IOError("File not found", new File(project.getRootFolder(), name));
-                    errors.add(error);
+                    errors.registerIOError("File not found", new File(project.getRootFolder(), name));
                 }
                 else{
                     resources.setSourceFile(resourceFile);

@@ -14,9 +14,9 @@ import java.util.regex.Pattern;
 
 public class Linker {
     private final Runtime runtime;
-    private final List<Error> errors;
+    private final ErrorManager errors;
 
-    private Linker(Runtime runtime, List<Error> errors){
+    private Linker(Runtime runtime, ErrorManager errors){
         this.runtime = runtime;
         this.errors = errors;
     }
@@ -27,7 +27,7 @@ public class Linker {
         gherkinPattern =  Pattern.compile("^(\\s*)(Given|When|Then|And|But)", Pattern.CASE_INSENSITIVE);
     }
 
-    public static void link(Runtime runtime, List<Error> errors) {
+    public static void link(Runtime runtime, ErrorManager errors) {
         Linker linker = new Linker(runtime, errors);
 
         List<ScopeValue> unresolvedArguments = new ArrayList<>();
@@ -45,7 +45,7 @@ public class Linker {
         linker.processUnresolvedArguments(unresolvedArguments);
     }
 
-    public static void link(KeywordCall call, Runtime runtime, List<Error> errors) {
+    public static void link(KeywordCall call, Runtime runtime, ErrorManager errors) {
         Linker linker = new Linker(runtime, errors);
 
         Matcher matcher = gherkinPattern.matcher(call.getName());
@@ -64,11 +64,11 @@ public class Linker {
 
         for(Step step: testCase) {
             if(!(step instanceof KeywordCall)) {
-                SyntaxError error = new SyntaxError("Expecting a step of type keyword call",
+                errors.registerSyntaxError(
+                        "Expecting a step of type keyword call",
                         step.getFile().getFile(),
-                        step.getLineRange());
-
-                errors.add(error);
+                        step.getLineRange()
+                );
             }
             else {
                 KeywordCall call = (KeywordCall)step;
@@ -110,17 +110,17 @@ public class Linker {
             try {
                 call.linkKeyword((Keyword) keyword, Link.Import.STATIC);
             } catch (InvalidImportTypeException e) {
-                InternalError error = new InternalError("Should handle Static import at this point but didn't!",
+                errors.registerInternalError(
+                        "Should handle Static import at this point but didn't!",
                         call.getFile().getFile(),
-                        call.getLineRange());
-
-                errors.add(error);
+                        call.getLineRange()
+                );
             } catch (InvalidDependencyException e) {
-                SymbolError error = new SymbolError("Invalid dependency",
+                errors.registerSymbolError(
+                        "Invalid dependency",
                         ((Keyword) keyword).getFile().getFile(),
-                        ((Keyword) keyword).getLineRange());
-
-                errors.add(error);
+                        ((Keyword) keyword).getLineRange()
+                );
             }
         });
 
@@ -162,11 +162,12 @@ public class Linker {
                 parameter = step.getParameter(position, false);
 
                 if(!parameter.isPresent()){
-                    InternalError error = new InternalError("Failed to link keyword parameter",
+                    errors.registerInternalError(
+                            "Failed to link keyword parameter",
                             step.getFile().getFile(),
-                            step.getLineRange());
+                            step.getLineRange()
+                    );
 
-                    errors.add(error);
                     continue;
                 }
             }
@@ -175,19 +176,21 @@ public class Linker {
             Set<? super Keyword> keywords = getKeywords(keywordParameter, step.getParent().getFile());
 
             if(keywords.isEmpty()) {
-                SymbolError error = new SymbolError(String.format("Found no definition for keyword parameter: %s", keywordParameter),
+                errors.registerSymbolError(
+                        String.format("Found no definition for keyword parameter: %s", keywordParameter),
                         step.getFile().getFile(),
-                        step.getLineRange());
+                        step.getLineRange()
+                );
 
-                errors.add(error);
                 continue;
             }
             else if(keywords.size() > 1){
-                SymbolError error = new SymbolError(String.format("Found multiple definitions for keyword parameter: %s", keywordParameter),
+                errors.registerSymbolError(
+                        String.format("Found multiple definitions for keyword parameter: %s", keywordParameter),
                         step.getFile().getFile(),
-                        step.getLineRange());
+                        step.getLineRange()
+                );
 
-                errors.add(error);
                 continue;
             }
 
@@ -198,11 +201,11 @@ public class Linker {
                         KeywordCall call = step.setKeywordParameter(parameterName, keyword);
 
                         if(call == null){
-                            InternalError error = new InternalError(String.format("Failed to set keyword parameter: %s", keywordParameter),
+                            errors.registerInternalError(
+                                    String.format("Failed to set keyword parameter: %s", keywordParameter),
                                     step.getFile().getFile(),
-                                    step.getLineRange());
-
-                            errors.add(error);
+                                    step.getLineRange()
+                            );
                         }
                         else{
                             linkStepArguments(call);
@@ -245,9 +248,11 @@ public class Linker {
                 if(runtimeKeyword != null){
                     keywordsFound.add(runtimeKeyword);
                 }
-            } catch (InstantiationException | IllegalAccessException e) {
-                UnhandledError error = new UnhandledError("Failed to locate runtime keyword", e);
-                errors.add(error);
+            } catch (InstantiationException | IllegalAccessException exception) {
+                errors.registerUnhandledError(
+                    "Failed to locate runtime keyword",
+                    exception
+                );
             }
         }
 
@@ -289,11 +294,11 @@ public class Linker {
                 valueScope.value.setVariable(valueScope.variableName, variable);
             }
             else {
-                SymbolError error = new SymbolError(String.format("Found no definition for local variable: %s", valueScope.variableName),
-                        valueScope.keyword.getFile().getFile(),
-                        valueScope.keyword.getLineRange());
-
-                errors.add(error);
+                errors.registerSymbolError(
+                    String.format("Found no definition for local variable: %s", valueScope.variableName),
+                    valueScope.keyword.getFile().getFile(),
+                    valueScope.keyword.getLineRange()
+                );
             }
         }
     }

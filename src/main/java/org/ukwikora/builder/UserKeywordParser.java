@@ -1,17 +1,15 @@
 package org.ukwikora.builder;
 
-import org.ukwikora.error.Error;
-import org.ukwikora.error.SyntaxError;
+import org.ukwikora.error.ErrorManager;
 import org.ukwikora.model.LineRange;
 import org.ukwikora.model.Step;
 import org.ukwikora.model.UserKeyword;
 
 import java.io.IOException;
-import java.util.List;
 
 class UserKeywordParser {
 
-    public static UserKeyword parse(LineReader reader, DynamicImports dynamicImports, List<Error> errors) throws IOException {
+    public static UserKeyword parse(LineReader reader, DynamicImports dynamicImports, ErrorManager errors) throws IOException {
         UserKeyword userKeyword = new UserKeyword();
         int startLine = reader.getCurrent().getNumber();
 
@@ -100,7 +98,7 @@ class UserKeywordParser {
         reader.readLine();
     }
 
-    private static void parseTeardown(LineReader reader, String[] tokens, UserKeyword userKeyword, List<Error> errors) throws IOException {
+    private static void parseTeardown(LineReader reader, String[] tokens, UserKeyword userKeyword, ErrorManager errors) throws IOException {
         Step step = StepParser.parse(reader, tokens, "\\[teardown\\]", errors);
         userKeyword.setTearDown(step);
 
@@ -111,18 +109,17 @@ class UserKeywordParser {
         reader.readLine();
     }
 
-    private static void parseStep(LineReader reader, String[] tokens, UserKeyword userKeyword, DynamicImports dynamicImports, List<Error> errors) throws IOException {
+    private static void parseStep(LineReader reader, String[] tokens, UserKeyword userKeyword, DynamicImports dynamicImports,ErrorManager errors) throws IOException {
         Step step = StepParser.parse(reader, tokens, errors);
 
         try {
             userKeyword.addStep(step);
             dynamicImports.add(userKeyword, step);
         } catch (Exception e) {
-            SyntaxError error = new SyntaxError("Failed to add step to user keyword",
+           errors.registerSyntaxError("Failed to add step to user keyword",
                     step.getFile().getFile(),
-                    step.getLineRange());
-
-            errors.add(error);
+                    step.getLineRange()
+            );
         }
     }
 

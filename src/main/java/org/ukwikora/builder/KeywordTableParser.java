@@ -1,16 +1,15 @@
 package org.ukwikora.builder;
 
-import org.ukwikora.error.Error;
+import org.ukwikora.error.ErrorManager;
 import org.ukwikora.model.NodeTable;
 import org.ukwikora.model.UserKeyword;
 
 import java.io.IOException;
-import java.util.List;
 
 class KeywordTableParser {
     private KeywordTableParser() {}
 
-    public static NodeTable<UserKeyword> parse(LineReader reader, DynamicImports dynamicImports, List<Error> errors) throws IOException {
+    public static NodeTable<UserKeyword> parse(LineReader reader, DynamicImports dynamicImports, ErrorManager errors) throws IOException {
         NodeTable<UserKeyword> nodeTable = new NodeTable<>();
 
         reader.readLine();

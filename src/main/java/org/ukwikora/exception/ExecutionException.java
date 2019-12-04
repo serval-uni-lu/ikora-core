@@ -1,13 +1,15 @@
 package org.ukwikora.exception;
 
-import org.ukwikora.error.Error;
-
-import java.util.List;
+import org.ukwikora.error.ErrorManager;
 
 public class ExecutionException extends Exception{
-    private final List<Error> errors;
+    private final ErrorManager errors;
 
-    public ExecutionException(List<Error> errors){
+    public ExecutionException(ErrorManager errors){
         this.errors = errors;
+    }
+
+    public ErrorManager getErrors() {
+        return errors;
     }
 }

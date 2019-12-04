@@ -5,6 +5,7 @@ import org.ukwikora.analytics.NodeVisitor;
 import org.ukwikora.analytics.VisitorMemory;
 import org.ukwikora.builder.Linker;
 import org.ukwikora.error.Error;
+import org.ukwikora.error.ErrorManager;
 import org.ukwikora.exception.ExecutionException;
 import org.ukwikora.exception.InvalidDependencyException;
 import org.ukwikora.runner.Runtime;
@@ -113,7 +114,7 @@ public class Assignment extends Step {
         runtime.enterKeyword(this);
 
         if(expression != null){
-            List<Error> errors = new ArrayList<>();
+            ErrorManager errors = new ErrorManager();
             Linker.link(expression, runtime, errors);
 
             if(!errors.isEmpty()){

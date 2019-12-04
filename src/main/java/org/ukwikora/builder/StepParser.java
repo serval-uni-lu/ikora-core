@@ -1,20 +1,18 @@
 package org.ukwikora.builder;
 
-import org.ukwikora.error.Error;
-import org.ukwikora.error.SyntaxError;
+import org.ukwikora.error.ErrorManager;
 import org.ukwikora.exception.InvalidDependencyException;
 import org.ukwikora.model.*;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.List;
 
 class StepParser {
-    public static Step parse(LineReader reader, String[] tokens, List<Error> errors) throws IOException {
+    public static Step parse(LineReader reader, String[] tokens, ErrorManager errors) throws IOException {
         return parse(reader, tokens, "", errors);
     }
 
-    public static Step parse(LineReader reader, String[] tokens, String ignoreTag, List<Error> errors) throws IOException {
+    public static Step parse(LineReader reader, String[] tokens, String ignoreTag, ErrorManager errors) throws IOException {
         Step step;
         int startLine = reader.getCurrent().getNumber();
 
@@ -51,7 +49,7 @@ class StepParser {
         return forLoop;
     }
 
-    private static Step parseAssignment(LineReader reader, List<Error> errors) throws IOException {
+    private static Step parseAssignment(LineReader reader, ErrorManager errors) throws IOException {
         Assignment assignment = new Assignment();
         assignment.setName(reader.getCurrent().getText());
 
@@ -77,8 +75,11 @@ class StepParser {
                 try {
                     assignment.setExpression(call);
                 } catch (InvalidDependencyException e) {
-                    SyntaxError error = new SyntaxError("", call.getFile().getFile(), call.getLineRange());
-                    errors.add(error);
+                    errors.registerInternalError(
+                            "Dependency failed to be created, this should not happen",
+                            call.getFile().getFile(),
+                            call.getLineRange()
+                    );
                 }
                 break;
             }
