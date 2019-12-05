@@ -19,10 +19,10 @@ class BuilderTest {
 
         assertEquals(1, project.getTestCases().size());
 
-        final SourceFile sourceFile = project.getSourceFile("library-variable.robot");
-        assertNotNull(sourceFile);
+        final Optional<SourceFile> sourceFile = project.getSourceFile("library-variable.robot");
+        assertTrue(sourceFile.isPresent());
 
-        final TestCase testCase = sourceFile.getTestCases().get(0);
+        final TestCase testCase = sourceFile.get().getTestCases().get(0);
         assertEquals(1, testCase.getSteps().size());
 
         final KeywordCall step = (KeywordCall)testCase.getSteps().get(0);
@@ -40,17 +40,18 @@ class BuilderTest {
         final File robot = Helpers.getResourceFile("robot/keyword-with-dot.robot");
         assertNotNull(robot);
 
-        final Builder builder = new Builder();
-        final Project project = builder.build(robot, true);
-        assertNotNull(project);
+        final BuildResult result = Builder.build(robot, true);
+        assertEquals(1, result.getProjects().size());
+
+        final Project project = result.getProjects().iterator().next();
 
         final Set<UserKeyword> keywords = project.findUserKeyword("Show the content of ${value}");
         assertEquals(1, keywords.size());
 
-        final SourceFile sourceFile = project.getSourceFile("keyword-with-dot.robot");
-        assertNotNull(sourceFile);
+        final Optional<SourceFile> sourceFile = project.getSourceFile("keyword-with-dot.robot");
+        assertTrue(sourceFile.isPresent());
 
-        final TestCase testCase = sourceFile.getTestCases().get(0);
+        final TestCase testCase = sourceFile.get().getTestCases().get(0);
         assertEquals(1, testCase.getSteps().size());
     }
 
@@ -59,9 +60,10 @@ class BuilderTest {
         final File robot = Helpers.getResourceFile("robot/scope-testing");
         assertNotNull(robot);
 
-        final Builder builder = new Builder();
-        final Project project = builder.build(robot, true);
-        assertNotNull(project);
+        final BuildResult result = Builder.build(robot, true);
+        assertEquals(1, result.getProjects().size());
+
+        final Project project = result.getProjects().iterator().next();
 
         Set<UserKeyword> fromResources1 = project.findUserKeyword("Load keyword from resource1");
         assertEquals(1, fromResources1.size());
@@ -88,10 +90,10 @@ class BuilderTest {
             fail(String.format("Failed to load 'robot/scope-testing' from resources: %s", e.getMessage()));
         }
 
-        final Builder builder = new Builder();
-        final Project project = builder.build(robot, true);
+        final BuildResult result = Builder.build(robot, true);
+        assertEquals(1, result.getProjects().size());
 
-        assertNotNull(project);
+        final Project project = result.getProjects().iterator().next();
 
         List<TestCase> mainTest = project.getTestCases();
         assertEquals(1, mainTest.size());
@@ -110,9 +112,10 @@ class BuilderTest {
         final File robot = Helpers.getResourceFile("robot/assignment/keyword.robot");
         assertNotNull(robot);
 
-        final Builder builder = new Builder();
-        final Project project = builder.build(robot, true);
-        assertNotNull(project);
+        final BuildResult result = Builder.build(robot, true);
+        assertEquals(1, result.getProjects().size());
+
+        final Project project = result.getProjects().iterator().next();
 
         Set<UserKeyword> userKeywords = project.getUserKeywords();
         assertEquals(3, userKeywords.size());
@@ -132,9 +135,10 @@ class BuilderTest {
         final File robot = Helpers.getResourceFile("robot/assignment/variable.robot");
         assertNotNull(robot);
 
-        final Builder builder = new Builder();
-        final Project project = builder.build(robot, true);
-        assertNotNull(project);
+        final BuildResult result = Builder.build(robot, true);
+        assertEquals(1, result.getProjects().size());
+
+        final Project project = result.getProjects().iterator().next();
 
         Set<Variable> variables = project.getVariables();
         assertEquals(1, variables.size());
@@ -145,9 +149,10 @@ class BuilderTest {
         final File robot = Helpers.getResourceFile("robot/setup-and-teardown.robot");
         assertNotNull(robot);
 
-        final Builder builder = new Builder();
-        final Project project = builder.build(robot, true);
-        assertNotNull(project);
+        final BuildResult result = Builder.build(robot, true);
+        assertEquals(1, result.getProjects().size());
+
+        final Project project = result.getProjects().iterator().next();
 
         Set<UserKeyword> ofInterest = project.findUserKeyword("Setup the test case");
         assertEquals(1, ofInterest.size());
@@ -165,9 +170,10 @@ class BuilderTest {
         final File robot = Helpers.getResourceFile("robot/setup-and-teardown.robot");
         assertNotNull(robot);
 
-        final Builder builder = new Builder();
-        final Project project = builder.build(robot, true);
-        assertNotNull(project);
+        final BuildResult result = Builder.build(robot, true);
+        assertEquals(1, result.getProjects().size());
+
+        final Project project = result.getProjects().iterator().next();
 
         Set<UserKeyword> ofInterest = project.findUserKeyword("Clean the environment");
         assertEquals(1, ofInterest.size());

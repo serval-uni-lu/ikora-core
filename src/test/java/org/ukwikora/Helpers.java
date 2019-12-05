@@ -1,6 +1,7 @@
 package org.ukwikora;
 
 import org.apache.commons.io.FileUtils;
+import org.ukwikora.builder.BuildResult;
 import org.ukwikora.builder.Builder;
 import org.ukwikora.model.Project;
 
@@ -20,8 +21,10 @@ public class Helpers {
             fail(String.format("Failed to load '%s': %s", resourcesPath, e.getMessage()));
         }
 
-        Builder builder = new Builder();
-        return builder.build(projectFolder, link);
+        final BuildResult result = Builder.build(projectFolder, link);
+        assertEquals(1, result.getProjects().size());
+
+        return result.getProjects().iterator().next();
     }
 
     public static File getNewTmpFolder(String name){

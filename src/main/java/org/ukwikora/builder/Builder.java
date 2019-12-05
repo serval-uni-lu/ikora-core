@@ -10,37 +10,34 @@ import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 public class Builder {
-    private ErrorManager errors;
+    private Builder(){}
 
-    private long parsingTime;
-    private long dependencyResolutionTime;
-    private long linkingTime;
-    private long buildTime;
+    public static BuildResult build(Set<File> files, boolean link){
+        BuildResult result = new BuildResult();
+        ErrorManager errors = new ErrorManager();
 
-    public Builder(){
-        errors = new ErrorManager();
-    }
-
-    public Set<Project> build(Set<File> files, boolean link){
         Set<Project> projects = new HashSet<>();
 
         Instant start = Instant.now();
 
         DynamicImports dynamicImports = new DynamicImports();
         for(File file: files) {
-            Project project = parse(file, dynamicImports);
+            Project project = parse(file, dynamicImports, errors);
             projects.add(project);
         }
 
-        parsingTime = Duration.between(start, Instant.now()).toMillis();
+        long parsingTime = Duration.between(start, Instant.now()).toMillis();
+        result.setParsingTime(parsingTime);
 
         Instant startDependencies = Instant.now();
-        resolveDependencies(projects);
-        dependencyResolutionTime = Duration.between(startDependencies, Instant.now()).toMillis();
+        resolveDependencies(projects, errors);
+        result.setDependencyResolutionTime(Duration.between(startDependencies, Instant.now()).toMillis());
 
         Instant startLinking = Instant.now();
 
@@ -48,53 +45,43 @@ public class Builder {
                 Runtime runtime;
                 runtime = new Runtime(project, new StaticScope());
                 loadLibraries(runtime);
-                link(runtime, link);
+                link(runtime, link, errors);
         }
 
-        linkingTime = Duration.between(startLinking, Instant.now()).toMillis();
-        buildTime = Duration.between(start, Instant.now()).toMillis();
+        result.setLinkingTime(Duration.between(startLinking, Instant.now()).toMillis());
+        result.setBuildTime(Duration.between(start, Instant.now()).toMillis());
 
-        return projects;
+        result.setErrors(errors);
+        result.setProjects(projects);
+
+        return result;
     }
 
-    public Project build(File file, boolean link) {
-        Project project;
+    public static BuildResult build(File file, boolean link) {
+        BuildResult result = new BuildResult();
+        ErrorManager errors = new ErrorManager();
+
         Instant start = Instant.now();
 
         DynamicImports dynamicImports = new DynamicImports();
-        project = parse(file, dynamicImports);
+        Project project = parse(file, dynamicImports, errors);
+        result.setParsingTime(Duration.between(start, Instant.now()).toMillis());
 
+        Instant startLinking = Instant.now();
         Runtime runtime = new Runtime(project, new StaticScope());
         loadLibraries(runtime);
-        link(runtime, link);
+        link(runtime, link, errors);
+        result.setLinkingTime(Duration.between(startLinking, Instant.now()).toMillis());
 
-        Instant finish = Instant.now();
-        buildTime = Duration.between(start, finish).toMillis();
+        result.setBuildTime(Duration.between(start, Instant.now()).toMillis());
 
-        return project;
+        result.setErrors(errors);
+        result.setProjects(Collections.singleton(project));
+
+        return result;
     }
 
-    public ErrorManager getErrors() {
-        return errors;
-    }
-
-    public long getParsingTime() {
-        return parsingTime;
-    }
-
-    public long getLinkingTime() {
-        return linkingTime;
-    }
-
-    public long getDependencyResolutionTime() {
-        return dependencyResolutionTime;
-    }
-
-    public long getBuildTime() {
-        return buildTime;
-    }
-
-    private void resolveDependencies(Set<Project> projects) {
+    private static void resolveDependencies(Set<Project> projects, ErrorManager errors) {
         for(Project project: projects){
             Set<Resources> externals =  project.getExternalResources();
 
@@ -104,7 +91,7 @@ public class Builder {
 
                     try {
                         if(FileUtils.isSubDirectory(base, external.getFile())){
-                            updateDependencies(project, dependency, external);
+                            updateDependencies(project, dependency, external, errors);
                             break;
                         }
                     } catch (IOException e) {
@@ -118,19 +105,22 @@ public class Builder {
         }
     }
 
-    private void updateDependencies(Project project, Project dependency, Resources external) {
+    private static void updateDependencies(Project project, Project dependency, Resources external, ErrorManager errors) {
         project.addDependency(dependency);
         String name = dependency.generateFileName(external.getFile());
-        SourceFile sourceFile = dependency.getSourceFile(name);
-        external.setSourceFile(sourceFile);
+        Optional<SourceFile> sourceFile = dependency.getSourceFile(name);
+
+        if(sourceFile.isPresent()){
+            external.setSourceFile(sourceFile.get());
+        }
     }
 
-    private void loadLibraries(Runtime runtime) {
+    private static void loadLibraries(Runtime runtime) {
         LibraryResources libraries = LibraryLoader.load();
         runtime.setLibraries(libraries);
     }
 
-    private void link(Runtime runtime, boolean link) {
+    private static void link(Runtime runtime, boolean link, ErrorManager errors) {
         if(!link){
             return;
         }
@@ -138,7 +128,7 @@ public class Builder {
         Linker.link(runtime, errors);
     }
 
-    private Project parse(File file, DynamicImports dynamicImports) {
+    private static Project parse(File file, DynamicImports dynamicImports, ErrorManager errors) {
         return ProjectParser.parse(file, dynamicImports, errors);
     }
 }

@@ -1,8 +1,6 @@
 package org.ukwikora.builder;
 
-import org.ukwikora.error.Error;
 import org.ukwikora.error.ErrorManager;
-import org.ukwikora.error.IOError;
 import org.ukwikora.utils.Configuration;
 import org.ukwikora.utils.Plugin;
 import org.apache.commons.io.FileUtils;
@@ -12,10 +10,7 @@ import org.ukwikora.model.SourceFile;
 
 import java.io.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 class ProjectParser {
     private ProjectParser(){}
@@ -62,13 +57,13 @@ class ProjectParser {
         for(SourceFile sourceFile : project.getSourceFiles()) {
             for (Resources resources: sourceFile.getSettings().getResources()) {
                 String name = project.generateFileName(resources.getFile());
-                SourceFile resourceFile = project.getSourceFile(name);
+                Optional<SourceFile> resourceFile = project.getSourceFile(name);
 
-                if(resourceFile == null) {
-                    errors.registerIOError("File not found", new File(project.getRootFolder(), name));
+                if(resourceFile.isPresent()) {
+                    resources.setSourceFile(resourceFile.get());
                 }
                 else{
-                    resources.setSourceFile(resourceFile);
+                    errors.registerIOError("File not found", new File(project.getRootFolder(), name));
                 }
             }
         }
