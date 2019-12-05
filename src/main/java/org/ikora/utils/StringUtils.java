@@ -1,6 +1,6 @@
 package org.ikora.utils;
 
-import org.apache.commons.lang3.text.WordUtils;
+import org.apache.commons.text.WordUtils;
 
 import javax.annotation.Nonnull;
 import java.io.UnsupportedEncodingException;
