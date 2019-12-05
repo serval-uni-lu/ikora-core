@@ -6,6 +6,7 @@ import org.ikora.exception.InvalidImportTypeException;
 import org.ikora.model.*;
 import org.ikora.runner.Runtime;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -246,9 +247,9 @@ public class Linker {
                 if(runtimeKeyword != null){
                     keywordsFound.add(runtimeKeyword);
                 }
-            } catch (InstantiationException | IllegalAccessException exception) {
+            } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException exception) {
                 errors.registerUnhandledError(
-                    "Failed to locate runtime keyword",
+                    String.format("Failed to load library keyword: %s::%s", library, name),
                     exception
                 );
             }

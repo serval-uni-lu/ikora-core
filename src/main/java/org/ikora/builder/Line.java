@@ -21,6 +21,10 @@ public class Line {
         return text;
     }
 
+    public boolean isCode() {
+        return !ignore();
+    }
+
     public boolean isValid() {
         return text != null;
     }
@@ -36,4 +40,6 @@ public class Line {
     public boolean ignore() {
         return isComment || isEmpty;
     }
+
+
 }

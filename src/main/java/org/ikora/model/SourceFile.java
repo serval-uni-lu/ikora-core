@@ -10,10 +10,7 @@ import java.util.*;
 public class SourceFile implements Iterable<UserKeyword> {
     final private Project project;
     final private File file;
-
-    private int linesOfCode;
-    private int commentLines;
-    private List<Line> lines;
+    final private List<Line> lines;
 
     private String name;
     private Settings settings;
@@ -24,8 +21,6 @@ public class SourceFile implements Iterable<UserKeyword> {
     public SourceFile(Project project, File file){
         this.project = project;
         this.file = file;
-        this.linesOfCode = 0;
-        this.commentLines = 0;
         this.lines = new ArrayList<>();
 
         setSettings(new Settings());
@@ -43,16 +38,8 @@ public class SourceFile implements Iterable<UserKeyword> {
         this.variableTable.setFile(this);
     }
 
-    public void setLinesOfCode(int linesOfCode) {
-        this.linesOfCode = linesOfCode;
-    }
-
-    public void setCommentLines(int commentLines) {
-        this.commentLines = commentLines;
-    }
-
-    public int getLinesOfCode(){
-        return this.linesOfCode;
+    public List<Line> getLines(){
+        return this.lines;
     }
 
     public int getDeadLoc() {
@@ -73,15 +60,15 @@ public class SourceFile implements Iterable<UserKeyword> {
         return deadLoc;
     }
 
-    public int getCommentLines(){
-        return commentLines;
+    public int getLinesOfCode(){
+        return getLinesOfCode(new LineRange(0, lines.size()));
     }
 
     public int getLinesOfCode(LineRange lineRange) {
         int loc = 0;
 
         for(int index = lineRange.getStart(); index < lineRange.getEnd(); ++index){
-            loc += lines.get(index).ignore() ? 0 : 1;
+            loc += lines.get(index).isCode() ? 1 : 0;
         }
 
         return loc;
