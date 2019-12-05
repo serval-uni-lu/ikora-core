@@ -4,6 +4,7 @@ import org.ikora.model.*;
 import org.ikora.report.Report;
 import org.ikora.report.ReportBuilder;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -37,7 +38,7 @@ public class Runtime {
         return scope.findInScope(testCases, suites, name);
     }
 
-    public Keyword findKeyword(String library, String name) throws InstantiationException, IllegalAccessException{
+    public Keyword findKeyword(String library, String name) throws InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
         if(library == null){
             return null;
         }

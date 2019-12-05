@@ -1,5 +1,6 @@
 package org.ikora.model;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,7 +29,7 @@ public class LibraryResources {
         }
     }
 
-    public Keyword findKeyword(String name) throws InstantiationException, IllegalAccessException {
+    public Keyword findKeyword(String name) throws InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
         Item<LibraryKeyword> keyword = keywordsNames.get(name.toLowerCase());
 
         if(keyword == null){
@@ -38,7 +39,7 @@ public class LibraryResources {
         return keyword.getObject();
     }
 
-    public Keyword findKeyword(String library, String name) throws IllegalAccessException, InstantiationException {
+    public Keyword findKeyword(String library, String name) throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
         if(library.isEmpty()){
             return findKeyword(name);
         }
@@ -66,9 +67,9 @@ public class LibraryResources {
             this.itemObject = null;
         }
 
-        public T getObject() throws IllegalAccessException, InstantiationException {
+        public T getObject() throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
             if(itemObject == null) {
-                itemObject = itemClass.newInstance();
+                itemObject = itemClass.getConstructor().newInstance();
             }
 
             return itemObject;
