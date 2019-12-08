@@ -6,6 +6,7 @@ import org.ikora.model.Step;
 import org.ikora.model.TestCase;
 
 import java.io.IOException;
+import java.util.Optional;
 
 class TestCaseParser {
     private TestCaseParser() {}
@@ -15,21 +16,24 @@ class TestCaseParser {
         TestCase testCase = new TestCase();
         int startLine = reader.getCurrent().getNumber();
 
-        Line test = reader.getCurrent();
-        String[] tokens = LexerUtils.tokenize(test.getText());
-        testCase.setName(tokens[0]);
+        Line line = reader.getCurrent();
+        Tokens testTokens = LexerUtils.tokenize(line.getText());
 
-        Line line = reader.readLine();
+        ParserUtils.parseName(reader, testTokens, testCase, errors);
 
-        while(line.isValid() && LexerUtils.isInBlock(test.getText(), line.getText())) {
+        while(line.isValid()) {
             if(line.ignore()) {
                 line = reader.readLine();
                 continue;
             }
 
-            tokens = LexerUtils.removeIndent(LexerUtils.tokenize(line.getText()));
+            Tokens tokens = LexerUtils.tokenize(line.getText()).withoutIndent();
 
-            String label = tokens[0].trim();
+            if(!testTokens.isParent(tokens)){
+                break;
+            }
+
+            String label = ParserUtils.getLabel(reader, tokens, errors);
 
             if (LexerUtils.compareNoCase(label, "\\[documentation\\]")) {
                 parseDocumentation(reader, testCase);
@@ -57,38 +61,38 @@ class TestCaseParser {
         }
 
         int endLine = reader.getCurrent().getNumber();
-        testCase.setLineRange(new LineRange(startLine, endLine));
+            testCase.setLineRange(new LineRange(startLine, endLine));
 
         return testCase;
     }
 
-    private static void parseTimeout(LineReader reader, String[] tokens, TestCase testCase) throws IOException {
+    private static void parseTimeout(LineReader reader, Tokens tokens, TestCase testCase) throws IOException {
        reader.readLine();
     }
 
-    private static void parseTemplate(LineReader reader, String[] tokens, TestCase testCase) throws IOException {
+    private static void parseTemplate(LineReader reader, Tokens tokens, TestCase testCase) throws IOException {
         reader.readLine();
     }
 
-    private static void parseTeardown(LineReader reader, String[] tokens, TestCase testCase, DynamicImports dynamicImports, ErrorManager errors) throws IOException {
+    private static void parseTeardown(LineReader reader, Tokens tokens, TestCase testCase, DynamicImports dynamicImports, ErrorManager errors) throws IOException {
             Step step = StepParser.parse(reader, tokens, "\\[teardown\\]", errors);
             testCase.setTearDown(step);
 
             dynamicImports.add(testCase, step);
     }
 
-    private static void parseSetup(LineReader reader, String[] tokens, TestCase testCase, DynamicImports dynamicImports, ErrorManager errors) throws IOException {
+    private static void parseSetup(LineReader reader, Tokens tokens, TestCase testCase, DynamicImports dynamicImports, ErrorManager errors) throws IOException {
             Step step = StepParser.parse(reader, tokens, "\\[setup\\]", errors);
             testCase.setSetup(step);
 
             dynamicImports.add(testCase, step);
     }
 
-    private static void parseTags(LineReader reader, String[] tokens, TestCase testCase) throws IOException {
-        tokens = LexerUtils.removeIndent(tokens);
+    private static void parseTags(LineReader reader, Tokens tokens, TestCase testCase) throws IOException {
+        tokens = tokens.withoutIndent();
 
-        for(int i = 1; i < tokens.length; ++i){
-            testCase.addTag(tokens[i]);
+        for(Token token: tokens){
+            testCase.addTag(token.getValue());
         }
 
         reader.readLine();
@@ -101,7 +105,7 @@ class TestCaseParser {
         testCase.setDocumentation(builder.toString());
     }
 
-    private static void parseStep(LineReader reader, String[] tokens, TestCase testCase, DynamicImports dynamicImports, ErrorManager errors) throws IOException {
+    private static void parseStep(LineReader reader, Tokens tokens, TestCase testCase, DynamicImports dynamicImports, ErrorManager errors) throws IOException {
         Step step = StepParser.parse(reader, tokens, errors);
 
         try {

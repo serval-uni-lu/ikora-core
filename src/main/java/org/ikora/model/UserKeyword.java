@@ -37,12 +37,8 @@ public class UserKeyword extends KeywordDefinition {
         return returnValues;
     }
 
-    public void setReturn(String[] returnString) {
-        returnValues.clear();
-
-        for (String string : returnString) {
-            returnValues.add(new Value(string));
-        }
+    public void addReturn(String returnString) {
+        returnValues.add(new Value(returnString));
     }
 
     public TimeOut getTimeOut() {

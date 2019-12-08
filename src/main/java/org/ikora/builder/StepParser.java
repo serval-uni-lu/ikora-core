@@ -5,28 +5,28 @@ import org.ikora.exception.InvalidDependencyException;
 import org.ikora.model.*;
 
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.Optional;
 
 class StepParser {
-    public static Step parse(LineReader reader, String[] tokens, ErrorManager errors) throws IOException {
+    public static Step parse(LineReader reader, Tokens tokens, ErrorManager errors) throws IOException {
         return parse(reader, tokens, "", errors);
     }
 
-    public static Step parse(LineReader reader, String[] tokens, String ignoreTag, ErrorManager errors) throws IOException {
+    public static Step parse(LineReader reader, Tokens tokens, String ignoreTag, ErrorManager errors) throws IOException {
         Step step;
         int startLine = reader.getCurrent().getNumber();
 
-        tokens = LexerUtils.removeIndent(tokens);
-        tokens = LexerUtils.removeTag(tokens, ignoreTag);
+        tokens = tokens.withoutIndent();
+        tokens = tokens.withoutTag(ignoreTag);
 
-        if(isForLoop(tokens)) {
+        if(isForLoop(reader, tokens, errors)) {
             step = parseForLoop(reader);
         }
-        else if (isAssignment(tokens)){
+        else if (isAssignment(reader, tokens, errors)){
             step = parseAssignment(reader, errors);
         }
         else {
-            step = parseKeywordCall(reader, tokens);
+            step = parseKeywordCall(reader, tokens, errors);
         }
 
         int endLine = reader.getCurrent().getNumber();
@@ -37,11 +37,13 @@ class StepParser {
 
     private static Step parseForLoop(LineReader reader) throws IOException {
         ForLoop forLoop = new ForLoop();
-        Line loop = reader.getCurrent();
-        forLoop.setName(loop.getText());
+        Tokens loop = LexerUtils.tokenize(reader.getCurrent().getText());
+        forLoop.setName("TO DO");
 
         while (reader.readLine().isValid()){
-            if(!LexerUtils.isInBlock(loop.getText(), reader.getCurrent().getText())){
+            Tokens tokens = LexerUtils.tokenize(reader.getCurrent().getText());
+
+            if(!loop.isParent(tokens)){
                 break;
             }
         }
@@ -53,24 +55,26 @@ class StepParser {
         Assignment assignment = new Assignment();
         assignment.setName(reader.getCurrent().getText());
 
-        String[] tokens = LexerUtils.tokenize(reader.getCurrent().getText());
+        Tokens tokens = LexerUtils.tokenize(reader.getCurrent().getText());
 
-        for(int i = 0; i < tokens.length; ++i){
-            String token = tokens[i].replaceAll("(\\s*)=(\\s*)$", "");
-            token = token.replaceAll("^(\\s*)=(\\s*)", "");
+        int offset = 0;
+        for(Token token: tokens){
+            String value = token.getValue().replaceAll("(\\s*)=(\\s*)$", "");
+            value = value.replaceAll("^(\\s*)=(\\s*)", "");
 
-            if(token.isEmpty()){
+            if(value.isEmpty()){
+                ++offset;
                 continue;
             }
 
-            if(Value.isVariable(token)){
-                VariableParser.parse(token).ifPresent(variable -> {
+            if(Value.isVariable(value)){
+                VariableParser.parse(value).ifPresent(variable -> {
                     variable.setAssignment(assignment);
                     assignment.addReturnValue(variable);
                 });
             }
             else{
-                KeywordCall call = getKeywordCall(Arrays.copyOfRange(tokens, i, tokens.length));
+                KeywordCall call = getKeywordCall(reader, tokens.withoutFirst(offset), errors);
 
                 try {
                     assignment.setExpression(call);
@@ -83,6 +87,8 @@ class StepParser {
                 }
                 break;
             }
+
+            ++offset;
         }
 
         reader.readLine();
@@ -90,33 +96,70 @@ class StepParser {
         return assignment;
     }
 
-    private static Step parseKeywordCall(LineReader reader, String[] tokens) throws IOException {
-        KeywordCall call = getKeywordCall(tokens);
+    private static Step parseKeywordCall(LineReader reader, Tokens tokens, ErrorManager errors) throws IOException {
+        KeywordCall call = getKeywordCall(reader, tokens, errors);
         reader.readLine();
-
         return call;
     }
 
-    private static KeywordCall getKeywordCall(String[] tokens) {
+    private static KeywordCall getKeywordCall(LineReader reader, Tokens tokens, ErrorManager errors) throws IOException {
         KeywordCall call = new KeywordCall();
 
-        if(tokens.length > 0) {
-            call.setName(tokens[0]);
-        }
+        Optional<Token> first =  tokens.first();
 
-        if (tokens.length > 1) {
-            for(int i = 1; i < tokens.length; ++i) {
-                call.addParameter(tokens[i]);
+        if(!first.isPresent()){
+            int lineNumber = reader.getCurrent().getNumber();
+
+            errors.registerInternalError(
+                    "Empty token should be a keyword call",
+                    reader.getFile(),
+                    new LineRange(lineNumber, lineNumber + 1)
+            );
+        }
+        else{
+            call.setName(first.get().getValue());
+
+            for(Token token: tokens.withoutFirst()) {
+                call.addParameter(token.getValue());
             }
         }
+
         return call;
     }
 
-    private static boolean isAssignment(String[] tokens){
-        return LexerUtils.compareNoCase(tokens[0], "^((\\$|@|&)\\{)(.*)(\\})(\\s?)(=?)");
+    private static boolean isAssignment(LineReader reader, Tokens tokens, ErrorManager errors){
+        Optional<Token> first = tokens.first();
+
+        if(!first.isPresent()) {
+            int lineNumber = reader.getCurrent().getNumber();
+
+            errors.registerInternalError(
+                    "Empty token should be a keyword call",
+                    reader.getFile(),
+                    new LineRange(lineNumber, lineNumber + 1)
+            );
+
+            return false;
+        }
+
+        return first.get().isAssignment();
     }
 
-    private static boolean isForLoop(String[] tokens) {
-        return tokens[0].equalsIgnoreCase(":FOR");
+    private static boolean isForLoop(LineReader reader, Tokens tokens, ErrorManager errors) {
+        Optional<Token> first =  tokens.first();
+
+        if(!first.isPresent()){
+            int lineNumber = reader.getCurrent().getNumber();
+
+            errors.registerInternalError(
+                    "Empty token should be a keyword call",
+                    reader.getFile(),
+                    new LineRange(lineNumber, lineNumber + 1)
+            );
+
+            return false;
+        }
+
+        return first.get().isForLoop();
     }
 }

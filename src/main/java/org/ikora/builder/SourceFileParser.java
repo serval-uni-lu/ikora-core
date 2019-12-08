@@ -29,7 +29,7 @@ class SourceFileParser {
                 String text = reader.getCurrent().getText();
 
                 if(isSettings(text)){
-                    Settings settings = SettingsTableParser.parse(reader, sourceFile);
+                    Settings settings = SettingsTableParser.parse(reader, sourceFile, errors);
                     sourceFile.setSettings(settings);
                 }
                 else if(isTestCases(text)){
@@ -41,7 +41,7 @@ class SourceFileParser {
                     sourceFile.setKeywordTable(nodeTable);
                 }
                 else if(isVariable(text)){
-                    NodeTable<Variable> variableTable = VariableTableParser.parse(reader);
+                    NodeTable<Variable> variableTable = VariableTableParser.parse(reader, errors);
                     sourceFile.setVariableTable(variableTable);
                 }
                 else {

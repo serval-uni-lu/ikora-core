@@ -1,9 +1,7 @@
 package org.ikora.builder;
 
-import org.ikora.model.Library;
-import org.ikora.model.Resources;
-import org.ikora.model.Settings;
-import org.ikora.model.SourceFile;
+import org.ikora.error.ErrorManager;
+import org.ikora.model.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,7 +10,7 @@ import java.util.ArrayList;
 class SettingsTableParser {
     private SettingsTableParser(){ }
 
-    public static Settings parse(LineReader reader, SourceFile sourceFile) throws IOException {
+    public static Settings parse(LineReader reader, SourceFile sourceFile, ErrorManager errors) throws IOException {
         Settings settings = new Settings();
         settings.setFile(sourceFile);
 
@@ -24,23 +22,23 @@ class SettingsTableParser {
                 continue;
             }
 
-            String[] tokens = LexerUtils.tokenize(line.getText());
+            Tokens tokens = LexerUtils.tokenize(line.getText());
 
-            if(tokens.length == 0){
+            if(tokens.size() == 0){
                 line = reader.readLine();
                 continue;
             }
 
-            String label = tokens[0];
+            String label = ParserUtils.getLabel(reader, tokens, errors);
 
             if(LexerUtils.compareNoCase(label, "documentation")){
                 parseDocumentation(reader, tokens, settings);
             }
             else if(LexerUtils.compareNoCase(label, "resource")){
-                parseResource(reader, tokens, settings);
+                parseResource(reader, tokens, settings, errors);
             }
             else if(LexerUtils.compareNoCase(label, "library")){
-                parseLibrary(reader, tokens, settings);
+                parseLibrary(reader, tokens, settings, errors);
             }
             else if(LexerUtils.compareNoCase(label, "variables")) {
                 parseVariable(reader, tokens, settings);
@@ -82,73 +80,75 @@ class SettingsTableParser {
         return settings;
     }
 
-    private static void parseTestTimeout(LineReader reader, String[] tokens, Settings settings) throws IOException {
+    private static void parseTestTimeout(LineReader reader, Tokens tokens, Settings settings) throws IOException {
         reader.readLine();
     }
 
-    private static void parseTestTemplate(LineReader reader, String[] tokens, Settings settings) throws IOException {
+    private static void parseTestTemplate(LineReader reader, Tokens tokens, Settings settings) throws IOException {
         reader.readLine();
     }
 
-    private static void parseTestTeardown(LineReader reader, String[] tokens, Settings settings) throws IOException {
+    private static void parseTestTeardown(LineReader reader, Tokens tokens, Settings settings) throws IOException {
         reader.readLine();
     }
 
-    private static void parseTestSetup(LineReader reader, String[] tokens, Settings settings) throws IOException {
+    private static void parseTestSetup(LineReader reader, Tokens tokens, Settings settings) throws IOException {
         reader.readLine();
     }
 
-    private static void parseForceTags(LineReader reader, String[] tokens, Settings settings) throws IOException {
+    private static void parseForceTags(LineReader reader, Tokens tokens, Settings settings) throws IOException {
         reader.readLine();
     }
 
-    private static void parseSuiteTeardown(LineReader reader, String[] tokens, Settings settings) throws IOException {
+    private static void parseSuiteTeardown(LineReader reader, Tokens tokens, Settings settings) throws IOException {
         reader.readLine();
     }
 
-    private static void parseSuiteSetup(LineReader reader, String[] tokens, Settings settings) throws IOException {
+    private static void parseSuiteSetup(LineReader reader, Tokens tokens, Settings settings) throws IOException {
         reader.readLine();
     }
 
-    private static void parseMetadata(LineReader reader, String[] tokens, Settings settings) throws IOException {
+    private static void parseMetadata(LineReader reader, Tokens tokens, Settings settings) throws IOException {
         reader.readLine();
     }
 
-    private static void parseVariable(LineReader reader, String[] tokens, Settings settings) throws IOException {
+    private static void parseVariable(LineReader reader, Tokens tokens, Settings settings) throws IOException {
         reader.readLine();
     }
 
-    private static void parseDocumentation(LineReader reader, String[] tokens, Settings settings) throws IOException {
+    private static void parseDocumentation(LineReader reader, Tokens tokens, Settings settings) throws IOException {
         StringBuilder builder = new StringBuilder();
         LexerUtils.parseDocumentation(reader, builder);
 
         settings.setDocumentation(builder.toString());
     }
 
-    private static void parseLibrary(LineReader reader, String[] tokens, Settings settings) throws IOException {
-        Library library = new Library(tokens[1], new ArrayList<>(), "");
+    private static void parseLibrary(LineReader reader, Tokens tokens, Settings settings, ErrorManager errors) throws IOException {
+        tokens = tokens.withoutFirst();
+        String label = ParserUtils.getLabel(reader, tokens, errors);
+        Library library = new Library(label, new ArrayList<>(), "");
         settings.addLibrary(library);
 
         reader.readLine();
     }
 
-    private static void parseResource(LineReader reader, String[] tokens, Settings settings) throws IOException {
-        File filePath = new File(tokens[1]);
+    private static void parseResource(LineReader reader, Tokens tokens, Settings settings, ErrorManager errors) throws IOException {
+        tokens = tokens.withoutFirst();
+        String label = ParserUtils.getLabel(reader, tokens, errors);
+        File filePath = new File(label);
         if(!filePath.isAbsolute()) {
             filePath = new File(reader.getFile().getParentFile(), filePath.getPath());
         }
 
-        Resources resources = new Resources(tokens[1], filePath, new ArrayList<>(), "");
+        Resources resources = new Resources(label, filePath, new ArrayList<>(), "");
         settings.addResources(resources);
 
         reader.readLine();
     }
 
-    private static void parseDefaultTags(LineReader reader, String[] tokens, Settings settings) throws IOException {
-        tokens = LexerUtils.removeIndent(tokens);
-
-        for(int i = 1; i < tokens.length; ++i){
-            settings.addDefaultTag(tokens[i]);
+    private static void parseDefaultTags(LineReader reader, Tokens tokens, Settings settings) throws IOException {
+        for(Token token: tokens.withoutIndent()){
+            settings.addDefaultTag(token.getValue());
         }
 
         reader.readLine();

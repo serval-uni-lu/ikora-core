@@ -1,5 +1,6 @@
 package org.ikora.builder;
 
+import org.ikora.error.ErrorManager;
 import org.ikora.model.NodeTable;
 import org.ikora.model.LineRange;
 import org.ikora.model.Variable;
@@ -11,7 +12,7 @@ import java.util.Optional;
 class VariableTableParser {
     private VariableTableParser() {}
 
-    public static NodeTable<Variable> parse(LineReader reader) throws IOException {
+    public static NodeTable<Variable> parse(LineReader reader, ErrorManager errors) throws IOException {
         NodeTable<Variable> variableTable = new NodeTable<>();
 
         reader.readLine();
@@ -26,20 +27,39 @@ class VariableTableParser {
                 continue;
             }
 
-            String[] tokens = LexerUtils.tokenize(reader.getCurrent().getText());
+            Tokens tokens = LexerUtils.tokenize(reader.getCurrent().getText());
 
-            Optional<Variable> optional = VariableParser.parse(tokens[0]);
+            Optional<Token> first = tokens.first();
+            if(!first.isPresent()){
+                int lineNumber = reader.getCurrent().getNumber();
+                errors.registerInternalError(
+                        "Empty token not expected",
+                        reader.getFile(),
+                        new LineRange(lineNumber, lineNumber + 1)
+                );
+
+                continue;
+            }
+
+            Optional<Variable> optional = VariableParser.parse(first.get().getValue());
 
             if(!optional.isPresent()){
-                throw new InvalidParameterException(tokens[0]);
+                int lineNumber = reader.getCurrent().getNumber();
+                errors.registerInternalError(
+                        String.format("Invalid variable: %s", first.get().getValue()),
+                        reader.getFile(),
+                        new LineRange(lineNumber, lineNumber + 1)
+                );
+
+                continue;
             }
 
             Variable variable = optional.get();
 
             int startLine = reader.getCurrent().getNumber();
 
-            for (int i = 1; i < tokens.length; ++i) {
-                variable.addElement(tokens[i]);
+            for (Token token: tokens.withoutFirst()) {
+                variable.addElement(token.getValue());
             }
 
             reader.readLine();

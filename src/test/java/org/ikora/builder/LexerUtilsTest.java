@@ -5,65 +5,72 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+import java.util.Iterator;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class LexerUtilsTest {
 
     @Test
-    void checkRemoveIndent(){
-        String[] twoIndents = {"","","Some text", "More text"};
-        String[] oneIndent = {"","Some text", "More text"};
-        String[] zeroIndents = {"Some text", "More text"};
-
-        String[] twoIndentsClean = LexerUtils.removeIndent(twoIndents);
-        String[] oneIndentClean = LexerUtils.removeIndent(oneIndent);
-        String[] zeroIndentsClean = LexerUtils.removeIndent(zeroIndents);
-
-        assertArrayEquals(zeroIndents, twoIndentsClean);
-        assertArrayEquals(zeroIndents, oneIndentClean);
-        assertArrayEquals(zeroIndents, zeroIndentsClean);
-    }
-
-    @Test
     void checkTokenizerWith2spaceIndent(){
         String line = "  Some text";
-        String[] tokens = LexerUtils.tokenize(line);
+        Tokens tokens = LexerUtils.tokenize(line);
 
-        assertEquals(tokens.length, 2);
-        assertTrue(tokens[0].isEmpty());
-        assertEquals(tokens[1], "Some text");
+        assertEquals(2, tokens.size());
+
+        Iterator<Token> iterator =  tokens.iterator();
+
+        Token token1 = iterator.next();
+        assertTrue(token1.isDelimiter());
+
+        Token token2 = iterator.next();
+        assertTrue(token2.isText());
     }
 
     @Test
     void checkTokenizerWith1spaceIndent(){
         String line = " Some text";
-        String[] tokens = LexerUtils.tokenize(line);
+        Tokens tokens = LexerUtils.tokenize(line);
 
-        assertEquals(tokens.length, 1);
-        assertEquals(tokens[0], "Some text");
+        assertEquals( 1, tokens.size());
+
+        Token token = tokens.iterator().next();
+        assertTrue(token.isText());
+        assertEquals("Some text", token.getValue());
     }
 
     @Test
     void checkTokenizeWith4spaceIndent(){
         String line = "    Some text";
 
-        String[] tokens = LexerUtils.tokenize(line);
+        Tokens tokens = LexerUtils.tokenize(line);
 
-        assertEquals(2, tokens.length);
-        assertTrue(tokens[0].isEmpty());
-        assertEquals("Some text", tokens[1] );
+        assertEquals(2, tokens.size());
+
+        Iterator<Token> iterator =  tokens.iterator();
+
+        Token token1 = iterator.next();
+        assertTrue(token1.isDelimiter());
+
+        Token token2 = iterator.next();
+        assertTrue(token2.isText());
     }
 
     @Test
     void checkTokenizeWithTabIndent(){
         String line = "\tSome text";
 
-        String[] tokens = LexerUtils.tokenize(line);
+        Tokens tokens = LexerUtils.tokenize(line);
 
-        assertEquals(2, tokens.length);
-        assertTrue(tokens[0].isEmpty());
-        assertEquals(tokens[1], "Some text");
+        assertEquals(2, tokens.size());
+
+        Iterator<Token> iterator =  tokens.iterator();
+
+        Token token1 = iterator.next();
+        assertTrue(token1.isDelimiter());
+
+        Token token2 = iterator.next();
+        assertTrue(token2.isText());
     }
 
     @Test

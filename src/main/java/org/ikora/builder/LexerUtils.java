@@ -1,73 +1,73 @@
 package org.ikora.builder;
 
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 class LexerUtils {
     private LexerUtils(){}
 
-    static boolean compareNoCase(String line, String regex){
-        Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(line.trim());
-
-        return matcher.matches();
-    }
-
-    static String[] removeIndent(String[] tokens){
-        while (tokens[0].isEmpty()){
-            tokens = Arrays.copyOfRange(tokens, 1, tokens.length);
-        }
-
-        return tokens;
-    }
-
-    static String[] removeTag(String[] tokens, String tag) {
-        if(tag.isEmpty()){
-            return tokens;
-        }
-
-        if(compareNoCase(tokens[0], tag)){
-            tokens = Arrays.copyOfRange(tokens, 1, tokens.length);
-        }
-
-        return tokens;
-    }
-
     static void parseDocumentation(LineReader reader, StringBuilder builder) throws IOException {
-        String[] tokens = tokenize(reader.getCurrent().getText());
-        tokens = LexerUtils.removeIndent(tokens);
+        Tokens tokens = tokenize(reader.getCurrent().getText());
+        tokens = tokens.withoutIndent();
 
-        if(tokens.length > 1){
-            builder.append(LexerUtils.removeIndent(tokens)[1]);
+        if(tokens.size() > 1){
+            builder.append(tokens);
         }
 
         appendMultiline(reader, builder);
     }
 
-    static String[] tokenize(String line){
-        String tokens = line.replaceAll("\\s+$", "").replaceAll("\\s\\s(\\s*)", "\t");
-        tokens = tokens.replaceAll("\\\\t", "\t");
+    static Tokens tokenize(String line){
+        Tokens tokens = new Tokens();
 
-        return Arrays.stream(tokens.split("\t")).map(String::trim).toArray(String[]::new);
-    }
+        int start = 0;
+        int current = 0;
+        int spaces = 0;
+        int tabs = 0;
 
-    static boolean isBlock(String line, String block){
-        String regex = String.format("^\\*{3}(\\s*)%s(\\s*)(\\**)", block);
-        return LexerUtils.compareNoCase(line, regex);
-    }
+        for(char c: line.toCharArray()){
+            switch (c){
+                case ' ':
+                    ++spaces;
+                    break;
+                case '\t':
+                    ++tabs;
+                    break;
+                case '\n':
+                case '\r':
+                    tokens.add(createToken(line.substring(start, current), start));
+                default:
+                    if(spaces > 1 || tabs > 0){
+                        tokens.add(createToken(line.substring(start, current), start));
+                        spaces = 0;
+                        start = current;
+                    }
+            }
 
-    static boolean isBlock(String line) {
-        return isBlock(line, "(.+)");
-    }
-
-    static boolean isInBlock(String top, String bottom) {
-        if(ignore(bottom)){
-            return true;
+            ++current;
         }
 
-        return getIndentSize(bottom) == getIndentSize(top) + 1;
+        if(current > start) tokens.add(createToken(line.substring(start, current), start));
+
+        return tokens;
+    }
+
+    static boolean isBlock(String value) {
+        return isBlock(value, "(.+)");
+    }
+
+    static boolean isBlock(String value, String name){
+        String regex = String.format("^\\*{3}(\\s*)%s(\\s*)(\\**)", name);
+        return compareNoCase(value, regex);
+    }
+
+    static boolean compareNoCase(String value, String regex){
+        Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(value);
+
+        return matcher.matches();
     }
 
     static boolean isEmpty(String line) {
@@ -82,21 +82,6 @@ class LexerUtils {
         return isEmpty(line) || isComment(line);
     }
 
-    private static int getIndentSize(String line) {
-        String s = line.replaceAll("\\s\\s(\\s*)", "\t");
-        s = s.replaceAll("\\\\\\t", "\t");
-
-        int i = 0;
-
-        for (; i < s.length(); i++){
-            if(s.charAt(i) != '\t'){
-                break;
-            }
-        }
-
-        return i;
-    }
-
     private static void appendMultiline(LineReader reader, StringBuilder result) throws IOException {
         Line line;
 
@@ -105,17 +90,57 @@ class LexerUtils {
                 continue;
             }
 
-            String[] tokens = LexerUtils.removeIndent(tokenize(line.getText()));
+            Tokens tokens = tokenize(line.getText()).withoutIndent();
 
-            if(!tokens[0].startsWith("...")){
+            Optional<Token> first = tokens.first();
+
+            if(!first.isPresent()){
+                continue;
+            }
+
+            if(!compareNoCase(first.get().getValue(), "...")){
                 break;
             }
 
             result.append("\n");
+            tokens = tokens.withoutFirst();
 
-            if(tokens.length > 1) {
-                result.append(tokens[1]);
+            if(tokens.size() == 1) {
+                result.append(tokens.first());
             }
         }
+    }
+
+    private static Token createToken(String text, int start){
+        String trimmed = text.trim();
+
+        Token.Type type;
+        String value;
+
+        if(trimmed.isEmpty() || trimmed.equals("/")){
+            value = text;
+            type = Token.Type.Delimiter;
+        }
+        else{
+            value = trimmed;
+
+            if(isBlock(value)){
+                type = Token.Type.Block;
+            }
+            else if(value.startsWith("#")){
+                type = Token.Type.Comment;
+            }
+            else if(value.equalsIgnoreCase(":FOR")){
+                type = Token.Type.ForLoop;
+            }
+            else if(compareNoCase(value, "^((\\$|@|&)\\{)(.*)(\\})(\\s?)(=?)")){
+                type = Token.Type.Assignment;
+            }
+            else{
+                type = Token.Type.Text;
+            }
+        }
+
+        return new Token(value, start, start + value.length(), type);
     }
 }
