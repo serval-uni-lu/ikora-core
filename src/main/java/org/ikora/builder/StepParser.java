@@ -55,7 +55,7 @@ class StepParser {
         Assignment assignment = new Assignment();
         assignment.setName(reader.getCurrent().getText());
 
-        Tokens tokens = LexerUtils.tokenize(reader.getCurrent().getText());
+        Tokens tokens = LexerUtils.tokenize(reader.getCurrent().getText()).withoutIndent();
 
         int offset = 0;
         for(Token token: tokens){

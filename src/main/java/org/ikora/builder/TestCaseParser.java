@@ -6,7 +6,6 @@ import org.ikora.model.Step;
 import org.ikora.model.TestCase;
 
 import java.io.IOException;
-import java.util.Optional;
 
 class TestCaseParser {
     private TestCaseParser() {}
@@ -16,22 +15,23 @@ class TestCaseParser {
         TestCase testCase = new TestCase();
         int startLine = reader.getCurrent().getNumber();
 
-        Line line = reader.getCurrent();
-        Tokens testTokens = LexerUtils.tokenize(line.getText());
+        Tokens testTokens = LexerUtils.tokenize(reader.getCurrent().getText());
 
         ParserUtils.parseName(reader, testTokens, testCase, errors);
 
-        while(line.isValid()) {
-            if(line.ignore()) {
-                line = reader.readLine();
+        while(reader.getCurrent().isValid()) {
+            if(reader.getCurrent().ignore()) {
+                reader.readLine();
                 continue;
             }
 
-            Tokens tokens = LexerUtils.tokenize(line.getText()).withoutIndent();
+            Tokens tokens = LexerUtils.tokenize(reader.getCurrent().getText());
 
             if(!testTokens.isParent(tokens)){
                 break;
             }
+
+            tokens = tokens.withoutIndent();
 
             String label = ParserUtils.getLabel(reader, tokens, errors);
 
@@ -56,8 +56,6 @@ class TestCaseParser {
             else {
                 parseStep(reader, tokens, testCase, dynamicImports, errors);
             }
-
-            line = reader.getCurrent();
         }
 
         int endLine = reader.getCurrent().getNumber();

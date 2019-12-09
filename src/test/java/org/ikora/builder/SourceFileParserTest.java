@@ -11,6 +11,7 @@ class SourceFileParserTest {
         assertTrue(SourceFileParser.isSettings("***Setting***"));
         assertTrue(SourceFileParser.isSettings("*** settings ***"));
         assertTrue(SourceFileParser.isSettings("*** Setting ***  "));
+        assertTrue(SourceFileParser.isSettings("*** Setting ***\t"));
         assertTrue(SourceFileParser.isSettings("*** Setting"));
         assertFalse(SourceFileParser.isSettings("***Wrong***"));
     }

@@ -40,7 +40,6 @@ public class ParserUtils {
         keyword.setName(first.get().getValue());
 
         reader.readLine();
-        return;
     }
 
     static String getLabel(LineReader reader, Tokens tokens, ErrorManager errors){

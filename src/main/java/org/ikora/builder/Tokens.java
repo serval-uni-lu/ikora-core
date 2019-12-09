@@ -75,15 +75,22 @@ public class Tokens implements Iterable<Token> {
             return true;
         }
 
-        if(tokens.size() > 0 || tokens.tokens.get(0).isComment()){
+        if(tokens.size() > 0 && tokens.tokens.get(0).isComment()){
             return true;
         }
 
-        return getIndentSize() == tokens.getIndentSize() + 1;
+        return getIndentSize() + 1 == tokens.getIndentSize();
     }
 
     @Override
     public Iterator<Token> iterator() {
         return this.tokens.iterator();
+    }
+
+    @Override
+    public String toString() {
+        return this.tokens.stream()
+                .map(Token::getValue)
+                .collect(Collectors.joining("\t"));
     }
 }

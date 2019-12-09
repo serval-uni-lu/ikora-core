@@ -13,7 +13,7 @@ class LexerUtils {
         tokens = tokens.withoutIndent();
 
         if(tokens.size() > 1){
-            builder.append(tokens);
+            builder.append(tokens.withoutTag("\\[Documentation\\]").toString());
         }
 
         appendMultiline(reader, builder);
@@ -41,9 +41,10 @@ class LexerUtils {
                 default:
                     if(spaces > 1 || tabs > 0){
                         tokens.add(createToken(line.substring(start, current), start));
-                        spaces = 0;
                         start = current;
                     }
+
+                    spaces = tabs = 0;
             }
 
             ++current;
@@ -59,7 +60,7 @@ class LexerUtils {
     }
 
     static boolean isBlock(String value, String name){
-        String regex = String.format("^\\*{3}(\\s*)%s(\\s*)(\\**)", name);
+        String regex = String.format("^\\*{3}(\\s*)%s(\\s*)(\\**)(\\s*)", name);
         return compareNoCase(value, regex);
     }
 
@@ -103,11 +104,7 @@ class LexerUtils {
             }
 
             result.append("\n");
-            tokens = tokens.withoutFirst();
-
-            if(tokens.size() == 1) {
-                result.append(tokens.first());
-            }
+            result.append(tokens.withoutFirst().toString());
         }
     }
 

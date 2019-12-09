@@ -14,10 +14,9 @@ class UserKeywordParser {
         UserKeyword userKeyword = new UserKeyword();
         int startLine = reader.getCurrent().getNumber();
 
-        Line test = reader.getCurrent();
-        Tokens keywordTokens = LexerUtils.tokenize(test.getText());
+        Tokens keywordTokens = LexerUtils.tokenize( reader.getCurrent().getText());
 
-        ParserUtils.parseName(reader, keywordTokens, userKeyword, errors);
+        ParserUtils.parseName(reader, keywordTokens.withoutIndent(), userKeyword, errors);
 
         while(reader.getCurrent().isValid()) {
             if(reader.getCurrent().ignore()) {
@@ -25,7 +24,7 @@ class UserKeywordParser {
                 continue;
             }
 
-            Tokens tokens = LexerUtils.tokenize(test.getText());
+            Tokens tokens = LexerUtils.tokenize(reader.getCurrent().getText());
 
             if(!keywordTokens.isParent(tokens)){
                 break;
