@@ -140,6 +140,10 @@ public class Assignment extends Step {
 
     @Override
     public boolean equals(Object other) {
+        if(other == null){
+            return false;
+        }
+
         if (!(other instanceof Assignment)){
             return false;
         }

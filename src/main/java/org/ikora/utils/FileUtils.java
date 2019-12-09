@@ -150,9 +150,10 @@ public class FileUtils {
             return false;
         }
 
-        DataInputStream in = new DataInputStream(new BufferedInputStream(new FileInputStream(file)));
-        int test = in.readInt();
-        in.close();
+        int test;
+        try(DataInputStream in = new DataInputStream(new BufferedInputStream(new FileInputStream(file)))){
+            test = in.readInt();
+        }
 
         return test == 0x504b0304;
     }

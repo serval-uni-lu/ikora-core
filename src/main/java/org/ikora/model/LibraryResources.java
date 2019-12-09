@@ -22,8 +22,8 @@ public class LibraryResources {
         }
         else if(LibraryVariable.class.isAssignableFrom(libraryClass)){
             try {
-                variables.add((LibraryVariable) libraryClass.newInstance());
-            } catch (InstantiationException | IllegalAccessException e) {
+                variables.add((LibraryVariable) libraryClass.getConstructor().newInstance());
+            } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
                 e.printStackTrace();
             }
         }

@@ -8,6 +8,7 @@ import org.ikora.error.ErrorManager;
 import org.ikora.exception.ExecutionException;
 import org.ikora.exception.InvalidDependencyException;
 import org.ikora.exception.InvalidImportTypeException;
+import org.ikora.libraries.autoIt.Opt;
 import org.ikora.runner.Runtime;
 import org.ikora.utils.LevenshteinDistance;
 
@@ -86,15 +87,16 @@ public class KeywordCall extends Step {
 
     @Override
     public Keyword getStep(int position) {
-        if(!getKeyword().isPresent()) {
-            return null;
-        }
+        return getKeyword().map(value -> value.getStep(position)).orElse(null);
 
-        return getKeyword().get().getStep(position);
     }
 
     @Override
     public boolean equals(Object other) {
+        if(other == null){
+            return false;
+        }
+
         if (!(other instanceof KeywordCall)){
             return false;
         }
@@ -140,20 +142,18 @@ public class KeywordCall extends Step {
 
     @Override
     public Value.Type[] getArgumentTypes() {
-        if(!getKeyword().isPresent()){
-            return new Value.Type[0];
-        }
-
-        return getKeyword().get().getArgumentTypes();
+        return getKeyword().map(Keyword::getArgumentTypes).orElse(new Value.Type[0]);
     }
 
     @Override
     public int[] getKeywordsLaunchedPosition() {
-        if(!getKeyword().isPresent()){
+        Optional<Keyword> keyword = getKeyword();
+
+        if(!keyword.isPresent()){
             return new int[0];
         }
 
-        int[] positions = getKeyword().get().getKeywordsLaunchedPosition();
+        int[] positions = keyword.get().getKeywordsLaunchedPosition();
 
         if(positions.length == 1 && positions[0] == -1){
             positions = new int[getParameters().size()];
@@ -250,11 +250,7 @@ public class KeywordCall extends Step {
 
     @Override
     public Type getType(){
-        if(!getKeyword().isPresent()){
-            return Type.Unknown;
-        }
-
-        return getKeyword().get().getType();
+        return getKeyword().map(Keyword::getType).orElse(Type.Unknown);
     }
 
     @Override

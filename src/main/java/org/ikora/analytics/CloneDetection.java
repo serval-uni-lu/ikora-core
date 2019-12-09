@@ -5,6 +5,8 @@ import java.util.*;
 import org.ikora.model.*;
 import org.ikora.utils.LevenshteinDistance;
 
+import javax.swing.text.html.Option;
+
 public class CloneDetection<T extends Node> {
     private static Set<Action.Type> ignoreForTypeI;
     private static Set<Action.Type> ignoreForTypeII;
@@ -211,10 +213,6 @@ public class CloneDetection<T extends Node> {
     }
 
     private static Optional<Keyword> getKeywordFromStep(Step step){
-        if(step.getKeywordCall().isPresent()){
-            return  step.getKeywordCall().get().getKeyword();
-        }
-
-        return Optional.empty();
+        return  step.getKeywordCall().flatMap(KeywordCall::getKeyword);
     }
 }

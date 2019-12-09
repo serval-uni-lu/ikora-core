@@ -5,6 +5,8 @@ import org.ikora.model.Project;
 import org.ikora.model.Suite;
 import org.ikora.report.Report;
 
+import java.util.Optional;
+
 public class Runner {
     private final Project project;
     private final Runtime runtime;
@@ -25,10 +27,12 @@ public class Runner {
 
         runtime.finish();
 
-        if(!runtime.getReport().isPresent()){
+        Optional<Report> report = runtime.getReport();
+
+        if(!report.isPresent()){
             throw new Exception("Failed to create report during execution");
         }
 
-        return runtime.getReport().get();
+        return report.get();
     }
 }

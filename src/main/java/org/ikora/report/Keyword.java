@@ -52,7 +52,7 @@ public class Keyword implements ReportElement {
             setType(Type.TearDown);
         }
         else{
-            throw new IOException(String.format("Could not convert %s to keyword type. Excepted one of [setup, execution,teardown]"));
+            throw new IOException(String.format("Could not convert %s to keyword type. Excepted one of [setup, execution,teardown]", type));
         }
     }
 
