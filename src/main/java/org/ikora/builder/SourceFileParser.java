@@ -56,7 +56,13 @@ class SourceFileParser {
             project.addSourceFile(sourceFile);
 
             if(reader != null){
-                reader.close();
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    errors.registerInternalError("Failed to properly close reader for file %s",
+                            file,
+                            new LineRange(-1, -1));
+                }
             }
         }
     }

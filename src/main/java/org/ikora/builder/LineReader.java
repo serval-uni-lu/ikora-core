@@ -61,11 +61,7 @@ public class LineReader {
         return file;
     }
 
-    void close() {
-        try {
+    void close() throws IOException {
             reader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }
