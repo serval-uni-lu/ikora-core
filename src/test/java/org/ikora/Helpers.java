@@ -7,6 +7,7 @@ import org.ikora.model.Project;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -21,7 +22,7 @@ public class Helpers {
             fail(String.format("Failed to load '%s': %s", resourcesPath, e.getMessage()));
         }
 
-        final BuildResult result = Builder.build(projectFolder, link);
+        final BuildResult result = Builder.build(projectFolder, getConfiguration(), link);
         assertEquals(1, result.getProjects().size());
 
         return result.getProjects().iterator().next();
@@ -56,5 +57,13 @@ public class Helpers {
         }
 
         return null;
+    }
+
+    public static Configuration getConfiguration(){
+        final Configuration configuration = new Configuration();
+        configuration.setExtensions(Collections.singletonList("robot"));
+        configuration.setIgnorePath(Collections.emptyList());
+
+        return configuration;
     }
 }

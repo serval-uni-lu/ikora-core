@@ -1,5 +1,6 @@
 package org.ikora.builder;
 
+import org.ikora.Configuration;
 import org.ikora.error.ErrorManager;
 import org.ikora.model.*;
 import org.ikora.runner.Runtime;
@@ -18,7 +19,7 @@ import java.util.Set;
 public class Builder {
     private Builder(){}
 
-    public static BuildResult build(Set<File> files, boolean link){
+    public static BuildResult build(Set<File> files, Configuration configuration, boolean link){
         BuildResult result = new BuildResult();
         ErrorManager errors = new ErrorManager();
 
@@ -28,7 +29,7 @@ public class Builder {
 
         DynamicImports dynamicImports = new DynamicImports();
         for(File file: files) {
-            Project project = parse(file, dynamicImports, errors);
+            Project project = parse(file, configuration, dynamicImports, errors);
             projects.add(project);
         }
 
@@ -57,14 +58,14 @@ public class Builder {
         return result;
     }
 
-    public static BuildResult build(File file, boolean link) {
+    public static BuildResult build(File file, Configuration configuration, boolean link) {
         BuildResult result = new BuildResult();
         ErrorManager errors = new ErrorManager();
 
         Instant start = Instant.now();
 
         DynamicImports dynamicImports = new DynamicImports();
-        Project project = parse(file, dynamicImports, errors);
+        Project project = parse(file, configuration, dynamicImports, errors);
         result.setParsingTime(Duration.between(start, Instant.now()).toMillis());
 
         Instant startLinking = Instant.now();
@@ -91,7 +92,7 @@ public class Builder {
 
                     try {
                         if(FileUtils.isSubDirectory(base, external.getFile())){
-                            updateDependencies(project, dependency, external, errors);
+                            updateDependencies(project, dependency, external);
                             break;
                         }
                     } catch (IOException e) {
@@ -105,14 +106,11 @@ public class Builder {
         }
     }
 
-    private static void updateDependencies(Project project, Project dependency, Resources external, ErrorManager errors) {
+    private static void updateDependencies(Project project, Project dependency, Resources external) {
         project.addDependency(dependency);
         String name = dependency.generateFileName(external.getFile());
         Optional<SourceFile> sourceFile = dependency.getSourceFile(name);
-
-        if(sourceFile.isPresent()){
-            external.setSourceFile(sourceFile.get());
-        }
+        sourceFile.ifPresent(external::setSourceFile);
     }
 
     private static void loadLibraries(Runtime runtime) {
@@ -128,7 +126,7 @@ public class Builder {
         Linker.link(runtime, errors);
     }
 
-    private static Project parse(File file, DynamicImports dynamicImports, ErrorManager errors) {
-        return ProjectParser.parse(file, dynamicImports, errors);
+    private static Project parse(File file, Configuration configuration, DynamicImports dynamicImports, ErrorManager errors) {
+        return ProjectParser.parse(file, configuration, dynamicImports, errors);
     }
 }

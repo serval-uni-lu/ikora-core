@@ -1,8 +1,7 @@
 package org.ikora.builder;
 
+import org.ikora.Configuration;
 import org.ikora.error.ErrorManager;
-import org.ikora.utils.Configuration;
-import org.ikora.utils.Plugin;
 import org.apache.commons.io.FileUtils;
 import org.ikora.model.Project;
 import org.ikora.model.Resources;
@@ -15,11 +14,11 @@ import java.util.*;
 class ProjectParser {
     private ProjectParser(){}
 
-    public static Project parse(File file, DynamicImports dynamicImports, ErrorManager errors) {
+    public static Project parse(File file, Configuration configuration, DynamicImports dynamicImports, ErrorManager errors) {
         Project project = new Project(file);
 
         if(file.isDirectory()){
-            file = addRobotFiles(file, project);
+            file = addRobotFiles(file, project, configuration);
         }
 
         parseFiles(file, project, dynamicImports, errors);
@@ -28,11 +27,11 @@ class ProjectParser {
         return project;
     }
 
-    private static File addRobotFiles(File directory, Project project) {
-        String[] extensions = new String[] { "robot" };
+    private static File addRobotFiles(File directory, Project project, Configuration configuration) {
+        String[] extensions = configuration.getExtensions().toArray(new String[0]);
         List<File> robots = (List<File>) FileUtils.listFiles(directory, extensions, true);
 
-        List<File> ignoreList = getIgnoreList(project);
+        List<File> ignoreList = getIgnoreList(project, configuration.getIgnorePath());
 
         for(File robot: robots){
             if(!isIgnored(robot, ignoreList)){
@@ -79,18 +78,10 @@ class ProjectParser {
         return null;
     }
 
-    private static List<File> getIgnoreList(Project project){
-        Configuration configuration = Configuration.getInstance();
-        Plugin plugin = configuration.getPlugin("project analytics");
-
-        if(plugin == null){
-            return Collections.emptyList();
-        }
-
-        List<String> paths = (List<String>) plugin.getAdditionalProperty("exclude folders", new ArrayList<String>());
+    private static List<File> getIgnoreList(Project project, List<String> ignorePaths){
         List<File> ignoreList = new ArrayList<>();
 
-        for(String path: paths){
+        for(String path: ignorePaths){
             ignoreList.add(new File(project.getRootFolder(), path));
         }
 

@@ -1,10 +1,10 @@
 package org.ikora.runner;
 
+import org.ikora.utils.Globals;
 import org.junit.jupiter.api.Test;
 import org.ikora.Helpers;
 import org.ikora.model.Project;
 import org.ikora.report.Report;
-import org.ikora.utils.Globals;
 
 import static org.junit.jupiter.api.Assertions.*;
 

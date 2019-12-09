@@ -1,11 +1,13 @@
 package org.ikora.builder;
 
+import org.ikora.Configuration;
 import org.junit.jupiter.api.Test;
 import org.ikora.Helpers;
 import org.ikora.model.*;
 import org.ikora.utils.FileUtils;
 
 import java.io.File;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -40,7 +42,7 @@ class BuilderTest {
         final File robot = Helpers.getResourceFile("robot/keyword-with-dot.robot");
         assertNotNull(robot);
 
-        final BuildResult result = Builder.build(robot, true);
+        final BuildResult result = Builder.build(robot, Helpers.getConfiguration(), true);
         assertEquals(1, result.getProjects().size());
 
         final Project project = result.getProjects().iterator().next();
@@ -60,7 +62,7 @@ class BuilderTest {
         final File robot = Helpers.getResourceFile("robot/scope-testing");
         assertNotNull(robot);
 
-        final BuildResult result = Builder.build(robot, true);
+        final BuildResult result = Builder.build(robot, Helpers.getConfiguration(), true);
         assertEquals(1, result.getProjects().size());
 
         final Project project = result.getProjects().iterator().next();
@@ -90,7 +92,7 @@ class BuilderTest {
             fail(String.format("Failed to load 'robot/scope-testing' from resources: %s", e.getMessage()));
         }
 
-        final BuildResult result = Builder.build(robot, true);
+        final BuildResult result = Builder.build(robot, Helpers.getConfiguration(), true);
         assertEquals(1, result.getProjects().size());
 
         final Project project = result.getProjects().iterator().next();
@@ -112,7 +114,7 @@ class BuilderTest {
         final File robot = Helpers.getResourceFile("robot/assignment/keyword.robot");
         assertNotNull(robot);
 
-        final BuildResult result = Builder.build(robot, true);
+        final BuildResult result = Builder.build(robot, Helpers.getConfiguration(), true);
         assertEquals(1, result.getProjects().size());
 
         final Project project = result.getProjects().iterator().next();
@@ -135,7 +137,7 @@ class BuilderTest {
         final File robot = Helpers.getResourceFile("robot/assignment/variable.robot");
         assertNotNull(robot);
 
-        final BuildResult result = Builder.build(robot, true);
+        final BuildResult result = Builder.build(robot, Helpers.getConfiguration(),true);
         assertEquals(1, result.getProjects().size());
 
         final Project project = result.getProjects().iterator().next();
@@ -149,7 +151,7 @@ class BuilderTest {
         final File robot = Helpers.getResourceFile("robot/setup-and-teardown.robot");
         assertNotNull(robot);
 
-        final BuildResult result = Builder.build(robot, true);
+        final BuildResult result = Builder.build(robot, Helpers.getConfiguration(), true);
         assertEquals(1, result.getProjects().size());
 
         final Project project = result.getProjects().iterator().next();
@@ -170,7 +172,7 @@ class BuilderTest {
         final File robot = Helpers.getResourceFile("robot/setup-and-teardown.robot");
         assertNotNull(robot);
 
-        final BuildResult result = Builder.build(robot, true);
+        final BuildResult result = Builder.build(robot, Helpers.getConfiguration(), true);
         assertEquals(1, result.getProjects().size());
 
         final Project project = result.getProjects().iterator().next();

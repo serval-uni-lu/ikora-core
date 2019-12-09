@@ -2,7 +2,7 @@ package org.ikora.builder;
 
 public class Token {
     public enum Type{
-        Text, Delimiter, Block, Comment, ForLoop, Assignment
+        Text, Delimiter, Block, Comment, ForLoop, Assignment, Keyword, Variable
     }
 
     private Type type;
@@ -22,6 +22,14 @@ public class Token {
 
     public String getValue() {
         return this.value;
+    }
+
+    public int getStartOffset() {
+        return startOffset;
+    }
+
+    public int getEndOffset() {
+        return endOffset;
     }
 
     public boolean isDelimiter(){
