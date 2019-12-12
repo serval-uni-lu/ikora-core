@@ -13,14 +13,14 @@ public class Clones<T extends Node> implements Iterable<Clone<T>> {
     public Clones(){
         this.cloneMap = new EnumMap<>(Clone.Type.class);
 
-        this.cloneMap.put(Clone.Type.TypeI, new HashMap<>());
-        this.cloneMap.put(Clone.Type.TypeII, new HashMap<>());
-        this.cloneMap.put(Clone.Type.TypeIII, new HashMap<>());
-        this.cloneMap.put(Clone.Type.TypeIV, new HashMap<>());
+        this.cloneMap.put(Clone.Type.TYPE_1, new HashMap<>());
+        this.cloneMap.put(Clone.Type.TYPE_2, new HashMap<>());
+        this.cloneMap.put(Clone.Type.TYPE_3, new HashMap<>());
+        this.cloneMap.put(Clone.Type.TYPE_4, new HashMap<>());
     }
 
     public void update(T t1, T t2, Clone.Type cloneType){
-        if(Clone.Type.None == cloneType){
+        if(Clone.Type.NONE == cloneType){
             return;
         }
 
@@ -71,14 +71,14 @@ public class Clones<T extends Node> implements Iterable<Clone<T>> {
     }
 
     public Clone.Type getCloneType(T element) {
-        if(cloneMap.getOrDefault(Clone.Type.TypeI, new HashMap<>()).get(element) != null){
-            return Clone.Type.TypeI;
+        if(cloneMap.getOrDefault(Clone.Type.TYPE_1, new HashMap<>()).get(element) != null){
+            return Clone.Type.TYPE_1;
         }
-        else if(cloneMap.getOrDefault(Clone.Type.TypeII, new HashMap<>()).get(element) != null){
-            return Clone.Type.TypeII;
+        else if(cloneMap.getOrDefault(Clone.Type.TYPE_2, new HashMap<>()).get(element) != null){
+            return Clone.Type.TYPE_2;
         }
 
-        return Clone.Type.None;
+        return Clone.Type.NONE;
     }
 
     public int size(Clone.Type type) {
@@ -97,7 +97,7 @@ public class Clones<T extends Node> implements Iterable<Clone<T>> {
         private Iterator<Map.Entry<T, Clone<T>>> currentIterator;
 
         CloneIterator(){
-            this.currentType = Clone.Type.TypeI;
+            this.currentType = Clone.Type.TYPE_1;
             this.currentIterator = getIterator(this.currentType);
         }
 
@@ -144,7 +144,7 @@ public class Clones<T extends Node> implements Iterable<Clone<T>> {
         }
 
         private Iterator<Map.Entry<T, Clone<T>>> getIterator(Clone.Type type){
-            if(Clone.Type.None == type){
+            if(Clone.Type.NONE == type){
                 return null;
             }
 
@@ -153,12 +153,12 @@ public class Clones<T extends Node> implements Iterable<Clone<T>> {
 
         private Clone.Type getNextType(Clone.Type type){
             switch (type){
-                case TypeI: return Clone.Type.TypeII;
-                case TypeII: return Clone.Type.TypeIII;
-                case TypeIII: return Clone.Type.TypeIV;
-                case TypeIV:
-                case None:
-                default: return Clone.Type.None;
+                case TYPE_1: return Clone.Type.TYPE_2;
+                case TYPE_2: return Clone.Type.TYPE_3;
+                case TYPE_3: return Clone.Type.TYPE_4;
+                case TYPE_4:
+                case NONE:
+                default: return Clone.Type.NONE;
             }
         }
     }

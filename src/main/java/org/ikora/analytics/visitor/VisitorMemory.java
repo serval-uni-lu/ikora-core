@@ -1,4 +1,4 @@
-package org.ikora.analytics;
+package org.ikora.analytics.visitor;
 
 import org.ikora.model.Node;
 

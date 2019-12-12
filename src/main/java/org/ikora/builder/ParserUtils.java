@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.util.Optional;
 
 public class ParserUtils {
+    private ParserUtils(){}
+
     static void parseName(LineReader reader, Tokens tokens, KeywordDefinition keyword, ErrorManager errors) throws IOException {
         if(tokens.size() > 1){
             int lineNumber = reader.getCurrent().getNumber();

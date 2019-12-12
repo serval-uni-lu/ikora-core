@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class UserKeywordParserTest {
     @Test
-    void checkSimple() throws IOException {
+    void testParseSimpleKeyword() throws IOException {
         String text = "Keyword with cool name\n" +
                 "    Step one\tArg1\n" +
                 "    Step two without args\n" +
@@ -31,7 +31,7 @@ class UserKeywordParserTest {
     }
 
     @Test
-    void checkKeywordWithDocumentation() throws IOException {
+    void testParseKeywordWithDocumentation() throws IOException {
         String text = "Keyword with cool name\n" +
                 "    [Documentation]\tSimple documentation\n" +
                 "    Step one\tArg1\n" +

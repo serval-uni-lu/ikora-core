@@ -1,5 +1,6 @@
 package org.ikora.analytics;
 
+import org.ikora.analytics.visitor.VisitorMemory;
 import org.ikora.model.KeywordDefinition;
 import org.ikora.model.Node;
 

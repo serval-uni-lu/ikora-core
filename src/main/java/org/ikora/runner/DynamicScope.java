@@ -6,39 +6,45 @@ import java.util.*;
 
 public class DynamicScope implements Scope {
     private NodeTable<Variable> global;
-    private Stack<Block<Suite, Variable>> suiteStack;
-    private Stack<Block<TestCase, Variable>> testStack;
-    private Stack<Block<Keyword, Variable>> keywordStack;
-    private Stack<Block<Step, Value>> parametersStack;
+    private Deque<Block<Suite, Variable>> suiteStack;
+    private Deque<Block<TestCase, Variable>> testStack;
+    private Deque<Block<Keyword, Variable>> keywordStack;
+    private Deque<Block<Step, Value>> parametersStack;
     private List<Value> returnValues;
 
     public DynamicScope(){
         global = new NodeTable<>();
-        suiteStack = new Stack<>();
-        testStack = new Stack<>();
-        keywordStack = new Stack<>();
-        parametersStack = new Stack<>();
+        suiteStack = new LinkedList<>();
+        testStack = new LinkedList<>();
+        keywordStack = new LinkedList<>();
+        parametersStack = new LinkedList<>();
         returnValues = Collections.emptyList();
     }
 
     @Override
     public void addToKeyword(Keyword keyword, Variable variable) {
-        if(keywordStack.peek().is(keyword)){
-            keywordStack.peek().add(variable);
+        Block<Keyword, Variable> block = keywordStack.peek();
+
+        if(block != null && block.is(keyword)){
+            block.add(variable);
         }
     }
 
     @Override
     public void addToTest(TestCase testCase, Variable variable) {
-        if(testStack.peek().is(testCase)){
-            testStack.peek().add(variable);
+        Block<TestCase, Variable> block = testStack.peek();
+
+        if(block != null && block.is(testCase)){
+            block.add(variable);
         }
     }
 
     @Override
     public void addToSuite(String suite, Variable variable) {
-        if(suiteStack.peek().is(suite)){
-            suiteStack.peek().add(variable);
+        Block<Suite, Variable> block = suiteStack.peek();
+
+        if(block != null && block.is(suite)){
+            block.add(variable);
         }
     }
 
@@ -72,7 +78,7 @@ public class DynamicScope implements Scope {
             keywordStack.push(new Block<>(keyword));
         }
         else if(KeywordCall.class.isAssignableFrom(keyword.getClass())){
-            parametersStack.push(new Block<>((Step)keyword));
+            parametersStack.push(new Block<>((Step) keyword));
 
             for(int i = 0; i < ((KeywordCall)keyword).getParameters().size(); ++i){
                 Optional<Value> parameter = ((KeywordCall)keyword).getParameter(i, true);

@@ -1,5 +1,6 @@
 package org.ikora.analytics;
 
+import org.ikora.analytics.visitor.*;
 import org.ikora.model.KeywordDefinition;
 import org.ikora.model.Sequence;
 import org.ikora.model.Node;
@@ -7,6 +8,8 @@ import org.ikora.model.Node;
 import java.util.Set;
 
 public class KeywordStatistics {
+    private KeywordStatistics() {}
+
     public static int getConnectivity(Node node){
         ConnectivityVisitor visitor = new ConnectivityVisitor();
         node.accept(visitor, new PathMemory());

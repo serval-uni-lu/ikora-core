@@ -1,8 +1,8 @@
 package org.ikora.model;
 
 
-import org.ikora.analytics.NodeVisitor;
-import org.ikora.analytics.VisitorMemory;
+import org.ikora.analytics.visitor.NodeVisitor;
+import org.ikora.analytics.visitor.VisitorMemory;
 import org.ikora.exception.InvalidDependencyException;
 
 import javax.annotation.Nonnull;

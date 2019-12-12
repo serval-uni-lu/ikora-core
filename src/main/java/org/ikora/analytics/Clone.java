@@ -8,7 +8,7 @@ import java.util.Set;
 public class Clone<T extends Node> {
 
     public enum Type{
-        TypeI, TypeII, TypeIII, TypeIV, None
+        TYPE_1, TYPE_2, TYPE_3, TYPE_4, NONE
     }
 
     private final T node;

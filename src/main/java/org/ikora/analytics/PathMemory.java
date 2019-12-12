@@ -1,11 +1,12 @@
 package org.ikora.analytics;
 
+import org.ikora.analytics.visitor.VisitorMemory;
 import org.ikora.model.Node;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class PathMemory implements VisitorMemory{
+public class PathMemory implements VisitorMemory {
     private Set<Node> visited;
 
     public PathMemory(){

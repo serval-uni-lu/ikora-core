@@ -1,8 +1,10 @@
-package org.ikora.analytics;
+package org.ikora.analytics.visitor;
 import org.ikora.model.*;
 
 
 class VisitorUtils {
+    private VisitorUtils(){}
+
     static void traverseDependencies(NodeVisitor visitor, Node node, VisitorMemory memory){
         for(Node dependency: node.getDependencies()){
             if(memory.isAcceptable(dependency)){

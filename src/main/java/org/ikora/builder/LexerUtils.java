@@ -38,6 +38,7 @@ class LexerUtils {
                 case '\n':
                 case '\r':
                     tokens.add(createToken(line.substring(start, current), start));
+                    break;
                 default:
                     if(spaces > 1 || tabs > 0){
                         tokens.add(createToken(line.substring(start, current), start));

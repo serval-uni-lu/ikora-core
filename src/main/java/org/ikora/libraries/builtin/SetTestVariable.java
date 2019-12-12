@@ -1,6 +1,6 @@
 package org.ikora.libraries.builtin;
 
-import org.ikora.analytics.FindTestCaseVisitor;
+import org.ikora.analytics.visitor.FindTestCaseVisitor;
 import org.ikora.analytics.PathMemory;
 import org.ikora.error.ErrorManager;
 import org.ikora.model.*;

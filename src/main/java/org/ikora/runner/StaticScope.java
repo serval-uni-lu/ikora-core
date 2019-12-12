@@ -28,8 +28,8 @@ public class StaticScope implements Scope{
             variablesFound.addAll(findTestVariable(testCase, name));
         }
 
-        for(String suite: suites){
-            variablesFound.addAll(findSuiteVariable(suite, name));
+        for(String suiteName: suites){
+            variablesFound.addAll(findSuiteVariable(suiteName, name));
         }
 
         variablesFound.addAll(findGlobalVariable(name));
@@ -103,18 +103,22 @@ public class StaticScope implements Scope{
 
     @Override
     public void enterKeyword(Keyword keyword) {
+        // No concept of entering or leaving when performing static analysis
     }
 
     @Override
     public void exitKeyword(Keyword keyword) {
+        // No concept of entering or leaving when performing static analysis
     }
 
     @Override
     public void enterSuite(Suite suite) {
+        // No concept of entering or leaving when performing static analysis
     }
 
     @Override
     public void exitSuite(Suite suite) {
+        // No concept of entering or leaving when performing static analysis
     }
 
     @Override
@@ -132,7 +136,7 @@ public class StaticScope implements Scope{
 
     @Override
     public List<Value> getReturnValues() {
-        return null;
+        return Collections.emptyList();
     }
 
     private Set<Variable> findTestVariable(TestCase testCase, String name) {

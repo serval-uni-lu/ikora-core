@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Set;
 
 public class ViolationDetection {
+    private ViolationDetection() {}
+
     public static List<Violation> detect(Project project){
         List<Violation> violations = new ArrayList<>();
 
@@ -41,6 +43,7 @@ public class ViolationDetection {
     }
 
     private static void duplicatedVariable(Step step, List<Violation> violations) {
+        throw new UnsupportedOperationException();
     }
 
     private static void transitiveDependency(Step step, List<Violation> violations) {

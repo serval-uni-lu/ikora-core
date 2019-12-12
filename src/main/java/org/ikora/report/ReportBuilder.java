@@ -10,12 +10,13 @@ import org.ikora.utils.Globals;
 import java.time.Instant;
 
 import java.util.Date;
+import java.util.Deque;
+import java.util.LinkedList;
 import java.util.Optional;
-import java.util.Stack;
 
 public class ReportBuilder {
     private Report report;
-    private Stack<ReportElement> stack;
+    private Deque<ReportElement> stack;
 
     public ReportBuilder(){
         this.report = new Report();
@@ -60,7 +61,7 @@ public class ReportBuilder {
         report = new Report();
         report.setGenerator(Globals.applicationCanonical);
 
-        stack = new Stack<>();
+        stack = new LinkedList<>();
         stack.push(report);
     }
 

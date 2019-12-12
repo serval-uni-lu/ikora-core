@@ -1,7 +1,7 @@
 package org.ikora.builder;
 
-import org.ikora.analytics.FindSuiteVisitor;
-import org.ikora.analytics.FindTestCaseVisitor;
+import org.ikora.analytics.visitor.FindSuiteVisitor;
+import org.ikora.analytics.visitor.FindTestCaseVisitor;
 import org.ikora.analytics.PathMemory;
 import org.ikora.model.KeywordDefinition;
 import org.ikora.model.TestCase;

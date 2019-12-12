@@ -5,11 +5,9 @@ import java.util.*;
 import org.ikora.model.*;
 import org.ikora.utils.LevenshteinDistance;
 
-import javax.swing.text.html.Option;
-
 public class CloneDetection<T extends Node> {
-    private static Set<Action.Type> ignoreForTypeI;
-    private static Set<Action.Type> ignoreForTypeII;
+    private static Set<Action.Type> ignoreForType1;
+    private static Set<Action.Type> ignoreForType2;
 
     static {
         Set<Action.Type> typeI = new HashSet<>(4);
@@ -17,12 +15,12 @@ public class CloneDetection<T extends Node> {
         typeI.add(Action.Type.CHANGE_DOCUMENTATION);
         typeI.add(Action.Type.REMOVE_DOCUMENTATION);
         typeI.add(Action.Type.ADD_DOCUMENTATION);
-        ignoreForTypeI = Collections.unmodifiableSet(typeI);
+        ignoreForType1 = Collections.unmodifiableSet(typeI);
 
-        Set<Action.Type> typeII = new HashSet<>(ignoreForTypeI);
+        Set<Action.Type> typeII = new HashSet<>(ignoreForType1);
         typeII.add(Action.Type.CHANGE_STEP_ARGUMENTS);
         typeII.add(Action.Type.CHANGE_STEP_RETURN_VALUES);
-        ignoreForTypeII = Collections.unmodifiableSet(typeII);
+        ignoreForType2 = Collections.unmodifiableSet(typeII);
     }
 
     private Set<Project> projects;
@@ -49,7 +47,7 @@ public class CloneDetection<T extends Node> {
     }
 
     public static  <T extends Node> Clone.Type getCloneType(T t1, T t2){
-        Clone.Type clone = Clone.Type.None;
+        Clone.Type clone = Clone.Type.NONE;
 
         if(isTooShort(t1, t2)){
             return clone;
@@ -58,20 +56,20 @@ public class CloneDetection<T extends Node> {
         Difference difference = Difference.of(t1, t2);
 
         if(isSameSize(t1, t2)){
-            if(isCloneTypeI(t1.getClass(), difference)){
-                clone = Clone.Type.TypeI;
+            if(isCloneType1(difference)){
+                clone = Clone.Type.TYPE_1;
             }
-            else if(isCloneTypeII(t1.getClass(), difference)){
-                clone = Clone.Type.TypeII;
+            else if(isCloneType2(difference)){
+                clone = Clone.Type.TYPE_2;
             }
         }
 
-        if(clone == Clone.Type.None){
-            if(isCloneTypeIII(t1.getClass(), difference)){
-                clone = Clone.Type.TypeIII;
+        if(clone == Clone.Type.NONE){
+            if(isCloneType3(difference)){
+                clone = Clone.Type.TYPE_3;
             }
-            else if (isCloneTypeIV(t1.getClass(), difference)){
-                clone = Clone.Type.TypeIV;
+            else if (isCloneType4(difference)){
+                clone = Clone.Type.TYPE_4;
             }
         }
 
@@ -118,24 +116,24 @@ public class CloneDetection<T extends Node> {
         return ((KeywordDefinition)t1).getSteps().size() == ((KeywordDefinition)t2).getSteps().size();
     }
 
-    public static boolean isCloneTypeI(Class<?> type, Difference difference){
-        return difference.isEmpty(ignoreForTypeI);
+    public static boolean isCloneType1(Difference difference){
+        return difference.isEmpty(ignoreForType1);
     }
 
-    public static boolean isCloneTypeII(Class<?> type, Difference difference){
-        boolean isTypeII = difference.isEmpty(ignoreForTypeII);
+    public static boolean isCloneType2(Difference difference){
+        boolean isType2 = difference.isEmpty(ignoreForType2);
 
         //if(!isTypeII && KeywordDefinition.class.isAssignableFrom(type)){
         //    isTypeII = isStepsClones(difference);
         //}
 
-        return isTypeII;
+        return isType2;
     }
 
-    public static boolean isCloneTypeIII(Class<?> type, Difference difference){
+    public static boolean isCloneType3(Difference difference){
         for(Action action: difference.getActions()){
-            if (!ignoreForTypeII.contains(action.getType())
-            && !canIgnoreForTypeIII(action)){
+            if (!ignoreForType2.contains(action.getType())
+            && !canIgnoreForType3(action)){
                 return false;
             }
         }
@@ -143,7 +141,7 @@ public class CloneDetection<T extends Node> {
         return true;
     }
 
-    private static boolean canIgnoreForTypeIII(Action action) {
+    private static boolean canIgnoreForType3(Action action) {
 
         switch (action.getType()){
             case CHANGE_STEP_ARGUMENTS:
@@ -168,10 +166,10 @@ public class CloneDetection<T extends Node> {
         return optionalKeyword.filter(keyword -> keyword.getType() == Keyword.Type.Log).isPresent();
     }
 
-    public static boolean isCloneTypeIV(Class<?> type, Difference difference){
+    public static boolean isCloneType4(Difference difference){
         boolean isTypeIV = false;
 
-        if(KeywordDefinition.class.isAssignableFrom(type)){
+        if(KeywordDefinition.class.isAssignableFrom(difference.getType())){
             isTypeIV = isSameSequence(difference);
         }
 

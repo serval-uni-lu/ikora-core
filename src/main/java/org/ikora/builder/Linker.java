@@ -289,8 +289,9 @@ public class Linker {
             Set<Variable> variables = runtime.findInScope(valueScope.getTestCases(), valueScope.getSuites(), valueScope.variableName);
 
             if(!variables.isEmpty()){
-                for(Variable variable: variables)
-                valueScope.value.setVariable(valueScope.variableName, variable);
+                for(Variable variable: variables){
+                    valueScope.value.setVariable(valueScope.variableName, variable);
+                }
             }
             else {
                 errors.registerSymbolError(

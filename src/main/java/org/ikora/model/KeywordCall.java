@@ -1,14 +1,13 @@
 package org.ikora.model;
 
 import org.ikora.analytics.Action;
-import org.ikora.analytics.NodeVisitor;
-import org.ikora.analytics.VisitorMemory;
+import org.ikora.analytics.visitor.NodeVisitor;
+import org.ikora.analytics.visitor.VisitorMemory;
 import org.ikora.builder.Linker;
 import org.ikora.error.ErrorManager;
 import org.ikora.exception.ExecutionException;
 import org.ikora.exception.InvalidDependencyException;
 import org.ikora.exception.InvalidImportTypeException;
-import org.ikora.libraries.autoIt.Opt;
 import org.ikora.runner.Runtime;
 import org.ikora.utils.LevenshteinDistance;
 
