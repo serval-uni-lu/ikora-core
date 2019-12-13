@@ -9,18 +9,14 @@ import org.ikora.utils.LevenshteinDistance;
 import javax.annotation.Nonnull;
 import java.util.*;
 
-public abstract class KeywordDefinition implements Keyword, Iterable<Step> {
-    private SourceFile file;
+public abstract class KeywordDefinition extends Keyword implements Iterable<Step> {
     private Value name;
     private String documentation;
     private Set<String> tags;
     private List<Step> steps;
-    private Set<Node> dependencies;
-    private LineRange lineRange;
 
     KeywordDefinition(){
         steps = new ArrayList<>();
-        dependencies = new HashSet<>();
         tags = new HashSet<>();
         documentation = "";
     }
@@ -34,16 +30,9 @@ public abstract class KeywordDefinition implements Keyword, Iterable<Step> {
         step.addDependency(this);
     }
 
-
     public void addTag(String tag){
         if(!StringUtils.isBlank(tag)) {
             this.tags.add(tag);
-        }
-    }
-
-    public void addDependency(KeywordDefinition keyword) {
-        if(keyword != null) {
-            this.dependencies.add(keyword);
         }
     }
 
@@ -53,40 +42,12 @@ public abstract class KeywordDefinition implements Keyword, Iterable<Step> {
     }
 
     @Override
-    public void setFile(@Nonnull SourceFile file) {
-        this.file = file;
+    public void setSourceFile(@Nonnull SourceFile sourceFile) {
+        super.setSourceFile(sourceFile);
 
         for(Step step: this.steps){
-            step.setFile(this.file);
+            step.setSourceFile(getSourceFile());
         }
-    }
-
-    @Override
-    public SourceFile getFile() {
-        return file;
-    }
-
-    @Override
-    public String getFileName() {
-        if(this.file == null){
-            return "";
-        }
-
-        return this.file.getName();
-    }
-
-    @Override
-    public String getLibraryName(){
-        if(this.file == null){
-            return "";
-        }
-
-        return this.file.getLibraryName();
-    }
-
-    @Override
-    public long getEpoch() {
-        return file.getEpoch();
     }
 
     public List<Step> getSteps() {
@@ -116,23 +77,12 @@ public abstract class KeywordDefinition implements Keyword, Iterable<Step> {
         return tags;
     }
 
-    @Override
     public Step getStep(int position) {
         if(steps.size() <= position  || 0 > position){
             return null;
         }
 
         return steps.get(position);
-    }
-
-    @Override
-    public Set<Node> getDependencies() {
-        return dependencies;
-    }
-
-    @Override
-    public void addDependency(@Nonnull Node dependency) {
-        this.dependencies.add(dependency);
     }
 
 
@@ -147,13 +97,13 @@ public abstract class KeywordDefinition implements Keyword, Iterable<Step> {
 
     @Override
     public void execute(Runtime runtime) throws Exception{
-        runtime.enterKeyword(this);
+        runtime.enterNode(this);
 
         for(Step step: this.steps){
             step.execute(runtime);
         }
 
-        runtime.exitKeyword(this);
+        runtime.exitNode(this);
     }
 
     @Override
@@ -215,38 +165,8 @@ public abstract class KeywordDefinition implements Keyword, Iterable<Step> {
     }
 
     @Override
-    public Value.Type[] getArgumentTypes() {
-        return new Value.Type[0];
-    }
-
-    @Override
-    public int getMaxArgument() {
-        return 0;
-    }
-
-    @Override
-    public int[] getKeywordsLaunchedPosition() {
-        return new int[0];
-    }
-
-    @Override
     public Type getType(){
         return Type.User;
-    }
-
-    @Override
-    public void setLineRange(@Nonnull LineRange lineRange){
-        this.lineRange = lineRange;
-    }
-
-    @Override
-    public LineRange getLineRange(){
-        return this.lineRange;
-    }
-
-    @Override
-    public int getLoc() {
-        return this.file.getLinesOfCode(this.lineRange);
     }
 
     KeywordCall toCall(Step step){

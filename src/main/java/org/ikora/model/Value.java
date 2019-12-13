@@ -1,6 +1,7 @@
 package org.ikora.model;
 
 import org.ikora.analytics.Action;
+import org.ikora.exception.InvalidDependencyException;
 
 import javax.annotation.Nonnull;
 import java.security.InvalidParameterException;
@@ -46,7 +47,7 @@ public class Value implements Differentiable {
         this(null, value);
     }
 
-    public void setVariable(String name, Variable variable) {
+    public void setVariable(String name, Variable variable) throws InvalidDependencyException {
         if(variable == null){
             return;
         }
@@ -60,7 +61,7 @@ public class Value implements Differentiable {
         }
     }
 
-    public void setVariable(String name, Set<Variable> variables) {
+    public void setVariable(String name, Set<Variable> variables) throws InvalidDependencyException {
         for(Variable variable: variables){
             setVariable(name, variable);
         }

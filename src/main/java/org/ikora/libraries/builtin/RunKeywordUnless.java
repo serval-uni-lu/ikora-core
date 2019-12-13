@@ -23,8 +23,9 @@ public class RunKeywordUnless extends LibraryKeyword {
         };
     }
 
+
     @Override
-    public int[] getKeywordsLaunchedPosition() {
-        return new int[]{1};
+    public int getMaxNumberArguments() {
+        return -1;
     }
 }

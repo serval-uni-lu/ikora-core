@@ -48,4 +48,9 @@ public class TestCase extends KeywordDefinition {
     public List<Value> getReturnValues() {
         return Collections.emptyList();
     }
+
+    @Override
+    public int getMaxNumberArguments() {
+        return 0;
+    }
 }

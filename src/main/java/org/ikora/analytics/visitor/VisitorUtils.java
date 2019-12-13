@@ -37,17 +37,17 @@ class VisitorUtils {
 
     static void traverseKeywordCall(NodeVisitor visitor, KeywordCall call, VisitorMemory memory){
         call.getKeyword().ifPresent(keyword ->{
-            if(call.hasKeywordParameters()){
-                for(Step step: call.getKeywordParameter()){
-                    if(step == null){
-                        continue;
-                    }
-
-                    step.accept(visitor, memory.getUpdated(step));
-                }
+            for(Argument argument: call.getArgumentList()){
+                argument.accept(visitor, memory.getUpdated(argument));
             }
 
             keyword.accept(visitor, memory.getUpdated(keyword));
         });
+    }
+
+    static void traverseArgument(NodeVisitor visitor, Argument argument, VisitorMemory memory){
+        argument.getCall().ifPresent(keyword ->
+                keyword.accept(visitor, memory.getUpdated(argument))
+        );
     }
 }

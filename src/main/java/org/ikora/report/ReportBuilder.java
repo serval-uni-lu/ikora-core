@@ -1,10 +1,8 @@
 package org.ikora.report;
 
+import org.ikora.model.*;
 import org.ikora.model.Keyword;
-import org.ikora.model.KeywordDefinition;
-import org.ikora.model.LibraryKeyword;
 import org.ikora.model.Suite;
-import org.ikora.model.TestCase;
 import org.ikora.utils.Globals;
 
 import java.time.Instant;
@@ -36,15 +34,14 @@ public class ReportBuilder {
         stack.pop();
     }
 
-    public void enterKeyword(Keyword keyword) throws Exception {
+    public void enterNode(Node node) throws Exception {
         ReportElement element = null;
 
-        if(TestCase.class.isAssignableFrom(keyword.getClass())){
-            element = createTestNode((TestCase)keyword);
+        if(TestCase.class.isAssignableFrom(node.getClass())){
+            element = createTestNode((TestCase)node);
         }
-        else if(KeywordDefinition.class.isAssignableFrom(keyword.getClass())
-        || LibraryKeyword.class.isAssignableFrom(keyword.getClass())){
-            element =  createKeywordNode(keyword);
+        else if(Keyword.class.isAssignableFrom(node.getClass())){
+            element = createKeywordNode((Keyword)node);
         }
 
         if(element != null){
@@ -53,7 +50,7 @@ public class ReportBuilder {
         }
     }
 
-    public void exitKeyword(Keyword keyword) {
+    public void exitNode(Node node) {
         stack.pop();
     }
 

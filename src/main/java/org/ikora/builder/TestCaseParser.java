@@ -1,7 +1,7 @@
 package org.ikora.builder;
 
 import org.ikora.error.ErrorManager;
-import org.ikora.model.LineRange;
+import org.ikora.error.ErrorMessages;
 import org.ikora.model.Step;
 import org.ikora.model.TestCase;
 
@@ -10,12 +10,11 @@ import java.io.IOException;
 class TestCaseParser {
     private TestCaseParser() {}
 
-
     public static TestCase parse(LineReader reader, DynamicImports dynamicImports, ErrorManager errors) throws IOException {
         TestCase testCase = new TestCase();
-        int startLine = reader.getCurrent().getNumber();
 
-        Tokens testTokens = LexerUtils.tokenize(reader.getCurrent().getText());
+        Tokens testTokens = LexerUtils.tokenize(reader.getCurrent());
+        Tokens tokens = testTokens;
 
         ParserUtils.parseName(reader, testTokens, testCase, errors);
 
@@ -25,9 +24,9 @@ class TestCaseParser {
                 continue;
             }
 
-            Tokens tokens = LexerUtils.tokenize(reader.getCurrent().getText());
+            Tokens currentTokens = LexerUtils.tokenize(reader.getCurrent());
 
-            if(!testTokens.isParent(tokens)){
+            if(!testTokens.isParent(currentTokens)){
                 break;
             }
 
@@ -58,8 +57,7 @@ class TestCaseParser {
             }
         }
 
-        int endLine = reader.getCurrent().getNumber();
-            testCase.setLineRange(new LineRange(startLine, endLine));
+        testCase.setPosition(ParserUtils.getPosition(testTokens.first().get(), testTokens.last().get()));
 
         return testCase;
     }
@@ -110,9 +108,9 @@ class TestCaseParser {
             testCase.addStep(step);
         } catch (Exception e) {
             errors.registerSyntaxError(
-                    "Failed to add step to test case",
-                    step.getFile().getFile(),
-                    step.getLineRange()
+                    step.getFile(),
+                    ErrorMessages.FAILED_TO_ADD_STEP_TO_TEST_CASE,
+                    step.getPosition()
             );
         }
 

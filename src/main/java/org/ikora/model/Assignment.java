@@ -4,7 +4,6 @@ import org.ikora.analytics.Action;
 import org.ikora.analytics.visitor.NodeVisitor;
 import org.ikora.analytics.visitor.VisitorMemory;
 import org.ikora.builder.Linker;
-import org.ikora.error.ErrorManager;
 import org.ikora.exception.ExecutionException;
 import org.ikora.exception.InvalidDependencyException;
 import org.ikora.runner.Runtime;
@@ -12,7 +11,6 @@ import org.ikora.utils.LevenshteinDistance;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,65 +36,23 @@ public class Assignment extends Step {
     }
 
     @Override
-    public void setFile(@Nonnull SourceFile file){
-        super.setFile(file);
+    public void setSourceFile(@Nonnull SourceFile sourceFile){
+        super.setSourceFile(sourceFile);
 
         for(Variable variable: returnVariables){
-            variable.setFile(this.getFile());
+            variable.setSourceFile(this.getSourceFile());
         }
 
-        expression.setFile(this.getFile());
+        expression.setSourceFile(this.getSourceFile());
     }
 
     @Override
-    public void setLineRange(@Nonnull LineRange lineRange){
-        super.setLineRange(lineRange);
-
-        for(Variable variable: returnVariables){
-            variable.setLineRange(this.getLineRange());
-        }
-
-        expression.setLineRange(this.getLineRange());
-    }
-
-    @Override
-    public boolean hasKeywordParameters() {
-        return getKeywordCall().map(KeywordCall::hasKeywordParameters).orElse(false);
-
-    }
-
-    @Override
-    public List<KeywordCall> getKeywordParameter() {
-        Optional<KeywordCall> call = getKeywordCall();
-
-        if(call.isPresent()){
-            return call.get().getKeywordParameter();
-        }
-
-        return Collections.emptyList();
-    }
-
-    @Override
-    public Keyword getStep(int position) {
-        return null;
-    }
-
-    @Override
-    public List<Value> getParameters() {
+    public List<Argument> getArgumentList() {
         if(expression == null){
             return new ArrayList<>();
         }
 
-        return expression.getParameters();
-    }
-
-    @Override
-    public Optional<Value> getParameter(int position, boolean resolved) {
-        if(expression == null){
-            return Optional.empty();
-        }
-
-        return expression.getParameter(position, resolved);
+        return expression.getArgumentList();
     }
 
     @Override
@@ -110,14 +66,13 @@ public class Assignment extends Step {
 
     @Override
     public void execute(Runtime runtime) throws Exception {
-        runtime.enterKeyword(this);
+        runtime.enterNode(this);
 
         if(expression != null){
-            ErrorManager errors = new ErrorManager();
-            Linker.link(expression, runtime, errors);
+            Linker.link(expression, runtime);
 
-            if(!errors.isEmpty()){
-                throw new ExecutionException(errors);
+            if(!runtime.getErrors().isEmpty()){
+                throw new ExecutionException(runtime.getErrors());
             }
 
             Optional<Keyword> callee = expression.getKeyword();
@@ -131,7 +86,7 @@ public class Assignment extends Step {
             }
         }
 
-        runtime.exitKeyword(this);
+        runtime.exitNode(this);
 
         for(Variable variable: returnVariables){
             runtime.addToKeywordScope(this.getParent(), variable);
@@ -160,7 +115,7 @@ public class Assignment extends Step {
             same &= this.returnVariables.get(i).getName().equalsIgnoreCase(assignment.returnVariables.get(i).getName());
         }
 
-        return  same;
+        return same;
     }
 
     @Override
@@ -195,18 +150,16 @@ public class Assignment extends Step {
         else{
             Assignment assignment = (Assignment)other;
 
-            getKeywordCall().ifPresent(call -> {
-                assignment.getKeywordCall().ifPresent(otherCall -> {
+            getKeywordCall().ifPresent(call -> assignment.getKeywordCall().ifPresent(otherCall -> {
 
-                    if(call.distance(otherCall) > 0){
-                        actions.add(Action.changeStepExpression(this, assignment));
-                    }
+                if(call.distance(otherCall) > 0){
+                    actions.add(Action.changeStepExpression(this, assignment));
+                }
 
-                    if(LevenshteinDistance.index(this.getReturnVariables(), assignment.getReturnVariables()) > 0){
-                        actions.add(Action.changeStepReturnValues(this, assignment));
-                    }
-                });
-            });
+                if(LevenshteinDistance.index(this.getReturnVariables(), assignment.getReturnVariables()) > 0){
+                    actions.add(Action.changeStepReturnValues(this, assignment));
+                }
+            }));
 
         }
 
@@ -230,34 +183,6 @@ public class Assignment extends Step {
     }
 
     @Override
-    public Value.Type[] getArgumentTypes() {
-        if(this.expression == null){
-            return new Value.Type[0];
-        }
-
-        return this.expression.getArgumentTypes();
-    }
-
-    @Override
-    public int[] getKeywordsLaunchedPosition() {
-        if(this.expression == null){
-            return new int[0];
-        }
-
-        return this.expression.getKeywordsLaunchedPosition();
-    }
-
-    @Override
-    public Type getType(){
-        return this.expression.getType();
-    }
-
-    @Override
-    public List<Value> getReturnValues() {
-        return Collections.emptyList();
-    }
-
-    @Override
     public void accept(NodeVisitor visitor, VisitorMemory memory){
         visitor.visit(this, memory);
     }
@@ -268,6 +193,6 @@ public class Assignment extends Step {
     }
 
     private void assignVariables(List<Value> returnValues){
-
+        //TODO: implement assignment
     }
 }

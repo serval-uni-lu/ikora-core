@@ -9,30 +9,16 @@ import org.apache.commons.lang3.NotImplementedException;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 public class ForLoop extends Step {
     private List<Step> steps;
-    private List<Value> parameters;
+    private List<Argument> argumentList;
 
     public ForLoop() {
         steps = new ArrayList<>();
-        parameters = new ArrayList<>();
-    }
-
-    public void addStep(Step step) {
-        steps.add(step);
-    }
-
-    @Override
-    public Keyword getStep(int position) {
-        if(steps.size() <= position){
-            return null;
-        }
-
-        return steps.get(position);
+        argumentList = new ArrayList<>();
     }
 
     public List<Step> getSteps(){
@@ -40,13 +26,8 @@ public class ForLoop extends Step {
     }
 
     @Override
-    public List<Value> getParameters() {
-        return parameters;
-    }
-
-    @Override
-    public Optional<Value> getParameter(int position, boolean resolved) {
-        return Optional.empty();
+    public List<Argument> getArgumentList() {
+        return argumentList;
     }
 
     @Override
@@ -76,16 +57,6 @@ public class ForLoop extends Step {
     }
 
     @Override
-    public boolean hasKeywordParameters() {
-        return false;
-    }
-
-    @Override
-    public List<KeywordCall> getKeywordParameter() {
-        return Collections.emptyList();
-    }
-
-    @Override
     public Optional<KeywordCall> getKeywordCall() {
         return Optional.empty();
     }
@@ -93,11 +64,6 @@ public class ForLoop extends Step {
     @Override
     public void execute(Runtime runtime) {
         throw new NotImplementedException("Didn't implemented the execution module yet");
-    }
-
-    @Override
-    public int[] getKeywordsLaunchedPosition() {
-        return new int[0];
     }
 
     @Override
@@ -140,10 +106,5 @@ public class ForLoop extends Step {
     @Override
     public void accept(NodeVisitor visitor, VisitorMemory memory){
         visitor.visit(this, memory);
-    }
-
-    @Override
-    public List<Value> getReturnValues() {
-        return Collections.emptyList();
     }
 }

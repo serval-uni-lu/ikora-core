@@ -7,13 +7,15 @@ public class Token {
 
     private Type type;
 
+    private final int line;
     private final int startOffset;
     private final int endOffset;
 
     private final String value;
 
-    public Token(String value, int startOffset, int endOffset, Type type){
+    public Token(String value, int line, int startOffset, int endOffset, Type type){
         this.value = value;
+        this.line = line;
         this.startOffset = startOffset;
         this.endOffset = endOffset;
 
@@ -22,6 +24,10 @@ public class Token {
 
     public String getValue() {
         return this.value;
+    }
+
+    public int getLine() {
+        return line;
     }
 
     public int getStartOffset() {

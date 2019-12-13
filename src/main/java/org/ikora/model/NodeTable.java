@@ -19,7 +19,7 @@ public class NodeTable<T extends Node> implements Iterable<T> {
 
         nodeMap = new HashMap<>();
         for (T node: nodeList){
-            node.setFile(this.file);
+            node.setSourceFile(this.file);
             nodeMap.put(getKey(node), node);
         }
     }
@@ -132,6 +132,6 @@ public class NodeTable<T extends Node> implements Iterable<T> {
     }
 
     private String getKey(T node){
-        return node.getFile() + File.separator + node.getName();
+        return node.getSourceFile() + File.separator + node.getName();
     }
 }

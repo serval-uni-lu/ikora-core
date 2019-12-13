@@ -1,12 +1,11 @@
 package org.ikora.builder;
 
 import org.ikora.error.ErrorManager;
+import org.ikora.error.ErrorMessages;
 import org.ikora.model.NodeTable;
-import org.ikora.model.LineRange;
 import org.ikora.model.Variable;
 
 import java.io.IOException;
-import java.security.InvalidParameterException;
 import java.util.Optional;
 
 class VariableTableParser {
@@ -27,15 +26,14 @@ class VariableTableParser {
                 continue;
             }
 
-            Tokens tokens = LexerUtils.tokenize(reader.getCurrent().getText());
+            Tokens tokens = LexerUtils.tokenize(reader.getCurrent());
 
             Optional<Token> first = tokens.first();
             if(!first.isPresent()){
-                int lineNumber = reader.getCurrent().getNumber();
                 errors.registerInternalError(
-                        "Empty token not expected",
                         reader.getFile(),
-                        new LineRange(lineNumber, lineNumber + 1)
+                        ErrorMessages.EMPTY_TOKEN_NOT_EXPECTED,
+                        ParserUtils.getPosition(reader.getCurrent())
                 );
 
                 continue;
@@ -44,11 +42,10 @@ class VariableTableParser {
             Optional<Variable> optional = VariableParser.parse(first.get().getValue());
 
             if(!optional.isPresent()){
-                int lineNumber = reader.getCurrent().getNumber();
                 errors.registerInternalError(
-                        String.format("Invalid variable: %s", first.get().getValue()),
                         reader.getFile(),
-                        new LineRange(lineNumber, lineNumber + 1)
+                        String.format("Invalid variable: %s", first.get().getValue()),
+                        ParserUtils.getPosition(reader.getCurrent())
                 );
 
                 continue;
@@ -56,17 +53,13 @@ class VariableTableParser {
 
             Variable variable = optional.get();
 
-            int startLine = reader.getCurrent().getNumber();
-
             for (Token token: tokens.withoutFirst()) {
                 variable.addElement(token.getValue());
             }
 
             reader.readLine();
 
-            int endLine = reader.getCurrent().getNumber();
-            variable.setLineRange(new LineRange(startLine, endLine));
-
+            variable.setPosition(ParserUtils.getPosition(tokens));
             variableTable.add(variable);
         }
 

@@ -8,6 +8,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 class SourceFileParser {
+    private SourceFileParser() {}
+
     public static void parse(File file, Project project, DynamicImports dynamicImports, ErrorManager errors) {
         LineReader reader = null;
         SourceFile sourceFile = null;
@@ -49,9 +51,9 @@ class SourceFileParser {
                 }
             }
         } catch (FileNotFoundException e) {
-            errors.registerIOError("File not found", file);
+            errors.registerIOError(file, "File not found");
         } catch (IOException e) {
-            errors.registerIOError("Failed to read line", file);
+            errors.registerIOError(file, "Failed to read line");
         } finally {
             project.addSourceFile(sourceFile);
 
@@ -59,9 +61,7 @@ class SourceFileParser {
                 try {
                     reader.close();
                 } catch (IOException e) {
-                    errors.registerInternalError("Failed to properly close reader for file %s",
-                            file,
-                            new LineRange(-1, -1));
+                    errors.registerIOError(file,"Failed to properly close reader for file %s");
                 }
             }
         }

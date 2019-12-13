@@ -1,5 +1,8 @@
 package org.ikora.model;
 
+import org.ikora.error.ErrorManager;
+
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,7 +18,7 @@ public class LibraryResources {
         this.variables = new ArrayList<>();
     }
 
-    public <T> void loadClass(Class<T> libraryClass){
+    public <T> void loadClass(Class<T> libraryClass, ErrorManager errors){
         if(LibraryKeyword.class.isAssignableFrom(libraryClass)){
             String keyword = LibraryKeyword.toKeyword((Class<? extends LibraryKeyword>) libraryClass);
             keywordsNames.put(keyword, new Item<>((Class<? extends LibraryKeyword>) libraryClass));
@@ -24,8 +27,17 @@ public class LibraryResources {
             try {
                 variables.add((LibraryVariable) libraryClass.getConstructor().newInstance());
             } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
-                e.printStackTrace();
+                errors.registerLibraryError(
+                        libraryClass.getName(),
+                        String.format("Failed to load library variable: %s", e.getMessage())
+                );
             }
+        }
+        else{
+            errors.registerLibraryError(
+                    libraryClass.getName(),
+                    "Unknown library element"
+            );
         }
     }
 

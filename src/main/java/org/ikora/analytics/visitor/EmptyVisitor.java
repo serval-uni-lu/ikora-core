@@ -52,4 +52,9 @@ public class EmptyVisitor implements NodeVisitor{
     public void visit(TimeOut timeOut, VisitorMemory memory) {
         //nothing to do in this node
     }
+
+    @Override
+    public void visit(Argument argument, VisitorMemory memory) {
+        //nothing to do in this node
+    }
 }

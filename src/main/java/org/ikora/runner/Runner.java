@@ -15,7 +15,7 @@ public class Runner {
         this.project = project;
 
         this.runtime = new Runtime(this.project, new DynamicScope());
-        runtime.setLibraries(LibraryLoader.load());
+        runtime.setLibraries(LibraryLoader.load(runtime.getErrors()));
     }
 
     public Report execute() throws Exception{

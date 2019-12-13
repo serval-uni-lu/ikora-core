@@ -22,7 +22,7 @@ class SettingsTableParser {
                 continue;
             }
 
-            Tokens tokens = LexerUtils.tokenize(line.getText());
+            Tokens tokens = LexerUtils.tokenize(line);
 
             if(tokens.size() == 0){
                 line = reader.readLine();

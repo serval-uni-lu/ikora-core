@@ -2,7 +2,8 @@ package org.ikora.builder;
 
 import org.ikora.error.ErrorManager;
 import org.ikora.model.KeywordDefinition;
-import org.ikora.model.LineRange;
+import org.ikora.model.Mark;
+import org.ikora.model.Position;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -12,12 +13,10 @@ public class ParserUtils {
 
     static void parseName(LineReader reader, Tokens tokens, KeywordDefinition keyword, ErrorManager errors) throws IOException {
         if(tokens.size() > 1){
-            int lineNumber = reader.getCurrent().getNumber();
-
             errors.registerSyntaxError(
-                    "Test definition cannot take arguments",
                     reader.getFile(),
-                    new LineRange(lineNumber, lineNumber + 1)
+                    "Test definition cannot take arguments",
+                    getPosition(tokens)
             );
 
             reader.readLine();
@@ -27,12 +26,10 @@ public class ParserUtils {
         Optional<Token> first = tokens.first();
 
         if(!first.isPresent()){
-            int lineNumber = reader.getCurrent().getNumber();
-
             errors.registerInternalError(
-                    "Should have at least one token, but found none",
                     reader.getFile(),
-                    new LineRange(lineNumber, lineNumber + 1)
+                    "Should have at least one token, but found none",
+                    getPosition(tokens)
             );
 
             reader.readLine();
@@ -47,16 +44,44 @@ public class ParserUtils {
     static String getLabel(LineReader reader, Tokens tokens, ErrorManager errors){
         Optional<Token> first = tokens.first();
         if(!first.isPresent()){
-            int lineNumber = reader.getCurrent().getNumber();
             errors.registerInternalError(
-                    "Not expecting an empty token",
                     reader.getFile(),
-                    new LineRange(lineNumber, lineNumber + 1)
+                    "Not expecting an empty token",
+                    getPosition(reader.getCurrent())
             );
 
             return "";
         }
 
         return first.get().getValue();
+    }
+
+    static Position getPosition(Token start, Token end) {
+        if(start == null || end == null){
+            return Position.createInvalid();
+        }
+
+        Mark startMark = new Mark(start.getLine(), start.getStartOffset());
+        Mark endMark = new Mark(end.getLine(), end.getEndOffset());
+
+        return new Position(startMark, endMark);
+    }
+
+    static Position getPosition(Tokens tokens) {
+        Optional<Token> start = tokens.first();
+        Optional<Token> end = tokens.last();
+
+        if(start.isPresent() && end.isPresent()){
+            return getPosition(start.get(), end.get());
+        }
+
+        return Position.createInvalid();
+    }
+
+    static Position getPosition(Line line){
+        Mark startMark = new Mark(line.getNumber(), 0);
+        Mark endMark = new Mark(line.getNumber(), line.getText().length());
+
+        return new Position(startMark, endMark);
     }
 }

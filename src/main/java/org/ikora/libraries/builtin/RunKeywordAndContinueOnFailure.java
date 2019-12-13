@@ -21,9 +21,4 @@ public class RunKeywordAndContinueOnFailure extends LibraryKeyword {
                 Value.Type.Kwargs
         };
     }
-
-    @Override
-    public int[] getKeywordsLaunchedPosition() {
-        return new int[]{0};
-    }
 }

@@ -62,7 +62,7 @@ class ProjectParser {
                     resources.setSourceFile(resourceFile.get());
                 }
                 else{
-                    errors.registerIOError("File not found", new File(project.getRootFolder(), name));
+                    errors.registerIOError(new File(project.getRootFolder(), name),"File not found");
                 }
             }
         }

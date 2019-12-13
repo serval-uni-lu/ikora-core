@@ -9,7 +9,7 @@ class LexerUtils {
     private LexerUtils(){}
 
     static void parseDocumentation(LineReader reader, StringBuilder builder) throws IOException {
-        Tokens tokens = tokenize(reader.getCurrent().getText());
+        Tokens tokens = tokenize(reader.getCurrent());
         tokens = tokens.withoutIndent();
 
         if(tokens.size() > 1){
@@ -19,15 +19,16 @@ class LexerUtils {
         appendMultiline(reader, builder);
     }
 
-    static Tokens tokenize(String line){
+    static Tokens tokenize(Line line){
         Tokens tokens = new Tokens();
+        final String text = line.getText();
 
         int start = 0;
         int current = 0;
         int spaces = 0;
         int tabs = 0;
 
-        for(char c: line.toCharArray()){
+        for(char c: text.toCharArray()){
             switch (c){
                 case ' ':
                     ++spaces;
@@ -37,11 +38,11 @@ class LexerUtils {
                     break;
                 case '\n':
                 case '\r':
-                    tokens.add(createToken(line.substring(start, current), start));
+                    tokens.add(createToken(line.getNumber(), start, text.substring(start, current)));
                     break;
                 default:
                     if(spaces > 1 || tabs > 0){
-                        tokens.add(createToken(line.substring(start, current), start));
+                        tokens.add(createToken(line.getNumber(), start, text.substring(start, current)));
                         start = current;
                     }
 
@@ -51,7 +52,7 @@ class LexerUtils {
             ++current;
         }
 
-        if(current > start) tokens.add(createToken(line.substring(start, current), start));
+        if(current > start) tokens.add(createToken(line.getNumber(), start, text.substring(start, current)));
 
         return tokens;
     }
@@ -92,7 +93,7 @@ class LexerUtils {
                 continue;
             }
 
-            Tokens tokens = tokenize(line.getText()).withoutIndent();
+            Tokens tokens = tokenize(line).withoutIndent();
 
             Optional<Token> first = tokens.first();
 
@@ -109,7 +110,7 @@ class LexerUtils {
         }
     }
 
-    private static Token createToken(String text, int start){
+    private static Token createToken(int line, int offset, String text){
         String trimmed = text.trim();
 
         Token.Type type;
@@ -139,6 +140,6 @@ class LexerUtils {
             }
         }
 
-        return new Token(value, start, start + value.length(), type);
+        return new Token(value, line, offset, offset + value.length(), type);
     }
 }

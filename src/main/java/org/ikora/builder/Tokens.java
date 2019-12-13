@@ -32,6 +32,14 @@ public class Tokens implements Iterable<Token> {
         return Optional.empty();
     }
 
+    public Optional<Token> last() {
+        if(this.size() > 0){
+            return Optional.of(this.tokens.get(this.tokens.size() - 1));
+        }
+
+        return Optional.empty();
+    }
+
     public int size(){
         return this.tokens.size();
     }
@@ -92,5 +100,9 @@ public class Tokens implements Iterable<Token> {
         return this.tokens.stream()
                 .map(Token::getValue)
                 .collect(Collectors.joining("\t"));
+    }
+
+    public boolean isEmpty() {
+        return this.tokens.isEmpty();
     }
 }

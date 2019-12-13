@@ -1,22 +1,20 @@
 package org.ikora.builder;
 
 import org.ikora.error.ErrorManager;
-import org.ikora.model.LineRange;
+import org.ikora.error.ErrorMessages;
 import org.ikora.model.Step;
 import org.ikora.model.UserKeyword;
 
 import java.io.IOException;
-import java.util.Optional;
 
 class UserKeywordParser {
 
     public static UserKeyword parse(LineReader reader, DynamicImports dynamicImports, ErrorManager errors) throws IOException {
         UserKeyword userKeyword = new UserKeyword();
-        int startLine = reader.getCurrent().getNumber();
+        Tokens nameTokens = LexerUtils.tokenize(reader.getCurrent());
+        Tokens tokens = nameTokens;
 
-        Tokens keywordTokens = LexerUtils.tokenize( reader.getCurrent().getText());
-
-        ParserUtils.parseName(reader, keywordTokens.withoutIndent(), userKeyword, errors);
+        ParserUtils.parseName(reader, nameTokens.withoutIndent(), userKeyword, errors);
 
         while(reader.getCurrent().isValid()) {
             if(reader.getCurrent().ignore()) {
@@ -24,13 +22,13 @@ class UserKeywordParser {
                 continue;
             }
 
-            Tokens tokens = LexerUtils.tokenize(reader.getCurrent().getText());
+            Tokens currentTokens = LexerUtils.tokenize(reader.getCurrent());
 
-            if(!keywordTokens.isParent(tokens)){
+            if(!nameTokens.isParent(currentTokens)){
                 break;
             }
 
-            tokens = tokens.withoutIndent();
+            tokens = currentTokens.withoutIndent();
 
             String label = ParserUtils.getLabel(reader, tokens, errors);
 
@@ -57,8 +55,7 @@ class UserKeywordParser {
             }
         }
 
-        int endLine = reader.getCurrent().getNumber();
-        userKeyword.setLineRange(new LineRange(startLine, endLine));
+        userKeyword.setPosition(ParserUtils.getPosition(nameTokens.first().get(), tokens.last().get()));
 
         return userKeyword;
     }
@@ -105,16 +102,17 @@ class UserKeywordParser {
         reader.readLine();
     }
 
-    private static void parseStep(LineReader reader, Tokens tokens, UserKeyword userKeyword, DynamicImports dynamicImports,ErrorManager errors) throws IOException {
+    private static void parseStep(LineReader reader, Tokens tokens, UserKeyword userKeyword, DynamicImports dynamicImports, ErrorManager errors) throws IOException {
         Step step = StepParser.parse(reader, tokens, errors);
 
         try {
             userKeyword.addStep(step);
             dynamicImports.add(userKeyword, step);
         } catch (Exception e) {
-           errors.registerSyntaxError("Failed to add step to user keyword",
-                    step.getFile().getFile(),
-                    step.getLineRange()
+           errors.registerSyntaxError(
+                   step.getSourceFile().getFile(),
+                   ErrorMessages.FAILED_TO_ADD_STEP_TO_KEYWORD,
+                   step.getPosition()
             );
         }
     }

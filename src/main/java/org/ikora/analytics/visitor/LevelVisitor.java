@@ -49,6 +49,11 @@ public class LevelVisitor extends EmptyVisitor {
         updateLevel(memory);
     }
 
+    @Override
+    public void visit(Argument argument, VisitorMemory memory) {
+        VisitorUtils.traverseArgument(this, argument, memory);
+    }
+
     public int getLevel() {
         return level;
     }

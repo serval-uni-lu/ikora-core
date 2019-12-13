@@ -1,5 +1,6 @@
 package org.ikora.runner;
 
+import org.ikora.error.ErrorManager;
 import org.ikora.model.*;
 import org.ikora.report.Report;
 import org.ikora.report.ReportBuilder;
@@ -11,15 +12,18 @@ import java.util.Optional;
 import java.util.Set;
 
 public class Runtime {
-    private Scope scope;
+    private final Scope scope;
+    private final Project project;
+    private final ReportBuilder reportBuilder;
+    private final ErrorManager errors;
+
     private LibraryResources libraries;
-    private Project project;
-    private ReportBuilder reportBuilder;
 
     public Runtime(Project project, Scope scope){
         this.project = project;
         this.scope = scope;
         this.reportBuilder = new ReportBuilder();
+        this.errors = new ErrorManager();
     }
 
     public void setLibraries(LibraryResources libraries) {
@@ -62,8 +66,8 @@ public class Runtime {
         this.scope.addToKeyword(keyword, variable);
     }
 
-    public void addDynamicLibrary(KeywordDefinition keyword, List<Value> parameters){
-        this.scope.addDynamicLibrary(keyword, parameters);
+    public void addDynamicLibrary(KeywordDefinition keyword, List<Argument> argumentList){
+        this.scope.addDynamicLibrary(keyword, argumentList);
     }
 
     public void reset(){
@@ -76,9 +80,9 @@ public class Runtime {
         this.reportBuilder.enterSuite(suite);
     }
 
-    public void enterKeyword(Keyword keyword) throws Exception {
-        this.scope.enterKeyword(keyword);
-        this.reportBuilder.enterKeyword(keyword);
+    public void enterNode(Node node) throws Exception {
+        this.scope.enterNode(node);
+        this.reportBuilder.enterNode(node);
     }
 
     public void exitSuite(Suite suite) {
@@ -86,9 +90,9 @@ public class Runtime {
         this.reportBuilder.exitSuite(suite);
     }
 
-    public void exitKeyword(Keyword keyword){
-        this.scope.exitKeyword(keyword);
-        this.reportBuilder.exitKeyword(keyword);
+    public void exitNode(Node node){
+        this.scope.exitNode(node);
+        this.reportBuilder.exitNode(node);
     }
 
     public void finish() {
@@ -105,5 +109,9 @@ public class Runtime {
 
     public List<Value> getReturnValues() {
         return scope.getReturnValues();
+    }
+
+    public ErrorManager getErrors() {
+        return errors;
     }
 }

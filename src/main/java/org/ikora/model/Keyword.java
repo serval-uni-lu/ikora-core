@@ -1,24 +1,14 @@
 package org.ikora.model;
 
-import org.ikora.runner.Runtime;
-
 import java.util.List;
 
-public interface Keyword extends Node {
-    enum Type{
+public abstract class Keyword extends Node {
+    public enum Type{
         User, ControlFlow, Assertion, Action, Log, Error, Synchronisation, Get,  Unknown, Set
     }
 
-    Keyword getStep(int position);
-
-    Value.Type[] getArgumentTypes();
-    int getMaxArgument();
-    int[] getKeywordsLaunchedPosition();
-
-    void execute(Runtime runtime) throws Exception;
-
-    Type getType();
-    String getDocumentation();
-
-    List<Value> getReturnValues();
+    public abstract Type getType();
+    public abstract List<Value> getReturnValues();
+    public abstract String getDocumentation();
+    public abstract int getMaxNumberArguments();
 }

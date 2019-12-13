@@ -2,11 +2,10 @@ package org.ikora.libraries.builtin;
 
 import org.ikora.analytics.visitor.FindSuiteVisitor;
 import org.ikora.analytics.PathMemory;
-import org.ikora.error.ErrorManager;
 import org.ikora.model.*;
 import org.ikora.runner.Runtime;
 
-import java.util.Optional;
+import java.util.List;
 
 public class SetSuiteVariable extends LibraryKeyword implements ScopeModifier {
     public SetSuiteVariable(){
@@ -19,19 +18,23 @@ public class SetSuiteVariable extends LibraryKeyword implements ScopeModifier {
     }
 
     @Override
-    public void addToScope(Runtime runtime, KeywordCall call, ErrorManager errors) {
-        Optional<Value> parameter = call.getParameter(0, false);
+    public void addToScope(Runtime runtime, KeywordCall call) {
+        List<Argument> argumentList = call.getArgumentList();
 
-        if(!parameter.isPresent()){
-            errors.registerInternalError(
+        if(argumentList.size() < 2){
+            runtime.getErrors().registerInternalError(
+                    call.getFile(),
                     "Failed to update suite scope: no argument found.",
-                    call.getFile().getFile(),
-                    call.getLineRange()
+                    call.getPosition()
             );
         }
         else{
             try {
-                Variable variable = Variable.create(parameter.get());
+                Variable variable = Variable.create(argumentList.get(0).getNameAsValue());
+
+                for(int i = 1; i < argumentList.size(); ++i){
+                    variable.addElement(argumentList.get(i).getName());
+                }
 
                 FindSuiteVisitor visitor = new FindSuiteVisitor();
                 call.accept(visitor, new PathMemory());
@@ -40,12 +43,17 @@ public class SetSuiteVariable extends LibraryKeyword implements ScopeModifier {
                     runtime.addToSuiteScope(suite, variable);
                 }
             } catch (Exception e) {
-                errors.registerInternalError(
+                runtime.getErrors().registerInternalError(
+                        call.getFile(),
                         "Failed to update suite scope: malformed variable.",
-                        call.getFile().getFile(),
-                        call.getLineRange()
+                        call.getPosition()
                 );
             }
         }
+    }
+
+    @Override
+    public int getMaxNumberArguments() {
+        return -1;
     }
 }

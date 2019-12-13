@@ -63,11 +63,6 @@ public class UserKeyword extends KeywordDefinition {
     }
 
     @Override
-    public boolean isDeadCode(){
-        return getDependencies().size() == 0;
-    }
-
-    @Override
     public void addStep(Step step) throws Exception {
         super.addStep(step);
 
@@ -76,22 +71,6 @@ public class UserKeyword extends KeywordDefinition {
                 localVariables.add(variable);
             }
         }
-    }
-
-    @Override
-    public Value.Type[] getArgumentTypes() {
-        Value.Type[] types = new Value.Type[parameters.size()];
-
-        for(int i = 0; i < types.length; ++i){
-            types[i] = Value.Type.String;
-        }
-
-        return types;
-    }
-
-    @Override
-    public int getMaxArgument(){
-        return parameters.size();
     }
 
     @Override
@@ -117,5 +96,10 @@ public class UserKeyword extends KeywordDefinition {
     @Override
     public void accept(NodeVisitor visitor, VisitorMemory memory){
         visitor.visit(this, memory);
+    }
+
+    @Override
+    public int getMaxNumberArguments() {
+        return parameters.size();
     }
 }

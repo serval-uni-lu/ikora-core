@@ -1,5 +1,6 @@
 package org.ikora.model;
 
+import org.ikora.exception.InvalidDependencyException;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -73,7 +74,7 @@ class ValueTest {
     }
 
     @Test
-    void checkResolvedSimpleValues(){
+    void checkResolvedSimpleValues() throws InvalidDependencyException {
         ScalarVariable name = new ScalarVariable("${name}");
         name.addElement("John Smith");
 
@@ -92,7 +93,7 @@ class ValueTest {
     }
 
     @Test
-    void checkResolveCompositeValues(){
+    void checkResolveCompositeValues() throws InvalidDependencyException {
         ScalarVariable name = new ScalarVariable("${name}");
         name.addElement("John Smith");
 

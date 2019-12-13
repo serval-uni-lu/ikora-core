@@ -1,13 +1,11 @@
 package org.ikora.builder;
 
-import org.ikora.Configuration;
 import org.junit.jupiter.api.Test;
 import org.ikora.Helpers;
 import org.ikora.model.*;
 import org.ikora.utils.FileUtils;
 
 import java.io.File;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -28,13 +26,10 @@ class BuilderTest {
         assertEquals(1, testCase.getSteps().size());
 
         final KeywordCall step = (KeywordCall)testCase.getSteps().get(0);
-        assertEquals(1, step.getParameters().size());
+        assertEquals(1, step.getArgumentList().size());
 
-        final Value value = step.getParameters().get(0);
-        final Optional<List<Value>> resolvedValues = value.getResolvedValues();
-
-        assertTrue(resolvedValues.isPresent());
-        assertEquals(1, resolvedValues.get().size());
+        final Argument argument = step.getArgumentList().get(0);
+        assertTrue(argument.getName().contains("Test Status"));
     }
 
     @Test
@@ -125,11 +120,15 @@ class BuilderTest {
         Set<UserKeyword> ofInterest = project.findUserKeyword("Test with a simple test case to see how assignment works");
         assertEquals(1, ofInterest.size());
 
-        Keyword keyword = ofInterest.iterator().next();
-        Assignment step0 = (Assignment) keyword.getStep(0);
-        assertEquals(1, step0.getReturnVariables().size());
-        assertEquals("${EtatRun}", step0.getReturnVariables().get(0).getName());
-        assertEquals(1, step0.getReturnVariables().get(0).getDependencies().size());
+        UserKeyword keyword = ofInterest.iterator().next();
+        Step step0 = keyword.getStep(0);
+
+        assertTrue(Assignment.class.isAssignableFrom(step0.getClass()));
+        Assignment assignment = (Assignment) step0;
+
+        assertEquals(1, assignment.getReturnVariables().size());
+        assertEquals("${EtatRun}", assignment.getReturnVariables().get(0).getName());
+        assertEquals(1, assignment.getReturnVariables().get(0).getDependencies().size());
     }
 
     @Test

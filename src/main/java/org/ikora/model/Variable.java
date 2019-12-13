@@ -1,33 +1,25 @@
 package org.ikora.model;
 
 import org.ikora.builder.VariableParser;
+import org.ikora.runner.Runtime;
 
 import javax.annotation.Nonnull;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public abstract class Variable implements Node {
+public abstract class Variable extends Node {
     public enum Type{
         SCALAR, LIST, DICTIONARY
     }
 
-    private SourceFile file;
-    private LineRange lineRange;
     private Assignment assignment;
-    private Set<Node> dependencies;
 
     protected String name;
     protected Pattern pattern;
 
-    protected Variable() {
-        this.dependencies = new HashSet<>();
-    }
-
     public Variable(String name) {
         this.assignment = null;
-        this.dependencies = new HashSet<>();
-
         setName(name);
     }
 
@@ -35,43 +27,8 @@ public abstract class Variable implements Node {
         this.assignment = assignment;
     }
 
-    @Override
-    public void setFile(@Nonnull SourceFile file) {
-        this.file = file;
-    }
-
-    public abstract String getValueAsString();
-
     public boolean isAssignment(){
         return this.assignment != null;
-    }
-
-    @Override
-    public SourceFile getFile() {
-        return this.file;
-    }
-
-    @Override
-    public String getFileName() {
-        if(this.file == null){
-            return "";
-        }
-
-        return this.file.getName();
-    }
-
-    @Override
-    public String getLibraryName(){
-        if(this.file == null){
-            return "";
-        }
-
-        return this.file.getLibraryName();
-    }
-
-    @Override
-    public long getEpoch(){
-        return this.file.getEpoch();
     }
 
     @Override
@@ -82,31 +39,6 @@ public abstract class Variable implements Node {
     @Override
     public String getName() {
         return this.name;
-    }
-
-    @Override
-    public void setLineRange(@Nonnull LineRange lineRange){
-        this.lineRange = lineRange;
-    }
-
-    @Override
-    public LineRange getLineRange(){
-        return this.lineRange;
-    }
-
-    @Override
-    public int getLoc() {
-        return file.getLinesOfCode(lineRange);
-    }
-
-    @Override
-    public Set<Node> getDependencies(){
-        return dependencies;
-    }
-
-    @Override
-    public void addDependency(@Nonnull Node dependency){
-        dependencies.add(dependency);
     }
 
     public Optional<List<Value>> getResolvedValues() {
@@ -146,7 +78,13 @@ public abstract class Variable implements Node {
         return variable.get();
     }
 
+    @Override
+    public void execute(Runtime runtime) {
+        // nothing to do for variables
+    }
+
     protected abstract void setName(String name);
     public abstract void addElement(String element);
     public abstract List<Value> getValues();
+    public abstract String getValueAsString();
 }

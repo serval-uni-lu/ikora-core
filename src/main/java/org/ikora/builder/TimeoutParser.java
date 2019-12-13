@@ -2,21 +2,19 @@ package org.ikora.builder;
 
 import org.ikora.error.ErrorManager;
 import org.ikora.exception.InvalidNumberArgumentException;
-import org.ikora.model.LineRange;
 import org.ikora.model.TimeOut;
 
 public class TimeoutParser {
+    private TimeoutParser() {}
+
     public static TimeOut parse(LineReader reader, Tokens tokens, ErrorManager errors) throws Exception {
-        int startLine = reader.getCurrent().getNumber();
-        int endLine = reader.readLine().getNumber();
+        Tokens fullTokens = tokens.withoutIndent();
+        Tokens currentTokens = fullTokens.withoutTag("\\[Timeout\\]");
 
-        tokens = tokens.withoutIndent();
-        tokens = tokens.withoutTag("\\[Timeout\\]");
-
-        TimeOut timeOut = parseLine(reader, tokens, errors);
+        TimeOut timeOut = parseLine(reader, currentTokens, errors);
 
         if(timeOut != null){
-            timeOut.setLineRange(new LineRange(startLine, endLine));
+            timeOut.setPosition(ParserUtils.getPosition(fullTokens));
         }
 
         return timeOut;

@@ -64,7 +64,7 @@ public class ViolationDetection {
                 return;
             }
 
-            if(!step.getFile().isDirectDependency(keyword.getFile())){
+            if(!step.getSourceFile().isDirectDependency(keyword.getSourceFile())){
                 violations.add(new Violation(Violation.Level.WARNING, step, Violation.Cause.TRANSITIVE_DEPENDENCY));
             }
         });

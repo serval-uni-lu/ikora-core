@@ -20,9 +20,4 @@ public class RunKeywords extends LibraryKeyword {
                 Value.Type.Keywords,
         };
     }
-
-    @Override
-    public int[] getKeywordsLaunchedPosition() {
-        return new int[]{-1};
-    }
 }

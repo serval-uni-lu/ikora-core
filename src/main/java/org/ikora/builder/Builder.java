@@ -45,8 +45,8 @@ public class Builder {
         for(Project project: projects) {
                 Runtime runtime;
                 runtime = new Runtime(project, new StaticScope());
-                loadLibraries(runtime);
-                link(runtime, link, errors);
+                loadLibraries(runtime, errors);
+                link(runtime, link);
         }
 
         result.setLinkingTime(Duration.between(startLinking, Instant.now()).toMillis());
@@ -70,8 +70,8 @@ public class Builder {
 
         Instant startLinking = Instant.now();
         Runtime runtime = new Runtime(project, new StaticScope());
-        loadLibraries(runtime);
-        link(runtime, link, errors);
+        loadLibraries(runtime, errors);
+        link(runtime, link);
         result.setLinkingTime(Duration.between(startLinking, Instant.now()).toMillis());
 
         result.setBuildTime(Duration.between(start, Instant.now()).toMillis());
@@ -97,8 +97,8 @@ public class Builder {
                         }
                     } catch (IOException e) {
                         errors.registerIOError(
-                                String.format("Failed to resolve dependency: %s", e.getMessage()),
-                                base
+                                base,
+                                String.format("Failed to resolve dependency: %s", e.getMessage())
                         );
                     }
                 }
@@ -113,17 +113,17 @@ public class Builder {
         sourceFile.ifPresent(external::setSourceFile);
     }
 
-    private static void loadLibraries(Runtime runtime) {
-        LibraryResources libraries = LibraryLoader.load();
+    private static void loadLibraries(Runtime runtime, ErrorManager errors) {
+        LibraryResources libraries = LibraryLoader.load(errors);
         runtime.setLibraries(libraries);
     }
 
-    private static void link(Runtime runtime, boolean link, ErrorManager errors) {
+    private static void link(Runtime runtime, boolean link) {
         if(!link){
             return;
         }
 
-        Linker.link(runtime, errors);
+        Linker.link(runtime);
     }
 
     private static Project parse(File file, Configuration configuration, DynamicImports dynamicImports, ErrorManager errors) {

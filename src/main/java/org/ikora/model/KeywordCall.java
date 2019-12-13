@@ -4,8 +4,6 @@ import org.ikora.analytics.Action;
 import org.ikora.analytics.visitor.NodeVisitor;
 import org.ikora.analytics.visitor.VisitorMemory;
 import org.ikora.builder.Linker;
-import org.ikora.error.ErrorManager;
-import org.ikora.exception.ExecutionException;
 import org.ikora.exception.InvalidDependencyException;
 import org.ikora.exception.InvalidImportTypeException;
 import org.ikora.runner.Runtime;
@@ -16,13 +14,11 @@ import java.util.*;
 
 public class KeywordCall extends Step {
     private Link<KeywordCall, Keyword> link;
-    private List<Value> parameters;
+    private List<Argument> argumentList;
     private List<Value> returnValues;
-    private Map<Value, KeywordCall> stepParameters;
 
     public KeywordCall() {
-        this.parameters = new ArrayList<>();
-        this.stepParameters = new HashMap<>();
+        this.argumentList = new ArrayList<>();
         this.link = new Link<>(this);
     }
 
@@ -31,49 +27,22 @@ public class KeywordCall extends Step {
         link.addNode(keyword, importLink);
     }
 
-    public void addParameter(String value) {
-        this.parameters.add(new Value(this, value));
+    public void addArgument(Argument argument) throws InvalidDependencyException {
+        this.argumentList.add(argument);
     }
 
-    public List<Value> getParameters() {
-        return this.parameters;
+    public void setArgumentList(List<Argument> argumentList){
+        this.argumentList = argumentList;
     }
 
     @Override
-    public Optional<Value> getParameter(int position, boolean resolved) {
-        if (position < 0){
-            return Optional.empty();
-        }
-
-        if(resolved){
-            int current = 0;
-            for(Value parameter: this.parameters){
-                Optional<List<Value>> resolvedParameters  = parameter.getResolvedValues();
-
-                if(!resolvedParameters.isPresent()){
-                    return Optional.empty();
-                }
-
-                for(Value resolvedParameter: resolvedParameters.get()){
-                    if(position == current){
-                        return Optional.of(resolvedParameter);
-                    }
-
-                    ++current;
-                }
-            }
-        }
-
-        if(position < this.parameters.size()){
-            return Optional.ofNullable(this.parameters.get(position));
-        }
-
-        return Optional.empty();
+    public List<Argument> getArgumentList() {
+        return this.argumentList;
     }
 
     @Override
     public boolean hasParameters() {
-        return !this.parameters.isEmpty();
+        return !this.argumentList.isEmpty();
     }
 
     public Optional<Keyword> getKeyword() {
@@ -82,12 +51,6 @@ public class KeywordCall extends Step {
 
     public Set<Keyword> getAllPotentialKeywords(Link.Import importType){
         return link.getAllLinks(importType);
-    }
-
-    @Override
-    public Keyword getStep(int position) {
-        return getKeyword().map(value -> value.getStep(position)).orElse(null);
-
     }
 
     @Override
@@ -106,10 +69,10 @@ public class KeywordCall extends Step {
 
         KeywordCall call = (KeywordCall)other;
 
-        boolean same = this.parameters.size() == call.parameters.size();
+        boolean same = this.argumentList.size() == call.argumentList.size();
 
-        for(int i = 0; same && i < this.parameters.size(); ++i) {
-            same &= this.parameters.get(i).equals(call.parameters.get(i));
+        for(int i = 0; same && i < this.argumentList.size(); ++i) {
+            same &= this.argumentList.get(i).equals(call.argumentList.get(i));
         }
 
         return  same;
@@ -117,14 +80,8 @@ public class KeywordCall extends Step {
 
     @Override
     public void execute(Runtime runtime) throws Exception{
-        runtime.enterKeyword(this);
-
-        ErrorManager errors = new ErrorManager();
-        Linker.link(this, runtime, errors);
-
-        if(!errors.isEmpty()){
-            throw new ExecutionException(errors);
-        }
+        runtime.enterNode(this);
+        Linker.link(this, runtime);
 
         Optional<Keyword> callee = link.getNode();
 
@@ -136,32 +93,7 @@ public class KeywordCall extends Step {
             throw new Exception("Need to have a better exception");
         }
 
-        runtime.exitKeyword(this);
-    }
-
-    @Override
-    public Value.Type[] getArgumentTypes() {
-        return getKeyword().map(Keyword::getArgumentTypes).orElse(new Value.Type[0]);
-    }
-
-    @Override
-    public int[] getKeywordsLaunchedPosition() {
-        Optional<Keyword> keyword = getKeyword();
-
-        if(!keyword.isPresent()){
-            return new int[0];
-        }
-
-        int[] positions = keyword.get().getKeywordsLaunchedPosition();
-
-        if(positions.length == 1 && positions[0] == -1){
-            positions = new int[getParameters().size()];
-            for (int i = 0; i < positions.length; ++i) {
-                positions[i] = i;
-            }
-        }
-
-        return positions;
+        runtime.exitNode(this);
     }
 
     @Override
@@ -173,7 +105,7 @@ public class KeywordCall extends Step {
         KeywordCall call = (KeywordCall)other;
 
         double nameIndex = LevenshteinDistance.stringIndex(getName(), call.getName());
-        double parameterIndex = LevenshteinDistance.index(getParameters(), call.getParameters());
+        double parameterIndex = LevenshteinDistance.index(getArgumentList(), call.getArgumentList());
 
         return (0.5 * nameIndex) + (0.5 * parameterIndex);
     }
@@ -196,7 +128,7 @@ public class KeywordCall extends Step {
                 actions.add(Action.changeStepName(this, call));
             }
 
-            if(LevenshteinDistance.index(this.getParameters(), call.getParameters()) > 0){
+            if(LevenshteinDistance.index(this.getArgumentList(), call.getArgumentList()) > 0){
                 actions.add(Action.changeStepArguments(this, call));
             }
         }
@@ -210,61 +142,16 @@ public class KeywordCall extends Step {
 
         builder.append(getName());
 
-        for (Value parameter: parameters){
+        for (Argument argument: argumentList){
             builder.append("\t");
-            builder.append(parameter.toString());
+            builder.append(argument.toString());
         }
 
         return builder.toString();
     }
 
-    public KeywordCall setKeywordParameter(Value keywordParameter, Keyword keyword) {
-        int index = parameters.indexOf(keywordParameter);
-
-        if(index < 0){
-            return null;
-        }
-
-        KeywordCall step;
-
-        try {
-            step = new KeywordCall();
-            step.addDependency(this);
-            step.linkKeyword(keyword, Link.Import.STATIC);
-            step.setFile(this.getFile());
-            step.setName(keywordParameter.toString());
-
-            int j = keyword.getMaxArgument() == -1 ? parameters.size() : keyword.getMaxArgument();
-            for(int i = index + 1; i < parameters.size() && j > 0; ++i, --j){
-                step.parameters.add(parameters.get(i));
-            }
-
-            stepParameters.put(keywordParameter, step);
-        } catch (Exception e) {
-            step = null;
-        }
-
-        return step;
-    }
-
-    @Override
-    public Type getType(){
-        return getKeyword().map(Keyword::getType).orElse(Type.Unknown);
-    }
-
-    @Override
     public List<Value> getReturnValues() {
         return this.returnValues;
-    }
-
-    @Override
-    public boolean hasKeywordParameters() {
-        return !stepParameters.isEmpty();
-    }
-
-    @Override
-    public List<KeywordCall> getKeywordParameter() {
-        return new ArrayList<>(stepParameters.values());
     }
 
     @Override

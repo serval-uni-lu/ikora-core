@@ -1,10 +1,9 @@
 package org.ikora.libraries.builtin;
 
-import org.ikora.error.ErrorManager;
 import org.ikora.model.*;
 import org.ikora.runner.Runtime;
 
-import java.util.Optional;
+import java.util.List;
 
 public class SetGlobalVariable extends LibraryKeyword implements ScopeModifier {
     public SetGlobalVariable(){
@@ -17,26 +16,38 @@ public class SetGlobalVariable extends LibraryKeyword implements ScopeModifier {
     }
 
     @Override
-    public void addToScope(Runtime runtime, KeywordCall call, ErrorManager errors) {
-        Optional<Value> parameter = call.getParameter(0, false);
+    public void addToScope(Runtime runtime, KeywordCall call) {
+        List<Argument> argumentList = call.getArgumentList();
 
-        if(!parameter.isPresent()){
-            errors.registerInternalError(
-                    "Failed to update global scope: no argument found.",
-                    call.getFile().getFile(),
-                    call.getLineRange()
+        if(argumentList.size() < 2){
+            runtime.getErrors().registerInternalError(
+                    call.getFile(),
+                    "Failed to update global scope: not enough arguments found. Need 2!",
+                    call.getPosition()
             );
         }
         else{
             try {
-                runtime.addToGlobalScope(Variable.create(parameter.get()));
+                Variable variable = Variable.create(argumentList.get(0).getNameAsValue());
+
+                for(int i = 1; i < argumentList.size(); ++i){
+                    variable.addElement(argumentList.get(i).getName());
+                }
+
+                runtime.addToGlobalScope(variable);
             } catch (Exception e) {
-                errors.registerInternalError(
+                runtime.getErrors().registerInternalError(
+                        call.getFile(),
                         "Failed to update global scope: malformed variable.",
-                        call.getFile().getFile(),
-                        call.getLineRange()
+                        call.getPosition()
                 );
             }
         }
+    }
+
+
+    @Override
+    public int getMaxNumberArguments() {
+        return -1;
     }
 }

@@ -21,9 +21,4 @@ public class RunKeywordIfTestPassed extends LibraryKeyword {
                 Value.Type.Kwargs
         };
     }
-
-    @Override
-    public int[] getKeywordsLaunchedPosition() {
-        return new int[]{0};
-    }
 }

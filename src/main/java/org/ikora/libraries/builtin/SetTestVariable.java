@@ -2,11 +2,10 @@ package org.ikora.libraries.builtin;
 
 import org.ikora.analytics.visitor.FindTestCaseVisitor;
 import org.ikora.analytics.PathMemory;
-import org.ikora.error.ErrorManager;
 import org.ikora.model.*;
 import org.ikora.runner.Runtime;
 
-import java.util.Optional;
+import java.util.List;
 
 public class SetTestVariable extends LibraryKeyword implements ScopeModifier {
     public SetTestVariable(){
@@ -19,18 +18,23 @@ public class SetTestVariable extends LibraryKeyword implements ScopeModifier {
     }
 
     @Override
-    public void addToScope(Runtime runtime, KeywordCall call, ErrorManager errors) {
-        Optional<Value> parameter = call.getParameter(0, false);
+    public void addToScope(Runtime runtime, KeywordCall call) {
+        List<Argument> argumentList = call.getArgumentList();
 
-        if(!parameter.isPresent()){
-            errors.registerInternalError(
+        if(argumentList.size() < 2){
+            runtime.getErrors().registerInternalError(
+                    call.getFile(),
                     "Failed to update test scope: no argument found.",
-                    call.getFile().getFile(),
-                    call.getLineRange());
+                    call.getPosition()
+            );
         }
         else{
             try {
-                Variable variable = Variable.create(parameter.get());
+                Variable variable = Variable.create(argumentList.get(0).getNameAsValue());
+
+                for(int i = 1; i < argumentList.size(); ++i){
+                    variable.addElement(argumentList.get(i).getName());
+                }
 
                 FindTestCaseVisitor visitor = new FindTestCaseVisitor();
                 call.accept(visitor, new PathMemory());
@@ -39,10 +43,10 @@ public class SetTestVariable extends LibraryKeyword implements ScopeModifier {
                     runtime.addToTestScope(testCase, variable);
                 }
             } catch (Exception e) {
-                errors.registerInternalError(
+                runtime.getErrors().registerInternalError(
+                        call.getFile(),
                         "Failed to update test scope: malformed variable.",
-                        call.getFile().getFile(),
-                        call.getLineRange()
+                        call.getPosition()
                 );
             }
         }

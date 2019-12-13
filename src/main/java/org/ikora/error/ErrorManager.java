@@ -1,76 +1,57 @@
 package org.ikora.error;
 
-import org.ikora.model.LineRange;
+import org.ikora.model.Position;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class ErrorManager {
-    private final Set<SyntaxError> syntaxErrors;
-    private final Set<SymbolError> symbolErrors;
-    private final Set<InternalError> internalErrors;
-    private final Set<IOError> ioErrors;
-    private final Set<UnhandledError> unhandledErrors;
+    private final Map<File, ErrorFile> errors;
+    private final Set<LibraryError> libraryErrors;
 
-    public ErrorManager(){
-        syntaxErrors = new HashSet<>();
-        symbolErrors = new HashSet<>();
-        ioErrors = new HashSet<>();
-        internalErrors = new HashSet<>();
-        unhandledErrors = new HashSet<>();
+    public ErrorManager() {
+        this.errors = new HashMap<>();
+        this.libraryErrors = new HashSet<>();
     }
 
-    public void registerSyntaxError(String message, File file, LineRange lineRange){
-        SyntaxError error = new SyntaxError(message, file, lineRange);
-        syntaxErrors.add(error);
+    public void registerSyntaxError(File file, String message, Position position){
+        ErrorFile errorFile = errors.getOrDefault(file, new ErrorFile());
+        errorFile.registerSyntaxError(message, position);
+        errors.putIfAbsent(file, errorFile);
     }
 
-    public void registerSymbolError(String message, File file, LineRange lineRange){
-        SymbolError error = new SymbolError(message, file, lineRange);
-        symbolErrors.add(error);
+    public void registerSymbolError(File file, String message, Position position){
+        ErrorFile errorFile = errors.getOrDefault(file, new ErrorFile());
+        SymbolError error = new SymbolError(message, position);
+        errors.putIfAbsent(file, errorFile);
     }
 
-    public void registerIOError(String message, File file){
-        IOError error = new IOError(message, file);
-        ioErrors.add(error);
+    public void registerIOError(File file, String message){
+        ErrorFile errorFile = errors.getOrDefault(file, new ErrorFile());
+        errorFile.registerIOError(message, file);
+        errors.putIfAbsent(file, errorFile);
     }
 
-    public void registerInternalError(String message, File file, LineRange lineRange){
-        InternalError error = new InternalError(message, file, lineRange);
-        internalErrors.add(error);
+    public void registerInternalError(File file, String message, Position position){
+        ErrorFile errorFile = errors.getOrDefault(file, new ErrorFile());
+        errorFile.registerInternalError(message, position);
+        errors.putIfAbsent(file, errorFile);
     }
 
-    public void  registerUnhandledError(String message, Exception exception){
-        UnhandledError error = new UnhandledError(message, exception);
-        unhandledErrors.add(error);
+    public void registerUnhandledError(File file, String message, Exception exception){
+        ErrorFile errorFile = errors.getOrDefault(file, new ErrorFile());
+        errorFile.registerUnhandledError(message, exception);
+        errors.putIfAbsent(file, errorFile);
     }
 
-    public int getSize(){
-        return syntaxErrors.size()
-                + symbolErrors.size()
-                + ioErrors.size()
-                + internalErrors.size()
-                + unhandledErrors.size();
-    }
-
-    public Set<Error> getAll(){
-        Set<Error> all = new HashSet<>(getSize());
-
-        all.addAll(syntaxErrors);
-        all.addAll(symbolErrors);
-        all.addAll(ioErrors);
-        all.addAll(internalErrors);
-        all.addAll(unhandledErrors);
-
-        return all;
+    public void registerLibraryError(String library, String message){
+        libraryErrors.add(new LibraryError(message, library));
     }
 
     public boolean isEmpty() {
-        return syntaxErrors.isEmpty()
-                && symbolErrors.isEmpty()
-                && ioErrors.isEmpty()
-                && internalErrors.isEmpty()
-                && unhandledErrors.isEmpty();
+        return errors.isEmpty() && libraryErrors.isEmpty();
     }
 }

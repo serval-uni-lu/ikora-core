@@ -1,6 +1,7 @@
 package org.ikora.builder;
 
 import org.ikora.error.ErrorManager;
+import org.ikora.error.ErrorMessages;
 import org.ikora.exception.InvalidDependencyException;
 import org.ikora.model.*;
 
@@ -8,40 +9,40 @@ import java.io.IOException;
 import java.util.Optional;
 
 class StepParser {
+    private StepParser() {}
+
     public static Step parse(LineReader reader, Tokens tokens, ErrorManager errors) throws IOException {
         return parse(reader, tokens, "", errors);
     }
 
     public static Step parse(LineReader reader, Tokens tokens, String ignoreTag, ErrorManager errors) throws IOException {
         Step step;
-        int startLine = reader.getCurrent().getNumber();
 
-        tokens = tokens.withoutIndent();
-        tokens = tokens.withoutTag(ignoreTag);
+        Tokens fullTokens = tokens.withoutIndent();
+        Tokens tokensWithoutTag = fullTokens.withoutTag(ignoreTag);
 
-        if(isForLoop(reader, tokens, errors)) {
+        if(isForLoop(reader, tokensWithoutTag, errors)) {
             step = parseForLoop(reader);
         }
-        else if (isAssignment(reader, tokens, errors)){
+        else if (isAssignment(reader, tokensWithoutTag, errors)){
             step = parseAssignment(reader, errors);
         }
         else {
-            step = parseKeywordCall(reader, tokens, errors);
+            step = parseKeywordCall(reader, tokensWithoutTag, errors);
         }
 
-        int endLine = reader.getCurrent().getNumber();
-        step.setLineRange(new LineRange(startLine, endLine));
+        step.setPosition(ParserUtils.getPosition(tokens));
 
         return step;
     }
 
     private static Step parseForLoop(LineReader reader) throws IOException {
         ForLoop forLoop = new ForLoop();
-        Tokens loop = LexerUtils.tokenize(reader.getCurrent().getText());
+        Tokens loop = LexerUtils.tokenize(reader.getCurrent());
         forLoop.setName("TO DO");
 
         while (reader.readLine().isValid()){
-            Tokens tokens = LexerUtils.tokenize(reader.getCurrent().getText());
+            Tokens tokens = LexerUtils.tokenize(reader.getCurrent());
 
             if(!loop.isParent(tokens)){
                 break;
@@ -55,7 +56,7 @@ class StepParser {
         Assignment assignment = new Assignment();
         assignment.setName(reader.getCurrent().getText());
 
-        Tokens tokens = LexerUtils.tokenize(reader.getCurrent().getText()).withoutIndent();
+        Tokens tokens = LexerUtils.tokenize(reader.getCurrent()).withoutIndent();
 
         int offset = 0;
         for(Token token: tokens){
@@ -80,9 +81,9 @@ class StepParser {
                     assignment.setExpression(call);
                 } catch (InvalidDependencyException e) {
                     errors.registerInternalError(
-                            "Dependency failed to be created, this should not happen",
-                            call.getFile().getFile(),
-                            call.getLineRange()
+                            call.getFile(),
+                            ErrorMessages.FAILED_TO_CREATE_DEPENDENCY,
+                            call.getPosition()
                     );
                 }
                 break;
@@ -102,25 +103,35 @@ class StepParser {
         return call;
     }
 
-    private static KeywordCall getKeywordCall(LineReader reader, Tokens tokens, ErrorManager errors) throws IOException {
+    private static KeywordCall getKeywordCall(LineReader reader, Tokens tokens, ErrorManager errors) {
         KeywordCall call = new KeywordCall();
 
         Optional<Token> first =  tokens.first();
 
         if(!first.isPresent()){
-            int lineNumber = reader.getCurrent().getNumber();
-
             errors.registerInternalError(
-                    "Empty token should be a keyword call",
                     reader.getFile(),
-                    new LineRange(lineNumber, lineNumber + 1)
+                    ErrorMessages.EMPTY_TOKEN_SHOULD_BE_KEYWORD,
+                    ParserUtils. getPosition(reader.getCurrent())
             );
         }
         else{
             call.setName(first.get().getValue());
 
             for(Token token: tokens.withoutFirst()) {
-                call.addParameter(token.getValue());
+                try {
+                    Argument argument = new Argument(call, token.getValue());
+                    argument.setSourceFile(call.getSourceFile());
+                    argument.setPosition(ParserUtils.getPosition(token, token));
+
+                    call.addArgument(argument);
+                } catch (InvalidDependencyException e) {
+                    errors.registerInternalError(
+                            reader.getFile(),
+                            "Failed to register parameter to keyword call",
+                            ParserUtils. getPosition(token, token)
+                    );
+                }
             }
         }
 
@@ -131,12 +142,10 @@ class StepParser {
         Optional<Token> first = tokens.first();
 
         if(!first.isPresent()) {
-            int lineNumber = reader.getCurrent().getNumber();
-
             errors.registerInternalError(
-                    "Empty token should be a keyword call",
                     reader.getFile(),
-                    new LineRange(lineNumber, lineNumber + 1)
+                    ErrorMessages.EMPTY_TOKEN_SHOULD_BE_KEYWORD,
+                    ParserUtils. getPosition(reader.getCurrent())
             );
 
             return false;
@@ -149,12 +158,10 @@ class StepParser {
         Optional<Token> first =  tokens.first();
 
         if(!first.isPresent()){
-            int lineNumber = reader.getCurrent().getNumber();
-
             errors.registerInternalError(
-                    "Empty token should be a keyword call",
                     reader.getFile(),
-                    new LineRange(lineNumber, lineNumber + 1)
+                    ErrorMessages.EMPTY_TOKEN_SHOULD_BE_KEYWORD,
+                    ParserUtils. getPosition(reader.getCurrent())
             );
 
             return false;

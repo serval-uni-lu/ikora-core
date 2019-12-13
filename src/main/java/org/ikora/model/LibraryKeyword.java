@@ -8,16 +8,10 @@ import org.ikora.runner.Runtime;
 import javax.annotation.Nonnull;
 import java.util.*;
 
-public abstract class LibraryKeyword implements Keyword {
-
-    private Set<Node> dependencies;
-    private SourceFile file;
-    private LineRange lineRange;
-
+public abstract class LibraryKeyword extends Keyword {
     protected Type type;
 
     public LibraryKeyword() {
-        this.dependencies = new HashSet<>();
         this.type = Type.Unknown;
     }
 
@@ -26,33 +20,8 @@ public abstract class LibraryKeyword implements Keyword {
     }
 
     @Override
-    public Keyword getStep(int position) {
-        return null;
-    }
-
-    @Override
-    public Set<Node> getDependencies() {
-        return dependencies;
-    }
-
-    @Override
     public void accept(NodeVisitor visitor, VisitorMemory memory){
         visitor.visit(this, memory);
-    }
-
-    @Override
-    public long getEpoch() {
-        return file.getEpoch();
-    }
-
-    @Override
-    public void addDependency(@Nonnull Node dependency) {
-        this.dependencies.add(dependency);
-    }
-
-    @Override
-    public boolean isDeadCode(){
-        return false;
     }
 
     @Override
@@ -85,16 +54,6 @@ public abstract class LibraryKeyword implements Keyword {
     }
 
     @Override
-    public SourceFile getFile(){
-        return this.file;
-    }
-
-    @Override
-    public String getFileName(){
-        return this.file.getName();
-    }
-
-    @Override
     public String getLibraryName(){
         String[] packages = this.getClass().getCanonicalName().split("\\.");
 
@@ -108,22 +67,36 @@ public abstract class LibraryKeyword implements Keyword {
     }
 
     @Override
-    public void setFile(@Nonnull SourceFile file){
-        this.file = file;
-    }
-
-    @Override
     public boolean matches(@Nonnull String name) {
         return this.getName().matches(name);
     }
 
-    @Override
     public Value.Type[] getArgumentTypes() {
         return new Value.Type[0];
     }
 
     @Override
-    public int getMaxArgument(){
+    public void execute(Runtime runtime) throws Exception{
+        runtime.enterNode(this);
+
+        run(runtime);
+
+        runtime.exitNode(this);
+    }
+
+    protected abstract void run(Runtime runtime);
+
+    public String getDocumentation(){
+        return "";
+    }
+
+    @Override
+    public List<Value> getReturnValues(){
+        return Collections.emptyList();
+    }
+
+    @Override
+    public int getMaxNumberArguments() {
         Value.Type[] types = getArgumentTypes();
 
         if(types.length == 0){
@@ -135,46 +108,5 @@ public abstract class LibraryKeyword implements Keyword {
         }
 
         return types.length;
-    }
-
-    @Override
-    public int[] getKeywordsLaunchedPosition() {
-        return new int[0];
-    }
-
-    @Override
-    public void setLineRange(@Nonnull LineRange lineRange){
-        this.lineRange = lineRange;
-    }
-
-    @Override
-    public LineRange getLineRange(){
-        return this.lineRange;
-    }
-
-    @Override
-    public int getLoc() {
-        return 1;
-    }
-
-    @Override
-    public void execute(Runtime runtime) throws Exception{
-        runtime.enterKeyword(this);
-
-        run(runtime);
-
-        runtime.exitKeyword(this);
-    }
-
-    protected abstract void run(Runtime runtime);
-
-    @Override
-    public String getDocumentation(){
-        return "";
-    }
-
-    @Override
-    public List<Value> getReturnValues(){
-        return Collections.emptyList();
     }
 }

@@ -1,6 +1,5 @@
 package org.ikora.builder;
 
-import org.ikora.error.*;
 import org.ikora.exception.InvalidDependencyException;
 import org.ikora.exception.InvalidImportTypeException;
 import org.ikora.model.*;
@@ -13,11 +12,9 @@ import java.util.regex.Pattern;
 
 public class Linker {
     private final Runtime runtime;
-    private final ErrorManager errors;
 
-    private Linker(Runtime runtime, ErrorManager errors){
+    private Linker(Runtime runtime){
         this.runtime = runtime;
-        this.errors = errors;
     }
 
     private static final Pattern gherkinPattern;
@@ -26,8 +23,8 @@ public class Linker {
         gherkinPattern =  Pattern.compile("^(\\s*)(Given|When|Then|And|But)", Pattern.CASE_INSENSITIVE);
     }
 
-    public static void link(Runtime runtime, ErrorManager errors) {
-        Linker linker = new Linker(runtime, errors);
+    public static void link(Runtime runtime) {
+        Linker linker = new Linker(runtime);
 
         List<ScopeValue> unresolvedArguments = new ArrayList<>();
 
@@ -44,13 +41,13 @@ public class Linker {
         linker.processUnresolvedArguments(unresolvedArguments);
     }
 
-    public static void link(KeywordCall call, Runtime runtime, ErrorManager errors) {
-        Linker linker = new Linker(runtime, errors);
+    public static void link(KeywordCall call, Runtime runtime) {
+        Linker linker = new Linker(runtime);
 
         Matcher matcher = gherkinPattern.matcher(call.getName());
         String name = matcher.replaceAll("").trim();
 
-        linker.resolveCall(runtime.getTestCase(), call, name);
+        linker.resolveCall(call, name);
     }
 
     private List<ScopeValue> linkSteps(TestCase testCase) {
@@ -58,15 +55,15 @@ public class Linker {
 
         KeywordCall setup = testCase.getSetup();
         if(setup != null){
-            unresolvedArguments.addAll(resolveCall(testCase, setup, setup.getName().trim()));
+            unresolvedArguments.addAll(resolveCall(setup, setup.getName()));
         }
 
         for(Step step: testCase) {
             if(!(step instanceof KeywordCall)) {
-                errors.registerSyntaxError(
+                runtime.getErrors().registerSyntaxError(
+                        step.getFile(),
                         "Expecting a step of type keyword call",
-                        step.getFile().getFile(),
-                        step.getLineRange()
+                        step.getPosition()
                 );
             }
             else {
@@ -75,13 +72,13 @@ public class Linker {
                 Matcher matcher = gherkinPattern.matcher(step.getName());
                 String name = matcher.replaceAll("").trim();
 
-                unresolvedArguments.addAll(resolveCall(testCase, call, name));
+                unresolvedArguments.addAll(resolveCall(call, name));
             }
         }
 
         KeywordCall teardown = testCase.getTearDown();
         if(teardown != null){
-            unresolvedArguments.addAll(resolveCall(testCase, teardown, teardown.getName().trim()));
+            unresolvedArguments.addAll(resolveCall(teardown, teardown.getName()));
         }
 
         return unresolvedArguments;
@@ -91,126 +88,119 @@ public class Linker {
         List<ScopeValue> unresolvedArguments = new ArrayList<>();
 
         for (Step step: userKeyword) {
-            step.getKeywordCall().ifPresent(call -> {
-                try {
-                    String name = call.getName().trim();
-                    unresolvedArguments.addAll(resolveCall(userKeyword, call, name));
-                } catch (Exception e) {
-                    throw new RuntimeException(e.getMessage());
-                }
-            });
+            step.getKeywordCall().ifPresent(call -> unresolvedArguments.addAll(resolveCall(call, call.getName())));
         }
 
         return unresolvedArguments;
     }
 
-    private List<ScopeValue> resolveCall(KeywordDefinition parentKeyword, KeywordCall call, String name) {
-        getKeywords(name, parentKeyword.getFile()).forEach(keyword -> {
+    private List<ScopeValue> resolveCall(KeywordCall call, String name) {
+        getKeywords(name, call.getSourceFile()).forEach(keyword -> {
             try {
                 call.linkKeyword((Keyword) keyword, Link.Import.STATIC);
             } catch (InvalidImportTypeException e) {
-                errors.registerInternalError(
-                        "Should handle Static import at this point but didn't!",
-                        call.getFile().getFile(),
-                        call.getLineRange()
+                runtime.getErrors().registerInternalError(
+                        call.getFile(),
+                        "Should handle Static import at this point",
+                        call.getPosition()
                 );
             } catch (InvalidDependencyException e) {
-                errors.registerSymbolError(
-                        "Invalid dependency",
-                        ((Keyword) keyword).getFile().getFile(),
-                        ((Keyword) keyword).getLineRange()
+                runtime.getErrors().registerSymbolError(
+                        ((Keyword) keyword).getFile(),
+                        e.getMessage(),
+                        ((Keyword) keyword).getPosition()
                 );
             }
         });
 
-        return linkCall(parentKeyword, call);
+        return linkCallArguments(call);
     }
 
-    private List<ScopeValue> linkCall(KeywordDefinition parentKeyword, KeywordCall call) {
+    private List<ScopeValue> linkCallArguments(KeywordCall call) {
         List<ScopeValue> unresolvedArguments = new ArrayList<>();
 
-        for(Value value : call.getParameters()) {
-            unresolvedArguments.addAll(resolveArgument(value, parentKeyword.getFile(), parentKeyword));
+        Iterator<Argument> iterator = call.getArgumentList().iterator();
+
+        List<Argument> newArgumentList = new ArrayList<>(call.getArgumentList().size());
+
+        while(iterator.hasNext()){
+            Argument argument = iterator.next();
+            Set<? super Keyword> keywords = getKeywords(argument.getName(), argument.getSourceFile());
+
+            if(keywords.isEmpty()){
+                newArgumentList.add(argument);
+            }
+            else if(keywords.size() == 1){
+                try {
+                    Keyword keyword = (Keyword)keywords.iterator().next();
+                    KeywordCall keywordCall = createKeywordCall(keyword, argument, iterator);
+                    Argument keywordArgument = new Argument(call, keywordCall.toString());
+                    keywordArgument.setCall(keywordCall);
+
+                    newArgumentList.add(keywordArgument);
+                } catch (InvalidDependencyException e) {
+                    runtime.getErrors().registerSymbolError(
+                            call.getFile(),
+                            e.getMessage(),
+                            argument.getPosition()
+                    );
+
+                    break;
+                }
+            }
+            else{
+                newArgumentList.add(argument);
+
+                runtime.getErrors().registerSymbolError(
+                        call.getFile(),
+                        "Found more than one keyword to match argument",
+                        argument.getPosition()
+                );
+
+                iterator.forEachRemaining(newArgumentList::add);
+            }
         }
 
-        linkStepArguments(call);
+        call.setArgumentList(newArgumentList);
+
         updateScope(call);
 
         return unresolvedArguments;
     }
 
+    private KeywordCall createKeywordCall(Keyword keyword, Argument first, Iterator<Argument> iterator) throws InvalidDependencyException {
+        KeywordCall call = new KeywordCall();
+
+        Argument last = first;
+
+        int i = keyword.getMaxNumberArguments();
+
+        while (iterator.hasNext() && i > 0){
+            last = iterator.next();
+
+            Argument current = new Argument(call, last.getName());
+            current.setSourceFile(last.getSourceFile());
+            current.setPosition(last.getPosition());
+
+            call.addArgument(current);
+            --i;
+        }
+
+        call.setName(first.getName());
+        call.setSourceFile(keyword.getSourceFile());
+        call.setPosition(first.getPosition().merge(last.getPosition()));
+        call.addDependency(keyword);
+
+        resolveCall(call, call.getName());
+
+        return call;
+    }
+
     private void updateScope(KeywordCall call) {
         for(Keyword keyword: call.getAllPotentialKeywords(Link.Import.BOTH)){
             if(keyword instanceof ScopeModifier){
-                ((ScopeModifier)keyword).addToScope(runtime, call, errors);
+                ((ScopeModifier)keyword).addToScope(runtime, call);
             }
-        }
-    }
-
-    private void linkStepArguments(KeywordCall step) {
-        if(!step.hasParameters()){
-            return;
-        }
-
-        for(int position: step.getKeywordsLaunchedPosition()){
-            // try to resolve parameters
-            Optional<Value> parameter = step.getParameter(position, true);
-
-            if(!parameter.isPresent()){
-                // if not working try without resolving them
-                parameter = step.getParameter(position, false);
-
-                if(!parameter.isPresent()){
-                    errors.registerInternalError(
-                            "Failed to link keyword parameter",
-                            step.getFile().getFile(),
-                            step.getLineRange()
-                    );
-
-                    continue;
-                }
-            }
-
-            final String keywordParameter = parameter.get().getName();
-            Set<? super Keyword> keywords = getKeywords(keywordParameter, step.getParent().getFile());
-
-            if(keywords.isEmpty()) {
-                errors.registerSymbolError(
-                        String.format("Found no definition for keyword parameter: %s", keywordParameter),
-                        step.getFile().getFile(),
-                        step.getLineRange()
-                );
-
-                continue;
-            }
-            else if(keywords.size() > 1){
-                errors.registerSymbolError(
-                        String.format("Found multiple definitions for keyword parameter: %s", keywordParameter),
-                        step.getFile().getFile(),
-                        step.getLineRange()
-                );
-
-                continue;
-            }
-
-            Keyword keyword = (Keyword) keywords.iterator().next();
-
-            step.getParameter(position, false).ifPresent(
-                    parameterName -> {
-                        KeywordCall call = step.setKeywordParameter(parameterName, keyword);
-
-                        if(call == null){
-                            errors.registerInternalError(
-                                    String.format("Failed to set keyword parameter: %s", keywordParameter),
-                                    step.getFile().getFile(),
-                                    step.getLineRange()
-                            );
-                        }
-                        else{
-                            linkStepArguments(call);
-                        }
-                    }
-            );
         }
     }
 
@@ -248,40 +238,15 @@ public class Linker {
                     keywordsFound.add(runtimeKeyword);
                 }
             } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException exception) {
-                errors.registerUnhandledError(
-                    String.format("Failed to load library keyword: %s::%s", library, name),
-                    exception
+                runtime.getErrors().registerUnhandledError(
+                        sourceFile.getFile(),
+                        String.format("Failed to load library keyword: %s::%s", library, name),
+                        exception
                 );
             }
         }
 
         return keywordsFound;
-    }
-
-    private List<ScopeValue> resolveArgument(Value value, SourceFile sourceFile, KeywordDefinition keyword) {
-        List<ScopeValue> unresolvedArguments = new ArrayList<>();
-
-        List<String> variables = value.findVariables();
-
-        for(String name: variables){
-            Set<Variable> variablesFound = new HashSet<>();
-
-            if(keyword.getClass() == UserKeyword.class){
-                variablesFound.addAll(((UserKeyword)keyword).findLocalVariable(name));
-            }
-
-            variablesFound.addAll(sourceFile.findVariable(name));
-            variablesFound.addAll(runtime.findLibraryVariable(name));
-
-            if(variablesFound.isEmpty()){
-                unresolvedArguments.add(new ScopeValue(keyword, value, name));
-            }
-            else{
-                value.setVariable(name, variablesFound);
-            }
-        }
-
-        return unresolvedArguments;
     }
 
     private void processUnresolvedArguments(List<ScopeValue> unresolvedArguments) {
@@ -290,14 +255,22 @@ public class Linker {
 
             if(!variables.isEmpty()){
                 for(Variable variable: variables){
-                    valueScope.value.setVariable(valueScope.variableName, variable);
+                    try {
+                        valueScope.value.setVariable(valueScope.variableName, variable);
+                    } catch (InvalidDependencyException e) {
+                        runtime.getErrors().registerInternalError(
+                                valueScope.keyword.getFile(),
+                                e.getMessage(),
+                                valueScope.keyword.getPosition()
+                        );
+                    }
                 }
             }
             else {
-                errors.registerSymbolError(
-                    String.format("Found no definition for local variable: %s", valueScope.variableName),
-                    valueScope.keyword.getFile().getFile(),
-                    valueScope.keyword.getLineRange()
+                runtime.getErrors().registerSymbolError(
+                        valueScope.keyword.getFile(),
+                        String.format("Found no definition for local variable: %s", valueScope.variableName),
+                        valueScope.keyword.getPosition()
                 );
             }
         }

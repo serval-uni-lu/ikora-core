@@ -3,21 +3,17 @@ package org.ikora.model;
 import org.ikora.analytics.Action;
 import org.ikora.analytics.visitor.NodeVisitor;
 import org.ikora.analytics.visitor.VisitorMemory;
-import org.ikora.exception.InvalidDependencyException;
+import org.ikora.runner.Runtime;
 
 import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
-public class TimeOut implements Node {
+public class TimeOut extends Node {
     private final Value variable;
     private final TimeValue value;
 
-    private SourceFile file;
-    private LineRange lineRange;
     private String name;
-    private KeywordDefinition parent;
 
     public TimeOut(String name){
         this.name = name;
@@ -40,70 +36,9 @@ public class TimeOut implements Node {
         return this.variable != null || this.value != null;
     }
 
-    public KeywordDefinition getParent() {
-        return parent;
-    }
-
-    public void setParent(KeywordDefinition parent) {
-        this.parent = parent;
-    }
-
-    @Override
-    public void setFile(@Nonnull SourceFile file) {
-        this.file = file;
-    }
-
-    @Override
-    public SourceFile getFile() {
-        return file;
-    }
-
-    @Override
-    public String getFileName() {
-        if(this.file == null){
-            return "";
-        }
-
-        return this.file.getName();
-    }
-
-    @Override
-    public String getLibraryName() {
-        if(this.file == null){
-            return "";
-        }
-
-        return this.file.getLibraryName();
-    }
-
-    @Override
-    public void setLineRange(@Nonnull LineRange lineRange) {
-        this.lineRange = lineRange;
-    }
-
-    @Override
-    public LineRange getLineRange() {
-        return lineRange;
-    }
-
-    @Override
-    public int getLoc() {
-        return this.file.getLinesOfCode(this.lineRange);
-    }
-
-    @Override
-    public long getEpoch() {
-        return file.getEpoch();
-    }
-
     @Override
     public Value getNameAsValue() {
         return new Value(name);
-    }
-
-    @Override
-    public boolean isDeadCode(){
-        return false;
     }
 
     @Override
@@ -114,20 +49,6 @@ public class TimeOut implements Node {
     @Override
     public boolean matches(@Nonnull String name) {
         return this.name.equalsIgnoreCase(name);
-    }
-
-    @Override
-    public Set<Node> getDependencies() {
-        if(parent == null){
-            return Collections.emptySet();
-        }
-
-        return Collections.singleton(parent);
-    }
-
-    @Override
-    public void addDependency(@Nonnull Node dependency) throws InvalidDependencyException {
-        throw new InvalidDependencyException();
     }
 
     @Override
@@ -143,5 +64,10 @@ public class TimeOut implements Node {
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public void execute(Runtime runtime) throws Exception {
+        //TODO: implement
     }
 }

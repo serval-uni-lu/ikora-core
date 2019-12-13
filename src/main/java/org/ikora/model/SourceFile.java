@@ -61,13 +61,13 @@ public class SourceFile implements Iterable<UserKeyword> {
     }
 
     public int getLinesOfCode(){
-        return getLinesOfCode(new LineRange(0, lines.size()));
+        return getLinesOfCode(0, lines.size());
     }
 
-    public int getLinesOfCode(LineRange lineRange) {
+    public int getLinesOfCode(int start, int end) {
         int loc = 0;
 
-        for(int index = lineRange.getStart(); index < lineRange.getEnd(); ++index){
+        for(int index = start; index < end; ++index){
             loc += lines.get(index).isCode() ? 1 : 0;
         }
 

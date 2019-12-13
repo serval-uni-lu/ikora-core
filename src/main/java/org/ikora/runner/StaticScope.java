@@ -60,29 +60,29 @@ public class StaticScope implements Scope{
     }
 
     @Override
-    public void addDynamicLibrary(KeywordDefinition keyword, List<Value> parameters) {
+    public void addDynamicLibrary(KeywordDefinition keyword, List<Argument> argumentList) {
         if(keyword == null){
             return;
         }
 
-        if(parameters.isEmpty()){
+        if(argumentList.isEmpty()){
             return;
         }
 
-        File filePath = new File(parameters.get(0).getName());
+        File filePath = new File(argumentList.get(0).getName());
 
-        if(!filePath.isAbsolute() && keyword.getFile() != null) {
-            filePath = new File(keyword.getFile().getFile(), filePath.getPath());
+        if(!filePath.isAbsolute() && keyword.getSourceFile() != null) {
+            filePath = new File(keyword.getSourceFile().getFile(), filePath.getPath());
         }
 
         dynamicLibrary.putIfAbsent(keyword, new ResourcesTable());
 
         List<String> resourcesParameters = new ArrayList<>();
-        for(int i = 1; i < parameters.size(); ++i){
-            resourcesParameters.add(parameters.get(i).getName());
+        for(int i = 1; i < argumentList.size(); ++i){
+            resourcesParameters.add(argumentList.get(i).getName());
         }
 
-        Resources resources = new Resources(parameters.get(0).getName(), filePath, resourcesParameters, "");
+        Resources resources = new Resources(argumentList.get(0).getName(), filePath, resourcesParameters, "");
         dynamicLibrary.get(keyword).add(resources);
     }
 
@@ -102,12 +102,12 @@ public class StaticScope implements Scope{
     }
 
     @Override
-    public void enterKeyword(Keyword keyword) {
+    public void enterNode(Node node) {
         // No concept of entering or leaving when performing static analysis
     }
 
     @Override
-    public void exitKeyword(Keyword keyword) {
+    public void exitNode(Node node) {
         // No concept of entering or leaving when performing static analysis
     }
 

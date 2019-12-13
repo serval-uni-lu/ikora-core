@@ -14,7 +14,7 @@ class LexerUtilsTest {
     @Test
     void checkTokenizerWith2spaceIndent(){
         String line = "  Some text";
-        Tokens tokens = LexerUtils.tokenize(line);
+        Tokens tokens = LexerUtils.tokenize(new Line(line, 0, false, false));
 
         assertEquals(2, tokens.size());
 
@@ -30,7 +30,7 @@ class LexerUtilsTest {
     @Test
     void checkTokenizerWith1spaceIndent(){
         String line = " Some text";
-        Tokens tokens = LexerUtils.tokenize(line);
+        Tokens tokens = LexerUtils.tokenize(new Line(line, 0, false, false));
 
         assertEquals( 1, tokens.size());
 
@@ -43,7 +43,7 @@ class LexerUtilsTest {
     void checkTokenizeWith4spaceIndent(){
         String line = "    Some text";
 
-        Tokens tokens = LexerUtils.tokenize(line);
+        Tokens tokens = LexerUtils.tokenize(new Line(line, 0, false, false));
 
         assertEquals(2, tokens.size());
 
@@ -60,7 +60,7 @@ class LexerUtilsTest {
     void checkTokenizeWithTabIndent(){
         String line = "\tSome text";
 
-        Tokens tokens = LexerUtils.tokenize(line);
+        Tokens tokens = LexerUtils.tokenize(new Line(line, 0, false, false));
 
         assertEquals(2, tokens.size());
 

@@ -13,4 +13,5 @@ public interface NodeVisitor {
     void visit(DictionaryVariable dictionary, VisitorMemory memory);
     void visit(ListVariable list, VisitorMemory memory);
     void visit(TimeOut timeOut, VisitorMemory memory);
+    void visit(Argument argument, VisitorMemory memory);
 }

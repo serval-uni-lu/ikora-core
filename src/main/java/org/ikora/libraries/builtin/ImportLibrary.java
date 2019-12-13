@@ -1,6 +1,6 @@
 package org.ikora.libraries.builtin;
 
-import org.ikora.error.ErrorManager;
+import org.ikora.exception.InvalidDependencyException;
 import org.ikora.model.*;
 import org.ikora.runner.Runtime;
 
@@ -11,31 +11,39 @@ public class ImportLibrary extends LibraryKeyword implements ScopeModifier {
     }
 
     @Override
-    public void addToScope(Runtime runtime, KeywordCall call, ErrorManager errors) {
-        KeywordDefinition parent = null;
-        Keyword current = call.getParent();
+    public void addToScope(Runtime runtime, KeywordCall call) {
+        try {
+            KeywordDefinition parent = null;
+            Node current = call.getParent();
 
-        while(current != null){
-            if(current.getClass() == Step.class) {
-                current = ((Step) current).getParent();
-            }
-            else if(current.getClass() == KeywordDefinition.class){
-                parent = (KeywordDefinition) current;
-                break;
-            }
-            else{
-                errors.registerSymbolError(
-                        "Failed to resolve dynamic import",
-                        call.getFile().getFile(),
-                        call.getLineRange()
-                );
+            while(current != null){
+                if(Step.class.isAssignableFrom(current.getClass())) {
+                    current = ((Step) current).getParent();
+                }
+                else if(KeywordDefinition.class.isAssignableFrom(current.getClass())){
+                    parent = (KeywordDefinition) current;
+                    break;
+                }
+                else{
+                    runtime.getErrors().registerSymbolError(
+                            call.getFile(),
+                            "Failed to resolve dynamic import",
+                            call.getPosition()
+                    );
 
-                break;
+                    break;
+                }
             }
-        }
 
-        if(parent != null){
-            runtime.addDynamicLibrary(parent, call.getParameters());
+            if(parent != null){
+                runtime.addDynamicLibrary(parent, call.getArgumentList());
+            }
+        } catch (InvalidDependencyException e) {
+            runtime.getErrors().registerInternalError(
+                    call.getFile(),
+                    e.getMessage(),
+                    call.getPosition()
+            );
         }
     }
 }

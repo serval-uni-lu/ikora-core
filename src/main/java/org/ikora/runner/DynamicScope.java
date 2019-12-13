@@ -9,7 +9,7 @@ public class DynamicScope implements Scope {
     private Deque<Block<Suite, Variable>> suiteStack;
     private Deque<Block<TestCase, Variable>> testStack;
     private Deque<Block<Keyword, Variable>> keywordStack;
-    private Deque<Block<Step, Value>> parametersStack;
+    private Deque<Block<Step, Argument>> argumentStack;
     private List<Value> returnValues;
 
     public DynamicScope(){
@@ -17,7 +17,7 @@ public class DynamicScope implements Scope {
         suiteStack = new LinkedList<>();
         testStack = new LinkedList<>();
         keywordStack = new LinkedList<>();
-        parametersStack = new LinkedList<>();
+        argumentStack = new LinkedList<>();
         returnValues = Collections.emptyList();
     }
 
@@ -59,8 +59,8 @@ public class DynamicScope implements Scope {
     }
 
     @Override
-    public void addDynamicLibrary(KeywordDefinition keyword, List<Value> parameters) {
-
+    public void addDynamicLibrary(KeywordDefinition keyword, List<Argument> argumentList) {
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -69,46 +69,34 @@ public class DynamicScope implements Scope {
     }
 
     @Override
-    public void enterKeyword(Keyword keyword) throws Exception {
-        if (TestCase.class.isAssignableFrom(keyword.getClass())){
-            testStack.push(new Block<>((TestCase) keyword));
+    public void enterNode(Node node) {
+        if (TestCase.class.isAssignableFrom(node.getClass())){
+            testStack.push(new Block<>((TestCase) node));
         }
-        else if(KeywordDefinition.class.isAssignableFrom(keyword.getClass())
-                || LibraryKeyword.class.isAssignableFrom(keyword.getClass())){
-            keywordStack.push(new Block<>(keyword));
+        else if(Keyword.class.isAssignableFrom(node.getClass())){
+            keywordStack.push(new Block<>((Keyword) node));
         }
-        else if(KeywordCall.class.isAssignableFrom(keyword.getClass())){
-            parametersStack.push(new Block<>((Step) keyword));
+        else if(KeywordCall.class.isAssignableFrom(node.getClass())){
+            argumentStack.push(new Block<>((Step) node));
 
-            for(int i = 0; i < ((KeywordCall)keyword).getParameters().size(); ++i){
-                Optional<Value> parameter = ((KeywordCall)keyword).getParameter(i, true);
-
-                if(!parameter.isPresent()){
-                    throw new Exception(String.format("Failed to resolve parameter '%s' for call '%s in '%s' at line %s",
-                            ((KeywordCall)keyword).getParameter(i, false),
-                            keyword.toString(),
-                            keyword.getFileName(),
-                            keyword.getLineRange().toString()));
-                }
-
-                parametersStack.peek().add(parameter.get());
+            for(Argument argument: ((KeywordCall)node).getArgumentList()){
+                argumentStack.peek().add(argument);
             }
         }
     }
 
     @Override
-    public void exitKeyword(Keyword keyword) {
-        if (TestCase.class.isAssignableFrom(keyword.getClass())){
+    public void exitNode(Node node) {
+        if (TestCase.class.isAssignableFrom(node.getClass())){
             testStack.pop();
         }
-        else if(KeywordDefinition.class.isAssignableFrom(keyword.getClass())
-                || LibraryKeyword.class.isAssignableFrom(keyword.getClass())){
+        else if(Keyword.class.isAssignableFrom(node.getClass())){
             keywordStack.pop();
-            returnValues = keyword.getReturnValues();
+            returnValues = ((Keyword)node).getReturnValues();
         }
-        else if(KeywordCall.class.isAssignableFrom(keyword.getClass())){
-            parametersStack.pop();
-            returnValues = keyword.getReturnValues();
+        else if(KeywordCall.class.isAssignableFrom(node.getClass())){
+            argumentStack.pop();
+            returnValues = ((KeywordCall)node).getReturnValues();
         }
     }
 

@@ -17,6 +17,7 @@ public abstract class LibraryVariable extends Variable {
     protected Format format;
 
     public LibraryVariable(){
+        super("");
         this.format = Format.scalar;
         setName(toVariable(this.getClass()));
     }

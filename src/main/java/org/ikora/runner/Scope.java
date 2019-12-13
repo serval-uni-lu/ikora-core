@@ -14,11 +14,11 @@ public interface Scope {
 
     Set<Variable> findInScope(Set<TestCase> testCases, Set<String> suites, String name);
     
-    void addDynamicLibrary(KeywordDefinition keyword, List<Value> parameters);
+    void addDynamicLibrary(KeywordDefinition keyword, List<Argument> argumentList);
     ResourcesTable getDynamicResources(Node node);
 
-    void enterKeyword(Keyword keyword) throws Exception;
-    void exitKeyword(Keyword keyword);
+    void enterNode(Node node) throws Exception;
+    void exitNode(Node node);
 
     void enterSuite(Suite suite);
     void exitSuite(Suite suite);

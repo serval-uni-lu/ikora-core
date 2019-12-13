@@ -33,28 +33,28 @@ public class DynamicImports {
             }
 
             if(call.getClass().isAssignableFrom(ImportLibrary.class)){
-                addLibrary(parent, call.getParameters());
+                addLibrary(parent, call.getArgumentList());
             }
             else if(call.getClass().isAssignableFrom(ImportResource.class)){
-                addResources(parent, call.getParameters());
+                addResources(parent, call.getArgumentList());
             }
             else if(call.getClass().isAssignableFrom(ImportVariables.class)){
-                addVariables(parent, call.getParameters());
+                addVariables(parent, call.getArgumentList());
             }
         });
     }
 
-    private void addLibrary(KeywordDefinition parent, List<Value> values){
-        if(!values.isEmpty()){
+    private void addLibrary(KeywordDefinition parent, List<Argument> argumentList){
+        if(!argumentList.isEmpty()){
             libraries.putIfAbsent(parent, new HashSet<>());
             Set<Library> current = libraries.get(parent);
 
-            Library library = new Library(values.get(0).getName(), getParams(values), "");
+            Library library = new Library(argumentList.get(0).getName(), getParams(argumentList), "");
             current.add(library);
         }
     }
 
-    private void addResources(KeywordDefinition parent, List<Value> values){
+    private void addResources(KeywordDefinition parent, List<Argument> values){
         if(!values.isEmpty()){
             resources.putIfAbsent(parent, new ResourcesTable());
             ResourcesTable current = resources.get(parent);
@@ -67,7 +67,7 @@ public class DynamicImports {
         }
     }
 
-    private void addVariables(KeywordDefinition parent, List<Value> values){
+    private void addVariables(KeywordDefinition parent, List<Argument> values){
         if(!values.isEmpty()){
             variables.putIfAbsent(parent, new HashMap<>());
             Map<Resources, Set<String>> current = variables.get(parent);
@@ -90,11 +90,13 @@ public class DynamicImports {
         }
     }
 
-    private static List<String> getParams(List<Value> values){
-        if(values.size() < 2){
+    private static List<String> getParams(List<Argument> argumentList){
+        if(argumentList.size() < 2){
             return Collections.emptyList();
         }
 
-        return values.subList(1, values.size()).stream().map(Value::getName).collect(Collectors.toList());
+        return argumentList.subList(1, argumentList.size()).stream()
+                .map(Argument::getName)
+                .collect(Collectors.toList());
     }
 }

@@ -44,4 +44,9 @@ public class SizeVisitor extends EmptyVisitor {
     public void visit(ForLoop forLoop, VisitorMemory memory) {
         VisitorUtils.traverseForLoopSteps(this, forLoop, memory);
     }
+
+    @Override
+    public void visit(Argument argument, VisitorMemory memory) {
+        VisitorUtils.traverseArgument(this, argument, memory);
+    }
 }

@@ -52,4 +52,9 @@ public class DependencyVisitor implements NodeVisitor {
     public void visit(TimeOut timeOut, VisitorMemory memory) {
         VisitorUtils.traverseDependencies(this, timeOut, memory);
     }
+
+    @Override
+    public void visit(Argument argument, VisitorMemory memory) {
+        VisitorUtils.traverseDependencies(this, argument, memory);
+    }
 }
