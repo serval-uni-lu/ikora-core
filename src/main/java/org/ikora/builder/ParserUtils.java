@@ -37,7 +37,6 @@ public class ParserUtils {
         }
 
         keyword.setName(first.get().getValue());
-
         reader.readLine();
     }
 

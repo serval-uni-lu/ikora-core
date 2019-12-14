@@ -51,15 +51,6 @@ public abstract class Step extends Node {
         return getName().matches(name);
     }
 
-    @Override
-    public void addDependency(Node dependency) throws InvalidDependencyException{
-        if(!Keyword.class.isAssignableFrom(dependency.getClass())){
-            throw new InvalidDependencyException("steps always have their parent as dependency");
-        }
-
-        super.addDependency(dependency);
-    }
-
     public abstract Optional<KeywordCall> getKeywordCall();
     public abstract List<Argument> getArgumentList();
     public abstract boolean hasParameters();

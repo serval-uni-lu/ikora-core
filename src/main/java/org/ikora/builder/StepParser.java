@@ -59,36 +59,38 @@ class StepParser {
         Tokens tokens = LexerUtils.tokenize(reader.getCurrent()).withoutIndent();
 
         int offset = 0;
+        boolean leftSide = true;
         for(Token token: tokens){
-            String value = token.getValue().replaceAll("(\\s*)=(\\s*)$", "");
-            value = value.replaceAll("^(\\s*)=(\\s*)", "");
+            try {
+                String value = token.getValue().replaceAll("(\\s*)=(\\s*)$", "");
 
-            if(value.isEmpty()){
-                ++offset;
-                continue;
-            }
+                if(!value.isEmpty()){
+                    if(leftSide && Value.isVariable(value)){
+                        Optional<Variable> variable = VariableParser.parse(value);
 
-            if(Value.isVariable(value)){
-                VariableParser.parse(value).ifPresent(variable -> {
-                    variable.setAssignment(assignment);
-                    assignment.addReturnValue(variable);
-                });
-            }
-            else{
-                KeywordCall call = getKeywordCall(reader, tokens.withoutFirst(offset), errors);
+                        if(variable.isPresent()){
+                            variable.get().setAssignment(assignment);
+                            variable.get().setPosition(ParserUtils.getPosition(token, token));
+                            assignment.addReturnValue(variable.get());
+                        }
+                    }
+                    else if(!leftSide){
+                        KeywordCall call = getKeywordCall(reader, tokens.withoutFirst(offset), errors);
+                        assignment.setExpression(call);
 
-                try {
-                    assignment.setExpression(call);
-                } catch (InvalidDependencyException e) {
-                    errors.registerInternalError(
-                            call.getFile(),
-                            ErrorMessages.FAILED_TO_CREATE_DEPENDENCY,
-                            call.getPosition()
-                    );
+                        break;
+                    }
                 }
-                break;
-            }
 
+                leftSide &= !token.getValue().contains("=");
+                ++offset;
+            } catch (InvalidDependencyException e) {
+                errors.registerInternalError(
+                        reader.getFile(),
+                        ErrorMessages.FAILED_TO_CREATE_DEPENDENCY,
+                        ParserUtils.getPosition(token, token)
+                );
+            }
             ++offset;
         }
 
@@ -121,7 +123,6 @@ class StepParser {
             for(Token token: tokens.withoutFirst()) {
                 try {
                     Argument argument = new Argument(call, token.getValue());
-                    argument.setSourceFile(call.getSourceFile());
                     argument.setPosition(ParserUtils.getPosition(token, token));
 
                     call.addArgument(argument);
@@ -135,6 +136,7 @@ class StepParser {
             }
         }
 
+        call.setPosition(ParserUtils.getPosition(tokens.withoutIndent()));
         return call;
     }
 

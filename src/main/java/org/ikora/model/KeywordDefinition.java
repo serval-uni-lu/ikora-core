@@ -28,6 +28,7 @@ public abstract class KeywordDefinition extends Keyword implements Iterable<Step
     public void addStep(Step step) throws Exception {
         this.steps.add(step);
         step.addDependency(this);
+        step.setSourceFile(getSourceFile());
     }
 
     public void addTag(String tag){

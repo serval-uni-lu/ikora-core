@@ -3,6 +3,7 @@ package org.ikora.model;
 import org.ikora.analytics.visitor.NodeVisitor;
 import org.ikora.analytics.visitor.VisitorMemory;
 
+import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.List;
 
@@ -12,6 +13,7 @@ public class TestCase extends KeywordDefinition {
 
     public void setSetup(KeywordCall setup){
         this.setup = setup;
+        this.setup.setSourceFile(this.getSourceFile());
     }
 
     public void setSetup(Step step){
@@ -20,6 +22,7 @@ public class TestCase extends KeywordDefinition {
 
     public void setTearDown(KeywordCall tearDown){
         this.tearDown = tearDown;
+        this.tearDown.setSourceFile(this.getSourceFile());
     }
 
     public void setTearDown(Step tearDown){
@@ -32,6 +35,19 @@ public class TestCase extends KeywordDefinition {
 
     public KeywordCall getTearDown(){
         return tearDown;
+    }
+
+    @Override
+    public void setSourceFile(@Nonnull SourceFile sourceFile) {
+        super.setSourceFile(sourceFile);
+
+        if(this.setup != null){
+            this.setup.setSourceFile(sourceFile);
+        }
+
+        if(this.tearDown != null){
+            this.tearDown.setSourceFile(sourceFile);
+        }
     }
 
     @Override

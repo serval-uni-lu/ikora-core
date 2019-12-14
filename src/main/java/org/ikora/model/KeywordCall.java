@@ -27,12 +27,22 @@ public class KeywordCall extends Step {
         link.addNode(keyword, importLink);
     }
 
-    public void addArgument(Argument argument) throws InvalidDependencyException {
+    public void addArgument(Argument argument) {
+        argument.setSourceFile(this.getSourceFile());
         this.argumentList.add(argument);
     }
 
-    public void setArgumentList(List<Argument> argumentList){
-        this.argumentList = argumentList;
+    public void clearArguments() {
+        this.argumentList.clear();
+    }
+
+    @Override
+    public void setSourceFile(SourceFile sourceFile) {
+        super.setSourceFile(sourceFile);
+
+        for(Argument argument: this.argumentList){
+            argument.setSourceFile(sourceFile);
+        }
     }
 
     @Override

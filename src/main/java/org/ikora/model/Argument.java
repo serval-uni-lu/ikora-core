@@ -26,6 +26,7 @@ public class Argument extends Node {
 
     public void setCall(KeywordCall call){
         this.call = call;
+        this.call.setSourceFile(getSourceFile());
     }
 
     @Override
@@ -77,5 +78,10 @@ public class Argument extends Node {
     @Override
     public String getName() {
         return this.value.getName();
+    }
+
+    @Override
+    public String toString() {
+        return value.toString();
     }
 }

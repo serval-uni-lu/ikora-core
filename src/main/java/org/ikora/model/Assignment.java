@@ -26,13 +26,17 @@ public class Assignment extends Step {
         return returnVariables;
     }
 
-    public void addReturnValue(@Nonnull Variable variable){
+    public void addReturnValue(@Nonnull Variable variable) throws InvalidDependencyException {
+        variable.addDependency(this);
+        variable.setSourceFile(getSourceFile());
+
         returnVariables.add(variable);
     }
 
     public void setExpression(@Nonnull KeywordCall call) throws InvalidDependencyException {
         expression = call;
         expression.addDependency(this);
+        expression.setSourceFile(getSourceFile());
     }
 
     @Override

@@ -30,7 +30,7 @@ class TestCaseParser {
                 break;
             }
 
-            tokens = tokens.withoutIndent();
+            tokens = currentTokens.withoutIndent();
 
             String label = ParserUtils.getLabel(reader, tokens, errors);
 

@@ -118,26 +118,28 @@ public class Linker {
 
     private List<ScopeValue> linkCallArguments(KeywordCall call) {
         List<ScopeValue> unresolvedArguments = new ArrayList<>();
+        List<Argument> oldArgumentList = new ArrayList<>(call.getArgumentList());
 
-        Iterator<Argument> iterator = call.getArgumentList().iterator();
+        Iterator<Argument> iterator = oldArgumentList.iterator();
 
-        List<Argument> newArgumentList = new ArrayList<>(call.getArgumentList().size());
-
+        call.clearArguments();
         while(iterator.hasNext()){
             Argument argument = iterator.next();
             Set<? super Keyword> keywords = getKeywords(argument.getName(), argument.getSourceFile());
 
             if(keywords.isEmpty()){
-                newArgumentList.add(argument);
+                call.addArgument(argument);
             }
             else if(keywords.size() == 1){
                 try {
                     Keyword keyword = (Keyword)keywords.iterator().next();
                     KeywordCall keywordCall = createKeywordCall(keyword, argument, iterator);
                     Argument keywordArgument = new Argument(call, keywordCall.toString());
+
+                    keywordArgument.setPosition(keywordCall.getPosition());
                     keywordArgument.setCall(keywordCall);
 
-                    newArgumentList.add(keywordArgument);
+                    call.addArgument(keywordArgument);
                 } catch (InvalidDependencyException e) {
                     runtime.getErrors().registerSymbolError(
                             call.getFile(),
@@ -145,23 +147,22 @@ public class Linker {
                             argument.getPosition()
                     );
 
+                    call.clearArguments();
+                    oldArgumentList.forEach(call::addArgument);
+
                     break;
                 }
             }
             else{
-                newArgumentList.add(argument);
-
                 runtime.getErrors().registerSymbolError(
                         call.getFile(),
                         "Found more than one keyword to match argument",
                         argument.getPosition()
                 );
 
-                iterator.forEachRemaining(newArgumentList::add);
+                iterator.forEachRemaining(call::addArgument);
             }
         }
-
-        call.setArgumentList(newArgumentList);
 
         updateScope(call);
 
@@ -171,6 +172,10 @@ public class Linker {
     private KeywordCall createKeywordCall(Keyword keyword, Argument first, Iterator<Argument> iterator) throws InvalidDependencyException {
         KeywordCall call = new KeywordCall();
 
+        call.setSourceFile(first.getSourceFile());
+        call.setName(first.getName());
+        call.addDependency(keyword);
+
         Argument last = first;
 
         int i = keyword.getMaxNumberArguments();
@@ -179,17 +184,13 @@ public class Linker {
             last = iterator.next();
 
             Argument current = new Argument(call, last.getName());
-            current.setSourceFile(last.getSourceFile());
             current.setPosition(last.getPosition());
 
             call.addArgument(current);
             --i;
         }
 
-        call.setName(first.getName());
-        call.setSourceFile(keyword.getSourceFile());
         call.setPosition(first.getPosition().merge(last.getPosition()));
-        call.addDependency(keyword);
 
         resolveCall(call, call.getName());
 
