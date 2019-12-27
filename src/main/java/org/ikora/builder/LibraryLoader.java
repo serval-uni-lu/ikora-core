@@ -1,6 +1,5 @@
 package org.ikora.builder;
 
-import org.ikora.error.ErrorFile;
 import org.ikora.error.ErrorManager;
 import org.ikora.model.LibraryKeyword;
 import org.ikora.model.LibraryResources;

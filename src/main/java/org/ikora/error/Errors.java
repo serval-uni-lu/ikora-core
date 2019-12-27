@@ -6,14 +6,14 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
-public class ErrorFile {
+public class Errors {
     private final Set<SyntaxError> syntaxErrors;
     private final Set<SymbolError> symbolErrors;
     private final Set<InternalError> internalErrors;
     private final Set<IOError> ioErrors;
     private final Set<UnhandledError> unhandledErrors;
 
-    ErrorFile(){
+    Errors(){
         syntaxErrors = new HashSet<>();
         symbolErrors = new HashSet<>();
         ioErrors = new HashSet<>();
@@ -52,6 +52,26 @@ public class ErrorFile {
                 + ioErrors.size()
                 + internalErrors.size()
                 + unhandledErrors.size();
+    }
+
+    public Set<SyntaxError> getSyntaxErrors() {
+        return syntaxErrors;
+    }
+
+    public Set<SymbolError> getSymbolErrors() {
+        return symbolErrors;
+    }
+
+    public Set<InternalError> getInternalErrors() {
+        return internalErrors;
+    }
+
+    public Set<IOError> getIoErrors() {
+        return ioErrors;
+    }
+
+    public Set<UnhandledError> getUnhandledErrors() {
+        return unhandledErrors;
     }
 
     public Set<Error> getAll(){

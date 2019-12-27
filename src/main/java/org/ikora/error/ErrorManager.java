@@ -9,42 +9,46 @@ import java.util.Map;
 import java.util.Set;
 
 public class ErrorManager {
-    private final Map<File, ErrorFile> errors;
+    private final Map<File, Errors> fileErrors;
     private final Set<LibraryError> libraryErrors;
 
     public ErrorManager() {
-        this.errors = new HashMap<>();
+        this.fileErrors = new HashMap<>();
         this.libraryErrors = new HashSet<>();
     }
 
+    public Errors in(File file){
+        return fileErrors.getOrDefault(file, new Errors());
+    }
+
     public void registerSyntaxError(File file, String message, Position position){
-        ErrorFile errorFile = errors.getOrDefault(file, new ErrorFile());
-        errorFile.registerSyntaxError(message, position);
-        errors.putIfAbsent(file, errorFile);
+        Errors errors = fileErrors.getOrDefault(file, new Errors());
+        errors.registerSyntaxError(message, position);
+        fileErrors.putIfAbsent(file, errors);
     }
 
     public void registerSymbolError(File file, String message, Position position){
-        ErrorFile errorFile = errors.getOrDefault(file, new ErrorFile());
-        SymbolError error = new SymbolError(message, position);
-        errors.putIfAbsent(file, errorFile);
+        Errors errors = fileErrors.getOrDefault(file, new Errors());
+        errors.registerSymbolError(message, position);
+        fileErrors.putIfAbsent(file, errors);
     }
 
     public void registerIOError(File file, String message){
-        ErrorFile errorFile = errors.getOrDefault(file, new ErrorFile());
-        errorFile.registerIOError(message, file);
-        errors.putIfAbsent(file, errorFile);
+        Errors errors = fileErrors.getOrDefault(file, new Errors());
+        errors.registerIOError(message, file);
+        fileErrors.putIfAbsent(file, errors);
     }
 
     public void registerInternalError(File file, String message, Position position){
-        ErrorFile errorFile = errors.getOrDefault(file, new ErrorFile());
-        errorFile.registerInternalError(message, position);
-        errors.putIfAbsent(file, errorFile);
+        Errors errors = fileErrors.getOrDefault(file, new Errors());
+        errors.registerInternalError(message, position);
+        fileErrors.putIfAbsent(file, errors);
     }
 
     public void registerUnhandledError(File file, String message, Exception exception){
-        ErrorFile errorFile = errors.getOrDefault(file, new ErrorFile());
-        errorFile.registerUnhandledError(message, exception);
-        errors.putIfAbsent(file, errorFile);
+        Errors errors = fileErrors.getOrDefault(file, new Errors());
+        errors.registerUnhandledError(message, exception);
+        fileErrors.putIfAbsent(file, errors);
     }
 
     public void registerLibraryError(String library, String message){
@@ -52,6 +56,6 @@ public class ErrorManager {
     }
 
     public boolean isEmpty() {
-        return errors.isEmpty() && libraryErrors.isEmpty();
+        return fileErrors.isEmpty() && libraryErrors.isEmpty();
     }
 }
