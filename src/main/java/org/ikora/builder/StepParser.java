@@ -39,7 +39,6 @@ class StepParser {
     private static Step parseForLoop(LineReader reader) throws IOException {
         ForLoop forLoop = new ForLoop();
         Tokens loop = LexerUtils.tokenize(reader.getCurrent());
-        forLoop.setName("TO DO");
 
         while (reader.readLine().isValid()){
             Tokens tokens = LexerUtils.tokenize(reader.getCurrent());
@@ -53,9 +52,7 @@ class StepParser {
     }
 
     private static Step parseAssignment(LineReader reader, ErrorManager errors) throws IOException {
-        Assignment assignment = new Assignment();
-        assignment.setName(reader.getCurrent().getText());
-
+        Assignment assignment = new Assignment(reader.getCurrent().getText());
         Tokens tokens = LexerUtils.tokenize(reader.getCurrent()).withoutIndent();
 
         int offset = 0;
@@ -106,8 +103,6 @@ class StepParser {
     }
 
     private static KeywordCall getKeywordCall(LineReader reader, Tokens tokens, ErrorManager errors) {
-        KeywordCall call = new KeywordCall();
-
         Optional<Token> first =  tokens.first();
 
         if(!first.isPresent()){
@@ -118,7 +113,7 @@ class StepParser {
             );
         }
         else{
-            call.setName(first.get().getValue());
+            KeywordCall call = new KeywordCall(first.get().getValue());
 
             for(Token token: tokens.withoutFirst()) {
                 try {
@@ -134,10 +129,12 @@ class StepParser {
                     );
                 }
             }
+
+            call.setPosition(ParserUtils.getPosition(tokens.withoutIndent()));
+            return call;
         }
 
-        call.setPosition(ParserUtils.getPosition(tokens.withoutIndent()));
-        return call;
+        return null;
     }
 
     private static boolean isAssignment(LineReader reader, Tokens tokens, ErrorManager errors){

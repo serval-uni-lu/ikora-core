@@ -17,7 +17,8 @@ public class KeywordCall extends Step {
     private List<Argument> argumentList;
     private List<Value> returnValues;
 
-    public KeywordCall() {
+    public KeywordCall(String name) {
+        super(name);
         this.argumentList = new ArrayList<>();
         this.link = new Link<>(this);
     }

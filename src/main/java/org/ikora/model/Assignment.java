@@ -18,7 +18,8 @@ public class Assignment extends Step {
     private List<Variable> returnVariables;
     private KeywordCall expression;
 
-    public Assignment(){
+    public Assignment(String name){
+        super(name);
         returnVariables = new ArrayList<>();
     }
 

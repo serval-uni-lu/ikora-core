@@ -9,7 +9,7 @@ import java.util.*;
 public abstract class Step extends Node {
     private Value name;
 
-    public void setName(@Nonnull String name) {
+    public Step(@Nonnull String name) {
         this.name = new Value(name);
     }
 

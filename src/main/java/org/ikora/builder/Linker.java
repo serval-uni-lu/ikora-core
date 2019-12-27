@@ -170,10 +170,9 @@ public class Linker {
     }
 
     private KeywordCall createKeywordCall(Keyword keyword, Argument first, Iterator<Argument> iterator) throws InvalidDependencyException {
-        KeywordCall call = new KeywordCall();
+        KeywordCall call = new KeywordCall(first.getName());
 
         call.setSourceFile(first.getSourceFile());
-        call.setName(first.getName());
         call.addDependency(keyword);
 
         Argument last = first;

@@ -17,6 +17,7 @@ public class ForLoop extends Step {
     private List<Argument> argumentList;
 
     public ForLoop() {
+        super(":FOR");
         steps = new ArrayList<>();
         argumentList = new ArrayList<>();
     }
