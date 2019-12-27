@@ -114,10 +114,14 @@ public class KeywordCall extends Step {
 
         KeywordCall call = (KeywordCall)other;
 
-        double nameIndex = LevenshteinDistance.stringIndex(getName(), call.getName());
-        double parameterIndex = LevenshteinDistance.index(getArgumentList(), call.getArgumentList());
+        Optional<Keyword> thisCallee = this.getKeyword();
+        Optional<Keyword> otherCallee = call.getKeyword();
 
-        return (0.5 * nameIndex) + (0.5 * parameterIndex);
+        if(thisCallee.isPresent() && otherCallee.isPresent()){
+            return thisCallee.get() == otherCallee.get() ? 0 : 1;
+        }
+
+        return this.getName().equalsIgnoreCase(call.getName()) ? 0 : 1;
     }
 
     @Override

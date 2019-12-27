@@ -27,7 +27,7 @@ public class LevenshteinDistance {
     }
 
     public static double stringIndex(String string1, String string2) {
-        int size = string1.length() > string2.length() ? string1.length() : string2.length();
+        int size = Math.max(string1.length(), string2.length());
 
         if(size == 0){
             return 0;
@@ -69,7 +69,7 @@ public class LevenshteinDistance {
     }
 
     public static double index(List<? extends Differentiable> before, List<? extends Differentiable> after){
-        double size = (double)(before.size() > after.size() ? before.size() : after.size());
+        double size = Math.max(before.size(), after.size());
         double distance = distanceMatrix(before, after)[before.size()][ after.size()];
 
         return size > 0 ? distance / size : 0;
@@ -86,7 +86,7 @@ public class LevenshteinDistance {
         double value = distances[xPosition][yPosition];
         double initialValue = value;
 
-        while(value != 0){
+        while(xPosition > 0 || yPosition > 0){
             double substitution = xPosition > 0 && yPosition > 0 ? distances[xPosition - 1][yPosition - 1] : initialValue;
             double addition = yPosition > 0 ? distances[xPosition][yPosition - 1] : initialValue;
             double subtraction = xPosition > 0 ? distances[xPosition - 1][yPosition] : initialValue;
@@ -96,12 +96,12 @@ public class LevenshteinDistance {
                 Differentiable beforeStep = before.get(xPosition - 1);
                 Differentiable afterStep = after.get(yPosition - 1);
 
-                List<Action> differences = beforeStep.differences(afterStep);
-
-                if(differences.isEmpty()){
+                if(beforeStep.distance(afterStep) == 0){
                     value = substitution;
                     xPosition -= 1;
                     yPosition -= 1;
+
+                    actions.addAll(beforeStep.differences(afterStep));
 
                     continue;
                 }

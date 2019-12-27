@@ -134,10 +134,7 @@ public class Assignment extends Step {
 
         Assignment assignment = (Assignment)other;
 
-        double expressionIndex = expression.distance(assignment.expression);
-        double returnValuesIndex = LevenshteinDistance.index(returnVariables, assignment.returnVariables);
-
-        return (0.5 * expressionIndex) + (0.5 * returnValuesIndex);
+        return expression.distance(assignment.expression);
     }
 
     @Override
