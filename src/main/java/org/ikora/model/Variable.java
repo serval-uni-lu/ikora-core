@@ -3,7 +3,6 @@ package org.ikora.model;
 import org.ikora.builder.VariableParser;
 import org.ikora.runner.Runtime;
 
-import javax.annotation.Nonnull;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -58,7 +57,7 @@ public abstract class Variable extends Node {
     }
 
     @Override
-    public boolean matches(@Nonnull String name) {
+    public boolean matches(String name) {
         String generic = Value.getGenericVariableName(name);
 
         Matcher matcher = pattern.matcher(generic);

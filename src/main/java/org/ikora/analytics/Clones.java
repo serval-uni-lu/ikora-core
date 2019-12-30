@@ -2,7 +2,6 @@ package org.ikora.analytics;
 
 import org.ikora.model.Node;
 
-import javax.annotation.Nonnull;
 import java.util.*;
 
 
@@ -87,7 +86,6 @@ public class Clones<T extends Node> implements Iterable<Clone<T>> {
     }
 
     @Override
-    @Nonnull
     public Iterator<Clone<T>> iterator() {
         return new CloneIterator();
     }

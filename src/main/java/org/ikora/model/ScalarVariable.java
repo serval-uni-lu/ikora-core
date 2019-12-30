@@ -51,7 +51,7 @@ public class ScalarVariable extends Variable {
     }
 
     @Override
-    public double distance(@Nonnull Differentiable other) {
+    public double distance(Differentiable other) {
         if(!(other instanceof ScalarVariable)){
             return 1;
         }
@@ -62,10 +62,11 @@ public class ScalarVariable extends Variable {
     }
 
     @Override
-    public List<Action> differences(@Nonnull Differentiable other) {
+    public List<Action> differences(Differentiable other) {
         List<Action> actions = new ArrayList<>();
 
         if(!(other instanceof ScalarVariable)){
+            actions.add(Action.invalid(this, other));
             return actions;
         }
 

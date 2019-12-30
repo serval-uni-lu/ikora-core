@@ -5,7 +5,6 @@ import org.ikora.analytics.visitor.NodeVisitor;
 import org.ikora.analytics.visitor.VisitorMemory;
 import org.ikora.runner.Runtime;
 
-import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.List;
 
@@ -47,17 +46,17 @@ public class TimeOut extends Node {
     }
 
     @Override
-    public boolean matches(@Nonnull String name) {
+    public boolean matches(String name) {
         return this.name.equalsIgnoreCase(name);
     }
 
     @Override
-    public double distance(@Nonnull Differentiable other) {
+    public double distance(Differentiable other) {
         return 0;
     }
 
     @Override
-    public List<Action> differences(@Nonnull Differentiable other) {
+    public List<Action> differences(Differentiable other) {
         return Collections.emptyList();
     }
 

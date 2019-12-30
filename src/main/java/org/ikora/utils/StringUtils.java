@@ -2,7 +2,6 @@ package org.ikora.utils;
 
 import org.apache.commons.text.WordUtils;
 
-import javax.annotation.Nonnull;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -64,7 +63,7 @@ public class StringUtils {
         return String.format("%s...", line.substring(0, maxSize - 3));
     }
 
-    public static String removeStart(@Nonnull String str, @Nonnull String remove) {
+    public static String removeStart(String str, String remove) {
         if (str.isEmpty() || remove.isEmpty()) {
             return str;
         }

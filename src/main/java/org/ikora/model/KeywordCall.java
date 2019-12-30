@@ -9,7 +9,6 @@ import org.ikora.exception.InvalidImportTypeException;
 import org.ikora.runner.Runtime;
 import org.ikora.utils.LevenshteinDistance;
 
-import javax.annotation.Nonnull;
 import java.util.*;
 
 public class KeywordCall extends Step {
@@ -108,7 +107,7 @@ public class KeywordCall extends Step {
     }
 
     @Override
-    public double distance(@Nonnull Differentiable other) {
+    public double distance(Differentiable other) {
         if(!(other instanceof KeywordCall)){
             return 1;
         }
@@ -126,7 +125,7 @@ public class KeywordCall extends Step {
     }
 
     @Override
-    public List<Action> differences(@Nonnull  Differentiable other) {
+    public List<Action> differences(Differentiable other) {
         List<Action> actions = new ArrayList<>();
 
         if(!(other instanceof Step)){

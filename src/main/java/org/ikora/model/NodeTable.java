@@ -1,6 +1,5 @@
 package org.ikora.model;
 
-import javax.annotation.Nonnull;
 import java.io.File;
 import java.util.*;
 
@@ -80,7 +79,6 @@ public class NodeTable<T extends Node> implements Iterable<T> {
     }
 
     @Override
-    @Nonnull
     public Iterator<T> iterator() {
         return this.nodeList.iterator();
     }

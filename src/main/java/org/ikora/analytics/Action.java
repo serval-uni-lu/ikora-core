@@ -2,7 +2,6 @@ package org.ikora.analytics;
 
 import org.ikora.model.*;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,7 +71,11 @@ public class Action implements Differentiable {
     }
 
     @Override
-    public double distance(@Nonnull Differentiable other) {
+    public double distance(Differentiable other) {
+        if(other == null){
+            return 1.0;
+        }
+
         if(other.getClass() != this.getClass()){
             return 1.0;
         }
@@ -85,10 +88,10 @@ public class Action implements Differentiable {
     }
 
     @Override
-    public List<Action> differences(@Nonnull Differentiable other) {
+    public List<Action> differences(Differentiable other) {
         List<Action> differences = new ArrayList<>();
 
-        if(other.getClass() != this.getClass()){
+        if(other == null || other.getClass() != this.getClass()){
             return differences;
         }
 

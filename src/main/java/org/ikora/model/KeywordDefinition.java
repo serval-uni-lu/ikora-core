@@ -5,8 +5,6 @@ import org.ikora.analytics.Action;
 import org.ikora.runner.Runtime;
 import org.ikora.utils.LevenshteinDistance;
 
-
-import javax.annotation.Nonnull;
 import java.util.*;
 
 public abstract class KeywordDefinition extends Keyword implements Iterable<Step> {
@@ -43,7 +41,7 @@ public abstract class KeywordDefinition extends Keyword implements Iterable<Step
     }
 
     @Override
-    public void setSourceFile(@Nonnull SourceFile sourceFile) {
+    public void setSourceFile(SourceFile sourceFile) {
         super.setSourceFile(sourceFile);
 
         for(Step step: this.steps){
@@ -87,11 +85,14 @@ public abstract class KeywordDefinition extends Keyword implements Iterable<Step
     }
 
 
-    public boolean matches(@Nonnull String name) {
+    public boolean matches(String name) {
+        if(name == null){
+            return false;
+        }
+
         return this.name.matches(name);
     }
 
-    @Nonnull
     public Iterator<Step> iterator() {
         return steps.iterator();
     }
@@ -108,7 +109,11 @@ public abstract class KeywordDefinition extends Keyword implements Iterable<Step
     }
 
     @Override
-    public double distance(@Nonnull Differentiable other) {
+    public double distance(Differentiable other) {
+        if(other == null){
+            return 1.0;
+        }
+
         if(other == this){
             return 0.0;
         }
@@ -117,14 +122,14 @@ public abstract class KeywordDefinition extends Keyword implements Iterable<Step
     }
 
     @Override
-    public List<Action> differences(@Nonnull Differentiable other) {
+    public List<Action> differences(Differentiable other) {
         List<Action> actions = new ArrayList<>();
 
         if(other == this){
             return actions;
         }
 
-        if(!KeywordDefinition.class.isAssignableFrom(other.getClass())){
+        if(other == null || !KeywordDefinition.class.isAssignableFrom(other.getClass())){
             actions.add(Action.invalid(this, other));
             return actions;
         }

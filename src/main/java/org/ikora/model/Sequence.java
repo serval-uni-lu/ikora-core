@@ -23,7 +23,7 @@ public class Sequence implements Differentiable {
     }
 
     @Override
-    public double distance(@Nonnull Differentiable other) {
+    public double distance(Differentiable other) {
         List<Action> actions = differences(other);
 
         for(Action action: actions){
@@ -36,14 +36,14 @@ public class Sequence implements Differentiable {
     }
 
     @Override
-    public List<Action> differences(@Nonnull Differentiable other) {
+    public List<Action> differences(Differentiable other) {
         List<Action> actions = new ArrayList<>();
 
         if(other == this){
             return actions;
         }
 
-        if(other.getClass() != this.getClass()){
+        if(!(other instanceof Sequence)){
             actions.add(Action.invalid(this, other));
             return actions;
         }

@@ -1,6 +1,5 @@
 package org.ikora.model;
 
-import javax.annotation.Nonnull;
 import java.io.File;
 import java.net.URI;
 import java.nio.file.Path;
@@ -244,7 +243,7 @@ public class Project implements Comparable<Project> {
     }
 
     @Override
-    public int compareTo(@Nonnull Project other) {
+    public int compareTo(Project other) {
         return date.compareTo(other.date);
     }
 }

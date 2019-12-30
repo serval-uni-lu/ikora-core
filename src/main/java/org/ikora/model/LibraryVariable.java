@@ -4,7 +4,6 @@ import org.ikora.analytics.Action;
 import org.ikora.analytics.visitor.NodeVisitor;
 import org.ikora.analytics.visitor.VisitorMemory;
 
-import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -57,12 +56,12 @@ public abstract class LibraryVariable extends Variable {
     }
 
     @Override
-    public double distance(@Nonnull Differentiable other) {
+    public double distance(Differentiable other) {
         return this.differences(other).isEmpty() ? 0 : 1;
     }
 
     @Override
-    public List<Action> differences(@Nonnull Differentiable other) {
+    public List<Action> differences(Differentiable other) {
         if(this != other){
             return Collections.singletonList(Action.changeVariableDefinition(this, other));
         }

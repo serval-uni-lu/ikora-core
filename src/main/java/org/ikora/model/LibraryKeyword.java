@@ -5,7 +5,6 @@ import org.ikora.analytics.visitor.NodeVisitor;
 import org.ikora.analytics.visitor.VisitorMemory;
 import org.ikora.runner.Runtime;
 
-import javax.annotation.Nonnull;
 import java.util.*;
 
 public abstract class LibraryKeyword extends Keyword {
@@ -40,13 +39,17 @@ public abstract class LibraryKeyword extends Keyword {
     }
 
     @Override
-    public double distance(@Nonnull Differentiable other){
+    public double distance(Differentiable other){
+        if(other == null){
+            return 1;
+        }
+
         return other.getClass() == this.getClass() ? 0 : 1;
     }
 
     @Override
-    public List<Action> differences(@Nonnull Differentiable other){
-        if(other.getClass() == this.getClass()){
+    public List<Action> differences(Differentiable other){
+        if(other != null && other.getClass() == this.getClass()){
             return Collections.emptyList();
         }
 
@@ -67,7 +70,7 @@ public abstract class LibraryKeyword extends Keyword {
     }
 
     @Override
-    public boolean matches(@Nonnull String name) {
+    public boolean matches(String name) {
         return this.getName().matches(name);
     }
 

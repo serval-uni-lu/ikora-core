@@ -2,7 +2,6 @@ package org.ikora.libraries.builtin.variables;
 
 import org.ikora.model.LibraryVariable;
 
-import javax.annotation.Nonnull;
 import java.util.regex.Pattern;
 
 public class Space extends LibraryVariable {
@@ -13,7 +12,7 @@ public class Space extends LibraryVariable {
     }
 
     @Override
-    public boolean matches(@Nonnull String name) {
+    public boolean matches(String name) {
         return match.matcher(name).matches();
     }
 }

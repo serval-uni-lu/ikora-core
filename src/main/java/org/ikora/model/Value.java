@@ -3,7 +3,6 @@ package org.ikora.model;
 import org.ikora.analytics.Action;
 import org.ikora.exception.InvalidDependencyException;
 
-import javax.annotation.Nonnull;
 import java.security.InvalidParameterException;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -196,13 +195,17 @@ public class Value implements Differentiable {
     }
 
     @Override
-    public double distance(@Nonnull Differentiable other) {
+    public double distance(Differentiable other) {
+        if(other == null){
+            return 1.0;
+        }
+
         if(other == this){
             return 0.0;
         }
 
         if(!(other instanceof Value)){
-            return 1;
+            return 1.0;
         }
 
         Value value = (Value)other;
@@ -210,8 +213,8 @@ public class Value implements Differentiable {
     }
 
     @Override
-    public List<Action> differences(@Nonnull Differentiable other) {
-        return null;
+    public List<Action> differences(Differentiable other) {
+        return Collections.emptyList();
     }
 
     public static Value empty(){

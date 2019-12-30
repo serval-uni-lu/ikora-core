@@ -68,7 +68,7 @@ public class ForLoop extends Step {
     }
 
     @Override
-    public double distance(@Nonnull Differentiable other) {
+    public double distance(Differentiable other) {
         if(!(other instanceof ForLoop)){
             return 1;
         }
@@ -79,7 +79,7 @@ public class ForLoop extends Step {
     }
 
     @Override
-    public List<Action> differences(@Nonnull Differentiable other) {
+    public List<Action> differences(Differentiable other) {
         List<Action> actions = new ArrayList<>();
 
         if(!(other instanceof Step)){

@@ -73,7 +73,10 @@ class StepParser {
                     }
                     else if(!leftSide){
                         KeywordCall call = getKeywordCall(reader, tokens.withoutFirst(offset), errors);
-                        assignment.setExpression(call);
+
+                        if(call != null){
+                            assignment.setExpression(call);
+                        }
 
                         break;
                     }

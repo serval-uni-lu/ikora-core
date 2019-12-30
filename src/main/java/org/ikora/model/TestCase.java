@@ -3,7 +3,6 @@ package org.ikora.model;
 import org.ikora.analytics.visitor.NodeVisitor;
 import org.ikora.analytics.visitor.VisitorMemory;
 
-import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.List;
 
@@ -38,7 +37,7 @@ public class TestCase extends KeywordDefinition {
     }
 
     @Override
-    public void setSourceFile(@Nonnull SourceFile sourceFile) {
+    public void setSourceFile(SourceFile sourceFile) {
         super.setSourceFile(sourceFile);
 
         if(this.setup != null){

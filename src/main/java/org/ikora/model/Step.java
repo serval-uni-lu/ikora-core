@@ -2,14 +2,13 @@ package org.ikora.model;
 
 import org.ikora.exception.InvalidDependencyException;
 
-import javax.annotation.Nonnull;
 import java.util.*;
 
 
 public abstract class Step extends Node {
     private Value name;
 
-    public Step(@Nonnull String name) {
+    public Step(String name) {
         this.name = new Value(name);
     }
 
@@ -47,7 +46,7 @@ public abstract class Step extends Node {
     }
 
     @Override
-    public boolean matches(@Nonnull String name){
+    public boolean matches(String name){
         return getName().matches(name);
     }
 

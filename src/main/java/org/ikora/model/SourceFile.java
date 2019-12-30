@@ -3,7 +3,6 @@ package org.ikora.model;
 import org.apache.commons.io.FilenameUtils;
 import org.ikora.builder.Line;
 
-import javax.annotation.Nonnull;
 import java.io.File;
 import java.util.*;
 
@@ -142,7 +141,6 @@ public class SourceFile implements Iterable<UserKeyword> {
         return testCaseTable.findNode(name);
     }
 
-    @Nonnull
     public Iterator<UserKeyword> iterator() {
         return userKeywordTable.iterator();
     }

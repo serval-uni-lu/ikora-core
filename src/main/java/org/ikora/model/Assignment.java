@@ -9,7 +9,6 @@ import org.ikora.exception.InvalidDependencyException;
 import org.ikora.runner.Runtime;
 import org.ikora.utils.LevenshteinDistance;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -27,21 +26,21 @@ public class Assignment extends Step {
         return returnVariables;
     }
 
-    public void addReturnValue(@Nonnull Variable variable) throws InvalidDependencyException {
+    public void addReturnValue(Variable variable) throws InvalidDependencyException {
         variable.addDependency(this);
         variable.setSourceFile(getSourceFile());
 
         returnVariables.add(variable);
     }
 
-    public void setExpression(@Nonnull KeywordCall call) throws InvalidDependencyException {
+    public void setExpression(KeywordCall call) throws InvalidDependencyException {
         expression = call;
         expression.addDependency(this);
         expression.setSourceFile(getSourceFile());
     }
 
     @Override
-    public void setSourceFile(@Nonnull SourceFile sourceFile){
+    public void setSourceFile(SourceFile sourceFile){
         super.setSourceFile(sourceFile);
 
         for(Variable variable: returnVariables){
@@ -124,7 +123,7 @@ public class Assignment extends Step {
     }
 
     @Override
-    public double distance(@Nonnull Differentiable other) {
+    public double distance(Differentiable other) {
         if(other == this){
             return 0.0;
         }
@@ -139,8 +138,13 @@ public class Assignment extends Step {
     }
 
     @Override
-    public List<Action> differences(@Nonnull Differentiable other) {
+    public List<Action> differences(Differentiable other) {
         List<Action> actions = new ArrayList<>();
+
+        if(other == null){
+            actions.add(Action.invalid(this, other));
+            return actions;
+        }
 
         if(!(other instanceof Step)){
             return actions;

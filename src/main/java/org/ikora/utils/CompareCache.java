@@ -1,6 +1,5 @@
 package org.ikora.utils;
 
-import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -59,7 +58,6 @@ public class CompareCache<K, T> implements Iterable<Map.Entry<UnorderedPair<K>, 
         }
     }
 
-    @Nonnull
     public Iterator<Map.Entry<UnorderedPair<K>, T>> iterator() {
         return map.entrySet().iterator();
     }

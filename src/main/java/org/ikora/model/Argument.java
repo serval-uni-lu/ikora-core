@@ -6,7 +6,6 @@ import org.ikora.analytics.visitor.VisitorMemory;
 import org.ikora.exception.InvalidDependencyException;
 import org.ikora.runner.Runtime;
 
-import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -50,12 +49,12 @@ public class Argument extends Node {
     }
 
     @Override
-    public double distance(@Nonnull Differentiable other) {
+    public double distance(Differentiable other) {
         if(other == this){
             return 0.0;
         }
 
-        if(!Argument.class.isAssignableFrom(other.getClass())){
+        if(other == null || !Argument.class.isAssignableFrom(other.getClass())){
             return 1.0;
         }
 
@@ -63,7 +62,7 @@ public class Argument extends Node {
     }
 
     @Override
-    public List<Action> differences(@Nonnull Differentiable other) {
+    public List<Action> differences(Differentiable other) {
         if(other == this){
             return Collections.emptyList();
         }

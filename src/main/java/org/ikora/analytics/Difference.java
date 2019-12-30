@@ -4,7 +4,6 @@ import org.ikora.model.Differentiable;
 import org.ikora.utils.LevenshteinDistance;
 import org.ikora.model.KeywordDefinition;
 
-import javax.annotation.Nonnull;
 import java.util.*;
 
 public class Difference implements Differentiable {
@@ -130,7 +129,11 @@ public class Difference implements Differentiable {
     }
 
     @Override
-    public double distance(@Nonnull Differentiable other) {
+    public double distance(Differentiable other) {
+        if(other == null){
+            return 1.0;
+        }
+
         if(other == this){
             return 0.0;
         }
@@ -147,7 +150,7 @@ public class Difference implements Differentiable {
     }
 
     @Override
-    public List<Action> differences(@Nonnull Differentiable other) {
+    public List<Action> differences(Differentiable other) {
         return Collections.emptyList();
     }
 
