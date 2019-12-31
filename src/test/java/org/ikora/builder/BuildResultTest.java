@@ -1,11 +1,14 @@
 package org.ikora.builder;
 
 import org.ikora.Configuration;
+import org.ikora.error.Errors;
+import org.ikora.error.SymbolError;
 import org.ikora.utils.FileUtils;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.net.URI;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -26,6 +29,26 @@ class BuildResultTest {
         assertTrue(build.getParsingTime() > 0);
 
         assertTrue(build.getErrors().isEmpty());
+    }
+
+    @Test
+    void testBuildProjectWithErrors(){
+        BuildResult build = build("robot/connected-projects/project-c");
+        assertNotNull(build);
+
+        assertEquals(1, build.getProjects().size());
+
+        assertNotNull(build.getSourceFile(getFileUri("robot/connected-projects/project-c/indirectDependency.robot")));
+        assertNotNull(build.getSourceFile(getFileUri("robot/connected-projects/project-c/resources.robot")));
+        assertNotNull(build.getSourceFile(getFileUri("robot/connected-projects/project-c/variables.robot")));
+
+        assertFalse(build.getErrors().isEmpty());
+
+        File file = build.getSourceFile(getFileUri("robot/connected-projects/project-c/resources.robot")).getFile();
+        Errors errors = build.getErrors().in(file);
+
+        Set<SymbolError> symbolErrors = errors.getSymbolErrors();
+        assertEquals(1, symbolErrors.size());
     }
 
     private static BuildResult build(String root) {

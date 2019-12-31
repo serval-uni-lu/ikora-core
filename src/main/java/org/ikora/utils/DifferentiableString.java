@@ -3,7 +3,6 @@ package org.ikora.utils;
 import org.ikora.analytics.Action;
 import org.ikora.model.Differentiable;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 

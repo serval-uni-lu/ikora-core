@@ -3,7 +3,6 @@ package org.ikora.model;
 import org.ikora.analytics.Action;
 import org.ikora.utils.LevenshteinDistance;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 

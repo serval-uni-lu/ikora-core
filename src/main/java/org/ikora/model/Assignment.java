@@ -47,7 +47,9 @@ public class Assignment extends Step {
             variable.setSourceFile(this.getSourceFile());
         }
 
-        expression.setSourceFile(this.getSourceFile());
+        if(expression != null){
+            expression.setSourceFile(this.getSourceFile());
+        }
     }
 
     @Override

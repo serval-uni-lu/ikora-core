@@ -5,7 +5,6 @@ import org.ikora.analytics.visitor.NodeVisitor;
 import org.ikora.analytics.visitor.VisitorMemory;
 import org.ikora.utils.LevenshteinDistance;
 
-import javax.annotation.Nonnull;
 import java.util.*;
 import java.util.regex.Pattern;
 
