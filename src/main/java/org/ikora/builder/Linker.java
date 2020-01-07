@@ -1,5 +1,6 @@
 package org.ikora.builder;
 
+import org.ikora.error.ErrorMessages;
 import org.ikora.exception.InvalidDependencyException;
 import org.ikora.exception.InvalidImportTypeException;
 import org.ikora.model.*;
@@ -62,7 +63,7 @@ public class Linker {
             if(!(step instanceof KeywordCall)) {
                 runtime.getErrors().registerSyntaxError(
                         step.getFile(),
-                        "Expecting a step of type keyword call",
+                        ErrorMessages.EXPECTING_KEYWORD_CALL,
                         step.getPosition()
                 );
             }
@@ -119,7 +120,11 @@ public class Linker {
 
         if(keywords.isEmpty()){
             try{
-                unresolvedArguments.add(new ScopeValue((KeywordDefinition) call.getParent(), new Value(name)));
+                unresolvedArguments.add(new ScopeValue(
+                        (KeywordDefinition) call.getParent(),
+                        new Value(name),
+                        call.getPosition())
+                );
             } catch (InvalidDependencyException e) {
                 runtime.getErrors().registerSymbolError(
                         call.getFile(),
@@ -270,26 +275,26 @@ public class Linker {
 
     private void processUnresolvedArguments(List<ScopeValue> unresolvedArguments) {
         for(ScopeValue valueScope: unresolvedArguments){
-            Set<Variable> variables = runtime.findInScope(valueScope.getTestCases(), valueScope.getSuites(), valueScope.value.toString());
+            Set<Variable> variables = runtime.findInScope(valueScope.getTestCases(), valueScope.getSuites(), valueScope.getName());
 
             if(!variables.isEmpty()){
                 for(Variable variable: variables){
                     try {
-                        valueScope.value.setVariable(valueScope.value.toString(), variable);
+                        valueScope.getValue().setVariable(valueScope.getName(), variable);
                     } catch (InvalidDependencyException e) {
                         runtime.getErrors().registerInternalError(
-                                valueScope.keyword.getFile(),
+                                valueScope.getFile(),
                                 e.getMessage(),
-                                valueScope.keyword.getPosition()
+                                valueScope.getPosition()
                         );
                     }
                 }
             }
             else {
                 runtime.getErrors().registerSymbolError(
-                        valueScope.keyword.getFile(),
-                        String.format("Found no definition for local variable: %s", valueScope.value.toString()),
-                        valueScope.keyword.getPosition()
+                        valueScope.getFile(),
+                        String.format("Found no definition for '%s'", valueScope.getName()),
+                        valueScope.getPosition()
                 );
             }
         }

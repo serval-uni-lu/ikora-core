@@ -8,4 +8,5 @@ public class ErrorMessages {
     static public String FAILED_TO_CREATE_DEPENDENCY = "Failed to create dependency";
     static public String FAILED_TO_ADD_STEP_TO_TEST_CASE = "Failed to add step to test case";
     static public String FAILED_TO_ADD_STEP_TO_KEYWORD = "Failed to add step to keyword";
+    static public String EXPECTING_KEYWORD_CALL = "Expecting a keyword call without assignment";
 }
