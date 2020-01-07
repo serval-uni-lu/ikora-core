@@ -43,9 +43,8 @@ public class Builder {
         Instant startLinking = Instant.now();
 
         for(Project project: projects) {
-                Runtime runtime;
-                runtime = new Runtime(project, new StaticScope());
-                loadLibraries(runtime, errors);
+                Runtime runtime = new Runtime(project, new StaticScope(), errors);
+                loadLibraries(runtime);
                 link(runtime, link);
         }
 
@@ -69,8 +68,8 @@ public class Builder {
         result.setParsingTime(Duration.between(start, Instant.now()).toMillis());
 
         Instant startLinking = Instant.now();
-        Runtime runtime = new Runtime(project, new StaticScope());
-        loadLibraries(runtime, errors);
+        Runtime runtime = new Runtime(project, new StaticScope(), errors);
+        loadLibraries(runtime);
         link(runtime, link);
         result.setLinkingTime(Duration.between(startLinking, Instant.now()).toMillis());
 
@@ -113,8 +112,8 @@ public class Builder {
         sourceFile.ifPresent(external::setSourceFile);
     }
 
-    private static void loadLibraries(Runtime runtime, ErrorManager errors) {
-        LibraryResources libraries = LibraryLoader.load(errors);
+    private static void loadLibraries(Runtime runtime) {
+        LibraryResources libraries = LibraryLoader.load(runtime.getErrors());
         runtime.setLibraries(libraries);
     }
 

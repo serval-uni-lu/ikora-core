@@ -1,6 +1,7 @@
 package org.ikora.runner;
 
 import org.ikora.builder.LibraryLoader;
+import org.ikora.error.ErrorManager;
 import org.ikora.model.Project;
 import org.ikora.model.Suite;
 import org.ikora.report.Report;
@@ -14,7 +15,7 @@ public class Runner {
     Runner(Project project){
         this.project = project;
 
-        this.runtime = new Runtime(this.project, new DynamicScope());
+        this.runtime = new Runtime(this.project, new DynamicScope(), new ErrorManager());
         runtime.setLibraries(LibraryLoader.load(runtime.getErrors()));
     }
 

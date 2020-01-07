@@ -11,12 +11,10 @@ import java.util.Set;
 
 class ScopeValue {
     Value value;
-    String variableName;
     KeywordDefinition keyword;
 
-    ScopeValue(KeywordDefinition keyword, Value value, String variableName){
+    ScopeValue(KeywordDefinition keyword, Value value){
         this.value = value;
-        this.variableName = variableName;
         this.keyword = keyword;
     }
 

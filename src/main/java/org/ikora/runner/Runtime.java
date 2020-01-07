@@ -19,11 +19,11 @@ public class Runtime {
 
     private LibraryResources libraries;
 
-    public Runtime(Project project, Scope scope){
+    public Runtime(Project project, Scope scope, ErrorManager errors){
         this.project = project;
         this.scope = scope;
         this.reportBuilder = new ReportBuilder();
-        this.errors = new ErrorManager();
+        this.errors = errors;
     }
 
     public void setLibraries(LibraryResources libraries) {

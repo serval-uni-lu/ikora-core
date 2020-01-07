@@ -95,25 +95,44 @@ public class Linker {
     }
 
     private List<ScopeValue> resolveCall(KeywordCall call, String name) {
-        getKeywords(name, call.getSourceFile()).forEach(keyword -> {
+        List<ScopeValue> unresolvedArguments = new ArrayList<>();
+
+        Set<? super Keyword> keywords = getKeywords(name, call.getSourceFile());
+
+        for(Object keyword: keywords) {
             try {
-                call.linkKeyword((Keyword) keyword, Link.Import.STATIC);
-            } catch (InvalidImportTypeException e) {
-                runtime.getErrors().registerInternalError(
-                        call.getFile(),
-                        "Should handle Static import at this point",
-                        call.getPosition()
-                );
+                    call.linkKeyword((Keyword) keyword, Link.Import.STATIC);
+                } catch (InvalidImportTypeException e) {
+                    runtime.getErrors().registerInternalError(
+                            call.getFile(),
+                            "Should handle Static import at this point",
+                            call.getPosition()
+                    );
+                } catch (InvalidDependencyException e) {
+                    runtime.getErrors().registerSymbolError(
+                            ((Keyword) keyword).getFile(),
+                            e.getMessage(),
+                            ((Keyword) keyword).getPosition()
+                    );
+                }
+        }
+
+        if(keywords.isEmpty()){
+            try{
+                unresolvedArguments.add(new ScopeValue((KeywordDefinition) call.getParent(), new Value(name)));
             } catch (InvalidDependencyException e) {
                 runtime.getErrors().registerSymbolError(
-                        ((Keyword) keyword).getFile(),
+                        call.getFile(),
                         e.getMessage(),
-                        ((Keyword) keyword).getPosition()
+                        call.getPosition()
                 );
             }
-        });
+        }
 
-        return linkCallArguments(call);
+
+        unresolvedArguments.addAll(linkCallArguments(call));
+
+        return unresolvedArguments;
     }
 
     private List<ScopeValue> linkCallArguments(KeywordCall call) {
@@ -251,12 +270,12 @@ public class Linker {
 
     private void processUnresolvedArguments(List<ScopeValue> unresolvedArguments) {
         for(ScopeValue valueScope: unresolvedArguments){
-            Set<Variable> variables = runtime.findInScope(valueScope.getTestCases(), valueScope.getSuites(), valueScope.variableName);
+            Set<Variable> variables = runtime.findInScope(valueScope.getTestCases(), valueScope.getSuites(), valueScope.value.toString());
 
             if(!variables.isEmpty()){
                 for(Variable variable: variables){
                     try {
-                        valueScope.value.setVariable(valueScope.variableName, variable);
+                        valueScope.value.setVariable(valueScope.value.toString(), variable);
                     } catch (InvalidDependencyException e) {
                         runtime.getErrors().registerInternalError(
                                 valueScope.keyword.getFile(),
@@ -269,7 +288,7 @@ public class Linker {
             else {
                 runtime.getErrors().registerSymbolError(
                         valueScope.keyword.getFile(),
-                        String.format("Found no definition for local variable: %s", valueScope.variableName),
+                        String.format("Found no definition for local variable: %s", valueScope.value.toString()),
                         valueScope.keyword.getPosition()
                 );
             }
