@@ -83,7 +83,6 @@ class StepParser {
                 }
 
                 leftSide &= !token.getValue().contains("=");
-                ++offset;
             } catch (InvalidDependencyException e) {
                 errors.registerInternalError(
                         reader.getFile(),
