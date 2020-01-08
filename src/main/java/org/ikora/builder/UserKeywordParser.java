@@ -8,6 +8,7 @@ import org.ikora.model.UserKeyword;
 import java.io.IOException;
 
 class UserKeywordParser {
+    private UserKeywordParser(){}
 
     public static UserKeyword parse(LineReader reader, DynamicImports dynamicImports, ErrorManager errors) throws IOException {
         UserKeyword userKeyword = new UserKeyword();

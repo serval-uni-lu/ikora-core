@@ -6,6 +6,8 @@ import org.ikora.utils.StringUtils;
 import java.util.Optional;
 
 public class VariableParser {
+    private VariableParser(){}
+
     public static Optional<Variable> parse(final String name){
         final String cleanName = StringUtils.trimLeft(name," =");
 
