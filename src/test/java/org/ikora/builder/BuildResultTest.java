@@ -33,18 +33,14 @@ class BuildResultTest {
 
     @Test
     void testBuildProjectWithErrors(){
-        BuildResult build = build("robot/connected-projects/project-c");
+        BuildResult build = build("robot/connected-projects");
+
         assertNotNull(build);
-
         assertEquals(1, build.getProjects().size());
-
-        assertNotNull(build.getSourceFile(getFileUri("robot/connected-projects/project-c/indirectDependency.robot")));
-        assertNotNull(build.getSourceFile(getFileUri("robot/connected-projects/project-c/resources.robot")));
-        assertNotNull(build.getSourceFile(getFileUri("robot/connected-projects/project-c/variables.robot")));
-
+        assertNotNull(build.getSourceFile(getFileUri("robot/connected-projects/project-a/test-cases.robot")));
         assertFalse(build.getErrors().isEmpty());
 
-        File file = build.getSourceFile(getFileUri("robot/connected-projects/project-c/resources.robot")).getFile();
+        File file = build.getSourceFile(getFileUri("robot/connected-projects/project-a/test-cases.robot")).getFile();
         Errors errors = build.getErrors().in(file);
 
         Set<SymbolError> symbolErrors = errors.getSymbolErrors();

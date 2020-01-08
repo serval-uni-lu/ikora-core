@@ -18,8 +18,6 @@ class SourceFileParser {
             sourceFile = new SourceFile(project, file);
             reader = new LineReader(sourceFile);
 
-            setName(project, sourceFile);
-
             reader.readLine();
 
             while(reader.getCurrent().isValid()){
@@ -65,11 +63,6 @@ class SourceFileParser {
                 }
             }
         }
-    }
-
-    private static void setName(Project project, SourceFile sourceFile) {
-        String name = project.generateFileName(sourceFile.getFile());
-        sourceFile.setName(name);
     }
 
     static boolean isSettings(String line){

@@ -26,9 +26,12 @@ public class SourceFile implements Iterable<UserKeyword> {
         setTestCaseTable(new NodeTable<>());
         setKeywordTable(new NodeTable<>());
         setVariableTable(new NodeTable<>());
+
+        String name = this.project.generateFileName(this.file);
+        setName(name);
     }
 
-    public void setName(String name) {
+    private void setName(String name) {
         this.name = name;
 
         this.settings.setFile(this);

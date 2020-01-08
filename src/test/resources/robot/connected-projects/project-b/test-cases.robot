@@ -1,5 +1,5 @@
 *** Settings ***
-Resource   ../project-C/resources.robot
+Resource   ../project-c/resources.robot
 
 *** Test Cases ***
 Test from project B
@@ -12,15 +12,18 @@ Test from project B
 
 *** Keywords ***
 First Keyword from project B
+    [Documentation]  This is the first keyword
     Keyword from resources without arguments
 
 Second Keyword from project B
-    Keyword from resrouces    ${everywhere}
+    [Documentation]  This is the second keyword
+    Keyword from resrouces    ${everwhere}
 
 Unused Keyword from project B
     Log    Never called
 
 Clone from project B
+    [Documentation]  Clone from project B
     ${other_time}=   Get Time
     ${other_secs}=    Get Time    epoch
     ${other_year}=    Get Time    return year
@@ -29,4 +32,12 @@ Clone from project B
     Log    ${other_year}
 
 Duplicated keyword
+    [Documentation]  This is the definition of a keyword which is duplicated
     Log    I am a duplicated keyword in project B
+
+Keyword without steps
+    [Documentation]  This keyword will not do anything :(
+
+Keyowrd doing nothing
+    [Documentation]  This keyword will not perform any action
+    No operation
