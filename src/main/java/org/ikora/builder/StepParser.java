@@ -31,6 +31,11 @@ class StepParser {
             step = parseKeywordCall(reader, tokensWithoutTag, errors);
         }
 
+        if(step == null){
+            step = new InvalidStep(tokensWithoutTag.toString());
+            step.setPosition(ParserUtils.getPosition(tokensWithoutTag));
+        }
+
         step.setPosition(ParserUtils.getPosition(tokens));
 
         return step;
