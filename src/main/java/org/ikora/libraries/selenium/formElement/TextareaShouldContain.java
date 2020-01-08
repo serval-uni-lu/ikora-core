@@ -5,11 +5,11 @@ import org.ikora.runner.Runtime;
 
 public class TextareaShouldContain extends LibraryKeyword {
     public TextareaShouldContain(){
-        this.type = Type.Assertion;
+        this.type = Type.ASSERTION;
     }
 
     @Override
     public void run(Runtime runtime) {
-
+        throw new UnsupportedOperationException();
     }
 }

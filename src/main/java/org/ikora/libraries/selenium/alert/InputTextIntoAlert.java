@@ -5,11 +5,11 @@ import org.ikora.runner.Runtime;
 
 public class InputTextIntoAlert extends LibraryKeyword {
     public InputTextIntoAlert(){
-        this.type = Type.Action;
+        this.type = Type.ACTION;
     }
 
     @Override
     public void run(Runtime runtime) {
-
+        throw new UnsupportedOperationException();
     }
 }

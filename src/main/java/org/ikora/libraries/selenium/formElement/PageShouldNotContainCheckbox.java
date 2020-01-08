@@ -5,11 +5,11 @@ import org.ikora.runner.Runtime;
 
 public class PageShouldNotContainCheckbox extends LibraryKeyword {
     public PageShouldNotContainCheckbox(){
-        this.type = Type.Assertion;
+        this.type = Type.ASSERTION;
     }
 
     @Override
     public void run(Runtime runtime) {
-
+        throw new UnsupportedOperationException();
     }
 }

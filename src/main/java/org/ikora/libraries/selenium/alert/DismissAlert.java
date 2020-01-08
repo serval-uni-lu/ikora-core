@@ -5,11 +5,11 @@ import org.ikora.runner.Runtime;
 
 public class DismissAlert extends LibraryKeyword {
     public DismissAlert(){
-        this.type = Type.Action;
+        this.type = Type.ACTION;
     }
 
     @Override
     public void run(Runtime runtime) {
-
+        throw new UnsupportedOperationException();
     }
 }

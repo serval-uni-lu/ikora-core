@@ -5,11 +5,11 @@ import org.ikora.runner.Runtime;
 
 public class GetAlertMessage extends LibraryKeyword {
     public GetAlertMessage(){
-        this.type = Type.Get;
+        this.type = Type.GET;
     }
 
     @Override
     public void run(Runtime runtime) {
-
+        throw new UnsupportedOperationException();
     }
 }

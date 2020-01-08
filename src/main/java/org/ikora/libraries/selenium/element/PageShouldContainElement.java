@@ -6,18 +6,18 @@ import org.ikora.runner.Runtime;
 
 public class PageShouldContainElement extends LibraryKeyword {
     public PageShouldContainElement(){
-        this.type = Type.Assertion;
+        this.type = Type.ASSERTION;
     }
 
     @Override
     public void run(Runtime runtime) {
-
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public Value.Type[] getArgumentTypes() {
         return new Value.Type[]{
-                Value.Type.Locator
+                Value.Type.LOCATOR
         };
     }
 }

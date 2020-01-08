@@ -9,7 +9,7 @@ import java.util.List;
 
 public class Keyword implements ReportElement {
     public enum Type{
-        Setup, Execution, TearDown
+        SETUP, EXECUTION, TEAR_DOWN
     }
 
     @JacksonXmlProperty(localName = "type", isAttribute = true)
@@ -43,13 +43,13 @@ public class Keyword implements ReportElement {
 
     public void setType(String type) throws IOException {
         if(type.equalsIgnoreCase("Setup")){
-            setType(Type.Setup);
+            setType(Type.SETUP);
         }
         else if(type.equalsIgnoreCase("Execution")){
-            setType(Type.Execution);
+            setType(Type.EXECUTION);
         }
         else if(type.equalsIgnoreCase("TearDown")){
-            setType(Type.TearDown);
+            setType(Type.TEAR_DOWN);
         }
         else{
             throw new IOException(String.format("Could not convert %s to keyword type. Excepted one of [setup, execution,teardown]", type));

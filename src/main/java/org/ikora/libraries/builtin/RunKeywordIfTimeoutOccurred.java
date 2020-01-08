@@ -6,19 +6,19 @@ import org.ikora.runner.Runtime;
 
 public class RunKeywordIfTimeoutOccurred extends LibraryKeyword {
     public RunKeywordIfTimeoutOccurred(){
-        this.type = Type.ControlFlow;
+        this.type = Type.CONTROL_FLOW;
     }
 
     @Override
     public void run(Runtime runtime) {
-
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public Value.Type[] getArgumentTypes() {
         return new Value.Type[]{
-                Value.Type.Keyword,
-                Value.Type.Kwargs
+                Value.Type.KEYWORD,
+                Value.Type.KWARGS
         };
     }
 }

@@ -6,14 +6,11 @@ import org.ikora.runner.Runtime;
 
 public class SetSeleniumSpeed extends LibraryKeyword {
     public SetSeleniumSpeed(){
-        this.type = Type.Synchronisation;
+        this.type = Type.SYNCHRONISATION;
     }
 
     @Override
     public void run(Runtime runtime) {
-        int sec = 0;
-
-        //TODO: properly convert time
-        //getDriver().manage().timeouts().implicitlyWait(sec, TimeUnit.SECONDS);
+        throw new UnsupportedOperationException();
     }
 }

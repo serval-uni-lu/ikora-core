@@ -6,6 +6,6 @@ import org.ikora.runner.Runtime;
 public class ListShouldContainValue extends LibraryKeyword {
     @Override
     public void run(Runtime runtime) {
-
+        throw new UnsupportedOperationException();
     }
 }

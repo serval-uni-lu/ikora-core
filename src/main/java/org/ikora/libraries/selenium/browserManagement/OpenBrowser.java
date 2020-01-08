@@ -5,14 +5,11 @@ import org.ikora.runner.Runtime;
 
 public class OpenBrowser extends LibraryKeyword {
     public OpenBrowser(){
-        this.type = Type.Action;
+        this.type = Type.ACTION;
     }
 
     @Override
     public void run(Runtime runtime) {
-        String browser = "browser";
-        String url = "url";
-
-        //initializeDriver(browser, url);
+        throw new UnsupportedOperationException();
     }
 }

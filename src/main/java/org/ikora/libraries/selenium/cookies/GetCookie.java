@@ -5,11 +5,11 @@ import org.ikora.runner.Runtime;
 
 public class GetCookie extends LibraryKeyword {
     public GetCookie(){
-        this.type = Type.Get;
+        this.type = Type.GET;
     }
 
     @Override
     public void run(Runtime runtime) {
-
+        throw new UnsupportedOperationException();
     }
 }

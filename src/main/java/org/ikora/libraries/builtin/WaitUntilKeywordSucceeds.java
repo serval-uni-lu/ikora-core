@@ -6,21 +6,21 @@ import org.ikora.model.Value;
 
 public class WaitUntilKeywordSucceeds extends LibraryKeyword {
     public WaitUntilKeywordSucceeds(){
-        this.type = Type.Synchronisation;
+        this.type = Type.SYNCHRONISATION;
     }
 
     @Override
     public Value.Type[] getArgumentTypes() {
         return new Value.Type[]{
-                Value.Type.String,
-                Value.Type.String,
-                Value.Type.Keyword,
-                Value.Type.Kwargs
+                Value.Type.STRING,
+                Value.Type.STRING,
+                Value.Type.KEYWORD,
+                Value.Type.KWARGS
         };
     }
 
     @Override
     public void run(Runtime runtime) {
-
+        throw new UnsupportedOperationException();
     }
 }

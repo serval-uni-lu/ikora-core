@@ -7,7 +7,7 @@ import org.ikora.runner.Runtime;
 public class ImportLibrary extends LibraryKeyword implements ScopeModifier {
     @Override
     public void run(Runtime runtime) {
-
+        throw new UnsupportedOperationException();
     }
 
     @Override

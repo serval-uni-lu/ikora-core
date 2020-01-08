@@ -10,14 +10,14 @@ import java.util.regex.Pattern;
 
 public abstract class LibraryVariable extends Variable {
     protected enum Format{
-        scalar, list, dictionary
+        SCALAR, LIST, DICTIONARY
     }
 
     protected Format format;
 
     public LibraryVariable(){
         super("");
-        this.format = Format.scalar;
+        this.format = Format.SCALAR;
         setName(toVariable(this.getClass()));
     }
 

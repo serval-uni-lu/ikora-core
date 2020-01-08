@@ -6,19 +6,19 @@ import org.ikora.runner.Runtime;
 
 public class ShouldBeEqual extends LibraryKeyword {
     public ShouldBeEqual(){
-        this.type = Type.Assertion;
+        this.type = Type.ASSERTION;
     }
 
     @Override
     public void run(Runtime runtime) {
-
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public Value.Type[] getArgumentTypes() {
         return new Value.Type[]{
-                Value.Type.String,
-                Value.Type.String
+                Value.Type.STRING,
+                Value.Type.STRING
         };
     }
 }

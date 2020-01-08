@@ -5,11 +5,11 @@ import org.ikora.runner.Runtime;
 
 public class GetSource extends LibraryKeyword {
     public GetSource(){
-        this.type = Type.Get;
+        this.type = Type.GET;
     }
 
     @Override
     public void run(Runtime runtime) {
-
+        throw new UnsupportedOperationException();
     }
 }

@@ -6,20 +6,20 @@ import org.ikora.runner.Runtime;
 
 public class RepeatKeyword extends LibraryKeyword {
     public RepeatKeyword(){
-        this.type = Type.ControlFlow;
+        this.type = Type.CONTROL_FLOW;
     }
 
     @Override
     public void run(Runtime runtime) {
-
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public Value.Type[] getArgumentTypes() {
         return new Value.Type[]{
-                Value.Type.String,
-                Value.Type.Keyword,
-                Value.Type.Kwargs
+                Value.Type.STRING,
+                Value.Type.KEYWORD,
+                Value.Type.KWARGS
         };
     }
 }

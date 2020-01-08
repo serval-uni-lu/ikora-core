@@ -172,7 +172,7 @@ public abstract class KeywordDefinition extends Keyword implements Iterable<Step
 
     @Override
     public Type getType(){
-        return Type.User;
+        return Type.USER;
     }
 
     KeywordCall toCall(Step step){

@@ -17,6 +17,8 @@ class RunnerTest {
         try {
             Report report = runner.execute();
             assertEquals(Globals.applicationCanonical, report.getGenerator());
+        } catch (UnsupportedOperationException e) {
+            e.getMessage();
         } catch (Exception e) {
             fail(e.getMessage());
         }

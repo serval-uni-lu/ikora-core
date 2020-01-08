@@ -4,6 +4,6 @@ import org.ikora.model.LibraryVariable;
 
 public class TestTags extends LibraryVariable {
     public TestTags(){
-        this.format = Format.list;
+        this.format = Format.LIST;
     }
 }

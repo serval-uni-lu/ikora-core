@@ -6,20 +6,20 @@ import org.ikora.runner.Runtime;
 
 public class RunKeywordUnless extends LibraryKeyword {
     public RunKeywordUnless(){
-        this.type = Type.ControlFlow;
+        this.type = Type.CONTROL_FLOW;
     }
 
     @Override
     public void run(Runtime runtime) {
-
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public Value.Type[] getArgumentTypes() {
         return new Value.Type[]{
-                Value.Type.Condition,
-                Value.Type.Keyword,
-                Value.Type.Kwargs
+                Value.Type.CONDITION,
+                Value.Type.KEYWORD,
+                Value.Type.KWARGS
         };
     }
 

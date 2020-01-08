@@ -6,6 +6,6 @@ import org.ikora.runner.Runtime;
 public class OptionsRequest extends LibraryKeyword {
     @Override
     public void run(Runtime runtime) {
-
+        throw new UnsupportedOperationException();
     }
 }

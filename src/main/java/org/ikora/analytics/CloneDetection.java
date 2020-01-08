@@ -163,7 +163,7 @@ public class CloneDetection<T extends Node> {
 
         Optional<Keyword> optionalKeyword = ((KeywordCall)differentiable).getKeyword();
 
-        return optionalKeyword.filter(keyword -> keyword.getType() == Keyword.Type.Log).isPresent();
+        return optionalKeyword.filter(keyword -> keyword.getType() == Keyword.Type.LOG).isPresent();
     }
 
     public static boolean isCloneType4(Difference difference){

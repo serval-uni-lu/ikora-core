@@ -4,7 +4,7 @@ import java.util.List;
 
 public abstract class Keyword extends Node {
     public enum Type{
-        User, ControlFlow, Assertion, Action, Log, Error, Synchronisation, Get,  Unknown, Set
+        USER, CONTROL_FLOW, ASSERTION, ACTION, LOG, ERROR, SYNCHRONISATION, GET, UNKNOWN, SET
     }
 
     public abstract Type getType();

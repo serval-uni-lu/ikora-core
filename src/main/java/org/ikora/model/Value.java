@@ -10,11 +10,11 @@ import java.util.regex.Pattern;
 
 public class Value implements Differentiable {
     public enum Type{
-        String, Object, Keyword, Locator, Condition, Keywords, Kwargs
+        STRING, OBJECT, KEYWORD, LOCATOR, CONDITION, KEYWORDS, KWARGS
     }
 
     private enum Matching{
-        isVariable, hasVariable, findVariable
+        IS_VARIABLE, HAS_VARIABLE, FIND_VARIABLE
     }
 
     private static Pattern isVariablePattern;
@@ -82,7 +82,7 @@ public class Value implements Differentiable {
     }
 
     public boolean isVariable() {
-        Matcher matcher = getVariableMatcher(this.value, Matching.isVariable);
+        Matcher matcher = getVariableMatcher(this.value, Matching.IS_VARIABLE);
         return matcher.matches();
     }
 
@@ -92,7 +92,7 @@ public class Value implements Differentiable {
     }
 
     public boolean hasVariable() {
-        Matcher matcher = getVariableMatcher(this.value, Matching.hasVariable);
+        Matcher matcher = getVariableMatcher(this.value, Matching.HAS_VARIABLE);
         return matcher.matches();
     }
 
@@ -104,7 +104,7 @@ public class Value implements Differentiable {
     public List<String> findVariables() {
         List<String> variables = new ArrayList<>();
 
-        Matcher matcher = getVariableMatcher(this.value, Matching.findVariable);
+        Matcher matcher = getVariableMatcher(this.value, Matching.FIND_VARIABLE);
 
         while (matcher.find()){
             variables.add(this.value.substring(matcher.start(), matcher.end()));
@@ -150,7 +150,7 @@ public class Value implements Differentiable {
     }
 
     private void buildRegex() {
-        Matcher matcher = getVariableMatcher(this.value, Matching.findVariable);
+        Matcher matcher = getVariableMatcher(this.value, Matching.FIND_VARIABLE);
 
         String placeholder = "@@@@___VARIABLE__PLACEHOLDER___@@@@";
 
@@ -165,13 +165,13 @@ public class Value implements Differentiable {
         Matcher matcher;
 
         switch (matching) {
-            case isVariable:
+            case IS_VARIABLE:
                 matcher = isVariablePattern.matcher(value);
                 break;
-            case hasVariable:
+            case HAS_VARIABLE:
                 matcher = hasVariablePattern.matcher(value);
                 break;
-            case findVariable:
+            case FIND_VARIABLE:
                 matcher = findVariablePattern.matcher(value);
                 break;
 

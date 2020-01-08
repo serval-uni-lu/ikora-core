@@ -118,25 +118,25 @@ class LexerUtils {
 
         if(trimmed.isEmpty() || trimmed.equals("/")){
             value = text;
-            type = Token.Type.Delimiter;
+            type = Token.Type.DELIMITER;
         }
         else{
             value = trimmed;
 
             if(isBlock(value)){
-                type = Token.Type.Block;
+                type = Token.Type.BLOCK;
             }
             else if(value.startsWith("#")){
-                type = Token.Type.Comment;
+                type = Token.Type.COMMENT;
             }
             else if(value.equalsIgnoreCase(":FOR")){
-                type = Token.Type.ForLoop;
+                type = Token.Type.FOR_LOOP;
             }
             else if(compareNoCase(value, "^((\\$|@|&)\\{)(.*)(\\})(\\s?)(=?)")){
-                type = Token.Type.Assignment;
+                type = Token.Type.ASSIGNMENT;
             }
             else{
-                type = Token.Type.Text;
+                type = Token.Type.TEXT;
             }
         }
 

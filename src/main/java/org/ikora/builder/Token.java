@@ -2,7 +2,7 @@ package org.ikora.builder;
 
 public class Token {
     public enum Type{
-        Text, Delimiter, Block, Comment, ForLoop, Assignment, Keyword, Variable
+        TEXT, DELIMITER, BLOCK, COMMENT, FOR_LOOP, ASSIGNMENT, KEYWORD, VARIABLE
     }
 
     private Type type;
@@ -39,15 +39,15 @@ public class Token {
     }
 
     public boolean isDelimiter(){
-        return this.type == Type.Delimiter;
+        return this.type == Type.DELIMITER;
     }
 
     public boolean isBlock(){
-        return this.type == Type.Block;
+        return this.type == Type.BLOCK;
     }
 
     public boolean isBlock(String name){
-        if(this.type != Type.Block){
+        if(this.type != Type.BLOCK){
             return false;
         }
 
@@ -55,18 +55,18 @@ public class Token {
     }
 
     public boolean isComment() {
-        return this.type == Type.Comment;
+        return this.type == Type.COMMENT;
     }
 
     public boolean isForLoop() {
-        return this.type == Type.ForLoop;
+        return this.type == Type.FOR_LOOP;
     }
 
     public boolean isAssignment(){
-        return this.type == Type.Assignment;
+        return this.type == Type.ASSIGNMENT;
     }
 
     public boolean isText() {
-        return this.type == Type.Text;
+        return this.type == Type.TEXT;
     }
 }

@@ -11,7 +11,7 @@ public abstract class LibraryKeyword extends Keyword {
     protected Type type;
 
     public LibraryKeyword() {
-        this.type = Type.Unknown;
+        this.type = Type.UNKNOWN;
     }
 
     public Type getType(){
@@ -106,7 +106,7 @@ public abstract class LibraryKeyword extends Keyword {
             return 0;
         }
 
-        if(types[types.length - 1] == Value.Type.Kwargs){
+        if(types[types.length - 1] == Value.Type.KWARGS){
             return -1;
         }
 

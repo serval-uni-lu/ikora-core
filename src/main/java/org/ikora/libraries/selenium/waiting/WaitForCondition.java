@@ -5,11 +5,11 @@ import org.ikora.runner.Runtime;
 
 public class WaitForCondition extends LibraryKeyword {
     public WaitForCondition(){
-        this.type = Type.Synchronisation;
+        this.type = Type.SYNCHRONISATION;
     }
 
     @Override
     public void run(Runtime runtime) {
-
+        throw new UnsupportedOperationException();
     }
 }

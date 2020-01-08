@@ -5,11 +5,11 @@ import org.ikora.runner.Runtime;
 
 public class VariableShouldNotExist extends LibraryKeyword {
     public VariableShouldNotExist(){
-        this.type = Type.Assertion;
+        this.type = Type.ASSERTION;
     }
 
     @Override
     public void run(Runtime runtime) {
-
+        throw new UnsupportedOperationException();
     }
 }

@@ -9,12 +9,12 @@ import java.util.List;
 
 public class SetSuiteVariable extends LibraryKeyword implements ScopeModifier {
     public SetSuiteVariable(){
-        this.type = Type.Set;
+        this.type = Type.SET;
     }
 
     @Override
     public void run(Runtime runtime) {
-
+        throw new UnsupportedOperationException();
     }
 
     @Override

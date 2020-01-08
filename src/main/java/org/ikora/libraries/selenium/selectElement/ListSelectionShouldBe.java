@@ -5,11 +5,11 @@ import org.ikora.runner.Runtime;
 
 public class ListSelectionShouldBe extends LibraryKeyword {
     public ListSelectionShouldBe(){
-        this.type = Type.Assertion;
+        this.type = Type.ASSERTION;
     }
 
     @Override
     public void run(Runtime runtime) {
-
+        throw new UnsupportedOperationException();
     }
 }

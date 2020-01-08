@@ -8,10 +8,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public abstract class Variable extends Node {
-    public enum Type{
-        SCALAR, LIST, DICTIONARY
-    }
-
     private Assignment assignment;
 
     protected String name;

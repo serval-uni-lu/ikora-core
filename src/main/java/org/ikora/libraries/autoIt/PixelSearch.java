@@ -6,6 +6,6 @@ import org.ikora.runner.Runtime;
 public class PixelSearch extends LibraryKeyword {
     @Override
     public void run(Runtime runtime) {
-
+        throw new UnsupportedOperationException();
     }
 }

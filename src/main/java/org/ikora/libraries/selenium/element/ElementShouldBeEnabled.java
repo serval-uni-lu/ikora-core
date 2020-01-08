@@ -5,11 +5,11 @@ import org.ikora.runner.Runtime;
 
 public class ElementShouldBeEnabled extends LibraryKeyword {
     public ElementShouldBeEnabled(){
-        this.type = Type.Assertion;
+        this.type = Type.ASSERTION;
     }
 
     @Override
     public void run(Runtime runtime) {
-
+        throw new UnsupportedOperationException();
     }
 }

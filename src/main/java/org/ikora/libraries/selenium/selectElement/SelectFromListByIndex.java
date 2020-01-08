@@ -5,11 +5,11 @@ import org.ikora.runner.Runtime;
 
 public class SelectFromListByIndex extends LibraryKeyword {
     public SelectFromListByIndex(){
-        this.type = Type.Action;
+        this.type = Type.ACTION;
     }
 
     @Override
     public void run(Runtime runtime) {
-
+        throw new UnsupportedOperationException();
     }
 }

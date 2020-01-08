@@ -6,18 +6,18 @@ import org.ikora.runner.Runtime;
 
 public class ClickLink extends LibraryKeyword {
     public ClickLink(){
-        this.type = Type.Action;
+        this.type = Type.ACTION;
     }
 
     @Override
     public void run(Runtime runtime) {
-
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public Value.Type[] getArgumentTypes() {
         return new Value.Type[]{
-                Value.Type.Locator
+                Value.Type.LOCATOR
         };
     }
 }

@@ -6,18 +6,18 @@ import org.ikora.runner.Runtime;
 
 public class RunKeywords extends LibraryKeyword {
     public RunKeywords(){
-        this.type = Type.ControlFlow;
+        this.type = Type.CONTROL_FLOW;
     }
 
     @Override
     public void run(Runtime runtime) {
-
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public Value.Type[] getArgumentTypes() {
         return new Value.Type[]{
-                Value.Type.Keywords,
+                Value.Type.KEYWORDS,
         };
     }
 }

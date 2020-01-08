@@ -5,11 +5,11 @@ import org.ikora.runner.Runtime;
 
 public class Sleep extends LibraryKeyword {
     public Sleep(){
-        this.type = Type.Synchronisation;
+        this.type = Type.SYNCHRONISATION;
     }
 
     @Override
     public void run(Runtime runtime) {
-
+        throw new UnsupportedOperationException();
     }
 }

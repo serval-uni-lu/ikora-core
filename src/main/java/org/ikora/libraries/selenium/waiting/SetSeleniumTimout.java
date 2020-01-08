@@ -5,11 +5,11 @@ import org.ikora.runner.Runtime;
 
 public class SetSeleniumTimout extends LibraryKeyword {
     public SetSeleniumTimout(){
-        this.type = Type.Synchronisation;
+        this.type = Type.SYNCHRONISATION;
     }
 
     @Override
     public void run(Runtime runtime) {
-
+        throw new UnsupportedOperationException();
     }
 }
