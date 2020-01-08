@@ -55,7 +55,7 @@ class UserKeywordParser {
             }
         }
 
-        userKeyword.setPosition(ParserUtils.getPosition(nameTokens.first().get(), tokens.last().get()));
+        userKeyword.setPosition(ParserUtils.getPosition(nameTokens));
 
         return userKeyword;
     }

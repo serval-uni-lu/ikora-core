@@ -57,7 +57,7 @@ class TestCaseParser {
             }
         }
 
-        testCase.setPosition(ParserUtils.getPosition(testTokens.first().get(), testTokens.last().get()));
+        testCase.setPosition(ParserUtils.getPosition(testTokens));
 
         return testCase;
     }
