@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class StringUtilsTest {
     @Test
-    void checkCountLines(){
+    void testCountLines(){
         String emptyBlock = "\n";
         String trailingBlock = "Trailing\n";
         String forwardBlock = "\nForward";
@@ -23,7 +23,7 @@ class StringUtilsTest {
     }
 
     @Test
-    void checkBeautifyName(){
+    void testBeautifyName(){
         assertEquals("Lower", StringUtils.toBeautifulName("lower"));
         assertEquals("Upper", StringUtils.toBeautifulName("UPPER"));
         assertEquals("Test Lower Underline", StringUtils.toBeautifulName("test_lower_underline"));
@@ -36,7 +36,7 @@ class StringUtilsTest {
     }
 
     @Test
-    void checkBeautifyUrl(){
+    void testBeautifyUrl(){
         try {
             assertEquals("page-1.html", StringUtils.toBeautifulUrl("PAGE-1_", "html"));
             assertEquals("page-1.html", StringUtils.toBeautifulUrl("Page 1", "html"));
@@ -48,7 +48,7 @@ class StringUtilsTest {
     }
 
     @Test
-    void checkLineTruncate(){
+    void testLineTruncate(){
         assertEquals("Some random line", StringUtils.lineTruncate("Some random line", -1));
         assertEquals("", StringUtils.lineTruncate("Some random line", 0));
         assertEquals(".", StringUtils.lineTruncate("Some random line", 1));
@@ -60,7 +60,7 @@ class StringUtilsTest {
     }
 
     @Test
-    void checkTrimLeft(){
+    void testTrimLeft(){
         assertEquals("${variable}", StringUtils.trimLeft("${variable}=", "="));
         assertEquals("${variable}", StringUtils.trimLeft("${variable} =", " ="));
         assertEquals("=${variable}", StringUtils.trimLeft("=${variable}", "="));

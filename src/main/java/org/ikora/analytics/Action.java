@@ -1,6 +1,7 @@
 package org.ikora.analytics;
 
 import org.ikora.model.*;
+import org.ikora.utils.DifferentiableString;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +33,9 @@ public class Action implements Differentiable {
 
         ADD_SEQUENCE,
         REMOVE_SEQUENCE,
+
+        ADD_STRING,
+        REMOVE_STRING,
 
         ADD_DOCUMENTATION,
         REMOVE_DOCUMENTATION,
@@ -124,6 +128,9 @@ public class Action implements Differentiable {
         else if(Sequence.class.isAssignableFrom(type)){
             return new Action(Type.ADD_SEQUENCE, null, element);
         }
+        else if(DifferentiableString.class.isAssignableFrom(type)){
+            return new Action(Type.ADD_STRING, null, element);
+        }
 
         return new Action(Type.INVALID, null, element);
     }
@@ -143,6 +150,9 @@ public class Action implements Differentiable {
         }
         else if(Sequence.class.isAssignableFrom(type)){
             return new Action(Type.REMOVE_SEQUENCE, element, null);
+        }
+        else if(DifferentiableString.class.isAssignableFrom(type)){
+            return new Action(Type.REMOVE_STRING, element, null);
         }
 
         return new Action(Type.INVALID, element, null);

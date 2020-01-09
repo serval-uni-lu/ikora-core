@@ -14,7 +14,7 @@ class TestCaseParser {
         TestCase testCase = new TestCase();
 
         Tokens testTokens = LexerUtils.tokenize(reader.getCurrent());
-        Tokens tokens = testTokens;
+        Tokens tokens;
 
         ParserUtils.parseName(reader, testTokens, testCase, errors);
 

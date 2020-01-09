@@ -24,7 +24,7 @@ class FileUtilsTest {
     }
 
     @Test
-    void checkIsSubfolderDetectsWhenTrue() {
+    void testIsSubfolderDetectsWhenTrue() {
         try {
             assertTrue(FileUtils.isSubDirectory(base, base));
             assertTrue(FileUtils.isSubDirectory(base, child1));
@@ -35,7 +35,7 @@ class FileUtilsTest {
     }
 
     @Test
-    void checkIsSubfolderDetectsWhenFalse() {
+    void testIsSubfolderDetectsWhenFalse() {
         try {
             assertFalse(FileUtils.isSubDirectory(child1, base));
             assertFalse(FileUtils.isSubDirectory(child2, base));
@@ -45,7 +45,7 @@ class FileUtilsTest {
     }
 
     @Test
-    void checkDetectCharsetWithUTF8(){
+    void testDetectCharsetWithUTF8(){
         File utf8 = Helpers.getResourceFile("files/file-in-utf8.txt");
         Charset charset = FileUtils.detectCharset(utf8, null);
         assertNotNull(charset);
@@ -53,7 +53,7 @@ class FileUtilsTest {
     }
 
     @Test
-    void checkDetectCharsetWithISO88591(){
+    void testDetectCharsetWithISO88591(){
         File utf8 = Helpers.getResourceFile("files/file-in-ISO-8859-1.txt");
         Charset charset = FileUtils.detectCharset(utf8, null);
         assertNotNull(charset);
@@ -61,7 +61,7 @@ class FileUtilsTest {
     }
 
     @Test
-    void checkDetectCharsetWithUTF8BOM(){
+    void testDetectCharsetWithUTF8BOM(){
         File utf8 = Helpers.getResourceFile("files/file-in-utf8-bom.txt");
         Charset charset = FileUtils.detectCharset(utf8, null);
         assertNotNull(charset);
@@ -69,7 +69,7 @@ class FileUtilsTest {
     }
 
     @Test
-    void checkCopyResource(){
+    void testCopyResource(){
         File destination = Helpers.getNewTmpFolder("with sépcial and space/ikora-copy-resources-test");
 
         try {

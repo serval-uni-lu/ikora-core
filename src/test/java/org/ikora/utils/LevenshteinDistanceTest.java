@@ -1,5 +1,6 @@
 package org.ikora.utils;
 
+import org.ikora.analytics.Action;
 import org.junit.jupiter.api.Test;
 import org.ikora.Helpers;
 
@@ -7,11 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class LevenshteinDistanceTest {
 
     @Test
-    void checkLevenshteinDistanceDifferentString() {
+    void testLevenshteinDistanceDifferentString() {
         String string1 = "First String";
         String string2 = "Second String";
 
@@ -21,7 +23,7 @@ class LevenshteinDistanceTest {
     }
 
     @Test
-    void checkLevenshteinIndexDifferentString() {
+    void testLevenshteinIndexDifferentString() {
         String string1 = "First String";
         String string2 = "Second String";
 
@@ -31,7 +33,7 @@ class LevenshteinDistanceTest {
     }
 
     @Test
-    void checkDistanceMatrix(){
+    void testRemoveStringFromList(){
         List<DifferentiableString> list1 = new ArrayList<>();
         list1.add(new DifferentiableString("Step 1"));
         list1.add(new DifferentiableString("Step 2"));
@@ -41,6 +43,26 @@ class LevenshteinDistanceTest {
         list2.add(new DifferentiableString("Step 2"));
         list2.add(new DifferentiableString("Step 3"));
 
-        LevenshteinDistance.getDifferences(list1, list2);
+        List<Action> differences = LevenshteinDistance.getDifferences(list1, list2);
+
+        assertEquals(1, differences.size());
+        assertEquals(Action.Type.REMOVE_STRING, differences.get(0).getType());
+    }
+
+    @Test
+    void testAddStringToList(){
+        List<DifferentiableString> list1 = new ArrayList<>();
+        list1.add(new DifferentiableString("Step 2"));
+        list1.add(new DifferentiableString("Step 3"));
+
+        List<DifferentiableString> list2 = new ArrayList<>();
+        list2.add(new DifferentiableString("Step 1"));
+        list2.add(new DifferentiableString("Step 2"));
+        list2.add(new DifferentiableString("Step 3"));
+
+        List<Action> differences = LevenshteinDistance.getDifferences(list1, list2);
+
+        assertEquals(1, differences.size());
+        assertEquals(Action.Type.ADD_STRING, differences.get(0).getType());
     }
 }
