@@ -15,11 +15,21 @@ public class KeywordCall extends Step {
     private Link<KeywordCall, Keyword> link;
     private List<Argument> argumentList;
     private List<Value> returnValues;
+    private Gherkin gherkin;
 
     public KeywordCall(String name) {
         super(name);
         this.argumentList = new ArrayList<>();
         this.link = new Link<>(this);
+        this.gherkin = Gherkin.none();
+    }
+
+    public void setGherkin(Gherkin gherkin) {
+        this.gherkin = gherkin;
+    }
+
+    public Gherkin getGherkin(){
+        return gherkin;
     }
 
     public void linkKeyword(Keyword keyword, Link.Import importLink)

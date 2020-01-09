@@ -7,15 +7,16 @@ import org.ikora.model.*;
 
 import java.io.IOException;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 class StepParser {
     private StepParser() {}
 
-    public static Step parse(LineReader reader, Tokens tokens, ErrorManager errors) throws IOException {
-        return parse(reader, tokens, "", errors);
+    public static Step parse(LineReader reader, Tokens tokens, boolean allowGherkin, ErrorManager errors) throws IOException {
+        return parse(reader, tokens, "", allowGherkin, errors);
     }
 
-    public static Step parse(LineReader reader, Tokens tokens, String ignoreTag, ErrorManager errors) throws IOException {
+    public static Step parse(LineReader reader, Tokens tokens, String ignoreTag, boolean allowGherkin, ErrorManager errors) throws IOException {
         Step step;
 
         Tokens fullTokens = tokens.withoutIndent();
@@ -28,7 +29,7 @@ class StepParser {
             step = parseAssignment(reader, errors);
         }
         else {
-            step = parseKeywordCall(reader, tokensWithoutTag, errors);
+            step = parseKeywordCall(reader, tokensWithoutTag, allowGherkin, errors);
         }
 
         if(step == null){
@@ -77,7 +78,7 @@ class StepParser {
                         }
                     }
                     else if(!leftSide){
-                        KeywordCall call = getKeywordCall(reader, tokens.withoutFirst(offset), errors);
+                        KeywordCall call = getKeywordCall(reader, tokens.withoutFirst(offset), false, errors);
 
                         if(call != null){
                             assignment.setExpression(call);
@@ -103,13 +104,13 @@ class StepParser {
         return assignment;
     }
 
-    private static Step parseKeywordCall(LineReader reader, Tokens tokens, ErrorManager errors) throws IOException {
-        KeywordCall call = getKeywordCall(reader, tokens, errors);
+    private static Step parseKeywordCall(LineReader reader, Tokens tokens, boolean allowGherkin, ErrorManager errors) throws IOException {
+        KeywordCall call = getKeywordCall(reader, tokens, allowGherkin, errors);
         reader.readLine();
         return call;
     }
 
-    private static KeywordCall getKeywordCall(LineReader reader, Tokens tokens, ErrorManager errors) {
+    private static KeywordCall getKeywordCall(LineReader reader, Tokens tokens, boolean allowGherkin, ErrorManager errors) {
         Optional<Token> first =  tokens.first();
 
         if(!first.isPresent()){
@@ -120,7 +121,12 @@ class StepParser {
             );
         }
         else{
-            KeywordCall call = new KeywordCall(first.get().getValue());
+            String rawName = first.get().getValue();
+            String name = getKeywordCallName(rawName, allowGherkin);
+            Gherkin gherkin = new Gherkin(rawName);
+
+            KeywordCall call = new KeywordCall(name);
+            call.setGherkin(gherkin);
 
             for(Token token: tokens.withoutFirst()) {
                 try {
@@ -143,6 +149,15 @@ class StepParser {
 
         return null;
     }
+
+    private static String getKeywordCallName(String raw, boolean allowGherkin) {
+        if(!allowGherkin){
+            return raw;
+        }
+
+        return Gherkin.getCleanName(raw);
+    }
+
 
     private static boolean isAssignment(LineReader reader, Tokens tokens, ErrorManager errors){
         Optional<Token> first = tokens.first();

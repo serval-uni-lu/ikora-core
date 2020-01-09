@@ -71,14 +71,14 @@ class TestCaseParser {
     }
 
     private static void parseTeardown(LineReader reader, Tokens tokens, TestCase testCase, DynamicImports dynamicImports, ErrorManager errors) throws IOException {
-            Step step = StepParser.parse(reader, tokens, "\\[teardown\\]", errors);
+            Step step = StepParser.parse(reader, tokens, "\\[teardown\\]", false, errors);
             testCase.setTearDown(step);
 
             dynamicImports.add(testCase, step);
     }
 
     private static void parseSetup(LineReader reader, Tokens tokens, TestCase testCase, DynamicImports dynamicImports, ErrorManager errors) throws IOException {
-            Step step = StepParser.parse(reader, tokens, "\\[setup\\]", errors);
+            Step step = StepParser.parse(reader, tokens, "\\[setup\\]", false, errors);
             testCase.setSetup(step);
 
             dynamicImports.add(testCase, step);
@@ -102,7 +102,7 @@ class TestCaseParser {
     }
 
     private static void parseStep(LineReader reader, Tokens tokens, TestCase testCase, DynamicImports dynamicImports, ErrorManager errors) throws IOException {
-        Step step = StepParser.parse(reader, tokens, errors);
+        Step step = StepParser.parse(reader, tokens, true, errors);
 
         try {
             testCase.addStep(step);

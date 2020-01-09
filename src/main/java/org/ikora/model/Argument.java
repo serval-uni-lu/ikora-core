@@ -45,7 +45,7 @@ public class Argument extends Node {
 
     @Override
     public void execute(Runtime runtime) {
-
+        throw new UnsupportedOperationException();
     }
 
     @Override

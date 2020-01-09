@@ -2,6 +2,7 @@ package org.ikora.model;
 
 import org.ikora.exception.InvalidDependencyException;
 
+import java.security.Key;
 import java.util.*;
 
 
@@ -20,7 +21,7 @@ public abstract class Step extends Node {
         return this.name.toString();
     }
 
-    public Keyword getParent() throws InvalidDependencyException {
+    public Node getParent() throws InvalidDependencyException {
         Set<Node> parents = getDependencies();
 
         if(parents.isEmpty()){
@@ -31,7 +32,21 @@ public abstract class Step extends Node {
             throw new InvalidDependencyException("Too many parent found");
         }
 
-        return (Keyword)parents.iterator().next();
+        return parents.iterator().next();
+    }
+
+    public KeywordDefinition getCaller() throws InvalidDependencyException {
+        Node node = getParent();
+
+        while (Step.class.isAssignableFrom(node.getClass())){
+            node = ((Step)node).getParent();
+        }
+
+        if(node instanceof KeywordDefinition){
+            return (KeywordDefinition)node;
+        }
+
+        throw new InvalidDependencyException("Step should always have a keyword definition caller");
     }
 
     @Override

@@ -56,7 +56,7 @@ public class ReportBuilder {
 
     public void reset() {
         report = new Report();
-        report.setGenerator(Globals.applicationCanonical);
+        report.setGenerator(Globals.APPLICATION_CANONICAL);
 
         stack = new LinkedList<>();
         stack.push(report);

@@ -93,7 +93,7 @@ class UserKeywordParser {
     }
 
     private static void parseTeardown(LineReader reader, Tokens tokens, UserKeyword userKeyword, ErrorManager errors) throws IOException {
-        Step step = StepParser.parse(reader, tokens, "\\[teardown\\]", errors);
+        Step step = StepParser.parse(reader, tokens, "\\[teardown\\]", false, errors);
         userKeyword.setTearDown(step);
 
         reader.readLine();
@@ -104,7 +104,7 @@ class UserKeywordParser {
     }
 
     private static void parseStep(LineReader reader, Tokens tokens, UserKeyword userKeyword, DynamicImports dynamicImports, ErrorManager errors) throws IOException {
-        Step step = StepParser.parse(reader, tokens, errors);
+        Step step = StepParser.parse(reader, tokens, false, errors);
 
         try {
             userKeyword.addStep(step);

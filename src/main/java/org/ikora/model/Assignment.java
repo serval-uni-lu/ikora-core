@@ -95,7 +95,7 @@ public class Assignment extends Step {
         runtime.exitNode(this);
 
         for(Variable variable: returnVariables){
-            runtime.addToKeywordScope(this.getParent(), variable);
+            runtime.addToKeywordScope(this.getCaller(), variable);
         }
     }
 

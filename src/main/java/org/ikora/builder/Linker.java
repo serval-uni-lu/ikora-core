@@ -18,12 +18,6 @@ public class Linker {
         this.runtime = runtime;
     }
 
-    private static final Pattern gherkinPattern;
-
-    static {
-        gherkinPattern =  Pattern.compile("^(\\s*)(Given|When|Then|And|But)", Pattern.CASE_INSENSITIVE);
-    }
-
     public static void link(Runtime runtime) {
         Linker linker = new Linker(runtime);
 
@@ -44,11 +38,7 @@ public class Linker {
 
     public static void link(KeywordCall call, Runtime runtime) {
         Linker linker = new Linker(runtime);
-
-        Matcher matcher = gherkinPattern.matcher(call.getName());
-        String name = matcher.replaceAll("").trim();
-
-        linker.resolveCall(call, name);
+        linker.resolveCall(call);
     }
 
     private List<ScopeValue> linkSteps(TestCase testCase) {
@@ -56,37 +46,16 @@ public class Linker {
 
         KeywordCall setup = testCase.getSetup();
         if(setup != null){
-            unresolvedArguments.addAll(resolveCall(setup, setup.getName()));
+            unresolvedArguments.addAll(resolveCall(setup));
         }
 
-        for(Step step: testCase) {
-            if(step instanceof ForLoop){
-                runtime.getErrors().registerSyntaxError(
-                        step.getFile(),
-                        ErrorMessages.FOR_LOOP_NOT_ALLOWED_IN_TEST_CASE,
-                        step.getPosition()
-                );
-            }
-            else if(!(step instanceof KeywordCall)) {
-                runtime.getErrors().registerSyntaxError(
-                        step.getFile(),
-                        ErrorMessages.EXPECTING_KEYWORD_CALL,
-                        step.getPosition()
-                );
-            }
-            else {
-                KeywordCall call = (KeywordCall)step;
-
-                Matcher matcher = gherkinPattern.matcher(step.getName());
-                String name = matcher.replaceAll("").trim();
-
-                unresolvedArguments.addAll(resolveCall(call, name));
-            }
+        for (Step step: testCase) {
+            step.getKeywordCall().ifPresent(call -> unresolvedArguments.addAll(resolveCall(call)));
         }
 
         KeywordCall teardown = testCase.getTearDown();
         if(teardown != null){
-            unresolvedArguments.addAll(resolveCall(teardown, teardown.getName()));
+            unresolvedArguments.addAll(resolveCall(teardown));
         }
 
         return unresolvedArguments;
@@ -96,16 +65,16 @@ public class Linker {
         List<ScopeValue> unresolvedArguments = new ArrayList<>();
 
         for (Step step: userKeyword) {
-            step.getKeywordCall().ifPresent(call -> unresolvedArguments.addAll(resolveCall(call, call.getName())));
+            step.getKeywordCall().ifPresent(call -> unresolvedArguments.addAll(resolveCall(call)));
         }
 
         return unresolvedArguments;
     }
 
-    private List<ScopeValue> resolveCall(KeywordCall call, String name) {
+    private List<ScopeValue> resolveCall(KeywordCall call) {
         List<ScopeValue> unresolvedArguments = new ArrayList<>();
 
-        Set<? super Keyword> keywords = getKeywords(name, call.getSourceFile());
+        Set<? super Keyword> keywords = getKeywords(call.getName(), call.getSourceFile());
 
         for(Object keyword: keywords) {
             try {
@@ -128,8 +97,8 @@ public class Linker {
         if(keywords.isEmpty()){
             try{
                 unresolvedArguments.add(new ScopeValue(
-                        (KeywordDefinition) call.getParent(),
-                        new Value(name),
+                        call.getCaller(),
+                        new Value(call.getName()),
                         call.getPosition())
                 );
             } catch (InvalidDependencyException e) {
@@ -222,7 +191,7 @@ public class Linker {
 
         call.setPosition(first.getPosition().merge(last.getPosition()));
 
-        resolveCall(call, call.getName());
+        resolveCall(call);
 
         return call;
     }
