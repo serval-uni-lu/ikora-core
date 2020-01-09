@@ -23,13 +23,13 @@ class StepParser {
         Tokens tokensWithoutTag = fullTokens.withoutTag(ignoreTag);
 
         if(isForLoop(reader, tokensWithoutTag, errors)) {
-            step = parseForLoop(reader);
+            step = ForLoopParser.parse(reader, errors);
         }
         else if (isAssignment(reader, tokensWithoutTag, errors)){
-            step = parseAssignment(reader, errors);
+            step = AssignmentParser.parse(reader, errors);
         }
         else {
-            step = parseKeywordCall(reader, tokensWithoutTag, allowGherkin, errors);
+            step = KeywordCallParser.parse(reader, tokensWithoutTag, allowGherkin, errors);
         }
 
         if(step == null){
@@ -41,123 +41,6 @@ class StepParser {
 
         return step;
     }
-
-    private static Step parseForLoop(LineReader reader) throws IOException {
-        ForLoop forLoop = new ForLoop();
-        Tokens loop = LexerUtils.tokenize(reader.getCurrent());
-
-        while (reader.readLine().isValid()){
-            Tokens tokens = LexerUtils.tokenize(reader.getCurrent());
-
-            if(!loop.isParent(tokens)){
-                break;
-            }
-        }
-
-        return forLoop;
-    }
-
-    private static Step parseAssignment(LineReader reader, ErrorManager errors) throws IOException {
-        Assignment assignment = new Assignment(reader.getCurrent().getText());
-        Tokens tokens = LexerUtils.tokenize(reader.getCurrent()).withoutIndent();
-
-        int offset = 0;
-        boolean leftSide = true;
-        for(Token token: tokens){
-            try {
-                String value = token.getValue().replaceAll("(\\s*)=(\\s*)$", "");
-
-                if(!value.isEmpty()){
-                    if(leftSide && Value.isVariable(value)){
-                        Optional<Variable> variable = VariableParser.parse(value);
-
-                        if(variable.isPresent()){
-                            variable.get().setAssignment(assignment);
-                            variable.get().setPosition(ParserUtils.getPosition(token, token));
-                            assignment.addReturnValue(variable.get());
-                        }
-                    }
-                    else if(!leftSide){
-                        KeywordCall call = getKeywordCall(reader, tokens.withoutFirst(offset), false, errors);
-
-                        if(call != null){
-                            assignment.setExpression(call);
-                        }
-
-                        break;
-                    }
-                }
-
-                leftSide &= !token.getValue().contains("=");
-            } catch (InvalidDependencyException e) {
-                errors.registerInternalError(
-                        reader.getFile(),
-                        ErrorMessages.FAILED_TO_CREATE_DEPENDENCY,
-                        ParserUtils.getPosition(token, token)
-                );
-            }
-            ++offset;
-        }
-
-        reader.readLine();
-
-        return assignment;
-    }
-
-    private static Step parseKeywordCall(LineReader reader, Tokens tokens, boolean allowGherkin, ErrorManager errors) throws IOException {
-        KeywordCall call = getKeywordCall(reader, tokens, allowGherkin, errors);
-        reader.readLine();
-        return call;
-    }
-
-    private static KeywordCall getKeywordCall(LineReader reader, Tokens tokens, boolean allowGherkin, ErrorManager errors) {
-        Optional<Token> first =  tokens.first();
-
-        if(!first.isPresent()){
-            errors.registerInternalError(
-                    reader.getFile(),
-                    ErrorMessages.EMPTY_TOKEN_SHOULD_BE_KEYWORD,
-                    ParserUtils. getPosition(reader.getCurrent())
-            );
-        }
-        else{
-            String rawName = first.get().getValue();
-            String name = getKeywordCallName(rawName, allowGherkin);
-            Gherkin gherkin = new Gherkin(rawName);
-
-            KeywordCall call = new KeywordCall(name);
-            call.setGherkin(gherkin);
-
-            for(Token token: tokens.withoutFirst()) {
-                try {
-                    Argument argument = new Argument(call, token.getValue());
-                    argument.setPosition(ParserUtils.getPosition(token, token));
-
-                    call.addArgument(argument);
-                } catch (InvalidDependencyException e) {
-                    errors.registerInternalError(
-                            reader.getFile(),
-                            "Failed to register parameter to keyword call",
-                            ParserUtils. getPosition(token, token)
-                    );
-                }
-            }
-
-            call.setPosition(ParserUtils.getPosition(tokens.withoutIndent()));
-            return call;
-        }
-
-        return null;
-    }
-
-    private static String getKeywordCallName(String raw, boolean allowGherkin) {
-        if(!allowGherkin){
-            return raw;
-        }
-
-        return Gherkin.getCleanName(raw);
-    }
-
 
     private static boolean isAssignment(LineReader reader, Tokens tokens, ErrorManager errors){
         Optional<Token> first = tokens.first();

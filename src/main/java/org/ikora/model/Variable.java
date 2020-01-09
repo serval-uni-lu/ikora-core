@@ -1,8 +1,11 @@
 package org.ikora.model;
 
 import org.ikora.builder.VariableParser;
+import org.ikora.exception.InvalidDependencyException;
+import org.ikora.exception.MalformedVariableException;
 import org.ikora.runner.Runtime;
 
+import java.lang.reflect.MalformedParametersException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -16,6 +19,10 @@ public abstract class Variable extends Node {
     public Variable(String name) {
         this.assignment = null;
         setName(name);
+    }
+
+    public static Variable invalid() {
+        return new InvalidVariable();
     }
 
     public void setAssignment(Assignment assignment) {
@@ -60,14 +67,14 @@ public abstract class Variable extends Node {
         return matcher.matches();
     }
 
-    public static Variable create(Value value) throws Exception {
+    public static Variable create(Value value) throws MalformedVariableException, InvalidDependencyException {
         Optional<Variable> variable = VariableParser.parse(value.toString());
 
         if(variable.isPresent()){
             value.setVariable(value.toString(), variable.get());
         }
         else{
-            throw new Exception(String.format("Failed to create variable from value '%s'", value.getName()));
+            throw new MalformedVariableException(String.format("Failed to create variable from value '%s'", value.getName()));
         }
 
         return variable.get();

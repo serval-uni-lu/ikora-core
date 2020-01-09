@@ -1,0 +1,60 @@
+package org.ikora.model;
+
+import org.ikora.analytics.Action;
+import org.ikora.analytics.visitor.NodeVisitor;
+import org.ikora.analytics.visitor.VisitorMemory;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class InvalidVariable extends Variable {
+    public InvalidVariable() {
+        super("INVALID");
+    }
+
+    @Override
+    protected void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public void addElement(String element) {
+        //nothing to do
+    }
+
+    @Override
+    public List<Value> getValues() {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public String getValueAsString() {
+        return "INVALID";
+    }
+
+    @Override
+    public void accept(NodeVisitor visitor, VisitorMemory memory) {
+        //nothing to do
+    }
+
+    @Override
+    public double distance(Differentiable other) {
+        if(other instanceof InvalidVariable){
+            return 0.0;
+        }
+
+        return 1.0;
+    }
+
+    @Override
+    public List<Action> differences(Differentiable other) {
+        List<Action> actions = new ArrayList<>();
+
+        if(!(other instanceof InvalidStep)){
+            actions.add(Action.changeVariableDefinition(this, other));
+        }
+
+        return actions;
+    }
+}

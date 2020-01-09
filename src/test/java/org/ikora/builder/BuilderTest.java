@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class BuilderTest {
     @Test
-    void checkParseLibraryVariable(){
+    void testParseLibraryVariable(){
         final Project project = Helpers.compileProject("robot/library-variable.robot", true);
 
         assertEquals(1, project.getTestCases().size());
@@ -33,7 +33,7 @@ class BuilderTest {
     }
 
     @Test
-    void checkBuildWithValueForVariableContainingDot(){
+    void testBuildWithValueForVariableContainingDot(){
         final File robot = Helpers.getResourceFile("robot/keyword-with-dot.robot");
         assertNotNull(robot);
 
@@ -53,7 +53,7 @@ class BuilderTest {
     }
 
     @Test
-    void checkScopedByPrefixResolution(){
+    void testScopedByPrefixResolution(){
         final File robot = Helpers.getResourceFile("robot/scope-testing");
         assertNotNull(robot);
 
@@ -78,7 +78,7 @@ class BuilderTest {
     }
 
     @Test
-    void checkDuplicatedStaticallyImportedKeywordsAreDetectedTwice(){
+    void testDuplicatedStaticallyImportedKeywordsAreDetectedTwice(){
         File robot = null;
 
         try{
@@ -105,7 +105,7 @@ class BuilderTest {
     }
 
     @Test
-    void checkAssignmentFromKeyword(){
+    void testAssignmentFromKeyword(){
         final File robot = Helpers.getResourceFile("robot/assignment/keyword.robot");
         assertNotNull(robot);
 
@@ -114,17 +114,17 @@ class BuilderTest {
 
         final Project project = result.getProjects().iterator().next();
 
-        Set<UserKeyword> userKeywords = project.getUserKeywords();
+        final Set<UserKeyword> userKeywords = project.getUserKeywords();
         assertEquals(3, userKeywords.size());
 
-        Set<UserKeyword> ofInterest = project.findUserKeyword("Test with a simple test case to see how assignment works");
+        final Set<UserKeyword> ofInterest = project.findUserKeyword("Test with a simple test case to see how assignment works");
         assertEquals(1, ofInterest.size());
 
-        UserKeyword keyword = ofInterest.iterator().next();
-        Step step0 = keyword.getStep(0);
+        final UserKeyword keyword = ofInterest.iterator().next();
+        final Step step0 = keyword.getStep(0);
 
         assertTrue(Assignment.class.isAssignableFrom(step0.getClass()));
-        Assignment assignment = (Assignment) step0;
+        final Assignment assignment = (Assignment) step0;
 
         assertEquals(1, assignment.getReturnVariables().size());
         assertEquals("${EtatRun}", assignment.getReturnVariables().get(0).getName());
@@ -132,7 +132,61 @@ class BuilderTest {
     }
 
     @Test
-    void checkAssignmentFromVariableWithEqualSign(){
+    void testForLoopWithRange(){
+        final File robot = Helpers.getResourceFile("robot/for-loop/simple.robot");
+        assertNotNull(robot);
+
+        final BuildResult result = Builder.build(robot, Helpers.getConfiguration(), true);
+        assertEquals(1, result.getProjects().size());
+
+        final Project project = result.getProjects().iterator().next();
+
+        final Set<UserKeyword> userKeywords = project.getUserKeywords();
+        assertEquals(1, userKeywords.size());
+
+        final Set<UserKeyword> ofInterest = project.findUserKeyword("Simple for loop");
+        assertEquals(1, ofInterest.size());
+
+        final UserKeyword keyword = ofInterest.iterator().next();
+        final Step step0 = keyword.getStep(0);
+
+        assertTrue(ForLoop.class.isAssignableFrom(step0.getClass()));
+        final ForLoop forLoop = (ForLoop) step0;
+        assertEquals("${index}", forLoop.getIterator().getName());
+
+        final List<Step> steps = forLoop.getSteps();
+        assertEquals(2, steps.size());
+    }
+
+    @Test
+    void testForLoopWithRangeWithoutTabAfterIn(){
+        final File robot = Helpers.getResourceFile("robot/for-loop/simple-without-tab-after-in.robot");
+        assertNotNull(robot);
+
+        final BuildResult result = Builder.build(robot, Helpers.getConfiguration(), true);
+        assertEquals(1, result.getProjects().size());
+
+        final Project project = result.getProjects().iterator().next();
+
+        final Set<UserKeyword> userKeywords = project.getUserKeywords();
+        assertEquals(1, userKeywords.size());
+
+        final Set<UserKeyword> ofInterest = project.findUserKeyword("Simple for loop");
+        assertEquals(1, ofInterest.size());
+
+        final UserKeyword keyword = ofInterest.iterator().next();
+        final Step step0 = keyword.getStep(0);
+
+        assertTrue(ForLoop.class.isAssignableFrom(step0.getClass()));
+        final ForLoop forLoop = (ForLoop) step0;
+        assertEquals("${index}", forLoop.getIterator().getName());
+
+        final List<Step> steps = forLoop.getSteps();
+        assertEquals(2, steps.size());
+    }
+
+    @Test
+    void testAssignmentFromVariableWithEqualSign(){
         final File robot = Helpers.getResourceFile("robot/assignment/variable.robot");
         assertNotNull(robot);
 
@@ -146,7 +200,7 @@ class BuilderTest {
     }
 
     @Test
-    void checkTestCaseSetupWithCall() {
+    void testTestCaseSetupWithCall() {
         final File robot = Helpers.getResourceFile("robot/setup-and-teardown.robot");
         assertNotNull(robot);
 
@@ -167,7 +221,7 @@ class BuilderTest {
     }
 
     @Test
-    void checkTestCaseTeardownWithCall() {
+    void testTestCaseTeardownWithCall() {
         final File robot = Helpers.getResourceFile("robot/setup-and-teardown.robot");
         assertNotNull(robot);
 

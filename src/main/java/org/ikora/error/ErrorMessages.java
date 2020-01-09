@@ -12,4 +12,6 @@ public class ErrorMessages {
     public static final String FOUND_MULTIPLE_MATCHES = "Found multiple matches to resolve symbol";
     public static final String FOUND_NO_MATCH = "Found no match to resolve symbol";
     public static final String FAILED_TO_LOAD_LIBRARY_KEYWORD = "Failed to load library keyword";
+    public static final String FAILED_TO_LOCATE_ITERATOR_IN_FOR_LOOP = "Failed to locate iterator when parsing for loop";
+    public static final String FAILED_TO_CREATE_ITERATOR_IN_FOR_LOOP = "Failed to create iterator when parsing for loop";
 }

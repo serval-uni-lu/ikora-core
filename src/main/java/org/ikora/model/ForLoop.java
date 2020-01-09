@@ -8,26 +8,38 @@ import org.ikora.utils.LevenshteinDistance;
 import org.apache.commons.lang3.NotImplementedException;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 public class ForLoop extends Step {
-    private List<Step> steps;
-    private List<Argument> argumentList;
+    private final List<Step> steps;
+    private final Variable iterator;
+    private final Step range;
 
-    public ForLoop() {
+    public ForLoop(Variable iterator, Step range, List<Step> steps) {
         super(":FOR");
-        steps = new ArrayList<>();
-        argumentList = new ArrayList<>();
+
+        this.iterator = iterator;
+        this.range = range;
+        this.steps = steps;
     }
 
     public List<Step> getSteps(){
         return steps;
     }
 
+    public Variable getIterator() {
+        return iterator;
+    }
+
+    public Step getRange() {
+        return range;
+    }
+
     @Override
     public List<Argument> getArgumentList() {
-        return argumentList;
+        return Collections.emptyList();
     }
 
     @Override

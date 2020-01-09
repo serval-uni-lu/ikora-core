@@ -7,26 +7,34 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class Tokens implements Iterable<Token> {
-    private final List<Token> tokens;
+    private final List<Token> tokenList;
 
     public Tokens(){
-        this.tokens = new ArrayList<>();
+        this.tokenList = new ArrayList<>();
     }
 
-    private Tokens(List<Token> tokens){
-        this.tokens = tokens;
+    private Tokens(List<Token> tokenList){
+        this.tokenList = tokenList;
     }
 
     public void add(Token token){
         if((token.isDelimiter() && containsDelimiterOnly())
             || !token.isDelimiter()){
-            this.tokens.add(token);
+            this.tokenList.add(token);
         }
+    }
+
+    public Optional<Token> get(int position){
+        if(position >= this.size() || position < 0){
+            return Optional.empty();
+        }
+
+        return Optional.of(this.tokenList.get(position));
     }
 
     public Optional<Token> first(){
         if(this.size() > 0){
-            return Optional.of(this.tokens.get(0));
+            return Optional.of(this.tokenList.get(0));
         }
 
         return Optional.empty();
@@ -34,18 +42,18 @@ public class Tokens implements Iterable<Token> {
 
     public Optional<Token> last() {
         if(this.size() > 0){
-            return Optional.of(this.tokens.get(this.tokens.size() - 1));
+            return Optional.of(this.tokenList.get(this.tokenList.size() - 1));
         }
 
         return Optional.empty();
     }
 
     public int size(){
-        return this.tokens.size();
+        return this.tokenList.size();
     }
 
     public Tokens withoutIndent(){
-        return new Tokens(tokens.stream().filter(token -> !token.isDelimiter()).collect(Collectors.toList()));
+        return new Tokens(tokenList.stream().filter(token -> !token.isDelimiter()).collect(Collectors.toList()));
     }
 
     public Tokens withoutFirst(){
@@ -53,7 +61,7 @@ public class Tokens implements Iterable<Token> {
     }
 
     public Tokens withoutFirst(int offset){
-        return new Tokens(this.tokens.subList(offset, tokens.size()));
+        return new Tokens(this.tokenList.subList(offset, tokenList.size()));
     }
 
     public Tokens withoutTag(String tag){
@@ -71,11 +79,11 @@ public class Tokens implements Iterable<Token> {
     }
 
     private boolean containsDelimiterOnly(){
-        return tokens.stream().allMatch(Token::isDelimiter);
+        return tokenList.stream().allMatch(Token::isDelimiter);
     }
 
     public int getIndentSize() {
-        return (int) tokens.stream().filter(Token::isDelimiter).count();
+        return (int) tokenList.stream().filter(Token::isDelimiter).count();
     }
 
     public boolean isParent(Tokens tokens) {
@@ -83,7 +91,7 @@ public class Tokens implements Iterable<Token> {
             return true;
         }
 
-        if(tokens.size() > 0 && tokens.tokens.get(0).isComment()){
+        if(tokens.size() > 0 && tokens.tokenList.get(0).isComment()){
             return true;
         }
 
@@ -92,17 +100,17 @@ public class Tokens implements Iterable<Token> {
 
     @Override
     public Iterator<Token> iterator() {
-        return this.tokens.iterator();
+        return this.tokenList.iterator();
     }
 
     @Override
     public String toString() {
-        return this.tokens.stream()
+        return this.tokenList.stream()
                 .map(Token::getValue)
                 .collect(Collectors.joining("\t"));
     }
 
     public boolean isEmpty() {
-        return this.tokens.isEmpty();
+        return this.tokenList.isEmpty();
     }
 }

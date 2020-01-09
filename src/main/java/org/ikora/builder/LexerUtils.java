@@ -116,7 +116,7 @@ class LexerUtils {
         Token.Type type;
         String value;
 
-        if(trimmed.isEmpty() || trimmed.equals("/")){
+        if(trimmed.isEmpty() || trimmed.equals("\\")){
             value = text;
             type = Token.Type.DELIMITER;
         }
@@ -129,7 +129,7 @@ class LexerUtils {
             else if(value.startsWith("#")){
                 type = Token.Type.COMMENT;
             }
-            else if(value.equalsIgnoreCase(":FOR")){
+            else if(compareNoCase(value,"^:(\\s?)FOR")){
                 type = Token.Type.FOR_LOOP;
             }
             else if(compareNoCase(value, "^((\\$|@|&)\\{)(.*)(\\})(\\s?)(=?)")){
