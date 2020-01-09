@@ -60,7 +60,14 @@ public class Linker {
         }
 
         for(Step step: testCase) {
-            if(!(step instanceof KeywordCall)) {
+            if(step instanceof ForLoop){
+                runtime.getErrors().registerSyntaxError(
+                        step.getFile(),
+                        ErrorMessages.FOR_LOOP_NOT_ALLOWED_IN_TEST_CASE,
+                        step.getPosition()
+                );
+            }
+            else if(!(step instanceof KeywordCall)) {
                 runtime.getErrors().registerSyntaxError(
                         step.getFile(),
                         ErrorMessages.EXPECTING_KEYWORD_CALL,
@@ -106,7 +113,7 @@ public class Linker {
                 } catch (InvalidImportTypeException e) {
                     runtime.getErrors().registerInternalError(
                             call.getFile(),
-                            "Should handle Static import at this point",
+                            ErrorMessages.SHOULD_HANDLE_STATIC_IMPORT,
                             call.getPosition()
                     );
                 } catch (InvalidDependencyException e) {
@@ -180,7 +187,7 @@ public class Linker {
             else{
                 runtime.getErrors().registerSymbolError(
                         call.getFile(),
-                        "Found more than one keyword to match argument",
+                        ErrorMessages.FOUND_MULTIPLE_MATCHES,
                         argument.getPosition()
                 );
 
@@ -264,7 +271,7 @@ public class Linker {
             } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException exception) {
                 runtime.getErrors().registerUnhandledError(
                         sourceFile.getFile(),
-                        String.format("Failed to load library keyword: %s::%s", library, name),
+                        ErrorMessages.FAILED_TO_LOAD_LIBRARY_KEYWORD,
                         exception
                 );
             }
@@ -293,7 +300,7 @@ public class Linker {
             else {
                 runtime.getErrors().registerSymbolError(
                         valueScope.getFile(),
-                        String.format("Found no definition for '%s'", valueScope.getName()),
+                        ErrorMessages.FOUND_NO_MATCH,
                         valueScope.getPosition()
                 );
             }
