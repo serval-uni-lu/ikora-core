@@ -80,39 +80,14 @@ public class ForLoop extends Step {
 
     @Override
     public double distance(Differentiable other) {
-        if(!(other instanceof ForLoop)){
-            return 1;
-        }
-
-        ForLoop forLoop = (ForLoop)other;
-
-        return LevenshteinDistance.index(steps, forLoop.steps);
+        //TODO: implement a proper distance method
+        return 0.0;
     }
 
     @Override
     public List<Action> differences(Differentiable other) {
-        List<Action> actions = new ArrayList<>();
-
-        if(!(other instanceof Step)){
-            return actions;
-        }
-
-        if(this.getClass() != other.getClass()){
-            actions.add(Action.changeStepType(this, other));
-        }
-        else{
-            ForLoop forLoop = (ForLoop)other;
-
-            if(LevenshteinDistance.stringIndex(this.getName(), forLoop.getName()) > 0){
-                actions.add(Action.changeForLoopCondition(this, forLoop));
-            }
-
-            if(LevenshteinDistance.index(this.getSteps(), forLoop.getSteps()) > 0){
-                actions.add(Action.changeForLoopBody(this, forLoop));
-            }
-        }
-
-        return actions;
+        //TODO: implement the a proper differences method
+        return Collections.emptyList();
     }
 
     @Override

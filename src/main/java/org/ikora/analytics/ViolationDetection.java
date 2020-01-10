@@ -9,26 +9,60 @@ import java.util.Set;
 public class ViolationDetection {
     private ViolationDetection() {}
 
-    public static List<Violation> detect(Project project){
+    public static List<Violation> detect(SourceFile file, Violation.Cause cause){
         List<Violation> violations = new ArrayList<>();
 
-        for(TestCase testCase: project.getTestCases()){
-            for(Step step: testCase.getSteps()){
-                duplicatedKeyword(step, violations);
-                duplicatedVariable(step, violations);
-                transitiveDependency(step, violations);
-            }
+        for(TestCase testCase: file.getTestCases()){
+            detect(cause, violations, testCase.getSteps());
         }
 
-        for(UserKeyword userKeyword: project.getUserKeywords()){
-            for(Step step: userKeyword.getSteps()){
-                duplicatedKeyword(step, violations);
-                duplicatedVariable(step, violations);
-                transitiveDependency(step, violations);
-            }
+        for(UserKeyword userKeyword: file.getUserKeywords()){
+            detect(cause, violations, userKeyword.getSteps());
         }
 
         return violations;
+    }
+
+    public static List<Violation> detect(Project project, Violation.Cause cause){
+        List<Violation> violations = new ArrayList<>();
+
+        for(SourceFile file: project.getSourceFiles()){
+            violations.addAll(detect(file, cause));
+        }
+
+        return violations;
+    }
+
+    public static List<Violation> detect(Set<Project> projects, Violation.Cause cause){
+        List<Violation> violations = new ArrayList<>();
+
+        for(Project project: projects){
+            violations.addAll(detect(project, cause));
+        }
+
+        return violations;
+    }
+
+    private static void detect(Violation.Cause cause, List<Violation> violations, List<Step> steps) {
+        for(Step step: steps){
+            if(step instanceof ForLoop){
+                detect(cause, violations, ((ForLoop)step).getSteps());
+            }
+
+            switch (cause){
+                case MULTIPLE_DEFINITIONS:
+                    duplicatedKeyword(step, violations);
+                    duplicatedVariable(step, violations);
+                    break;
+                case TRANSITIVE_DEPENDENCY:
+                    transitiveDependency(step, violations);
+                    break;
+                case NO_DEFINITION_FOUND:
+                case INFINITE_LOOP:
+                case LITERAL_LOCATOR:
+                    throw new UnsupportedOperationException();
+            }
+        }
     }
 
     private static void duplicatedKeyword(Step step, List<Violation> violations) {
@@ -68,17 +102,5 @@ public class ViolationDetection {
                 violations.add(new Violation(Violation.Level.WARNING, step, Violation.Cause.TRANSITIVE_DEPENDENCY));
             }
         });
-    }
-
-
-
-    public static List<Violation> detect(Set<Project> projects){
-        List<Violation> violations = new ArrayList<>();
-
-        for(Project project: projects){
-            violations.addAll(detect(project));
-        }
-
-        return violations;
     }
 }
