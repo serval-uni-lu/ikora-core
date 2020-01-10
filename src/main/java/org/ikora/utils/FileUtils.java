@@ -89,31 +89,13 @@ public class FileUtils {
     public static File getResourceFile(String name) throws IOException, URISyntaxException {
         URL resource = FileUtils.class.getClassLoader().getResource(name);
         if (resource == null) {
-            throw new IOException("failed to locate resource template for project analytics");
+            throw new IOException("Failed to locate resource template for project analytics");
         } else {
             return Paths.get(resource.toURI()).toFile();
         }
     }
 
     public static Charset detectCharset(File f, Charset defaultCharset) {
-
-        Charset charset = null;
-
-        for (Charset current : Charset.availableCharsets().values()) {
-            charset = validateCharset(f, current);
-            if (charset != null) {
-                break;
-            }
-        }
-
-        if(charset == null){
-            return defaultCharset;
-        }
-
-        return charset;
-    }
-
-    private static Charset validateCharset(File f, Charset defaultValue) {
         try(BufferedInputStream input = new BufferedInputStream(new FileInputStream(f))) {
             CharsetDetector detector = new CharsetDetector();
             detector.setText(input);
@@ -121,7 +103,7 @@ public class FileUtils {
             String match = detector.detect().getName();
             return Charset.forName(match);
         } catch (Exception e) {
-            return defaultValue;
+            return defaultCharset;
         }
     }
 
