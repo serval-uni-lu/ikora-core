@@ -9,14 +9,16 @@ import java.util.Collections;
 import java.util.List;
 
 public class TimeOut extends Node {
+    private final String name;
     private final Value variable;
     private final TimeValue value;
     private final boolean isNone;
 
-    private String name;
+    private String errorMessage;
 
-    public TimeOut(String name){
+    public TimeOut(String name, String errorMessage){
         this.name = name;
+        this.errorMessage = errorMessage;
 
         if(Value.isVariable(this.name)){
             this.variable = new Value(this, this.name);
@@ -41,7 +43,7 @@ public class TimeOut extends Node {
     }
 
     public static TimeOut none() {
-        return new TimeOut("NONE");
+        return new TimeOut("NONE", "");
     }
 
     public boolean isValid(){

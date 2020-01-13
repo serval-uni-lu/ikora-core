@@ -42,7 +42,7 @@ public class ParserUtils {
 
     static void parseTimeOut(String label, LineReader reader, Tokens tokens, Delayable delayable, ErrorManager errors) throws IOException {
         try {
-            TimeOut timeOut = TimeoutParser.parse(label, reader, tokens, errors);
+            TimeOut timeOut = TimeoutParser.parse(label, tokens);
             delayable.setTimeOut(timeOut);
         } catch (InvalidArgumentException e) {
             errors.registerSyntaxError(reader.getFile(),

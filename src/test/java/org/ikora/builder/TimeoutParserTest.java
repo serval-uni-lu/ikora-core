@@ -1,13 +1,10 @@
 package org.ikora.builder;
 
-import org.ikora.error.ErrorManager;
 import org.ikora.exception.InvalidArgumentException;
 import org.ikora.model.TimeOut;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.io.Reader;
-import java.io.StringReader;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -39,12 +36,9 @@ public class TimeoutParserTest {
     }
 
     private static TimeOut parse(String string) throws IOException, InvalidArgumentException {
-        Reader stringReader = new StringReader(string);
-        LineReader reader = new LineReader(stringReader);
-        Line line = reader.readLine();
+        Line line = new Line(string, 0, false, false);
         Tokens tokens = LexerUtils.tokenize(line);
-        ErrorManager errors = new ErrorManager();
 
-        return TimeoutParser.parse("\\[TimeOut\\]", reader, tokens, errors);
+        return TimeoutParser.parse("\\[TimeOut\\]", tokens);
     }
 }

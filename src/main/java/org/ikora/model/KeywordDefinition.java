@@ -18,7 +18,7 @@ public abstract class KeywordDefinition extends Keyword implements Iterable<Step
         steps = new ArrayList<>();
         tags = new HashSet<>();
         documentation = "";
-        this.timeOut = new TimeOut("NONE");
+        this.timeOut = TimeOut.none();
     }
 
     public void setName(String name){
