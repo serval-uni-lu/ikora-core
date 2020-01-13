@@ -68,7 +68,7 @@ class SettingsTableParser {
                 parseTestTemplate(reader, tokens, settings);
             }
             else if(LexerUtils.compareNoCase(label, "test timeout")){
-                parseTestTimeout(reader, tokens, settings);
+                ParserUtils.parseTimeOut("test timeout", reader, tokens, settings, errors);
             }
             else {
                 reader.readLine();
@@ -78,10 +78,6 @@ class SettingsTableParser {
         }
 
         return settings;
-    }
-
-    private static void parseTestTimeout(LineReader reader, Tokens tokens, Settings settings) throws IOException {
-        reader.readLine();
     }
 
     private static void parseTestTemplate(LineReader reader, Tokens tokens, Settings settings) throws IOException {

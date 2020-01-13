@@ -11,6 +11,7 @@ import java.util.List;
 public class TimeOut extends Node {
     private final Value variable;
     private final TimeValue value;
+    private final boolean isNone;
 
     private String name;
 
@@ -20,19 +21,31 @@ public class TimeOut extends Node {
         if(Value.isVariable(this.name)){
             this.variable = new Value(this, this.name);
             this.value = null;
+            this.isNone = false;
         }
         else if(TimeValue.isValid(this.name)){
             this.variable = null;
             this.value = new TimeValue(this.name);
+            this.isNone = false;
+        }
+        else if (this.name.equalsIgnoreCase("NONE")){
+            this.variable = null;
+            this.value = null;
+            this.isNone = true;
         }
         else{
             this.variable = null;
             this.value = null;
+            this.isNone = false;
         }
     }
 
+    public static TimeOut none() {
+        return new TimeOut("NONE");
+    }
+
     public boolean isValid(){
-        return this.variable != null || this.value != null;
+        return this.variable != null || this.value != null || this.isNone;
     }
 
     @Override

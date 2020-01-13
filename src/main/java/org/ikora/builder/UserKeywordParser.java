@@ -2,7 +2,9 @@ package org.ikora.builder;
 
 import org.ikora.error.ErrorManager;
 import org.ikora.error.ErrorMessages;
+import org.ikora.exception.InvalidNumberArgumentException;
 import org.ikora.model.Step;
+import org.ikora.model.TimeOut;
 import org.ikora.model.UserKeyword;
 
 import java.io.IOException;
@@ -13,7 +15,7 @@ class UserKeywordParser {
     public static UserKeyword parse(LineReader reader, DynamicImports dynamicImports, ErrorManager errors) throws IOException {
         UserKeyword userKeyword = new UserKeyword();
         Tokens nameTokens = LexerUtils.tokenize(reader.getCurrent());
-        Tokens tokens = nameTokens;
+        Tokens tokens;
 
         ParserUtils.parseName(reader, nameTokens.withoutIndent(), userKeyword, errors);
 
@@ -49,7 +51,7 @@ class UserKeywordParser {
                 parseTeardown(reader, tokens, userKeyword, errors);
             }
             else if (LexerUtils.compareNoCase(label, "\\[timeout\\]")) {
-                 parseTimeout(reader, tokens, userKeyword);
+                 ParserUtils.parseTimeOut("\\[timeout\\]", reader, tokens, userKeyword, errors);
             }
             else {
                 parseStep(reader, tokens, userKeyword, dynamicImports, errors);
@@ -96,10 +98,6 @@ class UserKeywordParser {
         Step step = StepParser.parse(reader, tokens, "\\[teardown\\]", false, errors);
         userKeyword.setTearDown(step);
 
-        reader.readLine();
-    }
-
-    private static void parseTimeout(LineReader reader, Tokens tokens, UserKeyword userKeyword) throws IOException {
         reader.readLine();
     }
 

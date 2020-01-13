@@ -7,20 +7,32 @@ import org.ikora.utils.LevenshteinDistance;
 
 import java.util.*;
 
-public abstract class KeywordDefinition extends Keyword implements Iterable<Step> {
+public abstract class KeywordDefinition extends Keyword implements Iterable<Step>, Delayable {
     private Value name;
     private String documentation;
     private Set<String> tags;
     private List<Step> steps;
+    private TimeOut timeOut;
 
     KeywordDefinition(){
         steps = new ArrayList<>();
         tags = new HashSet<>();
         documentation = "";
+        this.timeOut = new TimeOut("NONE");
     }
 
     public void setName(String name){
         this.name = new Value(name);
+    }
+
+    @Override
+    public TimeOut getTimeOut() {
+        return timeOut;
+    }
+
+    @Override
+    public void setTimeOut(TimeOut timeOut){
+        this.timeOut = timeOut;
     }
 
     public void addStep(Step step) throws Exception {

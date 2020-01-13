@@ -1,28 +1,26 @@
 package org.ikora.builder;
 
 import org.ikora.error.ErrorManager;
+import org.ikora.exception.InvalidArgumentException;
 import org.ikora.exception.InvalidNumberArgumentException;
 import org.ikora.model.TimeOut;
 
 public class TimeoutParser {
     private TimeoutParser() {}
 
-    public static TimeOut parse(LineReader reader, Tokens tokens, ErrorManager errors) throws Exception {
+    public static TimeOut parse( String label, LineReader reader, Tokens tokens, ErrorManager errors) throws InvalidArgumentException {
         Tokens fullTokens = tokens.withoutIndent();
-        Tokens currentTokens = fullTokens.withoutTag("\\[Timeout\\]");
+        Tokens currentTokens = fullTokens.withoutTag(label);
 
         TimeOut timeOut = parseLine(reader, currentTokens, errors);
-
-        if(timeOut != null){
-            timeOut.setPosition(ParserUtils.getPosition(fullTokens));
-        }
+        timeOut.setPosition(ParserUtils.getPosition(fullTokens));
 
         return timeOut;
     }
 
-    private static TimeOut parseLine(LineReader reader, Tokens tokens, ErrorManager errors) throws InvalidNumberArgumentException {
+    private static TimeOut parseLine(LineReader reader, Tokens tokens, ErrorManager errors) throws InvalidArgumentException {
         if(tokens.size() == 0){
-            return null;
+            throw new InvalidNumberArgumentException(1, 0);
         }
 
         if(tokens.size() > 1){
@@ -31,14 +29,10 @@ public class TimeoutParser {
 
         String text = ParserUtils.getLabel(reader, tokens, errors);
 
-        if(text.equalsIgnoreCase("NONE")){
-            return null;
-        }
-
         TimeOut timeOut = new TimeOut(text);
 
         if(!timeOut.isValid()){
-            return null;
+            throw new InvalidArgumentException(String.format("Invalid argument: %s", text));
         }
 
         return timeOut;

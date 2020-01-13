@@ -50,7 +50,7 @@ class TestCaseParser {
                 parseTemplate(reader, tokens, testCase);
             }
             else if (LexerUtils.compareNoCase(label, "\\[timeout\\]")) {
-                parseTimeout(reader, tokens, testCase);
+                ParserUtils.parseTimeOut("\\[timeout\\]", reader, tokens, testCase, errors);
             }
             else {
                 parseStep(reader, tokens, testCase, dynamicImports, errors);
@@ -60,10 +60,6 @@ class TestCaseParser {
         testCase.setPosition(ParserUtils.getPosition(testTokens));
 
         return testCase;
-    }
-
-    private static void parseTimeout(LineReader reader, Tokens tokens, TestCase testCase) throws IOException {
-       reader.readLine();
     }
 
     private static void parseTemplate(LineReader reader, Tokens tokens, TestCase testCase) throws IOException {

@@ -1,9 +1,9 @@
 package org.ikora.builder;
 
 import org.ikora.error.ErrorManager;
-import org.ikora.model.KeywordDefinition;
-import org.ikora.model.Mark;
-import org.ikora.model.Position;
+import org.ikora.error.ErrorMessages;
+import org.ikora.exception.InvalidArgumentException;
+import org.ikora.model.*;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -37,6 +37,19 @@ public class ParserUtils {
         }
 
         keyword.setName(first.get().getValue());
+        reader.readLine();
+    }
+
+    static void parseTimeOut(String label, LineReader reader, Tokens tokens, Delayable delayable, ErrorManager errors) throws IOException {
+        try {
+            TimeOut timeOut = TimeoutParser.parse(label, reader, tokens, errors);
+            delayable.setTimeOut(timeOut);
+        } catch (InvalidArgumentException e) {
+            errors.registerSyntaxError(reader.getFile(),
+                    String.format("%s: %s", ErrorMessages.FAILED_TO_PARSE_TIMEOUT, e.getMessage()),
+                    ParserUtils.getPosition(tokens));
+        }
+
         reader.readLine();
     }
 

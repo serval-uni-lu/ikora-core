@@ -9,19 +9,21 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class Settings {
+public class Settings implements Delayable {
     private List<Resources> resourcesTable;
     private List<Resources> externalResourcesTable;
     private List<Library> libraryTable;
     private List<String> defaultTags;
     private String documentation;
     private SourceFile file;
+    private TimeOut timeOut;
 
     public Settings() {
         this.resourcesTable = new ArrayList<>();
         this.externalResourcesTable = new ArrayList<>();
         this.libraryTable = new ArrayList<>();
         this.defaultTags = new ArrayList<>();
+        this.timeOut = TimeOut.none();
     }
 
     public SourceFile getFile() {
@@ -84,5 +86,15 @@ public class Settings {
 
     public void addDefaultTag(String defaultTag){
         defaultTags.add(defaultTag);
+    }
+
+    @Override
+    public TimeOut getTimeOut() {
+        return timeOut;
+    }
+
+    @Override
+    public void setTimeOut(TimeOut timeOut) {
+        this.timeOut = timeOut;
     }
 }
