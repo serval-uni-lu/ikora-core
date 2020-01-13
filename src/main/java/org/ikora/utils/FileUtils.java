@@ -1,6 +1,6 @@
 package org.ikora.utils;
 
-import org.apache.tika.parser.txt.CharsetDetector;
+import org.ikora.utils.charset.CharsetDetector;
 
 import java.io.*;
 import java.net.URI;
