@@ -8,8 +8,6 @@ import org.ikora.runner.Runtime;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Linker {
     private final Runtime runtime;
@@ -50,6 +48,18 @@ public class Linker {
         }
 
         for (Step step: testCase) {
+            if(testCase.hasTemplate()){
+                try {
+                    step.setTemplate(testCase.getTemplate());
+                } catch (InvalidDependencyException e) {
+                    runtime.getErrors().registerInternalError(
+                            step.getFile(),
+                            ErrorMessages.FAILED_TO_LINK_TEMPLATE,
+                            step.getPosition()
+                    );
+                }
+            }
+
             step.getKeywordCall().ifPresent(call -> unresolvedArguments.addAll(resolveCall(call)));
         }
 

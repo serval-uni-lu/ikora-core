@@ -42,6 +42,11 @@ public class KeywordCall extends Step {
         this.argumentList.add(argument);
     }
 
+    public void addArgument(int index, Argument argument) {
+        argument.setSourceFile(this.getSourceFile());
+        this.argumentList.add(index, argument);
+    }
+
     public void clearArguments() {
         this.argumentList.clear();
     }
@@ -186,5 +191,13 @@ public class KeywordCall extends Step {
     @Override
     public Optional<KeywordCall> getKeywordCall() {
         return Optional.of(this);
+    }
+
+    @Override
+    public void setTemplate(KeywordCall template) throws InvalidDependencyException {
+        super.setTemplate(template);
+
+        addArgument(0, new Argument(this, getName()));
+        setName(template.getName());
     }
 }

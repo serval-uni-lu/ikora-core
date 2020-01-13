@@ -2,6 +2,7 @@ package org.ikora.builder;
 
 import org.ikora.error.ErrorManager;
 import org.ikora.error.ErrorMessages;
+import org.ikora.exception.InvalidTypeException;
 import org.ikora.model.Step;
 import org.ikora.model.TestCase;
 
@@ -47,7 +48,7 @@ class TestCaseParser {
                 parseTeardown(reader, tokens, testCase, dynamicImports, errors);
             }
             else if (LexerUtils.compareNoCase(label, "\\[template\\]")) {
-                parseTemplate(reader, tokens, testCase);
+                parseTemplate(reader, tokens, testCase, errors);
             }
             else if (LexerUtils.compareNoCase(label, "\\[timeout\\]")) {
                 ParserUtils.parseTimeOut("\\[timeout\\]", reader, tokens, testCase, errors);
@@ -62,22 +63,51 @@ class TestCaseParser {
         return testCase;
     }
 
-    private static void parseTemplate(LineReader reader, Tokens tokens, TestCase testCase) throws IOException {
+    private static void parseTemplate(LineReader reader, Tokens tokens, TestCase testCase, ErrorManager errors) throws IOException {
+        Step step = StepParser.parse(reader, tokens, "\\[template\\]", false, errors);
+
+        try {
+            testCase.setTemplate(step);
+        } catch (InvalidTypeException e) {
+            errors.registerSyntaxError(
+                    step.getFile(),
+                    String.format("%s: %s", ErrorMessages.FAILED_TO_PARSE_TEMPLATE, e.getMessage()),
+                    step.getPosition()
+            );
+        }
         reader.readLine();
     }
 
     private static void parseTeardown(LineReader reader, Tokens tokens, TestCase testCase, DynamicImports dynamicImports, ErrorManager errors) throws IOException {
-            Step step = StepParser.parse(reader, tokens, "\\[teardown\\]", false, errors);
-            testCase.setTearDown(step);
+        Step step = StepParser.parse(reader, tokens, "\\[teardown\\]", false, errors);
 
-            dynamicImports.add(testCase, step);
+        try {
+            testCase.setTearDown(step);
+        } catch (InvalidTypeException e) {
+            errors.registerSyntaxError(
+                    step.getFile(),
+                    String.format("%s: %s", ErrorMessages.FAILED_TO_PARSE_TEARDOWN, e.getMessage()),
+                    step.getPosition()
+            );
+        }
+
+        dynamicImports.add(testCase, step);
     }
 
     private static void parseSetup(LineReader reader, Tokens tokens, TestCase testCase, DynamicImports dynamicImports, ErrorManager errors) throws IOException {
-            Step step = StepParser.parse(reader, tokens, "\\[setup\\]", false, errors);
-            testCase.setSetup(step);
+        Step step = StepParser.parse(reader, tokens, "\\[setup\\]", false, errors);
 
-            dynamicImports.add(testCase, step);
+        try {
+            testCase.setSetup(step);
+        } catch (InvalidTypeException e) {
+            errors.registerSyntaxError(
+                    step.getFile(),
+                    String.format("%s: %s", ErrorMessages.FAILED_TO_PARSE_SETUP, e.getMessage()),
+                    step.getPosition()
+            );
+        }
+
+        dynamicImports.add(testCase, step);
     }
 
     private static void parseTags(LineReader reader, Tokens tokens, TestCase testCase) throws IOException {

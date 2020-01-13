@@ -2,6 +2,7 @@ package org.ikora.model;
 
 import org.ikora.analytics.visitor.NodeVisitor;
 import org.ikora.analytics.visitor.VisitorMemory;
+import org.ikora.exception.InvalidTypeException;
 
 import java.util.Collections;
 import java.util.List;
@@ -9,13 +10,14 @@ import java.util.List;
 public class TestCase extends KeywordDefinition {
     private KeywordCall setup;
     private KeywordCall tearDown;
+    private KeywordCall template;
 
     public void setSetup(KeywordCall setup){
         this.setup = setup;
         this.setup.setSourceFile(this.getSourceFile());
     }
 
-    public void setSetup(Step step){
+    public void setSetup(Step step) throws InvalidTypeException {
         setSetup(toCall(step));
     }
 
@@ -24,8 +26,17 @@ public class TestCase extends KeywordDefinition {
         this.tearDown.setSourceFile(this.getSourceFile());
     }
 
-    public void setTearDown(Step tearDown){
+    public void setTearDown(Step tearDown) throws InvalidTypeException {
         setTearDown(toCall(tearDown));
+    }
+
+    public void setTemplate(KeywordCall template){
+        this.template = template;
+        this.template.setSourceFile(this.getSourceFile());
+    }
+
+    public void setTemplate(Step template) throws InvalidTypeException {
+        setTemplate(toCall(template));
     }
 
     public KeywordCall getSetup(){
@@ -34,6 +45,14 @@ public class TestCase extends KeywordDefinition {
 
     public KeywordCall getTearDown(){
         return tearDown;
+    }
+
+    public KeywordCall getTemplate() {
+        return template;
+    }
+
+    public boolean hasTemplate(){
+        return template != null;
     }
 
     @Override
@@ -46,6 +65,10 @@ public class TestCase extends KeywordDefinition {
 
         if(this.tearDown != null){
             this.tearDown.setSourceFile(sourceFile);
+        }
+
+        if(this.template != null){
+            this.template.setSourceFile(sourceFile);
         }
     }
 

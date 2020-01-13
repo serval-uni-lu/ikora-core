@@ -2,9 +2,8 @@ package org.ikora.builder;
 
 import org.ikora.error.ErrorManager;
 import org.ikora.error.ErrorMessages;
-import org.ikora.exception.InvalidNumberArgumentException;
+import org.ikora.exception.InvalidTypeException;
 import org.ikora.model.Step;
-import org.ikora.model.TimeOut;
 import org.ikora.model.UserKeyword;
 
 import java.io.IOException;
@@ -96,7 +95,16 @@ class UserKeywordParser {
 
     private static void parseTeardown(LineReader reader, Tokens tokens, UserKeyword userKeyword, ErrorManager errors) throws IOException {
         Step step = StepParser.parse(reader, tokens, "\\[teardown\\]", false, errors);
-        userKeyword.setTearDown(step);
+
+        try {
+            userKeyword.setTearDown(step);
+        } catch (InvalidTypeException e) {
+            errors.registerSyntaxError(
+                    step.getFile(),
+                    String.format("%s: %s", ErrorMessages.FAILED_TO_PARSE_TEARDOWN, e.getMessage()),
+                    step.getPosition()
+            );
+        }
 
         reader.readLine();
     }

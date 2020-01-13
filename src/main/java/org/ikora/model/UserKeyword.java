@@ -2,6 +2,7 @@ package org.ikora.model;
 
 import org.ikora.analytics.visitor.NodeVisitor;
 import org.ikora.analytics.visitor.VisitorMemory;
+import org.ikora.exception.InvalidTypeException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +28,7 @@ public class UserKeyword extends KeywordDefinition {
         this.tearDown = tearDown;
     }
 
-    public void setTearDown(Step tearDown){
+    public void setTearDown(Step tearDown) throws InvalidTypeException {
         setTearDown(toCall(tearDown));
     }
 

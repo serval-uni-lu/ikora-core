@@ -238,6 +238,31 @@ class BuilderTest {
         assertTrue(testCase.getTearDown().getKeyword().isPresent());
         Keyword setup = testCase.getTearDown().getKeyword().get();
 
-        assertEquals(setup, keyword);
+        assertEquals(keyword, setup);
+    }
+
+    @Test
+    void testTestCaseWithSimpleTemplate(){
+        final File robot = Helpers.getResourceFile("robot/template.robot");
+        assertNotNull(robot);
+
+        final BuildResult result = Builder.build(robot, Helpers.getConfiguration(), true);
+        assertEquals(1, result.getProjects().size());
+
+        final Project project = result.getProjects().iterator().next();
+
+        final TestCase testCase = project.getTestCases().iterator().next();
+        assertNotNull(testCase.getTemplate());
+
+        final Set<UserKeyword> ofInterest = project.findUserKeyword("This is a template");
+        assertEquals(1, ofInterest.size());
+        final Keyword keyword = ofInterest.iterator().next();
+
+        final Step step0 = testCase.getStep(0);
+        assertEquals("This is a template", step0.getName());
+        assertTrue(step0.getKeywordCall().map(KeywordCall::getKeyword).isPresent());
+        final Keyword template = step0.getKeywordCall().map(KeywordCall::getKeyword).get().get();
+
+        assertEquals(keyword, template);
     }
 }

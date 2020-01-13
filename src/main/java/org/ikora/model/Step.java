@@ -2,14 +2,17 @@ package org.ikora.model;
 
 import org.ikora.exception.InvalidDependencyException;
 
-import java.security.Key;
 import java.util.*;
-
 
 public abstract class Step extends Node {
     private Value name;
+    protected KeywordCall template;
 
     public Step(String name) {
+        this.name = new Value(name);
+    }
+
+    protected void setName(String name){
         this.name = new Value(name);
     }
 
@@ -68,4 +71,8 @@ public abstract class Step extends Node {
     public abstract Optional<KeywordCall> getKeywordCall();
     public abstract List<Argument> getArgumentList();
     public abstract boolean hasParameters();
+
+    public void setTemplate(KeywordCall template) throws InvalidDependencyException {
+        this.template = template;
+    }
 }

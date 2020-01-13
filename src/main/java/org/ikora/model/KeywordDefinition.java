@@ -2,6 +2,7 @@ package org.ikora.model;
 
 import org.apache.commons.lang3.StringUtils;
 import org.ikora.analytics.Action;
+import org.ikora.exception.InvalidTypeException;
 import org.ikora.runner.Runtime;
 import org.ikora.utils.LevenshteinDistance;
 
@@ -187,15 +188,15 @@ public abstract class KeywordDefinition extends Keyword implements Iterable<Step
         return Type.USER;
     }
 
-    KeywordCall toCall(Step step){
+    KeywordCall toCall(Step step) throws InvalidTypeException {
         if(step == null){
-            return null;
+            throw new InvalidTypeException("Expected a keyword call got null instead");
         }
 
         if(KeywordCall.class.isAssignableFrom(step.getClass())){
             return (KeywordCall) step;
         }
 
-        return null;
+        throw new InvalidTypeException(String.format("Expected a keyword call got %s instead", step.getClass().getName()));
     }
 }

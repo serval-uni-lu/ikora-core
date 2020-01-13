@@ -15,4 +15,8 @@ public class ErrorMessages {
     public static final String FAILED_TO_LOCATE_ITERATOR_IN_FOR_LOOP = "Failed to locate iterator when parsing for loop";
     public static final String FAILED_TO_CREATE_ITERATOR_IN_FOR_LOOP = "Failed to create iterator when parsing for loop";
     public static final String FAILED_TO_PARSE_TIMEOUT = "Failed to parse timeOut";
+    public static final String FAILED_TO_PARSE_SETUP = "Failed to parse setup";
+    public static final String FAILED_TO_PARSE_TEARDOWN = "Failed to parse teardown";
+    public static final String FAILED_TO_PARSE_TEMPLATE = "Failed to parse template";
+    public static final String FAILED_TO_LINK_TEMPLATE = "Failed to link template";
 }
