@@ -16,7 +16,7 @@ public class ParserUtils {
             errors.registerSyntaxError(
                     reader.getFile(),
                     "Test definition cannot take arguments",
-                    getPosition(tokens)
+                    getPosition(tokens.withoutFirst())
             );
 
             reader.readLine();
