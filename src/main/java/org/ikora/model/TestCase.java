@@ -18,7 +18,7 @@ public class TestCase extends KeywordDefinition {
     }
 
     public void setSetup(Step step) throws InvalidTypeException {
-        setSetup(toCall(step));
+        setSetup(step.toCall());
     }
 
     public void setTearDown(KeywordCall tearDown){
@@ -27,7 +27,7 @@ public class TestCase extends KeywordDefinition {
     }
 
     public void setTearDown(Step tearDown) throws InvalidTypeException {
-        setTearDown(toCall(tearDown));
+        setTearDown(tearDown.toCall());
     }
 
     public void setTemplate(KeywordCall template){
@@ -36,7 +36,7 @@ public class TestCase extends KeywordDefinition {
     }
 
     public void setTemplate(Step template) throws InvalidTypeException {
-        setTemplate(toCall(template));
+        setTemplate(template.toCall());
     }
 
     public KeywordCall getSetup(){

@@ -1,6 +1,7 @@
 package org.ikora.model;
 
 import org.ikora.exception.InvalidDependencyException;
+import org.ikora.exception.InvalidTypeException;
 
 import java.util.*;
 
@@ -74,5 +75,13 @@ public abstract class Step extends Node {
 
     public void setTemplate(KeywordCall template) throws InvalidDependencyException {
         this.template = template;
+    }
+
+    public KeywordCall toCall() throws InvalidTypeException {
+        if(KeywordCall.class.isAssignableFrom(this.getClass())){
+            return (KeywordCall) this;
+        }
+
+        throw new InvalidTypeException(String.format("Expected a keyword call got %s instead", this.getClass().getName()));
     }
 }

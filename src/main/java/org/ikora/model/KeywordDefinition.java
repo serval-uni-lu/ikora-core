@@ -187,16 +187,4 @@ public abstract class KeywordDefinition extends Keyword implements Iterable<Step
     public Type getType(){
         return Type.USER;
     }
-
-    KeywordCall toCall(Step step) throws InvalidTypeException {
-        if(step == null){
-            throw new InvalidTypeException("Expected a keyword call got null instead");
-        }
-
-        if(KeywordCall.class.isAssignableFrom(step.getClass())){
-            return (KeywordCall) step;
-        }
-
-        throw new InvalidTypeException(String.format("Expected a keyword call got %s instead", step.getClass().getName()));
-    }
 }

@@ -29,7 +29,7 @@ public class UserKeyword extends KeywordDefinition {
     }
 
     public void setTearDown(Step tearDown) throws InvalidTypeException {
-        setTearDown(toCall(tearDown));
+        setTearDown(tearDown.toCall());
     }
 
     public List<Value> getReturn(){
