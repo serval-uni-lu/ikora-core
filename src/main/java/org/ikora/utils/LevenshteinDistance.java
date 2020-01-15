@@ -10,20 +10,9 @@ import java.util.List;
 import static org.apache.commons.lang3.math.NumberUtils.min;
 
 public class LevenshteinDistance {
-    private static CompareCache<String, Integer> levenshteinDistanceMemory = new CompareCache<>();
-    private static CompareCache<String, Double> levenshteinIndexMemory = new CompareCache<>();
-
     public static int stringDistance(String string1, String string2){
-        if(levenshteinDistanceMemory.isCached(string1, string2)){
-            return levenshteinDistanceMemory.getScore(string1, string2);
-        }
-
         int[][] distanceMatrix = StringUtil.levenshteinDistance(string1, string2);
-        int score = distanceMatrix[string1.length()][string2.length()];
-
-        levenshteinDistanceMemory.set(string1, string2, score);
-
-        return score;
+        return distanceMatrix[string1.length()][string2.length()];
     }
 
     public static double stringIndex(String string1, String string2) {
@@ -33,15 +22,7 @@ public class LevenshteinDistance {
             return 0;
         }
 
-        if(levenshteinIndexMemory.isCached(string1, string2)){
-            return levenshteinIndexMemory.getScore(string1, string2);
-        }
-
-        double score = (double)stringDistance(string1, string2) / (double)size;
-
-        levenshteinIndexMemory.set(string1, string2, score);
-
-        return score;
+        return (double)stringDistance(string1, string2) / (double)size;
     }
 
     public static double[][] distanceMatrix(List<? extends Differentiable> before, List<? extends Differentiable> after) {
@@ -139,19 +120,5 @@ public class LevenshteinDistance {
         }
 
         return actions;
-    }
-
-    public static void printMatrix(double[][] grid)
-    {
-        for(int j = 0; j < grid[0].length; j++)
-        {
-            for (double[] row : grid) {
-                System.out.printf("%.3f", row[j]);
-                System.out.print("\t");
-            }
-            System.out.println();
-        }
-
-        System.out.println();
     }
 }
