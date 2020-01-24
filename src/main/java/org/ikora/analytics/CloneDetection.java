@@ -3,7 +3,6 @@ package org.ikora.analytics;
 import java.util.*;
 
 import org.ikora.model.*;
-import org.ikora.utils.LevenshteinDistance;
 
 public class CloneDetection<T extends Node> {
     private static Set<Action.Type> ignoreForType1;
@@ -15,11 +14,13 @@ public class CloneDetection<T extends Node> {
         typeI.add(Action.Type.CHANGE_DOCUMENTATION);
         typeI.add(Action.Type.REMOVE_DOCUMENTATION);
         typeI.add(Action.Type.ADD_DOCUMENTATION);
+
         ignoreForType1 = Collections.unmodifiableSet(typeI);
 
         Set<Action.Type> typeII = new HashSet<>(ignoreForType1);
         typeII.add(Action.Type.CHANGE_STEP_ARGUMENTS);
         typeII.add(Action.Type.CHANGE_STEP_RETURN_VALUES);
+
         ignoreForType2 = Collections.unmodifiableSet(typeII);
     }
 
@@ -67,9 +68,6 @@ public class CloneDetection<T extends Node> {
         if(clone == Clone.Type.NONE){
             if(isCloneType3(difference)){
                 clone = Clone.Type.TYPE_3;
-            }
-            else if (isCloneType4(difference)){
-                clone = Clone.Type.TYPE_4;
             }
         }
 
@@ -121,13 +119,7 @@ public class CloneDetection<T extends Node> {
     }
 
     public static boolean isCloneType2(Difference difference){
-        boolean isType2 = difference.isEmpty(ignoreForType2);
-
-        //if(!isTypeII && KeywordDefinition.class.isAssignableFrom(type)){
-        //    isTypeII = isStepsClones(difference);
-        //}
-
-        return isType2;
+        return difference.isEmpty(ignoreForType2);
     }
 
     public static boolean isCloneType3(Difference difference){
@@ -164,53 +156,5 @@ public class CloneDetection<T extends Node> {
         Optional<Keyword> optionalKeyword = ((KeywordCall)differentiable).getKeyword();
 
         return optionalKeyword.filter(keyword -> keyword.getType() == Keyword.Type.LOG).isPresent();
-    }
-
-    public static boolean isCloneType4(Difference difference){
-        boolean isTypeIV = false;
-
-        if(KeywordDefinition.class.isAssignableFrom(difference.getType())){
-            isTypeIV = isSameSequence(difference);
-        }
-
-        return isTypeIV;
-    }
-/*
-    private static boolean isStepsClones(Difference difference){
-        if(!difference.isEmpty(ignoreForTypeIIExtended)){
-            return false;
-        }
-
-        for(Action action: difference.getActions()){
-            if(action.getType() != Action.Type.CHANGE_STEP){
-                continue;
-            }
-
-            Optional<Keyword> left = getKeywordFromStep((Step)action.getLeft());
-            Optional<Keyword> right = getKeywordFromStep((Step)action.getRight());
-
-            if(!left.isPresent() || !right.isPresent()){
-                return false;
-            }
-
-            Difference stepDifference = Difference.of(left.get(), right.get());
-
-            if(!isCloneTypeI(Keyword.class, stepDifference)){
-                return false;
-            }
-        }
-
-        return true;
-    }
-*/
-    private static boolean isSameSequence(Difference difference) {
-        KeywordDefinition left = (KeywordDefinition) difference.getLeft();
-        KeywordDefinition right = (KeywordDefinition) difference.getRight();
-
-        return LevenshteinDistance.index(left.getSteps(), right.getSteps()) == 0.0;
-    }
-
-    private static Optional<Keyword> getKeywordFromStep(Step step){
-        return  step.getKeywordCall().flatMap(KeywordCall::getKeyword);
     }
 }

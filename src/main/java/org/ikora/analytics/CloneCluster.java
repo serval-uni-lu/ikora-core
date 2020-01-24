@@ -36,7 +36,7 @@ public class CloneCluster<T extends Node> {
         return clones;
     }
 
-    public boolean containsAll(CloneCluster other) {
+    public boolean containsAll(CloneCluster<T> other) {
         if(this.type != other.type){
             return false;
         }
@@ -48,6 +48,10 @@ public class CloneCluster<T extends Node> {
     public boolean equals(Object obj) {
         if(obj == null){
             return false;
+        }
+
+        if(this == obj){
+            return true;
         }
 
         if(obj.getClass() != this.getClass()){
