@@ -11,7 +11,7 @@ import java.util.Optional;
 public class AssignmentParser {
     private AssignmentParser(){}
 
-    public static Step parse(LineReader reader, ErrorManager errors) throws IOException {
+    public static Assignment parse(LineReader reader, ErrorManager errors) throws IOException {
         Assignment assignment = new Assignment(reader.getCurrent().getText());
         Tokens tokens = LexerUtils.tokenize(reader.getCurrent()).withoutIndent();
 
@@ -51,6 +51,14 @@ public class AssignmentParser {
                 );
             }
             ++offset;
+        }
+
+        if(!assignment.getKeywordCall().isPresent()){
+            errors.registerSyntaxError(
+                    reader.getFile(),
+                    ErrorMessages.ASSIGNMENT_SHOULD_HAVE_LEFT_HAND_OPERAND,
+                    ParserUtils.getPosition(tokens)
+            );
         }
 
         reader.readLine();

@@ -19,4 +19,5 @@ public class ErrorMessages {
     public static final String FAILED_TO_PARSE_TEARDOWN = "Failed to parse teardown";
     public static final String FAILED_TO_PARSE_TEMPLATE = "Failed to parse template";
     public static final String FAILED_TO_LINK_TEMPLATE = "Failed to link template";
+    public static final String ASSIGNMENT_SHOULD_HAVE_LEFT_HAND_OPERAND = "Assignment should have left hand operand";
 }
