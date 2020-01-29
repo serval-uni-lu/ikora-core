@@ -24,13 +24,13 @@ public abstract class LibraryKeyword extends Keyword {
     }
 
     @Override
-    public String getName(){
-        return toKeyword(this.getClass());
+    public Token getName(){
+        return Token.fromString(toKeyword(this.getClass()));
     }
 
     @Override
     public Value getNameAsValue(){
-        return new Value(toKeyword(this.getClass()));
+        return new Value(Token.fromString(toKeyword(this.getClass())));
     }
 
     public static String toKeyword(Class<? extends LibraryKeyword> libraryClass) {
@@ -70,8 +70,8 @@ public abstract class LibraryKeyword extends Keyword {
     }
 
     @Override
-    public boolean matches(String name) {
-        return this.getName().matches(name);
+    public boolean matches(Token name) {
+        return this.getNameAsValue().matches(name);
     }
 
     public Value.Type[] getArgumentTypes() {

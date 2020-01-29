@@ -140,7 +140,7 @@ public class SourceFile implements Iterable<UserKeyword> {
         return this.project.getEpoch();
     }
 
-    Set<TestCase> getTestCase(String name) {
+    Set<TestCase> getTestCase(Token name) {
         return testCaseTable.findNode(name);
     }
 
@@ -148,23 +148,23 @@ public class SourceFile implements Iterable<UserKeyword> {
         return userKeywordTable.iterator();
     }
 
-    public Set<UserKeyword> findUserKeyword(String name) {
+    public Set<UserKeyword> findUserKeyword(Token name) {
         return findNode(null, name, new HashSet<>(), UserKeyword.class);
     }
 
-    public Set<UserKeyword> findUserKeyword(String library, String name) {
+    public Set<UserKeyword> findUserKeyword(String library, Token name) {
         return findNode(library, name, new HashSet<>(), UserKeyword.class);
     }
 
-    public Set<Variable> findVariable(String name) {
+    public Set<Variable> findVariable(Token name) {
         return findNode(null, name, new HashSet<>(), Variable.class);
     }
 
-    public Set<Variable> findVariable(String library, String name) {
+    public Set<Variable> findVariable(String library, Token name) {
         return findNode(library, name, new HashSet<>(), Variable.class);
     }
 
-    private <T> Set<T> findNode(String library, String name, Set<SourceFile> memory, Class<T> type){
+    private <T> Set<T> findNode(String library, Token name, Set<SourceFile> memory, Class<T> type){
         HashSet<T> nodes = new HashSet<>();
 
         if(library == null || library.isEmpty() || getLibraryName().equalsIgnoreCase(library)){

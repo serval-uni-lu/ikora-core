@@ -98,7 +98,7 @@ public class Project implements Comparable<Project> {
         return userKeywords;
     }
 
-    public Set<UserKeyword> findUserKeyword(String name) {
+    public Set<UserKeyword> findUserKeyword(Token name) {
         Set<UserKeyword> userKeywordsFound = new HashSet<>();
 
         for(SourceFile file: files.values()){
@@ -108,7 +108,7 @@ public class Project implements Comparable<Project> {
         return userKeywordsFound;
     }
 
-    public Set<UserKeyword> findUserKeyword(String library, String name) {
+    public Set<UserKeyword> findUserKeyword(String library, Token name) {
         Set<UserKeyword> userKeywordsFound = new HashSet<>();
 
         for(SourceFile file: files.values()){

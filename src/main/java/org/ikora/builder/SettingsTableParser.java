@@ -32,7 +32,7 @@ class SettingsTableParser {
                 continue;
             }
 
-            String label = ParserUtils.getLabel(reader, tokens, errors);
+            String label = ParserUtils.getLabel(reader, tokens, errors).getValue();
 
             if(LexerUtils.compareNoCase(label, "documentation")){
                 parseDocumentation(reader, settings);
@@ -186,7 +186,7 @@ class SettingsTableParser {
 
             Value value = Value.empty();
             if(metadataTokens.get(1).isPresent()){
-                value = new Value(metadataTokens.get(1).get().getValue());
+                value = new Value(metadataTokens.get(1).get());
             }
 
             settings.addMetadata(key, value);
@@ -223,8 +223,8 @@ class SettingsTableParser {
 
     private static void parseLibrary(LineReader reader, Tokens tokens, Settings settings, ErrorManager errors) throws IOException {
         tokens = tokens.withoutFirst();
-        String label = ParserUtils.getLabel(reader, tokens, errors);
-        Library library = new Library(label, new ArrayList<>(), "");
+        Token label = ParserUtils.getLabel(reader, tokens, errors);
+        Library library = new Library(label, new ArrayList<>(), Token.empty());
         settings.addLibrary(library);
 
         reader.readLine();
@@ -232,13 +232,13 @@ class SettingsTableParser {
 
     private static void parseResource(LineReader reader, Tokens tokens, Settings settings, ErrorManager errors) throws IOException {
         tokens = tokens.withoutFirst();
-        String label = ParserUtils.getLabel(reader, tokens, errors);
-        File filePath = new File(label);
+        Token label = ParserUtils.getLabel(reader, tokens, errors);
+        File filePath = new File(label.getValue());
         if(!filePath.isAbsolute()) {
             filePath = new File(reader.getFile().getParentFile(), filePath.getPath());
         }
 
-        Resources resources = new Resources(label, filePath, new ArrayList<>(), "");
+        Resources resources = new Resources(label, filePath, new ArrayList<>(), Token.empty());
         settings.addResources(resources);
 
         reader.readLine();

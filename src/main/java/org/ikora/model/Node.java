@@ -94,7 +94,7 @@ public abstract class Node implements Differentiable {
     }
 
     public abstract Value getNameAsValue();
-    public abstract boolean matches(String name);
+    public abstract boolean matches(Token name);
     public abstract void accept(NodeVisitor visitor, VisitorMemory memory);
     public abstract void execute(Runtime runtime) throws Exception;
 }

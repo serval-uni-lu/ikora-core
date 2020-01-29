@@ -14,7 +14,7 @@ public class Argument extends Node {
     private final Value value;
     private KeywordCall call;
 
-    public Argument(Node parent, String name) throws InvalidDependencyException {
+    public Argument(Node parent, Token name) throws InvalidDependencyException {
         this.value = new Value(parent, name);
         this.addDependency(parent);
     }
@@ -34,7 +34,7 @@ public class Argument extends Node {
     }
 
     @Override
-    public boolean matches(String name) {
+    public boolean matches(Token name) {
         return value.matches(name);
     }
 
@@ -68,14 +68,18 @@ public class Argument extends Node {
         }
 
         if(!Argument.class.isAssignableFrom(other.getClass())){
+            return Collections.singletonList(Action.addElement(this.getClass(), this));
+        }
+
+        if(this.value.getName().equalsValue(other.getName())){
             return Collections.emptyList();
         }
 
-        return this.value.differences(((Argument)other).value);
+        return Collections.singletonList(Action.changeStepArgument(this, other));
     }
 
     @Override
-    public String getName() {
+    public Token getName() {
         return this.value.getName();
     }
 

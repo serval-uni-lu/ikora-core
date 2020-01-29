@@ -16,28 +16,23 @@ public abstract class LibraryVariable extends Variable {
     protected Format format;
 
     public LibraryVariable(){
-        super("");
+        super(Token.empty());
         this.format = Format.SCALAR;
         setName(toVariable(this.getClass()));
     }
 
     @Override
-    protected void setName(String name){
+    protected void setName(Token name){
         this.name = name;
 
-        String patternString = Value.escape(getName());
+        String patternString = Value.escape(getName().getValue());
         patternString = Value.getGenericVariableName(patternString);
         this.pattern = Pattern.compile(patternString, Pattern.CASE_INSENSITIVE);
     }
 
     @Override
-    public String getValueAsString() {
-        return "";
-    }
-
-    @Override
-    public void addElement(String element) {
-
+    public void addElement(Token element) {
+        //nothing to do
     }
 
     @Override
@@ -69,7 +64,7 @@ public abstract class LibraryVariable extends Variable {
         return Collections.emptyList();
     }
 
-    private static String toVariable(Class<? extends LibraryVariable> variableClass) {
-        return String.format("${%s}", variableClass.getSimpleName());
+    private static Token toVariable(Class<? extends LibraryVariable> variableClass) {
+        return Token.fromString(String.format("${%s}", variableClass.getSimpleName()));
     }
 }

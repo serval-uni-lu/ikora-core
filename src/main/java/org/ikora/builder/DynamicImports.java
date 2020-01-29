@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 public class DynamicImports {
     private Map<KeywordDefinition, ResourcesTable> resources;
     private Map<KeywordDefinition, Set<Library>> libraries;
-    private Map<KeywordDefinition, Map<Resources, Set<String>>> variables;
+    private Map<KeywordDefinition, Map<Resources, Set<Token>>> variables;
 
     public DynamicImports(){
         resources = new HashMap<>();
@@ -49,7 +49,7 @@ public class DynamicImports {
             libraries.putIfAbsent(parent, new HashSet<>());
             Set<Library> current = libraries.get(parent);
 
-            Library library = new Library(argumentList.get(0).getName(), getParams(argumentList), "");
+            Library library = new Library(argumentList.get(0).getName(), getParams(argumentList), Token.empty());
             current.add(library);
         }
     }
@@ -59,10 +59,10 @@ public class DynamicImports {
             resources.putIfAbsent(parent, new ResourcesTable());
             ResourcesTable current = resources.get(parent);
 
-            String name = values.get(0).getName();
-            File file = new File(name);
+            Token name = values.get(0).getName();
+            File file = new File(name.getValue());
 
-            Resources resource = new Resources(name, file, Collections.emptyList(), "");
+            Resources resource = new Resources(name, file, Collections.emptyList(), Token.empty());
             current.add(resource);
         }
     }
@@ -70,19 +70,19 @@ public class DynamicImports {
     private void addVariables(KeywordDefinition parent, List<Argument> values){
         if(!values.isEmpty()){
             variables.putIfAbsent(parent, new HashMap<>());
-            Map<Resources, Set<String>> current = variables.get(parent);
+            Map<Resources, Set<Token>> current = variables.get(parent);
 
-            String name = values.get(0).getName();
-            File file = new File(name);
+            Token name = values.get(0).getName();
+            File file = new File(name.getValue());
 
-            Resources resource = new Resources(name, file, Collections.emptyList(), "");
+            Resources resource = new Resources(name, file, Collections.emptyList(), Token.empty());
 
             current.putIfAbsent(resource, new HashSet<>());
-            Set<String> args = current.get(resource);
-            List<String> params = getParams(values);
+            Set<Token> args = current.get(resource);
+            List<Token> params = getParams(values);
 
             if(params.isEmpty()){
-                args.add("");
+                args.add(Token.empty());
             }
             else {
                 args.addAll(params);
@@ -90,7 +90,7 @@ public class DynamicImports {
         }
     }
 
-    private static List<String> getParams(List<Argument> argumentList){
+    private static List<Token> getParams(List<Argument> argumentList){
         if(argumentList.size() < 2){
             return Collections.emptyList();
         }

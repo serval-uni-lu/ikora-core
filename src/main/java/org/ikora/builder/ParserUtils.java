@@ -36,7 +36,7 @@ public class ParserUtils {
             return;
         }
 
-        keyword.setName(first.get().getValue());
+        keyword.setName(first.get());
         reader.readLine();
     }
 
@@ -53,7 +53,7 @@ public class ParserUtils {
         reader.readLine();
     }
 
-    static String getLabel(LineReader reader, Tokens tokens, ErrorManager errors){
+    static Token getLabel(LineReader reader, Tokens tokens, ErrorManager errors){
         Optional<Token> first = tokens.first();
         if(!first.isPresent()){
             errors.registerInternalError(
@@ -62,10 +62,10 @@ public class ParserUtils {
                     getPosition(reader.getCurrent())
             );
 
-            return "";
+            return Token.empty();
         }
 
-        return first.get().getValue();
+        return first.get();
     }
 
     static Position getPosition(Token start, Token end) {

@@ -17,8 +17,8 @@ public class Assignment extends Step {
     private List<Variable> returnVariables;
     private KeywordCall expression;
 
-    public Assignment(String name){
-        super(name);
+    public Assignment(){
+        super(Token.empty());
         returnVariables = new ArrayList<>();
     }
 
@@ -97,31 +97,6 @@ public class Assignment extends Step {
         for(Variable variable: returnVariables){
             runtime.addToKeywordScope(this.getCaller(), variable);
         }
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        if(other == null){
-            return false;
-        }
-
-        if (!(other instanceof Assignment)){
-            return false;
-        }
-
-        if(!super.equals(other)) {
-            return false;
-        }
-
-        Assignment assignment = (Assignment)other;
-
-        boolean same = this.expression.equals(assignment.expression);
-
-        for(int i = 0; same && i < this.returnVariables.size(); ++i) {
-            same &= this.returnVariables.get(i).getName().equalsIgnoreCase(assignment.returnVariables.get(i).getName());
-        }
-
-        return same;
     }
 
     @Override

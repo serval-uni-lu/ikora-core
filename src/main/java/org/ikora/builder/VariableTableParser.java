@@ -3,6 +3,7 @@ package org.ikora.builder;
 import org.ikora.error.ErrorManager;
 import org.ikora.error.ErrorMessages;
 import org.ikora.model.NodeTable;
+import org.ikora.model.Token;
 import org.ikora.model.Variable;
 
 import java.io.IOException;
@@ -39,7 +40,7 @@ class VariableTableParser {
                 continue;
             }
 
-            Optional<Variable> optional = VariableParser.parse(first.get().getValue());
+            Optional<Variable> optional = VariableParser.parse(first.get());
 
             if(!optional.isPresent()){
                 errors.registerInternalError(
@@ -54,7 +55,7 @@ class VariableTableParser {
             Variable variable = optional.get();
 
             for (Token token: tokens.withoutFirst()) {
-                variable.addElement(token.getValue());
+                variable.addElement(token);
             }
 
             reader.readLine();

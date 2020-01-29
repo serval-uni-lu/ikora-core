@@ -2,12 +2,10 @@ package org.ikora.builder;
 
 import org.ikora.error.ErrorManager;
 import org.ikora.error.ErrorMessages;
-import org.ikora.exception.InvalidDependencyException;
 import org.ikora.model.*;
 
 import java.io.IOException;
 import java.util.Optional;
-import java.util.regex.Pattern;
 
 class StepParser {
     private StepParser() {}
@@ -33,7 +31,7 @@ class StepParser {
         }
 
         if(step == null){
-            step = new InvalidStep(tokensWithoutTag.toString());
+            step = new InvalidStep(tokensWithoutTag.first().orElse(Token.empty()));
             step.setPosition(ParserUtils.getPosition(tokensWithoutTag));
         }
 

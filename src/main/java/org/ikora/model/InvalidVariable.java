@@ -10,27 +10,22 @@ import java.util.List;
 
 public class InvalidVariable extends Variable {
     public InvalidVariable() {
-        super("INVALID");
+        super(Token.fromString("INVALID"));
     }
 
     @Override
-    protected void setName(String name) {
+    protected void setName(Token name) {
         this.name = name;
     }
 
     @Override
-    public void addElement(String element) {
+    public void addElement(Token element) {
         //nothing to do
     }
 
     @Override
     public List<Value> getValues() {
         return Collections.emptyList();
-    }
-
-    @Override
-    public String getValueAsString() {
-        return "INVALID";
     }
 
     @Override

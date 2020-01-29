@@ -3,6 +3,7 @@ package org.ikora.builder;
 import org.ikora.exception.InvalidArgumentException;
 import org.ikora.exception.InvalidNumberArgumentException;
 import org.ikora.model.TimeOut;
+import org.ikora.model.Token;
 
 import java.util.Optional;
 
@@ -24,8 +25,8 @@ public class TimeoutParser {
             throw new InvalidNumberArgumentException(2, 3);
         }
 
-        String name = parseName(tokens);
-        String errorMessage = parseErrorMessage(tokens);
+        Token name = parseName(tokens);
+        Token errorMessage = parseErrorMessage(tokens);
 
         TimeOut timeOut = new TimeOut(name, errorMessage);
 
@@ -36,23 +37,18 @@ public class TimeoutParser {
         return timeOut;
     }
 
-    private static String parseName(Tokens tokens) throws InvalidArgumentException {
+    private static Token parseName(Tokens tokens) throws InvalidArgumentException {
         Optional<Token> token = tokens.get(0);
 
         if(!token.isPresent()){
             throw new InvalidNumberArgumentException(1, 0);
         }
 
-        return token.get().getValue();
+        return token.get();
     }
 
-    private static String parseErrorMessage(Tokens tokens) {
-        Optional<Token> token = tokens.get(1);
+    private static Token parseErrorMessage(Tokens tokens) {
+        return tokens.get(1).orElseGet(Token::empty);
 
-        if(!token.isPresent()){
-            return "";
-        }
-
-        return token.get().getValue();
     }
 }

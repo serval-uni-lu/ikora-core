@@ -54,7 +54,7 @@ public class DynamicScope implements Scope {
     }
 
     @Override
-    public Set<Variable> findInScope(Set<TestCase> testCases, Set<String> suites, String name) {
+    public Set<Variable> findInScope(Set<TestCase> testCases, Set<String> suites, Token name) {
         return null;
     }
 

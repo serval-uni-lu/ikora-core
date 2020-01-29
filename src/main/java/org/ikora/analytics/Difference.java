@@ -1,6 +1,7 @@
 package org.ikora.analytics;
 
 import org.ikora.model.Differentiable;
+import org.ikora.model.Token;
 import org.ikora.utils.LevenshteinDistance;
 import org.ikora.model.KeywordDefinition;
 
@@ -155,8 +156,8 @@ public class Difference implements Differentiable {
     }
 
     @Override
-    public String getName() {
-        return String.valueOf(this.hashCode());
+    public Token getName() {
+        return Token.fromString(String.valueOf(this.hashCode()));
     }
 
     public Class<?> getType() {

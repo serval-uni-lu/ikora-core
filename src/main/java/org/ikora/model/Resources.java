@@ -4,21 +4,21 @@ import java.io.File;
 import java.util.List;
 
 public class Resources {
-    private String name;
-    private List<String> arguments;
-    private String comment;
+    private Token name;
+    private List<Token> arguments;
+    private Token comment;
     private File file;
 
     private SourceFile sourceFile;
 
-    public Resources(String name, File file, List<String> arguments, String comment) {
+    public Resources(Token name, File file, List<Token> arguments, Token comment) {
         this.name = name;
         this.arguments = arguments;
         this.comment = comment;
         this.file = file;
     }
 
-    public String getName() {
+    public Token getName() {
         return this.name;
     }
 

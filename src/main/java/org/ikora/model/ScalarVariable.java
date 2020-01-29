@@ -11,14 +11,9 @@ import java.util.regex.Pattern;
 public class ScalarVariable extends Variable {
     private Value value;
 
-    public ScalarVariable(String name){
+    public ScalarVariable(Token name){
         super(name);
         this.value = Value.empty();
-    }
-
-    @Override
-    public String getValueAsString() {
-        return this.value.toString();
     }
 
     public Value getValue(){
@@ -26,22 +21,13 @@ public class ScalarVariable extends Variable {
     }
 
     @Override
-    public void addElement(String element){
+    public void addElement(Token element){
         this.value = new Value(this, element);
     }
 
     @Override
     public List<Value> getValues() {
         return Collections.singletonList(this.value);
-    }
-
-    @Override
-    public Optional<List<Value>> getResolvedValues() {
-        if(this.isAssignment()){
-            return Optional.empty();
-        }
-
-        return getValue().getResolvedValues();
     }
 
     @Override
@@ -84,9 +70,9 @@ public class ScalarVariable extends Variable {
     }
 
     @Override
-    protected void setName(String name) {
+    protected void setName(Token name) {
         this.name = name;
-        String generic = Value.getGenericVariableName(this.name);
+        String generic = Value.getGenericVariableName(this.name.getValue());
         String bareName = Value.escape(Value.getBareVariableName(generic));
 
         String patternString = String.format("^\\$\\{%s(((\\[\\d+\\])*)|([\\+\\-\\*/]\\d+))}$", bareName);

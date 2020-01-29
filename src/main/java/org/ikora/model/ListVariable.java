@@ -12,18 +12,13 @@ import java.util.stream.Collectors;
 public class ListVariable extends Variable {
     private List<Value> values;
 
-    public ListVariable(String name){
+    public ListVariable(Token name){
         super(name);
         this.values = new ArrayList<>();
     }
 
     @Override
-    public String getValueAsString() {
-        return values.stream().map(Value::toString).collect(Collectors.joining("\t"));
-    }
-
-    @Override
-    public void addElement(String element) {
+    public void addElement(Token element) {
         values.add(new Value(this, element));
     }
 
@@ -53,9 +48,9 @@ public class ListVariable extends Variable {
     }
 
     @Override
-    protected void setName(String name){
+    protected void setName(Token name){
         this.name = name;
-        String generic = Value.getGenericVariableName(this.name);
+        String generic = Value.getGenericVariableName(this.name.getValue());
         String bareName = Value.escape(Value.getBareVariableName(generic));
 
         String patternString = String.format("^[\\$@]\\{%s(\\[\\d+\\])*}$", bareName);

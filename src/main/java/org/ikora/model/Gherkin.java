@@ -8,7 +8,7 @@ public class Gherkin {
         GIVEN, WHEN, THEN, AND, BUT, NONE
     }
 
-    private static final Pattern gherkinPattern =  Pattern.compile("^(\\s*)(Given|When|Then|And|But)", Pattern.CASE_INSENSITIVE);
+    private static final Pattern gherkinPattern =  Pattern.compile("^(\\s*(Given|When|Then|And|But)\\s*)", Pattern.CASE_INSENSITIVE);
 
     private final Type type;
 
@@ -16,7 +16,7 @@ public class Gherkin {
         this.type = type;
     }
 
-    public Gherkin(String raw){
+    public Gherkin(Token raw){
         type = extractType(raw);
     }
 
@@ -32,11 +32,11 @@ public class Gherkin {
             prefix = matcher.group().toLowerCase();
         }
 
-        return prefix;
+        return prefix.trim();
     }
 
-    private Type extractType(String raw){
-        String prefix = extractPrefix(raw);
+    private Type extractType(Token raw){
+        String prefix = extractPrefix(raw.getValue());
 
         switch (prefix){
             case "given": return Type.GIVEN;
@@ -52,7 +52,7 @@ public class Gherkin {
         return new Gherkin(Type.NONE);
     }
 
-    public static String getCleanName(String rawName){
-        return rawName.replaceAll(gherkinPattern.pattern(), "").trim();
+    public static Token getCleanName(Token rawName){
+        return rawName.trim(gherkinPattern);
     }
 }

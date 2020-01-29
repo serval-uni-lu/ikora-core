@@ -9,11 +9,11 @@ public abstract class Step extends Node {
     private Value name;
     protected KeywordCall template;
 
-    public Step(String name) {
+    public Step(Token name) {
         this.name = new Value(name);
     }
 
-    protected void setName(String name){
+    protected void setName(Token name){
         this.name = new Value(name);
     }
 
@@ -21,8 +21,8 @@ public abstract class Step extends Node {
         return this.name;
     }
 
-    public String getName() {
-        return this.name.toString();
+    public Token getName() {
+        return this.name.getName();
     }
 
     public Node getParent() throws InvalidDependencyException {
@@ -54,19 +54,8 @@ public abstract class Step extends Node {
     }
 
     @Override
-    public boolean equals(Object other) {
-        if(!(other instanceof Step)) {
-            return false;
-        }
-
-        Step step = (Step)other;
-
-        return name.equals(step.name);
-    }
-
-    @Override
-    public boolean matches(String name){
-        return getName().matches(name);
+    public boolean matches(Token name){
+        return this.name.matches(name);
     }
 
     public abstract Optional<KeywordCall> getKeywordCall();

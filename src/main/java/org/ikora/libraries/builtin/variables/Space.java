@@ -1,6 +1,7 @@
 package org.ikora.libraries.builtin.variables;
 
 import org.ikora.model.LibraryVariable;
+import org.ikora.model.Token;
 
 import java.util.regex.Pattern;
 
@@ -12,7 +13,7 @@ public class Space extends LibraryVariable {
     }
 
     @Override
-    public boolean matches(String name) {
-        return match.matcher(name).matches();
+    public boolean matches(Token name) {
+        return match.matcher(name.getValue()).matches();
     }
 }

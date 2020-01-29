@@ -30,7 +30,7 @@ public class Runtime {
         this.libraries = libraries;
     }
 
-    public Set<Variable> findLibraryVariable(String name){
+    public Set<Variable> findLibraryVariable(Token name){
         return Collections.singleton(this.libraries.findVariable(name));
     }
 
@@ -38,11 +38,11 @@ public class Runtime {
         return project.getSourceFiles();
     }
 
-    public Set<Variable> findInScope(Set<TestCase> testCases, Set<String> suites, String name){
+    public Set<Variable> findInScope(Set<TestCase> testCases, Set<String> suites, Token name){
         return scope.findInScope(testCases, suites, name);
     }
 
-    public Keyword findKeyword(String library, String name) throws InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+    public Keyword findKeyword(String library, Token name) throws InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
         if(library == null){
             return null;
         }

@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 public class UserKeyword extends KeywordDefinition {
-    private List<String> parameters;
+    private List<Token> parameters;
     private NodeTable<Variable> localVariables;
     private KeywordCall tearDown;
     private List<Value> returnValues;
@@ -36,15 +36,15 @@ public class UserKeyword extends KeywordDefinition {
         return returnValues;
     }
 
-    public void addReturn(String returnString) {
-        returnValues.add(new Value(returnString));
+    public void addReturn(Token returnValue) {
+        returnValues.add(new Value(returnValue));
     }
 
     @Override
-    public void setName(String name) {
+    public void setName(Token name) {
         super.setName(name);
 
-        for(String argument: getNameAsValue().findVariables()){
+        for(Token argument: getNameAsValue().findVariables()){
             addParameter(argument);
         }
     }
@@ -65,18 +65,18 @@ public class UserKeyword extends KeywordDefinition {
         return returnValues;
     }
 
-    public void addParameter(String parameter){
+    public void addParameter(Token parameter){
         parameters.add(parameter);
 
         Variable variable = new ScalarVariable(parameter);
         localVariables.add(variable);
     }
 
-    public List<String> getParameters() {
+    public List<Token> getParameters() {
         return parameters;
     }
 
-    public Set<Variable> findLocalVariable(String name) {
+    public Set<Variable> findLocalVariable(Token name) {
         return localVariables.findNode(name);
     }
 

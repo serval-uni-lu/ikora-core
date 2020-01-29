@@ -41,8 +41,8 @@ public class LibraryResources {
         }
     }
 
-    public Keyword findKeyword(String name) throws InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
-        Item<LibraryKeyword> keyword = keywordsNames.get(name.toLowerCase());
+    public Keyword findKeyword(Token name) throws InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+        Item<LibraryKeyword> keyword = keywordsNames.get(name.getValue().toLowerCase());
 
         if(keyword == null){
             return null;
@@ -51,7 +51,7 @@ public class LibraryResources {
         return keyword.getObject();
     }
 
-    public Keyword findKeyword(String library, String name) throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
+    public Keyword findKeyword(String library, Token name) throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
         if(library.isEmpty()){
             return findKeyword(name);
         }
@@ -60,7 +60,7 @@ public class LibraryResources {
         return findKeyword(name);
     }
 
-    public Variable findVariable(String name) {
+    public Variable findVariable(Token name) {
         for(LibraryVariable variable: variables){
             if(variable.matches(name)){
                 return variable;

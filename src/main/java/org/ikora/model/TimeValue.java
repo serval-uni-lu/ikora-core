@@ -28,7 +28,7 @@ public class TimeValue {
     private int seconds;
     private int milliseconds;
 
-    public TimeValue(String text){
+    public TimeValue(Token text){
 
     }
 
@@ -63,15 +63,16 @@ public class TimeValue {
         return getTimeInSeconds() / SECONDS_IN_MILLISECOND;
     }
 
-    public static boolean isValid(String text) {
-        if(text.isEmpty()){
+    public static boolean isValid(Token token) {
+        if(token.isEmpty()){
             return false;
         }
 
-        if(NumberUtils.isNumber(text)){
+        if(NumberUtils.isNumber(token.getValue())){
             return true;
         }
 
-        return stringPattern.matcher(text).matches() || timerPattern.matcher(text).matches();
+        return stringPattern.matcher(token.getValue()).matches()
+                || timerPattern.matcher(token.getValue()).matches();
     }
 }

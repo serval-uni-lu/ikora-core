@@ -38,15 +38,15 @@ public class NodeTable<T extends Node> implements Iterable<T> {
         return findNode(node.getFileName(), node.getName());
     }
 
-    public Set<T> findNode(String name){
-        return findNode(null, name);
+    public Set<T> findNode(Token token){
+        return findNode(null, token);
     }
 
-    public Set<T> findNode(String file, String name){
+    public Set<T> findNode(String file, Token token){
         Set<T> nodes = new HashSet<>();
 
         for(T node: nodeList){
-            if(matches(file, name, node)){
+            if(matches(file, token, node)){
                 nodes.add(node);
             }
         }
@@ -54,12 +54,12 @@ public class NodeTable<T extends Node> implements Iterable<T> {
         return nodes;
     }
 
-    private boolean matches(String file, String name, T node){
+    private boolean matches(String file, Token token, T node){
         if(file == null){
-            return node.matches(name);
+            return node.matches(token);
         }
 
-        return file.equalsIgnoreCase(node.getFileName()) && node.matches(name);
+        return file.equalsIgnoreCase(node.getFileName()) && node.matches(token);
     }
 
     public int size() {

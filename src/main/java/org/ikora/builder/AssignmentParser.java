@@ -7,23 +7,24 @@ import org.ikora.model.*;
 
 import java.io.IOException;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 public class AssignmentParser {
     private AssignmentParser(){}
 
     public static Assignment parse(LineReader reader, ErrorManager errors) throws IOException {
-        Assignment assignment = new Assignment(reader.getCurrent().getText());
+        Assignment assignment = new Assignment();
         Tokens tokens = LexerUtils.tokenize(reader.getCurrent()).withoutIndent();
 
         int offset = 0;
         boolean leftSide = true;
         for(Token token: tokens){
             try {
-                String value = token.getValue().replaceAll("(\\s*)=(\\s*)$", "");
+                Token clean = VariableParser.trimEquals(token);
 
-                if(!value.isEmpty()){
-                    if(leftSide && Value.isVariable(value)){
-                        Optional<Variable> variable = VariableParser.parse(value);
+                if(!clean.isEmpty()){
+                    if(leftSide && Value.isVariable(clean)){
+                        Optional<Variable> variable = VariableParser.parse(clean);
 
                         if(variable.isPresent()){
                             variable.get().setAssignment(assignment);

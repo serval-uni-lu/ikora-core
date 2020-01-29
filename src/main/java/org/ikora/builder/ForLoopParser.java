@@ -54,7 +54,7 @@ public class ForLoopParser {
         }
         else{
             try {
-                variable = Variable.create(new Value(iteratorToken.get().getValue()));
+                variable = Variable.create(new Value(iteratorToken.get()));
             } catch (MalformedVariableException | InvalidDependencyException e) {
                 errors.registerInternalError(
                         reader.getFile(),
@@ -70,7 +70,7 @@ public class ForLoopParser {
     private static Step extractRange(LineReader reader, Tokens loop, ErrorManager errors) {
         Tokens rangeTokens = loop.withoutIndent().withoutFirst(2);
 
-        Step step = new InvalidStep(rangeTokens.toString());
+        Step step = new InvalidStep(rangeTokens.first().orElse(Token.empty()));
         step.setPosition(ParserUtils.getPosition(rangeTokens));
 
         if(rangeTokens.isEmpty()){

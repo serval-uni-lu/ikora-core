@@ -5,6 +5,7 @@ import org.ikora.error.ErrorMessages;
 import org.ikora.exception.InvalidTypeException;
 import org.ikora.model.Step;
 import org.ikora.model.TestCase;
+import org.ikora.model.Token;
 
 import java.io.IOException;
 
@@ -33,7 +34,7 @@ class TestCaseParser {
 
             tokens = currentTokens.withoutIndent();
 
-            String label = ParserUtils.getLabel(reader, tokens, errors);
+            String label = ParserUtils.getLabel(reader, tokens, errors).getValue();
 
             if (LexerUtils.compareNoCase(label, "\\[documentation\\]")) {
                 parseDocumentation(reader, testCase);

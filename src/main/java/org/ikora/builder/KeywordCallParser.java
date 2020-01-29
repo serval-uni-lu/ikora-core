@@ -3,9 +3,7 @@ package org.ikora.builder;
 import org.ikora.error.ErrorManager;
 import org.ikora.error.ErrorMessages;
 import org.ikora.exception.InvalidDependencyException;
-import org.ikora.model.Argument;
-import org.ikora.model.Gherkin;
-import org.ikora.model.KeywordCall;
+import org.ikora.model.*;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -30,8 +28,8 @@ public class KeywordCallParser {
             );
         }
         else{
-            String rawName = first.get().getValue();
-            String name = getKeywordCallName(rawName, allowGherkin);
+            Token rawName = first.get();
+            Token name = getKeywordCallName(rawName, allowGherkin);
             Gherkin gherkin = new Gherkin(rawName);
 
             KeywordCall call = new KeywordCall(name);
@@ -39,7 +37,7 @@ public class KeywordCallParser {
 
             for(Token token: tokens.withoutFirst()) {
                 try {
-                    Argument argument = new Argument(call, token.getValue());
+                    Argument argument = new Argument(call, token);
                     argument.setPosition(ParserUtils.getPosition(token, token));
 
                     call.addArgument(argument);
@@ -59,7 +57,7 @@ public class KeywordCallParser {
         return null;
     }
 
-    private static String getKeywordCallName(String raw, boolean allowGherkin) {
+    private static Token getKeywordCallName(Token raw, boolean allowGherkin) {
         if(!allowGherkin){
             return raw;
         }

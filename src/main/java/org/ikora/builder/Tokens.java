@@ -1,5 +1,7 @@
 package org.ikora.builder;
 
+import org.ikora.model.Token;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;

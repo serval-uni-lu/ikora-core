@@ -19,7 +19,7 @@ public class ForLoop extends Step {
     private final Step range;
 
     public ForLoop(Variable iterator, Step range, List<Step> steps) {
-        super(":FOR");
+        super(Token.empty());
 
         this.iterator = iterator;
         this.range = range;
@@ -46,27 +46,6 @@ public class ForLoop extends Step {
     @Override
     public boolean hasParameters() {
         return false;
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        if (!(other instanceof ForLoop)){
-            return false;
-        }
-
-        if(!super.equals(other)) {
-            return false;
-        }
-
-        ForLoop forLoop = (ForLoop)other;
-
-        boolean same = this.steps.size() == forLoop.steps.size();
-
-        for(int i = 0; same && i < this.steps.size(); ++i) {
-            same &= this.steps.get(i).equals(forLoop.steps.get(i));
-        }
-
-        return  same;
     }
 
     @Override

@@ -29,7 +29,7 @@ class BuilderTest {
         assertEquals(1, step.getArgumentList().size());
 
         final Argument argument = step.getArgumentList().get(0);
-        assertTrue(argument.getName().contains("Test Status"));
+        assertTrue(argument.getName().getValue().contains("Test Status"));
     }
 
     @Test
@@ -42,7 +42,7 @@ class BuilderTest {
 
         final Project project = result.getProjects().iterator().next();
 
-        final Set<UserKeyword> keywords = project.findUserKeyword("Show the content of ${value}");
+        final Set<UserKeyword> keywords = project.findUserKeyword(Token.fromString("Show the content of ${value}"));
         assertEquals(1, keywords.size());
 
         final Optional<SourceFile> sourceFile = project.getSourceFile("keyword-with-dot.robot");
@@ -62,14 +62,14 @@ class BuilderTest {
 
         final Project project = result.getProjects().iterator().next();
 
-        Set<UserKeyword> fromResources1 = project.findUserKeyword("Load keyword from resource1");
+        Set<UserKeyword> fromResources1 = project.findUserKeyword(Token.fromString("Load keyword from resource1"));
         assertEquals(1, fromResources1.size());
 
         Optional<Keyword> resources1Step0 = ((KeywordCall)fromResources1.iterator().next().getStep(0)).getKeyword();
         assertTrue(resources1Step0.isPresent());
         assertEquals("resources1", resources1Step0.get().getLibraryName());
 
-        Set<UserKeyword> fromResources2 = project.findUserKeyword("Load keyword from resource2");
+        Set<UserKeyword> fromResources2 = project.findUserKeyword(Token.fromString("Load keyword from resource2"));
         assertEquals(1, fromResources2.size());
 
         Optional<Keyword> resources2Step0 = ((KeywordCall)fromResources2.iterator().next().getStep(0)).getKeyword();
@@ -117,7 +117,7 @@ class BuilderTest {
         final Set<UserKeyword> userKeywords = project.getUserKeywords();
         assertEquals(3, userKeywords.size());
 
-        final Set<UserKeyword> ofInterest = project.findUserKeyword("Test with a simple test case to see how assignment works");
+        final Set<UserKeyword> ofInterest = project.findUserKeyword(Token.fromString("Test with a simple test case to see how assignment works"));
         assertEquals(1, ofInterest.size());
 
         final UserKeyword keyword = ofInterest.iterator().next();
@@ -127,7 +127,7 @@ class BuilderTest {
         final Assignment assignment = (Assignment) step0;
 
         assertEquals(1, assignment.getReturnVariables().size());
-        assertEquals("${EtatRun}", assignment.getReturnVariables().get(0).getName());
+        assertEquals("${EtatRun}", assignment.getReturnVariables().get(0).getName().getValue());
         assertEquals(1, assignment.getReturnVariables().get(0).getDependencies().size());
     }
 
@@ -144,7 +144,7 @@ class BuilderTest {
         final Set<UserKeyword> userKeywords = project.getUserKeywords();
         assertEquals(1, userKeywords.size());
 
-        final Set<UserKeyword> ofInterest = project.findUserKeyword("Simple for loop");
+        final Set<UserKeyword> ofInterest = project.findUserKeyword(Token.fromString("Simple for loop"));
         assertEquals(1, ofInterest.size());
 
         final UserKeyword keyword = ofInterest.iterator().next();
@@ -152,7 +152,7 @@ class BuilderTest {
 
         assertTrue(ForLoop.class.isAssignableFrom(step0.getClass()));
         final ForLoop forLoop = (ForLoop) step0;
-        assertEquals("${index}", forLoop.getIterator().getName());
+        assertEquals("${index}", forLoop.getIterator().getName().getValue());
 
         final List<Step> steps = forLoop.getSteps();
         assertEquals(2, steps.size());
@@ -171,7 +171,7 @@ class BuilderTest {
         final Set<UserKeyword> userKeywords = project.getUserKeywords();
         assertEquals(1, userKeywords.size());
 
-        final Set<UserKeyword> ofInterest = project.findUserKeyword("Simple for loop");
+        final Set<UserKeyword> ofInterest = project.findUserKeyword(Token.fromString("Simple for loop"));
         assertEquals(1, ofInterest.size());
 
         final UserKeyword keyword = ofInterest.iterator().next();
@@ -179,7 +179,7 @@ class BuilderTest {
 
         assertTrue(ForLoop.class.isAssignableFrom(step0.getClass()));
         final ForLoop forLoop = (ForLoop) step0;
-        assertEquals("${index}", forLoop.getIterator().getName());
+        assertEquals("${index}", forLoop.getIterator().getName().getValue());
 
         final List<Step> steps = forLoop.getSteps();
         assertEquals(2, steps.size());
@@ -209,7 +209,7 @@ class BuilderTest {
 
         final Project project = result.getProjects().iterator().next();
 
-        Set<UserKeyword> ofInterest = project.findUserKeyword("Setup the test case");
+        Set<UserKeyword> ofInterest = project.findUserKeyword(Token.fromString("Setup the test case"));
         assertEquals(1, ofInterest.size());
         Keyword keyword = ofInterest.iterator().next();
 
@@ -230,7 +230,7 @@ class BuilderTest {
 
         final Project project = result.getProjects().iterator().next();
 
-        Set<UserKeyword> ofInterest = project.findUserKeyword("Clean the environment");
+        Set<UserKeyword> ofInterest = project.findUserKeyword(Token.fromString("Clean the environment"));
         assertEquals(1, ofInterest.size());
         Keyword keyword = ofInterest.iterator().next();
 
@@ -254,12 +254,12 @@ class BuilderTest {
         final TestCase testCase = project.getTestCases().iterator().next();
         assertNotNull(testCase.getTemplate());
 
-        final Set<UserKeyword> ofInterest = project.findUserKeyword("This is a template");
+        final Set<UserKeyword> ofInterest = project.findUserKeyword(Token.fromString("This is a template"));
         assertEquals(1, ofInterest.size());
         final Keyword keyword = ofInterest.iterator().next();
 
         final Step step0 = testCase.getStep(0);
-        assertEquals("This is a template", step0.getName());
+        assertEquals("This is a template", step0.getName().getValue());
         assertTrue(step0.getKeywordCall().map(KeywordCall::getKeyword).isPresent());
         final Keyword template = step0.getKeywordCall().map(KeywordCall::getKeyword).get().get();
 

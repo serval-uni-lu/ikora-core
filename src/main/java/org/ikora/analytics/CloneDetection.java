@@ -18,7 +18,7 @@ public class CloneDetection<T extends Node> {
         ignoreForType1 = Collections.unmodifiableSet(typeI);
 
         Set<Action.Type> typeII = new HashSet<>(ignoreForType1);
-        typeII.add(Action.Type.CHANGE_STEP_ARGUMENTS);
+        typeII.add(Action.Type.CHANGE_STEP_ARGUMENT);
         typeII.add(Action.Type.CHANGE_STEP_RETURN_VALUES);
 
         ignoreForType2 = Collections.unmodifiableSet(typeII);
@@ -136,7 +136,7 @@ public class CloneDetection<T extends Node> {
     private static boolean canIgnoreForType3(Action action) {
 
         switch (action.getType()){
-            case CHANGE_STEP_ARGUMENTS:
+            case CHANGE_STEP_ARGUMENT:
             case CHANGE_STEP: return isLogStep(action.getLeft()) && isLogStep(action.getRight());
             case ADD_STEP:
             case REMOVE_STEP: return isLogStep(action.getValue());

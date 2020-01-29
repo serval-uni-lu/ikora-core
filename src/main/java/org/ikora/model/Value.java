@@ -30,11 +30,11 @@ public class Value implements Differentiable {
     }
 
     private Node parent;
-    private String value;
+    private Token value;
     private Pattern match;
-    private Map<String, Set<Variable>> variables;
+    private Map<Token, Set<Variable>> variables;
 
-    public Value(Node parent, String value) {
+    public Value(Node parent, Token value) {
         this.parent = parent;
         this.value = value;
         this.variables = new HashMap<>();
@@ -42,11 +42,11 @@ public class Value implements Differentiable {
         buildRegex();
     }
 
-    public Value(String value){
+    public Value(Token value){
         this(null, value);
     }
 
-    public void setVariable(String name, Variable variable) throws InvalidDependencyException {
+    public void setVariable(Token name, Variable variable) throws InvalidDependencyException {
         if(variable == null){
             return;
         }
@@ -60,7 +60,7 @@ public class Value implements Differentiable {
         }
     }
 
-    public void setVariable(String name, Set<Variable> variables) throws InvalidDependencyException {
+    public void setVariable(Token name, Set<Variable> variables) throws InvalidDependencyException {
         for(Variable variable: variables){
             setVariable(name, variable);
         }
@@ -68,16 +68,16 @@ public class Value implements Differentiable {
 
     @Override
     public String toString() {
-        return this.value;
+        return this.value.getValue();
     }
 
     @Override
-    public String getName(){
-        return toString();
+    public Token getName(){
+        return this.value;
     }
 
-    public boolean matches(String string) {
-        Matcher matcher = match.matcher(string);
+    public boolean matches(Token token) {
+        Matcher matcher = match.matcher(token.getValue());
         return matcher.matches();
     }
 
@@ -86,8 +86,8 @@ public class Value implements Differentiable {
         return matcher.matches();
     }
 
-    public static boolean isVariable(String text) {
-        Value value = new Value(text);
+    public static boolean isVariable(Token token) {
+        Value value = new Value(token);
         return value.isVariable();
     }
 
@@ -96,57 +96,26 @@ public class Value implements Differentiable {
         return matcher.matches();
     }
 
-    public static boolean hasVariable(String text) {
-        Value value = new Value(text);
+    public static boolean hasVariable(Token token) {
+        Value value = new Value(token);
         return value.hasVariable();
     }
 
-    public List<String> findVariables() {
-        List<String> variables = new ArrayList<>();
+    public List<Token> findVariables() {
+        List<Token> variables = new ArrayList<>();
 
         Matcher matcher = getVariableMatcher(this.value, Matching.FIND_VARIABLE);
 
         while (matcher.find()){
-            variables.add(this.value.substring(matcher.start(), matcher.end()));
+            variables.add(this.value.extract(matcher.start(), matcher.end()));
         }
 
         return variables;
     }
 
-    public static List<String> findVariables(String text) {
-        Value value = new Value(text);
+    public static List<Token> findVariables(Token token) {
+        Value value = new Value(token);
         return value.findVariables();
-    }
-
-    public Optional<List<Value>> getResolvedValues() {
-        if(isVariable()){
-            Set<Variable> variables = this.variables.get(this.value);
-
-            if(variables.size() != 1){
-                return Optional.empty();
-            }
-
-            return variables.iterator().next().getResolvedValues();
-        }
-
-        if(hasVariable()){
-            String resolvedValue = this.value;
-
-            for(Map.Entry<String, Set<Variable>> entry: this.variables.entrySet()){
-                String name = entry.getKey();
-                Set<Variable> variables = entry.getValue();
-
-                if(variables.size() != 1){
-                    return Optional.empty();
-                }
-
-                resolvedValue = resolvedValue.replace(name, variables.iterator().next().getValueAsString());
-            }
-
-            return Optional.of(Collections.singletonList(new Value(resolvedValue)));
-        }
-
-        return Optional.of(Collections.singletonList(this));
     }
 
     private void buildRegex() {
@@ -161,18 +130,19 @@ public class Value implements Differentiable {
         match = Pattern.compile("^" + pattern + "$", Pattern.CASE_INSENSITIVE);
     }
 
-    private static Matcher getVariableMatcher(String value, Matching matching) {
+    private static Matcher getVariableMatcher(Token token, Matching matching) {
         Matcher matcher;
+        String name = token.getValue();
 
         switch (matching) {
             case IS_VARIABLE:
-                matcher = isVariablePattern.matcher(value);
+                matcher = isVariablePattern.matcher(name);
                 break;
             case HAS_VARIABLE:
-                matcher = hasVariablePattern.matcher(value);
+                matcher = hasVariablePattern.matcher(name);
                 break;
             case FIND_VARIABLE:
-                matcher = findVariablePattern.matcher(value);
+                matcher = findVariablePattern.matcher(name);
                 break;
 
             default:
@@ -214,10 +184,24 @@ public class Value implements Differentiable {
 
     @Override
     public List<Action> differences(Differentiable other) {
-        return Collections.emptyList();
+        if(other == this){
+            return Collections.emptyList();
+        }
+
+        if(!Value.class.isAssignableFrom(other.getClass())){
+            return Collections.singletonList(Action.addElement(Value.class, this));
+        }
+
+        Value value = (Value)other;
+
+        if(value.getName().equalsValue(this.getName())){
+            return Collections.emptyList();
+        }
+
+        return Collections.singletonList(Action.addElement(Value.class, this));
     }
 
     public static Value empty(){
-        return new Value("");
+        return new Value(Token.empty());
     }
 }

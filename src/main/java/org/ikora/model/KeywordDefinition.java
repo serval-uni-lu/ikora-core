@@ -2,7 +2,6 @@ package org.ikora.model;
 
 import org.apache.commons.lang3.StringUtils;
 import org.ikora.analytics.Action;
-import org.ikora.exception.InvalidTypeException;
 import org.ikora.runner.Runtime;
 import org.ikora.utils.LevenshteinDistance;
 
@@ -22,7 +21,7 @@ public abstract class KeywordDefinition extends Keyword implements Iterable<Step
         this.timeOut = TimeOut.none();
     }
 
-    public void setName(String name){
+    public void setName(Token name){
         this.name = new Value(name);
     }
 
@@ -71,8 +70,8 @@ public abstract class KeywordDefinition extends Keyword implements Iterable<Step
     }
 
     @Override
-    public String getName() {
-        return name.toString();
+    public Token getName() {
+        return name.getName();
     }
 
     @Override
@@ -98,12 +97,12 @@ public abstract class KeywordDefinition extends Keyword implements Iterable<Step
     }
 
 
-    public boolean matches(String name) {
-        if(name == null){
+    public boolean matches(Token token) {
+        if(token == null){
             return false;
         }
 
-        return this.name.matches(name);
+        return this.name.matches(token);
     }
 
     public Iterator<Step> iterator() {
@@ -131,7 +130,12 @@ public abstract class KeywordDefinition extends Keyword implements Iterable<Step
             return 0.0;
         }
 
-        return (double)differences(other).size() / this.getLoc();
+        KeywordDefinition keyword = (KeywordDefinition)other;
+
+        boolean sameName = this.getName().equalsValue(keyword.getName());
+        boolean sameArguments = LevenshteinDistance.index(this.steps, keyword.steps) == 0.0;
+
+        return sameName && sameArguments ? 0 : 1;
     }
 
     @Override
@@ -150,7 +154,7 @@ public abstract class KeywordDefinition extends Keyword implements Iterable<Step
         KeywordDefinition keyword = (KeywordDefinition)other;
 
         // check name change
-        if(!this.getName().equalsIgnoreCase(keyword.getName())){
+        if(!this.getName().equalsValue(keyword.getName())){
             actions.add(Action.changeName(this, other));
         }
 

@@ -17,7 +17,7 @@ public class KeywordCall extends Step {
     private List<Value> returnValues;
     private Gherkin gherkin;
 
-    public KeywordCall(String name) {
+    public KeywordCall(Token name) {
         super(name);
         this.argumentList = new ArrayList<>();
         this.link = new Link<>(this);
@@ -136,7 +136,10 @@ public class KeywordCall extends Step {
             return thisCallee.get() == otherCallee.get() ? 0 : 1;
         }
 
-        return this.getName().equalsIgnoreCase(call.getName()) ? 0 : 1;
+        boolean sameName = this.getName().equalsValue(call.getName());
+        boolean sameArguments = LevenshteinDistance.index(this.argumentList, call.argumentList) == 0.0;
+
+        return sameName && sameArguments ? 0 : 1;
     }
 
     @Override
@@ -153,13 +156,12 @@ public class KeywordCall extends Step {
         else{
             KeywordCall call = (KeywordCall)other;
 
-            if(!this.getName().equalsIgnoreCase(call.getName())){
+            if(!this.getName().equalsValue(call.getName())){
                 actions.add(Action.changeStepName(this, call));
             }
 
-            if(LevenshteinDistance.index(this.getArgumentList(), call.getArgumentList()) > 0){
-                actions.add(Action.changeStepArguments(this, call));
-            }
+            List<Action> argumentActions = LevenshteinDistance.getDifferences(this.argumentList, call.argumentList);
+            actions.addAll(argumentActions);
         }
 
         return actions;

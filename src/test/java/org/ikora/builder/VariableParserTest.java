@@ -1,10 +1,7 @@
 package org.ikora.builder;
 
+import org.ikora.model.*;
 import org.junit.jupiter.api.Test;
-import org.ikora.model.DictionaryVariable;
-import org.ikora.model.ListVariable;
-import org.ikora.model.ScalarVariable;
-import org.ikora.model.Variable;
 
 import java.util.Optional;
 
@@ -13,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class VariableParserTest {
     @Test
     void parseScalar(){
-        String scalar = "${scalar}";
+        Token scalar = Token.fromString("${scalar}");
         Optional<Variable> variable = VariableParser.parse(scalar);
         assertTrue(variable.isPresent());
         assertEquals(variable.get().getClass(), ScalarVariable.class);
@@ -21,7 +18,7 @@ class VariableParserTest {
 
     @Test
     void parseList(){
-        String list = "@{list}";
+        Token list = Token.fromString("@{list}");
         Optional<Variable> variable = VariableParser.parse(list);
         assertTrue(variable.isPresent());
         assertEquals(variable.get().getClass(), ListVariable.class);
@@ -29,7 +26,7 @@ class VariableParserTest {
 
     @Test
     void parseDictionary(){
-        String dictionary = "&{dictionary}";
+        Token dictionary = Token.fromString("&{dictionary}");
         Optional<Variable> variable = VariableParser.parse(dictionary);
         assertTrue(variable.isPresent());
         assertEquals(variable.get().getClass(), DictionaryVariable.class);
@@ -37,14 +34,14 @@ class VariableParserTest {
 
     @Test
     void parseNonVariable(){
-        String random = "not a variable";
+        Token random = Token.fromString("not a variable");
         Optional<Variable> variable = VariableParser.parse(random);
         assertFalse(variable.isPresent());
     }
 
     @Test
     void parseNonVariableContainingAVariable(){
-        String random = "not a variable containing a ${scalar}";
+        Token random = Token.fromString("not a variable containing a ${scalar}");
         Optional<Variable> variable = VariableParser.parse(random);
         assertFalse(variable.isPresent());
     }

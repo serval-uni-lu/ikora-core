@@ -2,6 +2,7 @@ package org.ikora.analytics;
 
 import org.ikora.Helpers;
 import org.ikora.model.Project;
+import org.ikora.model.Token;
 import org.ikora.model.UserKeyword;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -19,16 +20,16 @@ class DifferenceTest {
     @BeforeAll
     static void setUp() {
         Project project = Helpers.compileProject("robot/clones.robot", true);
-        keyword1 = project.findUserKeyword("First keyword").iterator().next();
+        keyword1 = project.findUserKeyword(Token.fromString("First keyword")).iterator().next();
         assertNotNull(keyword1);
 
-        keyword2 = project.findUserKeyword("Second keyword").iterator().next();
+        keyword2 = project.findUserKeyword(Token.fromString("Second keyword")).iterator().next();
         assertNotNull(keyword2);
 
-        keyword3 = project.findUserKeyword("Third keyword").iterator().next();
+        keyword3 = project.findUserKeyword(Token.fromString("Third keyword")).iterator().next();
         assertNotNull(keyword3);
 
-        keyword4 = project.findUserKeyword("Forth keyword").iterator().next();
+        keyword4 = project.findUserKeyword(Token.fromString("Forth keyword")).iterator().next();
         assertNotNull(keyword4);
     }
 
@@ -56,6 +57,6 @@ class DifferenceTest {
         assertEquals(4, actions.size());
         assertEquals(1, actions.stream().filter(action -> action.getType() == Action.Type.CHANGE_NAME).count());
         assertEquals(2, actions.stream().filter(action -> action.getType() == Action.Type.ADD_STEP).count());
-        assertEquals(1, actions.stream().filter(action -> action.getType() == Action.Type.CHANGE_STEP_ARGUMENTS).count());
+        assertEquals(1, actions.stream().filter(action -> action.getType() == Action.Type.CHANGE_STEP_ARGUMENT).count());
     }
 }

@@ -4,6 +4,7 @@ import org.ikora.error.ErrorManager;
 import org.ikora.error.ErrorMessages;
 import org.ikora.exception.InvalidTypeException;
 import org.ikora.model.Step;
+import org.ikora.model.Token;
 import org.ikora.model.UserKeyword;
 
 import java.io.IOException;
@@ -32,7 +33,7 @@ class UserKeywordParser {
 
             tokens = currentTokens.withoutIndent();
 
-            String label = ParserUtils.getLabel(reader, tokens, errors);
+            String label = ParserUtils.getLabel(reader, tokens, errors).getValue();
 
             if (LexerUtils.compareNoCase(label, "\\[documentation\\]")) {
                 parseDocumentation(reader, userKeyword);
@@ -79,7 +80,7 @@ class UserKeywordParser {
 
     private static void parseParameters(LineReader reader, Tokens tokens, UserKeyword userKeyword) throws IOException {
         for(Token token: tokens){
-            userKeyword.addParameter(token.getValue());
+            userKeyword.addParameter(token);
         }
 
         reader.readLine();
@@ -87,7 +88,7 @@ class UserKeywordParser {
 
     private static void parseReturn(LineReader reader, Tokens tokens, UserKeyword userKeyword) throws IOException {
         for(Token token: tokens.withoutTag("\\[return\\]")){
-            userKeyword.addReturn(token.getValue());
+            userKeyword.addReturn(token);
         }
 
         reader.readLine();

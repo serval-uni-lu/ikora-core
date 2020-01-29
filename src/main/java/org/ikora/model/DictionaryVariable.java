@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 public class DictionaryVariable extends Variable {
     private List<Value> values;
 
-    public DictionaryVariable(String name){
+    public DictionaryVariable(Token name){
         super(name);
         this.values = new ArrayList<>();
     }
@@ -28,12 +28,12 @@ public class DictionaryVariable extends Variable {
     }
 
     @Override
-    public void addElement(String element) {
+    public void addElement(Token element) {
         values.add(new Value(this, element));
     }
 
     @Override
-    public String getValueAsString() {
+    public String toString() {
         return values.stream().map(Value::toString).collect(Collectors.joining("\t"));
     }
 
@@ -53,9 +53,9 @@ public class DictionaryVariable extends Variable {
     }
 
     @Override
-    protected void setName(String name) {
+    protected void setName(Token name) {
         this.name = name;
-        String generic = Value.escape(Value.getGenericVariableName(this.name));
+        String generic = Value.escape(Value.getGenericVariableName(this.name.getValue()));
 
         this.pattern = Pattern.compile(generic, Pattern.CASE_INSENSITIVE);
     }

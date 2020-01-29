@@ -19,7 +19,10 @@ public class Action implements Differentiable {
         ADD_STEP,
         REMOVE_STEP,
         CHANGE_STEP,
-        CHANGE_STEP_ARGUMENTS,
+
+        ADD_STEP_ARGUMENT,
+        REMOVE_STEP_ARGUMENT,
+        CHANGE_STEP_ARGUMENT,
 
         CHANGE_STEP_EXPRESSION,
         CHANGE_STEP_RETURN_VALUES,
@@ -40,6 +43,10 @@ public class Action implements Differentiable {
         ADD_DOCUMENTATION,
         REMOVE_DOCUMENTATION,
         CHANGE_DOCUMENTATION,
+
+        ADD_VALUE,
+        REMOVE_VALUE,
+        CHANGE_VALUE,
 
         INVALID
     }
@@ -108,8 +115,8 @@ public class Action implements Differentiable {
     }
 
     @Override
-    public String getName() {
-        return this.getType().name();
+    public Token getName() {
+        return Token.fromString(this.getType().name());
     }
 
     public static <T> Action addElement(Class<T> type, Differentiable element) {
@@ -125,11 +132,17 @@ public class Action implements Differentiable {
         else if(Step.class.isAssignableFrom(type)){
             return new Action(Type.ADD_STEP, null, element);
         }
+        else if(Argument.class.isAssignableFrom(type)){
+            return new Action(Type.ADD_STEP_ARGUMENT, null, element);
+        }
         else if(Sequence.class.isAssignableFrom(type)){
             return new Action(Type.ADD_SEQUENCE, null, element);
         }
         else if(DifferentiableString.class.isAssignableFrom(type)){
             return new Action(Type.ADD_STRING, null, element);
+        }
+        else if(Value.class.isAssignableFrom(type)){
+            return new Action(Type.ADD_VALUE, null, element);
         }
 
         return new Action(Type.INVALID, null, element);
@@ -148,11 +161,17 @@ public class Action implements Differentiable {
         else if(Step.class.isAssignableFrom(type)){
             return new Action(Type.REMOVE_STEP, element, null);
         }
+        else if(Argument.class.isAssignableFrom(type)){
+            return new Action(Type.REMOVE_STEP_ARGUMENT, element, null);
+        }
         else if(Sequence.class.isAssignableFrom(type)){
             return new Action(Type.REMOVE_SEQUENCE, element, null);
         }
         else if(DifferentiableString.class.isAssignableFrom(type)){
             return new Action(Type.REMOVE_STRING, element, null);
+        }
+        else if(Value.class.isAssignableFrom(type)){
+            return new Action(Type.REMOVE_VALUE, element, null);
         }
 
         return new Action(Type.INVALID, element, null);
@@ -174,8 +193,8 @@ public class Action implements Differentiable {
         return new Action(Type.CHANGE_STEP, left, right);
     }
 
-    public static Action changeStepArguments(Differentiable left, Differentiable right){
-        return new Action(Type.CHANGE_STEP_ARGUMENTS, left, right);
+    public static Action changeStepArgument(Differentiable left, Differentiable right){
+        return new Action(Type.CHANGE_STEP_ARGUMENT, left, right);
     }
 
     public static Action changeStepExpression(Differentiable left, Differentiable right){
@@ -208,6 +227,10 @@ public class Action implements Differentiable {
 
     public static Action changeDocumentation(Differentiable left, Differentiable right) {
         return new Action(Type.CHANGE_DOCUMENTATION, left, right);
+    }
+
+    public static Action changeValue(Differentiable left, Differentiable right) {
+        return new Action(Type.CHANGE_VALUE, left, right);
     }
 
     public static Action invalid(Differentiable left, Differentiable right) {

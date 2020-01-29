@@ -1,5 +1,6 @@
 package org.ikora.builder;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.ikora.error.ErrorMessages;
 import org.ikora.exception.InvalidDependencyException;
 import org.ikora.exception.InvalidImportTypeException;
@@ -144,7 +145,7 @@ public class Linker {
                 try {
                     Keyword keyword = (Keyword)keywords.iterator().next();
                     KeywordCall keywordCall = createKeywordCall(keyword, argument, iterator);
-                    Argument keywordArgument = new Argument(call, keywordCall.toString());
+                    Argument keywordArgument = new Argument(call, keywordCall.getName());
 
                     keywordArgument.setPosition(keywordCall.getPosition());
                     keywordArgument.setCall(keywordCall);
@@ -214,7 +215,7 @@ public class Linker {
         }
     }
 
-    private Set<? super Keyword> getKeywords(String fullName, SourceFile sourceFile) {
+    private Set<? super Keyword> getKeywords(Token fullName, SourceFile sourceFile) {
         Set<? super Keyword> keywordsFound = getKeywords(fullName, sourceFile, false);
 
         if(keywordsFound.isEmpty()){
@@ -224,14 +225,15 @@ public class Linker {
         return keywordsFound;
     }
 
-    private Set<? super Keyword> getKeywords(String fullName, SourceFile sourceFile, boolean allowSplit) {
+    private Set<? super Keyword> getKeywords(Token fullName, SourceFile sourceFile, boolean allowSplit) {
         String library;
-        String name;
+        Token name;
 
         if(allowSplit){
-            List<String> particles = Arrays.asList(fullName.split("\\."));
-            library = particles.size() > 1 ? String.join(".", particles.subList(0, particles.size() - 1)) : "";
-            name = particles.get(particles.size() - 1);
+            Pair<Token, Token> libraryAndName = fullName.splitLibrary();
+
+            library = libraryAndName.getLeft().getValue();
+            name = libraryAndName.getRight();
         }
         else {
             library = "";

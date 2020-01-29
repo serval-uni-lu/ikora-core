@@ -21,7 +21,7 @@ public class StaticScope implements Scope{
     }
 
     @Override
-    public Set<Variable> findInScope(Set<TestCase> testCases, Set<String> suites, String name){
+    public Set<Variable> findInScope(Set<TestCase> testCases, Set<String> suites, Token name){
         Set<Variable> variablesFound = new HashSet<>();
 
         for(TestCase testCase: testCases){
@@ -69,7 +69,7 @@ public class StaticScope implements Scope{
             return;
         }
 
-        File filePath = new File(argumentList.get(0).getName());
+        File filePath = new File(argumentList.get(0).getName().getValue());
 
         if(!filePath.isAbsolute() && keyword.getSourceFile() != null) {
             filePath = new File(keyword.getSourceFile().getFile(), filePath.getPath());
@@ -77,12 +77,12 @@ public class StaticScope implements Scope{
 
         dynamicLibrary.putIfAbsent(keyword, new ResourcesTable());
 
-        List<String> resourcesParameters = new ArrayList<>();
+        List<Token> resourcesParameters = new ArrayList<>();
         for(int i = 1; i < argumentList.size(); ++i){
             resourcesParameters.add(argumentList.get(i).getName());
         }
 
-        Resources resources = new Resources(argumentList.get(0).getName(), filePath, resourcesParameters, "");
+        Resources resources = new Resources(argumentList.get(0).getName(), filePath, resourcesParameters, Token.empty());
         dynamicLibrary.get(keyword).add(resources);
     }
 
@@ -139,7 +139,7 @@ public class StaticScope implements Scope{
         return Collections.emptyList();
     }
 
-    private Set<Variable> findTestVariable(TestCase testCase, String name) {
+    private Set<Variable> findTestVariable(TestCase testCase, Token name) {
         if(!test.containsKey(testCase)){
             return Collections.emptySet();
         }
@@ -148,7 +148,7 @@ public class StaticScope implements Scope{
     }
 
 
-    private Set<Variable> findSuiteVariable(String suite, String name) {
+    private Set<Variable> findSuiteVariable(String suite, Token name) {
         if(!this.suite.containsKey(suite)){
             return Collections.emptySet();
         }
@@ -157,7 +157,7 @@ public class StaticScope implements Scope{
     }
 
 
-    private Set<Variable> findGlobalVariable(String name) {
+    private Set<Variable> findGlobalVariable(Token name) {
         return global.findNode(name);
     }
 }

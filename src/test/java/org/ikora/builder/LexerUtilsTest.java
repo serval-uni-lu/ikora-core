@@ -1,5 +1,6 @@
 package org.ikora.builder;
 
+import org.ikora.model.Token;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;

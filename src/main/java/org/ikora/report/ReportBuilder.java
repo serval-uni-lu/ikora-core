@@ -69,7 +69,7 @@ public class ReportBuilder {
     private Test createTestNode(TestCase testCase){
         Test test = new Test();
 
-        test.setName(testCase.getName());
+        test.setName(testCase.getName().getValue());
         test.setDocumentation(testCase.getDocumentation());
         test.setTags(testCase.getTags());
 
@@ -79,7 +79,7 @@ public class ReportBuilder {
     private org.ikora.report.Keyword createKeywordNode(Keyword keyword){
         org.ikora.report.Keyword keywordNode = new org.ikora.report.Keyword();
 
-        keywordNode.setName(keyword.getName());
+        keywordNode.setName(keyword.getName().getValue());
         keywordNode.setDocumentation(keyword.getDocumentation());
 
         return keywordNode;

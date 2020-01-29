@@ -77,7 +77,7 @@ public class Suite {
         return keywords;
     }
 
-    public Set<UserKeyword> findUserKeyword(String name) {
+    public Set<UserKeyword> findUserKeyword(Token name) {
         Set<UserKeyword> userKeywordsFound = new HashSet<>();
 
         for(Suite suite: suites){
@@ -91,7 +91,7 @@ public class Suite {
         return userKeywordsFound;
     }
 
-    public Set<UserKeyword> findUserKeyword(String library, String name) {
+    public Set<UserKeyword> findUserKeyword(String library, Token name) {
         Set<UserKeyword> userKeywordsFound = new HashSet<>();
 
         for(Suite suite: suites){

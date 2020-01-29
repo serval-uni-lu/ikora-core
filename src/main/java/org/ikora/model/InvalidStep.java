@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class InvalidStep extends Step {
-    public InvalidStep(String name) {
+    public InvalidStep(Token name) {
         super(name);
     }
 

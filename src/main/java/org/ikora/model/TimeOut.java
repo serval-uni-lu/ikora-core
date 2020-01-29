@@ -9,14 +9,14 @@ import java.util.Collections;
 import java.util.List;
 
 public class TimeOut extends Node {
-    private final String name;
+    private final Token name;
     private final Value variable;
     private final TimeValue value;
     private final boolean isNone;
 
-    private String errorMessage;
+    private Token errorMessage;
 
-    public TimeOut(String name, String errorMessage){
+    public TimeOut(Token name, Token errorMessage){
         this.name = name;
         this.errorMessage = errorMessage;
 
@@ -30,7 +30,7 @@ public class TimeOut extends Node {
             this.value = new TimeValue(this.name);
             this.isNone = false;
         }
-        else if (this.name.equalsIgnoreCase("NONE")){
+        else if (this.name.getValue().equalsIgnoreCase("NONE")){
             this.variable = null;
             this.value = null;
             this.isNone = true;
@@ -43,7 +43,7 @@ public class TimeOut extends Node {
     }
 
     public static TimeOut none() {
-        return new TimeOut("NONE", "");
+        return new TimeOut(Token.empty(), Token.empty());
     }
 
     public boolean isValid(){
@@ -61,8 +61,8 @@ public class TimeOut extends Node {
     }
 
     @Override
-    public boolean matches(String name) {
-        return this.name.equalsIgnoreCase(name);
+    public boolean matches(Token name) {
+        return this.name.equalsValue(name);
     }
 
     @Override
@@ -76,7 +76,7 @@ public class TimeOut extends Node {
     }
 
     @Override
-    public String getName() {
+    public Token getName() {
         return name;
     }
 

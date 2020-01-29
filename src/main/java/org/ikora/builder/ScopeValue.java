@@ -3,10 +3,7 @@ package org.ikora.builder;
 import org.ikora.analytics.visitor.FindSuiteVisitor;
 import org.ikora.analytics.visitor.FindTestCaseVisitor;
 import org.ikora.analytics.PathMemory;
-import org.ikora.model.KeywordDefinition;
-import org.ikora.model.Position;
-import org.ikora.model.TestCase;
-import org.ikora.model.Value;
+import org.ikora.model.*;
 
 import java.io.File;
 import java.util.Set;
@@ -22,7 +19,7 @@ class ScopeValue {
         this.position = position;
     }
 
-    public String getName(){
+    public Token getName(){
         return value.getName();
     }
 

@@ -3,17 +3,17 @@ package org.ikora.model;
 import java.util.List;
 
 public class Library {
-    private String name;
-    private List<String> arguments;
-    private String comment;
+    private Token name;
+    private List<Token> arguments;
+    private Token comment;
 
-    public Library(String name, List<String> arguments, String comment) {
+    public Library(Token name, List<Token> arguments, Token comment) {
         this.name = name;
         this.arguments = arguments;
         this.comment = comment;
     }
 
-    public String getName() {
+    public Token getName() {
         return this.name;
     }
 }

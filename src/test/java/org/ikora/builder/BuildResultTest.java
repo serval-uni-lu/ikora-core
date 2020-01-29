@@ -24,9 +24,9 @@ class BuildResultTest {
         assertNotNull(build.getSourceFile(getFileUri("robot/web-demo/resource.robot")));
         assertNull(build.getSourceFile(URI.create("Fake/path/to/file.robot")));
 
-        assertTrue(build.getBuildTime() > 0);
-        assertTrue(build.getLinkingTime() > 0);
-        assertTrue(build.getParsingTime() > 0);
+        assertTrue(build.getBuildTime() >= 0);
+        assertTrue(build.getLinkingTime() >= 0);
+        assertTrue(build.getParsingTime() >= 0);
 
         assertTrue(build.getErrors().isEmpty());
     }

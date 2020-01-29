@@ -20,35 +20,35 @@ class TimeValueTest {
 
     @Test
     void TestIsValidWithNumeric() {
-        assertTrue(TimeValue.isValid("10"));
-        assertTrue(TimeValue.isValid("-1"));
-        assertTrue(TimeValue.isValid("50.53"));
-        assertTrue(TimeValue.isValid("-42.1"));
-        assertTrue(TimeValue.isValid("0"));
+        assertTrue(TimeValue.isValid(Token.fromString("10")));
+        assertTrue(TimeValue.isValid(Token.fromString("-1")));
+        assertTrue(TimeValue.isValid(Token.fromString("50.53")));
+        assertTrue(TimeValue.isValid(Token.fromString("-42.1")));
+        assertTrue(TimeValue.isValid(Token.fromString("0")));
 
-        assertFalse(TimeValue.isValid("-10AB"));
+        assertFalse(TimeValue.isValid(Token.fromString("-10AB")));
     }
 
     @Test
     void TestIsValidWithString(){
-        assertTrue(TimeValue.isValid("1 min 30 secs"));
-        assertTrue(TimeValue.isValid("1.5 minutes"));
-        assertTrue(TimeValue.isValid("90 s"));
-        assertTrue(TimeValue.isValid("1 day 2 hours 3 minutes 4 seconds 5 milliseconds"));
-        assertTrue(TimeValue.isValid("1d 2h 3m 4s 5ms"));
-        assertTrue(TimeValue.isValid("- 10 seconds"));
+        assertTrue(TimeValue.isValid(Token.fromString("1 min 30 secs")));
+        assertTrue(TimeValue.isValid(Token.fromString("1.5 minutes")));
+        assertTrue(TimeValue.isValid(Token.fromString("90 s")));
+        assertTrue(TimeValue.isValid(Token.fromString("1 day 2 hours 3 minutes 4 seconds 5 milliseconds")));
+        assertTrue(TimeValue.isValid(Token.fromString("1d 2h 3m 4s 5ms")));
+        assertTrue(TimeValue.isValid(Token.fromString("- 10 seconds")));
     }
 
     @Test
     void TestIsValidWithTimer(){
-        assertTrue(TimeValue.isValid("00:00:01"));
-        assertTrue(TimeValue.isValid("01:02:03"));
-        assertTrue(TimeValue.isValid("1:00:00"));
-        assertTrue(TimeValue.isValid("100:00:00"));
-        assertTrue(TimeValue.isValid("00:02"));
-        assertTrue(TimeValue.isValid("42:00"));
-        assertTrue(TimeValue.isValid("00:01:02.003"));
-        assertTrue(TimeValue.isValid("00:01.5"));
-        assertTrue(TimeValue.isValid("-01:02.345"));
+        assertTrue(TimeValue.isValid(Token.fromString("00:00:01")));
+        assertTrue(TimeValue.isValid(Token.fromString("01:02:03")));
+        assertTrue(TimeValue.isValid(Token.fromString("1:00:00")));
+        assertTrue(TimeValue.isValid(Token.fromString("100:00:00")));
+        assertTrue(TimeValue.isValid(Token.fromString("00:02")));
+        assertTrue(TimeValue.isValid(Token.fromString("42:00")));
+        assertTrue(TimeValue.isValid(Token.fromString("00:01:02.003")));
+        assertTrue(TimeValue.isValid(Token.fromString("00:01.5")));
+        assertTrue(TimeValue.isValid(Token.fromString("-01:02.345")));
     }
 }
