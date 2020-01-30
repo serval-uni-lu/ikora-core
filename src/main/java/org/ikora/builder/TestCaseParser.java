@@ -34,7 +34,7 @@ class TestCaseParser {
 
             tokens = currentTokens.withoutIndent();
 
-            String label = ParserUtils.getLabel(reader, tokens, errors).getValue();
+            String label = ParserUtils.getLabel(reader, tokens, errors).getText();
 
             if (LexerUtils.compareNoCase(label, "\\[documentation\\]")) {
                 parseDocumentation(reader, testCase);
@@ -115,7 +115,7 @@ class TestCaseParser {
         tokens = tokens.withoutIndent();
 
         for(Token token: tokens){
-            testCase.addTag(token.getValue());
+            testCase.addTag(token.getText());
         }
 
         reader.readLine();

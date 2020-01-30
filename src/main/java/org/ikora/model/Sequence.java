@@ -53,9 +53,4 @@ public class Sequence implements Differentiable {
 
         return actions;
     }
-
-    @Override
-    public Token getName() {
-        return Token.fromString(String.valueOf(hashCode()));
-    }
 }

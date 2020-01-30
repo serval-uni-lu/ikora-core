@@ -2,7 +2,6 @@ package org.ikora.model;
 
 import org.ikora.error.ErrorManager;
 
-import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,7 +41,7 @@ public class LibraryResources {
     }
 
     public Keyword findKeyword(Token name) throws InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
-        Item<LibraryKeyword> keyword = keywordsNames.get(name.getValue().toLowerCase());
+        Item<LibraryKeyword> keyword = keywordsNames.get(name.getText().toLowerCase());
 
         if(keyword == null){
             return null;

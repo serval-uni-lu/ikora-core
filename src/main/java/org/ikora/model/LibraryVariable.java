@@ -25,7 +25,7 @@ public abstract class LibraryVariable extends Variable {
     protected void setName(Token name){
         this.name = name;
 
-        String patternString = Value.escape(getName().getValue());
+        String patternString = Value.escape(getName().getText());
         patternString = Value.getGenericVariableName(patternString);
         this.pattern = Pattern.compile(patternString, Pattern.CASE_INSENSITIVE);
     }

@@ -18,10 +18,10 @@ public class Token {
     private final int startOffset;
     private final int endOffset;
 
-    private final String value;
+    private final String text;
 
-    public Token(String value, int line, int startOffset, int endOffset, Type type){
-        this.value = value;
+    public Token(String text, int line, int startOffset, int endOffset, Type type){
+        this.text = text;
         this.line = line;
         this.startOffset = startOffset;
         this.endOffset = endOffset;
@@ -30,20 +30,20 @@ public class Token {
     }
 
     public Token clone(){
-        return new Token(this.value, this.line, this.startOffset, this.endOffset, this.type);
+        return new Token(this.text, this.line, this.startOffset, this.endOffset, this.type);
     }
 
     @Override
     public String toString() {
-        return this.value;
+        return this.text;
     }
 
-    public String getValue() {
-        return this.value;
+    public String getText() {
+        return this.text;
     }
 
     public boolean isEmpty() {
-        return this.value.isEmpty();
+        return this.text.isEmpty();
     }
 
     public int getLine() {
@@ -71,7 +71,7 @@ public class Token {
             return false;
         }
 
-        return this.value.contains(name);
+        return this.text.contains(name);
     }
 
     public boolean isComment() {
@@ -91,15 +91,15 @@ public class Token {
     }
 
     public boolean equalsValue(Token name) {
-        return name.value.equalsIgnoreCase(this.value);
+        return name.text.equalsIgnoreCase(this.text);
     }
 
     public Token extract(int start){
-        return this.extract(start, this.value.length());
+        return this.extract(start, this.text.length());
     }
 
     public Token extract(int start, int end) {
-        String value = this.value.substring(start, end);
+        String value = this.text.substring(start, end);
         int startOffset = this.startOffset + start;
         int endOffset = this.startOffset + end;
         Type type = value.isEmpty() ? Type.EMPTY : this.type;
@@ -108,17 +108,17 @@ public class Token {
     }
 
     public Token trim(Pattern pattern){
-        Matcher m = pattern.matcher(this.getValue());
+        Matcher m = pattern.matcher(this.getText());
 
         if (m.find()) {
             int start = 0;
-            int end = this.value.length();
+            int end = this.text.length();
 
             if(m.start() == 0){
                 start = m.end();
             }
 
-            if(m.end() == this.value.length()){
+            if(m.end() == this.text.length()){
                 end = m.start();
             }
 
@@ -129,7 +129,7 @@ public class Token {
     }
 
     public Pair<Token, Token> splitLibrary(){
-        List<String> particles = Arrays.asList(this.value.split("\\."));
+        List<String> particles = Arrays.asList(this.text.split("\\."));
 
         if(particles.size() == 1){
             return Pair.of(Token.empty(), this);

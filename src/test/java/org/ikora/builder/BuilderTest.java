@@ -24,12 +24,13 @@ class BuilderTest {
 
         final TestCase testCase = sourceFile.get().getTestCases().get(0);
         assertEquals(1, testCase.getSteps().size());
+        assertEquals(2, testCase.getPosition().getStartMark().getLine());
 
         final KeywordCall step = (KeywordCall)testCase.getSteps().get(0);
         assertEquals(1, step.getArgumentList().size());
 
         final Argument argument = step.getArgumentList().get(0);
-        assertTrue(argument.getName().getValue().contains("Test Status"));
+        assertTrue(argument.getName().getText().contains("Test Status"));
     }
 
     @Test
@@ -127,7 +128,7 @@ class BuilderTest {
         final Assignment assignment = (Assignment) step0;
 
         assertEquals(1, assignment.getReturnVariables().size());
-        assertEquals("${EtatRun}", assignment.getReturnVariables().get(0).getName().getValue());
+        assertEquals("${EtatRun}", assignment.getReturnVariables().get(0).getName().getText());
         assertEquals(1, assignment.getReturnVariables().get(0).getDependencies().size());
     }
 
@@ -152,7 +153,7 @@ class BuilderTest {
 
         assertTrue(ForLoop.class.isAssignableFrom(step0.getClass()));
         final ForLoop forLoop = (ForLoop) step0;
-        assertEquals("${index}", forLoop.getIterator().getName().getValue());
+        assertEquals("${index}", forLoop.getIterator().getName().getText());
 
         final List<Step> steps = forLoop.getSteps();
         assertEquals(2, steps.size());
@@ -179,7 +180,7 @@ class BuilderTest {
 
         assertTrue(ForLoop.class.isAssignableFrom(step0.getClass()));
         final ForLoop forLoop = (ForLoop) step0;
-        assertEquals("${index}", forLoop.getIterator().getName().getValue());
+        assertEquals("${index}", forLoop.getIterator().getName().getText());
 
         final List<Step> steps = forLoop.getSteps();
         assertEquals(2, steps.size());
@@ -259,7 +260,7 @@ class BuilderTest {
         final Keyword keyword = ofInterest.iterator().next();
 
         final Step step0 = testCase.getStep(0);
-        assertEquals("This is a template", step0.getName().getValue());
+        assertEquals("This is a template", step0.getName().getText());
         assertTrue(step0.getKeywordCall().map(KeywordCall::getKeyword).isPresent());
         final Keyword template = step0.getKeywordCall().map(KeywordCall::getKeyword).get().get();
 

@@ -44,20 +44,20 @@ public abstract class Variable extends Node {
 
     @Override
     public boolean matches(Token name) {
-        String generic = Value.getGenericVariableName(name.getValue());
+        String generic = Value.getGenericVariableName(name.getText());
 
         Matcher matcher = pattern.matcher(generic);
         return matcher.matches();
     }
 
     public static Variable create(Value value) throws MalformedVariableException, InvalidDependencyException {
-        Optional<Variable> variable = VariableParser.parse(value.getName());
+        Optional<Variable> variable = VariableParser.parse(value.getToken());
 
         if(variable.isPresent()){
-            value.setVariable(value.getName(), variable.get());
+            value.setVariable(value.getToken(), variable.get());
         }
         else{
-            throw new MalformedVariableException(String.format("Failed to create variable from value '%s'", value.getName()));
+            throw new MalformedVariableException(String.format("Failed to create variable from value '%s'", value.getToken()));
         }
 
         return variable.get();

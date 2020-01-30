@@ -20,7 +20,7 @@ class ScopeValue {
     }
 
     public Token getName(){
-        return value.getName();
+        return value.getToken();
     }
 
     public Value getValue() {

@@ -14,6 +14,6 @@ public class Space extends LibraryVariable {
 
     @Override
     public boolean matches(Token name) {
-        return match.matcher(name.getValue()).matches();
+        return match.matcher(name.getText()).matches();
     }
 }

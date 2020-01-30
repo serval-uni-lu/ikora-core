@@ -72,7 +72,7 @@ public class ScalarVariable extends Variable {
     @Override
     protected void setName(Token name) {
         this.name = name;
-        String generic = Value.getGenericVariableName(this.name.getValue());
+        String generic = Value.getGenericVariableName(this.name.getText());
         String bareName = Value.escape(Value.getBareVariableName(generic));
 
         String patternString = String.format("^\\$\\{%s(((\\[\\d+\\])*)|([\\+\\-\\*/]\\d+))}$", bareName);

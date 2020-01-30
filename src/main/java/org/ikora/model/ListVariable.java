@@ -7,7 +7,6 @@ import org.ikora.analytics.visitor.VisitorMemory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 public class ListVariable extends Variable {
     private List<Value> values;
@@ -50,7 +49,7 @@ public class ListVariable extends Variable {
     @Override
     protected void setName(Token name){
         this.name = name;
-        String generic = Value.getGenericVariableName(this.name.getValue());
+        String generic = Value.getGenericVariableName(this.name.getText());
         String bareName = Value.escape(Value.getBareVariableName(generic));
 
         String patternString = String.format("^[\\$@]\\{%s(\\[\\d+\\])*}$", bareName);

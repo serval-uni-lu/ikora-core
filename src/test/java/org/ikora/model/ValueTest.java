@@ -4,7 +4,6 @@ import org.ikora.exception.InvalidDependencyException;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -38,9 +37,9 @@ class ValueTest {
         List<Token> variables = Value.findVariables(raw);
 
         assertEquals(3, variables.size());
-        assertEquals("@{user}", variables.get(0).getValue());
-        assertEquals("${password}", variables.get(1).getValue());
-        assertEquals("&{options}", variables.get(2).getValue());
+        assertEquals("@{user}", variables.get(0).getText());
+        assertEquals("${password}", variables.get(1).getText());
+        assertEquals("&{options}", variables.get(2).getText());
     }
 
     @Test

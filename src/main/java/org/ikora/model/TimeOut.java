@@ -30,7 +30,7 @@ public class TimeOut extends Node {
             this.value = new TimeValue(this.name);
             this.isNone = false;
         }
-        else if (this.name.getValue().equalsIgnoreCase("NONE")){
+        else if (this.name.getText().equalsIgnoreCase("NONE")){
             this.variable = null;
             this.value = null;
             this.isNone = true;

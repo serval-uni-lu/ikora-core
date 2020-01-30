@@ -37,7 +37,7 @@ class LexerUtilsTest {
 
         Token token = tokens.iterator().next();
         assertTrue(token.isText());
-        assertEquals("Some text", token.getValue());
+        assertEquals("Some text", token.getText());
     }
 
     @Test

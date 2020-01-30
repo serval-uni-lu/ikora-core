@@ -11,4 +11,5 @@ public abstract class Keyword extends Node {
     public abstract List<Value> getReturnValues();
     public abstract String getDocumentation();
     public abstract int getMaxNumberArguments();
+    public abstract Token getName();
 }

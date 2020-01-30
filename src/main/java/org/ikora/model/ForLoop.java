@@ -18,8 +18,8 @@ public class ForLoop extends Step {
     private final Variable iterator;
     private final Step range;
 
-    public ForLoop(Variable iterator, Step range, List<Step> steps) {
-        super(Token.empty());
+    public ForLoop(Token name, Variable iterator, Step range, List<Step> steps) {
+        super(name);
 
         this.iterator = iterator;
         this.range = range;

@@ -232,7 +232,7 @@ public class Linker {
         if(allowSplit){
             Pair<Token, Token> libraryAndName = fullName.splitLibrary();
 
-            library = libraryAndName.getLeft().getValue();
+            library = libraryAndName.getLeft().getText();
             name = libraryAndName.getRight();
         }
         else {

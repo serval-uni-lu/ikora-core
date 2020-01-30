@@ -22,7 +22,7 @@ public abstract class Step extends Node {
     }
 
     public Token getName() {
-        return this.name.getName();
+        return this.name.getToken();
     }
 
     public Node getParent() throws InvalidDependencyException {

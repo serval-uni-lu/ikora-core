@@ -19,7 +19,7 @@ public class VariableParser {
 
         Variable variable;
 
-        switch (cleanName.getValue().substring(0, 1)) {
+        switch (cleanName.getText().substring(0, 1)) {
             case "$":  variable = new ScalarVariable(cleanName); break;
             case "@":  variable = new ListVariable(cleanName); break;
             case "&": variable = new DictionaryVariable(cleanName); break;

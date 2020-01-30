@@ -36,7 +36,7 @@ public class Gherkin {
     }
 
     private Type extractType(Token raw){
-        String prefix = extractPrefix(raw.getValue());
+        String prefix = extractPrefix(raw.getText());
 
         switch (prefix){
             case "given": return Type.GIVEN;

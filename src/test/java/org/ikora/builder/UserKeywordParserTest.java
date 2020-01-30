@@ -23,11 +23,11 @@ class UserKeywordParserTest {
         assertNotNull(keyword);
         assertTrue(errors.isEmpty());
 
-        assertEquals("Keyword with cool name", keyword.getName().getValue());
+        assertEquals("Keyword with cool name", keyword.getName().getText());
         assertEquals(3, keyword.getSteps().size());
-        assertEquals("Step one", keyword.getStep(0).getName().getValue());
-        assertEquals("Step two without args", keyword.getStep(1).getName().getValue());
-        assertEquals("Step three \"Embedded arg\"", keyword.getStep(2).getName().getValue());
+        assertEquals("Step one", keyword.getStep(0).getName().getText());
+        assertEquals("Step two without args", keyword.getStep(1).getName().getText());
+        assertEquals("Step three \"Embedded arg\"", keyword.getStep(2).getName().getText());
     }
 
     @Test
@@ -43,7 +43,7 @@ class UserKeywordParserTest {
         assertNotNull(keyword);
         assertTrue(errors.isEmpty());
 
-        assertEquals("Keyword with cool name", keyword.getName().getValue());
+        assertEquals("Keyword with cool name", keyword.getName().getText());
         assertEquals(3, keyword.getSteps().size());
         assertEquals("Simple documentation", keyword.getDocumentation());
     }

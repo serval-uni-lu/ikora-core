@@ -91,7 +91,7 @@ public class Action implements Differentiable {
             return 1.0;
         }
 
-        if(this.type == ((Action)other).type && this.getValue().getName().equals(((Action)other).getValue().getName())){
+        if(this.type == ((Action)other).type && this.getValue().toString().equals(((Action)other).getValue().toString())){
             return 0.0;
         }
 
@@ -107,16 +107,11 @@ public class Action implements Differentiable {
         }
 
         if(this.type != ((Action)other).type
-        && this.getValue().getName().equals(((Action)other).getValue().getName())){
+        && this.getValue().toString().equals(((Action)other).getValue().toString())){
             differences.add(Action.changeStep(this, other));
         }
 
         return differences;
-    }
-
-    @Override
-    public Token getName() {
-        return Token.fromString(this.getType().name());
     }
 
     public static <T> Action addElement(Class<T> type, Differentiable element) {

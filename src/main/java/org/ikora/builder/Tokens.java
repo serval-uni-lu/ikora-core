@@ -73,7 +73,7 @@ public class Tokens implements Iterable<Token> {
             return this;
         }
 
-        if(LexerUtils.compareNoCase(first.get().getValue(), tag)){
+        if(LexerUtils.compareNoCase(first.get().getText(), tag)){
             return withoutFirst();
         }
 
@@ -108,7 +108,7 @@ public class Tokens implements Iterable<Token> {
     @Override
     public String toString() {
         return this.tokenList.stream()
-                .map(Token::getValue)
+                .map(Token::getText)
                 .collect(Collectors.joining("\t"));
     }
 

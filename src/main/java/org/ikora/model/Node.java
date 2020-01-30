@@ -36,7 +36,7 @@ public abstract class Node implements Differentiable {
 
     public String getFileName() {
         if(this.sourceFile == null){
-            return "";
+            return "<NONE>";
         }
 
         return this.sourceFile.getName();
@@ -97,4 +97,5 @@ public abstract class Node implements Differentiable {
     public abstract boolean matches(Token name);
     public abstract void accept(NodeVisitor visitor, VisitorMemory memory);
     public abstract void execute(Runtime runtime) throws Exception;
+    public abstract Token getName();
 }

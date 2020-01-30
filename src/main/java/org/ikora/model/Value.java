@@ -30,20 +30,24 @@ public class Value implements Differentiable {
     }
 
     private Node parent;
-    private Token value;
+    private Token token;
     private Pattern match;
     private Map<Token, Set<Variable>> variables;
 
-    public Value(Node parent, Token value) {
+    public Value(Node parent, Token token) {
         this.parent = parent;
-        this.value = value;
+        this.token = token;
         this.variables = new HashMap<>();
 
         buildRegex();
     }
 
-    public Value(Token value){
-        this(null, value);
+    public Value(Token token){
+        this(null, token);
+    }
+
+    public Token getToken(){
+        return token;
     }
 
     public void setVariable(Token name, Variable variable) throws InvalidDependencyException {
@@ -68,21 +72,16 @@ public class Value implements Differentiable {
 
     @Override
     public String toString() {
-        return this.value.getValue();
-    }
-
-    @Override
-    public Token getName(){
-        return this.value;
+        return this.token.getText();
     }
 
     public boolean matches(Token token) {
-        Matcher matcher = match.matcher(token.getValue());
+        Matcher matcher = match.matcher(token.getText());
         return matcher.matches();
     }
 
     public boolean isVariable() {
-        Matcher matcher = getVariableMatcher(this.value, Matching.IS_VARIABLE);
+        Matcher matcher = getVariableMatcher(this.token, Matching.IS_VARIABLE);
         return matcher.matches();
     }
 
@@ -92,7 +91,7 @@ public class Value implements Differentiable {
     }
 
     public boolean hasVariable() {
-        Matcher matcher = getVariableMatcher(this.value, Matching.HAS_VARIABLE);
+        Matcher matcher = getVariableMatcher(this.token, Matching.HAS_VARIABLE);
         return matcher.matches();
     }
 
@@ -104,10 +103,10 @@ public class Value implements Differentiable {
     public List<Token> findVariables() {
         List<Token> variables = new ArrayList<>();
 
-        Matcher matcher = getVariableMatcher(this.value, Matching.FIND_VARIABLE);
+        Matcher matcher = getVariableMatcher(this.token, Matching.FIND_VARIABLE);
 
         while (matcher.find()){
-            variables.add(this.value.extract(matcher.start(), matcher.end()));
+            variables.add(this.token.extract(matcher.start(), matcher.end()));
         }
 
         return variables;
@@ -119,7 +118,7 @@ public class Value implements Differentiable {
     }
 
     private void buildRegex() {
-        Matcher matcher = getVariableMatcher(this.value, Matching.FIND_VARIABLE);
+        Matcher matcher = getVariableMatcher(this.token, Matching.FIND_VARIABLE);
 
         String placeholder = "@@@@___VARIABLE__PLACEHOLDER___@@@@";
 
@@ -132,7 +131,7 @@ public class Value implements Differentiable {
 
     private static Matcher getVariableMatcher(Token token, Matching matching) {
         Matcher matcher;
-        String name = token.getValue();
+        String name = token.getText();
 
         switch (matching) {
             case IS_VARIABLE:
@@ -179,7 +178,7 @@ public class Value implements Differentiable {
         }
 
         Value value = (Value)other;
-        return this.value.equals(value.value) ? 0 : 1;
+        return this.token.equals(value.token) ? 0 : 1;
     }
 
     @Override
@@ -194,7 +193,7 @@ public class Value implements Differentiable {
 
         Value value = (Value)other;
 
-        if(value.getName().equalsValue(this.getName())){
+        if(value.token.equalsValue(this.token)){
             return Collections.emptyList();
         }
 

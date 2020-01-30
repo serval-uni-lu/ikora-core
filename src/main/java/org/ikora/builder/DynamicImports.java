@@ -60,7 +60,7 @@ public class DynamicImports {
             ResourcesTable current = resources.get(parent);
 
             Token name = values.get(0).getName();
-            File file = new File(name.getValue());
+            File file = new File(name.getText());
 
             Resources resource = new Resources(name, file, Collections.emptyList(), Token.empty());
             current.add(resource);
@@ -73,7 +73,7 @@ public class DynamicImports {
             Map<Resources, Set<Token>> current = variables.get(parent);
 
             Token name = values.get(0).getName();
-            File file = new File(name.getValue());
+            File file = new File(name.getText());
 
             Resources resource = new Resources(name, file, Collections.emptyList(), Token.empty());
 

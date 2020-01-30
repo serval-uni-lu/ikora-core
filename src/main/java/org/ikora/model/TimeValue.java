@@ -68,11 +68,11 @@ public class TimeValue {
             return false;
         }
 
-        if(NumberUtils.isNumber(token.getValue())){
+        if(NumberUtils.isNumber(token.getText())){
             return true;
         }
 
-        return stringPattern.matcher(token.getValue()).matches()
-                || timerPattern.matcher(token.getValue()).matches();
+        return stringPattern.matcher(token.getText()).matches()
+                || timerPattern.matcher(token.getText()).matches();
     }
 }

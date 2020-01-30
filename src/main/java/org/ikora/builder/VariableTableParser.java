@@ -45,7 +45,7 @@ class VariableTableParser {
             if(!optional.isPresent()){
                 errors.registerInternalError(
                         reader.getFile(),
-                        String.format("Invalid variable: %s", first.get().getValue()),
+                        String.format("Invalid variable: %s", first.get().getText()),
                         ParserUtils.getPosition(reader.getCurrent())
                 );
 

@@ -32,7 +32,7 @@ class SettingsTableParser {
                 continue;
             }
 
-            String label = ParserUtils.getLabel(reader, tokens, errors).getValue();
+            String label = ParserUtils.getLabel(reader, tokens, errors).getText();
 
             if(LexerUtils.compareNoCase(label, "documentation")){
                 parseDocumentation(reader, settings);
@@ -132,7 +132,7 @@ class SettingsTableParser {
 
     private static void parseForceTags(LineReader reader, Tokens tokens, Settings settings) throws IOException {
         for(Token token: tokens.withoutIndent()){
-            settings.addForceTag(token.getValue());
+            settings.addForceTag(token.getText());
         }
 
         reader.readLine();
@@ -140,7 +140,7 @@ class SettingsTableParser {
 
     private static void parseDefaultTags(LineReader reader, Tokens tokens, Settings settings) throws IOException {
         for(Token token: tokens.withoutIndent()){
-            settings.addDefaultTag(token.getValue());
+            settings.addDefaultTag(token.getText());
         }
 
         reader.readLine();
@@ -182,7 +182,7 @@ class SettingsTableParser {
         Tokens metadataTokens = tokens.withoutTag("metadata");
 
         if(metadataTokens.get(0).isPresent()){
-            String key =  metadataTokens.get(0).get().getValue();
+            String key =  metadataTokens.get(0).get().getText();
 
             Value value = Value.empty();
             if(metadataTokens.get(1).isPresent()){
@@ -199,12 +199,12 @@ class SettingsTableParser {
         Tokens variableTokens = tokens.withoutTag("variables");
 
         if(variableTokens.get(0).isPresent()){
-            String file =  variableTokens.get(0).get().getValue();
+            String file =  variableTokens.get(0).get().getText();
 
             List<String> parameters = new ArrayList<>();
             for(Token token: tokens.withoutFirst()){
                 if(token.isText()){
-                    parameters.add(token.getValue());
+                    parameters.add(token.getText());
                 }
             }
 
@@ -233,7 +233,7 @@ class SettingsTableParser {
     private static void parseResource(LineReader reader, Tokens tokens, Settings settings, ErrorManager errors) throws IOException {
         tokens = tokens.withoutFirst();
         Token label = ParserUtils.getLabel(reader, tokens, errors);
-        File filePath = new File(label.getValue());
+        File filePath = new File(label.getText());
         if(!filePath.isAbsolute()) {
             filePath = new File(reader.getFile().getParentFile(), filePath.getPath());
         }

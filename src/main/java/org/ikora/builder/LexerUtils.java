@@ -103,7 +103,7 @@ class LexerUtils {
                 continue;
             }
 
-            if(!compareNoCase(first.get().getValue(), "\\.\\.\\.")){
+            if(!compareNoCase(first.get().getText(), "\\.\\.\\.")){
                 break;
             }
 

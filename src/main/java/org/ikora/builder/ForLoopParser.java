@@ -17,6 +17,7 @@ public class ForLoopParser {
     public static ForLoop parse(LineReader reader, ErrorManager errors) throws IOException {
         Tokens loop = LexerUtils.tokenize(reader.getCurrent());
 
+        Token name = extractName(reader, loop, errors);
         Variable iterator = extractIterator(reader, loop, errors);
         Step range = extractRange(reader, loop, errors);
         reader.readLine();
@@ -38,7 +39,24 @@ public class ForLoopParser {
             steps.add(step);
         }
 
-        return new ForLoop(iterator, range, steps);
+        return new ForLoop(name, iterator, range, steps);
+    }
+
+    private static Token extractName(LineReader reader, Tokens loop, ErrorManager errors) {
+        Optional<Token> nameToken = loop.withoutIndent().get(0);
+
+        if(!nameToken.isPresent()){
+            errors.registerInternalError(
+                    reader.getFile(),
+                    ErrorMessages.FAILED_TO_PARSE_FORLOOP,
+                    ParserUtils. getPosition(reader.getCurrent())
+            );
+        }
+        else{
+            return nameToken.get();
+        }
+
+        return Token.empty();
     }
 
     private static Variable extractIterator(LineReader reader, Tokens loop, ErrorManager errors) {
@@ -95,7 +113,7 @@ public class ForLoopParser {
         for(Token token: tokens){
             if(first){
                 first = false;
-                String value = token.getValue();
+                String value = token.getText();
 
                 if(LexerUtils.compareNoCase(value, "^IN(\\s?)(.+)")){
                     String cleanValue = value.replaceAll("^([Ii])([Nn])", "").trim();

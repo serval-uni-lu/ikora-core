@@ -155,11 +155,6 @@ public class Difference implements Differentiable {
         return Collections.emptyList();
     }
 
-    @Override
-    public Token getName() {
-        return Token.fromString(String.valueOf(this.hashCode()));
-    }
-
     public Class<?> getType() {
         return this.getValue().getClass();
     }

@@ -55,7 +55,7 @@ public class DictionaryVariable extends Variable {
     @Override
     protected void setName(Token name) {
         this.name = name;
-        String generic = Value.escape(Value.getGenericVariableName(this.name.getValue()));
+        String generic = Value.escape(Value.getGenericVariableName(this.name.getText()));
 
         this.pattern = Pattern.compile(generic, Pattern.CASE_INSENSITIVE);
     }

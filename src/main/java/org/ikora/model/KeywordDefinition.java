@@ -71,7 +71,7 @@ public abstract class KeywordDefinition extends Keyword implements Iterable<Step
 
     @Override
     public Token getName() {
-        return name.getName();
+        return name.getToken();
     }
 
     @Override

@@ -18,18 +18,21 @@ public class Assignment extends Step {
     private List<Variable> returnVariables;
     private KeywordCall expression;
 
-    public Assignment(){
-        super(Token.empty());
-        returnVariables = new ArrayList<>();
+    public Assignment(Token name, List<Variable> returnVariables, KeywordCall expression) throws InvalidDependencyException {
+        super(name);
+
+        this.returnVariables = new ArrayList<>(returnVariables.size());
+        for(Variable returnVariable: returnVariables){
+            this.addReturnVariable(returnVariable);
+        }
+
+        this.expression = expression;
     }
 
-    public List<Variable> getReturnVariables() {
-        return returnVariables;
-    }
-
-    public void addReturnValue(Variable variable) throws InvalidDependencyException {
+    public void addReturnVariable(Variable variable) throws InvalidDependencyException {
         variable.addDependency(this);
         variable.setSourceFile(getSourceFile());
+        variable.setAssignment(this);
 
         returnVariables.add(variable);
     }
@@ -38,6 +41,10 @@ public class Assignment extends Step {
         expression = call;
         expression.addDependency(this);
         expression.setSourceFile(getSourceFile());
+    }
+
+    public List<Variable> getReturnVariables() {
+        return returnVariables;
     }
 
     @Override

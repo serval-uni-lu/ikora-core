@@ -33,7 +33,7 @@ class UserKeywordParser {
 
             tokens = currentTokens.withoutIndent();
 
-            String label = ParserUtils.getLabel(reader, tokens, errors).getValue();
+            String label = ParserUtils.getLabel(reader, tokens, errors).getText();
 
             if (LexerUtils.compareNoCase(label, "\\[documentation\\]")) {
                 parseDocumentation(reader, userKeyword);
@@ -72,7 +72,7 @@ class UserKeywordParser {
 
     private static void parseTags(LineReader reader, Tokens tokens, UserKeyword userKeyword) throws IOException {
         for(Token token: tokens){
-            userKeyword.addTag(token.getValue());
+            userKeyword.addTag(token.getText());
         }
 
         reader.readLine();

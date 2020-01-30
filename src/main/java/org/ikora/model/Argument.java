@@ -71,7 +71,7 @@ public class Argument extends Node {
             return Collections.singletonList(Action.addElement(this.getClass(), this));
         }
 
-        if(this.value.getName().equalsValue(other.getName())){
+        if(this.value.getToken().equalsValue(((Argument)other).value.getToken())){
             return Collections.emptyList();
         }
 
@@ -80,7 +80,7 @@ public class Argument extends Node {
 
     @Override
     public Token getName() {
-        return this.value.getName();
+        return this.value.getToken();
     }
 
     @Override

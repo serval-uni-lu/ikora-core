@@ -2,7 +2,6 @@ package org.ikora.utils;
 
 import org.ikora.analytics.Action;
 import org.ikora.model.Differentiable;
-import org.ikora.model.Token;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,10 +35,5 @@ public class DifferentiableString implements Differentiable {
         actions.add(Action.changeName(this, other));
 
         return actions;
-    }
-
-    @Override
-    public Token getName() {
-        return Token.fromString(this.text);
     }
 }
