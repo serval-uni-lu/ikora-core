@@ -126,7 +126,7 @@ public abstract class KeywordDefinition extends Keyword implements Iterable<Step
             return 1.0;
         }
 
-        if(other == this){
+        if(other == this || !this.getClass().isAssignableFrom(other.getClass())){
             return 0.0;
         }
 
@@ -135,7 +135,7 @@ public abstract class KeywordDefinition extends Keyword implements Iterable<Step
         boolean sameName = this.getName().equalsValue(keyword.getName());
         boolean sameArguments = LevenshteinDistance.index(this.steps, keyword.steps) == 0.0;
 
-        return sameName && sameArguments ? 0 : 1;
+        return sameName && sameArguments ? 0.0 : 1.0;
     }
 
     @Override

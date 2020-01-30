@@ -26,6 +26,7 @@ public class ForLoop extends Step {
         this.steps = steps;
     }
 
+    @Override
     public List<Step> getSteps(){
         return steps;
     }
@@ -60,14 +61,43 @@ public class ForLoop extends Step {
 
     @Override
     public double distance(Differentiable other) {
-        //TODO: implement a proper distance method
-        return 0.0;
+        if(other == this){
+            return 0.0;
+        }
+
+        if(other == null || !this.getClass().isAssignableFrom(other.getClass())){
+            return 0.0;
+        }
+
+        ForLoop forLoop = (ForLoop)other;
+
+        boolean sameIterator = this.iterator.distance(forLoop.iterator) == 0.0;
+        boolean sameRange = this.range.distance(forLoop.range) == 0.0;
+        boolean sameSteps = LevenshteinDistance.index(this.steps, forLoop.steps) == 0.0;
+
+        return sameIterator && sameRange && sameSteps ? 0.0 : 1.0;
     }
 
     @Override
     public List<Action> differences(Differentiable other) {
-        //TODO: implement the a proper differences method
-        return Collections.emptyList();
+        if(other == this){
+            return Collections.emptyList();
+        }
+
+        List<Action> actions = new ArrayList<>();
+
+        if(other == null || !this.getClass().isAssignableFrom(other.getClass())){
+            actions.add(Action.addElement(ForLoop.class, this));
+            return actions;
+        }
+
+        ForLoop forLoop = (ForLoop)other;
+
+        actions.addAll(this.iterator.differences(forLoop.iterator));
+        actions.addAll(this.range.differences(forLoop.range));
+        actions.addAll(LevenshteinDistance.getDifferences(this.steps, forLoop.steps));
+
+        return actions;
     }
 
     @Override

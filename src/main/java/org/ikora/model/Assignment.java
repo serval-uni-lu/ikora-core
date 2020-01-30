@@ -10,6 +10,7 @@ import org.ikora.runner.Runtime;
 import org.ikora.utils.LevenshteinDistance;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -111,21 +112,23 @@ public class Assignment extends Step {
 
         Assignment assignment = (Assignment)other;
 
-        return expression.distance(assignment.expression);
+        boolean sameReturnValues = LevenshteinDistance.index(this.returnVariables, assignment.returnVariables) == 0.0;
+        boolean sameExpression = expression.distance(assignment.expression) == 0.0;
+
+        return sameReturnValues && sameExpression ? 0.0 : 1.0;
     }
 
     @Override
     public List<Action> differences(Differentiable other) {
-        List<Action> actions = new ArrayList<>();
-
         if(other == null){
-            actions.add(Action.invalid(this, other));
-            return actions;
+            return Collections.singletonList(Action.addElement(this.getClass(), this));
         }
 
         if(!(other instanceof Step)){
-            return actions;
+            return Collections.emptyList();
         }
+
+        List<Action> actions = new ArrayList<>();
 
         if(this.getClass() != other.getClass()){
             actions.add(Action.changeStepType(this, other));

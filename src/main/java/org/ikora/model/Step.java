@@ -39,6 +39,10 @@ public abstract class Step extends Node {
         return parents.iterator().next();
     }
 
+    public List<Step> getSteps(){
+        return Collections.emptyList();
+    }
+
     public KeywordDefinition getCaller() throws InvalidDependencyException {
         Node node = getParent();
 
