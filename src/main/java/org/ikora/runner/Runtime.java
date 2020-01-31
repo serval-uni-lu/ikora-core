@@ -38,7 +38,7 @@ public class Runtime {
         return project.getSourceFiles();
     }
 
-    public Set<Variable> findInScope(Set<TestCase> testCases, Set<String> suites, Token name){
+    public Set<Node> findInScope(Set<TestCase> testCases, Set<String> suites, Token name){
         return scope.findInScope(testCases, suites, name);
     }
 
@@ -107,8 +107,8 @@ public class Runtime {
         return scope.getTestCase();
     }
 
-    public List<Value> getReturnValues() {
-        return scope.getReturnValues();
+    public List<Variable> getReturnVariables() {
+        return scope.getReturnVariables();
     }
 
     public ErrorManager getErrors() {

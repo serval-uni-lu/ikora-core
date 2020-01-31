@@ -12,7 +12,7 @@ public interface Scope {
     void addToSuite(String suite, Variable variable);
     void addToGlobal(Variable variable);
 
-    Set<Variable> findInScope(Set<TestCase> testCases, Set<String> suites, Token name);
+    Set<Node> findInScope(Set<TestCase> testCases, Set<String> suites, Token name);
     
     void addDynamicLibrary(KeywordDefinition keyword, List<Argument> argumentList);
     ResourcesTable getDynamicResources(Node node);
@@ -27,5 +27,5 @@ public interface Scope {
 
     TestCase getTestCase();
 
-    List<Value> getReturnValues();
+    List<Variable> getReturnVariables();
 }

@@ -83,7 +83,7 @@ public class TestCase extends KeywordDefinition {
     }
 
     @Override
-    public List<Value> getReturnValues() {
+    public List<Variable> getReturnVariables() {
         return Collections.emptyList();
     }
 

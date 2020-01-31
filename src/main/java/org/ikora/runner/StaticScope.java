@@ -21,8 +21,8 @@ public class StaticScope implements Scope{
     }
 
     @Override
-    public Set<Variable> findInScope(Set<TestCase> testCases, Set<String> suites, Token name){
-        Set<Variable> variablesFound = new HashSet<>();
+    public Set<Node> findInScope(Set<TestCase> testCases, Set<String> suites, Token name){
+        Set<Node> variablesFound = new HashSet<>();
 
         for(TestCase testCase: testCases){
             variablesFound.addAll(findTestVariable(testCase, name));
@@ -135,7 +135,7 @@ public class StaticScope implements Scope{
     }
 
     @Override
-    public List<Value> getReturnValues() {
+    public List<Variable> getReturnVariables() {
         return Collections.emptyList();
     }
 

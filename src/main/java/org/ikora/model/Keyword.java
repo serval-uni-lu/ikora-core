@@ -8,7 +8,7 @@ public abstract class Keyword extends Node {
     }
 
     public abstract Type getType();
-    public abstract List<Value> getReturnValues();
+    public abstract List<Variable> getReturnVariables();
     public abstract String getDocumentation();
     public abstract int getMaxNumberArguments();
     public abstract Token getName();

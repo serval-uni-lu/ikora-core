@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class DictionaryVariable extends Variable {
-    private List<Value> values;
+    private List<Argument> values;
 
     public DictionaryVariable(Token name){
         super(name);
@@ -30,7 +30,7 @@ public class DictionaryVariable extends Variable {
 
     @Override
     public String toString() {
-        return values.stream().map(Value::toString).collect(Collectors.joining("\t"));
+        return values.stream().map(Argument::toString).collect(Collectors.joining("\t"));
     }
 
     @Override

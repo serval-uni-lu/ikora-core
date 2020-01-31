@@ -56,32 +56,37 @@ public class Assignment extends Step {
 
     @Override
     public List<Argument> getArgumentList() {
-        if(expression == null ){
-            return new ArrayList<>();
-        }
-
-        Optional<KeywordCall> call = expression.getCall();
-
-        return call.map(KeywordCall::getArgumentList).orElse(Collections.emptyList());
+        return getKeywordCall().map(KeywordCall::getArgumentList).orElse(Collections.emptyList());
     }
 
     @Override
     public boolean hasParameters() {
+        return getKeywordCall().map(KeywordCall::hasParameters).orElse(false);
+    }
+
+    @Override
+    public Optional<KeywordCall> getKeywordCall(){
         if(expression == null){
-            return false;
+            return Optional.empty();
         }
-        Optional<KeywordCall> call = expression.getCall();
 
-        return call.map(KeywordCall::hasParameters).orElse(false);
+        Node node = expression.getDefinition().orElse(null);
 
+        if(node instanceof KeywordCall){
+            return Optional.of((KeywordCall)node);
+        }
+
+        return Optional.empty();
     }
 
     @Override
     public void execute(Runtime runtime) throws Exception {
         runtime.enterNode(this);
 
-        if(expression != null && expression.getCall().isPresent()){
-            KeywordCall call = expression.getCall().get();
+        Optional<KeywordCall> optional = getKeywordCall();
+
+        if(optional.isPresent()){
+            KeywordCall call = optional.get();
             Linker.link(call, runtime);
 
             if(!runtime.getErrors().isEmpty()){
@@ -92,7 +97,7 @@ public class Assignment extends Step {
 
             if(callee.isPresent()){
                 callee.get().execute(runtime);
-                assignVariables(runtime.getReturnValues());
+                assignVariables(runtime.getReturnVariables());
             }
             else{
                 throw new Exception("Need to have a better exception");
@@ -179,12 +184,7 @@ public class Assignment extends Step {
         visitor.visit(this, memory);
     }
 
-    @Override
-    public Optional<KeywordCall> getKeywordCall() {
-        return expression.getCall();
-    }
-
-    private void assignVariables(List<Value> returnValues){
+    private void assignVariables(List<Variable> returnValues){
         //TODO: implement assignment
     }
 }

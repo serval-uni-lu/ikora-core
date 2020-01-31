@@ -3,7 +3,6 @@ package org.ikora.libraries.builtin;
 import org.ikora.model.Argument;
 import org.ikora.model.LibraryKeyword;
 import org.ikora.runner.Runtime;
-import org.ikora.model.Value;
 
 public class WaitUntilKeywordSucceeds extends LibraryKeyword {
     public WaitUntilKeywordSucceeds(){

@@ -44,10 +44,6 @@ public class Action implements Differentiable {
         REMOVE_DOCUMENTATION,
         CHANGE_DOCUMENTATION,
 
-        ADD_VALUE,
-        REMOVE_VALUE,
-        CHANGE_VALUE,
-
         INVALID
     }
 
@@ -136,9 +132,6 @@ public class Action implements Differentiable {
         else if(DifferentiableString.class.isAssignableFrom(type)){
             return new Action(Type.ADD_STRING, null, element);
         }
-        else if(Value.class.isAssignableFrom(type)){
-            return new Action(Type.ADD_VALUE, null, element);
-        }
 
         return new Action(Type.INVALID, null, element);
     }
@@ -164,9 +157,6 @@ public class Action implements Differentiable {
         }
         else if(DifferentiableString.class.isAssignableFrom(type)){
             return new Action(Type.REMOVE_STRING, element, null);
-        }
-        else if(Value.class.isAssignableFrom(type)){
-            return new Action(Type.REMOVE_VALUE, element, null);
         }
 
         return new Action(Type.INVALID, element, null);
@@ -222,10 +212,6 @@ public class Action implements Differentiable {
 
     public static Action changeDocumentation(Differentiable left, Differentiable right) {
         return new Action(Type.CHANGE_DOCUMENTATION, left, right);
-    }
-
-    public static Action changeValue(Differentiable left, Differentiable right) {
-        return new Action(Type.CHANGE_VALUE, left, right);
     }
 
     public static Action invalid(Differentiable left, Differentiable right) {

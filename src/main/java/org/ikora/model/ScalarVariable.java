@@ -10,15 +10,8 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 public class ScalarVariable extends Variable {
-    private Value value;
-
     public ScalarVariable(Token name){
         super(name);
-        this.value = Value.empty();
-    }
-
-    public Value getValue(){
-        return value;
     }
 
     @Override

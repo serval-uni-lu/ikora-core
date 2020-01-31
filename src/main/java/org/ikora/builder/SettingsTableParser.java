@@ -183,13 +183,7 @@ class SettingsTableParser {
 
         if(metadataTokens.get(0).isPresent()){
             String key =  metadataTokens.get(0).get().getText();
-
-            Value value = Value.empty();
-            if(metadataTokens.get(1).isPresent()){
-                value = new Value(metadataTokens.get(1).get());
-            }
-
-            settings.addMetadata(key, value);
+            settings.addMetadata(key, metadataTokens.get(1).orElse(Token.empty()));
         }
 
         reader.readLine();

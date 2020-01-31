@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 public class ListVariable extends Variable {
-    private List<Value> values;
+    private List<Variable> values;
 
     public ListVariable(Token name){
         super(name);

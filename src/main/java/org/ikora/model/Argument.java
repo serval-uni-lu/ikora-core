@@ -16,37 +16,37 @@ public class Argument extends Node {
         STRING, OBJECT, KEYWORD, LOCATOR, CONDITION, KEYWORDS, KWARGS
     }
 
-    private KeywordCall call;
+    private Node definition;
     private final Token name;
 
     public Argument(Node parent, Token name) throws InvalidDependencyException {
         this.name = name;
-        this.call = null;
+        this.definition = null;
 
         this.addDependency(parent);
     }
 
-    public Argument(Node parent, KeywordCall call) throws InvalidDependencyException {
+    public Argument(Node parent, Node definition) throws InvalidDependencyException {
         this.addDependency(parent);
 
-        if(call == null){
+        if(definition == null){
             this.name = Token.empty();
-            this.call = null;
+            this.definition = null;
             return;
         }
 
-        this.name = call.getName();
-        this.call = call;
-        call.addDependency(this);
+        this.name = definition.getName();
+        this.definition = definition;
+        definition.addDependency(this);
     }
 
-    public Optional<KeywordCall> getCall() {
-        return Optional.ofNullable(this.call);
+    public Optional<Node> getDefinition() {
+        return Optional.ofNullable(this.definition);
     }
 
     public void setCall(KeywordCall call){
-        this.call = call;
-        this.call.setSourceFile(getSourceFile());
+        this.definition = call;
+        this.definition.setSourceFile(getSourceFile());
     }
 
     @Override
@@ -77,8 +77,8 @@ public class Argument extends Node {
         Argument argument = (Argument)other;
 
         boolean sameCall = true;
-        if(this.call != null && this.call != argument.call){
-            sameCall = this.call.distance(argument.call) == 0.0;
+        if(this.definition != null && this.definition != argument.definition){
+            sameCall = this.definition.distance(argument.definition) == 0.0;
         }
 
         boolean sameName = this.name.equalsValue(argument.getName());
@@ -110,15 +110,19 @@ public class Argument extends Node {
 
     @Override
     public String toString() {
-        return call != null ? call.toString() : name.toString();
+        if(name != null){
+            return name.toString();
+        }
+
+        return definition != null ? definition.toString() : "<ARGUMENT>";
     }
 
     @Override
     public void setSourceFile(SourceFile sourceFile) {
         super.setSourceFile(sourceFile);
 
-        if(call != null){
-            this.call.setSourceFile(sourceFile);
+        if(definition != null){
+            this.definition.setSourceFile(sourceFile);
         }
     }
 }

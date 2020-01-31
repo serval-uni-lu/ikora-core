@@ -14,7 +14,7 @@ import java.util.*;
 public class KeywordCall extends Step {
     private Link<KeywordCall, Keyword> link;
     private List<Argument> argumentList;
-    private List<Value> returnValues;
+    private List<Variable> returnVariables;
     private Gherkin gherkin;
 
     public KeywordCall(Token name) {
@@ -112,7 +112,7 @@ public class KeywordCall extends Step {
 
         if(callee.isPresent()){
             callee.get().execute(runtime);
-            returnValues = runtime.getReturnValues();
+            returnVariables = runtime.getReturnVariables();
         }
         else{
             throw new Exception("Need to have a better exception");
@@ -181,8 +181,8 @@ public class KeywordCall extends Step {
         return builder.toString();
     }
 
-    public List<Value> getReturnValues() {
-        return this.returnValues;
+    public List<Variable> getReturnVariables() {
+        return this.returnVariables;
     }
 
     @Override

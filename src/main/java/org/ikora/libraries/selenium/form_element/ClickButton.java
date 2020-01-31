@@ -1,7 +1,6 @@
 package org.ikora.libraries.selenium.form_element;
 
 import org.ikora.model.Argument;
-import org.ikora.model.Value;
 import org.ikora.model.LibraryKeyword;
 import org.ikora.runner.Runtime;
 

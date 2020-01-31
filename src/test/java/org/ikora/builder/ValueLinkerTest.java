@@ -1,9 +1,6 @@
 package org.ikora.builder;
 
-import org.ikora.exception.InvalidDependencyException;
-import org.ikora.model.ScalarVariable;
 import org.ikora.model.Token;
-import org.ikora.model.Value;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

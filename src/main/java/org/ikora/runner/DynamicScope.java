@@ -10,7 +10,7 @@ public class DynamicScope implements Scope {
     private Deque<Block<TestCase, Variable>> testStack;
     private Deque<Block<Keyword, Variable>> keywordStack;
     private Deque<Block<Step, Argument>> argumentStack;
-    private List<Value> returnValues;
+    private List<Variable> returnVariables;
 
     public DynamicScope(){
         global = new NodeTable<>();
@@ -18,7 +18,7 @@ public class DynamicScope implements Scope {
         testStack = new LinkedList<>();
         keywordStack = new LinkedList<>();
         argumentStack = new LinkedList<>();
-        returnValues = Collections.emptyList();
+        returnVariables = Collections.emptyList();
     }
 
     @Override
@@ -54,7 +54,7 @@ public class DynamicScope implements Scope {
     }
 
     @Override
-    public Set<Variable> findInScope(Set<TestCase> testCases, Set<String> suites, Token name) {
+    public Set<Node> findInScope(Set<TestCase> testCases, Set<String> suites, Token name) {
         return null;
     }
 
@@ -92,11 +92,11 @@ public class DynamicScope implements Scope {
         }
         else if(Keyword.class.isAssignableFrom(node.getClass())){
             keywordStack.pop();
-            returnValues = ((Keyword)node).getReturnValues();
+            returnVariables = ((Keyword)node).getReturnVariables();
         }
         else if(KeywordCall.class.isAssignableFrom(node.getClass())){
             argumentStack.pop();
-            returnValues = ((KeywordCall)node).getReturnValues();
+            returnVariables = ((KeywordCall)node).getReturnVariables();
         }
     }
 
@@ -124,8 +124,8 @@ public class DynamicScope implements Scope {
     }
 
     @Override
-    public List<Value> getReturnValues() {
-        return returnValues;
+    public List<Variable> getReturnVariables() {
+        return returnVariables;
     }
 
     class Block<T, U>{

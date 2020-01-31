@@ -90,7 +90,7 @@ public abstract class LibraryKeyword extends Keyword {
     }
 
     @Override
-    public List<Value> getReturnValues(){
+    public List<Variable> getReturnVariables(){
         return Collections.emptyList();
     }
 

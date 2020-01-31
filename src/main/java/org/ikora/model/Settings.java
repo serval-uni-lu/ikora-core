@@ -117,12 +117,12 @@ public class Settings implements Delayable {
         this.timeOut = timeOut;
     }
 
-    public void addMetadata(String key, Value value){
+    public void addMetadata(String key, Token token){
         if(key.isEmpty()){
             return;
         }
 
-        metadata.addEntry(key, value);
+        metadata.addEntry(key, token);
     }
 
     public void addVariableFile(VariableFile variableFile){

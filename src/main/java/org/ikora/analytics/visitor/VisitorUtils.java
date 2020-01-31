@@ -46,7 +46,7 @@ class VisitorUtils {
     }
 
     static void traverseArgument(NodeVisitor visitor, Argument argument, VisitorMemory memory){
-        argument.getCall().ifPresent(keyword ->
+        argument.getDefinition().ifPresent(keyword ->
                 keyword.accept(visitor, memory.getUpdated(argument))
         );
     }

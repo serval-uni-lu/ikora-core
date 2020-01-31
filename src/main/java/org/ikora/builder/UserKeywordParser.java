@@ -3,9 +3,11 @@ package org.ikora.builder;
 import org.ikora.error.ErrorManager;
 import org.ikora.error.ErrorMessages;
 import org.ikora.exception.InvalidTypeException;
+import org.ikora.exception.MalformedVariableException;
 import org.ikora.model.Step;
 import org.ikora.model.Token;
 import org.ikora.model.UserKeyword;
+import org.ikora.model.Variable;
 
 import java.io.IOException;
 
@@ -45,7 +47,7 @@ class UserKeywordParser {
                 parseParameters(reader, tokens, userKeyword);
             }
             else if (LexerUtils.compareNoCase(label, "\\[return\\]")) {
-                parseReturn(reader, tokens, userKeyword);
+                parseReturn(reader, tokens, userKeyword, errors);
             }
             else if (LexerUtils.compareNoCase(label, "\\[teardown\\]")) {
                 parseTeardown(reader, tokens, userKeyword, errors);
@@ -86,9 +88,17 @@ class UserKeywordParser {
         reader.readLine();
     }
 
-    private static void parseReturn(LineReader reader, Tokens tokens, UserKeyword userKeyword) throws IOException {
+    private static void parseReturn(LineReader reader, Tokens tokens, UserKeyword userKeyword, ErrorManager errors) throws IOException {
         for(Token token: tokens.withoutTag("\\[return\\]")){
-            userKeyword.addReturn(token);
+            try {
+                userKeyword.addReturnVariable(Variable.create(token));
+            } catch (MalformedVariableException e) {
+                errors.registerSyntaxError(
+                        reader.getFile(),
+                        String.format("%s: %s", ErrorMessages.RETURN_VALUE_SHOULD_BE_A_VARIABLE, e.getMessage()),
+                        ParserUtils.getPosition(token, token)
+                );
+            }
         }
 
         reader.readLine();

@@ -20,19 +20,19 @@ public class Linker {
     public static void link(Runtime runtime) {
         Linker linker = new Linker(runtime);
 
-        List<ScopeValue> unresolvedArguments = new ArrayList<>();
+        List<UnresolvedNode> unresolvedNodes = new ArrayList<>();
 
         for (SourceFile sourceFile : runtime.getSourceFiles()) {
             for(TestCase testCase: sourceFile.getTestCases()) {
-                unresolvedArguments.addAll(linker.linkSteps(testCase));
+                unresolvedNodes.addAll(linker.linkSteps(testCase));
             }
 
             for(UserKeyword userKeyword: sourceFile.getUserKeywords()) {
-                unresolvedArguments.addAll(linker.linkSteps(userKeyword));
+                unresolvedNodes.addAll(linker.linkSteps(userKeyword));
             }
         }
 
-        linker.processUnresolvedArguments(unresolvedArguments);
+        linker.processUnresolvedNodes(unresolvedNodes);
     }
 
     public static void link(KeywordCall call, Runtime runtime) {
@@ -40,12 +40,12 @@ public class Linker {
         linker.resolveCall(call);
     }
 
-    private List<ScopeValue> linkSteps(TestCase testCase) {
-        List<ScopeValue> unresolvedArguments = new ArrayList<>();
+    private List<UnresolvedNode> linkSteps(TestCase testCase) {
+        List<UnresolvedNode> unresolvedNodes = new ArrayList<>();
 
         KeywordCall setup = testCase.getSetup();
         if(setup != null){
-            unresolvedArguments.addAll(resolveCall(setup));
+            unresolvedNodes.addAll(resolveCall(setup));
         }
 
         for (Step step: testCase) {
@@ -61,29 +61,29 @@ public class Linker {
                 }
             }
 
-            step.getKeywordCall().ifPresent(call -> unresolvedArguments.addAll(resolveCall(call)));
+            step.getKeywordCall().ifPresent(call -> unresolvedNodes.addAll(resolveCall(call)));
         }
 
         KeywordCall teardown = testCase.getTearDown();
         if(teardown != null){
-            unresolvedArguments.addAll(resolveCall(teardown));
+            unresolvedNodes.addAll(resolveCall(teardown));
         }
 
-        return unresolvedArguments;
+        return unresolvedNodes;
     }
 
-    private List<ScopeValue> linkSteps(UserKeyword userKeyword) throws RuntimeException {
-        List<ScopeValue> unresolvedArguments = new ArrayList<>();
+    private List<UnresolvedNode> linkSteps(UserKeyword userKeyword) throws RuntimeException {
+        List<UnresolvedNode> unresolvedNodes = new ArrayList<>();
 
         for (Step step: userKeyword) {
-            step.getKeywordCall().ifPresent(call -> unresolvedArguments.addAll(resolveCall(call)));
+            step.getKeywordCall().ifPresent(call -> unresolvedNodes.addAll(resolveCall(call)));
         }
 
-        return unresolvedArguments;
+        return unresolvedNodes;
     }
 
-    private List<ScopeValue> resolveCall(KeywordCall call) {
-        List<ScopeValue> unresolvedArguments = new ArrayList<>();
+    private List<UnresolvedNode> resolveCall(KeywordCall call) {
+        List<UnresolvedNode> unresolvedNodes = new ArrayList<>();
 
         Set<? super Keyword> keywords = getKeywords(call.getName(), call.getSourceFile());
 
@@ -107,11 +107,7 @@ public class Linker {
 
         if(keywords.isEmpty()){
             try{
-                unresolvedArguments.add(new ScopeValue(
-                        call.getCaller(),
-                        new Value(call.getName()),
-                        call.getPosition())
-                );
+                unresolvedNodes.add(new UnresolvedNode(call.getCaller(), call));
             } catch (InvalidDependencyException e) {
                 runtime.getErrors().registerSymbolError(
                         call.getFile(),
@@ -122,13 +118,13 @@ public class Linker {
         }
 
 
-        unresolvedArguments.addAll(linkCallArguments(call));
+        unresolvedNodes.addAll(linkCallArguments(call));
 
-        return unresolvedArguments;
+        return unresolvedNodes;
     }
 
-    private List<ScopeValue> linkCallArguments(KeywordCall call) {
-        List<ScopeValue> unresolvedArguments = new ArrayList<>();
+    private List<UnresolvedNode> linkCallArguments(KeywordCall call) {
+        List<UnresolvedNode> unresolvedNodes = new ArrayList<>();
         List<Argument> oldArgumentList = new ArrayList<>(call.getArgumentList());
 
         Iterator<Argument> iterator = oldArgumentList.iterator();
@@ -177,7 +173,7 @@ public class Linker {
 
         updateScope(call);
 
-        return unresolvedArguments;
+        return unresolvedNodes;
     }
 
     private KeywordCall createKeywordCall(Keyword keyword, Argument first, Iterator<Argument> iterator) throws InvalidDependencyException {
@@ -261,29 +257,21 @@ public class Linker {
         return keywordsFound;
     }
 
-    private void processUnresolvedArguments(List<ScopeValue> unresolvedArguments) {
-        for(ScopeValue valueScope: unresolvedArguments){
-            Set<Variable> variables = runtime.findInScope(valueScope.getTestCases(), valueScope.getSuites(), valueScope.getName());
+    private void processUnresolvedNodes(List<UnresolvedNode> unresolvedNodes) {
+        for(UnresolvedNode unresolvedNode : unresolvedNodes){
+            Set<Node> nodes = runtime.findInScope(unresolvedNode.getTestCases(), unresolvedNode.getSuites(), unresolvedNode.getName());
 
-            if(!variables.isEmpty()){
-                for(Variable variable: variables){
-                    try {
-                        valueScope.getValue().setVariable(valueScope.getName(), variable);
-                    } catch (InvalidDependencyException e) {
-                        runtime.getErrors().registerInternalError(
-                                valueScope.getFile(),
-                                e.getMessage(),
-                                valueScope.getPosition()
-                        );
-                    }
-                }
+            for(Node node: nodes){
+                //TODO: Implement method to update the node that were just resolved
             }
-            else {
+
+            if(nodes.isEmpty()) {
                 runtime.getErrors().registerSymbolError(
-                        valueScope.getFile(),
+                        unresolvedNode.getFile(),
                         ErrorMessages.FOUND_NO_MATCH,
-                        valueScope.getPosition()
+                        ParserUtils.getPosition(unresolvedNode.getName(), unresolvedNode.getName())
                 );
+
             }
         }
     }

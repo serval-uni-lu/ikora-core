@@ -13,12 +13,12 @@ public class UserKeyword extends KeywordDefinition {
     private List<Token> parameters;
     private NodeTable<Variable> localVariables;
     private KeywordCall tearDown;
-    private List<Value> returnValues;
+    private List<Variable> returnVariables;
 
     public UserKeyword() {
         parameters = new ArrayList<>();
         localVariables = new NodeTable<>();
-        returnValues = new ArrayList<>();
+        returnVariables = new ArrayList<>();
     }
 
     public KeywordCall getTearDown() {
@@ -33,12 +33,8 @@ public class UserKeyword extends KeywordDefinition {
         setTearDown(tearDown.toCall());
     }
 
-    public List<Value> getReturn(){
-        return returnValues;
-    }
-
-    public void addReturn(Token returnValue) {
-        returnValues.add(new Value(returnValue));
+    public void addReturnVariable(Variable returnVariable) {
+        returnVariables.add(returnVariable);
     }
 
     @Override
@@ -62,8 +58,8 @@ public class UserKeyword extends KeywordDefinition {
     }
 
     @Override
-    public List<Value> getReturnValues() {
-        return returnValues;
+    public List<Variable> getReturnVariables() {
+        return returnVariables;
     }
 
     public void addParameter(Token parameter){
