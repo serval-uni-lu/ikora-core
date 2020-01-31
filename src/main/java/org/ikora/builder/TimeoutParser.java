@@ -39,7 +39,10 @@ public class TimeoutParser {
     }
 
     private static Token parseErrorMessage(Tokens tokens) {
-        return tokens.get(1);
+       if(tokens.size() > 2){
+           return tokens.get(1);
+       }
 
+       return Token.empty();
     }
 }

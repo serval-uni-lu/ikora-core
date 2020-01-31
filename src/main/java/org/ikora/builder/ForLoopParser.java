@@ -59,7 +59,7 @@ public class ForLoopParser {
     private static Variable extractIterator(LineReader reader, Tokens loop, ErrorManager errors) {
         Variable variable = Variable.invalid();
 
-        if(!loop.isEmpty()){
+        if(loop.isEmpty()){
             errors.registerInternalError(
                     reader.getFile(),
                     ErrorMessages.FAILED_TO_LOCATE_ITERATOR_IN_FOR_LOOP,

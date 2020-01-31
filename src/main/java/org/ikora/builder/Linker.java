@@ -181,8 +181,7 @@ public class Linker {
         call.setSourceFile(first.getSourceFile());
         call.addDependency(keyword);
 
-        Argument last = first;
-
+        Argument last;
         int i = keyword.getMaxNumberArguments();
 
         while (iterator.hasNext() && i > 0){

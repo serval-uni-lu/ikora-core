@@ -40,6 +40,8 @@ public class ParserUtils {
         }
 
         keyword.setName(tokens.first());
+        keyword.addToken(tokens.first());
+
         List<Variable> embeddedArguments = new ArrayList<>();
 
         for(Token embeddedArgument: ValueLinker.findVariables(tokens.first())){

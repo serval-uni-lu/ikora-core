@@ -179,18 +179,12 @@ class SettingsTableParser {
     }
 
     private static void parseMetadata(LineReader reader, Tokens tokens, Settings settings) throws IOException {
-        Tokens metadataTokens = tokens.withoutTag("metadata");
-
-        String key =  metadataTokens.first().getText();
-        settings.addMetadata(key, metadataTokens.get(1));
-
+        settings.addMetadata(tokens.first().getText(), tokens.get(1));
         reader.readLine();
     }
 
     private static void parseVariable(LineReader reader, Tokens tokens, Settings settings) throws IOException {
-        Tokens variableTokens = tokens.withoutTag("variables");
-
-        String file =  variableTokens.first().getText();
+        String file = tokens.first().getText();
 
         List<String> parameters = new ArrayList<>();
         for(Token token: tokens.withoutFirst()){
@@ -212,16 +206,14 @@ class SettingsTableParser {
     }
 
     private static void parseLibrary(LineReader reader, Tokens tokens, Settings settings, ErrorManager errors) throws IOException {
-        tokens = tokens.withoutFirst();
-        Token label = ParserUtils.getLabel(reader, tokens, errors);
-        Library library = new Library(label, new ArrayList<>(), Token.empty());
+        Token name = ParserUtils.getLabel(reader, tokens, errors);
+        Library library = new Library(name, new ArrayList<>(), Token.empty());
         settings.addLibrary(library);
 
         reader.readLine();
     }
 
     private static void parseResource(LineReader reader, Tokens tokens, Settings settings, ErrorManager errors) throws IOException {
-        tokens = tokens.withoutFirst();
         Token label = ParserUtils.getLabel(reader, tokens, errors);
         File filePath = new File(label.getText());
         if(!filePath.isAbsolute()) {

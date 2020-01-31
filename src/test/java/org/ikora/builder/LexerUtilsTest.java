@@ -85,7 +85,7 @@ class LexerUtilsTest {
 
         try {
             LineReader reader = createReader(documentation);
-            Tokens tokens = LexerUtils.tokenize(reader.getCurrent());
+            Tokens tokens = LexerUtils.tokenize(reader.getCurrent()).withoutIndent().withoutTag("\\[documentation\\]");
             LexerUtils.parseMultiLine(reader, tokens, builder);
         } catch (IOException e) {
             fail("Exception raised: " + e.getMessage());

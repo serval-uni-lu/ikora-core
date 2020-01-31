@@ -7,20 +7,20 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Tokens implements Iterable<Token> {
-    private final SortedSet<Token> tokenList;
+    private final SortedSet<Token> tokenSet;
 
     public Tokens(){
-        this.tokenList = new TreeSet<>();
+        this.tokenSet = new TreeSet<>();
     }
 
-    private Tokens(List<Token> tokenList){
-        this.tokenList = new TreeSet<>(tokenList);
+    private Tokens(List<Token> tokenSet){
+        this.tokenSet = new TreeSet<>(tokenSet);
     }
 
     public void add(Token token){
         if((token.isDelimiter() && containsDelimiterOnly())
             || !token.isDelimiter()){
-            this.tokenList.add(token);
+            this.tokenSet.add(token);
         }
     }
 
@@ -31,7 +31,7 @@ public class Tokens implements Iterable<Token> {
     }
 
     public Tokens setType(Token.Type type){
-        this.tokenList.forEach(token -> token.setType(type));
+        this.tokenSet.forEach(token -> token.setType(type));
         return this;
     }
 
@@ -41,23 +41,35 @@ public class Tokens implements Iterable<Token> {
     }
 
     public Token first(){
-        return this.tokenList.first();
+        if(this.tokenSet.isEmpty()){
+            return Token.empty();
+        }
+
+        return this.tokenSet.first();
     }
 
     public Token last() {
-        return this.tokenList.last();
+        if(this.tokenSet.isEmpty()){
+            return Token.empty();
+        }
+
+        return this.tokenSet.last();
     }
 
     public int size(){
-        return this.tokenList.size();
+        return this.tokenSet.size();
     }
 
     public Tokens withoutIndent(){
-        return new Tokens(tokenList.stream().filter(token -> !token.isDelimiter()).collect(Collectors.toList()));
+        return new Tokens(tokenSet.stream().filter(token -> !token.isDelimiter()).collect(Collectors.toList()));
     }
 
     public Tokens withoutFirst(){
-        return withoutFirst(0);
+        if(tokenSet.size() < 2){
+            return new Tokens();
+        }
+
+        return withoutFirst(1);
     }
 
     public Tokens withoutFirst(int offset){
@@ -80,7 +92,7 @@ public class Tokens implements Iterable<Token> {
     }
 
     public int getIndentSize() {
-        return (int) tokenList.stream().filter(Token::isDelimiter).count();
+        return (int) tokenSet.stream().filter(Token::isDelimiter).count();
     }
 
     public boolean isParent(Tokens tokens) {
@@ -97,22 +109,22 @@ public class Tokens implements Iterable<Token> {
 
     @Override
     public Iterator<Token> iterator() {
-        return this.tokenList.iterator();
+        return this.tokenSet.iterator();
     }
 
     @Override
     public String toString() {
-        return this.tokenList.stream()
+        return this.tokenSet.stream()
                 .map(Token::getText)
                 .collect(Collectors.joining("\t"));
     }
 
     public boolean isEmpty() {
-        return this.tokenList.isEmpty();
+        return this.tokenSet.isEmpty();
     }
 
     private boolean containsDelimiterOnly(){
-        return tokenList.stream().allMatch(Token::isDelimiter);
+        return tokenSet.stream().allMatch(Token::isDelimiter);
     }
 
     private Iterator<Token> offset(int offset){
@@ -121,7 +133,7 @@ public class Tokens implements Iterable<Token> {
         }
 
         int i = 0;
-        Iterator<Token> iterator = this.tokenList.iterator();
+        Iterator<Token> iterator = this.tokenSet.iterator();
 
         while (i++ < offset) iterator.next();
 
