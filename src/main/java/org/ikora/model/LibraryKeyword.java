@@ -3,6 +3,7 @@ package org.ikora.model;
 import org.ikora.analytics.Action;
 import org.ikora.analytics.visitor.NodeVisitor;
 import org.ikora.analytics.visitor.VisitorMemory;
+import org.ikora.builder.ValueLinker;
 import org.ikora.runner.Runtime;
 
 import java.util.*;
@@ -26,11 +27,6 @@ public abstract class LibraryKeyword extends Keyword {
     @Override
     public Token getName(){
         return Token.fromString(toKeyword(this.getClass()));
-    }
-
-    @Override
-    public Value getNameAsValue(){
-        return new Value(Token.fromString(toKeyword(this.getClass())));
     }
 
     public static String toKeyword(Class<? extends LibraryKeyword> libraryClass) {
@@ -71,11 +67,11 @@ public abstract class LibraryKeyword extends Keyword {
 
     @Override
     public boolean matches(Token name) {
-        return this.getNameAsValue().matches(name);
+        return ValueLinker.matches(getName(), name);
     }
 
-    public Value.Type[] getArgumentTypes() {
-        return new Value.Type[0];
+    public Argument.Type[] getArgumentTypes() {
+        return new Argument.Type[0];
     }
 
     @Override
@@ -100,13 +96,13 @@ public abstract class LibraryKeyword extends Keyword {
 
     @Override
     public int getMaxNumberArguments() {
-        Value.Type[] types = getArgumentTypes();
+        Argument.Type[] types = getArgumentTypes();
 
         if(types.length == 0){
             return 0;
         }
 
-        if(types[types.length - 1] == Value.Type.KWARGS){
+        if(types[types.length - 1] == Argument.Type.KWARGS){
             return -1;
         }
 

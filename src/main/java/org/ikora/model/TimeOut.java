@@ -3,6 +3,9 @@ package org.ikora.model;
 import org.ikora.analytics.Action;
 import org.ikora.analytics.visitor.NodeVisitor;
 import org.ikora.analytics.visitor.VisitorMemory;
+import org.ikora.builder.ValueLinker;
+import org.ikora.exception.InvalidDependencyException;
+import org.ikora.exception.MalformedVariableException;
 import org.ikora.runner.Runtime;
 
 import java.util.Collections;
@@ -10,18 +13,19 @@ import java.util.List;
 
 public class TimeOut extends Node {
     private final Token name;
-    private final Value variable;
+    private final Variable variable;
     private final TimeValue value;
     private final boolean isNone;
 
     private Token errorMessage;
 
-    public TimeOut(Token name, Token errorMessage){
+    public TimeOut(Token name, Token errorMessage) throws MalformedVariableException, InvalidDependencyException {
         this.name = name;
         this.errorMessage = errorMessage;
 
-        if(Value.isVariable(this.name)){
-            this.variable = new Value(this, this.name);
+        if(ValueLinker.isVariable(this.name)){
+            this.variable = Variable.create(this.name);
+            this.variable.addDependency(this);
             this.value = null;
             this.isNone = false;
         }
@@ -42,17 +46,19 @@ public class TimeOut extends Node {
         }
     }
 
+    private TimeOut(){
+        this.name = Token.empty();
+        this.variable = null;
+        this.value = null;
+        this.isNone = false;
+    }
+
     public static TimeOut none() {
-        return new TimeOut(Token.empty(), Token.empty());
+        return new TimeOut();
     }
 
     public boolean isValid(){
         return this.variable != null || this.value != null || this.isNone;
-    }
-
-    @Override
-    public Value getNameAsValue() {
-        return new Value(name);
     }
 
     @Override

@@ -19,16 +19,6 @@ public class InvalidVariable extends Variable {
     }
 
     @Override
-    public void addElement(Token element) {
-        //nothing to do
-    }
-
-    @Override
-    public List<Value> getValues() {
-        return Collections.emptyList();
-    }
-
-    @Override
     public void accept(NodeVisitor visitor, VisitorMemory memory) {
         //nothing to do
     }

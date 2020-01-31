@@ -13,7 +13,7 @@ public class VariableParser {
     public static Optional<Variable> parse(final Token name){
         Token cleanName = trimEquals(name);
 
-        if(!Value.isVariable(cleanName)){
+        if(!ValueLinker.isVariable(cleanName)){
             return Optional.empty();
         }
 

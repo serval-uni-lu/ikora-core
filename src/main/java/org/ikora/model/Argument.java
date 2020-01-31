@@ -3,6 +3,7 @@ package org.ikora.model;
 import org.ikora.analytics.Action;
 import org.ikora.analytics.visitor.NodeVisitor;
 import org.ikora.analytics.visitor.VisitorMemory;
+import org.ikora.builder.ValueLinker;
 import org.ikora.exception.InvalidDependencyException;
 import org.ikora.runner.Runtime;
 
@@ -11,12 +12,32 @@ import java.util.List;
 import java.util.Optional;
 
 public class Argument extends Node {
-    private final Value value;
+    public enum Type{
+        STRING, OBJECT, KEYWORD, LOCATOR, CONDITION, KEYWORDS, KWARGS
+    }
+
     private KeywordCall call;
+    private final Token name;
 
     public Argument(Node parent, Token name) throws InvalidDependencyException {
-        this.value = new Value(parent, name);
+        this.name = name;
+        this.call = null;
+
         this.addDependency(parent);
+    }
+
+    public Argument(Node parent, KeywordCall call) throws InvalidDependencyException {
+        this.addDependency(parent);
+
+        if(call == null){
+            this.name = Token.empty();
+            this.call = null;
+            return;
+        }
+
+        this.name = call.getName();
+        this.call = call;
+        call.addDependency(this);
     }
 
     public Optional<KeywordCall> getCall() {
@@ -29,13 +50,8 @@ public class Argument extends Node {
     }
 
     @Override
-    public Value getNameAsValue() {
-        return value;
-    }
-
-    @Override
     public boolean matches(Token name) {
-        return value.matches(name);
+        return ValueLinker.matches(this.name, name);
     }
 
     @Override
@@ -58,7 +74,16 @@ public class Argument extends Node {
             return 1.0;
         }
 
-        return this.value.distance(((Argument)other).value);
+        Argument argument = (Argument)other;
+
+        boolean sameCall = true;
+        if(this.call != null && this.call != argument.call){
+            sameCall = this.call.distance(argument.call) == 0.0;
+        }
+
+        boolean sameName = this.name.equalsValue(argument.getName());
+
+        return sameName && sameCall ? 0.0 : 1.0;
     }
 
     @Override
@@ -71,7 +96,7 @@ public class Argument extends Node {
             return Collections.singletonList(Action.addElement(this.getClass(), this));
         }
 
-        if(this.value.getToken().equalsValue(((Argument)other).value.getToken())){
+        if(this.name.equalsValue(((Argument)other).name)){
             return Collections.emptyList();
         }
 
@@ -80,11 +105,20 @@ public class Argument extends Node {
 
     @Override
     public Token getName() {
-        return this.value.getToken();
+        return this.name;
     }
 
     @Override
     public String toString() {
-        return value.toString();
+        return call != null ? call.toString() : name.toString();
+    }
+
+    @Override
+    public void setSourceFile(SourceFile sourceFile) {
+        super.setSourceFile(sourceFile);
+
+        if(call != null){
+            this.call.setSourceFile(sourceFile);
+        }
     }
 }

@@ -72,8 +72,8 @@ public class ForLoopParser {
         }
         else{
             try {
-                variable = Variable.create(new Value(iteratorToken.get()));
-            } catch (MalformedVariableException | InvalidDependencyException e) {
+                variable = Variable.create(iteratorToken.get());
+            } catch (MalformedVariableException e) {
                 errors.registerInternalError(
                         reader.getFile(),
                         ErrorMessages.FAILED_TO_CREATE_ITERATOR_IN_FOR_LOOP,

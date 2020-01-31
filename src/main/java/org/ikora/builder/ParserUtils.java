@@ -3,6 +3,8 @@ package org.ikora.builder;
 import org.ikora.error.ErrorManager;
 import org.ikora.error.ErrorMessages;
 import org.ikora.exception.InvalidArgumentException;
+import org.ikora.exception.InvalidDependencyException;
+import org.ikora.exception.MalformedVariableException;
 import org.ikora.model.*;
 
 import java.io.IOException;
@@ -44,7 +46,7 @@ public class ParserUtils {
         try {
             TimeOut timeOut = TimeoutParser.parse(label, tokens);
             delayable.setTimeOut(timeOut);
-        } catch (InvalidArgumentException e) {
+        } catch (InvalidArgumentException | MalformedVariableException | InvalidDependencyException e) {
             errors.registerSyntaxError(reader.getFile(),
                     String.format("%s: %s", ErrorMessages.FAILED_TO_PARSE_TIMEOUT, e.getMessage()),
                     ParserUtils.getPosition(tokens));

@@ -2,6 +2,7 @@ package org.ikora.model;
 
 import org.ikora.analytics.visitor.NodeVisitor;
 import org.ikora.analytics.visitor.VisitorMemory;
+import org.ikora.builder.ValueLinker;
 import org.ikora.exception.InvalidTypeException;
 
 import java.util.ArrayList;
@@ -44,7 +45,7 @@ public class UserKeyword extends KeywordDefinition {
     public void setName(Token name) {
         super.setName(name);
 
-        for(Token argument: getNameAsValue().findVariables()){
+        for(Token argument: ValueLinker.findVariables(name)){
             addParameter(argument);
         }
     }

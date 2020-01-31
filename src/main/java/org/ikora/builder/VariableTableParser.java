@@ -2,6 +2,8 @@ package org.ikora.builder;
 
 import org.ikora.error.ErrorManager;
 import org.ikora.error.ErrorMessages;
+import org.ikora.exception.InvalidDependencyException;
+import org.ikora.model.Argument;
 import org.ikora.model.NodeTable;
 import org.ikora.model.Token;
 import org.ikora.model.Variable;
@@ -55,7 +57,15 @@ class VariableTableParser {
             Variable variable = optional.get();
 
             for (Token token: tokens.withoutFirst()) {
-                variable.addElement(token);
+                try {
+                    variable.addArgument(new Argument(variable, token));
+                } catch (InvalidDependencyException e) {
+                    errors.registerInternalError(
+                            reader.getFile(),
+                            String.format("Invalid variable dependency: %s", token),
+                            ParserUtils.getPosition(reader.getCurrent())
+                    );
+                }
             }
 
             reader.readLine();

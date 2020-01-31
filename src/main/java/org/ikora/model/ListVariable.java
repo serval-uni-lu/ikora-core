@@ -3,6 +3,7 @@ package org.ikora.model;
 import org.ikora.analytics.Action;
 import org.ikora.analytics.visitor.NodeVisitor;
 import org.ikora.analytics.visitor.VisitorMemory;
+import org.ikora.builder.ValueLinker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,16 +15,6 @@ public class ListVariable extends Variable {
     public ListVariable(Token name){
         super(name);
         this.values = new ArrayList<>();
-    }
-
-    @Override
-    public void addElement(Token element) {
-        values.add(new Value(this, element));
-    }
-
-    @Override
-    public List<Value> getValues() {
-        return values;
     }
 
     @Override
@@ -49,8 +40,8 @@ public class ListVariable extends Variable {
     @Override
     protected void setName(Token name){
         this.name = name;
-        String generic = Value.getGenericVariableName(this.name.getText());
-        String bareName = Value.escape(Value.getBareVariableName(generic));
+        String generic = ValueLinker.getGenericVariableName(this.name.getText());
+        String bareName = ValueLinker.escape(ValueLinker.getBareVariableName(generic));
 
         String patternString = String.format("^[\\$@]\\{%s(\\[\\d+\\])*}$", bareName);
         this.pattern = Pattern.compile(patternString, Pattern.CASE_INSENSITIVE);

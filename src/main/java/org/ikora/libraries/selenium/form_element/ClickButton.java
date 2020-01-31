@@ -1,5 +1,6 @@
 package org.ikora.libraries.selenium.form_element;
 
+import org.ikora.model.Argument;
 import org.ikora.model.Value;
 import org.ikora.model.LibraryKeyword;
 import org.ikora.runner.Runtime;
@@ -15,9 +16,9 @@ public class ClickButton extends LibraryKeyword {
     }
 
     @Override
-    public Value.Type[] getArgumentTypes() {
-        return new Value.Type[]{
-                Value.Type.LOCATOR
+    public Argument.Type[] getArgumentTypes() {
+        return new Argument.Type[]{
+                Argument.Type.LOCATOR
         };
     }
 }

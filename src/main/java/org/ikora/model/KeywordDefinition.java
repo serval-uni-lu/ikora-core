@@ -2,13 +2,14 @@ package org.ikora.model;
 
 import org.apache.commons.lang3.StringUtils;
 import org.ikora.analytics.Action;
+import org.ikora.builder.ValueLinker;
 import org.ikora.runner.Runtime;
 import org.ikora.utils.LevenshteinDistance;
 
 import java.util.*;
 
 public abstract class KeywordDefinition extends Keyword implements Iterable<Step>, Delayable {
-    private Value name;
+    private Token name;
     private String documentation;
     private Set<String> tags;
     private List<Step> steps;
@@ -22,7 +23,7 @@ public abstract class KeywordDefinition extends Keyword implements Iterable<Step
     }
 
     public void setName(Token name){
-        this.name = new Value(name);
+        this.name = name;
     }
 
     @Override
@@ -71,11 +72,6 @@ public abstract class KeywordDefinition extends Keyword implements Iterable<Step
 
     @Override
     public Token getName() {
-        return name.getToken();
-    }
-
-    @Override
-    public Value getNameAsValue() {
         return name;
     }
 
@@ -102,7 +98,7 @@ public abstract class KeywordDefinition extends Keyword implements Iterable<Step
             return false;
         }
 
-        return this.name.matches(token);
+        return ValueLinker.matches(this.name, token);
     }
 
     public Iterator<Step> iterator() {

@@ -1,28 +1,26 @@
 package org.ikora.model;
 
+import org.ikora.builder.ValueLinker;
 import org.ikora.exception.InvalidDependencyException;
 import org.ikora.exception.InvalidTypeException;
 
 import java.util.*;
 
 public abstract class Step extends Node {
-    private Value name;
+    private Token name;
     protected KeywordCall template;
 
     public Step(Token name) {
-        this.name = new Value(name);
+        this.name = name;
     }
 
     protected void setName(Token name){
-        this.name = new Value(name);
+        this.name = name;
     }
 
-    public Value getNameAsValue() {
-        return this.name;
-    }
 
     public Token getName() {
-        return this.name.getToken();
+        return this.name;
     }
 
     public Node getParent() throws InvalidDependencyException {
@@ -59,7 +57,7 @@ public abstract class Step extends Node {
 
     @Override
     public boolean matches(Token name){
-        return this.name.matches(name);
+        return ValueLinker.matches(this.name, name);
     }
 
     public abstract Optional<KeywordCall> getKeywordCall();

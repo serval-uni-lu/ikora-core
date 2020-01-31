@@ -1,5 +1,6 @@
 package org.ikora.model;
 
+import org.ikora.builder.ValueLinker;
 import org.ikora.builder.VariableParser;
 import org.ikora.exception.InvalidDependencyException;
 import org.ikora.exception.MalformedVariableException;
@@ -10,31 +11,25 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public abstract class Variable extends Node {
-    private Assignment assignment;
-
     protected Token name;
     protected Pattern pattern;
+    protected List<Argument> arguments;
 
     public Variable(Token name) {
-        this.assignment = null;
         setName(name);
+        this.arguments = new ArrayList<>();
     }
 
     public static Variable invalid() {
         return new InvalidVariable();
     }
 
-    public void setAssignment(Assignment assignment) {
-        this.assignment = assignment;
+    public void addArgument(Argument argument){
+        this.arguments.add(argument);
     }
 
-    public boolean isAssignment(){
-        return this.assignment != null;
-    }
-
-    @Override
-    public Value getNameAsValue() {
-        return new Value(this.name);
+    public List<Argument> getArguments(){
+        return this.arguments;
     }
 
     @Override
@@ -44,20 +39,17 @@ public abstract class Variable extends Node {
 
     @Override
     public boolean matches(Token name) {
-        String generic = Value.getGenericVariableName(name.getText());
+        String generic = ValueLinker.getGenericVariableName(name.getText());
 
         Matcher matcher = pattern.matcher(generic);
         return matcher.matches();
     }
 
-    public static Variable create(Value value) throws MalformedVariableException, InvalidDependencyException {
-        Optional<Variable> variable = VariableParser.parse(value.getToken());
+    public static Variable create(Token token) throws MalformedVariableException {
+        Optional<Variable> variable = VariableParser.parse(token);
 
-        if(variable.isPresent()){
-            value.setVariable(value.getToken(), variable.get());
-        }
-        else{
-            throw new MalformedVariableException(String.format("Failed to create variable from value '%s'", value.getToken()));
+        if(!variable.isPresent()){
+            throw new MalformedVariableException(String.format("Failed to create variable from value '%s'", token));
         }
 
         return variable.get();
@@ -69,6 +61,4 @@ public abstract class Variable extends Node {
     }
 
     protected abstract void setName(Token name);
-    public abstract void addElement(Token element);
-    public abstract List<Value> getValues();
 }

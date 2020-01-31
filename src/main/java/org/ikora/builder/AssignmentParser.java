@@ -25,7 +25,7 @@ public class AssignmentParser {
             Token clean = VariableParser.trimEquals(token);
 
             if(!clean.isEmpty()){
-                if(leftSide && Value.isVariable(clean)){
+                if(leftSide && ValueLinker.isVariable(clean)){
                     Optional<Variable> variable = VariableParser.parse(clean);
 
                     if(variable.isPresent()){

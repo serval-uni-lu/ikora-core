@@ -16,7 +16,7 @@ import java.util.Optional;
 
 public class Assignment extends Step {
     private List<Variable> returnVariables;
-    private KeywordCall expression;
+    private Argument expression;
 
     public Assignment(Token name, List<Variable> returnVariables, KeywordCall expression) throws InvalidDependencyException {
         super(name);
@@ -26,21 +26,15 @@ public class Assignment extends Step {
             this.addReturnVariable(returnVariable);
         }
 
-        this.expression = expression;
+       this.expression = new Argument(this, expression);
     }
 
     public void addReturnVariable(Variable variable) throws InvalidDependencyException {
         variable.addDependency(this);
         variable.setSourceFile(getSourceFile());
-        variable.setAssignment(this);
+        variable.addArgument(this.expression);
 
         returnVariables.add(variable);
-    }
-
-    public void setExpression(KeywordCall call) throws InvalidDependencyException {
-        expression = call;
-        expression.addDependency(this);
-        expression.setSourceFile(getSourceFile());
     }
 
     public List<Variable> getReturnVariables() {
@@ -62,11 +56,13 @@ public class Assignment extends Step {
 
     @Override
     public List<Argument> getArgumentList() {
-        if(expression == null){
+        if(expression == null ){
             return new ArrayList<>();
         }
 
-        return expression.getArgumentList();
+        Optional<KeywordCall> call = expression.getCall();
+
+        return call.map(KeywordCall::getArgumentList).orElse(Collections.emptyList());
     }
 
     @Override
@@ -74,22 +70,25 @@ public class Assignment extends Step {
         if(expression == null){
             return false;
         }
+        Optional<KeywordCall> call = expression.getCall();
 
-        return expression.hasParameters();
+        return call.map(KeywordCall::hasParameters).orElse(false);
+
     }
 
     @Override
     public void execute(Runtime runtime) throws Exception {
         runtime.enterNode(this);
 
-        if(expression != null){
-            Linker.link(expression, runtime);
+        if(expression != null && expression.getCall().isPresent()){
+            KeywordCall call = expression.getCall().get();
+            Linker.link(call, runtime);
 
             if(!runtime.getErrors().isEmpty()){
                 throw new ExecutionException(runtime.getErrors());
             }
 
-            Optional<Keyword> callee = expression.getKeyword();
+            Optional<Keyword> callee = call.getKeyword();
 
             if(callee.isPresent()){
                 callee.get().execute(runtime);
@@ -182,7 +181,7 @@ public class Assignment extends Step {
 
     @Override
     public Optional<KeywordCall> getKeywordCall() {
-        return Optional.ofNullable(expression);
+        return expression.getCall();
     }
 
     private void assignVariables(List<Value> returnValues){

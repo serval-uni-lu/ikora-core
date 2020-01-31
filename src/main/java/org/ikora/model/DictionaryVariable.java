@@ -3,6 +3,7 @@ package org.ikora.model;
 import org.ikora.analytics.Action;
 import org.ikora.analytics.visitor.NodeVisitor;
 import org.ikora.analytics.visitor.VisitorMemory;
+import org.ikora.builder.ValueLinker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,18 +29,8 @@ public class DictionaryVariable extends Variable {
     }
 
     @Override
-    public void addElement(Token element) {
-        values.add(new Value(this, element));
-    }
-
-    @Override
     public String toString() {
         return values.stream().map(Value::toString).collect(Collectors.joining("\t"));
-    }
-
-    @Override
-    public List<Value> getValues() {
-        return values;
     }
 
     @Override
@@ -55,7 +46,7 @@ public class DictionaryVariable extends Variable {
     @Override
     protected void setName(Token name) {
         this.name = name;
-        String generic = Value.escape(Value.getGenericVariableName(this.name.getText()));
+        String generic = ValueLinker.escape(ValueLinker.getGenericVariableName(this.name.getText()));
 
         this.pattern = Pattern.compile(generic, Pattern.CASE_INSENSITIVE);
     }

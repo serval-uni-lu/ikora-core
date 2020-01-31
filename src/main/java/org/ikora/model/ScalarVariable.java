@@ -3,6 +3,7 @@ package org.ikora.model;
 import org.ikora.analytics.Action;
 import org.ikora.analytics.visitor.NodeVisitor;
 import org.ikora.analytics.visitor.VisitorMemory;
+import org.ikora.builder.ValueLinker;
 import org.ikora.utils.LevenshteinDistance;
 
 import java.util.*;
@@ -21,16 +22,6 @@ public class ScalarVariable extends Variable {
     }
 
     @Override
-    public void addElement(Token element){
-        this.value = new Value(this, element);
-    }
-
-    @Override
-    public List<Value> getValues() {
-        return Collections.singletonList(this.value);
-    }
-
-    @Override
     public boolean isDeadCode(){
         return getDependencies().size() == 0;
     }
@@ -42,8 +33,10 @@ public class ScalarVariable extends Variable {
         }
 
         ScalarVariable variable = (ScalarVariable)other;
-        double value = getName().equals(variable.getName()) ? 0 : 0.5;
-        return value + (LevenshteinDistance.index(getValues(), variable.getValues()) / 2.0);
+        boolean same = getName().equalsValue(variable.getName());
+        same &= LevenshteinDistance.index(getArguments(), variable.getArguments()) == 0.0;
+
+        return same ? 0.0 : 1.0;
     }
 
     @Override
@@ -57,7 +50,7 @@ public class ScalarVariable extends Variable {
 
         ScalarVariable variable = (ScalarVariable)other;
 
-        if(LevenshteinDistance.index(getValues(), variable.getValues()) > 0){
+        if(LevenshteinDistance.index(getArguments(), variable.getArguments()) > 0){
             actions.add(Action.changeVariableDefinition(this, other));
         }
 
@@ -72,8 +65,8 @@ public class ScalarVariable extends Variable {
     @Override
     protected void setName(Token name) {
         this.name = name;
-        String generic = Value.getGenericVariableName(this.name.getText());
-        String bareName = Value.escape(Value.getBareVariableName(generic));
+        String generic = ValueLinker.getGenericVariableName(this.name.getText());
+        String bareName = ValueLinker.escape(ValueLinker.getBareVariableName(generic));
 
         String patternString = String.format("^\\$\\{%s(((\\[\\d+\\])*)|([\\+\\-\\*/]\\d+))}$", bareName);
         this.pattern = Pattern.compile(patternString, Pattern.CASE_INSENSITIVE);

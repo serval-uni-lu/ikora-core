@@ -93,7 +93,6 @@ public abstract class Node implements Differentiable {
         return this.sourceFile.getLinesOfCode(startLine, endLine);
     }
 
-    public abstract Value getNameAsValue();
     public abstract boolean matches(Token name);
     public abstract void accept(NodeVisitor visitor, VisitorMemory memory);
     public abstract void execute(Runtime runtime) throws Exception;

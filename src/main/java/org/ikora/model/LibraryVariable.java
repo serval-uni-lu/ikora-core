@@ -3,6 +3,7 @@ package org.ikora.model;
 import org.ikora.analytics.Action;
 import org.ikora.analytics.visitor.NodeVisitor;
 import org.ikora.analytics.visitor.VisitorMemory;
+import org.ikora.builder.ValueLinker;
 
 import java.util.Collections;
 import java.util.List;
@@ -25,19 +26,9 @@ public abstract class LibraryVariable extends Variable {
     protected void setName(Token name){
         this.name = name;
 
-        String patternString = Value.escape(getName().getText());
-        patternString = Value.getGenericVariableName(patternString);
+        String patternString = ValueLinker.escape(getName().getText());
+        patternString = ValueLinker.getGenericVariableName(patternString);
         this.pattern = Pattern.compile(patternString, Pattern.CASE_INSENSITIVE);
-    }
-
-    @Override
-    public void addElement(Token element) {
-        //nothing to do
-    }
-
-    @Override
-    public List<Value> getValues() {
-        return null;
     }
 
     @Override

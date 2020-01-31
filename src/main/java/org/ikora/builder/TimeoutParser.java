@@ -1,7 +1,9 @@
 package org.ikora.builder;
 
 import org.ikora.exception.InvalidArgumentException;
+import org.ikora.exception.InvalidDependencyException;
 import org.ikora.exception.InvalidNumberArgumentException;
+import org.ikora.exception.MalformedVariableException;
 import org.ikora.model.TimeOut;
 import org.ikora.model.Token;
 
@@ -10,7 +12,7 @@ import java.util.Optional;
 public class TimeoutParser {
     private TimeoutParser() {}
 
-    public static TimeOut parse(String label, Tokens tokens) throws InvalidArgumentException {
+    public static TimeOut parse(String label, Tokens tokens) throws InvalidArgumentException, MalformedVariableException, InvalidDependencyException {
         Tokens fullTokens = tokens.withoutIndent();
         Tokens currentTokens = fullTokens.withoutTag(label);
 
@@ -20,7 +22,7 @@ public class TimeoutParser {
         return timeOut;
     }
 
-    private static TimeOut parseLine(Tokens tokens) throws InvalidArgumentException {
+    private static TimeOut parseLine(Tokens tokens) throws InvalidArgumentException, MalformedVariableException, InvalidDependencyException {
         if(tokens.size() > 3){
             throw new InvalidNumberArgumentException(2, 3);
         }
