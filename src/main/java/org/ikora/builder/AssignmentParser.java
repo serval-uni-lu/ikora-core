@@ -30,7 +30,6 @@ public class AssignmentParser {
 
                     if(variable.isPresent()){
                         Variable returnValue = variable.get();
-                        returnValue.setPosition(ParserUtils.getPosition(token, token));
                         returnValues.add(returnValue);
                     }
                 }
@@ -54,7 +53,7 @@ public class AssignmentParser {
                 errors.registerSyntaxError(
                         reader.getFile(),
                         ErrorMessages.ASSIGNMENT_SHOULD_HAVE_LEFT_HAND_OPERAND,
-                        ParserUtils.getPosition(tokens)
+                        Position.fromTokens(tokens)
                 );
             }
         }
@@ -62,7 +61,7 @@ public class AssignmentParser {
             errors.registerInternalError(
                     reader.getFile(),
                     ErrorMessages.FAILED_TO_CREATE_DEPENDENCY,
-                    ParserUtils.getPosition(tokens)
+                    Position.fromTokens(tokens)
             );
         }
 

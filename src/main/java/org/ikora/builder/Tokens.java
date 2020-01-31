@@ -1,22 +1,20 @@
 package org.ikora.builder;
 
+import org.apache.commons.math3.exception.OutOfRangeException;
 import org.ikora.model.Token;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Tokens implements Iterable<Token> {
-    private final List<Token> tokenList;
+    private final SortedSet<Token> tokenList;
 
     public Tokens(){
-        this.tokenList = new ArrayList<>();
+        this.tokenList = new TreeSet<>();
     }
 
     private Tokens(List<Token> tokenList){
-        this.tokenList = tokenList;
+        this.tokenList = new TreeSet<>(tokenList);
     }
 
     public void add(Token token){
@@ -26,28 +24,28 @@ public class Tokens implements Iterable<Token> {
         }
     }
 
-    public Optional<Token> get(int position){
-        if(position >= this.size() || position < 0){
-            return Optional.empty();
+    public void addAll(Tokens tokens) {
+        for(Token token: tokens){
+            add(token);
         }
-
-        return Optional.of(this.tokenList.get(position));
     }
 
-    public Optional<Token> first(){
-        if(this.size() > 0){
-            return Optional.of(this.tokenList.get(0));
-        }
-
-        return Optional.empty();
+    public Tokens setType(Token.Type type){
+        this.tokenList.forEach(token -> token.setType(type));
+        return this;
     }
 
-    public Optional<Token> last() {
-        if(this.size() > 0){
-            return Optional.of(this.tokenList.get(this.tokenList.size() - 1));
-        }
+    public Token get(int position){
+        Iterator<Token> iterator = offset(position);
+        return iterator.next();
+    }
 
-        return Optional.empty();
+    public Token first(){
+        return this.tokenList.first();
+    }
+
+    public Token last() {
+        return this.tokenList.last();
     }
 
     public int size(){
@@ -59,29 +57,26 @@ public class Tokens implements Iterable<Token> {
     }
 
     public Tokens withoutFirst(){
-        return withoutFirst(1);
+        return withoutFirst(0);
     }
 
     public Tokens withoutFirst(int offset){
-        return new Tokens(this.tokenList.subList(offset, tokenList.size()));
+        Iterator<Token> iterator = offset(offset);
+        Tokens newTokens = new Tokens();
+        while(iterator.hasNext()) newTokens.add(iterator.next());
+        return newTokens;
     }
 
     public Tokens withoutTag(String tag){
-        Optional<Token> first = first();
-
-        if(tag.isEmpty() || !first.isPresent()){
+        if(tag.isEmpty()){
             return this;
         }
 
-        if(LexerUtils.compareNoCase(first.get().getText(), tag)){
+        if(LexerUtils.compareNoCase(first().getText(), tag)){
             return withoutFirst();
         }
 
         return this;
-    }
-
-    private boolean containsDelimiterOnly(){
-        return tokenList.stream().allMatch(Token::isDelimiter);
     }
 
     public int getIndentSize() {
@@ -93,7 +88,7 @@ public class Tokens implements Iterable<Token> {
             return true;
         }
 
-        if(tokens.size() > 0 && tokens.tokenList.get(0).isComment()){
+        if(tokens.size() > 0 && tokens.first().isComment()){
             return true;
         }
 
@@ -114,5 +109,22 @@ public class Tokens implements Iterable<Token> {
 
     public boolean isEmpty() {
         return this.tokenList.isEmpty();
+    }
+
+    private boolean containsDelimiterOnly(){
+        return tokenList.stream().allMatch(Token::isDelimiter);
+    }
+
+    private Iterator<Token> offset(int offset){
+        if(offset < 0 || offset >= size()){
+            throw new OutOfRangeException(offset, 0, size() - 1);
+        }
+
+        int i = 0;
+        Iterator<Token> iterator = this.tokenList.iterator();
+
+        while (i++ < offset) iterator.next();
+
+        return iterator;
     }
 }

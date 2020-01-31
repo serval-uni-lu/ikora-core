@@ -13,11 +13,11 @@ import java.util.List;
 
 public class TimeOut extends Node {
     private final Token name;
+    private final Token errorMessage;
+
     private final Variable variable;
     private final TimeValue value;
     private final boolean isNone;
-
-    private Token errorMessage;
 
     public TimeOut(Token name, Token errorMessage) throws MalformedVariableException, InvalidDependencyException {
         this.name = name;
@@ -48,6 +48,7 @@ public class TimeOut extends Node {
 
     private TimeOut(){
         this.name = Token.empty();
+        this.errorMessage = Token.empty();
         this.variable = null;
         this.value = null;
         this.isNone = false;

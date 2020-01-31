@@ -2,6 +2,7 @@ package org.ikora.model;
 
 import org.apache.commons.lang3.StringUtils;
 import org.ikora.analytics.Action;
+import org.ikora.builder.Tokens;
 import org.ikora.builder.ValueLinker;
 import org.ikora.runner.Runtime;
 import org.ikora.utils.LevenshteinDistance;
@@ -92,7 +93,6 @@ public abstract class KeywordDefinition extends Keyword implements Iterable<Step
         return steps.get(position);
     }
 
-
     public boolean matches(Token token) {
         if(token == null){
             return false;
@@ -118,12 +118,12 @@ public abstract class KeywordDefinition extends Keyword implements Iterable<Step
 
     @Override
     public double distance(Differentiable other) {
-        if(other == null){
-            return 1.0;
+        if(other == this){
+            return 0.0;
         }
 
-        if(other == this || !this.getClass().isAssignableFrom(other.getClass())){
-            return 0.0;
+        if(other == null || !this.getClass().isAssignableFrom(other.getClass())){
+            return 1.0;
         }
 
         KeywordDefinition keyword = (KeywordDefinition)other;

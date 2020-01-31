@@ -2,7 +2,6 @@ package org.ikora.model;
 
 import org.ikora.analytics.visitor.NodeVisitor;
 import org.ikora.analytics.visitor.VisitorMemory;
-import org.ikora.builder.ValueLinker;
 import org.ikora.exception.InvalidTypeException;
 
 import java.util.ArrayList;
@@ -10,13 +9,17 @@ import java.util.List;
 import java.util.Set;
 
 public class UserKeyword extends KeywordDefinition {
-    private List<Token> parameters;
+    private List<Variable> parameters;
+    private List<Variable> embeddedVariables;
     private NodeTable<Variable> localVariables;
+
     private KeywordCall tearDown;
     private List<Variable> returnVariables;
 
     public UserKeyword() {
         parameters = new ArrayList<>();
+        embeddedVariables = new ArrayList<>();
+
         localVariables = new NodeTable<>();
         returnVariables = new ArrayList<>();
     }
@@ -40,10 +43,6 @@ public class UserKeyword extends KeywordDefinition {
     @Override
     public void setName(Token name) {
         super.setName(name);
-
-        for(Token argument: ValueLinker.findVariables(name)){
-            addParameter(argument);
-        }
     }
 
     @Override
@@ -62,14 +61,17 @@ public class UserKeyword extends KeywordDefinition {
         return returnVariables;
     }
 
-    public void addParameter(Token parameter){
+    public void addParameter(Variable parameter){
         parameters.add(parameter);
-
-        Variable variable = new ScalarVariable(parameter);
-        localVariables.add(variable);
+        localVariables.add(parameter);
     }
 
-    public List<Token> getParameters() {
+    public void addEmbeddedVariable(Variable embeddedVariable) {
+        embeddedVariables.add(embeddedVariable);
+        localVariables.add(embeddedVariable);
+    }
+
+    public List<Variable> getParameters() {
         return parameters;
     }
 

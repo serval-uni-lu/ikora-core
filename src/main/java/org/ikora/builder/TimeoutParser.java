@@ -12,14 +12,9 @@ import java.util.Optional;
 public class TimeoutParser {
     private TimeoutParser() {}
 
-    public static TimeOut parse(String label, Tokens tokens) throws InvalidArgumentException, MalformedVariableException, InvalidDependencyException {
+    public static TimeOut parse(Tokens tokens) throws InvalidArgumentException, MalformedVariableException, InvalidDependencyException {
         Tokens fullTokens = tokens.withoutIndent();
-        Tokens currentTokens = fullTokens.withoutTag(label);
-
-        TimeOut timeOut = parseLine(currentTokens);
-        timeOut.setPosition(ParserUtils.getPosition(fullTokens));
-
-        return timeOut;
+        return parseLine(fullTokens);
     }
 
     private static TimeOut parseLine(Tokens tokens) throws InvalidArgumentException, MalformedVariableException, InvalidDependencyException {
@@ -39,18 +34,12 @@ public class TimeoutParser {
         return timeOut;
     }
 
-    private static Token parseName(Tokens tokens) throws InvalidArgumentException {
-        Optional<Token> token = tokens.get(0);
-
-        if(!token.isPresent()){
-            throw new InvalidNumberArgumentException(1, 0);
-        }
-
-        return token.get();
+    private static Token parseName(Tokens tokens) {
+        return tokens.first();
     }
 
     private static Token parseErrorMessage(Tokens tokens) {
-        return tokens.get(1).orElseGet(Token::empty);
+        return tokens.get(1);
 
     }
 }

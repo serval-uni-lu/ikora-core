@@ -18,17 +18,15 @@ public class KeywordCallParser {
     }
 
     public static KeywordCall parseLocal(LineReader reader, Tokens tokens, boolean allowGherkin, ErrorManager errors) {
-        Optional<Token> first =  tokens.first();
-
-        if(!first.isPresent()){
+        if(tokens.isEmpty()){
             errors.registerInternalError(
                     reader.getFile(),
                     ErrorMessages.EMPTY_TOKEN_SHOULD_BE_KEYWORD,
-                    ParserUtils.getPosition(reader.getCurrent())
+                    Position.fromLine(reader.getCurrent())
             );
         }
         else{
-            Token rawName = first.get();
+            Token rawName = tokens.first();
             Token name = getKeywordCallName(rawName, allowGherkin);
             Gherkin gherkin = new Gherkin(rawName);
 
@@ -38,19 +36,16 @@ public class KeywordCallParser {
             for(Token token: tokens.withoutFirst()) {
                 try {
                     Argument argument = new Argument(call, token);
-                    argument.setPosition(ParserUtils.getPosition(token, token));
-
                     call.addArgument(argument);
                 } catch (InvalidDependencyException e) {
                     errors.registerInternalError(
                             reader.getFile(),
                             "Failed to register parameter to keyword call",
-                            ParserUtils. getPosition(token, token)
+                            Position.fromToken(token)
                     );
                 }
             }
 
-            call.setPosition(ParserUtils.getPosition(tokens.withoutIndent()));
             return call;
         }
 

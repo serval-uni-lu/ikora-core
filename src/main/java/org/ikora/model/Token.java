@@ -7,9 +7,10 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Token {
+public class Token implements Comparable<Token> {
     public enum Type{
-        TEXT, DELIMITER, BLOCK, COMMENT, FOR_LOOP, ASSIGNMENT, KEYWORD, EMPTY
+        TEXT, DELIMITER, BLOCK, COMMENT, ASSIGNMENT, FOR_LOOP, EQUALS, KEYWORD, EMPTY, LABEL, DOCUMENTATION, TAG,
+        CONTINUATION, VARIABLE
     }
 
     private Type type;
@@ -31,6 +32,11 @@ public class Token {
 
     public Token clone(){
         return new Token(this.text, this.line, this.startOffset, this.endOffset, this.type);
+    }
+
+    public Token setType(Type type) {
+        this.type = type;
+        return this;
     }
 
     @Override
@@ -148,5 +154,18 @@ public class Token {
 
     public static Token empty(){
         return new Token("", -1, -1, -1, Type.EMPTY);
+    }
+
+    @Override
+    public int compareTo(Token other) {
+        if(this.line != other.line){
+            return Integer.compare(this.line, other.line);
+        }
+
+        if(this.startOffset != other.startOffset){
+            return Integer.compare(this.startOffset, other.startOffset);
+        }
+
+        return Integer.compare(this.endOffset, other.endOffset);
     }
 }

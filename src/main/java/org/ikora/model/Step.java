@@ -11,13 +11,12 @@ public abstract class Step extends Node {
     protected KeywordCall template;
 
     public Step(Token name) {
-        this.name = name;
+        setName(name);
     }
 
     protected void setName(Token name){
         this.name = name;
     }
-
 
     public Token getName() {
         return this.name;

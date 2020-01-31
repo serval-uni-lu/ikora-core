@@ -26,6 +26,10 @@ public class VariableParser {
             default: variable = null;
         }
 
+        if(variable != null){
+            variable.addToken(name);
+        }
+
         return Optional.ofNullable(variable);
     }
 

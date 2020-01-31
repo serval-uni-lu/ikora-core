@@ -2,7 +2,6 @@ package org.ikora.builder;
 
 import org.ikora.error.ErrorManager;
 import org.ikora.error.ErrorMessages;
-import org.ikora.exception.InvalidDependencyException;
 import org.ikora.exception.MalformedVariableException;
 import org.ikora.model.*;
 
@@ -43,41 +42,38 @@ public class ForLoopParser {
     }
 
     private static Token extractName(LineReader reader, Tokens loop, ErrorManager errors) {
-        Optional<Token> nameToken = loop.withoutIndent().get(0);
 
-        if(!nameToken.isPresent()){
+        if(loop.isEmpty()){
             errors.registerInternalError(
                     reader.getFile(),
                     ErrorMessages.FAILED_TO_PARSE_FORLOOP,
-                    ParserUtils. getPosition(reader.getCurrent())
+                    Position.fromLine(reader.getCurrent())
             );
-        }
-        else{
-            return nameToken.get();
+
+            return Token.empty();
         }
 
-        return Token.empty();
+        return loop.withoutIndent().first();
     }
 
     private static Variable extractIterator(LineReader reader, Tokens loop, ErrorManager errors) {
-        Optional<Token> iteratorToken = loop.withoutIndent().get(1);
         Variable variable = Variable.invalid();
 
-        if(!iteratorToken.isPresent()){
+        if(!loop.isEmpty()){
             errors.registerInternalError(
                     reader.getFile(),
                     ErrorMessages.FAILED_TO_LOCATE_ITERATOR_IN_FOR_LOOP,
-                    ParserUtils. getPosition(reader.getCurrent())
+                    Position.fromLine(reader.getCurrent())
             );
         }
         else{
             try {
-                variable = Variable.create(iteratorToken.get());
+                variable = Variable.create(loop.withoutIndent().get(1));
             } catch (MalformedVariableException e) {
                 errors.registerInternalError(
                         reader.getFile(),
                         ErrorMessages.FAILED_TO_CREATE_ITERATOR_IN_FOR_LOOP,
-                        ParserUtils. getPosition(iteratorToken.get(), iteratorToken.get())
+                        Position.fromToken(loop.withoutIndent().get(1))
                 );
             }
         }
@@ -88,14 +84,13 @@ public class ForLoopParser {
     private static Step extractRange(LineReader reader, Tokens loop, ErrorManager errors) {
         Tokens rangeTokens = loop.withoutIndent().withoutFirst(2);
 
-        Step step = new InvalidStep(rangeTokens.first().orElse(Token.empty()));
-        step.setPosition(ParserUtils.getPosition(rangeTokens));
+        Step step = new InvalidStep(rangeTokens.first());
 
         if(rangeTokens.isEmpty()){
             errors.registerInternalError(
                     reader.getFile(),
                     ErrorMessages.EMPTY_TOKEN_SHOULD_BE_KEYWORD,
-                    ParserUtils.getPosition(loop.withoutIndent())
+                    Position.fromTokens(loop.withoutIndent())
             );
         }
         else{

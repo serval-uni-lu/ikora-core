@@ -19,6 +19,7 @@ public class KeywordCall extends Step {
 
     public KeywordCall(Token name) {
         super(name);
+
         this.argumentList = new ArrayList<>();
         this.link = new Link<>(this);
         this.gherkin = Gherkin.none();

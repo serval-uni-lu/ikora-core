@@ -35,43 +35,43 @@ class SettingsTableParser {
             String label = ParserUtils.getLabel(reader, tokens, errors).getText();
 
             if(LexerUtils.compareNoCase(label, "documentation")){
-                parseDocumentation(reader, settings);
+                parseDocumentation(reader, tokens.withoutTag("documentation"), settings);
             }
             else if(LexerUtils.compareNoCase(label, "resource")){
-                parseResource(reader, tokens, settings, errors);
+                parseResource(reader, tokens.withoutTag("resource"), settings, errors);
             }
             else if(LexerUtils.compareNoCase(label, "library")){
-                parseLibrary(reader, tokens, settings, errors);
+                parseLibrary(reader, tokens.withoutTag("library"), settings, errors);
             }
             else if(LexerUtils.compareNoCase(label, "variables")) {
-                parseVariable(reader, tokens, settings);
+                parseVariable(reader, tokens.withoutTag("variables"), settings);
             }
             else if(LexerUtils.compareNoCase(label, "metadata")) {
-                parseMetadata(reader, tokens, settings);
+                parseMetadata(reader, tokens.withoutTag("metadata"), settings);
             }
             else if(LexerUtils.compareNoCase(label, "suite setup")) {
-                parseSuiteSetup(reader, tokens, settings, errors);
+                parseSuiteSetup(reader, tokens.withoutTag("suite setup"), settings, errors);
             }
             else if(LexerUtils.compareNoCase(label, "suite teardown")) {
-                parseSuiteTeardown(reader, tokens, settings, errors);
+                parseSuiteTeardown(reader, tokens.withoutTag("suite teardown"), settings, errors);
             }
             else if(LexerUtils.compareNoCase(label, "force tags")) {
-                parseForceTags(reader, tokens, settings);
+                parseForceTags(reader, tokens.withoutTag("force tags"), settings);
             }
             else if(LexerUtils.compareNoCase(label, "default tags")){
-                parseDefaultTags(reader, tokens, settings);
+                parseDefaultTags(reader, tokens.withoutTag("default tags"), settings);
             }
             else if(LexerUtils.compareNoCase(label, "test setup")){
-                parseTestSetup(reader, tokens, settings, errors);
+                parseTestSetup(reader, tokens.withoutTag("test setup"), settings, errors);
             }
             else if(LexerUtils.compareNoCase(label, "test teardown")){
-                parseTestTeardown(reader, tokens, settings, errors);
+                parseTestTeardown(reader, tokens.withoutTag("test teardown"), settings, errors);
             }
             else if(LexerUtils.compareNoCase(label, "test template")){
-                parseTestTemplate(reader, tokens, settings, errors);
+                parseTestTemplate(reader, tokens.withoutTag("test template"), settings, errors);
             }
             else if(LexerUtils.compareNoCase(label, "test timeout")){
-                ParserUtils.parseTimeOut("test timeout", reader, tokens, settings, errors);
+                ParserUtils.parseTimeOut(reader, tokens, settings, errors);
             }
             else {
                 reader.readLine();
@@ -84,7 +84,7 @@ class SettingsTableParser {
     }
 
     private static void parseTestTemplate(LineReader reader, Tokens tokens, Settings settings, ErrorManager errors) throws IOException {
-        Step step = StepParser.parse(reader, tokens, "test template", false, errors);
+        Step step = StepParser.parse(reader, tokens, false, errors);
 
         try {
             settings.setTemplate(step);
@@ -99,7 +99,7 @@ class SettingsTableParser {
     }
 
     private static void parseTestTeardown(LineReader reader, Tokens tokens, Settings settings, ErrorManager errors) throws IOException {
-        Step step = StepParser.parse(reader, tokens, "test teardown", false, errors);
+        Step step = StepParser.parse(reader, tokens, false, errors);
 
         try {
             settings.setTestTeardown(step);
@@ -115,7 +115,7 @@ class SettingsTableParser {
     }
 
     private static void parseTestSetup(LineReader reader, Tokens tokens, Settings settings, ErrorManager errors) throws IOException {
-        Step step = StepParser.parse(reader, tokens, "test setup", false, errors);
+        Step step = StepParser.parse(reader, tokens, false, errors);
 
         try {
             settings.setTestSetup(step);
@@ -147,7 +147,7 @@ class SettingsTableParser {
     }
 
     private static void parseSuiteTeardown(LineReader reader, Tokens tokens, Settings settings, ErrorManager errors) throws IOException {
-        Step step = StepParser.parse(reader, tokens, "suite teardown", false, errors);
+        Step step = StepParser.parse(reader, tokens, false, errors);
 
         try {
             settings.setSuiteTeardown(step);
@@ -163,7 +163,7 @@ class SettingsTableParser {
     }
 
     private static void parseSuiteSetup(LineReader reader, Tokens tokens, Settings settings, ErrorManager errors) throws IOException {
-        Step step = StepParser.parse(reader, tokens, "suite setup", false, errors);
+        Step step = StepParser.parse(reader, tokens, false, errors);
 
         try {
             settings.setSuiteSetup(step);
@@ -181,10 +181,8 @@ class SettingsTableParser {
     private static void parseMetadata(LineReader reader, Tokens tokens, Settings settings) throws IOException {
         Tokens metadataTokens = tokens.withoutTag("metadata");
 
-        if(metadataTokens.get(0).isPresent()){
-            String key =  metadataTokens.get(0).get().getText();
-            settings.addMetadata(key, metadataTokens.get(1).orElse(Token.empty()));
-        }
+        String key =  metadataTokens.first().getText();
+        settings.addMetadata(key, metadataTokens.get(1));
 
         reader.readLine();
     }
@@ -192,25 +190,23 @@ class SettingsTableParser {
     private static void parseVariable(LineReader reader, Tokens tokens, Settings settings) throws IOException {
         Tokens variableTokens = tokens.withoutTag("variables");
 
-        if(variableTokens.get(0).isPresent()){
-            String file =  variableTokens.get(0).get().getText();
+        String file =  variableTokens.first().getText();
 
-            List<String> parameters = new ArrayList<>();
-            for(Token token: tokens.withoutFirst()){
-                if(token.isText()){
-                    parameters.add(token.getText());
-                }
+        List<String> parameters = new ArrayList<>();
+        for(Token token: tokens.withoutFirst()){
+            if(token.isText()){
+                parameters.add(token.getText());
             }
-
-            settings.addVariableFile(new VariableFile(file, parameters));
         }
+
+        settings.addVariableFile(new VariableFile(file, parameters));
 
         reader.readLine();
     }
 
-    private static void parseDocumentation(LineReader reader, Settings settings) throws IOException {
+    private static void parseDocumentation(LineReader reader, Tokens tokens, Settings settings) throws IOException {
         StringBuilder builder = new StringBuilder();
-        LexerUtils.parseDocumentation(reader, builder);
+        LexerUtils.parseMultiLine(reader, tokens, builder);
 
         settings.setDocumentation(builder.toString());
     }

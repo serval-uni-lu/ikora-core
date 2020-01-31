@@ -8,94 +8,81 @@ import org.ikora.exception.MalformedVariableException;
 import org.ikora.model.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 public class ParserUtils {
     private ParserUtils(){}
 
-    static void parseName(LineReader reader, Tokens tokens, KeywordDefinition keyword, ErrorManager errors) throws IOException {
+    static List<Variable> parseName(LineReader reader, Tokens tokens, KeywordDefinition keyword, ErrorManager errors) throws IOException {
         if(tokens.size() > 1){
             errors.registerSyntaxError(
                     reader.getFile(),
-                    "Test definition cannot take arguments",
-                    getPosition(tokens.withoutFirst())
+                    "Keyword definition cannot take arguments",
+                    Position.fromTokens(tokens.withoutFirst())
             );
 
             reader.readLine();
-            return;
+            return Collections.emptyList();
         }
 
-        Optional<Token> first = tokens.first();
-
-        if(!first.isPresent()){
+        if(tokens.isEmpty()){
             errors.registerInternalError(
                     reader.getFile(),
                     "Should have at least one token, but found none",
-                    getPosition(tokens)
+                    Position.fromTokens(tokens)
             );
 
             reader.readLine();
-            return;
+            return Collections.emptyList();
         }
 
-        keyword.setName(first.get());
+        keyword.setName(tokens.first());
+        List<Variable> embeddedArguments = new ArrayList<>();
+
+        for(Token embeddedArgument: ValueLinker.findVariables(tokens.first())){
+            try {
+                embeddedArguments.add(Variable.create(embeddedArgument));
+            } catch (MalformedVariableException e) {
+                errors.registerInternalError(
+                        reader.getFile(),
+                        "Failed to parse embedded argument",
+                        Position.fromToken(embeddedArgument)
+                );
+            }
+        }
+
         reader.readLine();
+
+        return embeddedArguments;
     }
 
-    static void parseTimeOut(String label, LineReader reader, Tokens tokens, Delayable delayable, ErrorManager errors) throws IOException {
+    static void parseTimeOut(LineReader reader, Tokens tokens, Delayable delayable, ErrorManager errors) throws IOException {
         try {
-            TimeOut timeOut = TimeoutParser.parse(label, tokens);
+            TimeOut timeOut = TimeoutParser.parse(tokens);
             delayable.setTimeOut(timeOut);
         } catch (InvalidArgumentException | MalformedVariableException | InvalidDependencyException e) {
             errors.registerSyntaxError(reader.getFile(),
                     String.format("%s: %s", ErrorMessages.FAILED_TO_PARSE_TIMEOUT, e.getMessage()),
-                    ParserUtils.getPosition(tokens));
+                    Position.fromTokens(tokens));
         }
 
         reader.readLine();
     }
 
     static Token getLabel(LineReader reader, Tokens tokens, ErrorManager errors){
-        Optional<Token> first = tokens.first();
-        if(!first.isPresent()){
+        if(tokens.isEmpty()){
             errors.registerInternalError(
                     reader.getFile(),
                     "Not expecting an empty token",
-                    getPosition(reader.getCurrent())
+                    Position.fromTokens(tokens)
             );
 
             return Token.empty();
         }
 
-        return first.get();
-    }
-
-    static Position getPosition(Token start, Token end) {
-        if(start == null || end == null){
-            return Position.createInvalid();
-        }
-
-        Mark startMark = new Mark(start.getLine(), start.getStartOffset());
-        Mark endMark = new Mark(end.getLine(), end.getEndOffset());
-
-        return new Position(startMark, endMark);
-    }
-
-    static Position getPosition(Tokens tokens) {
-        Optional<Token> start = tokens.first();
-        Optional<Token> end = tokens.last();
-
-        if(start.isPresent() && end.isPresent()){
-            return getPosition(start.get(), end.get());
-        }
-
-        return Position.createInvalid();
-    }
-
-    static Position getPosition(Line line){
-        Mark startMark = new Mark(line.getNumber(), 0);
-        Mark endMark = new Mark(line.getNumber(), line.getText().length());
-
-        return new Position(startMark, endMark);
+        return tokens.first();
     }
 }

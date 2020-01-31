@@ -41,6 +41,6 @@ public class TimeoutParserTest {
         Line line = new Line(string, 0, false, false);
         Tokens tokens = LexerUtils.tokenize(line);
 
-        return TimeoutParser.parse("\\[TimeOut\\]", tokens);
+        return TimeoutParser.parse(tokens.withoutTag("\\[TimeOut\\]"));
     }
 }

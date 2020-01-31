@@ -143,7 +143,6 @@ public class Linker {
                     KeywordCall keywordCall = createKeywordCall(keyword, argument, iterator);
                     Argument keywordArgument = new Argument(call, keywordCall.getName());
 
-                    keywordArgument.setPosition(keywordCall.getPosition());
                     keywordArgument.setCall(keywordCall);
 
                     call.addArgument(keywordArgument);
@@ -190,13 +189,9 @@ public class Linker {
             last = iterator.next();
 
             Argument current = new Argument(call, last.getName());
-            current.setPosition(last.getPosition());
-
             call.addArgument(current);
             --i;
         }
-
-        call.setPosition(first.getPosition().merge(last.getPosition()));
 
         resolveCall(call);
 
@@ -269,7 +264,7 @@ public class Linker {
                 runtime.getErrors().registerSymbolError(
                         unresolvedNode.getFile(),
                         ErrorMessages.FOUND_NO_MATCH,
-                        ParserUtils.getPosition(unresolvedNode.getName(), unresolvedNode.getName())
+                        Position.fromToken(unresolvedNode.getName())
                 );
 
             }

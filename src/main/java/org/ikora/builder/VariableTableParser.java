@@ -3,10 +3,7 @@ package org.ikora.builder;
 import org.ikora.error.ErrorManager;
 import org.ikora.error.ErrorMessages;
 import org.ikora.exception.InvalidDependencyException;
-import org.ikora.model.Argument;
-import org.ikora.model.NodeTable;
-import org.ikora.model.Token;
-import org.ikora.model.Variable;
+import org.ikora.model.*;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -31,24 +28,23 @@ class VariableTableParser {
 
             Tokens tokens = LexerUtils.tokenize(reader.getCurrent());
 
-            Optional<Token> first = tokens.first();
-            if(!first.isPresent()){
+            if(tokens.isEmpty()){
                 errors.registerInternalError(
                         reader.getFile(),
                         ErrorMessages.EMPTY_TOKEN_NOT_EXPECTED,
-                        ParserUtils.getPosition(reader.getCurrent())
+                        Position.fromLine(reader.getCurrent())
                 );
 
                 continue;
             }
 
-            Optional<Variable> optional = VariableParser.parse(first.get());
+            Optional<Variable> optional = VariableParser.parse(tokens.first());
 
             if(!optional.isPresent()){
                 errors.registerInternalError(
                         reader.getFile(),
-                        String.format("Invalid variable: %s", first.get().getText()),
-                        ParserUtils.getPosition(reader.getCurrent())
+                        String.format("Invalid variable: %s", tokens.first().getText()),
+                        Position.fromToken(tokens.first())
                 );
 
                 continue;
@@ -63,14 +59,13 @@ class VariableTableParser {
                     errors.registerInternalError(
                             reader.getFile(),
                             String.format("Invalid variable dependency: %s", token),
-                            ParserUtils.getPosition(reader.getCurrent())
+                            Position.fromToken(token)
                     );
                 }
             }
 
             reader.readLine();
 
-            variable.setPosition(ParserUtils.getPosition(tokens));
             variableTable.add(variable);
         }
 

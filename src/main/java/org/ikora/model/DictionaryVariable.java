@@ -5,17 +5,13 @@ import org.ikora.analytics.visitor.NodeVisitor;
 import org.ikora.analytics.visitor.VisitorMemory;
 import org.ikora.builder.ValueLinker;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class DictionaryVariable extends Variable {
-    private List<Argument> values;
-
     public DictionaryVariable(Token name){
         super(name);
-        this.values = new ArrayList<>();
     }
 
     @Override
@@ -30,7 +26,7 @@ public class DictionaryVariable extends Variable {
 
     @Override
     public String toString() {
-        return values.stream().map(Argument::toString).collect(Collectors.joining("\t"));
+        return getArguments().stream().map(Argument::toString).collect(Collectors.joining("\t"));
     }
 
     @Override
@@ -46,8 +42,8 @@ public class DictionaryVariable extends Variable {
     @Override
     protected void setName(Token name) {
         this.name = name;
-        String generic = ValueLinker.escape(ValueLinker.getGenericVariableName(this.name.getText()));
 
+        String generic = ValueLinker.escape(ValueLinker.getGenericVariableName(this.name.getText()));
         this.pattern = Pattern.compile(generic, Pattern.CASE_INSENSITIVE);
     }
 }

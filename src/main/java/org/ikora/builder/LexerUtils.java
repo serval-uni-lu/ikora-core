@@ -10,15 +10,14 @@ import java.util.regex.Pattern;
 class LexerUtils {
     private LexerUtils(){}
 
-    static void parseDocumentation(LineReader reader, StringBuilder builder) throws IOException {
-        Tokens tokens = tokenize(reader.getCurrent());
-        tokens = tokens.withoutIndent();
+    static Tokens parseMultiLine(LineReader reader, Tokens tokens, StringBuilder builder) throws IOException {
+        Tokens collect = new Tokens();
+        collect.addAll(tokens.setType(Token.Type.DOCUMENTATION));
 
-        if(tokens.size() > 1){
-            builder.append(tokens.withoutTag("\\[Documentation\\]").toString());
-        }
+        builder.append(tokens.toString());
+        appendMultiline(reader, builder, collect);
 
-        appendMultiline(reader, builder);
+        return collect;
     }
 
     static Tokens tokenize(Line line){
@@ -68,9 +67,13 @@ class LexerUtils {
         return compareNoCase(value, regex);
     }
 
-    static boolean compareNoCase(String value, String regex){
+    static boolean compareNoCase(Token token, String regex){
+        return compareNoCase(token.getText(), regex);
+    }
+
+    static boolean compareNoCase(String text, String regex){
         Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(value);
+        Matcher matcher = pattern.matcher(text);
 
         return matcher.matches();
     }
@@ -87,7 +90,7 @@ class LexerUtils {
         return isEmpty(line) || isComment(line);
     }
 
-    private static void appendMultiline(LineReader reader, StringBuilder result) throws IOException {
+    private static void appendMultiline(LineReader reader, StringBuilder result, Tokens collect) throws IOException {
         Line line;
 
         while((line = reader.readLine()) != null){
@@ -97,18 +100,18 @@ class LexerUtils {
 
             Tokens tokens = tokenize(line).withoutIndent();
 
-            Optional<Token> first = tokens.first();
-
-            if(!first.isPresent()){
+            if(tokens.isEmpty()){
                 continue;
             }
 
-            if(!compareNoCase(first.get().getText(), "\\.\\.\\.")){
+            if(!compareNoCase(tokens.first().getText(), "\\.\\.\\.")){
                 break;
             }
 
             result.append("\n");
             result.append(tokens.withoutFirst().toString());
+            collect.add(tokens.first().setType(Token.Type.CONTINUATION));
+            collect.addAll(tokens.withoutFirst().setType(Token.Type.DOCUMENTATION));
         }
     }
 

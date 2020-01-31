@@ -2,6 +2,7 @@ package org.ikora.model;
 
 import org.ikora.analytics.visitor.NodeVisitor;
 import org.ikora.analytics.visitor.VisitorMemory;
+import org.ikora.builder.Tokens;
 import org.ikora.exception.InvalidDependencyException;
 import org.ikora.runner.Runtime;
 
@@ -12,10 +13,11 @@ import java.util.Set;
 public abstract class Node implements Differentiable {
     private SourceFile sourceFile;
     private final Set<Node> dependencies;
-    private Position position;
+    private final Tokens tokens;
 
     Node(){
         dependencies = new HashSet<>();
+        tokens = new Tokens();
     }
 
     public void setSourceFile(SourceFile sourceFile) {
@@ -78,12 +80,20 @@ public abstract class Node implements Differentiable {
         return getDependencies().size() == 0;
     }
 
-    public void setPosition(Position position){
-        this.position = position;
+    public void addToken(Token token){
+        tokens.add(token);
+    }
+
+    public void addTokens(Tokens tokens){
+        tokens.addAll(tokens);
+    }
+
+    public Tokens getTokens(){
+        return tokens;
     }
 
     public Position getPosition(){
-        return this.position;
+        return Position.fromTokens(tokens);
     }
 
     public int getLoc() {
