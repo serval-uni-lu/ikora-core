@@ -91,9 +91,9 @@ class LexerUtils {
     }
 
     private static void appendMultiline(LineReader reader, StringBuilder result, Tokens collect) throws IOException {
-        Line line;
+        while(reader.readLine().isValid()){
+            Line line = reader.getCurrent();
 
-        while((line = reader.readLine()) != null){
             if(ignore(line.getText())){
                 continue;
             }

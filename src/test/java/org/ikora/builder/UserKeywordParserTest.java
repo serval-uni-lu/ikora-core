@@ -31,8 +31,8 @@ class UserKeywordParserTest {
     }
 
     @Test
-    void testParseKeywordWithDocumentation() throws IOException {
-        String text = "Keyword with cool name\n" +
+    void testParseDocumentation() throws IOException {
+        String text = "Keyword with documentation\n" +
                 "    [Documentation]\tSimple documentation\n" +
                 "    Step one\tArg1\n" +
                 "    Step two without args\n" +
@@ -43,9 +43,27 @@ class UserKeywordParserTest {
         assertNotNull(keyword);
         assertTrue(errors.isEmpty());
 
-        assertEquals("Keyword with cool name", keyword.getName().getText());
+        assertEquals("Keyword with documentation", keyword.getName().getText());
         assertEquals(3, keyword.getSteps().size());
         assertEquals("Simple documentation", keyword.getDocumentation());
+    }
+
+    @Test
+    void testParseTags() throws IOException {
+        String text = "Keyword with tags\n" +
+                "   [Tags]\ttag1\ttag2 with space\ttag3\n" +
+                "   Step1\n";
+
+        ErrorManager errors = new ErrorManager();
+        UserKeyword keyword = createKeyword(text, errors);
+        assertNotNull(keyword);
+        assertTrue(errors.isEmpty());
+
+        assertEquals("Keyword with tags", keyword.getName().getText());
+        assertEquals(3, keyword.getTags().size());
+        assertTrue(keyword.getTags().contains("tag1"));
+        assertTrue(keyword.getTags().contains("tag2 with space"));
+        assertTrue(keyword.getTags().contains("tag3"));
     }
 
     private UserKeyword createKeyword(String text, ErrorManager errors) throws IOException {
