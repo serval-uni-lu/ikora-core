@@ -4,11 +4,11 @@ import org.ikora.error.ErrorManager;
 import org.ikora.error.ErrorMessages;
 import org.ikora.exception.MalformedVariableException;
 import org.ikora.model.*;
+import org.ikora.utils.StringUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class ForLoopParser {
     private ForLoopParser() {}
@@ -111,7 +111,7 @@ public class ForLoopParser {
                 first = false;
                 String value = token.getText();
 
-                if(LexerUtils.compareNoCase(value, "^IN(\\s?)(.+)")){
+                if(StringUtils.compareNoCase(value, "^IN(\\s?)(.+)")){
                     String cleanValue = value.replaceAll("^([Ii])([Nn])", "").trim();
                     cleanTokens.add(new Token(cleanValue, token.getLine(), token.getStartOffset(), token.getEndOffset(), Token.Type.TEXT));
                 }

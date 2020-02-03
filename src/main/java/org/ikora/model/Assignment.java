@@ -32,10 +32,13 @@ public class Assignment extends Step {
     }
 
     public void addReturnVariable(Variable variable) throws InvalidDependencyException {
+        if(variable == null){
+            return;
+        }
+
         variable.addDependency(this);
         variable.setSourceFile(getSourceFile());
         variable.addArgument(this.expression);
-
         returnVariables.add(variable);
     }
 

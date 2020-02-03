@@ -2,7 +2,6 @@ package org.ikora.model;
 
 import org.apache.commons.lang3.StringUtils;
 import org.ikora.analytics.Action;
-import org.ikora.builder.Tokens;
 import org.ikora.builder.ValueLinker;
 import org.ikora.runner.Runtime;
 import org.ikora.utils.LevenshteinDistance;

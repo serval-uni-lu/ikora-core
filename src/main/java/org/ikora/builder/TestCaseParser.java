@@ -6,6 +6,8 @@ import org.ikora.exception.InvalidTypeException;
 import org.ikora.model.Step;
 import org.ikora.model.TestCase;
 import org.ikora.model.Token;
+import org.ikora.model.Tokens;
+import org.ikora.utils.StringUtils;
 
 import java.io.IOException;
 
@@ -36,27 +38,27 @@ class TestCaseParser {
 
             Token label = ParserUtils.getLabel(reader, tokens, errors);
 
-            if (LexerUtils.compareNoCase(label, "\\[documentation\\]")) {
+            if (StringUtils.compareNoCase(label, "\\[documentation\\]")) {
                 testCase.addToken(label.setType(Token.Type.LABEL));
                 parseDocumentation(reader, tokens.withoutTag("\\[documentation\\]"), testCase);
             }
-            else if (LexerUtils.compareNoCase(label, "\\[tags\\]")) {
+            else if (StringUtils.compareNoCase(label, "\\[tags\\]")) {
                 testCase.addToken(label.setType(Token.Type.LABEL));
                 parseTags(reader, tokens, testCase);
             }
-            else if (LexerUtils.compareNoCase(label, "\\[setup\\]")) {
+            else if (StringUtils.compareNoCase(label, "\\[setup\\]")) {
                 testCase.addToken(label.setType(Token.Type.LABEL));
                 parseSetup(reader, tokens.withoutTag("\\[setup\\]"), testCase, dynamicImports, errors);
             }
-            else if (LexerUtils.compareNoCase(label, "\\[teardown\\]")) {
+            else if (StringUtils.compareNoCase(label, "\\[teardown\\]")) {
                 testCase.addToken(label.setType(Token.Type.LABEL));
                 parseTeardown(reader, tokens.withoutTag("\\[teardown\\]"), testCase, dynamicImports, errors);
             }
-            else if (LexerUtils.compareNoCase(label, "\\[template\\]")) {
+            else if (StringUtils.compareNoCase(label, "\\[template\\]")) {
                 testCase.addToken(label.setType(Token.Type.LABEL));
                 parseTemplate(reader, tokens.withoutTag("\\[template\\]"), testCase, errors);
             }
-            else if (LexerUtils.compareNoCase(label, "\\[timeout\\]")) {
+            else if (StringUtils.compareNoCase(label, "\\[timeout\\]")) {
                 testCase.addToken(label.setType(Token.Type.LABEL));
                 ParserUtils.parseTimeOut(reader, tokens.withoutTag("\\[timeout\\]"), testCase, errors);
             }

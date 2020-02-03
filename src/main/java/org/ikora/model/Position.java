@@ -1,7 +1,6 @@
 package org.ikora.model;
 
 import org.ikora.builder.Line;
-import org.ikora.builder.Tokens;
 
 public class Position {
     private final Mark startMark;

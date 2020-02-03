@@ -44,6 +44,16 @@ public class SourceFile implements Iterable<UserKeyword> {
         return this.lines;
     }
 
+    public Tokens getTokens() {
+        Tokens fileTokens = new Tokens();
+
+        fileTokens.addAll(testCaseTable.getTokens());
+        fileTokens.addAll(userKeywordTable.getTokens());
+        fileTokens.addAll(variableTable.getTokens());
+
+        return fileTokens;
+    }
+
     public int getDeadLoc() {
         int deadLoc = 0;
 

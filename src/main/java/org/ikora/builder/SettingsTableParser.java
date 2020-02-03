@@ -4,6 +4,7 @@ import org.ikora.error.ErrorManager;
 import org.ikora.error.ErrorMessages;
 import org.ikora.exception.InvalidTypeException;
 import org.ikora.model.*;
+import org.ikora.utils.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,43 +35,43 @@ class SettingsTableParser {
 
             String label = ParserUtils.getLabel(reader, tokens, errors).getText();
 
-            if(LexerUtils.compareNoCase(label, "documentation")){
+            if(StringUtils.compareNoCase(label, "documentation")){
                 parseDocumentation(reader, tokens.withoutTag("documentation"), settings);
             }
-            else if(LexerUtils.compareNoCase(label, "resource")){
+            else if(StringUtils.compareNoCase(label, "resource")){
                 parseResource(reader, tokens.withoutTag("resource"), settings, errors);
             }
-            else if(LexerUtils.compareNoCase(label, "library")){
+            else if(StringUtils.compareNoCase(label, "library")){
                 parseLibrary(reader, tokens.withoutTag("library"), settings, errors);
             }
-            else if(LexerUtils.compareNoCase(label, "variables")) {
+            else if(StringUtils.compareNoCase(label, "variables")) {
                 parseVariable(reader, tokens.withoutTag("variables"), settings);
             }
-            else if(LexerUtils.compareNoCase(label, "metadata")) {
+            else if(StringUtils.compareNoCase(label, "metadata")) {
                 parseMetadata(reader, tokens.withoutTag("metadata"), settings);
             }
-            else if(LexerUtils.compareNoCase(label, "suite setup")) {
+            else if(StringUtils.compareNoCase(label, "suite setup")) {
                 parseSuiteSetup(reader, tokens.withoutTag("suite setup"), settings, errors);
             }
-            else if(LexerUtils.compareNoCase(label, "suite teardown")) {
+            else if(StringUtils.compareNoCase(label, "suite teardown")) {
                 parseSuiteTeardown(reader, tokens.withoutTag("suite teardown"), settings, errors);
             }
-            else if(LexerUtils.compareNoCase(label, "force tags")) {
+            else if(StringUtils.compareNoCase(label, "force tags")) {
                 parseForceTags(reader, tokens.withoutTag("force tags"), settings);
             }
-            else if(LexerUtils.compareNoCase(label, "default tags")){
+            else if(StringUtils.compareNoCase(label, "default tags")){
                 parseDefaultTags(reader, tokens.withoutTag("default tags"), settings);
             }
-            else if(LexerUtils.compareNoCase(label, "test setup")){
+            else if(StringUtils.compareNoCase(label, "test setup")){
                 parseTestSetup(reader, tokens.withoutTag("test setup"), settings, errors);
             }
-            else if(LexerUtils.compareNoCase(label, "test teardown")){
+            else if(StringUtils.compareNoCase(label, "test teardown")){
                 parseTestTeardown(reader, tokens.withoutTag("test teardown"), settings, errors);
             }
-            else if(LexerUtils.compareNoCase(label, "test template")){
+            else if(StringUtils.compareNoCase(label, "test template")){
                 parseTestTemplate(reader, tokens.withoutTag("test template"), settings, errors);
             }
-            else if(LexerUtils.compareNoCase(label, "test timeout")){
+            else if(StringUtils.compareNoCase(label, "test timeout")){
                 ParserUtils.parseTimeOut(reader, tokens, settings, errors);
             }
             else {

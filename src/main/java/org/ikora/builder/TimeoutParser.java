@@ -6,8 +6,7 @@ import org.ikora.exception.InvalidNumberArgumentException;
 import org.ikora.exception.MalformedVariableException;
 import org.ikora.model.TimeOut;
 import org.ikora.model.Token;
-
-import java.util.Optional;
+import org.ikora.model.Tokens;
 
 public class TimeoutParser {
     private TimeoutParser() {}

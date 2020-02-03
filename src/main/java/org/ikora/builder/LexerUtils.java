@@ -1,11 +1,10 @@
 package org.ikora.builder;
 
 import org.ikora.model.Token;
+import org.ikora.model.Tokens;
+import org.ikora.utils.StringUtils;
 
 import java.io.IOException;
-import java.util.Optional;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 class LexerUtils {
     private LexerUtils(){}
@@ -64,18 +63,7 @@ class LexerUtils {
 
     static boolean isBlock(String value, String name){
         String regex = String.format("^\\*{3}(\\s*)%s(\\s*)(\\**)(\\s*)", name);
-        return compareNoCase(value, regex);
-    }
-
-    static boolean compareNoCase(Token token, String regex){
-        return compareNoCase(token.getText(), regex);
-    }
-
-    static boolean compareNoCase(String text, String regex){
-        Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(text);
-
-        return matcher.matches();
+        return StringUtils.compareNoCase(value, regex);
     }
 
     static boolean isEmpty(String line) {
@@ -104,7 +92,7 @@ class LexerUtils {
                 continue;
             }
 
-            if(!compareNoCase(tokens.first().getText(), "\\.\\.\\.")){
+            if(!StringUtils.compareNoCase(tokens.first().getText(), "\\.\\.\\.")){
                 break;
             }
 
@@ -134,10 +122,10 @@ class LexerUtils {
             else if(value.startsWith("#")){
                 type = Token.Type.COMMENT;
             }
-            else if(compareNoCase(value,"^:(\\s?)FOR")){
+            else if(StringUtils.compareNoCase(value,"^:(\\s?)FOR")){
                 type = Token.Type.FOR_LOOP;
             }
-            else if(compareNoCase(value, "^((\\$|@|&)\\{)(.*)(\\})(\\s?)(=?)")){
+            else if(StringUtils.compareNoCase(value, "^((\\$|@|&)\\{)(.*)(\\})(\\s?)(=?)")){
                 type = Token.Type.ASSIGNMENT;
             }
             else{

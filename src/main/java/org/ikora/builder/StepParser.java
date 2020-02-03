@@ -5,7 +5,6 @@ import org.ikora.error.ErrorMessages;
 import org.ikora.model.*;
 
 import java.io.IOException;
-import java.util.Optional;
 
 class StepParser {
     private StepParser() {}

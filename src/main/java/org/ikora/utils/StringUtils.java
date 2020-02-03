@@ -1,6 +1,7 @@
 package org.ikora.utils;
 
 import org.apache.commons.text.WordUtils;
+import org.ikora.model.Token;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -75,5 +76,16 @@ public class StringUtils {
 
     public static String trimLeft(String string, String remove) {
         return org.apache.commons.lang3.StringUtils.stripEnd(string, remove);
+    }
+
+    public static boolean compareNoCase(Token token, String regex){
+        return compareNoCase(token.getText(), regex);
+    }
+
+    public static boolean compareNoCase(String text, String regex){
+        Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(text);
+
+        return matcher.matches();
     }
 }

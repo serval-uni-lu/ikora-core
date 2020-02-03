@@ -25,7 +25,12 @@ public abstract class Variable extends Node {
     }
 
     public void addArgument(Argument argument){
+        if(argument == null){
+            return;
+        }
+
         this.arguments.add(argument);
+        addTokens(argument.getTokens());
     }
 
     public List<Argument> getArguments(){

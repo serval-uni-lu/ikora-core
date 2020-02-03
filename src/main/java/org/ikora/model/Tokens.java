@@ -1,7 +1,7 @@
-package org.ikora.builder;
+package org.ikora.model;
 
 import org.apache.commons.math3.exception.OutOfRangeException;
-import org.ikora.model.Token;
+import org.ikora.utils.StringUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -84,7 +84,7 @@ public class Tokens implements Iterable<Token> {
             return this;
         }
 
-        if(LexerUtils.compareNoCase(first().getText(), tag)){
+        if(StringUtils.compareNoCase(first().getText(), tag)){
             return withoutFirst();
         }
 

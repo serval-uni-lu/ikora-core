@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.*;
 
 public class NodeTable<T extends Node> implements Iterable<T> {
+    private Token name;
     private HashMap<String, T> nodeMap;
     private List<T> nodeList;
     private SourceFile file;
@@ -11,6 +12,10 @@ public class NodeTable<T extends Node> implements Iterable<T> {
     public NodeTable() {
         this.nodeMap = new HashMap<>();
         this.nodeList = new ArrayList<>();
+    }
+
+    public void setName(Token name){
+        this.name = name;
     }
 
     public void setFile(SourceFile file) {
@@ -52,6 +57,13 @@ public class NodeTable<T extends Node> implements Iterable<T> {
         }
 
         return nodes;
+    }
+
+    public Tokens getTokens(){
+        Tokens tokens = new Tokens();
+        tokens.add(name);
+        nodeList.forEach(node -> tokens.addAll(node.getTokens()));
+        return tokens;
     }
 
     private boolean matches(String file, Token token, T node){

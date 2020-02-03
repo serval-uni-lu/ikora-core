@@ -5,6 +5,7 @@ import org.ikora.error.ErrorMessages;
 import org.ikora.exception.InvalidTypeException;
 import org.ikora.exception.MalformedVariableException;
 import org.ikora.model.*;
+import org.ikora.utils.StringUtils;
 
 import java.io.IOException;
 import java.util.List;
@@ -40,27 +41,27 @@ class UserKeywordParser {
 
             Token label = ParserUtils.getLabel(reader, tokens, errors);
 
-            if (LexerUtils.compareNoCase(label, "\\[documentation\\]")) {
+            if (StringUtils.compareNoCase(label, "\\[documentation\\]")) {
                 userKeyword.addToken(label.setType(Token.Type.LABEL));
                 parseDocumentation(reader, tokens.withoutFirst(), userKeyword);
             }
-            else if (LexerUtils.compareNoCase(label, "\\[tags\\]")) {
+            else if (StringUtils.compareNoCase(label, "\\[tags\\]")) {
                 userKeyword.addToken(label.setType(Token.Type.LABEL));
                 parseTags(reader, tokens.withoutFirst(), userKeyword);
             }
-            else if (LexerUtils.compareNoCase(label, "\\[arguments\\]")) {
+            else if (StringUtils.compareNoCase(label, "\\[arguments\\]")) {
                 userKeyword.addToken(label.setType(Token.Type.LABEL));
                 parseParameters(reader, tokens.withoutFirst(), userKeyword, errors);
             }
-            else if (LexerUtils.compareNoCase(label, "\\[return\\]")) {
+            else if (StringUtils.compareNoCase(label, "\\[return\\]")) {
                 userKeyword.addToken(label.setType(Token.Type.LABEL));
                 parseReturn(reader, tokens.withoutFirst(), userKeyword, errors);
             }
-            else if (LexerUtils.compareNoCase(label, "\\[teardown\\]")) {
+            else if (StringUtils.compareNoCase(label, "\\[teardown\\]")) {
                 userKeyword.addToken(label.setType(Token.Type.LABEL));
                 parseTeardown(reader, tokens.withoutFirst(), userKeyword, errors);
             }
-            else if (LexerUtils.compareNoCase(label, "\\[timeout\\]")) {
+            else if (StringUtils.compareNoCase(label, "\\[timeout\\]")) {
                 userKeyword.addToken(label.setType(Token.Type.LABEL));
                 ParserUtils.parseTimeOut(reader, tokens.withoutFirst(), userKeyword, errors);
             }
