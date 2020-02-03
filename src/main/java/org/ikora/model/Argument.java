@@ -24,6 +24,7 @@ public class Argument extends Node {
         this.definition = null;
 
         this.addDependency(parent);
+        this.addToken(name);
     }
 
     public Argument(Node parent, Node definition) throws InvalidDependencyException {
@@ -37,6 +38,8 @@ public class Argument extends Node {
 
         this.name = definition.getName();
         this.definition = definition;
+        addTokens(this.definition.getTokens());
+
         definition.addDependency(this);
     }
 

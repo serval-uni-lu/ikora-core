@@ -6,21 +6,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class GherkinTest {
     @Test
-    void testTypeConstructor(){
-        Gherkin gherkinGiven = new Gherkin(Gherkin.Type.GIVEN);
-        Gherkin gherkinWhen = new Gherkin(Gherkin.Type.WHEN);
-        Gherkin gherkinThen = new Gherkin(Gherkin.Type.THEN);
-        Gherkin gherkinAnd = new Gherkin(Gherkin.Type.AND);
-        Gherkin gherkinBut = new Gherkin(Gherkin.Type.BUT);
-
-        assertEquals(Gherkin.Type.GIVEN, gherkinGiven.getType());
-        assertEquals(Gherkin.Type.WHEN, gherkinWhen.getType());
-        assertEquals(Gherkin.Type.THEN, gherkinThen.getType());
-        assertEquals(Gherkin.Type.AND, gherkinAnd.getType());
-        assertEquals(Gherkin.Type.BUT, gherkinBut.getType());
-    }
-
-    @Test
     void testStringConstructorWithValid(){
         Gherkin gherkinGiven = new Gherkin(Token.fromString("Given that this is a gherkin test."));
         Gherkin gherkinWhen = new Gherkin(Token.fromString("When given a string to play with."));

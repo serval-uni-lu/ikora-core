@@ -24,7 +24,16 @@ public class ForLoop extends Step {
 
         this.iterator = iterator;
         this.range = range;
-        this.steps = steps;
+
+        this.addToken(name);
+        this.addTokens(this.iterator.getTokens());
+        this.addTokens(this.range.getTokens());
+
+        this.steps = new ArrayList<>(steps.size());
+        for(Step step: steps){
+            this.steps.add(step);
+            this.addTokens(step.getTokens());
+        }
     }
 
     @Override

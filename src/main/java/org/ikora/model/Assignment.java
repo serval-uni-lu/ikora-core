@@ -24,9 +24,11 @@ public class Assignment extends Step {
         this.returnVariables = new ArrayList<>(returnVariables.size());
         for(Variable returnVariable: returnVariables){
             this.addReturnVariable(returnVariable);
+            this.addTokens(returnVariable.getTokens());
         }
 
         this.expression = new Argument(this, expression);
+        this.addTokens(this.expression.getTokens());
     }
 
     public void addReturnVariable(Variable variable) throws InvalidDependencyException {

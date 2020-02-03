@@ -134,6 +134,16 @@ public class Token implements Comparable<Token> {
         return this.clone();
     }
 
+    public Token extract(Pattern pattern){
+        Matcher m = pattern.matcher(this.getText());
+
+        if(m.find()){
+            return this.extract(m.start(), m.end());
+        }
+
+        return this.clone();
+    }
+
     public Pair<Token, Token> splitLibrary(){
         List<String> particles = Arrays.asList(this.text.split("\\."));
 

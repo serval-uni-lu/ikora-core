@@ -1,5 +1,7 @@
 package org.ikora.model;
 
+import org.ikora.builder.ParserUtils;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -11,32 +13,28 @@ public class Gherkin {
     private static final Pattern gherkinPattern =  Pattern.compile("^(\\s*(Given|When|Then|And|But)\\s*)", Pattern.CASE_INSENSITIVE);
 
     private final Type type;
+    private final Token token;
 
-    public Gherkin(Type type){
+    private Gherkin(Type type){
         this.type = type;
+        this.token = Token.empty();
     }
 
     public Gherkin(Token raw){
-        type = extractType(raw);
+        this.token = raw.extract(gherkinPattern);
+        type = getType(this.token);
     }
 
     public Type getType() {
         return type;
     }
 
-    private String extractPrefix(String raw){
-        Matcher matcher = gherkinPattern.matcher(raw);
-        String prefix = "";
-
-        if(matcher.find()){
-            prefix = matcher.group().toLowerCase();
-        }
-
-        return prefix.trim();
+    public Token getToken() {
+        return token;
     }
 
-    private Type extractType(Token raw){
-        String prefix = extractPrefix(raw.getText());
+    private Type getType(Token token){
+        String prefix = token.getText().trim().toLowerCase();
 
         switch (prefix){
             case "given": return Type.GIVEN;

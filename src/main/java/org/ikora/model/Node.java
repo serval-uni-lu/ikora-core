@@ -95,11 +95,11 @@ public abstract class Node implements Differentiable {
     }
 
     public void addToken(Token token){
-        tokens.add(token);
+        this.tokens.add(token);
     }
 
     public void addTokens(Tokens tokens){
-        tokens.addAll(tokens);
+        this.tokens.addAll(tokens);
     }
 
     public Tokens getTokens(){

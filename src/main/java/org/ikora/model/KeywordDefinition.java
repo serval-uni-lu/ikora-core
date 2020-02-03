@@ -41,6 +41,7 @@ public abstract class KeywordDefinition extends Keyword implements Iterable<Step
         this.steps.add(step);
         step.addDependency(this);
         step.setSourceFile(getSourceFile());
+        addTokens(step.getTokens());
     }
 
     public void addTag(String tag){

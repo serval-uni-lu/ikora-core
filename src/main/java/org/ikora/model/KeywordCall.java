@@ -19,14 +19,17 @@ public class KeywordCall extends Step {
 
     public KeywordCall(Token name) {
         super(name);
+        addToken(name);
 
-        this.argumentList = new ArrayList<>();
-        this.link = new Link<>(this);
         this.gherkin = Gherkin.none();
+        this.argumentList = new ArrayList<>();
+
+        this.link = new Link<>(this);
     }
 
     public void setGherkin(Gherkin gherkin) {
         this.gherkin = gherkin;
+        addToken(this.gherkin.getToken());
     }
 
     public Gherkin getGherkin(){
@@ -41,6 +44,7 @@ public class KeywordCall extends Step {
     public void addArgument(Argument argument) {
         argument.setSourceFile(this.getSourceFile());
         this.argumentList.add(argument);
+        addTokens(argument.getTokens());
     }
 
     public void addArgument(int index, Argument argument) {

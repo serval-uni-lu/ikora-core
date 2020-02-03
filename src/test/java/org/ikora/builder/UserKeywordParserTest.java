@@ -47,7 +47,7 @@ class UserKeywordParserTest {
         assertEquals("Keyword with documentation", keyword.getName().getText());
         assertEquals(3, keyword.getSteps().size());
         assertEquals("Simple documentation", keyword.getDocumentation());
-        assertEquals(5, keyword.getTokens().size());
+        assertEquals(7, keyword.getTokens().size());
     }
 
     @Test
