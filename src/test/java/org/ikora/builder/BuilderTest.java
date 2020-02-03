@@ -51,6 +51,9 @@ class BuilderTest {
 
         final TestCase testCase = sourceFile.get().getTestCases().get(0);
         assertEquals(1, testCase.getSteps().size());
+
+        final Tokens tokens = sourceFile.get().getTokens();
+        assertEquals(8, tokens.size());
     }
 
     @Test
@@ -60,6 +63,7 @@ class BuilderTest {
 
         final BuildResult result = Builder.build(robot, Helpers.getConfiguration(), true);
         assertEquals(1, result.getProjects().size());
+        assertTrue(result.getErrors().isEmpty());
 
         final Project project = result.getProjects().iterator().next();
 
@@ -262,8 +266,9 @@ class BuilderTest {
         final Step step0 = testCase.getStep(0);
         assertEquals("This is a template", step0.getName().getText());
         assertTrue(step0.getKeywordCall().map(KeywordCall::getKeyword).isPresent());
-        final Keyword template = step0.getKeywordCall().map(KeywordCall::getKeyword).get().get();
+        final Optional<Keyword> template = step0.getKeywordCall().map(KeywordCall::getKeyword).get();
+        assertTrue(template.isPresent());
 
-        assertEquals(keyword, template);
+        assertEquals(keyword, template.get());
     }
 }

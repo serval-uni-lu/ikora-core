@@ -52,7 +52,7 @@ public class AssignmentParser {
                 errors.registerSyntaxError(
                         reader.getFile(),
                         ErrorMessages.ASSIGNMENT_SHOULD_HAVE_LEFT_HAND_OPERAND,
-                        Position.fromTokens(tokens)
+                        Position.fromTokens(tokens, reader.getCurrent())
                 );
             }
         }
@@ -60,7 +60,7 @@ public class AssignmentParser {
             errors.registerInternalError(
                     reader.getFile(),
                     ErrorMessages.FAILED_TO_CREATE_DEPENDENCY,
-                    Position.fromTokens(tokens)
+                    Position.fromTokens(tokens, reader.getCurrent())
             );
         }
 

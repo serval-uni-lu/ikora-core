@@ -42,7 +42,7 @@ public class KeywordCallParser {
                     errors.registerInternalError(
                             reader.getFile(),
                             "Failed to register parameter to keyword call",
-                            Position.fromToken(token)
+                            Position.fromToken(token, reader.getCurrent())
                     );
                 }
             }

@@ -263,7 +263,7 @@ public class Linker {
                 runtime.getErrors().registerSymbolError(
                         unresolvedNode.getFile(),
                         ErrorMessages.FOUND_NO_MATCH,
-                        Position.fromToken(unresolvedNode.getName())
+                        Position.fromToken(unresolvedNode.getName(), null)
                 );
 
             }

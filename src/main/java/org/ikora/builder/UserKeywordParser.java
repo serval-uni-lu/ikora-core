@@ -13,12 +13,11 @@ import java.util.List;
 class UserKeywordParser {
     private UserKeywordParser(){}
 
-    public static UserKeyword parse(LineReader reader, DynamicImports dynamicImports, ErrorManager errors) throws IOException {
+    public static UserKeyword parse(LineReader reader, Tokens nameTokens, DynamicImports dynamicImports, ErrorManager errors) throws IOException {
         UserKeyword userKeyword = new UserKeyword();
-        Tokens nameTokens = LexerUtils.tokenize(reader.getCurrent());
         Tokens tokens;
 
-        final List<Variable> embeddedVariables = ParserUtils.parseName(reader, nameTokens.withoutIndent(), userKeyword, errors);
+        final List<Variable> embeddedVariables = ParserUtils.parseKeywordName(reader, nameTokens.withoutIndent(), userKeyword, errors);
 
         for(Variable embeddedVariable: embeddedVariables){
             userKeyword.addEmbeddedVariable(embeddedVariable);
@@ -99,7 +98,7 @@ class UserKeywordParser {
                 errors.registerSyntaxError(
                         reader.getFile(),
                         String.format("%s: %s", ErrorMessages.FAILED_TO_PARSE_PARAMETER, e.getMessage()),
-                        Position.fromToken(token)
+                        Position.fromToken(token, reader.getCurrent())
                 );
             }
         }
@@ -116,7 +115,7 @@ class UserKeywordParser {
                 errors.registerSyntaxError(
                         reader.getFile(),
                         String.format("%s: %s", ErrorMessages.RETURN_VALUE_SHOULD_BE_A_VARIABLE, e.getMessage()),
-                        Position.fromToken(token)
+                        Position.fromToken(token, reader.getCurrent())
                 );
             }
         }

@@ -14,9 +14,10 @@ import java.util.List;
 class SettingsTableParser {
     private SettingsTableParser(){ }
 
-    public static Settings parse(LineReader reader, SourceFile sourceFile, ErrorManager errors) throws IOException {
+    public static Settings parse(LineReader reader, Tokens blockTokens, SourceFile sourceFile, ErrorManager errors) throws IOException {
         Settings settings = new Settings();
         settings.setFile(sourceFile);
+        settings.setHeader(ParserUtils.parseHeaderName(reader, blockTokens, errors));
 
         Line line = reader.readLine();
 

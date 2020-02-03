@@ -94,10 +94,18 @@ public abstract class Node implements Differentiable {
     }
 
     public void addToken(Token token){
+        if(token == null || token.isEmpty()){
+            return;
+        }
+
         this.tokens.add(token);
     }
 
     public void addTokens(Tokens tokens){
+        if(tokens == null){
+            return;
+        }
+
         this.tokens.addAll(tokens);
     }
 
@@ -106,7 +114,7 @@ public abstract class Node implements Differentiable {
     }
 
     public Position getPosition(){
-        return Position.fromTokens(tokens);
+        return Position.fromTokens(tokens, null);
     }
 
     public int getLoc() {

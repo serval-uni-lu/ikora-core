@@ -11,6 +11,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Settings implements Delayable {
+    private Token header;
+
     private List<Resources> resourcesTable;
     private List<Resources> externalResourcesTable;
     private List<Library> libraryTable;
@@ -32,6 +34,8 @@ public class Settings implements Delayable {
     private KeywordCall suiteTeardown;
 
     public Settings() {
+        this.header = Token.empty();
+
         this.resourcesTable = new ArrayList<>();
         this.externalResourcesTable = new ArrayList<>();
         this.libraryTable = new ArrayList<>();
@@ -39,6 +43,10 @@ public class Settings implements Delayable {
         this.timeOut = TimeOut.none();
         this.metadata = new Metadata();
         this.variableFiles = new ArrayList<>();
+    }
+
+    public Token getHeader() {
+        return header;
     }
 
     public SourceFile getFile() {
@@ -88,6 +96,10 @@ public class Settings implements Delayable {
 
     public KeywordCall getSuiteTeardown() {
         return suiteTeardown;
+    }
+
+    public void setHeader(Token header){
+        this.header = header;
     }
 
     public void setFile(SourceFile file) {

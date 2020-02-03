@@ -1,6 +1,7 @@
 package org.ikora.builder;
 
 import org.ikora.error.ErrorManager;
+import org.ikora.model.Tokens;
 import org.ikora.model.UserKeyword;
 import org.junit.jupiter.api.Test;
 
@@ -73,8 +74,8 @@ class UserKeywordParserTest {
         DynamicImports dynamicImports = new DynamicImports();
         Reader targetReader = new StringReader(text);
         LineReader reader = new LineReader(targetReader);
-        reader.readLine();
+        Tokens tokens = LexerUtils.tokenize(reader.readLine());
 
-        return UserKeywordParser.parse(reader, dynamicImports, errors);
+        return UserKeywordParser.parse(reader, tokens, dynamicImports, errors);
     }
 }

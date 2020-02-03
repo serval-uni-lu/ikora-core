@@ -14,13 +14,10 @@ import java.io.IOException;
 class TestCaseParser {
     private TestCaseParser() {}
 
-    public static TestCase parse(LineReader reader, DynamicImports dynamicImports, ErrorManager errors) throws IOException {
+    public static TestCase parse(LineReader reader, Tokens nameTokens, DynamicImports dynamicImports, ErrorManager errors) throws IOException {
         TestCase testCase = new TestCase();
 
-        Tokens testTokens = LexerUtils.tokenize(reader.getCurrent());
-        Tokens tokens;
-
-        ParserUtils.parseName(reader, testTokens, testCase, errors);
+        ParserUtils.parseKeywordName(reader, nameTokens, testCase, errors);
 
         while(reader.getCurrent().isValid()) {
             if(reader.getCurrent().ignore()) {
@@ -30,11 +27,11 @@ class TestCaseParser {
 
             Tokens currentTokens = LexerUtils.tokenize(reader.getCurrent());
 
-            if(!testTokens.isParent(currentTokens)){
+            if(!nameTokens.isParent(currentTokens)){
                 break;
             }
 
-            tokens = currentTokens.withoutIndent();
+            Tokens tokens = currentTokens.withoutIndent();
 
             Token label = ParserUtils.getLabel(reader, tokens, errors);
 
@@ -63,7 +60,7 @@ class TestCaseParser {
                 ParserUtils.parseTimeOut(reader, tokens.withoutTag("\\[timeout\\]"), testCase, errors);
             }
             else {
-                parseStep(reader, tokens, testCase, dynamicImports, errors);
+                parseStep(reader, currentTokens, testCase, dynamicImports, errors);
             }
         }
 

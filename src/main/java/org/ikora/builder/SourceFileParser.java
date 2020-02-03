@@ -26,22 +26,22 @@ class SourceFileParser {
                     continue;
                 }
 
-                String text = reader.getCurrent().getText();
+                Tokens tokens = LexerUtils.tokenize(reader.getCurrent());
 
-                if(isSettings(text)){
-                    Settings settings = SettingsTableParser.parse(reader, sourceFile, errors);
+                if(isSettings(tokens.toString())){
+                    Settings settings = SettingsTableParser.parse(reader, tokens, sourceFile, errors);
                     sourceFile.setSettings(settings);
                 }
-                else if(isTestCases(text)){
-                    NodeTable<TestCase> testCaseTable = TestCaseTableParser.parse(reader, dynamicImports, errors);
+                else if(isTestCases(tokens.toString())){
+                    NodeTable<TestCase> testCaseTable = TestCaseTableParser.parse(reader, tokens, dynamicImports, errors);
                     sourceFile.setTestCaseTable(testCaseTable);
                 }
-                else if(isKeywords(text)){
-                    NodeTable<UserKeyword> nodeTable = KeywordTableParser.parse(reader, dynamicImports, errors);
+                else if(isKeywords(tokens.toString())){
+                    NodeTable<UserKeyword> nodeTable = KeywordTableParser.parse(reader, tokens, dynamicImports, errors);
                     sourceFile.setKeywordTable(nodeTable);
                 }
-                else if(isVariable(text)){
-                    NodeTable<Variable> variableTable = VariableTableParser.parse(reader, errors);
+                else if(isVariable(tokens.toString())){
+                    NodeTable<Variable> variableTable = VariableTableParser.parse(reader, tokens, errors);
                     sourceFile.setVariableTable(variableTable);
                 }
                 else {
@@ -65,19 +65,19 @@ class SourceFileParser {
         }
     }
 
-    static boolean isSettings(String line){
-        return LexerUtils.isBlock(line, "setting(s?)");
+    static boolean isSettings(String block){
+        return LexerUtils.isBlock(block, "setting(s?)");
     }
 
-    static boolean isTestCases(String line){
-        return LexerUtils.isBlock(line, "test case(s?)");
+    static boolean isTestCases(String block){
+        return LexerUtils.isBlock(block, "test case(s?)");
     }
 
-    static boolean isKeywords(String line){
-        return LexerUtils.isBlock(line, "keyword(s?)");
+    static boolean isKeywords(String block){
+        return LexerUtils.isBlock(block, "keyword(s?)");
     }
 
-    static boolean isVariable(String line){
-        return LexerUtils.isBlock(line, "variable(s?)");
+    static boolean isVariable(String block){
+        return LexerUtils.isBlock(block, "variable(s?)");
     }
 }

@@ -74,7 +74,7 @@ public class ForLoopParser {
                 errors.registerInternalError(
                         reader.getFile(),
                         ErrorMessages.FAILED_TO_CREATE_ITERATOR_IN_FOR_LOOP,
-                        Position.fromToken(loop.withoutIndent().get(1))
+                        Position.fromToken(loop.withoutIndent().get(1), reader.getCurrent())
                 );
             }
         }
@@ -91,7 +91,7 @@ public class ForLoopParser {
             errors.registerInternalError(
                     reader.getFile(),
                     ErrorMessages.EMPTY_TOKEN_SHOULD_BE_KEYWORD,
-                    Position.fromTokens(loop.withoutIndent())
+                    Position.fromTokens(loop.withoutIndent(), reader.getCurrent())
             );
         }
         else{

@@ -4,18 +4,19 @@ import java.io.File;
 import java.util.*;
 
 public class NodeTable<T extends Node> implements Iterable<T> {
-    private Token name;
+    private Token header;
     private HashMap<String, T> nodeMap;
     private List<T> nodeList;
     private SourceFile file;
 
     public NodeTable() {
+        this.header = Token.empty();
         this.nodeMap = new HashMap<>();
         this.nodeList = new ArrayList<>();
     }
 
-    public void setName(Token name){
-        this.name = name;
+    public void setHeader(Token header){
+        this.header = header;
     }
 
     public void setFile(SourceFile file) {
@@ -26,6 +27,10 @@ public class NodeTable<T extends Node> implements Iterable<T> {
             node.setSourceFile(this.file);
             nodeMap.put(getKey(node), node);
         }
+    }
+
+    public Token getHeader(){
+        return header;
     }
 
     public SourceFile getFile() {
@@ -61,7 +66,7 @@ public class NodeTable<T extends Node> implements Iterable<T> {
 
     public Tokens getTokens(){
         Tokens tokens = new Tokens();
-        tokens.add(name);
+        tokens.add(header);
         nodeList.forEach(node -> tokens.addAll(node.getTokens()));
         return tokens;
     }

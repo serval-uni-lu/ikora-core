@@ -11,8 +11,9 @@ import java.util.Optional;
 class VariableTableParser {
     private VariableTableParser() {}
 
-    public static NodeTable<Variable> parse(LineReader reader, ErrorManager errors) throws IOException {
+    public static NodeTable<Variable> parse(LineReader reader, Tokens blockTokens, ErrorManager errors) throws IOException {
         NodeTable<Variable> variableTable = new NodeTable<>();
+        variableTable.setHeader(ParserUtils.parseHeaderName(reader, blockTokens, errors));
 
         reader.readLine();
 
@@ -44,7 +45,7 @@ class VariableTableParser {
                 errors.registerInternalError(
                         reader.getFile(),
                         String.format("Invalid variable: %s", tokens.first().getText()),
-                        Position.fromToken(tokens.first())
+                        Position.fromToken(tokens.first(), reader.getCurrent())
                 );
 
                 continue;
@@ -59,7 +60,7 @@ class VariableTableParser {
                     errors.registerInternalError(
                             reader.getFile(),
                             String.format("Invalid variable dependency: %s", token),
-                            Position.fromToken(token)
+                            Position.fromToken(token, reader.getCurrent())
                     );
                 }
             }

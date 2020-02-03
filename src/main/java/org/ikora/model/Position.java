@@ -32,9 +32,9 @@ public class Position {
         return new Position(new Mark(-1, -1), new Mark(-1, -1));
     }
 
-    public static Position fromTokens(Token start, Token end) {
-        if(start == null || end == null){
-            return Position.createInvalid();
+    public static Position fromTokens(Token start, Token end, Line line) {
+        if(start == null || end == null || start.isEmpty() || end.isEmpty()){
+            return Position.fromLine(line);
         }
 
         Mark startMark = new Mark(start.getLine(), start.getStartOffset());
@@ -43,12 +43,12 @@ public class Position {
         return new Position(startMark, endMark);
     }
 
-    public static Position fromTokens(Tokens tokens) {
-        return Position.fromTokens(tokens.first(), tokens.last());
+    public static Position fromTokens(Tokens tokens, Line line) {
+        return Position.fromTokens(tokens.first(), tokens.last(), line);
     }
 
-    public static Position fromToken(Token token){
-        return Position.fromTokens(token, token);
+    public static Position fromToken(Token token, Line line){
+        return Position.fromTokens(token, token, line);
     }
 
     public static Position fromLine(Line line) {

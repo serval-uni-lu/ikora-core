@@ -18,6 +18,10 @@ public class Tokens implements Iterable<Token> {
     }
 
     public void add(Token token){
+        if(token == null || token.isEmpty()){
+            return;
+        }
+
         if((token.isDelimiter() && containsDelimiterOnly())
             || !token.isDelimiter()){
             this.tokenSet.add(token);

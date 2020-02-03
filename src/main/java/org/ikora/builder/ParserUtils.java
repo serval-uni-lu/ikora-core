@@ -15,12 +15,12 @@ import java.util.List;
 public class ParserUtils {
     private ParserUtils(){}
 
-    static List<Variable> parseName(LineReader reader, Tokens tokens, KeywordDefinition keyword, ErrorManager errors) throws IOException {
+    static List<Variable> parseKeywordName(LineReader reader, Tokens tokens, KeywordDefinition keyword, ErrorManager errors) throws IOException {
         if(tokens.size() > 1){
             errors.registerSyntaxError(
                     reader.getFile(),
                     "Keyword definition cannot take arguments",
-                    Position.fromTokens(tokens.withoutFirst())
+                    Position.fromTokens(tokens.withoutFirst(), reader.getCurrent())
             );
 
             reader.readLine();
@@ -31,7 +31,7 @@ public class ParserUtils {
             errors.registerInternalError(
                     reader.getFile(),
                     "Should have at least one token, but found none",
-                    Position.fromTokens(tokens)
+                    Position.fromTokens(tokens, reader.getCurrent())
             );
 
             reader.readLine();
@@ -50,7 +50,7 @@ public class ParserUtils {
                 errors.registerInternalError(
                         reader.getFile(),
                         "Failed to parse embedded argument",
-                        Position.fromToken(embeddedArgument)
+                        Position.fromToken(embeddedArgument, reader.getCurrent())
                 );
             }
         }
@@ -60,6 +60,25 @@ public class ParserUtils {
         return embeddedArguments;
     }
 
+    static Token parseHeaderName(LineReader reader, Tokens tokens, ErrorManager errors){
+        Token header = tokens.first();
+
+        if(header.isEmpty()){
+            errors.registerSyntaxError(reader.getFile(),
+                    "Failed to parse block header",
+                    Position.fromLine(reader.getCurrent())
+            );
+        }
+        else if(!header.isBlock()){
+            errors.registerSyntaxError(reader.getFile(),
+                    "Expecting block header",
+                    Position.fromToken(header, reader.getCurrent())
+            );
+        }
+
+        return header;
+    }
+
     static void parseTimeOut(LineReader reader, Tokens tokens, Delayable delayable, ErrorManager errors) throws IOException {
         try {
             TimeOut timeOut = TimeoutParser.parse(tokens);
@@ -67,7 +86,8 @@ public class ParserUtils {
         } catch (InvalidArgumentException | MalformedVariableException | InvalidDependencyException e) {
             errors.registerSyntaxError(reader.getFile(),
                     String.format("%s: %s", ErrorMessages.FAILED_TO_PARSE_TIMEOUT, e.getMessage()),
-                    Position.fromTokens(tokens));
+                    Position.fromTokens(tokens, reader.getCurrent())
+            );
         }
 
         reader.readLine();
@@ -78,7 +98,7 @@ public class ParserUtils {
             errors.registerInternalError(
                     reader.getFile(),
                     "Not expecting an empty token",
-                    Position.fromTokens(tokens)
+                    Position.fromTokens(tokens, reader.getCurrent())
             );
 
             return Token.empty();
