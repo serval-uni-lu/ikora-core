@@ -74,8 +74,8 @@ class AssignmentParserTest {
     private Assignment createAssignment(String text, ErrorManager errors) throws IOException {
         Reader targetReader = new StringReader(text);
         LineReader reader = new LineReader(targetReader);
-        reader.readLine();
+        Tokens tokens = LexerUtils.tokenize(reader.readLine()).withoutIndent();
 
-        return AssignmentParser.parse(reader, errors);
+        return AssignmentParser.parse(reader, tokens, errors);
     }
 }

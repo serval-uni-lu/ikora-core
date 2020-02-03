@@ -13,15 +13,14 @@ import java.util.Optional;
 public class AssignmentParser {
     private AssignmentParser(){}
 
-    public static Assignment parse(LineReader reader, ErrorManager errors) throws IOException {
-        Tokens tokens = LexerUtils.tokenize(reader.getCurrent()).withoutIndent();
-
+    public static Assignment parse(LineReader reader, Tokens tokens, ErrorManager errors) throws IOException {
         List<Variable> returnValues = new ArrayList<>();
         KeywordCall expression = null;
 
         int offset = 0;
         boolean leftSide = true;
-        for(Token token: tokens){
+        Tokens assignmentTokens = tokens.withoutIndent();
+        for(Token token: assignmentTokens){
             Token clean = VariableParser.trimEquals(token);
 
             if(!clean.isEmpty()){
@@ -34,7 +33,7 @@ public class AssignmentParser {
                     }
                 }
                 else if(!leftSide){
-                    expression = KeywordCallParser.parseLocal(reader, tokens.withoutFirst(offset), false, errors);
+                    expression = KeywordCallParser.parseLocal(reader, assignmentTokens.withoutFirst(offset), false, errors);
                     break;
                 }
             }

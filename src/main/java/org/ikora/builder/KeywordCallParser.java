@@ -18,7 +18,9 @@ public class KeywordCallParser {
     }
 
     public static KeywordCall parseLocal(LineReader reader, Tokens tokens, boolean allowGherkin, ErrorManager errors) {
-        if(tokens.isEmpty()){
+        Tokens callTokens = tokens.withoutIndent();
+
+        if(callTokens.isEmpty()){
             errors.registerInternalError(
                     reader.getFile(),
                     ErrorMessages.EMPTY_TOKEN_SHOULD_BE_KEYWORD,
@@ -26,14 +28,14 @@ public class KeywordCallParser {
             );
         }
         else{
-            Token rawName = tokens.first();
+            Token rawName = callTokens.first();
             Token name = getKeywordCallName(rawName, allowGherkin);
             Gherkin gherkin = new Gherkin(rawName);
 
             KeywordCall call = new KeywordCall(name);
             call.setGherkin(gherkin);
 
-            for(Token token: tokens.withoutFirst()) {
+            for(Token token: callTokens.withoutFirst()) {
                 try {
                     Argument argument = new Argument(call, token);
                     call.addArgument(argument);

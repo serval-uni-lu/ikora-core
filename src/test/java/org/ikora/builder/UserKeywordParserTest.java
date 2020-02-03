@@ -28,6 +28,7 @@ class UserKeywordParserTest {
         assertEquals("Step one", keyword.getStep(0).getName().getText());
         assertEquals("Step two without args", keyword.getStep(1).getName().getText());
         assertEquals("Step three \"Embedded arg\"", keyword.getStep(2).getName().getText());
+        assertEquals(5, keyword.getTokens().size());
     }
 
     @Test
@@ -46,6 +47,7 @@ class UserKeywordParserTest {
         assertEquals("Keyword with documentation", keyword.getName().getText());
         assertEquals(3, keyword.getSteps().size());
         assertEquals("Simple documentation", keyword.getDocumentation());
+        assertEquals(5, keyword.getTokens().size());
     }
 
     @Test
@@ -64,6 +66,7 @@ class UserKeywordParserTest {
         assertTrue(keyword.getTags().contains("tag1"));
         assertTrue(keyword.getTags().contains("tag2 with space"));
         assertTrue(keyword.getTags().contains("tag3"));
+        assertEquals(6, keyword.getTokens().size());
     }
 
     private UserKeyword createKeyword(String text, ErrorManager errors) throws IOException {

@@ -76,6 +76,20 @@ public abstract class Node implements Differentiable {
         return dependencies;
     }
 
+    public Node getParent() throws InvalidDependencyException {
+        Set<Node> parents = getDependencies();
+
+        if(parents.isEmpty()){
+            throw new InvalidDependencyException("No parent found");
+        }
+
+        if(parents.size() > 1){
+            throw new InvalidDependencyException("Too many parent found");
+        }
+
+        return parents.iterator().next();
+    }
+
     public boolean isDeadCode(){
         return getDependencies().size() == 0;
     }

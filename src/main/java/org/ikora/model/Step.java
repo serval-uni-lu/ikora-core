@@ -22,20 +22,6 @@ public abstract class Step extends Node {
         return this.name;
     }
 
-    public Node getParent() throws InvalidDependencyException {
-        Set<Node> parents = getDependencies();
-
-        if(parents.isEmpty()){
-            throw new InvalidDependencyException("No parent found");
-        }
-
-        if(parents.size() > 1){
-            throw new InvalidDependencyException("Too many parent found");
-        }
-
-        return parents.iterator().next();
-    }
-
     public List<Step> getSteps(){
         return Collections.emptyList();
     }
@@ -43,8 +29,8 @@ public abstract class Step extends Node {
     public KeywordDefinition getCaller() throws InvalidDependencyException {
         Node node = getParent();
 
-        while (Step.class.isAssignableFrom(node.getClass())){
-            node = ((Step)node).getParent();
+        while (Argument.class.isAssignableFrom(node.getClass()) || Step.class.isAssignableFrom(node.getClass())){
+            node = node.getParent();
         }
 
         if(node instanceof KeywordDefinition){

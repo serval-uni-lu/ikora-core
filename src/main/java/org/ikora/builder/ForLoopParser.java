@@ -13,28 +13,29 @@ import java.util.Optional;
 public class ForLoopParser {
     private ForLoopParser() {}
 
-    public static ForLoop parse(LineReader reader, ErrorManager errors) throws IOException {
-        Tokens loop = LexerUtils.tokenize(reader.getCurrent());
+    public static ForLoop parse(LineReader reader, Tokens tokens, ErrorManager errors) throws IOException {
+        Tokens loopTokens = tokens.withoutIndent();
 
-        Token name = extractName(reader, loop, errors);
-        Variable iterator = extractIterator(reader, loop, errors);
-        Step range = extractRange(reader, loop, errors);
-        reader.readLine();
+        Token name = extractName(reader, loopTokens, errors);
+        Variable iterator = extractIterator(reader, loopTokens, errors);
+        Step range = extractRange(reader, loopTokens, errors);
 
         List<Step> steps = new ArrayList<>();
+
+        reader.readLine();
         while (reader.getCurrent().isValid()){
             if(reader.getCurrent().ignore()) {
                 reader.readLine();
                 continue;
             }
 
-            Tokens tokens = LexerUtils.tokenize(reader.getCurrent());
+            Tokens stepTokens = LexerUtils.tokenize(reader.getCurrent());
 
-            if(!loop.isParent(tokens)){
+            if(!tokens.isParent(stepTokens)){
                 break;
             }
 
-            Step step = StepParser.parse(reader, tokens, false, errors);
+            Step step = StepParser.parse(reader, stepTokens, false, errors);
             steps.add(step);
         }
 

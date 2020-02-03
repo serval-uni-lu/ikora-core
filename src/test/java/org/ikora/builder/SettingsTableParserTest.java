@@ -2,7 +2,6 @@ package org.ikora.builder;
 
 import org.ikora.error.ErrorManager;
 import org.ikora.model.Settings;
-import org.ikora.model.UserKeyword;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -22,6 +21,19 @@ public class SettingsTableParserTest {
         final Settings settings = createSettings(settingText, errors);
 
         assertEquals("Example suite", settings.getDocumentation());
+    }
+
+    @Test
+    void testSuiteSetup() throws IOException {
+        String settingText = "***Settings***\n" +
+                "Suite Setup    Do Something    ${MESSAGE}";
+
+        ErrorManager errors = new ErrorManager();
+
+        final Settings settings = createSettings(settingText, errors);
+
+        assertEquals("Do Something", settings.getSuiteSetup().getName().getText());
+        assertEquals("${MESSAGE}", settings.getSuiteSetup().getArgumentList().get(0).getName().getText());
     }
 
     private Settings createSettings(String text, ErrorManager errors) throws IOException {

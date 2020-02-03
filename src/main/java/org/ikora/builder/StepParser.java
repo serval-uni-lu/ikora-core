@@ -16,13 +16,13 @@ class StepParser {
         Tokens fullTokens = tokens.withoutIndent();
 
         if(isForLoop(reader, fullTokens, errors)) {
-            step = ForLoopParser.parse(reader, errors);
+            step = ForLoopParser.parse(reader, tokens, errors);
         }
         else if (isAssignment(reader, fullTokens, errors)){
-            step = AssignmentParser.parse(reader, errors);
+            step = AssignmentParser.parse(reader, tokens, errors);
         }
         else {
-            step = KeywordCallParser.parse(reader, fullTokens, allowGherkin, errors);
+            step = KeywordCallParser.parse(reader, tokens, allowGherkin, errors);
         }
 
         if(step == null){

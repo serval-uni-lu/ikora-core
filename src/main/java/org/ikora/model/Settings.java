@@ -70,6 +70,26 @@ public class Settings implements Delayable {
         return defaultTags;
     }
 
+    public KeywordCall getTemplate() {
+        return template;
+    }
+
+    public KeywordCall getTestSetup() {
+        return testSetup;
+    }
+
+    public KeywordCall getTestTeardown() {
+        return testTeardown;
+    }
+
+    public KeywordCall getSuiteSetup() {
+        return suiteSetup;
+    }
+
+    public KeywordCall getSuiteTeardown() {
+        return suiteTeardown;
+    }
+
     public void setFile(SourceFile file) {
         this.file = file;
     }

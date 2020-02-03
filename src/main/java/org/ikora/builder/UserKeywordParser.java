@@ -65,7 +65,7 @@ class UserKeywordParser {
                 ParserUtils.parseTimeOut(reader, tokens.withoutFirst(), userKeyword, errors);
             }
             else {
-                parseStep(reader, tokens, userKeyword, dynamicImports, errors);
+                parseStep(reader, currentTokens, userKeyword, dynamicImports, errors);
             }
         }
 
