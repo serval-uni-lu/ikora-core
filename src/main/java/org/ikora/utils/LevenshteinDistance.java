@@ -1,7 +1,6 @@
 package org.ikora.utils;
 
 import org.ikora.analytics.Action;
-import opennlp.tools.util.StringUtil;
 import org.ikora.model.Differentiable;
 
 import java.util.ArrayList;
@@ -11,7 +10,7 @@ import static org.apache.commons.lang3.math.NumberUtils.min;
 
 public class LevenshteinDistance {
     public static int stringDistance(String string1, String string2){
-        int[][] distanceMatrix = StringUtil.levenshteinDistance(string1, string2);
+        int[][] distanceMatrix = levenshteinDistance(string1, string2);
         return distanceMatrix[string1.length()][string2.length()];
     }
 
@@ -47,6 +46,43 @@ public class LevenshteinDistance {
         }
 
         return d;
+    }
+
+    // taken from OpenNLP StringUtils
+    public static int[][] levenshteinDistance(String left, String right) {
+        int wordLength = left.length();
+        int lemmaLength = right.length();
+
+        int[][] distance = new int[wordLength + 1][lemmaLength + 1];
+        if (wordLength == 0) {
+            return distance;
+        } else if (lemmaLength == 0) {
+            return distance;
+        } else {
+            int i;
+            for(i = 0; i <= wordLength; distance[i][0] = i++) {
+            }
+
+            for(i = 0; i <= lemmaLength; distance[0][i] = i++) {
+            }
+
+            for(i = 1; i <= wordLength; ++i) {
+                int s_i = left.charAt(i - 1);
+
+                for(int j = 1; j <= lemmaLength; ++j) {
+                    byte cost;
+                    if (s_i == right.charAt(j - 1)) {
+                        cost = 0;
+                    } else {
+                        cost = 1;
+                    }
+
+                    distance[i][j] = min(distance[i - 1][j] + 1, distance[i][j - 1] + 1, distance[i - 1][j - 1] + cost);
+                }
+            }
+
+            return distance;
+        }
     }
 
     public static double index(List<? extends Differentiable> before, List<? extends Differentiable> after){
