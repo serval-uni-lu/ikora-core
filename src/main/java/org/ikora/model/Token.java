@@ -41,6 +41,10 @@ public class Token implements Comparable<Token> {
 
     @Override
     public String toString() {
+        if(type == Type.CONTINUATION){
+            return "\n";
+        }
+
         return this.text;
     }
 

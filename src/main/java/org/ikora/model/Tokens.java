@@ -121,7 +121,7 @@ public class Tokens implements Iterable<Token> {
     @Override
     public String toString() {
         return this.tokenSet.stream()
-                .map(Token::getText)
+                .map(Token::toString)
                 .collect(Collectors.joining());
     }
 
