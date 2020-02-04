@@ -6,9 +6,7 @@ import org.ikora.model.*;
 import org.ikora.utils.FileUtils;
 
 import java.io.File;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -270,5 +268,43 @@ class BuilderTest {
         assertTrue(template.isPresent());
 
         assertEquals(keyword, template.get());
+    }
+
+    @Test
+    void testParseConnectedProject(){
+        final File projectAFile = Helpers.getResourceFile("robot/connected-projects/project-a");
+        assertNotNull(projectAFile);
+
+        final File projectBFile = Helpers.getResourceFile("robot/connected-projects/project-b");
+        assertNotNull(projectBFile);
+
+        final File projectCFile = Helpers.getResourceFile("robot/connected-projects/project-c");
+        assertNotNull(projectCFile);
+
+        Set<File> files = new HashSet<>(Arrays.asList(projectAFile, projectBFile, projectCFile));
+
+        final BuildResult result = Builder.build(files, Helpers.getConfiguration(), true);
+
+        assertEquals(3, result.getProjects().size());
+
+        final Optional<Project> projectA = result.getProject("project-a");
+        assertTrue(projectA.isPresent());
+
+        final Optional<Project> projectB = result.getProject("project-b");
+        assertTrue(projectB.isPresent());
+
+        final Optional<Project> projectC = result.getProject("project-c");
+        assertTrue(projectC.isPresent());
+
+        final Set<Project> dependenciesA = projectA.get().getDependencies();
+        assertEquals(1, dependenciesA.size());
+        assertEquals("project-c", dependenciesA.iterator().next().getName());
+
+        final Set<Project> dependenciesB = projectB.get().getDependencies();
+        assertEquals(1, dependenciesB.size());
+        assertEquals("project-c", dependenciesB.iterator().next().getName());
+
+        final Set<Project> dependenciesC = projectC.get().getDependencies();
+        assertEquals(0, dependenciesC.size());
     }
 }

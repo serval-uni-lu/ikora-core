@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class UserKeywordParserTest {
     @Test
     void testParseSimpleKeyword() throws IOException {
-        String text = "Keyword with cool name\n" +
+        String text = "Keyword with cool name\n\n" +
                 "    Step one\tArg1\n" +
                 "    Step two without args\n" +
                 "    Step three \"Embedded arg\" \n";

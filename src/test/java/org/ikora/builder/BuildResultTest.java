@@ -1,6 +1,7 @@
 package org.ikora.builder;
 
 import org.ikora.Configuration;
+import org.ikora.Helpers;
 import org.ikora.error.Errors;
 import org.ikora.error.SymbolError;
 import org.ikora.utils.FileUtils;
@@ -8,6 +9,8 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.net.URI;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -45,6 +48,26 @@ class BuildResultTest {
 
         Set<SymbolError> symbolErrors = errors.getSymbolErrors();
         assertEquals(1, symbolErrors.size());
+    }
+
+    @Test
+    void testProjectsWithDependencies(){
+        final File projectAFile = Helpers.getResourceFile("robot/connected-projects/project-a");
+        assertNotNull(projectAFile);
+
+        final File projectBFile = Helpers.getResourceFile("robot/connected-projects/project-b");
+        assertNotNull(projectBFile);
+
+        final File projectCFile = Helpers.getResourceFile("robot/connected-projects/project-c");
+        assertNotNull(projectCFile);
+
+        Set<File> files = new HashSet<>(Arrays.asList(projectAFile, projectBFile, projectCFile));
+        final BuildResult build = Builder.build(files, Helpers.getConfiguration(), true);
+
+        assertTrue(build.getBuildTime() >= 0);
+        assertTrue(build.getLinkingTime() >= 0);
+        assertTrue(build.getParsingTime() >= 0);
+        assertTrue(build.getDependencyResolutionTime() >= 0);
     }
 
     private static BuildResult build(String root) {

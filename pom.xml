@@ -84,6 +84,7 @@
                     <compilerArgument>-Xlint:deprecation</compilerArgument>
                 </configuration>
             </plugin>
+<!--
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
@@ -135,10 +136,11 @@
                     <autoReleaseAfterClose>true</autoReleaseAfterClose>
                 </configuration>
             </plugin>
+-->
         </plugins>
     </build>
 
-
+<!--
     <distributionManagement>
         <snapshotRepository>
             <id>ossrh</id>
@@ -149,6 +151,7 @@
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
     </distributionManagement>
+-->
 
     <dependencies>
         <dependency>

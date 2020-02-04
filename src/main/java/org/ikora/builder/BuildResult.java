@@ -5,9 +5,8 @@ import org.ikora.model.Project;
 import org.ikora.model.SourceFile;
 
 import java.net.URI;
-import java.util.Collections;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class BuildResult {
     private ErrorManager errors;
@@ -34,6 +33,18 @@ public class BuildResult {
 
     public Set<Project> getProjects() {
         return projects;
+    }
+
+    public Optional<Project> getProject(String project){
+        final List<Project> filtered = projects.stream()
+                .filter(project1 -> project1.getName().equalsIgnoreCase(project))
+                .collect(Collectors.toList());
+
+        if(filtered.size() != 1){
+            return Optional.empty();
+        }
+
+        return Optional.of(filtered.get(0));
     }
 
     public void setErrors(ErrorManager errors) {
