@@ -74,7 +74,9 @@ class UserKeywordParserTest {
         DynamicImports dynamicImports = new DynamicImports();
         Reader targetReader = new StringReader(text);
         LineReader reader = new LineReader(targetReader);
-        Tokens tokens = LexerUtils.tokenize(reader.readLine());
+        reader.readLine();
+
+        Tokens tokens = LexerUtils.tokenize(reader);
 
         return UserKeywordParser.parse(reader, tokens, dynamicImports, errors);
     }

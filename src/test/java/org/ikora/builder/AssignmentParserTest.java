@@ -1,5 +1,6 @@
 package org.ikora.builder;
 
+import org.ikora.Helpers;
 import org.ikora.error.ErrorManager;
 import org.ikora.error.ErrorMessages;
 import org.ikora.error.Errors;
@@ -73,9 +74,8 @@ class AssignmentParserTest {
     }
 
     private Assignment createAssignment(String text, ErrorManager errors) throws IOException {
-        Reader targetReader = new StringReader(text);
-        LineReader reader = new LineReader(targetReader);
-        Tokens tokens = LexerUtils.tokenize(reader.readLine()).withoutIndent();
+        LineReader reader = Helpers.lineReader(text);
+        Tokens tokens = LexerUtils.tokenize(reader).withoutIndent();
 
         return AssignmentParser.parse(reader, tokens, errors);
     }

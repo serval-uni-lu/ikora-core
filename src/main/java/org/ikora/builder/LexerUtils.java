@@ -9,17 +9,49 @@ import java.io.IOException;
 class LexerUtils {
     private LexerUtils(){}
 
-    static Tokens parseMultiLine(LineReader reader, Tokens tokens, StringBuilder builder) throws IOException {
-        Tokens collect = new Tokens();
-        collect.addAll(tokens.setType(Token.Type.DOCUMENTATION));
+    public static Tokens tokenize(LineReader reader) throws IOException {
+        Tokens tokens = tokenize(reader.getCurrent());
 
-        builder.append(tokens.toString());
-        appendMultiline(reader, builder, collect);
+        while (reader.readLine().isValid()) {
+            Line line = reader.getCurrent();
 
-        return collect;
+            if (ignore(line.getText())) {
+                continue;
+            }
+
+            Tokens nextTokens = tokenize(line);
+
+            if (!isContinuation(nextTokens)) {
+                break;
+            }
+
+            tokens.addAll(nextTokens);
+        }
+
+        return tokens;
     }
 
-    static Tokens tokenize(Line line){
+    public static Tokens peek(Line line) {
+        return tokenize(line);
+    }
+
+    public static boolean exitBlock(Tokens forLoop, LineReader reader){
+        return !forLoop.isParent(LexerUtils.peek(reader.getCurrent())) || LexerUtils.isBlock(reader.getCurrent().getText());
+    }
+
+    private static boolean isContinuation(Tokens tokens){
+        for(Token token: tokens){
+            if(token.isDelimiter()) {
+                continue;
+            }
+
+            return token.isContinuation();
+        }
+
+        return false;
+    }
+
+    private static Tokens tokenize(Line line){
         Tokens tokens = new Tokens();
         final String text = line.getText();
 
@@ -78,31 +110,6 @@ class LexerUtils {
         return isEmpty(line) || isComment(line);
     }
 
-    private static void appendMultiline(LineReader reader, StringBuilder result, Tokens collect) throws IOException {
-        while(reader.readLine().isValid()){
-            Line line = reader.getCurrent();
-
-            if(ignore(line.getText())){
-                continue;
-            }
-
-            Tokens tokens = tokenize(line).withoutIndent();
-
-            if(tokens.isEmpty()){
-                continue;
-            }
-
-            if(!StringUtils.compareNoCase(tokens.first().getText(), "\\.\\.\\.")){
-                break;
-            }
-
-            result.append("\n");
-            result.append(tokens.withoutFirst().toString());
-            collect.add(tokens.first().setType(Token.Type.CONTINUATION));
-            collect.addAll(tokens.withoutFirst().setType(Token.Type.DOCUMENTATION));
-        }
-    }
-
     private static Token createToken(int line, int offset, String text){
         String trimmed = text.trim();
 
@@ -127,6 +134,9 @@ class LexerUtils {
             }
             else if(StringUtils.compareNoCase(value, "^((\\$|@|&)\\{)(.*)(\\})(\\s?)(=?)")){
                 type = Token.Type.ASSIGNMENT;
+            }
+            else if(StringUtils.compareNoCase(value, "^\\.\\.\\.$")){
+                type = Token.Type.CONTINUATION;
             }
             else{
                 type = Token.Type.TEXT;

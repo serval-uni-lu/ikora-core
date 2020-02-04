@@ -25,12 +25,11 @@ class TestCaseParser {
                 continue;
             }
 
-            Tokens currentTokens = LexerUtils.tokenize(reader.getCurrent());
-
-            if(!nameTokens.isParent(currentTokens)){
+            if(LexerUtils.exitBlock(nameTokens, reader)){
                 break;
             }
 
+            Tokens currentTokens = LexerUtils.tokenize(reader);
             Tokens tokens = currentTokens.withoutIndent();
 
             Token label = ParserUtils.getLabel(reader, tokens, errors);
@@ -79,7 +78,6 @@ class TestCaseParser {
                     step.getPosition()
             );
         }
-        reader.readLine();
     }
 
     private static void parseTeardown(LineReader reader, Tokens tokens, TestCase testCase, DynamicImports dynamicImports, ErrorManager errors) throws IOException {
@@ -114,22 +112,17 @@ class TestCaseParser {
         dynamicImports.add(testCase, step);
     }
 
-    private static void parseTags(LineReader reader, Tokens tokens, TestCase testCase) throws IOException {
+    private static void parseTags(LineReader reader, Tokens tokens, TestCase testCase) {
         tokens = tokens.withoutIndent();
 
         for(Token token: tokens){
             testCase.addTag(token.getText());
         }
-
-        reader.readLine();
     }
 
-    private static void parseDocumentation(LineReader reader, Tokens tokens, TestCase testCase) throws IOException {
-        StringBuilder builder = new StringBuilder();
-        final Tokens documentationTokens = LexerUtils.parseMultiLine(reader, tokens, builder);
-
-        testCase.setDocumentation(builder.toString());
-        testCase.addTokens(documentationTokens);
+    private static void parseDocumentation(LineReader reader, Tokens tokens, TestCase testCase) {
+        testCase.setDocumentation(tokens.toString());
+        testCase.addTokens(tokens);
     }
 
     private static void parseStep(LineReader reader, Tokens tokens, TestCase testCase, DynamicImports dynamicImports, ErrorManager errors) throws IOException {

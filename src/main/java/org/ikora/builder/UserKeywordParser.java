@@ -30,11 +30,11 @@ class UserKeywordParser {
                 continue;
             }
 
-            Tokens currentTokens = LexerUtils.tokenize(reader.getCurrent());
-
-            if(!nameTokens.isParent(currentTokens)){
+            if(LexerUtils.exitBlock(nameTokens, reader)){
                 break;
             }
+
+            Tokens currentTokens = LexerUtils.tokenize(reader);
 
             tokens = currentTokens.withoutIndent();
 
@@ -73,9 +73,8 @@ class UserKeywordParser {
     }
 
     private static void parseDocumentation(LineReader reader, Tokens tokens, UserKeyword userKeyword) throws IOException {
-        StringBuilder builder = new StringBuilder();
-        userKeyword.addTokens(LexerUtils.parseMultiLine(reader, tokens, builder));
-        userKeyword.setDocumentation(builder.toString());
+        userKeyword.addTokens(tokens.setType(Token.Type.DOCUMENTATION));
+        userKeyword.setDocumentation(tokens.toString());
     }
 
     private static void parseTags(LineReader reader, Tokens tokens, UserKeyword userKeyword) throws IOException {
@@ -85,8 +84,6 @@ class UserKeywordParser {
             userKeyword.addTag(token.getText());
             userKeyword.addToken(token.setType(Token.Type.TAG));
         }
-
-        reader.readLine();
     }
 
     private static void parseParameters(LineReader reader, Tokens tokens, UserKeyword userKeyword, ErrorManager errors) throws IOException {
@@ -102,8 +99,6 @@ class UserKeywordParser {
                 );
             }
         }
-
-        reader.readLine();
     }
 
     private static void parseReturn(LineReader reader, Tokens tokens, UserKeyword userKeyword, ErrorManager errors) throws IOException {
@@ -119,8 +114,6 @@ class UserKeywordParser {
                 );
             }
         }
-
-        reader.readLine();
     }
 
     private static void parseTeardown(LineReader reader, Tokens tokens, UserKeyword userKeyword, ErrorManager errors) throws IOException {
@@ -136,8 +129,6 @@ class UserKeywordParser {
                     step.getPosition()
             );
         }
-
-        reader.readLine();
     }
 
     private static void parseStep(LineReader reader, Tokens tokens, UserKeyword userKeyword, DynamicImports dynamicImports, ErrorManager errors) throws IOException {

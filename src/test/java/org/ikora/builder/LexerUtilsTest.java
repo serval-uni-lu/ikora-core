@@ -1,5 +1,6 @@
 package org.ikora.builder;
 
+import org.ikora.Helpers;
 import org.ikora.model.Token;
 import org.ikora.model.Tokens;
 import org.junit.jupiter.api.Test;
@@ -14,9 +15,9 @@ import static org.junit.jupiter.api.Assertions.*;
 class LexerUtilsTest {
 
     @Test
-    void checkTokenizerWith2spaceIndent(){
+    void checkTokenizerWith2spaceIndent() throws IOException {
         String line = "  Some text";
-        Tokens tokens = LexerUtils.tokenize(new Line(line, 0, false, false));
+        Tokens tokens = LexerUtils.tokenize(Helpers.lineReader(line));
 
         assertEquals(2, tokens.size());
 
@@ -30,9 +31,9 @@ class LexerUtilsTest {
     }
 
     @Test
-    void checkTokenizerWith1spaceIndent(){
+    void checkTokenizerWith1spaceIndent() throws IOException {
         String line = " Some text";
-        Tokens tokens = LexerUtils.tokenize(new Line(line, 0, false, false));
+        Tokens tokens = LexerUtils.tokenize(Helpers.lineReader(line));
 
         assertEquals( 1, tokens.size());
 
@@ -42,10 +43,10 @@ class LexerUtilsTest {
     }
 
     @Test
-    void checkTokenizeWith4spaceIndent(){
+    void checkTokenizeWith4spaceIndent() throws IOException {
         String line = "    Some text";
 
-        Tokens tokens = LexerUtils.tokenize(new Line(line, 0, false, false));
+        Tokens tokens = LexerUtils.tokenize(Helpers.lineReader(line));
 
         assertEquals(2, tokens.size());
 
@@ -59,10 +60,10 @@ class LexerUtilsTest {
     }
 
     @Test
-    void checkTokenizeWithTabIndent(){
+    void checkTokenizeWithTabIndent() throws IOException {
         String line = "\tSome text";
 
-        Tokens tokens = LexerUtils.tokenize(new Line(line, 0, false, false));
+        Tokens tokens = LexerUtils.tokenize(Helpers.lineReader(line));
 
         assertEquals(2, tokens.size());
 
@@ -82,17 +83,16 @@ class LexerUtilsTest {
                 "\t...\tThird line\n" +
                 "\tNot documentation";
 
-        StringBuilder builder = new StringBuilder();
+        Tokens tokens = null;
 
         try {
             LineReader reader = createReader(documentation);
-            Tokens tokens = LexerUtils.tokenize(reader.getCurrent()).withoutIndent().withoutTag("\\[documentation\\]");
-            LexerUtils.parseMultiLine(reader, tokens, builder);
+            tokens = LexerUtils.tokenize(reader).withoutIndent().withoutTag("\\[documentation\\]");
         } catch (IOException e) {
             fail("Exception raised: " + e.getMessage());
         }
 
-        String[] lines = builder.toString().split("\n");
+        String[] lines = tokens.toString().split("\n");
 
         assertEquals(3, lines.length);
         assertEquals("First line", lines[0]);

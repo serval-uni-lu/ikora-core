@@ -96,6 +96,10 @@ public class Token implements Comparable<Token> {
         return this.type == Type.TEXT;
     }
 
+    public boolean isContinuation() {
+        return this.type == Type.CONTINUATION;
+    }
+
     public boolean equalsValue(Token name) {
         return name.text.equalsIgnoreCase(this.text);
     }

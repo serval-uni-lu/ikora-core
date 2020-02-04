@@ -3,10 +3,13 @@ package org.ikora;
 import org.apache.commons.io.FileUtils;
 import org.ikora.builder.BuildResult;
 import org.ikora.builder.Builder;
+import org.ikora.builder.LineReader;
 import org.ikora.model.Project;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Reader;
+import java.io.StringReader;
 import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -65,5 +68,13 @@ public class Helpers {
         configuration.setIgnorePath(Collections.emptyList());
 
         return configuration;
+    }
+
+    public static LineReader lineReader(String text) throws IOException {
+        Reader targetReader = new StringReader(text);
+        LineReader lineReader = new LineReader(targetReader);
+        lineReader.readLine();
+
+        return lineReader;
     }
 }

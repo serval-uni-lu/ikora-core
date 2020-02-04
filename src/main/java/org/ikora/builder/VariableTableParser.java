@@ -15,19 +15,13 @@ class VariableTableParser {
         NodeTable<Variable> variableTable = new NodeTable<>();
         variableTable.setHeader(ParserUtils.parseHeaderName(reader, blockTokens, errors));
 
-        reader.readLine();
-
-        while(reader.getCurrent().isValid()){
-            if(LexerUtils.isBlock(reader.getCurrent().getText())){
-                break;
-            }
-
+        while(reader.getCurrent().isValid() && !LexerUtils.isBlock(reader.getCurrent().getText())){
             if(reader.getCurrent().ignore()){
                 reader.readLine();
                 continue;
             }
 
-            Tokens tokens = LexerUtils.tokenize(reader.getCurrent());
+            Tokens tokens = LexerUtils.tokenize(reader);
 
             if(tokens.isEmpty()){
                 errors.registerInternalError(
@@ -64,8 +58,6 @@ class VariableTableParser {
                     );
                 }
             }
-
-            reader.readLine();
 
             variableTable.add(variable);
         }

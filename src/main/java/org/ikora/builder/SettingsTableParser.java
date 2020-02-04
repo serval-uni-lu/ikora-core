@@ -19,20 +19,13 @@ class SettingsTableParser {
         settings.setFile(sourceFile);
         settings.setHeader(ParserUtils.parseHeaderName(reader, blockTokens, errors));
 
-        Line line = reader.readLine();
-
-        while(line.isValid() && !LexerUtils.isBlock(line.getText())){
-            if(line.ignore()){
-                line = reader.readLine();
+        while(reader.getCurrent().isValid() && !LexerUtils.isBlock(reader.getCurrent().getText())){
+            if(reader.getCurrent().ignore()){
+                reader.readLine();
                 continue;
             }
 
-            Tokens tokens = LexerUtils.tokenize(line);
-
-            if(tokens.size() == 0){
-                line = reader.readLine();
-                continue;
-            }
+            Tokens tokens = LexerUtils.tokenize(reader);
 
             String label = ParserUtils.getLabel(reader, tokens, errors).getText();
 
@@ -75,11 +68,6 @@ class SettingsTableParser {
             else if(StringUtils.compareNoCase(label, "test timeout")){
                 ParserUtils.parseTimeOut(reader, tokens, settings, errors);
             }
-            else {
-                reader.readLine();
-            }
-
-            line = reader.getCurrent();
         }
 
         return settings;
@@ -97,7 +85,6 @@ class SettingsTableParser {
                     step.getPosition()
             );
         }
-        reader.readLine();
     }
 
     private static void parseTestTeardown(LineReader reader, Tokens tokens, Settings settings, ErrorManager errors) throws IOException {
@@ -112,8 +99,6 @@ class SettingsTableParser {
                     step.getPosition()
             );
         }
-
-        reader.readLine();
     }
 
     private static void parseTestSetup(LineReader reader, Tokens tokens, Settings settings, ErrorManager errors) throws IOException {
@@ -128,24 +113,18 @@ class SettingsTableParser {
                     step.getPosition()
             );
         }
-
-        reader.readLine();
     }
 
     private static void parseForceTags(LineReader reader, Tokens tokens, Settings settings) throws IOException {
         for(Token token: tokens.withoutIndent()){
             settings.addForceTag(token.getText());
         }
-
-        reader.readLine();
     }
 
     private static void parseDefaultTags(LineReader reader, Tokens tokens, Settings settings) throws IOException {
         for(Token token: tokens.withoutIndent()){
             settings.addDefaultTag(token.getText());
         }
-
-        reader.readLine();
     }
 
     private static void parseSuiteTeardown(LineReader reader, Tokens tokens, Settings settings, ErrorManager errors) throws IOException {
@@ -160,8 +139,6 @@ class SettingsTableParser {
                     step.getPosition()
             );
         }
-
-        reader.readLine();
     }
 
     private static void parseSuiteSetup(LineReader reader, Tokens tokens, Settings settings, ErrorManager errors) throws IOException {
@@ -176,13 +153,10 @@ class SettingsTableParser {
                     step.getPosition()
             );
         }
-
-        reader.readLine();
     }
 
     private static void parseMetadata(LineReader reader, Tokens tokens, Settings settings) throws IOException {
         settings.addMetadata(tokens.first().getText(), tokens.get(1));
-        reader.readLine();
     }
 
     private static void parseVariable(LineReader reader, Tokens tokens, Settings settings) throws IOException {
@@ -196,23 +170,16 @@ class SettingsTableParser {
         }
 
         settings.addVariableFile(new VariableFile(file, parameters));
-
-        reader.readLine();
     }
 
     private static void parseDocumentation(LineReader reader, Tokens tokens, Settings settings) throws IOException {
-        StringBuilder builder = new StringBuilder();
-        LexerUtils.parseMultiLine(reader, tokens, builder);
-
-        settings.setDocumentation(builder.toString());
+        settings.setDocumentation(tokens.toString());
     }
 
     private static void parseLibrary(LineReader reader, Tokens tokens, Settings settings, ErrorManager errors) throws IOException {
         Token name = ParserUtils.getLabel(reader, tokens, errors);
         Library library = new Library(name, new ArrayList<>(), Token.empty());
         settings.addLibrary(library);
-
-        reader.readLine();
     }
 
     private static void parseResource(LineReader reader, Tokens tokens, Settings settings, ErrorManager errors) throws IOException {
@@ -224,7 +191,5 @@ class SettingsTableParser {
 
         Resources resources = new Resources(label, filePath, new ArrayList<>(), Token.empty());
         settings.addResources(resources);
-
-        reader.readLine();
     }
 }

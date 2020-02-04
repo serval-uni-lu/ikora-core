@@ -1,13 +1,12 @@
 package org.ikora.builder;
 
+import org.ikora.Helpers;
 import org.ikora.error.ErrorManager;
 import org.ikora.model.Settings;
 import org.ikora.model.Tokens;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.io.Reader;
-import java.io.StringReader;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -38,9 +37,8 @@ public class SettingsTableParserTest {
     }
 
     private Settings createSettings(String text, ErrorManager errors) throws IOException {
-        Reader targetReader = new StringReader(text);
-        LineReader reader = new LineReader(targetReader);
-        Tokens tokens = LexerUtils.tokenize(reader.readLine());
+        LineReader reader = Helpers.lineReader(text);
+        Tokens tokens = LexerUtils.tokenize(reader);
 
         return SettingsTableParser.parse(reader, tokens,null, errors);
     }

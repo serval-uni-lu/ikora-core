@@ -10,13 +10,7 @@ import java.io.IOException;
 public class KeywordCallParser {
     private KeywordCallParser() {}
 
-    public static KeywordCall parse(LineReader reader, Tokens tokens, boolean allowGherkin, ErrorManager errors) throws IOException {
-        KeywordCall call = parseLocal(reader, tokens, allowGherkin, errors);
-        reader.readLine();
-        return call;
-    }
-
-    public static KeywordCall parseLocal(LineReader reader, Tokens tokens, boolean allowGherkin, ErrorManager errors) {
+    public static KeywordCall parse(LineReader reader, Tokens tokens, boolean allowGherkin, ErrorManager errors) {
         Tokens callTokens = tokens.withoutIndent();
 
         if(callTokens.isEmpty()){

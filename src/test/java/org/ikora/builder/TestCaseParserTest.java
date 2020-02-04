@@ -35,7 +35,9 @@ public class TestCaseParserTest {
         DynamicImports dynamicImports = new DynamicImports();
         Reader targetReader = new StringReader(text);
         LineReader reader = new LineReader(targetReader);
-        Tokens tokens = LexerUtils.tokenize(reader.readLine());
+        reader.readLine();
+
+        Tokens tokens = LexerUtils.tokenize(reader);
 
         return TestCaseParser.parse(reader, tokens, dynamicImports, errors);
     }

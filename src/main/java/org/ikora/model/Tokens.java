@@ -35,7 +35,9 @@ public class Tokens implements Iterable<Token> {
     }
 
     public Tokens setType(Token.Type type){
-        this.tokenSet.forEach(token -> token.setType(type));
+        this.tokenSet.stream()
+                .filter(Token::isText)
+                .forEach(token -> token.setType(type));
         return this;
     }
 
@@ -120,7 +122,7 @@ public class Tokens implements Iterable<Token> {
     public String toString() {
         return this.tokenSet.stream()
                 .map(Token::getText)
-                .collect(Collectors.joining("\t"));
+                .collect(Collectors.joining());
     }
 
     public boolean isEmpty() {

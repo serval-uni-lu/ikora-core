@@ -14,15 +14,13 @@ class KeywordTableParser {
         NodeTable<UserKeyword> keywordTable = new NodeTable<>();
         keywordTable.setHeader(ParserUtils.parseHeaderName(reader, blockTokens, errors));
 
-        reader.readLine();
-
         while(reader.getCurrent().isValid() && !LexerUtils.isBlock(reader.getCurrent().getText())){
             if(reader.getCurrent().ignore()){
                 reader.readLine();
                 continue;
             }
 
-            Tokens tokens = LexerUtils.tokenize(reader.getCurrent());
+            Tokens tokens = LexerUtils.tokenize(reader);
 
             UserKeyword userKeyword = UserKeywordParser.parse(reader, tokens, dynamicImports, errors);
             keywordTable.add(userKeyword);

@@ -13,7 +13,7 @@ import java.util.Optional;
 public class AssignmentParser {
     private AssignmentParser(){}
 
-    public static Assignment parse(LineReader reader, Tokens tokens, ErrorManager errors) throws IOException {
+    public static Assignment parse(LineReader reader, Tokens tokens, ErrorManager errors) {
         List<Variable> returnValues = new ArrayList<>();
         KeywordCall expression = null;
 
@@ -33,7 +33,7 @@ public class AssignmentParser {
                     }
                 }
                 else if(!leftSide){
-                    expression = KeywordCallParser.parseLocal(reader, assignmentTokens.withoutFirst(offset), false, errors);
+                    expression = KeywordCallParser.parse(reader, assignmentTokens.withoutFirst(offset), false, errors);
                     break;
                 }
             }
@@ -63,8 +63,6 @@ public class AssignmentParser {
                     Position.fromTokens(tokens, reader.getCurrent())
             );
         }
-
-        reader.readLine();
 
         return assignment;
     }

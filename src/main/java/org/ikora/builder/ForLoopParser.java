@@ -22,18 +22,17 @@ public class ForLoopParser {
 
         List<Step> steps = new ArrayList<>();
 
-        reader.readLine();
         while (reader.getCurrent().isValid()){
             if(reader.getCurrent().ignore()) {
                 reader.readLine();
                 continue;
             }
 
-            Tokens stepTokens = LexerUtils.tokenize(reader.getCurrent());
-
-            if(!tokens.isParent(stepTokens)){
+            if(LexerUtils.exitBlock(tokens, reader)){
                 break;
             }
+
+            Tokens stepTokens = LexerUtils.tokenize(reader);
 
             Step step = StepParser.parse(reader, stepTokens, false, errors);
             steps.add(step);
@@ -96,7 +95,7 @@ public class ForLoopParser {
         }
         else{
             Tokens cleanTokens = cleanInKeyword(rangeTokens);
-            step = KeywordCallParser.parseLocal(reader, cleanTokens, false, errors);
+            step = KeywordCallParser.parse(reader, cleanTokens, false, errors);
         }
 
         return step;

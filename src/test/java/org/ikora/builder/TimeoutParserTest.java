@@ -1,5 +1,6 @@
 package org.ikora.builder;
 
+import org.ikora.Helpers;
 import org.ikora.exception.InvalidArgumentException;
 import org.ikora.exception.InvalidDependencyException;
 import org.ikora.exception.MalformedVariableException;
@@ -8,6 +9,8 @@ import org.ikora.model.Tokens;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.io.Reader;
+import java.io.StringReader;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -38,9 +41,9 @@ public class TimeoutParserTest {
         assertThrows(InvalidArgumentException.class, () -> parse("[TimeOut]  Invalid timeout"));
     }
 
-    private static TimeOut parse(String string) throws IOException, InvalidArgumentException, MalformedVariableException, InvalidDependencyException {
-        Line line = new Line(string, 0, false, false);
-        Tokens tokens = LexerUtils.tokenize(line);
+    private static TimeOut parse(String text) throws IOException, InvalidArgumentException, MalformedVariableException, InvalidDependencyException {
+        LineReader reader = Helpers.lineReader(text);
+        Tokens tokens = LexerUtils.tokenize(reader);
 
         return TimeoutParser.parse(tokens.withoutTag("\\[TimeOut\\]"));
     }

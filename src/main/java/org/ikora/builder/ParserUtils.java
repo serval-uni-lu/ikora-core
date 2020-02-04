@@ -23,7 +23,6 @@ public class ParserUtils {
                     Position.fromTokens(tokens.withoutFirst(), reader.getCurrent())
             );
 
-            reader.readLine();
             return Collections.emptyList();
         }
 
@@ -34,7 +33,6 @@ public class ParserUtils {
                     Position.fromTokens(tokens, reader.getCurrent())
             );
 
-            reader.readLine();
             return Collections.emptyList();
         }
 
@@ -54,8 +52,6 @@ public class ParserUtils {
                 );
             }
         }
-
-        reader.readLine();
 
         return embeddedArguments;
     }
@@ -89,8 +85,6 @@ public class ParserUtils {
                     Position.fromTokens(tokens, reader.getCurrent())
             );
         }
-
-        reader.readLine();
     }
 
     static Token getLabel(LineReader reader, Tokens tokens, ErrorManager errors){

@@ -17,7 +17,6 @@ class SourceFileParser {
         try {
             sourceFile = new SourceFile(project, file);
             reader = new LineReader(sourceFile);
-
             reader.readLine();
 
             while(reader.getCurrent().isValid()){
@@ -26,7 +25,7 @@ class SourceFileParser {
                     continue;
                 }
 
-                Tokens tokens = LexerUtils.tokenize(reader.getCurrent());
+                Tokens tokens = LexerUtils.tokenize(reader);
 
                 if(isSettings(tokens.toString())){
                     Settings settings = SettingsTableParser.parse(reader, tokens, sourceFile, errors);
@@ -43,9 +42,6 @@ class SourceFileParser {
                 else if(isVariable(tokens.toString())){
                     NodeTable<Variable> variableTable = VariableTableParser.parse(reader, tokens, errors);
                     sourceFile.setVariableTable(variableTable);
-                }
-                else {
-                    reader.readLine();
                 }
             }
         } catch (FileNotFoundException e) {

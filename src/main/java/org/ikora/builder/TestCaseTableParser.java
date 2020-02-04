@@ -15,26 +15,13 @@ class TestCaseTableParser {
         NodeTable<TestCase> testCaseTable = new NodeTable<>();
         testCaseTable.setHeader(ParserUtils.parseHeaderName(reader, blockTokens, errors));
 
-        if(blockTokens.size() == 1){
-            testCaseTable.setHeader(blockTokens.first());
-        }
-        else{
-            errors.registerSyntaxError(
-                    reader.getFile(),
-                    "Block name for test case not valid",
-                    Position.fromTokens(blockTokens, reader.getCurrent())
-            );
-        }
-
-        reader.readLine();
-
         while(reader.getCurrent().isValid() && !LexerUtils.isBlock(reader.getCurrent().getText())){
             if(reader.getCurrent().ignore()){
                 reader.readLine();
                 continue;
             }
 
-            Tokens nameTokens = LexerUtils.tokenize(reader.getCurrent());
+            Tokens nameTokens = LexerUtils.tokenize(reader);
 
             TestCase testCase = TestCaseParser.parse(reader, nameTokens, dynamicImports, errors);
             testCaseTable.add(testCase);
