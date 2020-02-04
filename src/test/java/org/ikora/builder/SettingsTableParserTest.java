@@ -2,6 +2,7 @@ package org.ikora.builder;
 
 import org.ikora.Helpers;
 import org.ikora.error.ErrorManager;
+import org.ikora.error.ErrorMessages;
 import org.ikora.model.Settings;
 import org.ikora.model.Tokens;
 import org.junit.jupiter.api.Test;
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class SettingsTableParserTest {
     @Test
@@ -19,6 +21,7 @@ public class SettingsTableParserTest {
         ErrorManager errors = new ErrorManager();
 
         final Settings settings = createSettings(settingText, errors);
+        assertTrue(errors.in(null).isEmpty());
 
         assertEquals("Example suite", settings.getDocumentation());
     }
@@ -29,6 +32,7 @@ public class SettingsTableParserTest {
                 "Suite Setup    Do Something    ${MESSAGE}";
 
         ErrorManager errors = new ErrorManager();
+        assertTrue(errors.in(null).isEmpty());
 
         final Settings settings = createSettings(settingText, errors);
 
@@ -44,6 +48,7 @@ public class SettingsTableParserTest {
         ErrorManager errors = new ErrorManager();
 
         final Settings settings = createSettings(settingText, errors);
+        assertTrue(errors.in(null).isEmpty());
 
         assertEquals("Do Something", settings.getTestSetup().getName().getText());
         assertEquals("${MESSAGE}", settings.getTestSetup().getArgumentList().get(0).getName().getText());
@@ -57,6 +62,7 @@ public class SettingsTableParserTest {
         ErrorManager errors = new ErrorManager();
 
         final Settings settings = createSettings(settingText, errors);
+        assertTrue(errors.in(null).isEmpty());
 
         assertEquals("Do Something", settings.getSuiteTeardown().getName().getText());
         assertEquals("${MESSAGE}", settings.getSuiteTeardown().getArgumentList().get(0).getName().getText());
@@ -70,9 +76,38 @@ public class SettingsTableParserTest {
         ErrorManager errors = new ErrorManager();
 
         final Settings settings = createSettings(settingText, errors);
+        assertTrue(errors.in(null).isEmpty());
 
         assertEquals("Do Something", settings.getTestTeardown().getName().getText());
         assertEquals("${MESSAGE}", settings.getTestTeardown().getArgumentList().get(0).getName().getText());
+    }
+
+    @Test
+    void tesTemplate() throws IOException {
+        String settingText = "***Settings***\n" +
+                "Test Template    Do Something    ${MESSAGE}";
+
+        ErrorManager errors = new ErrorManager();
+
+        final Settings settings = createSettings(settingText, errors);
+        assertTrue(errors.in(null).isEmpty());
+
+        assertEquals("Do Something", settings.getTemplate().getName().getText());
+        assertEquals("${MESSAGE}", settings.getTemplate().getArgumentList().get(0).getName().getText());
+    }
+
+    @Test
+    void tesTemplateWithInvalidType() throws IOException {
+        String settingText = "***Settings***\n" +
+                "Test Template    ${RESULT}=  Do Something    ${MESSAGE}";
+
+        ErrorManager errors = new ErrorManager();
+        createSettings(settingText, errors);
+
+        assertEquals(1, errors.in(null).getSize());
+
+        String errorMessage = errors.in(null).getSyntaxErrors().iterator().next().getMessage();
+        assertEquals(ErrorMessages.FAILED_TO_PARSE_TEMPLATE, errorMessage);
     }
 
     private Settings createSettings(String text, ErrorManager errors) throws IOException {

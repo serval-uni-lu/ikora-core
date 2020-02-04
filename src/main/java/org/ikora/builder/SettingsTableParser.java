@@ -81,7 +81,7 @@ class SettingsTableParser {
         } catch (InvalidTypeException e) {
             errors.registerSyntaxError(
                     step.getFile(),
-                    String.format("%s: %s", ErrorMessages.FAILED_TO_PARSE_TEMPLATE, e.getMessage()),
+                    ErrorMessages.FAILED_TO_PARSE_TEMPLATE,
                     step.getPosition()
             );
         }
