@@ -56,7 +56,7 @@ public class Linker {
                     runtime.getErrors().registerInternalError(
                             step.getFile(),
                             ErrorMessages.FAILED_TO_LINK_TEMPLATE,
-                            step.getPosition()
+                            step.getRange()
                     );
                 }
             }
@@ -94,13 +94,13 @@ public class Linker {
                     runtime.getErrors().registerInternalError(
                             call.getFile(),
                             ErrorMessages.SHOULD_HANDLE_STATIC_IMPORT,
-                            call.getPosition()
+                            call.getRange()
                     );
                 } catch (InvalidDependencyException e) {
                     runtime.getErrors().registerSymbolError(
                             ((Keyword) keyword).getFile(),
                             e.getMessage(),
-                            ((Keyword) keyword).getPosition()
+                            ((Keyword) keyword).getRange()
                     );
                 }
         }
@@ -112,7 +112,7 @@ public class Linker {
                 runtime.getErrors().registerSymbolError(
                         call.getFile(),
                         e.getMessage(),
-                        call.getPosition()
+                        call.getRange()
                 );
             }
         }
@@ -150,7 +150,7 @@ public class Linker {
                     runtime.getErrors().registerSymbolError(
                             call.getFile(),
                             e.getMessage(),
-                            argument.getPosition()
+                            argument.getRange()
                     );
 
                     call.clearArguments();
@@ -163,7 +163,7 @@ public class Linker {
                 runtime.getErrors().registerSymbolError(
                         call.getFile(),
                         ErrorMessages.FOUND_MULTIPLE_MATCHES,
-                        argument.getPosition()
+                        argument.getRange()
                 );
 
                 iterator.forEachRemaining(call::addArgument);
@@ -263,7 +263,7 @@ public class Linker {
                 runtime.getErrors().registerSymbolError(
                         unresolvedNode.getFile(),
                         ErrorMessages.FOUND_NO_MATCH,
-                        Position.fromToken(unresolvedNode.getName(), null)
+                        Range.fromToken(unresolvedNode.getName(), null)
                 );
 
             }

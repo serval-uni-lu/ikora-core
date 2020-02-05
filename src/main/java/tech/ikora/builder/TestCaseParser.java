@@ -75,7 +75,7 @@ class TestCaseParser {
             errors.registerSyntaxError(
                     step.getFile(),
                     String.format("%s: %s", ErrorMessages.FAILED_TO_PARSE_TEMPLATE, e.getMessage()),
-                    step.getPosition()
+                    step.getRange()
             );
         }
     }
@@ -89,7 +89,7 @@ class TestCaseParser {
             errors.registerSyntaxError(
                     step.getFile(),
                     String.format("%s: %s", ErrorMessages.FAILED_TO_PARSE_TEARDOWN, e.getMessage()),
-                    step.getPosition()
+                    step.getRange()
             );
         }
 
@@ -105,7 +105,7 @@ class TestCaseParser {
             errors.registerSyntaxError(
                     step.getFile(),
                     String.format("%s: %s", ErrorMessages.FAILED_TO_PARSE_SETUP, e.getMessage()),
-                    step.getPosition()
+                    step.getRange()
             );
         }
 
@@ -121,7 +121,7 @@ class TestCaseParser {
     }
 
     private static void parseDocumentation(LineReader reader, Tokens tokens, TestCase testCase) {
-        testCase.setDocumentation(tokens.toString());
+        testCase.setDocumentation(tokens);
         testCase.addTokens(tokens);
     }
 
@@ -134,7 +134,7 @@ class TestCaseParser {
             errors.registerSyntaxError(
                     step.getFile(),
                     ErrorMessages.FAILED_TO_ADD_STEP_TO_TEST_CASE,
-                    step.getPosition()
+                    step.getRange()
             );
         }
 

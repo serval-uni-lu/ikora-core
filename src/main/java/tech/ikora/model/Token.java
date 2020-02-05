@@ -41,11 +41,7 @@ public class Token implements Comparable<Token> {
 
     @Override
     public String toString() {
-        if(type == Type.CONTINUATION){
-            return "\n";
-        }
-
-        return this.text;
+        return type == Type.CONTINUATION ? "\n" : this.text;
     }
 
     public String getText() {
@@ -104,7 +100,7 @@ public class Token implements Comparable<Token> {
         return this.type == Type.CONTINUATION;
     }
 
-    public boolean equalsValue(Token name) {
+    public boolean equalsIgnorePosition(Token name) {
         return name.text.equalsIgnoreCase(this.text);
     }
 

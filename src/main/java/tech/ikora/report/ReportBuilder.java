@@ -71,7 +71,7 @@ public class ReportBuilder {
         Test test = new Test();
 
         test.setName(testCase.getName().getText());
-        test.setDocumentation(testCase.getDocumentation());
+        test.setDocumentation(testCase.getDocumentation().toString());
         test.setTags(testCase.getTags().stream().map(Token::getText).collect(Collectors.toSet()));
 
         return test;
@@ -81,7 +81,7 @@ public class ReportBuilder {
         tech.ikora.report.Keyword keywordNode = new tech.ikora.report.Keyword();
 
         keywordNode.setName(keyword.getName().getText());
-        keywordNode.setDocumentation(keyword.getDocumentation());
+        keywordNode.setDocumentation(keyword.getDocumentation().toString());
 
         return keywordNode;
     }

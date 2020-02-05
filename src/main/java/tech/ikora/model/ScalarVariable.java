@@ -26,7 +26,7 @@ public class ScalarVariable extends Variable {
         }
 
         ScalarVariable variable = (ScalarVariable)other;
-        boolean same = getName().equalsValue(variable.getName());
+        boolean same = getName().equalsIgnorePosition(variable.getName());
         same &= LevenshteinDistance.index(getArguments(), variable.getArguments()) == 0.0;
 
         return same ? 0.0 : 1.0;

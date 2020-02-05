@@ -25,7 +25,7 @@ public class SetTestVariable extends LibraryKeyword implements ScopeModifier {
             runtime.getErrors().registerInternalError(
                     call.getFile(),
                     "Failed to update test scope: no argument found.",
-                    call.getPosition()
+                    call.getRange()
             );
         }
         else{
@@ -46,7 +46,7 @@ public class SetTestVariable extends LibraryKeyword implements ScopeModifier {
                 runtime.getErrors().registerInternalError(
                         call.getFile(),
                         "Failed to update test scope: malformed variable.",
-                        call.getPosition()
+                        call.getRange()
                 );
             }
         }

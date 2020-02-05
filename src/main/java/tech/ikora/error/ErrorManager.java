@@ -1,6 +1,6 @@
 package tech.ikora.error;
 
-import tech.ikora.model.Position;
+import tech.ikora.model.Range;
 
 import java.io.File;
 import java.util.HashMap;
@@ -21,15 +21,15 @@ public class ErrorManager {
         return fileErrors.getOrDefault(file, new Errors());
     }
 
-    public void registerSyntaxError(File file, String message, Position position){
+    public void registerSyntaxError(File file, String message, Range range){
         Errors errors = fileErrors.getOrDefault(file, new Errors());
-        errors.registerSyntaxError(message, position);
+        errors.registerSyntaxError(message, range);
         fileErrors.putIfAbsent(file, errors);
     }
 
-    public void registerSymbolError(File file, String message, Position position){
+    public void registerSymbolError(File file, String message, Range range){
         Errors errors = fileErrors.getOrDefault(file, new Errors());
-        errors.registerSymbolError(message, position);
+        errors.registerSymbolError(message, range);
         fileErrors.putIfAbsent(file, errors);
     }
 
@@ -39,9 +39,9 @@ public class ErrorManager {
         fileErrors.putIfAbsent(file, errors);
     }
 
-    public void registerInternalError(File file, String message, Position position){
+    public void registerInternalError(File file, String message, Range range){
         Errors errors = fileErrors.getOrDefault(file, new Errors());
-        errors.registerInternalError(message, position);
+        errors.registerInternalError(message, range);
         fileErrors.putIfAbsent(file, errors);
     }
 

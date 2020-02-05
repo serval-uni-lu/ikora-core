@@ -22,7 +22,7 @@ class BuilderTest {
 
         final TestCase testCase = sourceFile.get().getTestCases().get(0);
         assertEquals(1, testCase.getSteps().size());
-        assertEquals(2, testCase.getPosition().getStartMark().getLine());
+        assertEquals(2, testCase.getRange().getStart().getLine());
 
         final KeywordCall step = (KeywordCall)testCase.getSteps().get(0);
         assertEquals(1, step.getArgumentList().size());

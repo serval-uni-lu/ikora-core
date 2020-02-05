@@ -141,7 +141,7 @@ public class KeywordCall extends Step {
             return thisCallee.get() == otherCallee.get() ? 0 : 1;
         }
 
-        boolean sameName = this.getName().equalsValue(call.getName());
+        boolean sameName = this.getName().equalsIgnorePosition(call.getName());
         boolean sameArguments = LevenshteinDistance.index(this.argumentList, call.argumentList) == 0.0;
 
         return sameName && sameArguments ? 0 : 1;
@@ -161,7 +161,7 @@ public class KeywordCall extends Step {
         else{
             KeywordCall call = (KeywordCall)other;
 
-            if(!this.getName().equalsValue(call.getName())){
+            if(!this.getName().equalsIgnorePosition(call.getName())){
                 actions.add(Action.changeStepName(this, call));
             }
 

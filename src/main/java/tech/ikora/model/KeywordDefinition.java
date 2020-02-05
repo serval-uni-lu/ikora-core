@@ -10,7 +10,7 @@ import java.util.*;
 
 public abstract class KeywordDefinition extends Keyword implements Iterable<Step>, Delayable {
     private Token name;
-    private String documentation;
+    private Tokens documentation;
     private Set<Token> tags;
     private List<Step> steps;
     private TimeOut timeOut;
@@ -18,7 +18,7 @@ public abstract class KeywordDefinition extends Keyword implements Iterable<Step
     KeywordDefinition(){
         steps = new ArrayList<>();
         tags = new HashSet<>();
-        documentation = "";
+        documentation = new Tokens();
         this.timeOut = TimeOut.none();
     }
 
@@ -67,7 +67,7 @@ public abstract class KeywordDefinition extends Keyword implements Iterable<Step
         return steps;
     }
 
-    public void setDocumentation(String documentation){
+    public void setDocumentation(Tokens documentation){
         this.documentation = documentation;
     }
 
@@ -76,10 +76,10 @@ public abstract class KeywordDefinition extends Keyword implements Iterable<Step
         return name;
     }
 
-    public String getDocumentation() {
+    @Override
+    public Tokens getDocumentation() {
         return documentation;
     }
-
 
     public Set<Token> getTags() {
         return tags;
@@ -128,7 +128,7 @@ public abstract class KeywordDefinition extends Keyword implements Iterable<Step
 
         KeywordDefinition keyword = (KeywordDefinition)other;
 
-        boolean sameName = this.getName().equalsValue(keyword.getName());
+        boolean sameName = this.getName().equalsIgnorePosition(keyword.getName());
         boolean sameArguments = LevenshteinDistance.index(this.steps, keyword.steps) == 0.0;
 
         return sameName && sameArguments ? 0.0 : 1.0;
@@ -150,7 +150,7 @@ public abstract class KeywordDefinition extends Keyword implements Iterable<Step
         KeywordDefinition keyword = (KeywordDefinition)other;
 
         // check name change
-        if(!this.getName().equalsValue(keyword.getName())){
+        if(!this.getName().equalsIgnorePosition(keyword.getName())){
             actions.add(Action.changeName(this, other));
         }
 
@@ -176,7 +176,7 @@ public abstract class KeywordDefinition extends Keyword implements Iterable<Step
         else if(!this.documentation.isEmpty() && keyword.documentation.isEmpty()){
             action = Action.removeDocumentation(this, keyword);
         }
-        else if(!this.documentation.equals(keyword.documentation)){
+        else if(!this.documentation.equalsIgnorePosition(keyword.documentation)){
             action = Action.changeDocumentation(this, keyword);
         }
 

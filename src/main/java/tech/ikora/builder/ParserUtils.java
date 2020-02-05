@@ -20,7 +20,7 @@ public class ParserUtils {
             errors.registerSyntaxError(
                     reader.getFile(),
                     "Keyword definition cannot take arguments",
-                    Position.fromTokens(tokens.withoutFirst(), reader.getCurrent())
+                    Range.fromTokens(tokens.withoutFirst(), reader.getCurrent())
             );
 
             return Collections.emptyList();
@@ -30,7 +30,7 @@ public class ParserUtils {
             errors.registerInternalError(
                     reader.getFile(),
                     "Should have at least one token, but found none",
-                    Position.fromTokens(tokens, reader.getCurrent())
+                    Range.fromTokens(tokens, reader.getCurrent())
             );
 
             return Collections.emptyList();
@@ -48,7 +48,7 @@ public class ParserUtils {
                 errors.registerInternalError(
                         reader.getFile(),
                         "Failed to parse embedded argument",
-                        Position.fromToken(embeddedArgument, reader.getCurrent())
+                        Range.fromToken(embeddedArgument, reader.getCurrent())
                 );
             }
         }
@@ -62,13 +62,13 @@ public class ParserUtils {
         if(header.isEmpty()){
             errors.registerSyntaxError(reader.getFile(),
                     "Failed to parse block header",
-                    Position.fromLine(reader.getCurrent())
+                    Range.fromLine(reader.getCurrent())
             );
         }
         else if(!header.isBlock()){
             errors.registerSyntaxError(reader.getFile(),
                     "Expecting block header",
-                    Position.fromToken(header, reader.getCurrent())
+                    Range.fromToken(header, reader.getCurrent())
             );
         }
 
@@ -82,7 +82,7 @@ public class ParserUtils {
         } catch (InvalidArgumentException | MalformedVariableException | InvalidDependencyException e) {
             errors.registerSyntaxError(reader.getFile(),
                     String.format("%s: %s", ErrorMessages.FAILED_TO_PARSE_TIMEOUT, e.getMessage()),
-                    Position.fromTokens(tokens, reader.getCurrent())
+                    Range.fromTokens(tokens, reader.getCurrent())
             );
         }
     }
@@ -92,7 +92,7 @@ public class ParserUtils {
             errors.registerInternalError(
                     reader.getFile(),
                     "Not expecting an empty token",
-                    Position.fromTokens(tokens, reader.getCurrent())
+                    Range.fromTokens(tokens, reader.getCurrent())
             );
 
             return Token.empty();

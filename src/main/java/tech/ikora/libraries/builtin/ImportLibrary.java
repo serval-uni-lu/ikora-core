@@ -28,7 +28,7 @@ public class ImportLibrary extends LibraryKeyword implements ScopeModifier {
                     runtime.getErrors().registerSymbolError(
                             call.getFile(),
                             "Failed to resolve dynamic import",
-                            call.getPosition()
+                            call.getRange()
                     );
 
                     break;
@@ -42,7 +42,7 @@ public class ImportLibrary extends LibraryKeyword implements ScopeModifier {
             runtime.getErrors().registerInternalError(
                     call.getFile(),
                     e.getMessage(),
-                    call.getPosition()
+                    call.getRange()
             );
         }
     }

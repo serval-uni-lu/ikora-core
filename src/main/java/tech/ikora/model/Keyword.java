@@ -9,7 +9,7 @@ public abstract class Keyword extends Node {
 
     public abstract Type getType();
     public abstract List<Variable> getReturnVariables();
-    public abstract String getDocumentation();
+    public abstract Tokens getDocumentation();
     public abstract int getMaxNumberArguments();
     public abstract Token getName();
 }

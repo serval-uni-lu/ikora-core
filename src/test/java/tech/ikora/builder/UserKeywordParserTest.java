@@ -45,9 +45,9 @@ class UserKeywordParserTest {
         assertNotNull(keyword);
         assertTrue(errors.isEmpty());
 
-        assertEquals("Keyword with documentation", keyword.getName().getText());
+        assertEquals("Keyword with documentation", keyword.getName().toString());
         assertEquals(3, keyword.getSteps().size());
-        assertEquals("Simple documentation", keyword.getDocumentation());
+        assertEquals("Simple documentation", keyword.getDocumentation().toString());
         assertEquals(7, keyword.getTokens().size());
     }
 
@@ -62,7 +62,7 @@ class UserKeywordParserTest {
         assertNotNull(keyword);
         assertTrue(errors.isEmpty());
 
-        assertEquals("Keyword with tags", keyword.getName().getText());
+        assertEquals("Keyword with tags", keyword.getName().toString());
         assertEquals(3, keyword.getTags().size());
         assertEquals(1, keyword.getTags().stream().filter(token -> token.toString().equals("tag1")).count());
         assertEquals(1, keyword.getTags().stream().filter(token -> token.toString().equals("tag2 with space")).count());

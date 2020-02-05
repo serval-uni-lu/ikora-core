@@ -15,7 +15,7 @@ public class KeywordCallParser {
             errors.registerInternalError(
                     reader.getFile(),
                     ErrorMessages.EMPTY_TOKEN_SHOULD_BE_KEYWORD,
-                    Position.fromLine(reader.getCurrent())
+                    Range.fromLine(reader.getCurrent())
             );
         }
         else{
@@ -34,7 +34,7 @@ public class KeywordCallParser {
                     errors.registerInternalError(
                             reader.getFile(),
                             "Failed to register parameter to keyword call",
-                            Position.fromToken(token, reader.getCurrent())
+                            Range.fromToken(token, reader.getCurrent())
                     );
                 }
             }

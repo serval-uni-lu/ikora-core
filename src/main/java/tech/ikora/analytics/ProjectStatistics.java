@@ -43,12 +43,12 @@ public class ProjectStatistics {
     public int getDocumentationLength() {
         int length = 0;
 
-        Set<Node> keywords = new HashSet<>();
+        Set<KeywordDefinition> keywords = new HashSet<>();
         keywords.addAll(userKeywords);
         keywords.addAll(testCases);
 
-        for (Node keyword: keywords){
-            length += StringUtils.countLines(((KeywordDefinition)keyword).getDocumentation());
+        for (KeywordDefinition keyword: keywords){
+            length += keyword.getDocumentation().getLoc();
         }
 
         return length;

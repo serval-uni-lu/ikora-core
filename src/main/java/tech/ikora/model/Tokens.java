@@ -125,6 +125,24 @@ public class Tokens implements Iterable<Token> {
                 .collect(Collectors.joining());
     }
 
+    public boolean equalsIgnorePosition(Tokens other){
+        if(this == other){
+            return true;
+        }
+
+        if(other == null || this.size() != other.size()){
+            return false;
+        }
+
+        for(int i = 0; i < size(); ++i){
+            if (!this.get(i).equalsIgnorePosition(other.get(i))){
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public boolean isEmpty() {
         return this.tokenSet.isEmpty();
     }
@@ -144,5 +162,12 @@ public class Tokens implements Iterable<Token> {
         while (i++ < offset) iterator.next();
 
         return iterator;
+    }
+
+    public int getLoc() {
+        return (int)this.tokenSet.stream()
+                .map(Token::getLine)
+                .distinct()
+                .count();
     }
 }

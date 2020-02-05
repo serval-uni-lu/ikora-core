@@ -84,7 +84,7 @@ public class Argument extends Node {
             sameCall = this.definition.distance(argument.definition) == 0.0;
         }
 
-        boolean sameName = this.name.equalsValue(argument.getName());
+        boolean sameName = this.name.equalsIgnorePosition(argument.getName());
 
         return sameName && sameCall ? 0.0 : 1.0;
     }
@@ -99,7 +99,7 @@ public class Argument extends Node {
             return Collections.singletonList(Action.addElement(this.getClass(), this));
         }
 
-        if(this.name.equalsValue(((Argument)other).name)){
+        if(this.name.equalsIgnorePosition(((Argument)other).name)){
             return Collections.emptyList();
         }
 

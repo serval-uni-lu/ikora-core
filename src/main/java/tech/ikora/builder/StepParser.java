@@ -3,7 +3,7 @@ package tech.ikora.builder;
 import tech.ikora.error.ErrorManager;
 import tech.ikora.error.ErrorMessages;
 import tech.ikora.model.InvalidStep;
-import tech.ikora.model.Position;
+import tech.ikora.model.Range;
 import tech.ikora.model.Step;
 import tech.ikora.model.Tokens;
 
@@ -39,7 +39,7 @@ class StepParser {
             errors.registerInternalError(
                     reader.getFile(),
                     ErrorMessages.EMPTY_TOKEN_SHOULD_BE_KEYWORD,
-                    Position.fromLine(reader.getCurrent())
+                    Range.fromLine(reader.getCurrent())
             );
 
             return false;
@@ -53,7 +53,7 @@ class StepParser {
             errors.registerInternalError(
                     reader.getFile(),
                     ErrorMessages.EMPTY_TOKEN_SHOULD_BE_KEYWORD,
-                    Position.fromLine(reader.getCurrent())
+                    Range.fromLine(reader.getCurrent())
             );
 
             return false;

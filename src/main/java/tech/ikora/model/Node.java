@@ -113,13 +113,13 @@ public abstract class Node implements Differentiable {
         return tokens;
     }
 
-    public Position getPosition(){
-        return Position.fromTokens(tokens, null);
+    public Range getRange(){
+        return Range.fromTokens(tokens, null);
     }
 
     public int getLoc() {
-        int startLine = getPosition().getStartMark().getLine();
-        int endLine = getPosition().getEndMark().getLine();
+        int startLine = getRange().getStart().getLine();
+        int endLine = getRange().getEnd().getLine();
 
         return this.sourceFile.getLinesOfCode(startLine, endLine);
     }

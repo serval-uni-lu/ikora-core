@@ -27,7 +27,7 @@ class VariableTableParser {
                 errors.registerInternalError(
                         reader.getFile(),
                         ErrorMessages.EMPTY_TOKEN_NOT_EXPECTED,
-                        Position.fromLine(reader.getCurrent())
+                        Range.fromLine(reader.getCurrent())
                 );
 
                 continue;
@@ -39,7 +39,7 @@ class VariableTableParser {
                 errors.registerInternalError(
                         reader.getFile(),
                         String.format("Invalid variable: %s", tokens.first().getText()),
-                        Position.fromToken(tokens.first(), reader.getCurrent())
+                        Range.fromToken(tokens.first(), reader.getCurrent())
                 );
 
                 continue;
@@ -54,7 +54,7 @@ class VariableTableParser {
                     errors.registerInternalError(
                             reader.getFile(),
                             String.format("Invalid variable dependency: %s", token),
-                            Position.fromToken(token, reader.getCurrent())
+                            Range.fromToken(token, reader.getCurrent())
                     );
                 }
             }

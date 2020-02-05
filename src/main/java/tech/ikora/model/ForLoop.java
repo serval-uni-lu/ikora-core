@@ -16,17 +16,17 @@ import java.util.Optional;
 public class ForLoop extends Step {
     private final List<Step> steps;
     private final Variable iterator;
-    private final Step range;
+    private final Step interval;
 
-    public ForLoop(Token name, Variable iterator, Step range, List<Step> steps) {
+    public ForLoop(Token name, Variable iterator, Step interval, List<Step> steps) {
         super(name);
 
         this.iterator = iterator;
-        this.range = range;
+        this.interval = interval;
 
         this.addToken(name);
         this.addTokens(this.iterator.getTokens());
-        this.addTokens(this.range.getTokens());
+        this.addTokens(this.interval.getTokens());
 
         this.steps = new ArrayList<>(steps.size());
         for(Step step: steps){
@@ -44,8 +44,8 @@ public class ForLoop extends Step {
         return iterator;
     }
 
-    public Step getRange() {
-        return range;
+    public Step getInterval() {
+        return interval;
     }
 
     @Override
@@ -81,7 +81,7 @@ public class ForLoop extends Step {
         ForLoop forLoop = (ForLoop)other;
 
         boolean sameIterator = this.iterator.distance(forLoop.iterator) == 0.0;
-        boolean sameRange = this.range.distance(forLoop.range) == 0.0;
+        boolean sameRange = this.interval.distance(forLoop.interval) == 0.0;
         boolean sameSteps = LevenshteinDistance.index(this.steps, forLoop.steps) == 0.0;
 
         return sameIterator && sameRange && sameSteps ? 0.0 : 1.0;
@@ -103,7 +103,7 @@ public class ForLoop extends Step {
         ForLoop forLoop = (ForLoop)other;
 
         actions.addAll(this.iterator.differences(forLoop.iterator));
-        actions.addAll(this.range.differences(forLoop.range));
+        actions.addAll(this.interval.differences(forLoop.interval));
         actions.addAll(LevenshteinDistance.getDifferences(this.steps, forLoop.steps));
 
         return actions;

@@ -74,7 +74,7 @@ class UserKeywordParser {
 
     private static void parseDocumentation(LineReader reader, Tokens tokens, UserKeyword userKeyword) throws IOException {
         userKeyword.addTokens(tokens.setType(Token.Type.DOCUMENTATION));
-        userKeyword.setDocumentation(tokens.toString());
+        userKeyword.setDocumentation(tokens);
     }
 
     private static void parseTags(LineReader reader, Tokens tokens, UserKeyword userKeyword) throws IOException {
@@ -95,7 +95,7 @@ class UserKeywordParser {
                 errors.registerSyntaxError(
                         reader.getFile(),
                         String.format("%s: %s", ErrorMessages.FAILED_TO_PARSE_PARAMETER, e.getMessage()),
-                        Position.fromToken(token, reader.getCurrent())
+                        Range.fromToken(token, reader.getCurrent())
                 );
             }
         }
@@ -110,7 +110,7 @@ class UserKeywordParser {
                 errors.registerSyntaxError(
                         reader.getFile(),
                         String.format("%s: %s", ErrorMessages.RETURN_VALUE_SHOULD_BE_A_VARIABLE, e.getMessage()),
-                        Position.fromToken(token, reader.getCurrent())
+                        Range.fromToken(token, reader.getCurrent())
                 );
             }
         }
@@ -126,7 +126,7 @@ class UserKeywordParser {
             errors.registerSyntaxError(
                     step.getFile(),
                     String.format("%s: %s", ErrorMessages.FAILED_TO_PARSE_TEARDOWN, e.getMessage()),
-                    step.getPosition()
+                    step.getRange()
             );
         }
     }
@@ -142,7 +142,7 @@ class UserKeywordParser {
            errors.registerSyntaxError(
                    step.getSourceFile().getFile(),
                    ErrorMessages.FAILED_TO_ADD_STEP_TO_KEYWORD,
-                   step.getPosition()
+                   step.getRange()
             );
         }
     }

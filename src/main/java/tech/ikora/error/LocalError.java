@@ -1,16 +1,16 @@
 package tech.ikora.error;
 
-import tech.ikora.model.Position;
+import tech.ikora.model.Range;
 
 public abstract class LocalError extends Error {
-    private final Position position;
+    private final Range range;
 
-    public LocalError(String message, Position position){
+    public LocalError(String message, Range range){
         super(message);
-        this.position = position;
+        this.range = range;
     }
 
-    public Position getPosition() {
-        return position;
+    public Range getRange() {
+        return range;
     }
 }

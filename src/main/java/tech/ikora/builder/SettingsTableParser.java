@@ -82,7 +82,7 @@ class SettingsTableParser {
             errors.registerSyntaxError(
                     step.getFile(),
                     ErrorMessages.FAILED_TO_PARSE_TEMPLATE,
-                    step.getPosition()
+                    step.getRange()
             );
         }
     }
@@ -96,7 +96,7 @@ class SettingsTableParser {
             errors.registerSyntaxError(
                     step.getFile(),
                     String.format("%s: %s", ErrorMessages.FAILED_TO_PARSE_TEARDOWN, e.getMessage()),
-                    step.getPosition()
+                    step.getRange()
             );
         }
     }
@@ -110,7 +110,7 @@ class SettingsTableParser {
             errors.registerSyntaxError(
                     step.getFile(),
                     String.format("%s: %s", ErrorMessages.FAILED_TO_PARSE_SETUP, e.getMessage()),
-                    step.getPosition()
+                    step.getRange()
             );
         }
     }
@@ -136,7 +136,7 @@ class SettingsTableParser {
             errors.registerSyntaxError(
                     step.getFile(),
                     String.format("%s: %s", ErrorMessages.FAILED_TO_PARSE_TEARDOWN, e.getMessage()),
-                    step.getPosition()
+                    step.getRange()
             );
         }
     }
@@ -150,7 +150,7 @@ class SettingsTableParser {
             errors.registerSyntaxError(
                     step.getFile(),
                     String.format("%s: %s", ErrorMessages.FAILED_TO_PARSE_SETUP, e.getMessage()),
-                    step.getPosition()
+                    step.getRange()
             );
         }
     }

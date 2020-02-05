@@ -85,8 +85,8 @@ public abstract class LibraryKeyword extends Keyword {
 
     protected abstract void run(Runtime runtime);
 
-    public String getDocumentation(){
-        return "";
+    public Tokens getDocumentation(){
+        return new Tokens();
     }
 
     @Override

@@ -1,6 +1,6 @@
 package tech.ikora.error;
 
-import tech.ikora.model.Position;
+import tech.ikora.model.Range;
 
 import java.io.File;
 import java.util.HashSet;
@@ -21,13 +21,13 @@ public class Errors {
         unhandledErrors = new HashSet<>();
     }
 
-    public void registerSyntaxError(String message, Position position){
-        SyntaxError error = new SyntaxError(message, position);
+    public void registerSyntaxError(String message, Range range){
+        SyntaxError error = new SyntaxError(message, range);
         syntaxErrors.add(error);
     }
 
-    public void registerSymbolError(String message, Position position){
-        SymbolError error = new SymbolError(message, position);
+    public void registerSymbolError(String message, Range range){
+        SymbolError error = new SymbolError(message, range);
         symbolErrors.add(error);
     }
 
@@ -36,8 +36,8 @@ public class Errors {
         ioErrors.add(error);
     }
 
-    public void registerInternalError(String message, Position position){
-        InternalError error = new InternalError(message, position);
+    public void registerInternalError(String message, Range range){
+        InternalError error = new InternalError(message, range);
         internalErrors.add(error);
     }
 

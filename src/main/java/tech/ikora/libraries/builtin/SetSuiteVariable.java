@@ -25,7 +25,7 @@ public class SetSuiteVariable extends LibraryKeyword implements ScopeModifier {
             runtime.getErrors().registerInternalError(
                     call.getFile(),
                     "Failed to update suite scope: no argument found.",
-                    call.getPosition()
+                    call.getRange()
             );
         }
         else{
@@ -46,7 +46,7 @@ public class SetSuiteVariable extends LibraryKeyword implements ScopeModifier {
                 runtime.getErrors().registerInternalError(
                         call.getFile(),
                         "Failed to update suite scope: malformed variable.",
-                        call.getPosition()
+                        call.getRange()
                 );
             }
         }

@@ -69,7 +69,7 @@ public class TimeOut extends Node {
 
     @Override
     public boolean matches(Token name) {
-        return this.name.equalsValue(name);
+        return this.name.equalsIgnorePosition(name);
     }
 
     @Override
