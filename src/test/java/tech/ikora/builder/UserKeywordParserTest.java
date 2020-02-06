@@ -70,6 +70,20 @@ class UserKeywordParserTest {
         assertEquals(6, keyword.getTokens().size());
     }
 
+    @Test
+    void testDocumentationParseSameAsName() throws IOException {
+        String text = "Keyword doing something\n" +
+                "\t[Documentation]\tKeyword doing something\n" +
+                "\t Some step";
+
+        ErrorManager errors = new ErrorManager();
+        UserKeyword keyword = createKeyword(text, errors);
+        assertNotNull(keyword);
+        assertTrue(errors.isEmpty());
+
+        assertEquals(keyword.getName().toString(), keyword.getDocumentation().toString());
+    }
+
     private UserKeyword createKeyword(String text, ErrorManager errors) throws IOException {
         DynamicImports dynamicImports = new DynamicImports();
         Reader targetReader = new StringReader(text);

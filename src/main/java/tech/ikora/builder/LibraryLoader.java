@@ -8,12 +8,8 @@ import tech.ikora.model.LibraryKeyword;
 import tech.ikora.model.LibraryResources;
 import tech.ikora.model.LibraryVariable;
 import org.reflections.Reflections;
-import tech.ikora.utils.FileUtils;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URISyntaxException;
+import java.io.*;
 import java.util.List;
 import java.util.Set;
 
@@ -48,12 +44,12 @@ public class LibraryLoader {
 
     private static void loadExternalLibrariesInfo(LibraryResources libraries, ErrorManager errors){
         try {
-            File file = FileUtils.getResourceFile("libraries.json");
+            InputStream in = LibraryLoader.class.getResourceAsStream("/libraries.json");
 
             ObjectMapper mapper = new ObjectMapper();
-            List<LibraryInfo> libraryInfos = mapper.readValue(file, new TypeReference<List<LibraryInfo>>(){});
+            List<LibraryInfo> libraryInfos = mapper.readValue(in, new TypeReference<List<LibraryInfo>>(){});
             libraries.addExternalLibraries(libraryInfos);
-        } catch (IOException | URISyntaxException e) {
+        } catch (IOException e) {
             errors.registerIOError(
                     new File("libraries.json"),
                     "Failed to load internal file libraries.json containing definitions for library keywords"
