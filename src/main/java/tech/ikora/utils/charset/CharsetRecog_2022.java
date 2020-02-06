@@ -18,18 +18,6 @@ package tech.ikora.utils.charset;
  */
 abstract class CharsetRecog_2022 extends CharsetRecognizer {
 
-
-    /**
-     * Matching function shared among the 2022 detectors JP, CN and KR
-     * Counts up the number of legal an unrecognized escape sequences in
-     * the sample of text, and computes a score based on the total number &
-     * the proportion that fit the encoding.
-     *
-     * @param text            the byte buffer containing text to analyse
-     * @param textLen         the size of the text in the byte.
-     * @param escapeSequences the byte escape sequences to test for.
-     * @return match quality, in the range of 0-100.
-     */
     int match(byte[] text, int textLen, byte[][] escapeSequences) {
         int i, j;
         int escN;

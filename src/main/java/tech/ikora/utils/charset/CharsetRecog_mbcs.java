@@ -25,26 +25,8 @@ import java.util.Arrays;
  */
 abstract class CharsetRecog_mbcs extends CharsetRecognizer {
 
-    /**
-     * Get the IANA name of this charset.
-     *
-     * @return the charset name.
-     */
     abstract String getName();
 
-
-    /**
-     * Test the match of this charset with the input text data
-     * which is obtained via the CharsetDetector object.
-     *
-     * @param det The CharsetDetector, which contains the input text
-     *            to be checked for being in this charset.
-     * @return Two values packed into one int  (Damn java, anyhow)
-     * <br/>
-     * bits 0-7:  the match confidence, ranging from 0-100
-     * <br/>
-     * bits 8-15: The match reason, an enum-like value.
-     */
     int match(CharsetDetector det, int[] commonChars) {
         @SuppressWarnings("unused")
         int singleByteCharCount = 0;  //TODO Do we really need this?
@@ -129,19 +111,6 @@ abstract class CharsetRecog_mbcs extends CharsetRecognizer {
         return confidence;
     }
 
-    /**
-     * Get the next character (however many bytes it is) from the input data
-     * Subclasses for specific charset encodings must implement this function
-     * to get characters according to the rules of their encoding scheme.
-     * <p>
-     * This function is not a method of class iteratedChar only because
-     * that would require a lot of extra derived classes, which is awkward.
-     *
-     * @param it  The iteratedChar "struct" into which the returned char is placed.
-     * @param det The charset detector, which is needed to get at the input byte data
-     *            being iterated over.
-     * @return True if a character was returned, false at end of input.
-     */
     abstract boolean nextChar(iteratedChar it, CharsetDetector det);
 
     // "Character"  iterated character class.
@@ -178,9 +147,6 @@ abstract class CharsetRecog_mbcs extends CharsetRecognizer {
         }
     }
 
-    /**
-     * Shift-JIS charset recognizer.
-     */
     static class CharsetRecog_sjis extends CharsetRecog_mbcs {
         static int[] commonChars =
                 // TODO:  This set of data comes from the character frequency-
@@ -233,10 +199,6 @@ abstract class CharsetRecog_mbcs extends CharsetRecognizer {
 
     }
 
-
-    /**
-     * Big5 charset recognizer.
-     */
     static class CharsetRecog_big5 extends CharsetRecog_mbcs {
         static int[] commonChars =
                 // TODO:  This set of data comes from the character frequency-
@@ -295,12 +257,6 @@ abstract class CharsetRecog_mbcs extends CharsetRecognizer {
         }
     }
 
-
-    /**
-     * EUC charset recognizers.  One abstract class that provides the common function
-     * for getting the next character according to the EUC encoding scheme,
-     * and nested derived classes for EUC_KR, EUC_JP, EUC_CN.
-     */
     abstract static class CharsetRecog_euc extends CharsetRecog_mbcs {
 
         /*
@@ -366,10 +322,6 @@ abstract class CharsetRecog_mbcs extends CharsetRecognizer {
             return (it.done == false);
         }
 
-        /**
-         * The charset recognize for EUC-JP.  A singleton instance of this class
-         * is created and kept by the public CharsetDetector class
-         */
         static class CharsetRecog_euc_jp extends CharsetRecog_mbcs.CharsetRecog_euc {
             static int[] commonChars =
                     // TODO:  This set of data comes from the character frequency-
@@ -400,10 +352,6 @@ abstract class CharsetRecog_mbcs extends CharsetRecognizer {
             }
         }
 
-        /**
-         * The charset recognize for EUC-KR.  A singleton instance of this class
-         * is created and kept by the public CharsetDetector class
-         */
         static class CharsetRecog_euc_kr extends CharsetRecog_mbcs.CharsetRecog_euc {
             static int[] commonChars =
                     // TODO:  This set of data comes from the character frequency-
@@ -435,9 +383,6 @@ abstract class CharsetRecog_mbcs extends CharsetRecognizer {
         }
     }
 
-    /**
-     * GB-18030 recognizer. Uses simplified Chinese statistics.
-     */
     static class CharsetRecog_gb_18030 extends CharsetRecog_mbcs {
 
         static int[] commonChars =

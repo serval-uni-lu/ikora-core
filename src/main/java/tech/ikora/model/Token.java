@@ -100,6 +100,10 @@ public class Token implements Comparable<Token> {
         return this.type == Type.CONTINUATION;
     }
 
+    public boolean isVariable(){
+        return this.type == Type.VARIABLE;
+    }
+
     public boolean equalsIgnorePosition(Token name) {
         return name.text.equalsIgnoreCase(this.text);
     }

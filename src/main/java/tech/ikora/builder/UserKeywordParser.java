@@ -90,7 +90,7 @@ class UserKeywordParser {
         for(Token token: tokens){
             try {
                 userKeyword.addParameter(Variable.create(token));
-                userKeyword.addToken(token.setType(Token.Type.VARIABLE));
+                userKeyword.addToken(token);
             } catch (MalformedVariableException e) {
                 errors.registerSyntaxError(
                         reader.getFile(),
@@ -105,7 +105,6 @@ class UserKeywordParser {
         for(Token token: tokens){
             try {
                 userKeyword.addReturnVariable(Variable.create(token));
-                userKeyword.addToken(token.setType(Token.Type.VARIABLE));
             } catch (MalformedVariableException e) {
                 errors.registerSyntaxError(
                         reader.getFile(),

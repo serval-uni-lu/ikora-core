@@ -3,51 +3,49 @@ package tech.ikora.model;
 import tech.ikora.error.ErrorManager;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class LibraryResources {
-    private Map<String, Item<LibraryKeyword>> keywordsNames;
+    private Map<String, KeywordObject> keywordsNames;
     private List<LibraryVariable> variables;
+    private Map<String, LibraryKeywordInfo> libraryKeywordNames;
 
     public LibraryResources() {
         this.keywordsNames = new HashMap<>();
         this.variables = new ArrayList<>();
+        this.libraryKeywordNames = new HashMap();
     }
 
-    public <T> void loadClass(Class<T> libraryClass, ErrorManager errors){
-        if(LibraryKeyword.class.isAssignableFrom(libraryClass)){
-            String keyword = LibraryKeyword.toKeyword((Class<? extends LibraryKeyword>) libraryClass);
-            keywordsNames.put(keyword, new Item<>((Class<? extends LibraryKeyword>) libraryClass));
-        }
-        else if(LibraryVariable.class.isAssignableFrom(libraryClass)){
-            try {
-                variables.add((LibraryVariable) libraryClass.getConstructor().newInstance());
-            } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
-                errors.registerLibraryError(
-                        libraryClass.getName(),
-                        String.format("Failed to load library variable: %s", e.getMessage())
-                );
-            }
-        }
-        else{
+    public void loadVariable(Class<? extends LibraryVariable> libraryVariable, ErrorManager errors){
+        try {
+            variables.add(libraryVariable.getConstructor().newInstance());
+        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
             errors.registerLibraryError(
-                    libraryClass.getName(),
-                    "Unknown library element"
+                    libraryVariable.getName(),
+                    String.format("Failed to load library variable: %s", e.getMessage())
             );
         }
     }
 
+    public void loadKeyword(Class<? extends LibraryKeyword> libraryKeyword, ErrorManager errors){
+        String keyword = LibraryKeyword.toKeyword(libraryKeyword);
+        keywordsNames.put(keyword, new KeywordObject(libraryKeyword));
+    }
+
     public Keyword findKeyword(Token name) throws InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
-        Item<LibraryKeyword> keyword = keywordsNames.get(name.getText().toLowerCase());
+        String key = name.toString().toLowerCase();
+
+        LibraryKeyword keyword = libraryKeywordNames.get(key);
 
         if(keyword == null){
-            return null;
+            KeywordObject object = keywordsNames.get(name.getText().toLowerCase());
+
+            if(object != null){
+                keyword = object.getKeyword();
+            }
         }
 
-        return keyword.getObject();
+        return keyword;
     }
 
     public Keyword findKeyword(String library, Token name) throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
@@ -69,16 +67,26 @@ public class LibraryResources {
         return null;
     }
 
-    protected class Item<T> {
-        private final Class<? extends T> itemClass;
-        T itemObject;
+    public void addExternalLibraries(List<LibraryInfo> librariesInfo) {
+        for(LibraryInfo library: librariesInfo){
+            for(LibraryKeywordInfo keyword: library.getKeywords()){
+                keyword.setLibrary(library);
+                this.libraryKeywordNames.put(keyword.getName().toString(), keyword);
+            }
+        }
+    }
 
-        Item(Class<? extends T> libraryClass) {
+    protected static class KeywordObject {
+        private final Class<? extends LibraryKeyword> itemClass;
+        private LibraryKeyword itemObject;
+
+        KeywordObject(Class<? extends LibraryKeyword> libraryClass) {
+            libraryClass.getPackage().getName();
             this.itemClass = libraryClass;
             this.itemObject = null;
         }
 
-        public T getObject() throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
+        public LibraryKeyword getKeyword() throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
             if(itemObject == null) {
                 itemObject = itemClass.getConstructor().newInstance();
             }

@@ -1257,11 +1257,6 @@ abstract class CharsetRecog_sbcs extends CharsetRecognizer {
             this.langIndex = langIndex;
         }
 
-        /**
-         * @param lang language to find
-         * @return the index into CharsetRecog_8859_1.ngrams_8859_1 that matches his language;
-         * throws IllegalArgumentException if language can't be found
-         */
         static int findLangIndex(String lang) {
             for (int i = 0; i < CharsetRecog_8859_1.ngrams_8859_1.length; i++) {
                 NGramsPlusLang ngpl = CharsetRecog_8859_1.ngrams_8859_1[i];

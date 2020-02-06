@@ -1,31 +1,63 @@
 package tech.ikora.builder;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import tech.ikora.error.ErrorManager;
+import tech.ikora.model.LibraryInfo;
 import tech.ikora.model.LibraryKeyword;
 import tech.ikora.model.LibraryResources;
 import tech.ikora.model.LibraryVariable;
 import org.reflections.Reflections;
+import tech.ikora.utils.FileUtils;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.util.List;
 import java.util.Set;
 
 public class LibraryLoader {
     private LibraryLoader() {}
 
     public static LibraryResources load(ErrorManager errors) {
-        Reflections reflections = new Reflections("tech.ikora.libraries");
-        Set<Class<? extends LibraryKeyword>> keywordClasses = reflections.getSubTypesOf(LibraryKeyword.class);
-        Set<Class<? extends LibraryVariable>> variableClasses = reflections.getSubTypesOf(LibraryVariable.class);
-
         LibraryResources libraries = new LibraryResources();
 
-        for(Class<? extends LibraryKeyword> libraryClass: keywordClasses) {
-            libraries.loadClass(libraryClass, errors);
+        loadBuiltInLibrary(libraries, errors);
+        loadExternalLibrariesInfo(libraries, errors);
+
+        return libraries;
+    }
+
+    private static void loadBuiltInLibrary(LibraryResources libraries, ErrorManager errors){
+        Reflections keywordReflections = new Reflections("tech.ikora.libraries.builtin.keywords");
+        Reflections variableReflections = new Reflections("tech.ikora.libraries.builtin.variables");
+
+        Set<Class<? extends LibraryKeyword>> builtInKeywords = keywordReflections.getSubTypesOf(LibraryKeyword.class);
+        Set<Class<? extends LibraryVariable>> variableClasses = variableReflections.getSubTypesOf(LibraryVariable.class);
+
+
+        for(Class<? extends LibraryKeyword> builtInKeyword: builtInKeywords) {
+            libraries.loadKeyword(builtInKeyword, errors);
         }
 
         for(Class<? extends LibraryVariable> libraryClass: variableClasses){
-            libraries.loadClass(libraryClass, errors);
+            libraries.loadVariable(libraryClass, errors);
         }
+    }
 
-        return libraries;
+    private static void loadExternalLibrariesInfo(LibraryResources libraries, ErrorManager errors){
+        try {
+            File file = FileUtils.getResourceFile("libraries.json");
+
+            ObjectMapper mapper = new ObjectMapper();
+            List<LibraryInfo> libraryInfos = mapper.readValue(file, new TypeReference<List<LibraryInfo>>(){});
+            libraries.addExternalLibraries(libraryInfos);
+        } catch (IOException | URISyntaxException e) {
+            errors.registerIOError(
+                    new File("libraries.json"),
+                    "Failed to load internal file libraries.json containing definitions for library keywords"
+            );
+        }
     }
 }

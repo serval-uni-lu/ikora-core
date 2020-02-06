@@ -1,8 +1,8 @@
 package tech.ikora.builder;
 
-import tech.ikora.libraries.builtin.ImportLibrary;
-import tech.ikora.libraries.builtin.ImportResource;
-import tech.ikora.libraries.builtin.ImportVariables;
+import tech.ikora.libraries.builtin.keywords.ImportLibrary;
+import tech.ikora.libraries.builtin.keywords.ImportResource;
+import tech.ikora.libraries.builtin.keywords.ImportVariables;
 import org.apache.commons.lang3.NotImplementedException;
 import tech.ikora.model.*;
 

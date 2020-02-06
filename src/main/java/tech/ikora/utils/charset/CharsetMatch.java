@@ -15,19 +15,6 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 
 
-/**
- * This class represents a charset that has been identified by a CharsetDetector
- * as a possible encoding for a set of input data.  From an instance of this
- * class, you can ask for a confidence level in the charset identification,
- * or for Java Reader or String to access the original byte data in Unicode form.
- * <p>
- * Instances of this class are created only by CharsetDetectors.
- * <p>
- * Note:  this class has a natural ordering that is inconsistent with equals.
- * The natural ordering is based on the match confidence value.
- *
- * @stable ICU 3.4
- */
 public class CharsetMatch implements Comparable<CharsetMatch> {
 
 
@@ -83,18 +70,6 @@ public class CharsetMatch implements Comparable<CharsetMatch> {
         fLang = lang;
     }
 
-    /**
-     * Create a java.io.Reader for reading the Unicode character data corresponding
-     * to the original byte data supplied to the Charset detect operation.
-     * <p>
-     * CAUTION:  if the source of the byte data was an InputStream, a Reader
-     * can be created for only one matching char set using this method.  If more
-     * than one charset needs to be tried, the caller will need to reset
-     * the InputStream and create InputStreamReaders itself, based on the charset name.
-     *
-     * @return the Reader for the Unicode character data.
-     * @stable ICU 3.4
-     */
     public Reader getReader() {
         InputStream inputStream = fInputStream;
 
@@ -110,31 +85,11 @@ public class CharsetMatch implements Comparable<CharsetMatch> {
         }
     }
 
-    /**
-     * Create a Java String from Unicode character data corresponding
-     * to the original byte data supplied to the Charset detect operation.
-     *
-     * @return a String created from the converted input data.
-     * @stable ICU 3.4
-     */
     public String getString() throws java.io.IOException {
         return getString(-1);
 
     }
 
-    /**
-     * Create a Java String from Unicode character data corresponding
-     * to the original byte data supplied to the Charset detect operation.
-     * The length of the returned string is limited to the specified size;
-     * the string will be trunctated to this length if necessary.  A limit value of
-     * zero or less is ignored, and treated as no limit.
-     *
-     * @param maxLength The maximium length of the String to be created when the
-     *                  source of the data is an input stream, or -1 for
-     *                  unlimited length.
-     * @return a String created from the converted input data.
-     * @stable ICU 3.4
-     */
     public String getString(int maxLength) throws java.io.IOException {
         String result = null;
         if (fInputStream != null) {
@@ -169,60 +124,19 @@ public class CharsetMatch implements Comparable<CharsetMatch> {
 
     }
 
-    /**
-     * Get an indication of the confidence in the charset detected.
-     * Confidence values range from 0-100, with larger numbers indicating
-     * a better match of the input data to the characteristics of the
-     * charset.
-     *
-     * @return the confidence in the charset match
-     * @stable ICU 3.4
-     */
     public int getConfidence() {
         return fConfidence;
     }
 
-    /**
-     * Get the name of the detected charset.
-     * The name will be one that can be used with other APIs on the
-     * platform that accept charset names.  It is the "Canonical name"
-     * as defined by the class java.nio.charset.Charset; for
-     * charsets that are registered with the IANA charset registry,
-     * this is the MIME-preferred registerd name.
-     *
-     * @return The name of the charset.
-     * @stable ICU 3.4
-     * @see java.nio.charset.Charset
-     * @see java.io.InputStreamReader
-     */
     public String getName() {
         return fCharsetName;
     }
     //   gave us a byte array.
 
-    /**
-     * Get the ISO code for the language of the detected charset.
-     *
-     * @return The ISO code for the language or <code>null</code> if the language cannot be determined.
-     * @stable ICU 3.4
-     */
     public String getLanguage() {
         return fLang;
     }
 
-    /**
-     * Compare to other CharsetMatch objects.
-     * Comparison is based on the match confidence value, which
-     * allows CharsetDetector.detectAll() to order its results.
-     *
-     * @param other the CharsetMatch object to compare against.
-     * @return a negative integer, zero, or a positive integer as the
-     * confidence level of this CharsetMatch
-     * is less than, equal to, or greater than that of
-     * the argument.
-     * @throws ClassCastException if the argument is not a CharsetMatch.
-     * @stable ICU 4.4
-     */
     public int compareTo(CharsetMatch other) {
         int compareResult = 0;
         if (this.fConfidence > other.fConfidence) {
@@ -233,11 +147,6 @@ public class CharsetMatch implements Comparable<CharsetMatch> {
         return compareResult;
     }
 
-    /**
-     * compare this CharsetMatch to another based on confidence value
-     * @param o the CharsetMatch object to compare against
-     * @return true if equal
-     */
     public boolean equals(Object o) {
         if (o instanceof CharsetMatch) {
             CharsetMatch that = (CharsetMatch) o;
@@ -247,10 +156,6 @@ public class CharsetMatch implements Comparable<CharsetMatch> {
         return false;
     }
 
-    /**
-     * generates a hashCode based on the confidence value
-     * @return the hashCode
-     */
     public int hashCode() {
         return fConfidence;
     }

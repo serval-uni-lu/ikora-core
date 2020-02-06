@@ -16,6 +16,8 @@ public abstract class Variable extends Node {
 
     public Variable(Token name) {
         setName(name);
+
+        name.setType(Token.Type.VARIABLE);
         this.arguments = new ArrayList<>();
     }
 
