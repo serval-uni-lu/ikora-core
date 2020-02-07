@@ -7,6 +7,8 @@
     <version>0.0.2-SNAPSHOT</version>
 
     <name>Ikora Core: Robot Framework Engine</name>
+    <url>https://github.com/kabinja/ikora-core</url>
+
     <description>
         In its current version this engine allows to parse simple Robot Framework projects but is still missing
         some features to be fully compatible with the official engine.
@@ -200,19 +202,19 @@
                     </plugin>
                 </plugins>
             </build>
+
+            <distributionManagement>
+                <snapshotRepository>
+                    <id>ossrh</id>
+                    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+                </snapshotRepository>
+                <repository>
+                    <id>ossrh</id>
+                    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+                </repository>
+            </distributionManagement>
         </profile>
     </profiles>
-
-    <distributionManagement>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-        <repository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
-    </distributionManagement>
 
     <dependencies>
         <dependency>
