@@ -19,9 +19,20 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+/**
+ * Entry point to construct the call graph and AST of a Robot Framework project
+ */
 public class Builder {
     private Builder(){}
 
+    /**
+     * Build a project indicating specifically which files and folders to analyze.
+     * Note that if a relative path to another file is present, it will be included in the analysis as well.
+     * @param files List File or Folder containing the files to analyze
+     * @param configuration Configuration file
+     * @param link If set to truth, resolve symbols otherwise just parse the files
+     * @return Results containing the graph, statistics about the build and eventual errors
+     */
     public static BuildResult build(Set<File> files, Configuration configuration, boolean link){
         BuildResult result = new BuildResult();
         ErrorManager errors = new ErrorManager();
@@ -60,6 +71,14 @@ public class Builder {
         return result;
     }
 
+    /**
+     * Build a project from a folder or from a single file.
+     * Note that if a relative path to another file is present, it will be included in the analysis as well.
+     * @param file File or Folder containing the files to analyze
+     * @param configuration Configuration file
+     * @param link If set to truth, resolve symbols otherwise just parse the files
+     * @return Results containing the graph, statistics about the build and eventual errors
+     */
     public static BuildResult build(File file, Configuration configuration, boolean link) {
         BuildResult result = new BuildResult();
         ErrorManager errors = new ErrorManager();
