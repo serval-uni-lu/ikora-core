@@ -52,7 +52,6 @@ public class ViolationDetection {
             switch (cause){
                 case MULTIPLE_DEFINITIONS:
                     duplicatedKeyword(step, violations);
-                    duplicatedVariable(step, violations);
                     break;
                 case TRANSITIVE_DEPENDENCY:
                     transitiveDependency(step, violations);
@@ -74,10 +73,6 @@ public class ViolationDetection {
                 violations.add(new Violation(Violation.Level.ERROR, call, Violation.Cause.NO_DEFINITION_FOUND));
             }
         });
-    }
-
-    private static void duplicatedVariable(Step step, List<Violation> violations) {
-        throw new UnsupportedOperationException();
     }
 
     private static void transitiveDependency(Step step, List<Violation> violations) {
