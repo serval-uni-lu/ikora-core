@@ -2,6 +2,7 @@ package tech.ikora.builder;
 
 import tech.ikora.error.ErrorManager;
 import tech.ikora.error.ErrorMessages;
+import tech.ikora.exception.InvalidMetadataException;
 import tech.ikora.exception.InvalidTypeException;
 import tech.ikora.utils.StringUtils;
 import tech.ikora.model.*;
@@ -42,7 +43,7 @@ class SettingsTableParser {
                 parseVariable(reader, tokens.withoutTag("variables"), settings);
             }
             else if(StringUtils.compareNoCase(label, "metadata")) {
-                parseMetadata(reader, tokens.withoutTag("metadata"), settings);
+                parseMetadata(reader, tokens.withoutTag("metadata"), settings, errors);
             }
             else if(StringUtils.compareNoCase(label, "suite setup")) {
                 parseSuiteSetup(reader, tokens.withoutTag("suite setup"), settings, errors);
@@ -66,7 +67,7 @@ class SettingsTableParser {
                 parseTestTemplate(reader, tokens.withoutTag("test template"), settings, errors);
             }
             else if(StringUtils.compareNoCase(label, "test timeout")){
-                ParserUtils.parseTimeOut(reader, tokens, settings, errors);
+                ParserUtils.parseTimeOut(reader, tokens.withoutTag("test timeout"), settings, errors);
             }
         }
 
@@ -117,13 +118,13 @@ class SettingsTableParser {
 
     private static void parseForceTags(LineReader reader, Tokens tokens, Settings settings) throws IOException {
         for(Token token: tokens.withoutIndent()){
-            settings.addForceTag(token.getText());
+            settings.addForceTag(token);
         }
     }
 
     private static void parseDefaultTags(LineReader reader, Tokens tokens, Settings settings) throws IOException {
         for(Token token: tokens.withoutIndent()){
-            settings.addDefaultTag(token.getText());
+            settings.addDefaultTag(token);
         }
     }
 
@@ -155,17 +156,37 @@ class SettingsTableParser {
         }
     }
 
-    private static void parseMetadata(LineReader reader, Tokens tokens, Settings settings) throws IOException {
-        settings.addMetadata(tokens.first().getText(), tokens.get(1));
+    private static void parseMetadata(LineReader reader, Tokens tokens, Settings settings, ErrorManager errors) throws IOException {
+        try{
+            final Token key = tokens.size() > 0 ? tokens.first() : null;
+            final Token value = tokens.size() > 1 ? tokens.get(1) : null;
+
+            settings.addMetadata(key, value);
+
+            if(tokens.size() > 2){
+                errors.registerSyntaxError(
+                        reader.getFile(),
+                        ErrorMessages.TOO_MANY_METADATA_ARGUMENTS,
+                        Range.fromTokens(tokens.withoutFirst(2), reader.getCurrent())
+                );
+            }
+
+        } catch (InvalidMetadataException e){
+            errors.registerSyntaxError(
+                    reader.getFile(),
+                    String.format("%s: %s", ErrorMessages.FAILED_TO_PARSE_METADATA, e.getMessage()),
+                    Range.fromTokens(tokens, reader.getCurrent())
+            );
+        }
     }
 
     private static void parseVariable(LineReader reader, Tokens tokens, Settings settings) throws IOException {
-        String file = tokens.first().getText();
+        Token file = tokens.first();
 
-        List<String> parameters = new ArrayList<>();
+        List<Token> parameters = new ArrayList<>();
         for(Token token: tokens.withoutFirst()){
             if(token.isText()){
-                parameters.add(token.getText());
+                parameters.add(token);
             }
         }
 

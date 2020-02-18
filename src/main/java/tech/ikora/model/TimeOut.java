@@ -20,6 +20,9 @@ public class TimeOut extends Node {
     private final boolean isNone;
 
     public TimeOut(Token name, Token errorMessage) throws MalformedVariableException, InvalidDependencyException {
+        addToken(name);
+        addToken(errorMessage);
+
         this.name = name;
         this.errorMessage = errorMessage;
 

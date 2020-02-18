@@ -1,12 +1,12 @@
 package tech.ikora.model;
 
+import tech.ikora.exception.InvalidMetadataException;
 import tech.ikora.exception.InvalidTypeException;
 import tech.ikora.utils.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -17,8 +17,8 @@ public class Settings implements Delayable {
     private List<Resources> externalResourcesTable;
     private List<Library> libraryTable;
 
-    private List<String> defaultTags;
-    private List<String> forceTags;
+    private Set<Token> defaultTags;
+    private Set<Token> forceTags;
 
     private String documentation;
 
@@ -39,7 +39,8 @@ public class Settings implements Delayable {
         this.resourcesTable = new ArrayList<>();
         this.externalResourcesTable = new ArrayList<>();
         this.libraryTable = new ArrayList<>();
-        this.defaultTags = new ArrayList<>();
+        this.defaultTags = new HashSet<>();
+        this.forceTags = new HashSet<>();
         this.timeOut = TimeOut.none();
         this.metadata = new Metadata();
         this.variableFiles = new ArrayList<>();
@@ -74,8 +75,20 @@ public class Settings implements Delayable {
         return libraryTable;
     }
 
-    public List<String> getDefaultTags(){
+    public Set<Token> getDefaultTags(){
         return defaultTags;
+    }
+
+    public boolean hasDefaultTag(String tag){
+        return defaultTags.stream().anyMatch(token -> token.getText().equalsIgnoreCase(tag));
+    }
+
+    public Set<Token> getForceTags(){
+        return forceTags;
+    }
+
+    public boolean hasForceTag(String tag){
+        return forceTags.stream().anyMatch(token -> token.getText().equalsIgnoreCase(tag));
     }
 
     public KeywordCall getTemplate() {
@@ -96,6 +109,22 @@ public class Settings implements Delayable {
 
     public KeywordCall getSuiteTeardown() {
         return suiteTeardown;
+    }
+
+    public Metadata getMetadata(){
+        return metadata;
+    }
+
+    public Token getMetadata(String key){
+        return metadata.get(key);
+    }
+
+    public List<VariableFile> getVariableFiles() {
+        return variableFiles;
+    }
+
+    public Optional<VariableFile> getVariableFile(String name){
+        return variableFiles.stream().filter(file -> file.getPath().equalsIgnoreCase(name)).findAny();
     }
 
     public void setHeader(Token header){
@@ -131,11 +160,11 @@ public class Settings implements Delayable {
         this.libraryTable.add(library);
     }
 
-    public void addDefaultTag(String defaultTag){
+    public void addDefaultTag(Token defaultTag){
         this.defaultTags.add(defaultTag);
     }
 
-    public void addForceTag(String forceTag){
+    public void addForceTag(Token forceTag){
         this.forceTags.add(forceTag);
     }
 
@@ -149,12 +178,16 @@ public class Settings implements Delayable {
         this.timeOut = timeOut;
     }
 
-    public void addMetadata(String key, Token token){
-        if(key.isEmpty()){
-            return;
+    public void addMetadata(Token key, Token value) throws InvalidMetadataException {
+        if(key == null || key.isEmpty()){
+            throw new InvalidMetadataException("No key defined");
         }
 
-        metadata.addEntry(key, token);
+        if(value == null || value.isEmpty()){
+            throw new InvalidMetadataException("No value defined");
+        }
+
+        metadata.addEntry(key, value);
     }
 
     public void addVariableFile(VariableFile variableFile){

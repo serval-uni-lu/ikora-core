@@ -19,6 +19,8 @@ public class ErrorMessages {
     public static final String FAILED_TO_PARSE_SETUP = "Failed to parse setup";
     public static final String FAILED_TO_PARSE_TEARDOWN = "Failed to parse teardown";
     public static final String FAILED_TO_PARSE_TEMPLATE = "Failed to parse template";
+    public static final String FAILED_TO_PARSE_METADATA = "Failed to parse metadata";
+    public static final String TOO_MANY_METADATA_ARGUMENTS = "Too many metadata arguments";
     public static final String FAILED_TO_LINK_TEMPLATE = "Failed to link template";
     public static final String FAILED_TO_PARSE_PARAMETER = "Failed to parse parameter";
     public static final String ASSIGNMENT_SHOULD_HAVE_LEFT_HAND_OPERAND = "Assignment should have left hand operand";
