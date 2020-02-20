@@ -67,13 +67,52 @@ class LexerUtilsTest {
 
         assertEquals(2, tokens.size());
 
-        Iterator<Token> iterator =  tokens.iterator();
+        assertTrue(tokens.get(0).isDelimiter());
+        assertTrue(tokens.get(1).isText());
+    }
 
-        Token token1 = iterator.next();
-        assertTrue(token1.isDelimiter());
+    @Test
+    void checkTokenizeWithComments() throws IOException {
+        String line = "\tSome text #Comments in line";
 
-        Token token2 = iterator.next();
-        assertTrue(token2.isText());
+        Tokens tokens = LexerUtils.tokenize(Helpers.lineReader(line));
+
+        assertEquals(3, tokens.size());
+
+        Token comment = tokens.get(2);
+        assertTrue(comment.isComment());
+    }
+
+    @Test
+    void testTokenizeCommentLine() throws IOException {
+        String line = "#Comments line with\tsome\tdelimiters";
+
+        Tokens tokens = LexerUtils.tokenize(Helpers.lineReader(line));
+
+        assertEquals(1, tokens.size());
+        assertTrue(tokens.get(0).isComment());
+    }
+
+    @Test
+    void testTokenizeMultipleIndents() throws IOException {
+        String line = "  \\  With 2 indents";
+
+        Tokens tokens = LexerUtils.tokenize(Helpers.lineReader(line));
+
+        assertEquals(3, tokens.size());
+        assertTrue(tokens.get(0).isDelimiter());
+        assertTrue(tokens.get(1).isDelimiter());
+        assertTrue(tokens.get(2).isText());
+    }
+
+    @Test
+    void testEscapeComment() throws IOException {
+        String line = "Text with escaped \\# comment";
+
+        Tokens tokens = LexerUtils.tokenize(Helpers.lineReader(line));
+
+        assertEquals(1, tokens.size());
+        assertTrue(tokens.get(0).isText());
     }
 
     @Test

@@ -39,56 +39,6 @@ class LexerUtils {
         return !forLoop.isParent(LexerUtils.peek(reader.getCurrent())) || LexerUtils.isBlock(reader.getCurrent().getText());
     }
 
-    private static boolean isContinuation(Tokens tokens){
-        for(Token token: tokens){
-            if(token.isDelimiter()) {
-                continue;
-            }
-
-            return token.isContinuation();
-        }
-
-        return false;
-    }
-
-    private static Tokens tokenize(Line line){
-        Tokens tokens = new Tokens();
-        final String text = line.getText();
-
-        int start = 0;
-        int current = 0;
-        int spaces = 0;
-        int tabs = 0;
-
-        for(char c: text.toCharArray()){
-            switch (c){
-                case ' ':
-                    ++spaces;
-                    break;
-                case '\t':
-                    ++tabs;
-                    break;
-                case '\n':
-                case '\r':
-                    tokens.add(createToken(line.getNumber(), start, text.substring(start, current)));
-                    break;
-                default:
-                    if(spaces > 1 || tabs > 0){
-                        tokens.add(createToken(line.getNumber(), start, text.substring(start, current)));
-                        start = current;
-                    }
-
-                    spaces = tabs = 0;
-            }
-
-            ++current;
-        }
-
-        if(current > start) tokens.add(createToken(line.getNumber(), start, text.substring(start, current)));
-
-        return tokens;
-    }
-
     static boolean isBlock(String value) {
         return isBlock(value, "(.+)");
     }
@@ -108,6 +58,67 @@ class LexerUtils {
 
     static boolean ignore(String line){
         return isEmpty(line) || isComment(line);
+    }
+
+    private static boolean isContinuation(Tokens tokens){
+        for(Token token: tokens){
+            if(token.isDelimiter()) {
+                continue;
+            }
+
+            return token.isContinuation();
+        }
+
+        return false;
+    }
+
+    private static Tokens tokenize(Line line){
+        Tokens tokens = new Tokens();
+        final String text = line.getText();
+        final State state = new State();
+
+        for(char c: text.toCharArray()){
+            if(state.comment) {
+                ++state.current;
+                continue;
+            }
+
+            switch (c){
+                case '#':
+                    if (!state.escape){
+                        tokens.add(createToken(line.getNumber(), state.start, text.substring(state.start, state.current)));
+                        state.reset();
+                        state.comment = true;
+                    }
+                    break;
+                case ' ':
+                    ++state.spaces;
+                    break;
+                case '\t':
+                    ++state.tabs;
+                    break;
+                case '\n':
+                case '\r':
+                    tokens.add(createToken(line.getNumber(), state.start, text.substring(state.start, state.current)));
+                    state.reset();
+                    break;
+                case '\\':
+                    state.escape = true;
+                default:
+                    if(state.isNewToken()){
+                        tokens.add(createToken(line.getNumber(), state.start, text.substring(state.start, state.current)));
+                        state.start =  state.current;
+                    }
+
+                    state.spaces = state.tabs = 0;
+            }
+
+            ++state.current;
+        }
+
+        if(state.current > state.start) tokens.add(createToken(line.getNumber(), state.start, text.substring(state.start, state.current)));
+
+        return tokens;
     }
 
     private static Token createToken(int line, int offset, String text){
@@ -144,5 +155,24 @@ class LexerUtils {
         }
 
         return new Token(value, line, offset, offset + value.length(), type);
+    }
+
+    private static class State{
+        int start = 0;
+        int current = 0;
+        int spaces = 0;
+        int tabs = 0;
+        boolean escape = false;
+        boolean comment = false;
+
+        void reset(){
+            spaces = 0;
+            tabs = 0;
+            start = current;
+        }
+
+        boolean isNewToken(){
+            return spaces > 1 || tabs > 0;
+        }
     }
 }
