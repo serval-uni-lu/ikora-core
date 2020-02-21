@@ -18,45 +18,34 @@ public class Assignment extends Step {
     private List<Variable> returnVariables;
     private Argument expression;
 
-    public Assignment(Token name, List<Variable> returnVariables, KeywordCall expression) throws InvalidDependencyException {
+    public Assignment(Token name, List<Variable> returnVariables, KeywordCall expression) {
         super(name);
 
         this.returnVariables = new ArrayList<>(returnVariables.size());
+
         for(Variable returnVariable: returnVariables){
             this.addReturnVariable(returnVariable);
+            this.addAstChild(returnVariable);
             this.addTokens(returnVariable.getTokens());
         }
 
-        this.expression = new Argument(this, expression);
+        this.expression = new Argument(expression);
+        this.addAstChild(expression);
         this.addTokens(this.expression.getTokens());
     }
 
-    public void addReturnVariable(Variable variable) throws InvalidDependencyException {
+    public void addReturnVariable(Variable variable)  {
         if(variable == null){
             return;
         }
 
-        variable.addDependency(this);
-        variable.setSourceFile(getSourceFile());
+        this.addAstChild(variable);
         variable.addArgument(this.expression);
         returnVariables.add(variable);
     }
 
     public List<Variable> getReturnVariables() {
         return returnVariables;
-    }
-
-    @Override
-    public void setSourceFile(SourceFile sourceFile){
-        super.setSourceFile(sourceFile);
-
-        for(Variable variable: returnVariables){
-            variable.setSourceFile(this.getSourceFile());
-        }
-
-        if(expression != null){
-            expression.setSourceFile(this.getSourceFile());
-        }
     }
 
     @Override
@@ -119,19 +108,19 @@ public class Assignment extends Step {
     @Override
     public double distance(Differentiable other) {
         if(other == this){
-            return 0.0;
+            return 0.;
         }
 
         if(!(other instanceof Assignment)){
-            return 1;
+            return 1.;
         }
 
         Assignment assignment = (Assignment)other;
 
-        boolean sameReturnValues = LevenshteinDistance.index(this.returnVariables, assignment.returnVariables) == 0.0;
-        boolean sameExpression = expression.distance(assignment.expression) == 0.0;
+        double distReturn = LevenshteinDistance.index(this.returnVariables, assignment.returnVariables) * 0.2;
+        double distExpression = expression.distance(assignment.expression) * 0.8;
 
-        return sameReturnValues && sameExpression ? 0.0 : 1.0;
+        return distReturn + distExpression;
     }
 
     @Override

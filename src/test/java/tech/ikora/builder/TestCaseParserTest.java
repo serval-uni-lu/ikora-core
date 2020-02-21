@@ -13,6 +13,23 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestCaseParserTest {
     @Test
+    void testTestCaseParsingWithDocumentation() throws IOException {
+        String text = "Test case with documentation\n" +
+                "\t[Documentation]\tSome documentation\n" +
+                "...\twith continuation\n\n" +
+                "\tSome keyword";
+
+        ErrorManager errors = new ErrorManager();
+        TestCase testCase = createTestCase(text, errors);
+
+        assertNotNull(testCase);
+        assertEquals("Test case with documentation", testCase.getName().getText());
+        assertEquals(1, testCase.getSteps().size());
+        assertEquals("Some documentationwith continuation", testCase.getDocumentation().clean().toString());
+        assertEquals("Some keyword", testCase.getStep(0).getName().getText());
+    }
+
+    @Test
     void testTestCaseParsingContainingForLoop() throws IOException {
         String text = "Test case with control flow elements\n" +
                     "    First Keyword from project B\n" +

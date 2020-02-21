@@ -30,6 +30,7 @@ public class UserKeyword extends KeywordDefinition {
 
     public void setTearDown(KeywordCall tearDown) {
         this.tearDown = tearDown;
+        this.addAstChild(this.tearDown);
     }
 
     public void setTearDown(Step tearDown) throws InvalidTypeException {
@@ -38,11 +39,7 @@ public class UserKeyword extends KeywordDefinition {
 
     public void addReturnVariable(Variable returnVariable) {
         returnVariables.add(returnVariable);
-    }
-
-    @Override
-    public void setName(Token name) {
-        super.setName(name);
+        this.addAstChild(returnVariable);
     }
 
     @Override
@@ -64,11 +61,13 @@ public class UserKeyword extends KeywordDefinition {
     public void addParameter(Variable parameter){
         parameters.add(parameter);
         localVariables.add(parameter);
+        this.addAstChild(parameter);
     }
 
     public void addEmbeddedVariable(Variable embeddedVariable) {
         embeddedVariables.add(embeddedVariable);
         localVariables.add(embeddedVariable);
+        this.addAstChild(embeddedVariable);
     }
 
     public List<Variable> getParameters() {

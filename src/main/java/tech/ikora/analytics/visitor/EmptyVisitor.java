@@ -57,4 +57,9 @@ public class EmptyVisitor implements NodeVisitor{
     public void visit(Argument argument, VisitorMemory memory) {
         //nothing to do in this node
     }
+
+    @Override
+    public <T extends Node> void visit(NodeTable<T> ts, VisitorMemory memory) {
+        //nothing to do in this node
+    }
 }

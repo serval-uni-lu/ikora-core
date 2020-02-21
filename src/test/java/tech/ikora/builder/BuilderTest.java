@@ -131,7 +131,7 @@ class BuilderTest {
 
         assertEquals(1, assignment.getReturnVariables().size());
         assertEquals("${EtatRun}", assignment.getReturnVariables().get(0).getName().getText());
-        assertEquals(1, assignment.getReturnVariables().get(0).getDependencies().size());
+        assertEquals(0, assignment.getReturnVariables().get(0).getDependencies().size());
     }
 
     @Test

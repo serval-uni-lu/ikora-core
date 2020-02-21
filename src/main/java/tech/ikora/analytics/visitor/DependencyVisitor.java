@@ -57,4 +57,9 @@ public class DependencyVisitor implements NodeVisitor {
     public void visit(Argument argument, VisitorMemory memory) {
         VisitorUtils.traverseDependencies(this, argument, memory);
     }
+
+    @Override
+    public <T extends Node> void visit(NodeTable<T> nodeTable, VisitorMemory memory) {
+        VisitorUtils.traverseDependencies(this, nodeTable, memory);
+    }
 }

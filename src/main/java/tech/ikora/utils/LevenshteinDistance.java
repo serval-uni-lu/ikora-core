@@ -125,7 +125,7 @@ public class LevenshteinDistance {
             }
 
             // then check for the rest
-            if(substitution < subtraction && substitution < addition){
+            if(substitution <= subtraction && substitution <= addition){
                 Differentiable beforeStep = before.get(xPosition - 1);
                 Differentiable afterStep = after.get(yPosition - 1);
 
@@ -139,7 +139,7 @@ public class LevenshteinDistance {
                 xPosition -= 1;
                 yPosition -= 1;
             }
-            else if (subtraction < addition){
+            else if (subtraction <= addition){
                 Differentiable beforeStep = before.get(xPosition - 1);
                 actions.add(Action.removeElement(beforeStep.getClass(), beforeStep));
 

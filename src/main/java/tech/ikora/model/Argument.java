@@ -4,7 +4,6 @@ import tech.ikora.analytics.Action;
 import tech.ikora.analytics.visitor.NodeVisitor;
 import tech.ikora.analytics.visitor.VisitorMemory;
 import tech.ikora.builder.ValueLinker;
-import tech.ikora.exception.InvalidDependencyException;
 import tech.ikora.runner.Runtime;
 
 import java.util.Collections;
@@ -19,17 +18,13 @@ public class Argument extends Node {
     private Node definition;
     private final Token name;
 
-    public Argument(Node parent, Token name) throws InvalidDependencyException {
+    public Argument(Token name) {
         this.name = name;
         this.definition = null;
-
-        this.addDependency(parent);
         this.addToken(name);
     }
 
-    public Argument(Node parent, Node definition) throws InvalidDependencyException {
-        this.addDependency(parent);
-
+    public Argument(Node definition) {
         if(definition == null){
             this.name = Token.empty();
             this.definition = null;
@@ -40,16 +35,11 @@ public class Argument extends Node {
         this.definition = definition;
         addTokens(this.definition.getTokens());
 
-        definition.addDependency(this);
+        this.addAstChild(this.definition);
     }
 
     public Optional<Node> getDefinition() {
         return Optional.ofNullable(this.definition);
-    }
-
-    public void setCall(KeywordCall call){
-        this.definition = call;
-        this.definition.setSourceFile(getSourceFile());
     }
 
     @Override
@@ -117,15 +107,6 @@ public class Argument extends Node {
             return name.toString();
         }
 
-        return definition != null ? definition.toString() : "<ARGUMENT>";
-    }
-
-    @Override
-    public void setSourceFile(SourceFile sourceFile) {
-        super.setSourceFile(sourceFile);
-
-        if(definition != null){
-            this.definition.setSourceFile(sourceFile);
-        }
+        return "<ARGUMENT>";
     }
 }

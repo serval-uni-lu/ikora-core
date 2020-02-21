@@ -14,4 +14,5 @@ public interface NodeVisitor {
     void visit(ListVariable list, VisitorMemory memory);
     void visit(TimeOut timeOut, VisitorMemory memory);
     void visit(Argument argument, VisitorMemory memory);
+    <T extends Node> void visit(NodeTable<T> ts, VisitorMemory memory);
 }

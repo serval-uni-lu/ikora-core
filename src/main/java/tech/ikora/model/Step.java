@@ -5,6 +5,7 @@ import tech.ikora.exception.InvalidDependencyException;
 import tech.ikora.exception.InvalidTypeException;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public abstract class Step extends Node {
     private Token name;
@@ -27,10 +28,10 @@ public abstract class Step extends Node {
     }
 
     public KeywordDefinition getCaller() throws InvalidDependencyException {
-        Node node = getParent();
+        Node node = getAstParent();
 
         while (Argument.class.isAssignableFrom(node.getClass()) || Step.class.isAssignableFrom(node.getClass())){
-            node = node.getParent();
+            node = node.getAstParent();
         }
 
         if(node instanceof KeywordDefinition){

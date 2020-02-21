@@ -48,15 +48,7 @@ class VariableTableParser {
             Variable variable = optional.get();
 
             for (Token token: tokens.withoutFirst()) {
-                try {
-                    variable.addArgument(new Argument(variable, token));
-                } catch (InvalidDependencyException e) {
-                    errors.registerInternalError(
-                            reader.getFile(),
-                            String.format("Invalid variable dependency: %s", token),
-                            Range.fromToken(token, reader.getCurrent())
-                    );
-                }
+                variable.addArgument(new Argument(token));
             }
 
             variableTable.add(variable);

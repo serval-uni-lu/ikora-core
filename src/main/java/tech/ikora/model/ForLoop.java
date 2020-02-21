@@ -22,7 +22,10 @@ public class ForLoop extends Step {
         super(name);
 
         this.iterator = iterator;
+        this.addAstChild(this.iterator);
+
         this.interval = interval;
+        this.addAstChild(this.interval);
 
         this.addToken(name);
         this.addTokens(this.iterator.getTokens());
@@ -31,13 +34,10 @@ public class ForLoop extends Step {
         this.steps = new ArrayList<>(steps.size());
         for(Step step: steps){
             this.steps.add(step);
+            this.addAstChild(step);
+            step.addDependency(this);
             this.addTokens(step.getTokens());
         }
-    }
-
-    @Override
-    public List<Step> getSteps(){
-        return steps;
     }
 
     public Variable getIterator() {
@@ -46,6 +46,11 @@ public class ForLoop extends Step {
 
     public Step getInterval() {
         return interval;
+    }
+
+    @Override
+    public List<Step> getSteps(){
+        return this.steps;
     }
 
     @Override
@@ -80,11 +85,11 @@ public class ForLoop extends Step {
 
         ForLoop forLoop = (ForLoop)other;
 
-        boolean sameIterator = this.iterator.distance(forLoop.iterator) == 0.0;
-        boolean sameRange = this.interval.distance(forLoop.interval) == 0.0;
-        boolean sameSteps = LevenshteinDistance.index(this.steps, forLoop.steps) == 0.0;
+        double sameIterator = this.iterator.distance(forLoop.iterator) * 0.1;
+        double sameRange = this.interval.distance(forLoop.interval) * 0.1;
+        double sameSteps = LevenshteinDistance.index(this.steps, forLoop.steps) * 0.8;
 
-        return sameIterator && sameRange && sameSteps ? 0.0 : 1.0;
+        return sameIterator + sameRange + sameSteps;
     }
 
     @Override

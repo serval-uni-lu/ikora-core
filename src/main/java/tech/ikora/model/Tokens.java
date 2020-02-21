@@ -170,4 +170,10 @@ public class Tokens implements Iterable<Token> {
                 .distinct()
                 .count();
     }
+
+    public Tokens clean() {
+        return new Tokens(tokenSet.stream()
+                .filter(token -> !token.isComment() && !token.isContinuation() && !token.isDelimiter() && !token.isEmpty())
+                .collect(Collectors.toList()));
+    }
 }

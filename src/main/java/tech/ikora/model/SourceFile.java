@@ -35,9 +35,9 @@ public class SourceFile implements Iterable<UserKeyword> {
         this.name = name;
 
         this.settings.setFile(this);
-        this.testCaseTable.setFile(this);
-        this.userKeywordTable.setFile(this);
-        this.variableTable.setFile(this);
+        this.testCaseTable.setSourceFile(this);
+        this.userKeywordTable.setSourceFile(this);
+        this.variableTable.setSourceFile(this);
     }
 
     public List<Line> getLines(){
@@ -93,17 +93,17 @@ public class SourceFile implements Iterable<UserKeyword> {
 
     public void setTestCaseTable(NodeTable<TestCase> testCaseTable) {
         this.testCaseTable = testCaseTable;
-        this.testCaseTable.setFile(this);
+        this.testCaseTable.setSourceFile(this);
     }
 
     public void setKeywordTable(NodeTable<UserKeyword> nodeTable) {
         this.userKeywordTable = nodeTable;
-        this.userKeywordTable.setFile(this);
+        this.userKeywordTable.setSourceFile(this);
     }
 
     public void setVariableTable(NodeTable<Variable> variableTable) {
         this.variableTable = variableTable;
-        this.variableTable.setFile(this);
+        this.variableTable.setSourceFile(this);
     }
 
     public Project getProject() {

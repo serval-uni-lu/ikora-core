@@ -19,7 +19,7 @@ public class TimeOut extends Node {
     private final TimeValue value;
     private final boolean isNone;
 
-    public TimeOut(Token name, Token errorMessage) throws MalformedVariableException, InvalidDependencyException {
+    public TimeOut(Token name, Token errorMessage) throws MalformedVariableException {
         addToken(name);
         addToken(errorMessage);
 
@@ -28,7 +28,7 @@ public class TimeOut extends Node {
 
         if(ValueLinker.isVariable(this.name)){
             this.variable = Variable.create(this.name);
-            this.variable.addDependency(this);
+            this.addAstChild(this.variable);
             this.value = null;
             this.isNone = false;
         }

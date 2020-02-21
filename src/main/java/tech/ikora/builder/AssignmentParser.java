@@ -41,24 +41,13 @@ public class AssignmentParser {
             ++offset;
         }
 
-        Assignment assignment = null;
+        Token name = expression != null ? expression.getName() : Token.empty();
+        Assignment assignment = new Assignment(name, returnValues, expression);
 
-        try{
-            Token name = expression != null ? expression.getName() : Token.empty();
-            assignment = new Assignment(name, returnValues, expression);
-
-            if(!assignment.getKeywordCall().isPresent()){
-                errors.registerSyntaxError(
-                        reader.getFile(),
-                        ErrorMessages.ASSIGNMENT_SHOULD_HAVE_LEFT_HAND_OPERAND,
-                        Range.fromTokens(tokens, reader.getCurrent())
-                );
-            }
-        }
-        catch (InvalidDependencyException e) {
-            errors.registerInternalError(
+        if(!assignment.getKeywordCall().isPresent()){
+            errors.registerSyntaxError(
                     reader.getFile(),
-                    ErrorMessages.FAILED_TO_CREATE_DEPENDENCY,
+                    ErrorMessages.ASSIGNMENT_SHOULD_HAVE_LEFT_HAND_OPERAND,
                     Range.fromTokens(tokens, reader.getCurrent())
             );
         }

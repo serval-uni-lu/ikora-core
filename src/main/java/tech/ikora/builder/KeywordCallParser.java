@@ -2,7 +2,6 @@ package tech.ikora.builder;
 
 import tech.ikora.error.ErrorManager;
 import tech.ikora.error.ErrorMessages;
-import tech.ikora.exception.InvalidDependencyException;
 import tech.ikora.model.*;
 
 public class KeywordCallParser {
@@ -27,16 +26,8 @@ public class KeywordCallParser {
             call.setGherkin(gherkin);
 
             for(Token token: callTokens.withoutFirst()) {
-                try {
-                    Argument argument = new Argument(call, token);
-                    call.addArgument(argument);
-                } catch (InvalidDependencyException e) {
-                    errors.registerInternalError(
-                            reader.getFile(),
-                            "Failed to register parameter to keyword call",
-                            Range.fromToken(token, reader.getCurrent())
-                    );
-                }
+                Argument argument = new Argument(token);
+                call.addArgument(argument);
             }
 
             return call;

@@ -14,7 +14,7 @@ public class TestCase extends KeywordDefinition {
 
     public void setSetup(KeywordCall setup){
         this.setup = setup;
-        this.setup.setSourceFile(this.getSourceFile());
+        this.addAstChild(setup);
     }
 
     public void setSetup(Step step) throws InvalidTypeException {
@@ -23,7 +23,7 @@ public class TestCase extends KeywordDefinition {
 
     public void setTearDown(KeywordCall tearDown){
         this.tearDown = tearDown;
-        this.tearDown.setSourceFile(this.getSourceFile());
+        this.addAstChild(tearDown);
     }
 
     public void setTearDown(Step tearDown) throws InvalidTypeException {
@@ -32,7 +32,7 @@ public class TestCase extends KeywordDefinition {
 
     public void setTemplate(KeywordCall template){
         this.template = template;
-        this.template.setSourceFile(this.getSourceFile());
+        this.addAstChild(template);
     }
 
     public void setTemplate(Step template) throws InvalidTypeException {
@@ -53,23 +53,6 @@ public class TestCase extends KeywordDefinition {
 
     public boolean hasTemplate(){
         return template != null;
-    }
-
-    @Override
-    public void setSourceFile(SourceFile sourceFile) {
-        super.setSourceFile(sourceFile);
-
-        if(this.setup != null){
-            this.setup.setSourceFile(sourceFile);
-        }
-
-        if(this.tearDown != null){
-            this.tearDown.setSourceFile(sourceFile);
-        }
-
-        if(this.template != null){
-            this.template.setSourceFile(sourceFile);
-        }
     }
 
     @Override

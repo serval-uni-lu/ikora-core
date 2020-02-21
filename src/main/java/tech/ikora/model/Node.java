@@ -2,29 +2,69 @@ package tech.ikora.model;
 
 import tech.ikora.analytics.visitor.NodeVisitor;
 import tech.ikora.analytics.visitor.VisitorMemory;
-import tech.ikora.exception.InvalidDependencyException;
 import tech.ikora.runner.Runtime;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public abstract class Node implements Differentiable {
     private SourceFile sourceFile;
+    private Node astParent;
+    private final List<Node> astChildren;
     private final Set<Node> dependencies;
     private final Tokens tokens;
 
     Node(){
+        astParent = null;
+        astChildren = new ArrayList<>();
         dependencies = new HashSet<>();
         tokens = new Tokens();
     }
 
-    public void setSourceFile(SourceFile sourceFile) {
+    public final void setSourceFile(SourceFile sourceFile) {
         this.sourceFile = sourceFile;
+
+        for(Node astChild: this.astChildren){
+            astChild.setSourceFile(sourceFile);
+        }
     }
 
     public SourceFile getSourceFile() {
         return sourceFile;
+    }
+
+    public void setAstParent(Node astParent){
+        if(astParent == null){
+            return;
+        }
+
+        this.astParent = astParent;
+        this.setSourceFile(astParent.getSourceFile());
+    }
+
+    public void addAstChild(Node astChild){
+        if(astChild == null || astChildren.contains(astChild)){
+            return;
+        }
+
+        astChild.setAstParent(this);
+        astChildren.add(astChild);
+    }
+
+    protected void addAstChild(int index, Node astChild) {
+        if(astChild == null || astChildren.contains(astChild)){
+            return;
+        }
+
+        astChild.setAstParent(this);
+        astChildren.add(index, astChild);
+    }
+
+    protected void clearAstChildren() {
+        this.astChildren.clear();
     }
 
     public File getFile(){
@@ -63,9 +103,17 @@ public abstract class Node implements Differentiable {
         return getSourceFile().getProject();
     }
 
-    public void addDependency(Node node) throws InvalidDependencyException {
-        if(node == null) {
-            throw new InvalidDependencyException("Cannot add null dependency");
+    public Node getAstParent() {
+        return astParent;
+    }
+
+    public List<Node> getAstChildren() {
+        return astChildren;
+    }
+
+    public void addDependency(Node node) {
+        if(node == null || this.dependencies.contains(node)) {
+            return;
         }
 
         this.dependencies.add(node);
@@ -73,20 +121,6 @@ public abstract class Node implements Differentiable {
 
     public Set<Node> getDependencies() {
         return dependencies;
-    }
-
-    public Node getParent() throws InvalidDependencyException {
-        Set<Node> parents = getDependencies();
-
-        if(parents.isEmpty()){
-            throw new InvalidDependencyException("No parent found");
-        }
-
-        if(parents.size() > 1){
-            throw new InvalidDependencyException("Too many parent found");
-        }
-
-        return parents.iterator().next();
     }
 
     public boolean isDeadCode(){
@@ -122,6 +156,28 @@ public abstract class Node implements Differentiable {
         int endLine = getRange().getEnd().getLine();
 
         return this.sourceFile.getLinesOfCode(startLine, endLine);
+    }
+
+    @Override
+    public boolean equals(Object other){
+        if(other == null){
+            return false;
+        }
+
+        if (!(other instanceof Node)){
+            return false;
+        }
+
+        Node node = (Node)other;
+
+        boolean same = this.getName().equalsIgnorePosition(node.getName());
+        same &= this.astChildren.size() == node.astChildren.size();
+
+        for(int i = 0; same && i < this.astChildren.size(); ++i) {
+            same = this.astChildren.get(i).equals(node.astChildren.get(i));
+        }
+
+        return same;
     }
 
     public abstract boolean matches(Token name);

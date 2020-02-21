@@ -57,8 +57,7 @@ public class Link<K extends Node,T extends Node> {
         return allLinks;
     }
 
-    public void addNode(T destination, Import importType)
-            throws InvalidImportTypeException, InvalidDependencyException {
+    public void addNode(T destination, Import importType) {
         switch (importType) {
             case STATIC:
                 addNode(destination, staticCallee);
@@ -66,13 +65,10 @@ public class Link<K extends Node,T extends Node> {
             case DYNAMIC:
                 addNode(destination, dynamicCallee);
                 break;
-            default:
-                throw new InvalidImportTypeException(
-                        String.format("Was expecting a STATIC or DYNAMIC import type, got %s instead", importType.name()));
         }
     }
 
-    private void addNode(T destination, Set<T> destinations) throws InvalidDependencyException {
+    private void addNode(T destination, Set<T> destinations) {
         if(destination == null){
             return;
         }

@@ -38,8 +38,8 @@ public abstract class KeywordDefinition extends Keyword implements Iterable<Step
 
     public void addStep(Step step) throws Exception {
         this.steps.add(step);
+        this.addAstChild(step);
         step.addDependency(this);
-        step.setSourceFile(getSourceFile());
         addTokens(step.getTokens());
     }
 
@@ -52,15 +52,6 @@ public abstract class KeywordDefinition extends Keyword implements Iterable<Step
     @Override
     public String toString() {
         return String.format("%s - %s", getFileName(), getName());
-    }
-
-    @Override
-    public void setSourceFile(SourceFile sourceFile) {
-        super.setSourceFile(sourceFile);
-
-        for(Step step: this.steps){
-            step.setSourceFile(getSourceFile());
-        }
     }
 
     public List<Step> getSteps() {
@@ -118,20 +109,7 @@ public abstract class KeywordDefinition extends Keyword implements Iterable<Step
 
     @Override
     public double distance(Differentiable other) {
-        if(other == this){
-            return 0.0;
-        }
-
-        if(other == null || !this.getClass().isAssignableFrom(other.getClass())){
-            return 1.0;
-        }
-
-        KeywordDefinition keyword = (KeywordDefinition)other;
-
-        boolean sameName = this.getName().equalsIgnorePosition(keyword.getName());
-        boolean sameArguments = LevenshteinDistance.index(this.steps, keyword.steps) == 0.0;
-
-        return sameName && sameArguments ? 0.0 : 1.0;
+        return this.equals(other) ? 0. : 1.;
     }
 
     @Override

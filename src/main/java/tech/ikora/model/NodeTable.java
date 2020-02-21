@@ -1,17 +1,20 @@
 package tech.ikora.model;
 
-import java.io.File;
+import tech.ikora.analytics.Action;
+import tech.ikora.analytics.visitor.NodeVisitor;
+import tech.ikora.analytics.visitor.VisitorMemory;
+import tech.ikora.runner.Runtime;
+import org.apache.commons.lang3.NotImplementedException;
+
 import java.util.*;
 
-public class NodeTable<T extends Node> implements Iterable<T> {
+public class NodeTable<T extends Node> extends Node implements Iterable<T> {
     private Token header;
-    private HashMap<String, T> nodeMap;
     private List<T> nodeList;
     private SourceFile file;
 
     public NodeTable() {
         this.header = Token.empty();
-        this.nodeMap = new HashMap<>();
         this.nodeList = new ArrayList<>();
     }
 
@@ -19,29 +22,8 @@ public class NodeTable<T extends Node> implements Iterable<T> {
         this.header = header;
     }
 
-    public void setFile(SourceFile file) {
-        this.file = file;
-
-        nodeMap = new HashMap<>();
-        for (T node: nodeList){
-            node.setSourceFile(this.file);
-            nodeMap.put(getKey(node), node);
-        }
-    }
-
     public Token getHeader(){
         return header;
-    }
-
-    public SourceFile getFile() {
-        return file;
-    }
-
-    public NodeTable(NodeTable<T> other){
-        nodeMap = other.nodeMap;
-        nodeList = other.nodeList;
-
-        file = other.file;
     }
 
     public Set<T> findNode(T node){
@@ -69,6 +51,26 @@ public class NodeTable<T extends Node> implements Iterable<T> {
         tokens.add(header);
         nodeList.forEach(node -> tokens.addAll(node.getTokens()));
         return tokens;
+    }
+
+    @Override
+    public boolean matches(Token name) {
+        return getName().equalsIgnorePosition(name);
+    }
+
+    @Override
+    public void accept(NodeVisitor visitor, VisitorMemory memory) {
+        visitor.visit(this, memory);
+    }
+
+    @Override
+    public void execute(Runtime runtime) throws Exception {
+        throw new NotImplementedException("Note Table execution not implemented");
+    }
+
+    @Override
+    public Token getName() {
+        return this.header;
     }
 
     private boolean matches(String file, Token token, T node){
@@ -104,49 +106,26 @@ public class NodeTable<T extends Node> implements Iterable<T> {
         return nodeList;
     }
 
-    public boolean add(T node) {
-        if(node == null){
-            return false;
-        }
-
-        if(nodeList.contains(node)){
-            return false;
+    public void add(T node) {
+        if(node == null || nodeList.contains(node)){
+            return;
         }
 
         nodeList.add(node);
-        nodeMap.put(getKey(node), node);
-
-        return true;
-    }
-
-    public boolean remove(T node) {
-        if(node == null){
-            return false;
-        }
-
-        this.nodeMap.remove(getKey(node));
-        this.nodeList.remove(node);
-
-        return true;
-    }
-
-    public void extend(NodeTable<T> table) {
-        for(T node: table){
-            if(nodeList.contains(node)){
-                continue;
-            }
-
-            this.nodeList.add(node);
-            this.nodeMap.put(getKey(node), node);
-        }
+        this.addAstChild(node);
     }
 
     public void clear() {
         this.nodeList.clear();
-        this.nodeMap.clear();
     }
 
-    private String getKey(T node){
-        return node.getSourceFile() + File.separator + node.getName();
+    @Override
+    public double distance(Differentiable other) {
+        return this.equals(other) ? 0. : 1.;
+    }
+
+    @Override
+    public List<Action> differences(Differentiable other) {
+        return null;
     }
 }

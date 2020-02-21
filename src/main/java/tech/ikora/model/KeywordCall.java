@@ -10,10 +10,10 @@ import tech.ikora.runner.Runtime;
 import tech.ikora.utils.LevenshteinDistance;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class KeywordCall extends Step {
     private Link<KeywordCall, Keyword> link;
-    private List<Argument> argumentList;
     private List<Variable> returnVariables;
     private Gherkin gherkin;
 
@@ -22,8 +22,6 @@ public class KeywordCall extends Step {
         addToken(name);
 
         this.gherkin = Gherkin.none();
-        this.argumentList = new ArrayList<>();
-
         this.link = new Link<>(this);
     }
 
@@ -36,43 +34,31 @@ public class KeywordCall extends Step {
         return gherkin;
     }
 
-    public void linkKeyword(Keyword keyword, Link.Import importLink)
-            throws InvalidImportTypeException, InvalidDependencyException {
+    public void linkKeyword(Keyword keyword, Link.Import importLink) {
         link.addNode(keyword, importLink);
     }
 
     public void addArgument(Argument argument) {
-        argument.setSourceFile(this.getSourceFile());
-        this.argumentList.add(argument);
+        this.addAstChild(argument);
         addTokens(argument.getTokens());
     }
 
     public void addArgument(int index, Argument argument) {
-        argument.setSourceFile(this.getSourceFile());
-        this.argumentList.add(index, argument);
+        this.addAstChild(index, argument);
     }
 
     public void clearArguments() {
-        this.argumentList.clear();
-    }
-
-    @Override
-    public void setSourceFile(SourceFile sourceFile) {
-        super.setSourceFile(sourceFile);
-
-        for(Argument argument: this.argumentList){
-            argument.setSourceFile(sourceFile);
-        }
+        this.clearAstChildren();
     }
 
     @Override
     public List<Argument> getArgumentList() {
-        return this.argumentList;
+        return getAstChildren().stream().map(node -> (Argument)node).collect(Collectors.toList());
     }
 
     @Override
     public boolean hasParameters() {
-        return !this.argumentList.isEmpty();
+        return !getAstChildren().isEmpty();
     }
 
     public Optional<Keyword> getKeyword() {
@@ -81,31 +67,6 @@ public class KeywordCall extends Step {
 
     public Set<Keyword> getAllPotentialKeywords(Link.Import importType){
         return link.getAllLinks(importType);
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        if(other == null){
-            return false;
-        }
-
-        if (!(other instanceof KeywordCall)){
-            return false;
-        }
-
-        if(!super.equals(other)) {
-            return false;
-        }
-
-        KeywordCall call = (KeywordCall)other;
-
-        boolean same = this.argumentList.size() == call.argumentList.size();
-
-        for(int i = 0; same && i < this.argumentList.size(); ++i) {
-            same &= this.argumentList.get(i).equals(call.argumentList.get(i));
-        }
-
-        return  same;
     }
 
     @Override
@@ -128,23 +89,26 @@ public class KeywordCall extends Step {
 
     @Override
     public double distance(Differentiable other) {
-        if(!(other instanceof KeywordCall)){
-            return 1;
+        if(other == null){
+            return 1.;
         }
 
-        KeywordCall call = (KeywordCall)other;
-
-        Optional<Keyword> thisCallee = this.getKeyword();
-        Optional<Keyword> otherCallee = call.getKeyword();
-
-        if(thisCallee.isPresent() && otherCallee.isPresent()){
-            return thisCallee.get() == otherCallee.get() ? 0 : 1;
+        if (!(other instanceof KeywordCall)){
+            return 1.;
         }
 
-        boolean sameName = this.getName().equalsIgnorePosition(call.getName());
-        boolean sameArguments = LevenshteinDistance.index(this.argumentList, call.argumentList) == 0.0;
+        Node node = (Node)other;
 
-        return sameName && sameArguments ? 0 : 1;
+        double distName = this.getName().equalsIgnorePosition(node.getName()) ? 0. : 0.5;
+
+        boolean sameArguments = this.getAstChildren().size() == node.getAstChildren().size();
+        for(int i = 0; sameArguments && i < this.getAstChildren().size(); ++i) {
+            sameArguments = this.getAstChildren().get(i).equals(node.getAstChildren().get(i));
+        }
+
+        double distArguments = sameArguments ? 0. : 0.5;
+
+        return distName + distArguments;
     }
 
     @Override
@@ -165,7 +129,7 @@ public class KeywordCall extends Step {
                 actions.add(Action.changeStepName(this, call));
             }
 
-            List<Action> argumentActions = LevenshteinDistance.getDifferences(this.argumentList, call.argumentList);
+            List<Action> argumentActions = LevenshteinDistance.getDifferences(this.getAstChildren(), call.getAstChildren());
             actions.addAll(argumentActions);
         }
 
@@ -178,7 +142,7 @@ public class KeywordCall extends Step {
 
         builder.append(getName());
 
-        for (Argument argument: argumentList){
+        for (Argument argument: getArgumentList()){
             builder.append("\t");
             builder.append(argument.toString());
         }
@@ -204,7 +168,7 @@ public class KeywordCall extends Step {
     public void setTemplate(KeywordCall template) throws InvalidDependencyException {
         super.setTemplate(template);
 
-        addArgument(0, new Argument(this, getName()));
+        addArgument(0, new Argument(getName()));
         setName(template.getName());
     }
 }
