@@ -134,7 +134,7 @@ public class SettingsTableParserTest {
         ErrorManager errors = new ErrorManager();
 
         final Settings settings = createSettings(settingText, errors);
-        assertEquals(1, errors.in(new File("\\")).getSize());
+        assertEquals(1, errors.in(new File("<null>")).getSize());
 
         assertEquals(0, settings.getMetadata().size());
     }
@@ -146,7 +146,7 @@ public class SettingsTableParserTest {
 
         final ErrorManager errors = new ErrorManager();
         final Settings settings = createSettings(settingText, errors);
-        assertEquals(1, errors.in(new File("\\")).getSize());
+        assertEquals(1, errors.in(new File("<null>")).getSize());
 
         assertEquals(1, settings.getMetadata().size());
         assertEquals("2.0", settings.getMetadata("Version").getText());
@@ -195,7 +195,7 @@ public class SettingsTableParserTest {
 
         final ErrorManager errors = new ErrorManager();
         final Settings settings = createSettings(settingText, errors);
-        assertTrue(errors.in(new File("\\")).isEmpty());
+        assertTrue(errors.in(new File("<null>")).isEmpty());
 
         assertEquals("2 minutes", settings.getTimeOut().getTokens().toString());
     }
@@ -207,7 +207,7 @@ public class SettingsTableParserTest {
 
         final ErrorManager errors = new ErrorManager();
         final Settings settings = createSettings(settingText, errors);
-        assertTrue(errors.in(new File("\\")).isEmpty());
+        assertTrue(errors.in(new File("<null>")).isEmpty());
 
         assertEquals(1, settings.getVariableFiles().size());
     }
@@ -219,7 +219,7 @@ public class SettingsTableParserTest {
 
         final ErrorManager errors = new ErrorManager();
         final Settings settings = createSettings(settingText, errors);
-        assertTrue(errors.in(new File("\\")).isEmpty());
+        assertTrue(errors.in(new File("<null>")).isEmpty());
 
         assertEquals(1, settings.getVariableFiles().size());
     }

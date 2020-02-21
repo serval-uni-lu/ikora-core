@@ -25,7 +25,7 @@ public class LineReader {
     }
 
     public LineReader(Reader reader) {
-        this.file = new File("/");
+        this.file = new File("<null>");
         this.reader = new LineNumberReader(reader);
         this.sourceFile = null;
     }
