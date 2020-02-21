@@ -1,4 +1,4 @@
-package tech.ikora.analytics;
+package tech.ikora.analytics.violations;
 
 import tech.ikora.model.Node;
 
