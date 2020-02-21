@@ -16,6 +16,7 @@ class DifferenceTest {
     private static UserKeyword keyword2;
     private static UserKeyword keyword3;
     private static UserKeyword keyword4;
+    private static UserKeyword keyword5;
 
     @BeforeAll
     static void setUp() {
@@ -30,6 +31,9 @@ class DifferenceTest {
         assertNotNull(keyword3);
 
         keyword4 = project.findUserKeyword(Token.fromString("Forth keyword")).iterator().next();
+        assertNotNull(keyword4);
+
+        keyword5 = project.findUserKeyword(Token.fromString("Fifth keyword")).iterator().next();
         assertNotNull(keyword4);
     }
 
@@ -53,10 +57,27 @@ class DifferenceTest {
         Difference difference = Difference.of(keyword3, keyword4);
         List<Action> actions = difference.getActions();
 
-        // I will make that test fail because there is something shady in the action list
         assertEquals(4, actions.size());
         assertEquals(1, actions.stream().filter(action -> action.getType() == Action.Type.CHANGE_NAME).count());
         assertEquals(2, actions.stream().filter(action -> action.getType() == Action.Type.ADD_STEP).count());
         assertEquals(1, actions.stream().filter(action -> action.getType() == Action.Type.CHANGE_STEP_ARGUMENT).count());
+    }
+
+    @Test
+    void testFromCallToAssignment(){
+        Difference difference = Difference.of(keyword4, keyword5);
+        List<Action> actions = difference.getActions();
+
+        assertEquals(2, actions.size());
+        assertEquals(1, actions.stream().filter(action -> action.getType() == Action.Type.ADD_VARIABLE).count());
+    }
+
+    @Test
+    void testFromAssignmentToCall(){
+        Difference difference = Difference.of(keyword5, keyword4);
+        List<Action> actions = difference.getActions();
+
+        assertEquals(2, actions.size());
+        assertEquals(1, actions.stream().filter(action -> action.getType() == Action.Type.REMOVE_VARIABLE).count());
     }
 }

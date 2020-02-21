@@ -24,9 +24,6 @@ public class Action implements Differentiable {
         REMOVE_STEP_ARGUMENT,
         CHANGE_STEP_ARGUMENT,
 
-        CHANGE_STEP_EXPRESSION,
-        CHANGE_STEP_RETURN_VALUES,
-
         CHANGE_FOR_LOOP_CONDITION,
         CHANGE_FOR_LOOP_BODY,
 
@@ -180,14 +177,6 @@ public class Action implements Differentiable {
 
     public static Action changeStepArgument(Differentiable left, Differentiable right){
         return new Action(Type.CHANGE_STEP_ARGUMENT, left, right);
-    }
-
-    public static Action changeStepExpression(Differentiable left, Differentiable right){
-        return new Action(Type.CHANGE_STEP_EXPRESSION, left, right);
-    }
-
-    public static Action changeStepReturnValues(Differentiable left, Differentiable right){
-        return new Action(Type.CHANGE_STEP_RETURN_VALUES, left, right);
     }
 
     public static Action changeForLoopCondition(Differentiable left, Differentiable right) {

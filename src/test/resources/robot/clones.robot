@@ -22,3 +22,10 @@ Forth keyword
     Title Should be  google.com
     Log  Closing browser
     Close All Browser
+
+Fifth keyword
+    Log  Opening browser
+    ${result}=  Open Browser  firefox  google.com
+    Title Should be  google.com
+    Log  Closing browser
+    Close All Browser

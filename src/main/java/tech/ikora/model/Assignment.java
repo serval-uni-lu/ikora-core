@@ -128,29 +128,23 @@ public class Assignment extends Step {
             return Collections.singletonList(Action.addElement(this.getClass(), this));
         }
 
-        if(!(other instanceof Step)){
+        if(other == this){
             return Collections.emptyList();
         }
 
         List<Action> actions = new ArrayList<>();
 
-        if(this.getClass() != other.getClass()){
-            actions.add(Action.changeStepType(this, other));
-        }
-        else{
+        if(other instanceof Assignment){
             Assignment assignment = (Assignment)other;
-
-            getKeywordCall().ifPresent(call -> assignment.getKeywordCall().ifPresent(otherCall -> {
-
-                if(call.distance(otherCall) > 0){
-                    actions.add(Action.changeStepExpression(this, assignment));
-                }
-
-                if(LevenshteinDistance.index(this.getReturnVariables(), assignment.getReturnVariables()) > 0){
-                    actions.add(Action.changeStepReturnValues(this, assignment));
-                }
-            }));
-
+            actions.addAll(LevenshteinDistance.getDifferences(this.returnVariables, assignment.returnVariables));
+            getKeywordCall().ifPresent(call -> actions.addAll(call.differences(assignment.getKeywordCall().orElse(null))));
+        }
+        else if(other instanceof KeywordCall){
+            actions.addAll(LevenshteinDistance.getDifferences(this.returnVariables, Collections.emptyList()));
+            getKeywordCall().ifPresent(call -> actions.addAll(call.differences(other)));
+        }
+        else {
+            actions.add(Action.changeStepType(this, other));
         }
 
         return actions;

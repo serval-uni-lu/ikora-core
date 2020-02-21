@@ -19,7 +19,6 @@ public class CloneDetection<T extends Node> {
 
         Set<Action.Type> typeII = new HashSet<>(ignoreForType1);
         typeII.add(Action.Type.CHANGE_STEP_ARGUMENT);
-        typeII.add(Action.Type.CHANGE_STEP_RETURN_VALUES);
 
         ignoreForType2 = Collections.unmodifiableSet(typeII);
     }

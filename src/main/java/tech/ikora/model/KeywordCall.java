@@ -111,16 +111,17 @@ public class KeywordCall extends Step {
 
     @Override
     public List<Action> differences(Differentiable other) {
+        if(other == this){
+            return Collections.emptyList();
+        }
+
+        if(other == null){
+            return Collections.singletonList(Action.addElement(this.getClass(), this));
+        }
+
         List<Action> actions = new ArrayList<>();
 
-        if(!(other instanceof Step)){
-            return actions;
-        }
-
-        if(this.getClass() != other.getClass()){
-            actions.add(Action.changeStepType(this, other));
-        }
-        else{
+        if(other instanceof KeywordCall){
             KeywordCall call = (KeywordCall)other;
 
             if(!this.getName().equalsIgnorePosition(call.getName())){
@@ -129,6 +130,14 @@ public class KeywordCall extends Step {
 
             List<Action> argumentActions = LevenshteinDistance.getDifferences(this.getAstChildren(), call.getAstChildren());
             actions.addAll(argumentActions);
+        }
+        else if(other instanceof Assignment){
+            Assignment assignment = (Assignment)other;
+            actions.addAll(this.differences(assignment.getKeywordCall().orElse(null)));
+            actions.addAll(LevenshteinDistance.getDifferences(Collections.emptyList(), assignment.getReturnVariables()));
+        }
+        else{
+            actions.add(Action.changeStepType(this, other));
         }
 
         return actions;
