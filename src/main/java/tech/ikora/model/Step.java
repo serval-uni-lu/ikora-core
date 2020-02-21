@@ -5,7 +5,6 @@ import tech.ikora.exception.InvalidDependencyException;
 import tech.ikora.exception.InvalidTypeException;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public abstract class Step extends Node {
     private Token name;
@@ -50,8 +49,9 @@ public abstract class Step extends Node {
     public abstract List<Argument> getArgumentList();
     public abstract boolean hasParameters();
 
-    public void setTemplate(KeywordCall template) throws InvalidDependencyException {
+    public void setTemplate(KeywordCall template) {
         this.template = template;
+        this.template.addDependency(this);
     }
 
     public KeywordCall toCall() throws InvalidTypeException {

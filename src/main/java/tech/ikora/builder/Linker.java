@@ -3,7 +3,6 @@ package tech.ikora.builder;
 import org.apache.commons.lang3.tuple.Pair;
 import tech.ikora.error.ErrorMessages;
 import tech.ikora.exception.InvalidDependencyException;
-import tech.ikora.exception.InvalidImportTypeException;
 import tech.ikora.runner.Runtime;
 import tech.ikora.model.*;
 
@@ -50,15 +49,7 @@ public class Linker {
 
         for (Step step: testCase) {
             if(testCase.hasTemplate()){
-                try {
-                    step.setTemplate(testCase.getTemplate());
-                } catch (InvalidDependencyException e) {
-                    runtime.getErrors().registerInternalError(
-                            step.getFile(),
-                            ErrorMessages.FAILED_TO_LINK_TEMPLATE,
-                            step.getRange()
-                    );
-                }
+                step.setTemplate(testCase.getTemplate());
             }
 
             step.getKeywordCall().ifPresent(call -> unresolvedNodes.addAll(resolveCall(call)));

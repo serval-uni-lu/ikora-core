@@ -65,7 +65,7 @@ class AssignmentParserTest {
         final Optional<KeywordCall> expression = assignment.getKeywordCall();
         assertFalse(expression.isPresent());
 
-        final Errors fileError = errors.in(new File("/"));
+        final Errors fileError = errors.in(new File("<null>"));
         assertEquals(1, fileError.getSize());
         assertEquals(ErrorMessages.ASSIGNMENT_SHOULD_HAVE_LEFT_HAND_OPERAND,
                 fileError.getSyntaxErrors().iterator().next().getMessage());

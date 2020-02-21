@@ -4,8 +4,6 @@ import tech.ikora.analytics.Action;
 import tech.ikora.analytics.visitor.NodeVisitor;
 import tech.ikora.analytics.visitor.VisitorMemory;
 import tech.ikora.builder.Linker;
-import tech.ikora.exception.InvalidDependencyException;
-import tech.ikora.exception.InvalidImportTypeException;
 import tech.ikora.runner.Runtime;
 import tech.ikora.utils.LevenshteinDistance;
 
@@ -165,7 +163,7 @@ public class KeywordCall extends Step {
     }
 
     @Override
-    public void setTemplate(KeywordCall template) throws InvalidDependencyException {
+    public void setTemplate(KeywordCall template) {
         super.setTemplate(template);
 
         addArgument(0, new Argument(getName()));

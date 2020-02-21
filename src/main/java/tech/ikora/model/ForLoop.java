@@ -3,7 +3,6 @@ package tech.ikora.model;
 import tech.ikora.analytics.Action;
 import tech.ikora.analytics.visitor.NodeVisitor;
 import tech.ikora.analytics.visitor.VisitorMemory;
-import tech.ikora.exception.InvalidDependencyException;
 import tech.ikora.runner.Runtime;
 import tech.ikora.utils.LevenshteinDistance;
 import org.apache.commons.lang3.NotImplementedException;
@@ -120,7 +119,7 @@ public class ForLoop extends Step {
     }
 
     @Override
-    public void setTemplate(KeywordCall template) throws InvalidDependencyException {
+    public void setTemplate(KeywordCall template) {
         super.setTemplate(template);
 
         for(Step step: steps){

@@ -4,7 +4,6 @@ import tech.ikora.analytics.Action;
 import tech.ikora.analytics.visitor.NodeVisitor;
 import tech.ikora.analytics.visitor.VisitorMemory;
 import tech.ikora.builder.ValueLinker;
-import tech.ikora.exception.InvalidDependencyException;
 import tech.ikora.exception.MalformedVariableException;
 import tech.ikora.runner.Runtime;
 

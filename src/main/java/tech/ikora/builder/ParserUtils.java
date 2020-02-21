@@ -3,11 +3,9 @@ package tech.ikora.builder;
 import tech.ikora.error.ErrorManager;
 import tech.ikora.error.ErrorMessages;
 import tech.ikora.exception.InvalidArgumentException;
-import tech.ikora.exception.InvalidDependencyException;
 import tech.ikora.exception.MalformedVariableException;
 import tech.ikora.model.*;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -15,7 +13,7 @@ import java.util.List;
 public class ParserUtils {
     private ParserUtils(){}
 
-    static List<Variable> parseKeywordName(LineReader reader, Tokens tokens, KeywordDefinition keyword, ErrorManager errors) throws IOException {
+    static List<Variable> parseKeywordName(LineReader reader, Tokens tokens, KeywordDefinition keyword, ErrorManager errors) {
         if(tokens.size() > 1){
             errors.registerSyntaxError(
                     reader.getFile(),
@@ -75,11 +73,11 @@ public class ParserUtils {
         return header;
     }
 
-    static void parseTimeOut(LineReader reader, Tokens tokens, Delayable delayable, ErrorManager errors) throws IOException {
+    static void parseTimeOut(LineReader reader, Tokens tokens, Delayable delayable, ErrorManager errors) {
         try {
             TimeOut timeOut = TimeoutParser.parse(tokens);
             delayable.setTimeOut(timeOut);
-        } catch (InvalidArgumentException | MalformedVariableException | InvalidDependencyException e) {
+        } catch (InvalidArgumentException | MalformedVariableException e) {
             errors.registerSyntaxError(reader.getFile(),
                     String.format("%s: %s", ErrorMessages.FAILED_TO_PARSE_TIMEOUT, e.getMessage()),
                     Range.fromTokens(tokens, reader.getCurrent())

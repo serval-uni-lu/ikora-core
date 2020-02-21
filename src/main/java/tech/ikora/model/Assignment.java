@@ -5,7 +5,6 @@ import tech.ikora.analytics.visitor.NodeVisitor;
 import tech.ikora.analytics.visitor.VisitorMemory;
 import tech.ikora.builder.Linker;
 import tech.ikora.exception.ExecutionException;
-import tech.ikora.exception.InvalidDependencyException;
 import tech.ikora.runner.Runtime;
 import tech.ikora.utils.LevenshteinDistance;
 
