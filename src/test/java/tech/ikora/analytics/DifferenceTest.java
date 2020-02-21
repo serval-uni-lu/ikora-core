@@ -17,6 +17,9 @@ class DifferenceTest {
     private static UserKeyword keyword3;
     private static UserKeyword keyword4;
     private static UserKeyword keyword5;
+    private static UserKeyword keyword6;
+    private static UserKeyword keyword7;
+    private static UserKeyword keyword8;
 
     @BeforeAll
     static void setUp() {
@@ -34,7 +37,16 @@ class DifferenceTest {
         assertNotNull(keyword4);
 
         keyword5 = project.findUserKeyword(Token.fromString("Fifth keyword")).iterator().next();
-        assertNotNull(keyword4);
+        assertNotNull(keyword5);
+
+        keyword6 = project.findUserKeyword(Token.fromString("Sixth keyword")).iterator().next();
+        assertNotNull(keyword6);
+
+        keyword7 = project.findUserKeyword(Token.fromString("Seventh keyword")).iterator().next();
+        assertNotNull(keyword7);
+
+        keyword8 = project.findUserKeyword(Token.fromString("Eighth keyword")).iterator().next();
+        assertNotNull(keyword8);
     }
 
     @Test
@@ -79,5 +91,23 @@ class DifferenceTest {
 
         assertEquals(2, actions.size());
         assertEquals(1, actions.stream().filter(action -> action.getType() == Action.Type.REMOVE_VARIABLE).count());
+    }
+
+    @Test
+    void testForLoopCondition(){
+        Difference difference = Difference.of(keyword6, keyword7);
+        List<Action> actions = difference.getActions();
+
+        assertEquals(2, actions.size());
+        assertEquals(1, actions.stream().filter(action -> action.getType() == Action.Type.CHANGE_STEP_ARGUMENT).count());
+    }
+
+    @Test
+    void testForLoopInBody(){
+        Difference difference = Difference.of(keyword6, keyword8);
+        List<Action> actions = difference.getActions();
+
+        assertEquals(2, actions.size());
+        assertEquals(1, actions.stream().filter(action -> action.getType() == Action.Type.REMOVE_STEP).count());
     }
 }

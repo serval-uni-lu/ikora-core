@@ -15,7 +15,6 @@ Third keyword
     Title Should be  google.com
     Close All Browser
 
-
 Forth keyword
     Log  Opening browser
     Open Browser  firefox  google.com
@@ -29,3 +28,20 @@ Fifth keyword
     Title Should be  google.com
     Log  Closing browser
     Close All Browser
+
+Sixth keyword
+    :FOR    ${INDEX}    IN RANGE    1    3
+    \    Log    ${INDEX}
+    \    ${RANDOM_STRING}=    Generate Random String    ${INDEX}
+    \    Log    ${RANDOM_STRING}
+
+Seventh keyword
+    :FOR    ${INDEX}    IN RANGE    1    10
+    \    Log    ${INDEX}
+    \    ${RANDOM_STRING}=    Generate Random String    ${INDEX}
+    \    Log    ${RANDOM_STRING}
+
+Eighth keyword
+    :FOR    ${INDEX}    IN RANGE    1    3
+    \    ${RANDOM_STRING}=    Generate Random String    ${INDEX}
+    \    Log    ${RANDOM_STRING}

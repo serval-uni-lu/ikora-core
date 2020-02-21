@@ -24,9 +24,6 @@ public class Action implements Differentiable {
         REMOVE_STEP_ARGUMENT,
         CHANGE_STEP_ARGUMENT,
 
-        CHANGE_FOR_LOOP_CONDITION,
-        CHANGE_FOR_LOOP_BODY,
-
         ADD_VARIABLE,
         REMOVE_VARIABLE,
         CHANGE_VARIABLE_DEFINITION,
@@ -177,14 +174,6 @@ public class Action implements Differentiable {
 
     public static Action changeStepArgument(Differentiable left, Differentiable right){
         return new Action(Type.CHANGE_STEP_ARGUMENT, left, right);
-    }
-
-    public static Action changeForLoopCondition(Differentiable left, Differentiable right) {
-        return new Action(Type.CHANGE_FOR_LOOP_CONDITION, left, right);
-    }
-
-    public static Action changeForLoopBody(Differentiable left, Differentiable right) {
-        return new Action(Type.CHANGE_FOR_LOOP_BODY, left, right);
     }
 
     public static Action changeVariableDefinition(Differentiable left, Differentiable right) {
