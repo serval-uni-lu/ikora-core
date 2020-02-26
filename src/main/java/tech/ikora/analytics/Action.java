@@ -28,6 +28,8 @@ public class Action implements Differentiable {
         REMOVE_VARIABLE,
         CHANGE_VARIABLE_DEFINITION,
 
+        ADD_LITERAL,
+
         ADD_SEQUENCE,
         REMOVE_SEQUENCE,
 
