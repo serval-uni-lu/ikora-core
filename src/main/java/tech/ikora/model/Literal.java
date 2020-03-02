@@ -10,8 +10,9 @@ import java.util.List;
 public class Literal extends Node {
     private Token name;
 
-    Literal(Token name){
+    public Literal(Token name) {
         this.name = name;
+        addToken(this.name);
     }
 
     @Override

@@ -47,7 +47,7 @@ public class UserKeyword extends KeywordDefinition {
         super.addStep(step);
 
         if(Assignment.class.isAssignableFrom(step.getClass())){
-            for (Variable variable: ((Assignment)step).getReturnVariables()){
+            for (Variable variable: ((Assignment)step).getLeftHandOperand()){
                 localVariables.add(variable);
             }
         }

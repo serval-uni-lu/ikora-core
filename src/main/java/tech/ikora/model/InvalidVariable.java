@@ -3,6 +3,7 @@ package tech.ikora.model;
 import tech.ikora.analytics.Action;
 import tech.ikora.analytics.visitor.NodeVisitor;
 import tech.ikora.analytics.visitor.VisitorMemory;
+import tech.ikora.exception.InvalidArgumentException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,11 @@ public class InvalidVariable extends Variable {
     @Override
     protected void setName(Token name) {
         this.name = name;
+    }
+
+    @Override
+    public void addElement(Node value) throws InvalidArgumentException {
+        throw new InvalidArgumentException("Invalid Scalar cannot receive arguments");
     }
 
     @Override

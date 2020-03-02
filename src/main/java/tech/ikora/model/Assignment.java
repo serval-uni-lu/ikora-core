@@ -14,23 +14,23 @@ import java.util.List;
 import java.util.Optional;
 
 public class Assignment extends Step {
-    private List<Variable> returnVariables;
-    private Argument expression;
+    private List<Variable> leftHandOperand;
+    private Argument rightHandOperand;
 
-    public Assignment(Token name, List<Variable> returnVariables, KeywordCall expression) {
+    public Assignment(Token name, List<Variable> leftHandOperand, KeywordCall rightHandOperand) {
         super(name);
 
-        this.returnVariables = new ArrayList<>(returnVariables.size());
+        this.leftHandOperand = new ArrayList<>(leftHandOperand.size());
 
-        for(Variable returnVariable: returnVariables){
+        for(Variable returnVariable: leftHandOperand){
             this.addReturnVariable(returnVariable);
             this.addAstChild(returnVariable);
             this.addTokens(returnVariable.getTokens());
         }
 
-        this.expression = new Argument(expression);
-        this.addAstChild(expression);
-        this.addTokens(this.expression.getTokens());
+        this.rightHandOperand = new Argument(rightHandOperand);
+        this.addAstChild(rightHandOperand);
+        this.addTokens(this.rightHandOperand.getTokens());
     }
 
     public void addReturnVariable(Variable variable)  {
@@ -39,12 +39,11 @@ public class Assignment extends Step {
         }
 
         this.addAstChild(variable);
-        variable.addArgument(this.expression);
-        returnVariables.add(variable);
+        leftHandOperand.add(variable);
     }
 
-    public List<Variable> getReturnVariables() {
-        return returnVariables;
+    public List<Variable> getLeftHandOperand() {
+        return leftHandOperand;
     }
 
     @Override
@@ -59,11 +58,11 @@ public class Assignment extends Step {
 
     @Override
     public Optional<KeywordCall> getKeywordCall(){
-        if(expression == null){
+        if(rightHandOperand == null){
             return Optional.empty();
         }
 
-        Node node = expression.getDefinition().orElse(null);
+        Node node = rightHandOperand.getDefinition().orElse(null);
 
         if(node instanceof KeywordCall){
             return Optional.of((KeywordCall)node);
@@ -99,7 +98,7 @@ public class Assignment extends Step {
 
         runtime.exitNode(this);
 
-        for(Variable variable: returnVariables){
+        for(Variable variable: leftHandOperand){
             runtime.addToKeywordScope(this.getCaller(), variable);
         }
     }
@@ -116,8 +115,8 @@ public class Assignment extends Step {
 
         Assignment assignment = (Assignment)other;
 
-        double distReturn = LevenshteinDistance.index(this.returnVariables, assignment.returnVariables) * 0.2;
-        double distExpression = expression.distance(assignment.expression) * 0.8;
+        double distReturn = LevenshteinDistance.index(this.leftHandOperand, assignment.leftHandOperand) * 0.2;
+        double distExpression = rightHandOperand.distance(assignment.rightHandOperand) * 0.8;
 
         return distReturn + distExpression;
     }
@@ -136,11 +135,11 @@ public class Assignment extends Step {
 
         if(other instanceof Assignment){
             Assignment assignment = (Assignment)other;
-            actions.addAll(LevenshteinDistance.getDifferences(this.returnVariables, assignment.returnVariables));
+            actions.addAll(LevenshteinDistance.getDifferences(this.leftHandOperand, assignment.leftHandOperand));
             getKeywordCall().ifPresent(call -> actions.addAll(call.differences(assignment.getKeywordCall().orElse(null))));
         }
         else if(other instanceof KeywordCall){
-            actions.addAll(LevenshteinDistance.getDifferences(this.returnVariables, Collections.emptyList()));
+            actions.addAll(LevenshteinDistance.getDifferences(this.leftHandOperand, Collections.emptyList()));
             getKeywordCall().ifPresent(call -> actions.addAll(call.differences(other)));
         }
         else {
@@ -154,7 +153,7 @@ public class Assignment extends Step {
     public String toString(){
         StringBuilder builder = new StringBuilder();
 
-        for (Variable variable: returnVariables){
+        for (Variable variable: leftHandOperand){
             builder.append(variable.getName());
             builder.append("\t");
         }

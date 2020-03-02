@@ -134,7 +134,7 @@ public class KeywordCall extends Step {
         else if(other instanceof Assignment){
             Assignment assignment = (Assignment)other;
             actions.addAll(this.differences(assignment.getKeywordCall().orElse(null)));
-            actions.addAll(LevenshteinDistance.getDifferences(Collections.emptyList(), assignment.getReturnVariables()));
+            actions.addAll(LevenshteinDistance.getDifferences(Collections.emptyList(), assignment.getLeftHandOperand()));
         }
         else{
             actions.add(Action.changeStepType(this, other));
@@ -168,14 +168,10 @@ public class KeywordCall extends Step {
 
     @Override
     public Optional<KeywordCall> getKeywordCall() {
+        if(template != null){
+            return Optional.of(template);
+        }
+
         return Optional.of(this);
-    }
-
-    @Override
-    public void setTemplate(KeywordCall template) {
-        super.setTemplate(template);
-
-        addArgument(0, new Argument(getName()));
-        setName(template.getName());
     }
 }

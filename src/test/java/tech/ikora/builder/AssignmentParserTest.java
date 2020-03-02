@@ -25,7 +25,7 @@ class AssignmentParserTest {
         ErrorManager errors = new ErrorManager();
         Assignment assignment = createAssignment(text, errors);
 
-        List<Variable> variables = assignment.getReturnVariables();
+        List<Variable> variables = assignment.getLeftHandOperand();
         assertEquals(1, variables.size());
         assertEquals("${value}", variables.get(0).getName().getText());
 
@@ -41,7 +41,7 @@ class AssignmentParserTest {
         ErrorManager errors = new ErrorManager();
         Assignment assignment = createAssignment(text, errors);
 
-        List<Variable> variables = assignment.getReturnVariables();
+        List<Variable> variables = assignment.getLeftHandOperand();
         assertEquals(2, variables.size());
         assertEquals("${value1}", variables.get(0).getName().getText());
         assertEquals("${value2}", variables.get(1).getName().getText());
@@ -58,7 +58,7 @@ class AssignmentParserTest {
         final ErrorManager errors = new ErrorManager();
         Assignment assignment = createAssignment(text, errors);
 
-        final List<Variable> variables = assignment.getReturnVariables();
+        final List<Variable> variables = assignment.getLeftHandOperand();
         assertEquals(1, variables.size());
         assertEquals("${value}", variables.get(0).getName().getText());
 

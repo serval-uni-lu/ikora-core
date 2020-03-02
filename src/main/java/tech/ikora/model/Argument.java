@@ -18,12 +18,6 @@ public class Argument extends Node {
     private Node definition;
     private final Token name;
 
-    public Argument(Token name) {
-        this.name = name;
-        this.definition = null;
-        this.addToken(name);
-    }
-
     public Argument(Node definition) {
         if(definition == null){
             this.name = Token.empty();

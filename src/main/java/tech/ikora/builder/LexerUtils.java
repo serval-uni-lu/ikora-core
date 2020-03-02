@@ -1,5 +1,6 @@
 package tech.ikora.builder;
 
+import org.apache.commons.math3.util.Pair;
 import tech.ikora.model.Token;
 import tech.ikora.model.Tokens;
 import tech.ikora.utils.StringUtils;
@@ -58,6 +59,29 @@ class LexerUtils {
 
     static boolean ignore(String line){
         return isEmpty(line) || isComment(line);
+    }
+
+    static Pair<Token, Token> getKeyValuePair(Token token){
+        int current = 0;
+        int breakPosition = 0;
+        boolean escape = false;
+
+        for(char c: token.getText().toCharArray()){
+            if(!escape && c == '='){
+                break;
+            }
+
+            if(c == '\\'){
+                breakPosition = ++current;
+                escape = true;
+                continue;
+            }
+
+            breakPosition = ++current;
+            escape = false;
+        }
+
+        return new Pair<>(token.extract(0, breakPosition), token.extract(Math.min(token.length(), ++breakPosition)));
     }
 
     private static boolean isContinuation(Tokens tokens){

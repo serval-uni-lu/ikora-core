@@ -44,6 +44,10 @@ public class Token implements Comparable<Token> {
         return type == Type.CONTINUATION ? "\n" : this.text;
     }
 
+    public int length() {
+        return this.text.length();
+    }
+
     public String getText() {
         return this.text;
     }

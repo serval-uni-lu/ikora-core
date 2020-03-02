@@ -4,6 +4,7 @@ import tech.ikora.analytics.Action;
 import tech.ikora.analytics.visitor.NodeVisitor;
 import tech.ikora.analytics.visitor.VisitorMemory;
 import tech.ikora.builder.ValueLinker;
+import tech.ikora.exception.InvalidArgumentException;
 
 import java.util.Collections;
 import java.util.List;
@@ -20,6 +21,11 @@ public abstract class LibraryVariable extends Variable {
         super(Token.empty());
         this.format = Format.SCALAR;
         setName(toVariable(this.getClass()));
+    }
+
+    @Override
+    public void addElement(Node value) throws InvalidArgumentException {
+        throw new InvalidArgumentException("Library variable cannot be assigned");
     }
 
     @Override

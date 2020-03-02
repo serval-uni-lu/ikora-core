@@ -4,14 +4,35 @@ import tech.ikora.analytics.Action;
 import tech.ikora.analytics.visitor.NodeVisitor;
 import tech.ikora.analytics.visitor.VisitorMemory;
 import tech.ikora.builder.ValueLinker;
+import tech.ikora.exception.InvalidArgumentException;
 import tech.ikora.utils.LevenshteinDistance;
 
 import java.util.*;
 import java.util.regex.Pattern;
 
 public class ScalarVariable extends Variable {
+    private Node value;
+
     public ScalarVariable(Token name){
         super(name);
+        this.value = null;
+    }
+
+    @Override
+    public void addElement(Node value) throws InvalidArgumentException {
+        if(this.value != null){
+            throw new InvalidArgumentException("Scalar variable only accept one element");
+        }
+
+        setValue(value);
+    }
+
+    public void setValue(Node value) {
+        this.value = value;
+    }
+
+    public Node getValue() {
+        return value;
     }
 
     @Override
@@ -27,7 +48,10 @@ public class ScalarVariable extends Variable {
 
         ScalarVariable variable = (ScalarVariable)other;
         boolean same = getName().equalsIgnorePosition(variable.getName());
-        same &= LevenshteinDistance.index(getArguments(), variable.getArguments()) == 0.0;
+
+        if(this.value != null){
+            same &= this.value.distance(variable.value) == 0.0;
+        }
 
         return same ? 0.0 : 1.0;
     }
@@ -43,8 +67,12 @@ public class ScalarVariable extends Variable {
 
         ScalarVariable variable = (ScalarVariable)other;
 
-        if(LevenshteinDistance.index(getArguments(), variable.getArguments()) > 0){
-            actions.add(Action.changeVariableDefinition(this, other));
+        if(!getName().equalsIgnorePosition(variable.getName())){
+            actions.add(Action.changeName(this, variable));
+        }
+
+        if(this.value != null){
+            actions.addAll(this.value.differences(variable.value));
         }
 
         return actions;

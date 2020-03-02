@@ -129,9 +129,9 @@ class BuilderTest {
         assertTrue(Assignment.class.isAssignableFrom(step0.getClass()));
         final Assignment assignment = (Assignment) step0;
 
-        assertEquals(1, assignment.getReturnVariables().size());
-        assertEquals("${EtatRun}", assignment.getReturnVariables().get(0).getName().getText());
-        assertEquals(0, assignment.getReturnVariables().get(0).getDependencies().size());
+        assertEquals(1, assignment.getLeftHandOperand().size());
+        assertEquals("${EtatRun}", assignment.getLeftHandOperand().get(0).getName().getText());
+        assertEquals(0, assignment.getLeftHandOperand().get(0).getDependencies().size());
     }
 
     @Test
@@ -262,7 +262,6 @@ class BuilderTest {
         final Keyword keyword = ofInterest.iterator().next();
 
         final Step step0 = testCase.getStep(0);
-        assertEquals("This is a template", step0.getName().getText());
         assertTrue(step0.getKeywordCall().map(KeywordCall::getKeyword).isPresent());
         final Optional<Keyword> template = step0.getKeywordCall().map(KeywordCall::getKeyword).get();
         assertTrue(template.isPresent());

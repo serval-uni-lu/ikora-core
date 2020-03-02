@@ -2,6 +2,7 @@ package tech.ikora.model;
 
 import tech.ikora.builder.ValueLinker;
 import tech.ikora.builder.VariableParser;
+import tech.ikora.exception.InvalidArgumentException;
 import tech.ikora.exception.MalformedVariableException;
 import tech.ikora.runner.Runtime;
 
@@ -12,30 +13,15 @@ import java.util.regex.Pattern;
 public abstract class Variable extends Node {
     protected Token name;
     protected Pattern pattern;
-    protected List<Argument> arguments;
 
     public Variable(Token name) {
         setName(name);
 
         name.setType(Token.Type.VARIABLE);
-        this.arguments = new ArrayList<>();
     }
 
     public static Variable invalid() {
         return new InvalidVariable();
-    }
-
-    public void addArgument(Argument argument){
-        if(argument == null){
-            return;
-        }
-
-        this.arguments.add(argument);
-        addTokens(argument.getTokens());
-    }
-
-    public List<Argument> getArguments(){
-        return this.arguments;
     }
 
     @Override
@@ -67,4 +53,5 @@ public abstract class Variable extends Node {
     }
 
     protected abstract void setName(Token name);
+    public abstract void addElement(Node value) throws InvalidArgumentException;
 }

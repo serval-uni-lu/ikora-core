@@ -4,6 +4,8 @@ import tech.ikora.error.ErrorManager;
 import tech.ikora.error.ErrorMessages;
 import tech.ikora.model.*;
 
+import java.util.Optional;
+
 public class KeywordCallParser {
     private KeywordCallParser() {}
 
@@ -26,7 +28,8 @@ public class KeywordCallParser {
             call.setGherkin(gherkin);
 
             for(Token token: callTokens.withoutFirst()) {
-                Argument argument = new Argument(token);
+                Optional<Variable> optionalVariable = VariableParser.parse(token);
+                Argument argument = new Argument(optionalVariable.isPresent() ? optionalVariable.get() : new Literal(token));
                 call.addArgument(argument);
             }
 

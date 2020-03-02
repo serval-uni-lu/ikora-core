@@ -10,11 +10,24 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 public class ListVariable extends Variable {
-    private List<Variable> values;
+    private List<Node> values;
 
     public ListVariable(Token name){
         super(name);
         this.values = new ArrayList<>();
+    }
+
+    @Override
+    public void addElement(Node value) {
+        if(this.values == null){
+            this.values = new ArrayList<>();
+        }
+
+        this.values.add(value);
+    }
+
+    public void setValues(List<Node> values){
+        this.values = values;
     }
 
     @Override
@@ -35,6 +48,19 @@ public class ListVariable extends Variable {
     @Override
     public void accept(NodeVisitor visitor, VisitorMemory memory){
         visitor.visit(this, memory);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append(name.getText());
+
+        for(Node value: values){
+            builder.append("\t");
+            builder.append(value.getName());
+        }
+
+        return builder.toString();
     }
 
     @Override

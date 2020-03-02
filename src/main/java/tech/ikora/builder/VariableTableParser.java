@@ -35,7 +35,7 @@ class VariableTableParser {
             Optional<Variable> optional = VariableParser.parse(tokens.first());
 
             if(!optional.isPresent()){
-                errors.registerInternalError(
+                errors.registerSyntaxError(
                         reader.getFile(),
                         String.format("Invalid variable: %s", tokens.first().getText()),
                         Range.fromToken(tokens.first(), reader.getCurrent())
@@ -45,10 +45,7 @@ class VariableTableParser {
             }
 
             Variable variable = optional.get();
-
-            for (Token token: tokens.withoutFirst()) {
-                variable.addArgument(new Argument(token));
-            }
+            VariableParser.parseValues(variable, tokens.withoutFirst(), reader, errors);
 
             variableTable.add(variable);
         }

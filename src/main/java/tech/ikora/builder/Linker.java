@@ -149,8 +149,10 @@ public class Linker {
         while (iterator.hasNext() && i > 0){
             last = iterator.next();
 
-            Argument current = new Argument(last.getName());
+            Optional<Variable> optionalVariable = VariableParser.parse(last.getName());
+            Argument current = new Argument(optionalVariable.isPresent() ? optionalVariable.get() : new Literal(last.getName()));
             call.addArgument(current);
+
             --i;
         }
 
