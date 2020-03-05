@@ -1,7 +1,7 @@
 package tech.ikora.builder;
 
 import org.junit.jupiter.api.Test;
-import tech.ikora.Helpers;
+import tech.ikora.utils.FileUtils;
 
 import java.io.File;
 
@@ -11,7 +11,7 @@ class LineReaderTest {
     @Test
     void checkReadLine_SpecialCharacterReading(){
         try {
-            final File robot = Helpers.getResourceFile("robot/special-characters.robot");
+            final File robot = FileUtils.getResourceFile("robot/special-characters.robot");
             LineReader reader = new LineReader(robot);
 
             Line line = reader.readLine();
@@ -32,7 +32,7 @@ class LineReaderTest {
     @Test
     void checkReadLine_FileEncodedInUTF8WithBom(){
         try {
-            final File utf8bom = Helpers.getResourceFile("files/file-in-utf8-bom.txt");
+            final File utf8bom = FileUtils.getResourceFile("files/file-in-utf8-bom.txt");
             LineReader reader = new LineReader(utf8bom);
 
             Line line = reader.readLine();

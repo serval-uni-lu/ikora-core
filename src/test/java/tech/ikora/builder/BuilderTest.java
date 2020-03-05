@@ -6,6 +6,8 @@ import tech.ikora.model.*;
 import tech.ikora.utils.FileUtils;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -32,8 +34,8 @@ class BuilderTest {
     }
 
     @Test
-    void testBuildWithValueForVariableContainingDot(){
-        final File robot = Helpers.getResourceFile("robot/keyword-with-dot.robot");
+    void testBuildWithValueForVariableContainingDot() throws IOException, URISyntaxException {
+        final File robot = FileUtils.getResourceFile("robot/keyword-with-dot.robot");
         assertNotNull(robot);
 
         final BuildResult result = Builder.build(robot, Helpers.getConfiguration(), true);
@@ -55,8 +57,8 @@ class BuilderTest {
     }
 
     @Test
-    void testScopedByPrefixResolution(){
-        final File robot = Helpers.getResourceFile("robot/scope-testing");
+    void testScopedByPrefixResolution() throws IOException, URISyntaxException {
+        final File robot = FileUtils.getResourceFile("robot/scope-testing");
         assertNotNull(robot);
 
         final BuildResult result = Builder.build(robot, Helpers.getConfiguration(), true);
@@ -108,8 +110,8 @@ class BuilderTest {
     }
 
     @Test
-    void testAssignmentFromKeyword(){
-        final File robot = Helpers.getResourceFile("robot/assignment/keyword.robot");
+    void testAssignmentFromKeyword() throws IOException, URISyntaxException {
+        final File robot = FileUtils.getResourceFile("robot/assignment/keyword.robot");
         assertNotNull(robot);
 
         final BuildResult result = Builder.build(robot, Helpers.getConfiguration(), true);
@@ -135,8 +137,8 @@ class BuilderTest {
     }
 
     @Test
-    void testForLoopWithRange(){
-        final File robot = Helpers.getResourceFile("robot/for-loop/simple.robot");
+    void testForLoopWithRange() throws IOException, URISyntaxException {
+        final File robot = FileUtils.getResourceFile("robot/for-loop/simple.robot");
         assertNotNull(robot);
 
         final BuildResult result = Builder.build(robot, Helpers.getConfiguration(), true);
@@ -162,8 +164,8 @@ class BuilderTest {
     }
 
     @Test
-    void testForLoopWithRangeWithoutTabAfterIn(){
-        final File robot = Helpers.getResourceFile("robot/for-loop/simple-without-tab-after-in.robot");
+    void testForLoopWithRangeWithoutTabAfterIn() throws IOException, URISyntaxException {
+        final File robot = FileUtils.getResourceFile("robot/for-loop/simple-without-tab-after-in.robot");
         assertNotNull(robot);
 
         final BuildResult result = Builder.build(robot, Helpers.getConfiguration(), true);
@@ -189,8 +191,8 @@ class BuilderTest {
     }
 
     @Test
-    void testAssignmentFromVariableWithEqualSign(){
-        final File robot = Helpers.getResourceFile("robot/assignment/variable.robot");
+    void testAssignmentFromVariableWithEqualSign() throws IOException, URISyntaxException {
+        final File robot = FileUtils.getResourceFile("robot/assignment/variable.robot");
         assertNotNull(robot);
 
         final BuildResult result = Builder.build(robot, Helpers.getConfiguration(),true);
@@ -203,8 +205,8 @@ class BuilderTest {
     }
 
     @Test
-    void testTestCaseSetupWithCall() {
-        final File robot = Helpers.getResourceFile("robot/setup-and-teardown.robot");
+    void testTestCaseSetupWithCall() throws IOException, URISyntaxException {
+        final File robot = FileUtils.getResourceFile("robot/setup-and-teardown.robot");
         assertNotNull(robot);
 
         final BuildResult result = Builder.build(robot, Helpers.getConfiguration(), true);
@@ -224,8 +226,8 @@ class BuilderTest {
     }
 
     @Test
-    void testTestCaseTeardownWithCall() {
-        final File robot = Helpers.getResourceFile("robot/setup-and-teardown.robot");
+    void testTestCaseTeardownWithCall() throws IOException, URISyntaxException {
+        final File robot = FileUtils.getResourceFile("robot/setup-and-teardown.robot");
         assertNotNull(robot);
 
         final BuildResult result = Builder.build(robot, Helpers.getConfiguration(), true);
@@ -245,8 +247,8 @@ class BuilderTest {
     }
 
     @Test
-    void testTestCaseWithSimpleTemplate(){
-        final File robot = Helpers.getResourceFile("robot/template.robot");
+    void testTestCaseWithSimpleTemplate() throws IOException, URISyntaxException {
+        final File robot = FileUtils.getResourceFile("robot/template.robot");
         assertNotNull(robot);
 
         final BuildResult result = Builder.build(robot, Helpers.getConfiguration(), true);
@@ -270,14 +272,14 @@ class BuilderTest {
     }
 
     @Test
-    void testParseConnectedProject(){
-        final File projectAFile = Helpers.getResourceFile("robot/connected-projects/project-a");
+    void testParseConnectedProject() throws IOException, URISyntaxException {
+        final File projectAFile = FileUtils.getResourceFile("robot/connected-projects/project-a");
         assertNotNull(projectAFile);
 
-        final File projectBFile = Helpers.getResourceFile("robot/connected-projects/project-b");
+        final File projectBFile = FileUtils.getResourceFile("robot/connected-projects/project-b");
         assertNotNull(projectBFile);
 
-        final File projectCFile = Helpers.getResourceFile("robot/connected-projects/project-c");
+        final File projectCFile = FileUtils.getResourceFile("robot/connected-projects/project-c");
         assertNotNull(projectCFile);
 
         Set<File> files = new HashSet<>(Arrays.asList(projectAFile, projectBFile, projectCFile));

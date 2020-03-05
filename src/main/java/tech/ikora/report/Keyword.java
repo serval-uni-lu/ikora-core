@@ -14,7 +14,7 @@ public class Keyword implements ReportElement {
     }
 
     @JacksonXmlProperty(localName = "type", isAttribute = true)
-    private Type type;
+    private Type type = Type.EXECUTION;
     @JacksonXmlProperty(localName = "name", isAttribute = true)
     private String name;
     @JacksonXmlProperty(localName = "library", isAttribute = true)

@@ -6,6 +6,7 @@ import tech.ikora.Helpers;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
@@ -45,24 +46,24 @@ class FileUtilsTest {
     }
 
     @Test
-    void testDetectCharsetWithUTF8(){
-        File utf8 = Helpers.getResourceFile("files/file-in-utf8.txt");
+    void testDetectCharsetWithUTF8() throws IOException, URISyntaxException {
+        File utf8 = FileUtils.getResourceFile("files/file-in-utf8.txt");
         Charset charset = FileUtils.detectCharset(utf8, null);
         assertNotNull(charset);
         assertEquals(StandardCharsets.UTF_8, charset);
     }
 
     @Test
-    void testDetectCharsetWithISO88591(){
-        File utf8 = Helpers.getResourceFile("files/file-in-ISO-8859-1.txt");
+    void testDetectCharsetWithISO88591() throws IOException, URISyntaxException {
+        File utf8 = FileUtils.getResourceFile("files/file-in-ISO-8859-1.txt");
         Charset charset = FileUtils.detectCharset(utf8, null);
         assertNotNull(charset);
         assertEquals(StandardCharsets.ISO_8859_1, charset);
     }
 
     @Test
-    void testDetectCharsetWithUTF8BOM(){
-        File utf8 = Helpers.getResourceFile("files/file-in-utf8-bom.txt");
+    void testDetectCharsetWithUTF8BOM() throws IOException, URISyntaxException {
+        File utf8 = FileUtils.getResourceFile("files/file-in-utf8-bom.txt");
         Charset charset = FileUtils.detectCharset(utf8, null);
         assertNotNull(charset);
         assertEquals(StandardCharsets.UTF_8, charset);

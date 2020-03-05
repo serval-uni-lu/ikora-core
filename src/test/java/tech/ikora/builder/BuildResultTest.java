@@ -8,7 +8,9 @@ import tech.ikora.utils.FileUtils;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -51,14 +53,14 @@ class BuildResultTest {
     }
 
     @Test
-    void testProjectsWithDependencies(){
-        final File projectAFile = Helpers.getResourceFile("robot/connected-projects/project-a");
+    void testProjectsWithDependencies() throws IOException, URISyntaxException {
+        final File projectAFile = FileUtils.getResourceFile("robot/connected-projects/project-a");
         assertNotNull(projectAFile);
 
-        final File projectBFile = Helpers.getResourceFile("robot/connected-projects/project-b");
+        final File projectBFile = FileUtils.getResourceFile("robot/connected-projects/project-b");
         assertNotNull(projectBFile);
 
-        final File projectCFile = Helpers.getResourceFile("robot/connected-projects/project-c");
+        final File projectCFile = FileUtils.getResourceFile("robot/connected-projects/project-c");
         assertNotNull(projectCFile);
 
         Set<File> files = new HashSet<>(Arrays.asList(projectAFile, projectBFile, projectCFile));

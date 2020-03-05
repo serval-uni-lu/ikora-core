@@ -55,16 +55,6 @@ public class Helpers {
         }
     }
 
-    public static File getResourceFile(String resources) {
-        try {
-            return tech.ikora.utils.FileUtils.getResourceFile(resources);
-        } catch (Exception e){
-            fail(String.format("Failed to load resources '%s': %s", resources, e.getMessage()));
-        }
-
-        return null;
-    }
-
     public static Configuration getConfiguration(){
         final Configuration configuration = new Configuration();
         configuration.setExtensions(Collections.singletonList("robot"));

@@ -90,9 +90,9 @@ public class FileUtils {
         URL resource = FileUtils.class.getClassLoader().getResource(name);
         if (resource == null) {
             throw new IOException("Failed to locate resource template for project analytics");
-        } else {
-            return Paths.get(resource.toURI()).toFile();
         }
+
+        return Paths.get(resource.toURI()).toFile();
     }
 
     public static Charset detectCharset(File f, Charset defaultCharset) {
