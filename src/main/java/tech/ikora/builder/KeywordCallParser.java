@@ -28,7 +28,7 @@ public class KeywordCallParser {
             call.setGherkin(gherkin);
 
             for(Token token: callTokens.withoutFirst()) {
-                Optional<Variable> optionalVariable = VariableParser.parse(token);
+                Optional<Variable> optionalVariable = VariableParser.parseName(token);
                 Argument argument = new Argument(optionalVariable.isPresent() ? optionalVariable.get() : new Literal(token));
                 call.addArgument(argument);
             }

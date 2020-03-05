@@ -2,6 +2,7 @@ package tech.ikora.report;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import tech.ikora.exception.BadElementException;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public class Keyword implements ReportElement {
     private List<String> arguments;
     @JacksonXmlElementWrapper(localName = "assign")
     @JacksonXmlProperty(localName = "var")
-    private List<String> assigments;
+    private List<String> assignments;
     @JacksonXmlElementWrapper(localName = "tags")
     @JacksonXmlProperty(localName = "tag")
     private List<String> tags;
@@ -92,12 +93,12 @@ public class Keyword implements ReportElement {
         this.arguments = arguments;
     }
 
-    public List<String> getAssigments() {
-        return assigments;
+    public List<String> getAssignments() {
+        return assignments;
     }
 
-    public void setAssigments(List<String> assigments) {
-        this.assigments = assigments;
+    public void setAssignments(List<String> assignments) {
+        this.assignments = assignments;
     }
 
     public List<String> getTags() {

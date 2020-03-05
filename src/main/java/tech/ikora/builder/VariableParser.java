@@ -2,10 +2,9 @@ package tech.ikora.builder;
 
 import org.apache.commons.math3.util.Pair;
 import tech.ikora.error.ErrorManager;
+import tech.ikora.exception.InvalidArgumentException;
 import tech.ikora.model.*;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
@@ -14,7 +13,7 @@ public class VariableParser {
 
     public static final Pattern equalsFinder = Pattern.compile("(\\s*=\\s*)$");
 
-    public static Optional<Variable> parse(final Token name){
+    public static Optional<Variable> parseName(final Token name){
         Token cleanName = trimEquals(name);
 
         if(!ValueLinker.isVariable(cleanName)){
@@ -44,38 +43,18 @@ public class VariableParser {
                     String.format("Empty variable definition: %s", variable.getName()),
                     Range.fromTokens(variable.getTokens(), reader.getCurrent())
             );
-
-            return;
         }
 
-        if(variable instanceof ScalarVariable){
-            if(values.size() > 1){
+        for(Token value: values){
+            try {
+                variable.addValue(parseValue(value));
+            } catch (InvalidArgumentException e) {
                 errors.registerSyntaxError(
                         reader.getFile(),
-                        String.format("Too many arguments for scalar variable, the remaining will be ignored: %s", values.withoutFirst().toString()),
+                        String.format("Invalid value for a variable: %s", e.getMessage()),
                         Range.fromTokens(values.withoutFirst(), reader.getCurrent())
                 );
             }
-
-            ((ScalarVariable)variable).setValue(parseValue(values.get(0)));
-        }
-        else if(variable instanceof ListVariable){
-            final List<Node> elements = new ArrayList<>(values.size());
-
-            for(Token value: values){
-                elements.add(parseValue(value));
-            }
-
-            ((ListVariable)variable).setValues(elements);
-        }
-        else if(variable instanceof DictionaryVariable){
-            final List<DictionaryEntry> entries = new ArrayList<>(values.size());
-
-            for(Token value: values){
-                entries.add(parseEntry(value));
-            }
-
-            ((DictionaryVariable)variable).setEntries(entries);
         }
     }
 
@@ -84,16 +63,29 @@ public class VariableParser {
     }
 
     public static Node parseValue(Token token){
-        return VariableParser.parse(token).map(variable -> (Node)variable).orElse(new Literal(token));
+        final Optional<Variable> variable = VariableParser.parseName(token);
+        if(variable.isPresent()){
+            return variable.get();
+        }
+
+        final Optional<DictionaryEntry> entry = VariableParser.parseEntry(token);
+        if(entry.isPresent()){
+            return entry.get();
+        }
+
+        return new Literal(token);
     }
 
-    public static DictionaryEntry parseEntry(Token token){
+    public static Optional<DictionaryEntry> parseEntry(Token token){
         final Pair<Token, Token> keyValuePair = LexerUtils.getKeyValuePair(token);
+
+        if(keyValuePair.getKey().isEmpty() || keyValuePair.getValue().isEmpty()){
+            return Optional.empty();
+        }
+
         final Node key = parseValue(keyValuePair.getKey());
         final Node value = parseValue(keyValuePair.getValue());
 
-        //TODO: manage the case when there is an null key or value;
-
-        return new DictionaryEntry(key, value);
+        return Optional.of(new DictionaryEntry(key, value));
     }
 }

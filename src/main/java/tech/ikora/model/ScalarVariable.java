@@ -5,34 +5,31 @@ import tech.ikora.analytics.visitor.NodeVisitor;
 import tech.ikora.analytics.visitor.VisitorMemory;
 import tech.ikora.builder.ValueLinker;
 import tech.ikora.exception.InvalidArgumentException;
-import tech.ikora.utils.LevenshteinDistance;
 
 import java.util.*;
 import java.util.regex.Pattern;
 
 public class ScalarVariable extends Variable {
-    private Node value;
 
     public ScalarVariable(Token name){
         super(name);
-        this.value = null;
     }
 
     @Override
-    public void addElement(Node value) throws InvalidArgumentException {
-        if(this.value != null){
+    public void addValue(Node value) throws InvalidArgumentException {
+        if(!values.isEmpty()){
             throw new InvalidArgumentException("Scalar variable only accept one element");
         }
 
-        setValue(value);
+        this.values.add(value);
     }
 
-    public void setValue(Node value) {
-        this.value = value;
-    }
+    public Optional<Node> getValue() {
+        if(values.isEmpty()){
+            return Optional.empty();
+        }
 
-    public Node getValue() {
-        return value;
+        return Optional.of(values.get(0));
     }
 
     @Override
@@ -49,8 +46,9 @@ public class ScalarVariable extends Variable {
         ScalarVariable variable = (ScalarVariable)other;
         boolean same = getName().equalsIgnorePosition(variable.getName());
 
-        if(this.value != null){
-            same &= this.value.distance(variable.value) == 0.0;
+        Optional<Node> value = getValue();
+        if(value.isPresent()){
+            same &= value.get().distance(variable.getValue().orElse(null)) == 0.0;
         }
 
         return same ? 0.0 : 1.0;
@@ -71,8 +69,12 @@ public class ScalarVariable extends Variable {
             actions.add(Action.changeName(this, variable));
         }
 
-        if(this.value != null){
-            actions.addAll(this.value.differences(variable.value));
+        Optional<Node> value = getValue();
+        if(value.isPresent()){
+            actions.addAll(value.get().differences(variable.getValue().orElse(null)));
+        }
+        else if(variable.getValue().isPresent()){
+            actions.add(Action.addElement(Node.class, variable.getValue().get()));
         }
 
         return actions;

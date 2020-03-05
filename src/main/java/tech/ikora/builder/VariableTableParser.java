@@ -32,7 +32,7 @@ class VariableTableParser {
                 continue;
             }
 
-            Optional<Variable> optional = VariableParser.parse(tokens.first());
+            Optional<Variable> optional = VariableParser.parseName(tokens.first());
 
             if(!optional.isPresent()){
                 errors.registerSyntaxError(

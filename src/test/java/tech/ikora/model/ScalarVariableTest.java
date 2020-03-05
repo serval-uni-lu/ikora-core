@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ScalarVariableTest {
     @Test
-    void checkNameMatching(){
+    void testNameMatching(){
         ScalarVariable test1 = new ScalarVariable(Token.fromString("${test1}"));
         assertTrue(test1.matches(Token.fromString("${test1}")));
         assertTrue(test1.matches(Token.fromString("${TEST1}")));

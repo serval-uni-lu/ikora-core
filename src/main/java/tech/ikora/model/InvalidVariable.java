@@ -19,7 +19,7 @@ public class InvalidVariable extends Variable {
     }
 
     @Override
-    public void addElement(Node value) throws InvalidArgumentException {
+    public void addValue(Node value) throws InvalidArgumentException {
         throw new InvalidArgumentException("Invalid Scalar cannot receive arguments");
     }
 

@@ -24,7 +24,7 @@ public abstract class LibraryVariable extends Variable {
     }
 
     @Override
-    public void addElement(Node value) throws InvalidArgumentException {
+    public void addValue(Node value) throws InvalidArgumentException {
         throw new InvalidArgumentException("Library variable cannot be assigned");
     }
 

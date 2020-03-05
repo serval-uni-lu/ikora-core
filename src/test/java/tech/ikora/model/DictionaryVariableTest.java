@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class DictionaryVariableTest {
     @Test
-    void checkNameMatching(){
+    void testNameMatching(){
         DictionaryVariable test1 = new DictionaryVariable(Token.fromString("&{test1}"));
         assertTrue(test1.matches(Token.fromString("&{test1}")));
         assertTrue(test1.matches(Token.fromString("&{TEST1}")));

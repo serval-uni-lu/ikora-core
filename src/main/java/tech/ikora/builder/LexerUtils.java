@@ -7,7 +7,7 @@ import tech.ikora.utils.StringUtils;
 
 import java.io.IOException;
 
-class LexerUtils {
+public class LexerUtils {
     private LexerUtils(){}
 
     public static Tokens tokenize(LineReader reader) throws IOException {

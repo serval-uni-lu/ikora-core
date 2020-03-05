@@ -1,4 +1,4 @@
-package tech.ikora.report;
+package tech.ikora.exception;
 
 public class BadElementException extends Exception {
     private Class<?> expected;

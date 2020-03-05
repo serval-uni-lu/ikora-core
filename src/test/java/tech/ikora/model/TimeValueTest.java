@@ -7,19 +7,19 @@ import static org.junit.jupiter.api.Assertions.*;
 class TimeValueTest {
 
     @Test
-    void TestGetTimeInSeconds() {
+    void testGetTimeInSeconds() {
         TimeValue time = new TimeValue(TimeValue.Sign.POSITIVE, 1, 1, 1, 1, 1);
         assertEquals(90061.001, time.getTimeInSeconds());
     }
 
     @Test
-    void TestGetTimeInMilliseconds() {
+    void testGetTimeInMilliseconds() {
         TimeValue time = new TimeValue(TimeValue.Sign.POSITIVE, 1, 1, 1, 1, 1);
         assertEquals(90061001, time.getTimeInMilliseconds());
     }
 
     @Test
-    void TestIsValidWithNumeric() {
+    void testIsValidWithNumeric() {
         assertTrue(TimeValue.isValid(Token.fromString("10")));
         assertTrue(TimeValue.isValid(Token.fromString("-1")));
         assertTrue(TimeValue.isValid(Token.fromString("50.53")));
@@ -30,7 +30,7 @@ class TimeValueTest {
     }
 
     @Test
-    void TestIsValidWithString(){
+    void testIsValidWithString(){
         assertTrue(TimeValue.isValid(Token.fromString("1 min 30 secs")));
         assertTrue(TimeValue.isValid(Token.fromString("1.5 minutes")));
         assertTrue(TimeValue.isValid(Token.fromString("90 s")));
@@ -40,7 +40,7 @@ class TimeValueTest {
     }
 
     @Test
-    void TestIsValidWithTimer(){
+    void testIsValidWithTimer(){
         assertTrue(TimeValue.isValid(Token.fromString("00:00:01")));
         assertTrue(TimeValue.isValid(Token.fromString("01:02:03")));
         assertTrue(TimeValue.isValid(Token.fromString("1:00:00")));

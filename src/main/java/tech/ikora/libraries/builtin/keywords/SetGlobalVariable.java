@@ -31,7 +31,7 @@ public class SetGlobalVariable extends LibraryKeyword implements ScopeModifier {
                 Variable variable = Variable.create(argumentList.get(0).getName());
 
                 for(int i = 1; i < argumentList.size(); ++i){
-                    variable.addElement(argumentList.get(i));
+                    variable.addValue(argumentList.get(i));
                 }
 
                 runtime.addToGlobalScope(variable);

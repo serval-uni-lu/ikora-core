@@ -6,25 +6,22 @@ import tech.ikora.analytics.visitor.VisitorMemory;
 import tech.ikora.builder.ValueLinker;
 import tech.ikora.exception.InvalidArgumentException;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
 public class DictionaryVariable extends Variable {
-    private List<DictionaryEntry> entries;
 
     public DictionaryVariable(Token name){
         super(name);
-        entries = new ArrayList<>();
     }
 
     @Override
-    public void addElement(Node value) throws InvalidArgumentException {
+    public void addValue(Node value) throws InvalidArgumentException {
+        if(!Variable.class.isAssignableFrom(value.getClass()) && !DictionaryEntry.class.isAssignableFrom(value.getClass())){
+            throw new InvalidArgumentException("Key value pair or variable expected");
+        }
 
-    }
-
-    public void setEntries(List<DictionaryEntry> entries){
-        this.entries = entries;
+        values.add(value);
     }
 
     @Override
@@ -37,18 +34,7 @@ public class DictionaryVariable extends Variable {
         return null;
     }
 
-    @Override
-    public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append(name.getText());
 
-        for(DictionaryEntry entry: entries){
-            builder.append("\t");
-            builder.append(entry.toString());
-        }
-
-        return builder.toString();
-    }
 
     @Override
     public boolean isDeadCode(){

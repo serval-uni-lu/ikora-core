@@ -17,7 +17,7 @@ public class Literal extends Node {
 
     @Override
     public boolean matches(Token name) {
-        return this.name.equalsIgnorePosition(name);
+        return false;
     }
 
     @Override

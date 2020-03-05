@@ -23,7 +23,7 @@ public class AssignmentParser {
 
             if(!clean.isEmpty()){
                 if(leftSide && ValueLinker.isVariable(clean)){
-                    Optional<Variable> variable = VariableParser.parse(clean);
+                    Optional<Variable> variable = VariableParser.parseName(clean);
 
                     if(variable.isPresent()){
                         Variable returnValue = variable.get();

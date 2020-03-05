@@ -13,11 +13,17 @@ import java.util.regex.Pattern;
 public abstract class Variable extends Node {
     protected Token name;
     protected Pattern pattern;
+    protected List<Node> values;
 
     public Variable(Token name) {
         setName(name);
 
-        name.setType(Token.Type.VARIABLE);
+        this.name.setType(Token.Type.VARIABLE);
+        this.values = new ArrayList<>();
+    }
+
+    public List<Node> getValues(){
+        return values;
     }
 
     public static Variable invalid() {
@@ -38,7 +44,7 @@ public abstract class Variable extends Node {
     }
 
     public static Variable create(Token token) throws MalformedVariableException {
-        Optional<Variable> variable = VariableParser.parse(token);
+        Optional<Variable> variable = VariableParser.parseName(token);
 
         if(!variable.isPresent()){
             throw new MalformedVariableException(String.format("Failed to create variable from value '%s'", token));
@@ -52,6 +58,20 @@ public abstract class Variable extends Node {
         // nothing to do for variables
     }
 
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append(name.getText());
+
+        for(Node value: values){
+            builder.append("\t");
+            builder.append(value.toString());
+        }
+
+        return builder.toString();
+    }
+
     protected abstract void setName(Token name);
-    public abstract void addElement(Node value) throws InvalidArgumentException;
+    public abstract void addValue(Node value) throws InvalidArgumentException;
+
 }

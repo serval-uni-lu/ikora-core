@@ -2,6 +2,7 @@ package tech.ikora.report;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import tech.ikora.exception.BadElementException;
 
 import java.util.ArrayList;
 import java.util.List;

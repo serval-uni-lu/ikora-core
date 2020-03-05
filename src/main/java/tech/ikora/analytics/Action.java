@@ -40,6 +40,9 @@ public class Action implements Differentiable {
         REMOVE_DOCUMENTATION,
         CHANGE_DOCUMENTATION,
 
+        ADD_NODE,
+        REMOVE_NODE,
+
         INVALID
     }
 
@@ -129,7 +132,7 @@ public class Action implements Differentiable {
             return new Action(Type.ADD_STRING, null, element);
         }
 
-        return new Action(Type.INVALID, null, element);
+        return new Action(Type.ADD_NODE, null, element);
     }
 
     public static <T> Action removeElement(Class<T> type, Differentiable element){
