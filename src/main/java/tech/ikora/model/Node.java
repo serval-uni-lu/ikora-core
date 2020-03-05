@@ -158,28 +158,6 @@ public abstract class Node implements Differentiable {
         return this.sourceFile.getLinesOfCode(startLine, endLine);
     }
 
-    @Override
-    public boolean equals(Object other){
-        if(other == null){
-            return false;
-        }
-
-        if (!(other instanceof Node)){
-            return false;
-        }
-
-        Node node = (Node)other;
-
-        boolean same = this.getName().equalsIgnorePosition(node.getName());
-        same &= this.astChildren.size() == node.astChildren.size();
-
-        for(int i = 0; same && i < this.astChildren.size(); ++i) {
-            same = this.astChildren.get(i).equals(node.astChildren.get(i));
-        }
-
-        return same;
-    }
-
     public abstract boolean matches(Token name);
     public abstract void accept(NodeVisitor visitor, VisitorMemory memory);
     public abstract void execute(Runtime runtime) throws Exception;
