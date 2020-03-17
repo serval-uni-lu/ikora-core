@@ -1,6 +1,6 @@
 package tech.ikora.builder;
 
-import tech.ikora.Configuration;
+import tech.ikora.BuildConfiguration;
 import tech.ikora.error.ErrorManager;
 import org.apache.commons.io.FileUtils;
 import tech.ikora.model.Project;
@@ -14,7 +14,7 @@ import java.util.*;
 class ProjectParser {
     private ProjectParser(){}
 
-    public static Project parse(File file, Configuration configuration, DynamicImports dynamicImports, ErrorManager errors) {
+    public static Project parse(File file, BuildConfiguration configuration, DynamicImports dynamicImports, ErrorManager errors) {
         Project project = new Project(file);
 
         if(file.isDirectory()){
@@ -27,7 +27,7 @@ class ProjectParser {
         return project;
     }
 
-    private static File addRobotFiles(File directory, Project project, Configuration configuration) {
+    private static File addRobotFiles(File directory, Project project, BuildConfiguration configuration) {
         String[] extensions = configuration.getExtensions().toArray(new String[0]);
         List<File> robots = (List<File>) FileUtils.listFiles(directory, extensions, true);
 

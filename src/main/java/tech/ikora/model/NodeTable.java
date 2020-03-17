@@ -7,6 +7,7 @@ import tech.ikora.runner.Runtime;
 import org.apache.commons.lang3.NotImplementedException;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class NodeTable<T extends Node> extends Node implements Iterable<T> {
     private Token header;
@@ -51,6 +52,10 @@ public class NodeTable<T extends Node> extends Node implements Iterable<T> {
         tokens.add(header);
         nodeList.forEach(node -> tokens.addAll(node.getTokens()));
         return tokens;
+    }
+
+    public void remove(T node){
+        nodeList = nodeList.stream().filter(n -> n != node).collect(Collectors.toList());
     }
 
     @Override

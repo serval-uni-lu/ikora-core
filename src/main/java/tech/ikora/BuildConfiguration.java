@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Configuration file used for parsing Robot Framework files
  */
-public class Configuration {
+public class BuildConfiguration {
     private List<String> extensions = Collections.singletonList("robot");
     private List<String> ignorePath = Collections.emptyList();
 

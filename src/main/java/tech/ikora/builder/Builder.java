@@ -1,6 +1,6 @@
 package tech.ikora.builder;
 
-import tech.ikora.Configuration;
+import tech.ikora.BuildConfiguration;
 import tech.ikora.error.ErrorManager;
 import tech.ikora.runner.Runtime;
 import tech.ikora.runner.StaticScope;
@@ -33,7 +33,7 @@ public class Builder {
      * @param link If set to truth, resolve symbols otherwise just parse the files
      * @return Results containing the graph, statistics about the build and eventual errors
      */
-    public static BuildResult build(Set<File> files, Configuration configuration, boolean link){
+    public static BuildResult build(Set<File> files, BuildConfiguration configuration, boolean link){
         BuildResult result = new BuildResult();
         ErrorManager errors = new ErrorManager();
 
@@ -79,7 +79,7 @@ public class Builder {
      * @param link If set to truth, resolve symbols otherwise just parse the files
      * @return Results containing the graph, statistics about the build and eventual errors
      */
-    public static BuildResult build(File file, Configuration configuration, boolean link) {
+    public static BuildResult build(File file, BuildConfiguration configuration, boolean link) {
         BuildResult result = new BuildResult();
         ErrorManager errors = new ErrorManager();
 
@@ -147,7 +147,7 @@ public class Builder {
         Linker.link(runtime);
     }
 
-    private static Project parse(File file, Configuration configuration, DynamicImports dynamicImports, ErrorManager errors) {
+    private static Project parse(File file, BuildConfiguration configuration, DynamicImports dynamicImports, ErrorManager errors) {
         return ProjectParser.parse(file, configuration, dynamicImports, errors);
     }
 }

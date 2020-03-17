@@ -1,6 +1,6 @@
 package tech.ikora.builder;
 
-import tech.ikora.Configuration;
+import tech.ikora.BuildConfiguration;
 import tech.ikora.Helpers;
 import tech.ikora.error.Errors;
 import tech.ikora.error.SymbolError;
@@ -75,7 +75,7 @@ class BuildResultTest {
     private static BuildResult build(String root) {
         try{
             File rootFolder = FileUtils.getResourceFile(root);
-            return Builder.build(rootFolder, new Configuration(), true);
+            return Builder.build(rootFolder, new BuildConfiguration(), true);
         }
         catch (Exception e){
             fail(String.format("Failed to build project %s: %s", root, e.getMessage()));

@@ -3,11 +3,8 @@ package tech.ikora;
 import org.apache.commons.io.FileUtils;
 import tech.ikora.builder.BuildResult;
 import tech.ikora.builder.Builder;
-import tech.ikora.builder.LexerUtils;
 import tech.ikora.builder.LineReader;
 import tech.ikora.model.Project;
-import tech.ikora.model.Token;
-import tech.ikora.model.Tokens;
 
 import java.io.File;
 import java.io.IOException;
@@ -55,8 +52,8 @@ public class Helpers {
         }
     }
 
-    public static Configuration getConfiguration(){
-        final Configuration configuration = new Configuration();
+    public static BuildConfiguration getConfiguration(){
+        final BuildConfiguration configuration = new BuildConfiguration();
         configuration.setExtensions(Collections.singletonList("robot"));
         configuration.setIgnorePath(Collections.emptyList());
 
