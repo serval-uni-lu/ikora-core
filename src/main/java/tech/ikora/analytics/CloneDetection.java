@@ -31,12 +31,12 @@ public class CloneDetection<T extends Node> {
         this.clones = new Clones<>();
     }
 
-    private CloneDetection(Set<Project> projects){
-        this.projects = projects;
+    private CloneDetection(Projects projects){
+        this.projects = projects.asSet();
         this.clones = new Clones<>();
     }
 
-    public static <T extends Node> Clones<T> findClones(Set<Project> projects, Class<T> type){
+    public static <T extends Node> Clones<T> findClones(Projects projects, Class<T> type){
         CloneDetection<T> detection = new CloneDetection<>(projects);
         return detection.run(type);
     }

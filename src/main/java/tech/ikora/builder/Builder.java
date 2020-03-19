@@ -2,20 +2,16 @@ package tech.ikora.builder;
 
 import tech.ikora.BuildConfiguration;
 import tech.ikora.error.ErrorManager;
+import tech.ikora.model.*;
 import tech.ikora.runner.Runtime;
 import tech.ikora.runner.StaticScope;
 import tech.ikora.utils.FileUtils;
-import tech.ikora.model.LibraryResources;
-import tech.ikora.model.Project;
-import tech.ikora.model.Resources;
-import tech.ikora.model.SourceFile;
 
 import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -37,14 +33,14 @@ public class Builder {
         BuildResult result = new BuildResult();
         ErrorManager errors = new ErrorManager();
 
-        Set<Project> projects = new HashSet<>();
+        Projects projects = new Projects();
 
         Instant start = Instant.now();
 
         DynamicImports dynamicImports = new DynamicImports();
         for(File file: files) {
             Project project = parse(file, configuration, dynamicImports, errors);
-            projects.add(project);
+            projects.addProject(project);
         }
 
         long parsingTime = Duration.between(start, Instant.now()).toMillis();
@@ -98,12 +94,12 @@ public class Builder {
         result.setBuildTime(Duration.between(start, Instant.now()).toMillis());
 
         result.setErrors(errors);
-        result.setProjects(Collections.singleton(project));
+        result.setProjects(new Projects(project));
 
         return result;
     }
 
-    private static void resolveDependencies(Set<Project> projects, ErrorManager errors) {
+    private static void resolveDependencies(Projects projects, ErrorManager errors) {
         for(Project project: projects){
             Set<Resources> externals =  project.getExternalResources();
 

@@ -106,7 +106,7 @@ public class Project implements Comparable<Project> {
         return variables;
     }
 
-    public <T> Set<T> getNodes(Class<T> type) {
+    public <T extends Node> Set<T> getNodes(Class<T> type) {
         if(type == TestCase.class){
             return (Set<T>)new HashSet<>(getTestCases());
         }

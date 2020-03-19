@@ -2,15 +2,15 @@ package tech.ikora.builder;
 
 import tech.ikora.error.ErrorManager;
 import tech.ikora.model.Project;
+import tech.ikora.model.Projects;
 import tech.ikora.model.SourceFile;
 
 import java.net.URI;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class BuildResult {
     private ErrorManager errors;
-    private Set<Project> projects;
+    private Projects projects;
 
     private long parsingTime;
     private long dependencyResolutionTime;
@@ -19,7 +19,7 @@ public class BuildResult {
 
     public BuildResult(){
         this.errors = new ErrorManager();
-        this.projects = Collections.emptySet();
+        this.projects = new Projects();
 
         parsingTime = -1;
         dependencyResolutionTime = -1;
@@ -31,20 +31,12 @@ public class BuildResult {
         return errors;
     }
 
-    public Set<Project> getProjects() {
+    public Projects getProjects() {
         return projects;
     }
 
-    public Optional<Project> getProject(String project){
-        final List<Project> filtered = projects.stream()
-                .filter(project1 -> project1.getName().equalsIgnoreCase(project))
-                .collect(Collectors.toList());
-
-        if(filtered.size() != 1){
-            return Optional.empty();
-        }
-
-        return Optional.of(filtered.get(0));
+    public Optional<Project> getProject(String name){
+        return projects.findProjectByName(name);
     }
 
     public void setErrors(ErrorManager errors) {
@@ -83,7 +75,7 @@ public class BuildResult {
         this.buildTime = buildTime;
     }
 
-    public void setProjects(Set<Project> projects) {
+    public void setProjects(Projects projects) {
         this.projects = projects;
     }
 
