@@ -33,6 +33,12 @@ public class Projects implements Iterable<Project> {
         projectSet.add(project);
     }
 
+    public void addProjects(Projects projects){
+        for (Project project: projects.projectSet){
+            addProject(project);
+        }
+    }
+
     public boolean contains(Project project){
         return projectSet.contains(project);
     }
