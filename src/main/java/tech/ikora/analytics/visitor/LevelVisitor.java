@@ -1,7 +1,5 @@
 package tech.ikora.analytics.visitor;
 
-import tech.ikora.analytics.LevelMemory;
-
 import tech.ikora.model.*;
 
 public class LevelVisitor extends EmptyVisitor {

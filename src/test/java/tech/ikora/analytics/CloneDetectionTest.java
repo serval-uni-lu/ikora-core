@@ -1,6 +1,9 @@
 package tech.ikora.analytics;
 
 import tech.ikora.Helpers;
+import tech.ikora.analytics.clones.Clone;
+import tech.ikora.analytics.clones.CloneDetection;
+import tech.ikora.analytics.clones.Clones;
 import tech.ikora.model.Project;
 import tech.ikora.model.UserKeyword;
 import org.junit.jupiter.api.Test;

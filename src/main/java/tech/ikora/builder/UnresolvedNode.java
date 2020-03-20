@@ -2,7 +2,7 @@ package tech.ikora.builder;
 
 import tech.ikora.analytics.visitor.FindSuiteVisitor;
 import tech.ikora.analytics.visitor.FindTestCaseVisitor;
-import tech.ikora.analytics.PathMemory;
+import tech.ikora.analytics.visitor.PathMemory;
 import tech.ikora.model.KeywordDefinition;
 import tech.ikora.model.Node;
 import tech.ikora.model.TestCase;

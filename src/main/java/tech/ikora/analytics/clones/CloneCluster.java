@@ -1,4 +1,4 @@
-package tech.ikora.analytics;
+package tech.ikora.analytics.clones;
 
 import tech.ikora.model.Project;
 import tech.ikora.model.Node;

@@ -1,7 +1,9 @@
-package tech.ikora.analytics;
+package tech.ikora.analytics.clones;
 
 import java.util.*;
 
+import tech.ikora.analytics.Action;
+import tech.ikora.analytics.Difference;
 import tech.ikora.model.*;
 
 public class CloneDetection<T extends Node> {

@@ -1,7 +1,7 @@
 package tech.ikora.libraries.builtin.keywords;
 
 import tech.ikora.analytics.visitor.FindSuiteVisitor;
-import tech.ikora.analytics.PathMemory;
+import tech.ikora.analytics.visitor.PathMemory;
 import tech.ikora.model.*;
 import tech.ikora.runner.Runtime;
 
