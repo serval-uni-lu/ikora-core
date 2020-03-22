@@ -14,6 +14,11 @@ public class EmptyVisitor implements NodeVisitor{
     }
 
     @Override
+    public void visit(Step step, VisitorMemory memory) {
+        //nothing to do in this node
+    }
+
+    @Override
     public void visit(KeywordCall call, VisitorMemory memory) {
         //nothing to do in this node
     }

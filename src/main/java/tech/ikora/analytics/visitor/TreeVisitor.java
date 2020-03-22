@@ -15,6 +15,22 @@ public class TreeVisitor implements NodeVisitor {
     }
 
     @Override
+    public void visit(Step step, VisitorMemory memory) {
+        if(step instanceof KeywordCall){
+            VisitorUtils.traverseKeywordCall(this, (KeywordCall)step, memory);
+        }
+        else if(step instanceof Assignment){
+            VisitorUtils.traverseAssignmentCall(this, (Assignment)step, memory);
+        }
+        else if(step instanceof ForLoop){
+            VisitorUtils.traverseForLoopSteps(this, (ForLoop)step, memory);
+        }
+        else{
+            throw new NotImplementedException(String.format("Visitor does not support class %s", step.getClass()));
+        }
+    }
+
+    @Override
     public void visit(KeywordCall call, VisitorMemory memory) {
         VisitorUtils.traverseKeywordCall(this, call, memory);
     }
