@@ -19,11 +19,11 @@ public class AssignmentParser {
         boolean leftSide = true;
         Tokens assignmentTokens = tokens.withoutIndent();
         for(Token token: assignmentTokens){
-            Token clean = VariableParser.trimEquals(token);
+            Token clean = VariableAssignmentParser.trimEquals(token);
 
             if(!clean.isEmpty()){
                 if(leftSide && ValueLinker.isVariable(clean)){
-                    Optional<Variable> variable = VariableParser.parseName(clean);
+                    Optional<Variable> variable = VariableParser.parse(clean);
 
                     if(variable.isPresent()){
                         Variable returnValue = variable.get();

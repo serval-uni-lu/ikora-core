@@ -143,7 +143,7 @@ public class Assignment extends Step {
             getKeywordCall().ifPresent(call -> actions.addAll(call.differences(other)));
         }
         else {
-            actions.add(Action.changeStepType(this, other));
+            actions.add(Action.changeType(this, other));
         }
 
         return actions;

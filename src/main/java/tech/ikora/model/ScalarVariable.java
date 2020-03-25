@@ -1,6 +1,5 @@
 package tech.ikora.model;
 
-import tech.ikora.analytics.Action;
 import tech.ikora.analytics.visitor.NodeVisitor;
 import tech.ikora.analytics.visitor.VisitorMemory;
 import tech.ikora.builder.ValueLinker;
@@ -35,49 +34,6 @@ public class ScalarVariable extends Variable {
     @Override
     public boolean isDeadCode(){
         return getDependencies().size() == 0;
-    }
-
-    @Override
-    public double distance(Differentiable other) {
-        if(!(other instanceof ScalarVariable)){
-            return 1;
-        }
-
-        ScalarVariable variable = (ScalarVariable)other;
-        boolean same = getName().equalsIgnorePosition(variable.getName());
-
-        Optional<Node> value = getValue();
-        if(value.isPresent()){
-            same &= value.get().distance(variable.getValue().orElse(null)) == 0.0;
-        }
-
-        return same ? 0.0 : 1.0;
-    }
-
-    @Override
-    public List<Action> differences(Differentiable other) {
-        List<Action> actions = new ArrayList<>();
-
-        if(!(other instanceof ScalarVariable)){
-            actions.add(Action.invalid(this, other));
-            return actions;
-        }
-
-        ScalarVariable variable = (ScalarVariable)other;
-
-        if(!getName().equalsIgnorePosition(variable.getName())){
-            actions.add(Action.changeName(this, variable));
-        }
-
-        Optional<Node> value = getValue();
-        if(value.isPresent()){
-            actions.addAll(value.get().differences(variable.getValue().orElse(null)));
-        }
-        else if(variable.getValue().isPresent()){
-            actions.add(Action.addElement(Node.class, variable.getValue().get()));
-        }
-
-        return actions;
     }
 
     @Override

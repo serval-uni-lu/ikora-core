@@ -1,12 +1,10 @@
 package tech.ikora.model;
 
-import tech.ikora.analytics.Action;
 import tech.ikora.analytics.visitor.NodeVisitor;
 import tech.ikora.analytics.visitor.VisitorMemory;
 import tech.ikora.builder.ValueLinker;
 import tech.ikora.exception.InvalidArgumentException;
 
-import java.util.List;
 import java.util.regex.Pattern;
 
 public class DictionaryVariable extends Variable {
@@ -23,18 +21,6 @@ public class DictionaryVariable extends Variable {
 
         values.add(value);
     }
-
-    @Override
-    public double distance(Differentiable other) {
-        return 0;
-    }
-
-    @Override
-    public List<Action> differences(Differentiable other) {
-        return null;
-    }
-
-
 
     @Override
     public boolean isDeadCode(){

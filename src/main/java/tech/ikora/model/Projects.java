@@ -71,4 +71,8 @@ public class Projects implements Iterable<Project> {
     public int size() {
         return projectSet.size();
     }
+
+    public boolean isEmpty() {
+        return projectSet.isEmpty();
+    }
 }

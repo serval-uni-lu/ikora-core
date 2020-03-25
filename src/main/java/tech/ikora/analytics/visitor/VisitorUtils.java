@@ -50,4 +50,10 @@ public class VisitorUtils {
                 keyword.accept(visitor, memory.getUpdated(argument))
         );
     }
+
+    public static void traverseValues(TreeVisitor treeVisitor, VariableAssignment variableAssignment, VisitorMemory memory) {
+        for(Node value: variableAssignment.getValues()){
+            value.accept(treeVisitor, memory);
+        }
+    }
 }

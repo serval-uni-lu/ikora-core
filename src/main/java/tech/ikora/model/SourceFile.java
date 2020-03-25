@@ -5,6 +5,7 @@ import tech.ikora.builder.Line;
 
 import java.io.File;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class SourceFile implements Iterable<UserKeyword> {
     final private Project project;
@@ -15,7 +16,7 @@ public class SourceFile implements Iterable<UserKeyword> {
     private Settings settings;
     private NodeTable<TestCase> testCaseTable;
     private NodeTable<UserKeyword> userKeywordTable;
-    private NodeTable<Variable> variableTable;
+    private NodeTable<VariableAssignment> variableTable;
 
     public SourceFile(Project project, File file){
         this.project = project;
@@ -63,7 +64,7 @@ public class SourceFile implements Iterable<UserKeyword> {
             }
         }
 
-        for(Variable variable: variableTable){
+        for(VariableAssignment variable: variableTable){
             if(variable.getDependencies().isEmpty()){
                 deadLoc += variable.getLoc();
             }
@@ -101,7 +102,7 @@ public class SourceFile implements Iterable<UserKeyword> {
         this.userKeywordTable.setSourceFile(this);
     }
 
-    public void setVariableTable(NodeTable<Variable> variableTable) {
+    public void setVariableTable(NodeTable<VariableAssignment> variableTable) {
         this.variableTable = variableTable;
         this.variableTable.setSourceFile(this);
     }
@@ -143,7 +144,9 @@ public class SourceFile implements Iterable<UserKeyword> {
     }
 
     public List<Variable> getVariables() {
-        return variableTable.asList();
+        return variableTable.asList().stream()
+                .map(VariableAssignment::getVariable)
+                .collect(Collectors.toList());
     }
 
     public long getEpoch() {

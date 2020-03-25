@@ -1,6 +1,5 @@
 package tech.ikora.model;
 
-import tech.ikora.analytics.Action;
 import tech.ikora.analytics.visitor.NodeVisitor;
 import tech.ikora.analytics.visitor.VisitorMemory;
 import tech.ikora.builder.ValueLinker;
@@ -30,16 +29,6 @@ public class ListVariable extends Variable {
     @Override
     public boolean isDeadCode(){
         return getDependencies().size() == 0;
-    }
-
-    @Override
-    public double distance(Differentiable other) {
-        return 0;
-    }
-
-    @Override
-    public List<Action> differences(Differentiable other) {
-        return null;
     }
 
     @Override

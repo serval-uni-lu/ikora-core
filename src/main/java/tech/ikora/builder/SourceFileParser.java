@@ -40,7 +40,7 @@ class SourceFileParser {
                     sourceFile.setKeywordTable(nodeTable);
                 }
                 else if(isVariable(tokens.toString())){
-                    NodeTable<Variable> variableTable = VariableTableParser.parse(reader, tokens, errors);
+                    NodeTable<VariableAssignment> variableTable = VariableTableParser.parse(reader, tokens, errors);
                     sourceFile.setVariableTable(variableTable);
                 }
             }

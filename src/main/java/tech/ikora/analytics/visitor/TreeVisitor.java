@@ -47,27 +47,27 @@ public class TreeVisitor implements NodeVisitor {
 
     @Override
     public void visit(LibraryKeyword keyword, VisitorMemory memory) {
-        //root node
+        //leaf node
     }
 
     @Override
     public void visit(ScalarVariable scalar, VisitorMemory memory) {
-        //root node
+        //leaf node
     }
 
     @Override
     public void visit(DictionaryVariable dictionary, VisitorMemory memory) {
-        //root node
+        //leaf node
     }
 
     @Override
     public void visit(ListVariable list, VisitorMemory memory) {
-        //root node
+        //leaf node
     }
 
     @Override
     public void visit(TimeOut timeOut, VisitorMemory memory) {
-        //root node
+        //leaf node
     }
 
     @Override
@@ -78,5 +78,10 @@ public class TreeVisitor implements NodeVisitor {
     @Override
     public <T extends Node> void visit(NodeTable<T> ts, VisitorMemory memory) {
         throw new NotImplementedException("Cannot use a tree visitor to traverse a node table yet");
+    }
+
+    @Override
+    public void visit(VariableAssignment variableAssignment, VisitorMemory memory) {
+        VisitorUtils.traverseValues(this, variableAssignment, memory);
     }
 }

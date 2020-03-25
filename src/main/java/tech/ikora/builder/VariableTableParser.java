@@ -1,7 +1,6 @@
 package tech.ikora.builder;
 
 import tech.ikora.error.ErrorManager;
-import tech.ikora.error.ErrorMessages;
 import tech.ikora.model.*;
 
 import java.io.IOException;
@@ -10,8 +9,8 @@ import java.util.Optional;
 class VariableTableParser {
     private VariableTableParser() {}
 
-    public static NodeTable<Variable> parse(LineReader reader, Tokens blockTokens, ErrorManager errors) throws IOException {
-        NodeTable<Variable> variableTable = new NodeTable<>();
+    public static NodeTable<VariableAssignment> parse(LineReader reader, Tokens blockTokens, ErrorManager errors) throws IOException {
+        NodeTable<VariableAssignment> variableTable = new NodeTable<>();
         variableTable.setHeader(ParserUtils.parseHeaderName(reader, blockTokens, errors));
 
         while(reader.getCurrent().isValid() && !LexerUtils.isBlock(reader.getCurrent().getText())){
@@ -20,34 +19,8 @@ class VariableTableParser {
                 continue;
             }
 
-            Tokens tokens = LexerUtils.tokenize(reader);
-
-            if(tokens.isEmpty()){
-                errors.registerInternalError(
-                        reader.getFile(),
-                        ErrorMessages.EMPTY_TOKEN_NOT_EXPECTED,
-                        Range.fromLine(reader.getCurrent())
-                );
-
-                continue;
-            }
-
-            Optional<Variable> optional = VariableParser.parseName(tokens.first());
-
-            if(!optional.isPresent()){
-                errors.registerSyntaxError(
-                        reader.getFile(),
-                        String.format("Invalid variable: %s", tokens.first().getText()),
-                        Range.fromToken(tokens.first(), reader.getCurrent())
-                );
-
-                continue;
-            }
-
-            Variable variable = optional.get();
-            VariableParser.parseValues(variable, tokens.withoutFirst(), reader, errors);
-
-            variableTable.add(variable);
+            Optional<VariableAssignment> variable = VariableAssignmentParser.parse(reader, errors);
+            variable.ifPresent(variableTable::add);
         }
 
         return variableTable;

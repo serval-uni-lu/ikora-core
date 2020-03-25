@@ -51,7 +51,7 @@ public class InvalidStep extends Step {
         List<Action> actions = new ArrayList<>();
 
         if(!(other instanceof InvalidStep)){
-            actions.add(Action.changeStepType(this, other));
+            actions.add(Action.changeType(this, other));
         }
 
         return actions;

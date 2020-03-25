@@ -137,7 +137,7 @@ public class KeywordCall extends Step {
             actions.addAll(LevenshteinDistance.getDifferences(Collections.emptyList(), assignment.getLeftHandOperand()));
         }
         else{
-            actions.add(Action.changeStepType(this, other));
+            actions.add(Action.changeType(this, other));
         }
 
         return actions;

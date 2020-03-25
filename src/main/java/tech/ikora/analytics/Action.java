@@ -15,7 +15,7 @@ public class Action implements Differentiable {
         ADD_TEST_CASE,
         REMOVE_TEST_CASE,
 
-        CHANGE_STEP_TYPE,
+        CHANGE_TYPE,
         ADD_STEP,
         REMOVE_STEP,
         CHANGE_STEP,
@@ -27,8 +27,6 @@ public class Action implements Differentiable {
         ADD_VARIABLE,
         REMOVE_VARIABLE,
         CHANGE_VARIABLE_DEFINITION,
-
-        ADD_LITERAL,
 
         ADD_SEQUENCE,
         REMOVE_SEQUENCE,
@@ -169,8 +167,8 @@ public class Action implements Differentiable {
         return new Action(Type.CHANGE_STEP, left, right);
     }
 
-    public static Action changeStepType(Differentiable left, Differentiable right){
-        return new Action(Type.CHANGE_STEP_TYPE, left, right);
+    public static Action changeType(Differentiable left, Differentiable right){
+        return new Action(Type.CHANGE_TYPE, left, right);
     }
 
     public static Action changeStepName(Differentiable left, Differentiable right){
