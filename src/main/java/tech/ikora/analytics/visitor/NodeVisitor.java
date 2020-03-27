@@ -3,6 +3,7 @@ package tech.ikora.analytics.visitor;
 import tech.ikora.model.*;
 
 public interface NodeVisitor {
+    void visit(Node node, VisitorMemory memory);
     void visit(TestCase testCase, VisitorMemory memory);
     void visit(UserKeyword keyword, VisitorMemory memory);
     void visit(KeywordCall call, VisitorMemory memory);

@@ -1,11 +1,9 @@
 package tech.ikora.model;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 public class Projects implements Iterable<Project> {
+    private Date date;
     private Set<Project> projectSet;
 
     public Projects(){
@@ -37,6 +35,14 @@ public class Projects implements Iterable<Project> {
         for (Project project: projects.projectSet){
             addProject(project);
         }
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     public boolean contains(Project project){

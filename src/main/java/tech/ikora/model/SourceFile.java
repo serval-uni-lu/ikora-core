@@ -143,10 +143,8 @@ public class SourceFile implements Iterable<UserKeyword> {
         return userKeywordTable.asList();
     }
 
-    public List<Variable> getVariables() {
-        return variableTable.asList().stream()
-                .map(VariableAssignment::getVariable)
-                .collect(Collectors.toList());
+    public List<VariableAssignment> getVariables() {
+        return variableTable.asList();
     }
 
     public long getEpoch() {

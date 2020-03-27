@@ -1,9 +1,13 @@
 package tech.ikora.analytics.visitor;
 
-import org.apache.commons.lang3.NotImplementedException;
 import tech.ikora.model.*;
 
 public class DependencyVisitor implements NodeVisitor {
+    @Override
+    public void visit(Node node, VisitorMemory memory) {
+        node.accept(this, memory);
+    }
+
     @Override
     public void visit(TestCase testCase, VisitorMemory memory) {
         VisitorUtils.traverseDependencies(this, testCase, memory);

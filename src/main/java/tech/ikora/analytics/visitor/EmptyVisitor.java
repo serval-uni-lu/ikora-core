@@ -4,6 +4,11 @@ import tech.ikora.model.*;
 
 public class EmptyVisitor implements NodeVisitor{
     @Override
+    public void visit(Node node, VisitorMemory memory) {
+        node.accept(this, memory);
+    }
+
+    @Override
     public void visit(TestCase testCase, VisitorMemory memory) {
         //nothing to do in this node
     }

@@ -96,8 +96,8 @@ public class Project implements Comparable<Project> {
         return userKeywordsFound;
     }
 
-    public Set<Variable> getVariables(){
-        Set<Variable> variables = new HashSet<>();
+    public Set<VariableAssignment> getVariables(){
+        Set<VariableAssignment> variables = new HashSet<>();
 
         for(SourceFile file: files.values()){
             variables.addAll(file.getVariables());

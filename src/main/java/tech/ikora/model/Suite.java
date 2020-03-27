@@ -105,8 +105,8 @@ public class Suite {
         return userKeywordsFound;
     }
 
-    public Set<Variable> getVariables() {
-        Set<Variable> variables = new HashSet<>();
+    public Set<VariableAssignment> getVariables() {
+        Set<VariableAssignment> variables = new HashSet<>();
 
         for(Suite suite: suites){
             variables.addAll(suite.getVariables());

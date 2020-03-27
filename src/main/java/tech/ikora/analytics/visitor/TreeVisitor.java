@@ -5,6 +5,11 @@ import tech.ikora.model.*;
 
 public class TreeVisitor implements NodeVisitor {
     @Override
+    public void visit(Node node, VisitorMemory memory) {
+        node.accept(this, memory);
+    }
+
+    @Override
     public void visit(TestCase testCase, VisitorMemory memory) {
         VisitorUtils.traverseSteps(this, testCase, memory);
     }
