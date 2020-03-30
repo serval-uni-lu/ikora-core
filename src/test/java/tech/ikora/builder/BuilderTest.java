@@ -200,7 +200,7 @@ class BuilderTest {
 
         final Project project = result.getProjects().iterator().next();
 
-        Set<Variable> variables = project.getVariables();
+        Set<VariableAssignment> variables = project.getVariables();
         assertEquals(1, variables.size());
     }
 
