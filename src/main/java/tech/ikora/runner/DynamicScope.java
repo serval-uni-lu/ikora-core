@@ -5,7 +5,7 @@ import tech.ikora.model.*;
 import java.util.*;
 
 public class DynamicScope implements Scope {
-    private NodeTable<Variable> global;
+    private SourceNodeTable<Variable> global;
     private Deque<Block<Suite, Variable>> suiteStack;
     private Deque<Block<TestCase, Variable>> testStack;
     private Deque<Block<Keyword, Variable>> keywordStack;
@@ -13,7 +13,7 @@ public class DynamicScope implements Scope {
     private List<Variable> returnVariables;
 
     public DynamicScope(){
-        global = new NodeTable<>();
+        global = new SourceNodeTable<>();
         suiteStack = new LinkedList<>();
         testStack = new LinkedList<>();
         keywordStack = new LinkedList<>();
@@ -79,7 +79,7 @@ public class DynamicScope implements Scope {
         else if(KeywordCall.class.isAssignableFrom(node.getClass())){
             argumentStack.push(new Block<>((Step) node));
 
-            for(Argument argument: ((KeywordCall)node).getArgumentList()){
+            for(Argument argument: ((KeywordCall) node).getArgumentList()){
                 argumentStack.peek().add(argument);
             }
         }
@@ -92,11 +92,11 @@ public class DynamicScope implements Scope {
         }
         else if(Keyword.class.isAssignableFrom(node.getClass())){
             keywordStack.pop();
-            returnVariables = ((Keyword)node).getReturnVariables();
+            returnVariables = ((Keyword) node).getReturnVariables();
         }
         else if(KeywordCall.class.isAssignableFrom(node.getClass())){
             argumentStack.pop();
-            returnVariables = ((KeywordCall)node).getReturnVariables();
+            returnVariables = ((KeywordCall) node).getReturnVariables();
         }
     }
 

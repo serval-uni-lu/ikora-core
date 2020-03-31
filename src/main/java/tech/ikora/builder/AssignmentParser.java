@@ -40,7 +40,7 @@ public class AssignmentParser {
             ++offset;
         }
 
-        Token name = expression != null ? expression.getName() : Token.empty();
+        Token name = expression != null ? expression.getNameToken() : Token.empty();
         Assignment assignment = new Assignment(name, returnValues, expression);
 
         if(!assignment.getKeywordCall().isPresent()){

@@ -30,7 +30,7 @@ public class Runtime {
         this.libraries = libraries;
     }
 
-    public Set<Variable> findLibraryVariable(Token name){
+    public Set<LibraryVariable> findLibraryVariable(Token name){
         return Collections.singleton(this.libraries.findVariable(name));
     }
 

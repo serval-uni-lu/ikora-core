@@ -12,7 +12,7 @@ public class ImportLibrary extends LibraryKeyword implements ScopeModifier {
     @Override
     public void addToScope(Runtime runtime, KeywordCall call) {
         KeywordDefinition parent = null;
-        Node current = call.getAstParent();
+        SourceNode current = call.getAstParent();
 
         while(current != null){
             if(Step.class.isAssignableFrom(current.getClass())) {

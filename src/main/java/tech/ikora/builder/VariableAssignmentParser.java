@@ -55,7 +55,7 @@ public class VariableAssignmentParser {
         if(values.isEmpty()){
             errors.registerSyntaxError(
                     reader.getFile(),
-                    String.format("Empty variable definition: %s", variable.getName()),
+                    String.format("Empty variable definition: %s", variable.getNameToken()),
                     Range.fromTokens(variable.getTokens(), reader.getCurrent())
             );
         }
@@ -77,7 +77,7 @@ public class VariableAssignmentParser {
         return  token.trim(equalsFinder);
     }
 
-    public static Node parseValue(Token token){
+    public static SourceNode parseValue(Token token){
         final Optional<Variable> variable = VariableParser.parse(token);
         if(variable.isPresent()){
             return variable.get();
@@ -98,8 +98,8 @@ public class VariableAssignmentParser {
             return Optional.empty();
         }
 
-        final Node key = parseValue(keyValuePair.getKey());
-        final Node value = parseValue(keyValuePair.getValue());
+        final SourceNode key = parseValue(keyValuePair.getKey());
+        final SourceNode value = parseValue(keyValuePair.getValue());
 
         return Optional.of(new DictionaryEntry(key, value));
     }

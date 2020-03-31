@@ -1,5 +1,6 @@
 package tech.ikora.analytics.violations;
 
+import org.apache.commons.lang3.NotImplementedException;
 import tech.ikora.model.*;
 
 import java.util.ArrayList;
@@ -93,9 +94,21 @@ public class ViolationDetection {
                 return;
             }
 
-            if(!step.getSourceFile().isDirectDependency(keyword.getSourceFile())){
+            if(!isDirectDependency(keyword, step)){
                 violations.add(new Violation(Violation.Level.WARNING, step, Violation.Cause.TRANSITIVE_DEPENDENCY));
             }
         });
+    }
+
+    private static boolean isDirectDependency(Keyword keyword, Step step){
+        if(SourceNode.class.isAssignableFrom(keyword.getClass())){
+            return step.getSourceFile().isDirectDependency(((SourceNode)keyword).getSourceFile());
+        }
+        else if(LibraryKeyword.class.isAssignableFrom(keyword.getClass())){
+            String libraryName = keyword.getLibraryName();
+            return step.getSourceFile().isImportLibrary(libraryName);
+        }
+
+        throw new NotImplementedException("only support keywords in the source code or keyword from libraries for indirect dependency detection");
     }
 }

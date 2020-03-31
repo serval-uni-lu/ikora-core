@@ -9,8 +9,8 @@ import java.util.Optional;
 class VariableTableParser {
     private VariableTableParser() {}
 
-    public static NodeTable<VariableAssignment> parse(LineReader reader, Tokens blockTokens, ErrorManager errors) throws IOException {
-        NodeTable<VariableAssignment> variableTable = new NodeTable<>();
+    public static SourceNodeTable<VariableAssignment> parse(LineReader reader, Tokens blockTokens, ErrorManager errors) throws IOException {
+        SourceNodeTable<VariableAssignment> variableTable = new SourceNodeTable<>();
         variableTable.setHeader(ParserUtils.parseHeaderName(reader, blockTokens, errors));
 
         while(reader.getCurrent().isValid() && !LexerUtils.isBlock(reader.getCurrent().getText())){

@@ -5,7 +5,7 @@ import tech.ikora.model.Token;
 
 public class False extends LibraryVariable {
     @Override
-    public Token getName() {
-        return Token.fromString("${false}");
+    public String getName() {
+        return "${false}";
     }
 }

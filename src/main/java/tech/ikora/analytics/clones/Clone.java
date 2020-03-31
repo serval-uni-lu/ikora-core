@@ -1,11 +1,11 @@
 package tech.ikora.analytics.clones;
 
-import tech.ikora.model.Node;
+import tech.ikora.model.SourceNode;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class Clone<T extends Node> {
+public class Clone<T extends SourceNode> {
 
     public enum Type{
         TYPE_1, TYPE_2, TYPE_3, TYPE_4, NONE

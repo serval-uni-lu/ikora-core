@@ -4,8 +4,8 @@ import tech.ikora.model.*;
 
 public class DependencyVisitor implements NodeVisitor {
     @Override
-    public void visit(Node node, VisitorMemory memory) {
-        node.accept(this, memory);
+    public void visit(SourceNode sourceNode, VisitorMemory memory) {
+        sourceNode.accept(this, memory);
     }
 
     @Override
@@ -69,12 +69,17 @@ public class DependencyVisitor implements NodeVisitor {
     }
 
     @Override
-    public <T extends Node> void visit(NodeTable<T> nodeTable, VisitorMemory memory) {
+    public <T extends SourceNode> void visit(SourceNodeTable<T> nodeTable, VisitorMemory memory) {
         VisitorUtils.traverseDependencies(this, nodeTable, memory);
     }
 
     @Override
     public void visit(VariableAssignment variableAssignment, VisitorMemory memory) {
         VisitorUtils.traverseDependencies(this, variableAssignment, memory);
+    }
+
+    @Override
+    public void visit(LibraryVariable libraryVariable, VisitorMemory memory) {
+        VisitorUtils.traverseDependencies(this, libraryVariable, memory);
     }
 }

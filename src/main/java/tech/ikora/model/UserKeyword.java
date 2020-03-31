@@ -11,7 +11,7 @@ import java.util.Set;
 public class UserKeyword extends KeywordDefinition {
     private List<Variable> parameters;
     private List<Variable> embeddedVariables;
-    private NodeTable<Variable> localVariables;
+    private SourceNodeTable<Variable> localVariables;
 
     private KeywordCall tearDown;
     private List<Variable> returnVariables;
@@ -20,7 +20,7 @@ public class UserKeyword extends KeywordDefinition {
         parameters = new ArrayList<>();
         embeddedVariables = new ArrayList<>();
 
-        localVariables = new NodeTable<>();
+        localVariables = new SourceNodeTable<>();
         returnVariables = new ArrayList<>();
     }
 

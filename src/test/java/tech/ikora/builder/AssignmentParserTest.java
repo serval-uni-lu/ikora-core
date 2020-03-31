@@ -27,11 +27,11 @@ class AssignmentParserTest {
 
         List<Variable> variables = assignment.getLeftHandOperand();
         assertEquals(1, variables.size());
-        assertEquals("${value}", variables.get(0).getName().getText());
+        assertEquals("${value}", variables.get(0).getNameToken().getText());
 
         Optional<KeywordCall> expression = assignment.getKeywordCall();
         assertTrue(expression.isPresent());
-        assertEquals("Keyword returning a value", expression.get().getName().getText());
+        assertEquals("Keyword returning a value", expression.get().getNameToken().getText());
     }
 
     @Test
@@ -43,12 +43,12 @@ class AssignmentParserTest {
 
         List<Variable> variables = assignment.getLeftHandOperand();
         assertEquals(2, variables.size());
-        assertEquals("${value1}", variables.get(0).getName().getText());
-        assertEquals("${value2}", variables.get(1).getName().getText());
+        assertEquals("${value1}", variables.get(0).getNameToken().getText());
+        assertEquals("${value2}", variables.get(1).getNameToken().getText());
 
         Optional<KeywordCall> expression = assignment.getKeywordCall();
         assertTrue(expression.isPresent());
-        assertEquals("Keyword returning a value", expression.get().getName().getText());
+        assertEquals("Keyword returning a value", expression.get().getNameToken().getText());
     }
 
     @Test
@@ -60,7 +60,7 @@ class AssignmentParserTest {
 
         final List<Variable> variables = assignment.getLeftHandOperand();
         assertEquals(1, variables.size());
-        assertEquals("${value}", variables.get(0).getName().getText());
+        assertEquals("${value}", variables.get(0).getNameToken().getText());
 
         final Optional<KeywordCall> expression = assignment.getKeywordCall();
         assertFalse(expression.isPresent());

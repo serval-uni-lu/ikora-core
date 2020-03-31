@@ -59,7 +59,7 @@ public class Projects implements Iterable<Project> {
         return Optional.empty();
     }
 
-    public <T extends Node> Set<T> getNodes(Class<T> type){
+    public <T extends SourceNode> Set<T> getNodes(Class<T> type){
         Set<T> nodes = new HashSet<>();
 
         for(Project project: projectSet){

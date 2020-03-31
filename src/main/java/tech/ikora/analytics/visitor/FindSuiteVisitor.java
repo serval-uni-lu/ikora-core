@@ -19,7 +19,7 @@ public class FindSuiteVisitor extends DependencyVisitor {
     @Override
     public void visit(TestCase testCase, VisitorMemory memory) {
         if(testCase != null){
-            suites.add(testCase.getFileName());
+            suites.add(testCase.getLibraryName());
         }
     }
 }

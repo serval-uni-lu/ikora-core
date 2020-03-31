@@ -39,10 +39,10 @@ public class ReportBuilder {
         ReportElement element = null;
 
         if(TestCase.class.isAssignableFrom(node.getClass())){
-            element = createTestNode((TestCase)node);
+            element = createTestNode((TestCase) node);
         }
         else if(tech.ikora.model.Keyword.class.isAssignableFrom(node.getClass())){
-            element = createKeywordNode((tech.ikora.model.Keyword)node);
+            element = createKeywordNode((tech.ikora.model.Keyword) node);
         }
 
         if(element != null){
@@ -70,7 +70,7 @@ public class ReportBuilder {
     private Test createTestNode(TestCase testCase){
         Test test = new Test();
 
-        test.setName(testCase.getName().getText());
+        test.setName(testCase.getNameToken().getText());
         test.setDocumentation(testCase.getDocumentation().toString());
         test.setTags(testCase.getTags().stream().map(Token::getText).collect(Collectors.toSet()));
 
@@ -80,7 +80,7 @@ public class ReportBuilder {
     private tech.ikora.report.Keyword createKeywordNode(Keyword keyword){
         tech.ikora.report.Keyword keywordNode = new tech.ikora.report.Keyword();
 
-        keywordNode.setName(keyword.getName().getText());
+        keywordNode.setName(keyword.getName());
         keywordNode.setDocumentation(keyword.getDocumentation().toString());
 
         return keywordNode;

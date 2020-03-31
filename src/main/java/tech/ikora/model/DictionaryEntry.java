@@ -7,23 +7,23 @@ import tech.ikora.runner.Runtime;
 
 import java.util.List;
 
-public class DictionaryEntry extends Node {
-    private Node key;
-    private Node value;
+public class DictionaryEntry extends SourceNode {
+    private SourceNode key;
+    private SourceNode value;
 
-    public DictionaryEntry(Node key, Node value){
-        addToken(key.getName());
-        addToken(value.getName());
+    public DictionaryEntry(SourceNode key, SourceNode value){
+        addToken(key.getNameToken());
+        addToken(value.getNameToken());
 
         this.key = key;
         this.value = value;
     }
 
-    public Node getKey(){
+    public SourceNode getKey(){
         return this.key;
     }
 
-    public Node getValue(){
+    public SourceNode getValue(){
         return this.value;
     }
 
@@ -44,8 +44,8 @@ public class DictionaryEntry extends Node {
     }
 
     @Override
-    public Token getName() {
-        return getKey().getName();
+    public Token getNameToken() {
+        return getKey().getNameToken();
     }
 
     @Override

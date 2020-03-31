@@ -6,7 +6,7 @@ import tech.ikora.analytics.Action;
 import tech.ikora.analytics.Difference;
 import tech.ikora.model.*;
 
-public class CloneDetection<T extends Node> {
+public class CloneDetection<T extends SourceNode> {
     private static Set<Action.Type> ignoreForType1;
     private static Set<Action.Type> ignoreForType2;
 
@@ -38,17 +38,17 @@ public class CloneDetection<T extends Node> {
         this.clones = new Clones<>();
     }
 
-    public static <T extends Node> Clones<T> findClones(Projects projects, Class<T> type){
+    public static <T extends SourceNode> Clones<T> findClones(Projects projects, Class<T> type){
         CloneDetection<T> detection = new CloneDetection<>(projects);
         return detection.run(type);
     }
 
-    public static <T extends Node> Clones<T> findClones(Project project, Class<T> type){
+    public static <T extends SourceNode> Clones<T> findClones(Project project, Class<T> type){
         CloneDetection<T> detection = new CloneDetection<>(project);
         return detection.run(type);
     }
 
-    public static  <T extends Node> Clone.Type getCloneType(T t1, T t2){
+    public static  <T extends SourceNode> Clone.Type getCloneType(T t1, T t2){
         Clone.Type clone = Clone.Type.NONE;
 
         if(isTooShort(t1, t2)){
@@ -96,7 +96,7 @@ public class CloneDetection<T extends Node> {
         return clones;
     }
 
-    private static <T extends Node> boolean isTooShort(T t1, T t2){
+    private static <T extends SourceNode> boolean isTooShort(T t1, T t2){
         if(KeywordDefinition.class.isAssignableFrom(t1.getClass())){
             KeywordDefinition keyword1 = (KeywordDefinition)t1;
             KeywordDefinition keyword2 = (KeywordDefinition)t2;
@@ -107,7 +107,7 @@ public class CloneDetection<T extends Node> {
         return false;
     }
 
-    private static <T extends Node> boolean isSameSize(T t1, T t2){
+    private static <T extends SourceNode> boolean isSameSize(T t1, T t2){
         if(!KeywordDefinition.class.isAssignableFrom(t1.getClass())){
             return true;
         }

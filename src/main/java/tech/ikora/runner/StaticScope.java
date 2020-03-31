@@ -7,14 +7,14 @@ import java.io.File;
 import java.util.*;
 
 public class StaticScope implements Scope{
-    private NodeTable<Variable> global;
-    private Map<TestCase, NodeTable<Variable>> test;
-    private Map<String, NodeTable<Variable>> suite;
+    private SourceNodeTable<Variable> global;
+    private Map<TestCase, SourceNodeTable<Variable>> test;
+    private Map<String, SourceNodeTable<Variable>> suite;
 
     private Map<KeywordDefinition, ResourcesTable> dynamicLibrary;
 
     public StaticScope(){
-        global = new NodeTable<>();
+        global = new SourceNodeTable<>();
         suite = new HashMap<>();
         test = new HashMap<>();
         dynamicLibrary = new HashMap<>();
@@ -44,7 +44,7 @@ public class StaticScope implements Scope{
 
     @Override
     public void addToSuite(String suite, Variable variable) {
-        this.suite.putIfAbsent(suite, new NodeTable<>());
+        this.suite.putIfAbsent(suite, new SourceNodeTable<>());
         this.suite.get(suite).add(variable);
     }
 
@@ -55,7 +55,7 @@ public class StaticScope implements Scope{
 
     @Override
     public void addToTest(TestCase testCase, Variable variable) {
-        test.putIfAbsent(testCase, new NodeTable<>());
+        test.putIfAbsent(testCase, new SourceNodeTable<>());
         test.get(testCase).add(variable);
     }
 
@@ -69,7 +69,7 @@ public class StaticScope implements Scope{
             return;
         }
 
-        File filePath = new File(argumentList.get(0).getName().getText());
+        File filePath = new File(argumentList.get(0).getNameToken().getText());
 
         if(!filePath.isAbsolute() && keyword.getSourceFile() != null) {
             filePath = new File(keyword.getSourceFile().getFile(), filePath.getPath());
@@ -79,10 +79,10 @@ public class StaticScope implements Scope{
 
         List<Token> resourcesParameters = new ArrayList<>();
         for(int i = 1; i < argumentList.size(); ++i){
-            resourcesParameters.add(argumentList.get(i).getName());
+            resourcesParameters.add(argumentList.get(i).getNameToken());
         }
 
-        Resources resources = new Resources(argumentList.get(0).getName(), filePath, resourcesParameters, Token.empty());
+        Resources resources = new Resources(argumentList.get(0).getNameToken(), filePath, resourcesParameters, Token.empty());
         dynamicLibrary.get(keyword).add(resources);
     }
 

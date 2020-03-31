@@ -1,12 +1,12 @@
 package tech.ikora.analytics.clones;
 
 import tech.ikora.model.Project;
-import tech.ikora.model.Node;
+import tech.ikora.model.SourceNode;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class CloneCluster<T extends Node> {
+public class CloneCluster<T extends SourceNode> {
     private final Clone.Type type;
     private final Set<T> clones;
     private final Set<Project> projects;

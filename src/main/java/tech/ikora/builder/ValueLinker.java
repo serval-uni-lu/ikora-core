@@ -27,26 +27,30 @@ public class ValueLinker {
 
     private ValueLinker() {}
 
-    public static boolean matches(Token left, Token right) {
+    public static boolean matches(Token left, Token right){
+        return matches(left.getText(), right.getText());
+    }
+
+    public static boolean matches(String left, String right) {
         Pattern match = buildRegex(left);
-        Matcher matcher = match.matcher(right.getText());
+        Matcher matcher = match.matcher(right);
         return matcher.matches();
     }
 
     public static boolean isVariable(Token token) {
-        Matcher matcher = getVariableMatcher(token, Matching.IS_VARIABLE);
+        Matcher matcher = getVariableMatcher(token.getText(), Matching.IS_VARIABLE);
         return matcher.matches();
     }
 
     public static boolean hasVariable(Token token) {
-        Matcher matcher = getVariableMatcher(token, Matching.HAS_VARIABLE);
+        Matcher matcher = getVariableMatcher(token.getText(), Matching.HAS_VARIABLE);
         return matcher.matches();
     }
 
     public static List<Token> findVariables(Token token) {
         List<Token> variables = new ArrayList<>();
 
-        Matcher matcher = getVariableMatcher(token, Matching.FIND_VARIABLE);
+        Matcher matcher = getVariableMatcher(token.getText(), Matching.FIND_VARIABLE);
 
         while (matcher.find()){
             variables.add(token.extract(matcher.start(), matcher.end()));
@@ -55,8 +59,8 @@ public class ValueLinker {
         return variables;
     }
 
-    private static Pattern buildRegex(Token token) {
-        Matcher matcher = getVariableMatcher(token, Matching.FIND_VARIABLE);
+    private static Pattern buildRegex(String name) {
+        Matcher matcher = getVariableMatcher(name, Matching.FIND_VARIABLE);
 
         String placeholder = "@@@@___VARIABLE__PLACEHOLDER___@@@@";
 
@@ -67,9 +71,8 @@ public class ValueLinker {
         return Pattern.compile("^" + pattern + "$", Pattern.CASE_INSENSITIVE);
     }
 
-    private static Matcher getVariableMatcher(Token token, Matching matching) {
+    private static Matcher getVariableMatcher(String name, Matching matching) {
         Matcher matcher;
-        String name = token.getText();
 
         switch (matching) {
             case IS_VARIABLE:

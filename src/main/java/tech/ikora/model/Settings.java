@@ -75,6 +75,12 @@ public class Settings implements Delayable {
         return libraryTable;
     }
 
+    public boolean containsLibrary(String libraryName){
+        return libraryTable.stream()
+                .map(l -> l.getName().getText())
+                .anyMatch(n -> n.equalsIgnoreCase(libraryName));
+    }
+
     public Set<Token> getDefaultTags(){
         return defaultTags;
     }

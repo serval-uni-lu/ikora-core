@@ -1,6 +1,5 @@
 package tech.ikora.model;
 
-import tech.ikora.analytics.Action;
 import tech.ikora.analytics.visitor.NodeVisitor;
 import tech.ikora.analytics.visitor.VisitorMemory;
 import tech.ikora.builder.ValueLinker;
@@ -8,7 +7,7 @@ import tech.ikora.runner.Runtime;
 
 import java.util.*;
 
-public abstract class LibraryKeyword extends Keyword {
+public abstract class LibraryKeyword implements Keyword {
     protected Type type;
 
     public LibraryKeyword() {
@@ -25,8 +24,8 @@ public abstract class LibraryKeyword extends Keyword {
     }
 
     @Override
-    public Token getName(){
-        return Token.fromString(toKeyword(this.getClass()));
+    public String getName(){
+        return toKeyword(this.getClass());
     }
 
     public static String toKeyword(Class<? extends LibraryKeyword> libraryClass) {
@@ -34,25 +33,6 @@ public abstract class LibraryKeyword extends Keyword {
         return name.replaceAll("([A-Z])", " $1").trim().toLowerCase();
     }
 
-    @Override
-    public double distance(Differentiable other){
-        if(other == null){
-            return 1;
-        }
-
-        return other.getClass() == this.getClass() ? 0 : 1;
-    }
-
-    @Override
-    public List<Action> differences(Differentiable other){
-        if(other != null && other.getClass() == this.getClass()){
-            return Collections.emptyList();
-        }
-
-        return Collections.singletonList(Action.invalid(this, other));
-    }
-
-    @Override
     public String getLibraryName(){
         String[] packages = this.getClass().getCanonicalName().split("\\.");
 
@@ -67,7 +47,7 @@ public abstract class LibraryKeyword extends Keyword {
 
     @Override
     public boolean matches(Token name) {
-        return ValueLinker.matches(getName(), name);
+        return ValueLinker.matches(getName(), name.getText());
     }
 
     public Argument.Type[] getArgumentTypes() {
@@ -107,5 +87,15 @@ public abstract class LibraryKeyword extends Keyword {
         }
 
         return types.length;
+    }
+
+    @Override
+    public void addDependency(Node node) {
+
+    }
+
+    @Override
+    public Set<Node> getDependencies() {
+        return null;
     }
 }

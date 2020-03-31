@@ -25,7 +25,7 @@ public class VariableAssignmentParserTest {
 
         assertEquals(1, assignment.getValues().size());
         assertTrue(assignment.getValues().get(0) instanceof Literal);
-        assertEquals("scalar value", assignment.getValues().get(0).getName().toString());
+        assertEquals("scalar value", assignment.getValues().get(0).getNameToken().toString());
     }
 
     @Test
@@ -40,7 +40,7 @@ public class VariableAssignmentParserTest {
 
         assertEquals(1, assignment.getValues().size());
         assertTrue(assignment.getValues().get(0) instanceof Variable);
-        assertEquals("@{variable_value}", assignment.getValues().get(0).getName().toString());
+        assertEquals("@{variable_value}", assignment.getValues().get(0).getNameToken().toString());
     }
 
     @Test
@@ -55,7 +55,7 @@ public class VariableAssignmentParserTest {
 
         assertEquals(1, assignment.getValues().size());
         assertTrue(assignment.getValues().get(0) instanceof Literal);
-        assertEquals("scalar value 1", assignment.getValues().get(0).getName().toString());
+        assertEquals("scalar value 1", assignment.getValues().get(0).getNameToken().toString());
     }
 
     @Test
@@ -71,13 +71,13 @@ public class VariableAssignmentParserTest {
         assertFalse(assignment.getValues().isEmpty());
 
         assertTrue(assignment.getValues().get(0) instanceof Literal);
-        assertEquals("scalar value 1", assignment.getValues().get(0).getName().toString());
+        assertEquals("scalar value 1", assignment.getValues().get(0).getNameToken().toString());
 
         assertTrue(assignment.getValues().get(1) instanceof Variable);
-        assertEquals("${variable}", assignment.getValues().get(1).getName().toString());
+        assertEquals("${variable}", assignment.getValues().get(1).getNameToken().toString());
 
         assertTrue(assignment.getValues().get(2) instanceof Literal);
-        assertEquals("scalar value 3", assignment.getValues().get(2).getName().toString());
+        assertEquals("scalar value 3", assignment.getValues().get(2).getNameToken().toString());
     }
 
     @Test
@@ -93,14 +93,14 @@ public class VariableAssignmentParserTest {
         assertFalse(assignment.getValues().isEmpty());
 
         assertTrue(assignment.getValues().get(0) instanceof DictionaryEntry);
-        assertEquals("key1", ((DictionaryEntry)assignment.getValues().get(0)).getKey().getName().toString());
-        assertEquals("value1", ((DictionaryEntry)assignment.getValues().get(0)).getValue().getName().toString());
+        assertEquals("key1", ((DictionaryEntry)assignment.getValues().get(0)).getKey().getNameToken().toString());
+        assertEquals("value1", ((DictionaryEntry)assignment.getValues().get(0)).getValue().getNameToken().toString());
 
         assertTrue(assignment.getValues().get(1) instanceof Variable);
-        assertEquals("${variable}", assignment.getValues().get(1).getName().toString());
+        assertEquals("${variable}", assignment.getValues().get(1).getNameToken().toString());
 
         assertTrue(assignment.getValues().get(2) instanceof DictionaryEntry);
-        assertEquals("key3", ((DictionaryEntry)assignment.getValues().get(2)).getKey().getName().toString());
-        assertEquals("value3", ((DictionaryEntry)assignment.getValues().get(2)).getValue().getName().toString());
+        assertEquals("key3", ((DictionaryEntry)assignment.getValues().get(2)).getKey().getNameToken().toString());
+        assertEquals("value3", ((DictionaryEntry)assignment.getValues().get(2)).getValue().getNameToken().toString());
     }
 }

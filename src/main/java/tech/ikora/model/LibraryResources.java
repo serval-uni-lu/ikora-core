@@ -57,7 +57,7 @@ public class LibraryResources {
         return findKeyword(name);
     }
 
-    public Variable findVariable(Token name) {
+    public LibraryVariable findVariable(Token name) {
         for(LibraryVariable variable: variables){
             if(variable.matches(name)){
                 return variable;
@@ -71,7 +71,7 @@ public class LibraryResources {
         for(LibraryInfo library: librariesInfo){
             for(LibraryKeywordInfo keyword: library.getKeywords()){
                 keyword.setLibrary(library);
-                this.libraryKeywordNames.put(keyword.getName().toString(), keyword);
+                this.libraryKeywordNames.put(keyword.getName(), keyword);
             }
         }
     }

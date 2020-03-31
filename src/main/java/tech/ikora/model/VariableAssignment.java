@@ -12,14 +12,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class VariableAssignment extends Node{
+public class VariableAssignment extends SourceNode {
     private final Variable variable;
 
     public VariableAssignment(Variable variable){
         this.variable = variable;
     }
 
-    public void addValue(Node value) throws InvalidArgumentException {
+    public void addValue(SourceNode value) throws InvalidArgumentException {
         this.variable.addValue(value);
     }
 
@@ -27,7 +27,7 @@ public class VariableAssignment extends Node{
         return variable;
     }
 
-    public List<Node> getValues() {
+    public List<SourceNode> getValues() {
         return this.variable.getValues();
     }
 
@@ -47,8 +47,8 @@ public class VariableAssignment extends Node{
     }
 
     @Override
-    public Token getName() {
-        return variable.getName();
+    public Token getNameToken() {
+        return variable.getNameToken();
     }
 
     @Override
@@ -63,7 +63,7 @@ public class VariableAssignment extends Node{
 
         VariableAssignment assignment = (VariableAssignment)other;
 
-        double distanceName = this.getName().equalsIgnorePosition(assignment.getName()) ? 0. : 0.5;
+        double distanceName = this.getNameToken().equalsIgnorePosition(assignment.getNameToken()) ? 0. : 0.5;
         double distanceValues = LevenshteinDistance.index(this.getValues(), assignment.getValues()) == 0. ? 0. : 0.5;
 
         return distanceName + distanceValues;
@@ -83,7 +83,7 @@ public class VariableAssignment extends Node{
 
         List<Action> actions = new ArrayList<>();
 
-        if(!this.getName().equalsIgnorePosition(assignment.getName())){
+        if(!this.getNameToken().equalsIgnorePosition(assignment.getNameToken())){
             actions.add(Action.changeName(this, other));
         }
 

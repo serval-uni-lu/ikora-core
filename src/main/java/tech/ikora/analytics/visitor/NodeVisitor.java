@@ -3,7 +3,7 @@ package tech.ikora.analytics.visitor;
 import tech.ikora.model.*;
 
 public interface NodeVisitor {
-    void visit(Node node, VisitorMemory memory);
+    void visit(SourceNode sourceNode, VisitorMemory memory);
     void visit(TestCase testCase, VisitorMemory memory);
     void visit(UserKeyword keyword, VisitorMemory memory);
     void visit(KeywordCall call, VisitorMemory memory);
@@ -17,5 +17,6 @@ public interface NodeVisitor {
     void visit(Argument argument, VisitorMemory memory);
     void visit(Step step, VisitorMemory memory);
     void visit(VariableAssignment variableAssignment, VisitorMemory memory);
-    <T extends Node> void visit(NodeTable<T> ts, VisitorMemory memory);
+    void visit(LibraryVariable variable, VisitorMemory memory);
+    <T extends SourceNode> void visit(SourceNodeTable<T> ts, VisitorMemory memory);
 }

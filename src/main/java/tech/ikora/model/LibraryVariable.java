@@ -1,67 +1,80 @@
 package tech.ikora.model;
 
-import tech.ikora.analytics.Action;
 import tech.ikora.analytics.visitor.NodeVisitor;
 import tech.ikora.analytics.visitor.VisitorMemory;
 import tech.ikora.builder.ValueLinker;
-import tech.ikora.exception.InvalidArgumentException;
+import tech.ikora.runner.Runtime;
 
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public abstract class LibraryVariable extends Variable {
+public abstract class LibraryVariable implements Node {
     protected enum Format{
         SCALAR, LIST, DICTIONARY
     }
 
     protected Format format;
+    protected Pattern pattern;
+    protected List<SourceNode> values;
+    private Set<Node> dependencies;
 
     public LibraryVariable(){
-        super(Token.empty());
         this.format = Format.SCALAR;
-        setName(toVariable(this.getClass()));
+        this.values = new ArrayList<>();
+        this.dependencies = new HashSet<>();
+
+        initializePattern();
     }
 
-    @Override
-    public void addValue(Node value) throws InvalidArgumentException {
-        throw new InvalidArgumentException("Library variable cannot be assigned");
-    }
-
-    @Override
-    protected void setName(Token name){
-        this.name = name;
-
-        String patternString = ValueLinker.escape(getName().getText());
+    private void initializePattern(){
+        String patternString = ValueLinker.escape(getName());
         patternString = ValueLinker.getGenericVariableName(patternString);
         this.pattern = Pattern.compile(patternString, Pattern.CASE_INSENSITIVE);
     }
 
     @Override
-    public boolean isDeadCode(){
-        return false;
-    }
-
-    @Override
     public void accept(NodeVisitor visitor, VisitorMemory memory) {
-
+        visitor.visit(this, memory);
     }
 
     @Override
-    public double distance(Differentiable other) {
-        return this.differences(other).isEmpty() ? 0 : 1;
+    public String getName() {
+        return toVariable(this.getClass());
     }
 
     @Override
-    public List<Action> differences(Differentiable other) {
-        if(this != other){
-            return Collections.singletonList(Action.changeVariableDefinition(this, other));
-        }
-
-        return Collections.emptyList();
+    public String getLibraryName() {
+        return "builtin";
     }
 
-    private static Token toVariable(Class<? extends LibraryVariable> variableClass) {
-        return Token.fromString(String.format("${%s}", variableClass.getSimpleName()));
+    private static String toVariable(Class<? extends LibraryVariable> variableClass) {
+        return String.format("${%s}", variableClass.getSimpleName());
+    }
+
+    @Override
+    public void addDependency(Node node) {
+        this.dependencies.add(node);
+    }
+
+    @Override
+    public Set<Node> getDependencies() {
+        return this.dependencies;
+    }
+
+    @Override
+    public boolean matches(Token name) {
+        String generic = ValueLinker.getGenericVariableName(name.getText());
+
+        Matcher matcher = pattern.matcher(generic);
+        return matcher.matches();
+    }
+
+    @Override
+    public void execute(Runtime runtime) throws Exception {
+
     }
 }

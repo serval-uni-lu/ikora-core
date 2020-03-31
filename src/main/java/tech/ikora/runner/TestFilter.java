@@ -23,7 +23,7 @@ public class TestFilter {
                 continue;
             }
 
-            if(!names.isEmpty() && !names.contains(testCase.getName().getText().toLowerCase())){
+            if(!names.isEmpty() && !names.contains(testCase.getNameToken().getText().toLowerCase())){
                 continue;
             }
 

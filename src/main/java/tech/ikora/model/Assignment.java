@@ -62,10 +62,10 @@ public class Assignment extends Step {
             return Optional.empty();
         }
 
-        Node node = rightHandOperand.getDefinition().orElse(null);
+        SourceNode sourceNode = rightHandOperand.getDefinition().orElse(null);
 
-        if(node instanceof KeywordCall){
-            return Optional.of((KeywordCall)node);
+        if(sourceNode instanceof KeywordCall){
+            return Optional.of((KeywordCall) sourceNode);
         }
 
         return Optional.empty();
@@ -154,7 +154,7 @@ public class Assignment extends Step {
         StringBuilder builder = new StringBuilder();
 
         for (Variable variable: leftHandOperand){
-            builder.append(variable.getName());
+            builder.append(variable.getNameToken());
             builder.append("\t");
         }
 

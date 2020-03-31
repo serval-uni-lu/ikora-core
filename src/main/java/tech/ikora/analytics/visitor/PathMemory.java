@@ -1,6 +1,7 @@
 package tech.ikora.analytics.visitor;
 
 import tech.ikora.model.Node;
+import tech.ikora.model.SourceNode;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -25,6 +26,10 @@ public class PathMemory implements VisitorMemory {
     }
 
     protected void add(Node node){
+        if(!SourceNode.class.isAssignableFrom(node.getClass())){
+            return;
+        }
+
         visited.add(node);
     }
 

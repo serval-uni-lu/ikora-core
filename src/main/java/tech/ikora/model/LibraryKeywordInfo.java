@@ -32,8 +32,8 @@ public class LibraryKeywordInfo extends LibraryKeyword {
     }
 
     @Override
-    public Token getName() {
-        return Token.fromString(name);
+    public String getName() {
+        return this.name;
     }
 
     @Override

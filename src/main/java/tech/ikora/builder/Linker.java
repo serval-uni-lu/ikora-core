@@ -76,7 +76,7 @@ public class Linker {
     private List<UnresolvedNode> resolveCall(KeywordCall call) {
         List<UnresolvedNode> unresolvedNodes = new ArrayList<>();
 
-        Set<? super Keyword> keywords = getKeywords(call.getName(), call.getSourceFile());
+        Set<? super Keyword> keywords = getKeywords(call.getNameToken(), call.getSourceFile());
 
         for(Object keyword: keywords) {
             call.linkKeyword((Keyword) keyword, Link.Import.STATIC);
@@ -109,7 +109,7 @@ public class Linker {
         call.clearArguments();
         while(iterator.hasNext()){
             Argument argument = iterator.next();
-            Set<? super Keyword> keywords = getKeywords(argument.getName(), argument.getSourceFile());
+            Set<? super Keyword> keywords = getKeywords(argument.getNameToken(), argument.getSourceFile());
 
             if(keywords.isEmpty()){
                 call.addArgument(argument);
@@ -138,7 +138,7 @@ public class Linker {
     }
 
     private KeywordCall createKeywordCall(Keyword keyword, Argument first, Iterator<Argument> iterator) {
-        KeywordCall call = new KeywordCall(first.getName());
+        KeywordCall call = new KeywordCall(first.getNameToken());
 
         call.setSourceFile(first.getSourceFile());
         call.addDependency(keyword);
@@ -149,8 +149,8 @@ public class Linker {
         while (iterator.hasNext() && i > 0){
             last = iterator.next();
 
-            Optional<Variable> optionalVariable = VariableParser.parse(last.getName());
-            Argument current = new Argument(optionalVariable.isPresent() ? optionalVariable.get() : new Literal(last.getName()));
+            Optional<Variable> optionalVariable = VariableParser.parse(last.getNameToken());
+            Argument current = new Argument(optionalVariable.isPresent() ? optionalVariable.get() : new Literal(last.getNameToken()));
             call.addArgument(current);
 
             --i;
@@ -219,7 +219,7 @@ public class Linker {
         for(UnresolvedNode unresolvedNode : unresolvedNodes){
             Set<Node> nodes = runtime.findInScope(unresolvedNode.getTestCases(), unresolvedNode.getSuites(), unresolvedNode.getName());
 
-            for(Node node: nodes){
+            for(Node node : nodes){
                 //TODO: Implement method to update the node that were just resolved
             }
 

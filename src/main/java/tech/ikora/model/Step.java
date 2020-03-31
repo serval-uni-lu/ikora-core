@@ -6,7 +6,7 @@ import tech.ikora.exception.InvalidTypeException;
 
 import java.util.*;
 
-public abstract class Step extends Node {
+public abstract class Step extends SourceNode {
     private Token name;
     protected KeywordCall template;
 
@@ -18,7 +18,7 @@ public abstract class Step extends Node {
         this.name = name;
     }
 
-    public Token getName() {
+    public Token getNameToken() {
         return this.name;
     }
 
@@ -27,14 +27,14 @@ public abstract class Step extends Node {
     }
 
     public KeywordDefinition getCaller() throws InvalidDependencyException {
-        Node node = getAstParent();
+        SourceNode sourceNode = getAstParent();
 
-        while (Argument.class.isAssignableFrom(node.getClass()) || Step.class.isAssignableFrom(node.getClass())){
-            node = node.getAstParent();
+        while (Argument.class.isAssignableFrom(sourceNode.getClass()) || Step.class.isAssignableFrom(sourceNode.getClass())){
+            sourceNode = sourceNode.getAstParent();
         }
 
-        if(node instanceof KeywordDefinition){
-            return (KeywordDefinition)node;
+        if(sourceNode instanceof KeywordDefinition){
+            return (KeywordDefinition) sourceNode;
         }
 
         throw new InvalidDependencyException("Step should always have a keyword definition caller");

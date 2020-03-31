@@ -4,8 +4,8 @@ import tech.ikora.model.*;
 
 public class EmptyVisitor implements NodeVisitor{
     @Override
-    public void visit(Node node, VisitorMemory memory) {
-        node.accept(this, memory);
+    public void visit(SourceNode sourceNode, VisitorMemory memory) {
+        sourceNode.accept(this, memory);
     }
 
     @Override
@@ -69,12 +69,17 @@ public class EmptyVisitor implements NodeVisitor{
     }
 
     @Override
-    public <T extends Node> void visit(NodeTable<T> ts, VisitorMemory memory) {
+    public <T extends SourceNode> void visit(SourceNodeTable<T> ts, VisitorMemory memory) {
         //nothing to do in this node
     }
 
     @Override
     public void visit(VariableAssignment variableAssignment, VisitorMemory memory) {
+        //nothing to do in this node
+    }
+
+    @Override
+    public void visit(LibraryVariable variable, VisitorMemory memory) {
         //nothing to do in this node
     }
 }

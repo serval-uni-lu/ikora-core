@@ -5,7 +5,6 @@ import tech.ikora.builder.Line;
 
 import java.io.File;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class SourceFile implements Iterable<UserKeyword> {
     final private Project project;
@@ -14,9 +13,9 @@ public class SourceFile implements Iterable<UserKeyword> {
 
     private String name;
     private Settings settings;
-    private NodeTable<TestCase> testCaseTable;
-    private NodeTable<UserKeyword> userKeywordTable;
-    private NodeTable<VariableAssignment> variableTable;
+    private SourceNodeTable<TestCase> testCaseTable;
+    private SourceNodeTable<UserKeyword> userKeywordTable;
+    private SourceNodeTable<VariableAssignment> variableTable;
 
     public SourceFile(Project project, File file){
         this.project = project;
@@ -24,9 +23,9 @@ public class SourceFile implements Iterable<UserKeyword> {
         this.lines = new ArrayList<>();
 
         setSettings(new Settings());
-        setTestCaseTable(new NodeTable<>());
-        setKeywordTable(new NodeTable<>());
-        setVariableTable(new NodeTable<>());
+        setTestCaseTable(new SourceNodeTable<>());
+        setKeywordTable(new SourceNodeTable<>());
+        setVariableTable(new SourceNodeTable<>());
 
         String name = this.project.generateFileName(this.file);
         setName(name);
@@ -92,17 +91,17 @@ public class SourceFile implements Iterable<UserKeyword> {
         this.settings.setFile(this);
     }
 
-    public void setTestCaseTable(NodeTable<TestCase> testCaseTable) {
+    public void setTestCaseTable(SourceNodeTable<TestCase> testCaseTable) {
         this.testCaseTable = testCaseTable;
         this.testCaseTable.setSourceFile(this);
     }
 
-    public void setKeywordTable(NodeTable<UserKeyword> nodeTable) {
+    public void setKeywordTable(SourceNodeTable<UserKeyword> nodeTable) {
         this.userKeywordTable = nodeTable;
         this.userKeywordTable.setSourceFile(this);
     }
 
-    public void setVariableTable(NodeTable<VariableAssignment> variableTable) {
+    public void setVariableTable(SourceNodeTable<VariableAssignment> variableTable) {
         this.variableTable = variableTable;
         this.variableTable.setSourceFile(this);
     }
@@ -125,10 +124,6 @@ public class SourceFile implements Iterable<UserKeyword> {
 
     public String getName() {
         return this.name;
-    }
-
-    public String getLibraryName() {
-        return FilenameUtils.getBaseName(getPath());
     }
 
     public Settings getSettings() {
@@ -178,7 +173,7 @@ public class SourceFile implements Iterable<UserKeyword> {
     private <T> Set<T> findNode(String library, Token name, Set<SourceFile> memory, Class<T> type){
         HashSet<T> nodes = new HashSet<>();
 
-        if(library == null || library.isEmpty() || getLibraryName().equalsIgnoreCase(library)){
+        if(library == null || library.isEmpty() || matches(library)){
             if(type == UserKeyword.class){
                 nodes.addAll((Collection<? extends T>) userKeywordTable.findNode(name));
             }
@@ -223,5 +218,21 @@ public class SourceFile implements Iterable<UserKeyword> {
         }
 
         return false;
+    }
+
+    public boolean isImportLibrary(String libraryName) {
+        return this.settings.containsLibrary(libraryName);
+    }
+
+    public boolean matches(String path){
+        if(path == null){
+            return false;
+        }
+
+        if(path.equalsIgnoreCase(getPath())){
+            return true;
+        }
+
+        return path.equalsIgnoreCase(FilenameUtils.getBaseName(getPath()));
     }
 }

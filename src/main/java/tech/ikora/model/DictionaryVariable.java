@@ -14,7 +14,7 @@ public class DictionaryVariable extends Variable {
     }
 
     @Override
-    public void addValue(Node value) throws InvalidArgumentException {
+    public void addValue(SourceNode value) throws InvalidArgumentException {
         if(!Variable.class.isAssignableFrom(value.getClass()) && !DictionaryEntry.class.isAssignableFrom(value.getClass())){
             throw new InvalidArgumentException("Key value pair or variable expected");
         }

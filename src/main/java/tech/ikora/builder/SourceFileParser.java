@@ -32,15 +32,15 @@ class SourceFileParser {
                     sourceFile.setSettings(settings);
                 }
                 else if(isTestCases(tokens.toString())){
-                    NodeTable<TestCase> testCaseTable = TestCaseTableParser.parse(reader, tokens, dynamicImports, errors);
+                    SourceNodeTable<TestCase> testCaseTable = TestCaseTableParser.parse(reader, tokens, dynamicImports, errors);
                     sourceFile.setTestCaseTable(testCaseTable);
                 }
                 else if(isKeywords(tokens.toString())){
-                    NodeTable<UserKeyword> nodeTable = KeywordTableParser.parse(reader, tokens, dynamicImports, errors);
+                    SourceNodeTable<UserKeyword> nodeTable = KeywordTableParser.parse(reader, tokens, dynamicImports, errors);
                     sourceFile.setKeywordTable(nodeTable);
                 }
                 else if(isVariable(tokens.toString())){
-                    NodeTable<VariableAssignment> variableTable = VariableTableParser.parse(reader, tokens, errors);
+                    SourceNodeTable<VariableAssignment> variableTable = VariableTableParser.parse(reader, tokens, errors);
                     sourceFile.setVariableTable(variableTable);
                 }
             }

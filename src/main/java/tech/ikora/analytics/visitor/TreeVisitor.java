@@ -5,8 +5,8 @@ import tech.ikora.model.*;
 
 public class TreeVisitor implements NodeVisitor {
     @Override
-    public void visit(Node node, VisitorMemory memory) {
-        node.accept(this, memory);
+    public void visit(SourceNode sourceNode, VisitorMemory memory) {
+        sourceNode.accept(this, memory);
     }
 
     @Override
@@ -81,12 +81,17 @@ public class TreeVisitor implements NodeVisitor {
     }
 
     @Override
-    public <T extends Node> void visit(NodeTable<T> ts, VisitorMemory memory) {
+    public <T extends SourceNode> void visit(SourceNodeTable<T> ts, VisitorMemory memory) {
         throw new NotImplementedException("Cannot use a tree visitor to traverse a node table yet");
     }
 
     @Override
     public void visit(VariableAssignment variableAssignment, VisitorMemory memory) {
         VisitorUtils.traverseValues(this, variableAssignment, memory);
+    }
+
+    @Override
+    public void visit(LibraryVariable libraryVariable, VisitorMemory memory) {
+        //leaf node
     }
 }

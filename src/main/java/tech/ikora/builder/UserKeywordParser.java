@@ -21,7 +21,7 @@ class UserKeywordParser {
 
         for(Variable embeddedVariable: embeddedVariables){
             userKeyword.addEmbeddedVariable(embeddedVariable);
-            userKeyword.addToken(embeddedVariable.getName());
+            userKeyword.addToken(embeddedVariable.getNameToken());
         }
 
         while(reader.getCurrent().isValid()) {

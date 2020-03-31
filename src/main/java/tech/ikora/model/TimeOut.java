@@ -10,7 +10,7 @@ import tech.ikora.runner.Runtime;
 import java.util.Collections;
 import java.util.List;
 
-public class TimeOut extends Node {
+public class TimeOut extends SourceNode {
     private final Token name;
     private final Token errorMessage;
 
@@ -85,7 +85,7 @@ public class TimeOut extends Node {
     }
 
     @Override
-    public Token getName() {
+    public Token getNameToken() {
         return name;
     }
 

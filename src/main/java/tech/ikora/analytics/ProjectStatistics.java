@@ -1,7 +1,6 @@
 package tech.ikora.analytics;
 
 import tech.ikora.exception.InvalidTypeException;
-import tech.ikora.utils.StringUtils;
 import tech.ikora.model.*;
 
 import java.util.*;
@@ -54,46 +53,46 @@ public class ProjectStatistics {
         return length;
     }
 
-    public <T extends Node> Map<Integer, Integer> getSizeDistribution(Class<T> type) throws InvalidTypeException {
+    public <T extends SourceNode> Map<Integer, Integer> getSizeDistribution(Class<T> type) throws InvalidTypeException {
         return getDistribution(type, Metric.SIZE);
     }
 
-    public <T extends Node> Map<Integer, Integer> getConnectivityDistribution(Class<T> type) throws InvalidTypeException {
+    public <T extends SourceNode> Map<Integer, Integer> getConnectivityDistribution(Class<T> type) throws InvalidTypeException {
         return getDistribution(type, Metric.CONNECTIVITY);
     }
 
-    public <T extends Node> Map<Integer, Integer> getSequenceDistribution(Class<T> type) throws InvalidTypeException {
+    public <T extends SourceNode> Map<Integer, Integer> getSequenceDistribution(Class<T> type) throws InvalidTypeException {
         return getDistribution(type, Metric.SEQUENCE);
     }
 
-    public <T extends Node> Map<Integer, Integer> getLevelDistribution(Class<T> type) throws InvalidTypeException {
+    public <T extends SourceNode> Map<Integer, Integer> getLevelDistribution(Class<T> type) throws InvalidTypeException {
         return getDistribution(type, Metric.METRIC);
     }
 
-    public <T extends Node> Map<String, Integer> getDeadCodeDistribution(Class<T> type) throws InvalidTypeException {
+    public <T extends SourceNode> Map<String, Integer> getDeadCodeDistribution(Class<T> type) throws InvalidTypeException {
         Map<String, Integer> deadCode = new HashMap<>(2);
 
-        for(Node node : getNodes(type)){
-            deadCode.merge(node.isDeadCode() ? "Dead" : "Executed", node.getLoc(), Integer::sum);
+        for(SourceNode sourceNode : getNodes(type)){
+            deadCode.merge(sourceNode.isDeadCode() ? "Dead" : "Executed", sourceNode.getLoc(), Integer::sum);
         }
 
         return deadCode;
     }
 
-    <T extends Node> Map<Integer, Integer> getBranchIndex(Class<T> type) throws InvalidTypeException {
+    <T extends SourceNode> Map<Integer, Integer> getBranchIndex(Class<T> type) throws InvalidTypeException {
         return getDistribution(type, Metric.BRANCH_INDEX);
     }
 
-    private <T extends Node> Map<Integer, Integer> getDistribution(Class<T> type, Metric metric) throws InvalidTypeException {
+    private <T extends SourceNode> Map<Integer, Integer> getDistribution(Class<T> type, Metric metric) throws InvalidTypeException {
         Map<Integer, Integer> distribution = new TreeMap<>();
 
-        for(Node node : getNodes(type)){
+        for(SourceNode sourceNode : getNodes(type)){
             int value;
             switch (metric){
-                case SIZE: value = KeywordStatistics.getSize(node); break;
-                case CONNECTIVITY: value = KeywordStatistics.getConnectivity(node); break;
-                case SEQUENCE: value = KeywordStatistics.getSequenceSize(node); break;
-                case METRIC: value = KeywordStatistics.getLevel(node); break;
+                case SIZE: value = KeywordStatistics.getSize(sourceNode); break;
+                case CONNECTIVITY: value = KeywordStatistics.getConnectivity(sourceNode); break;
+                case SEQUENCE: value = KeywordStatistics.getSequenceSize(sourceNode); break;
+                case METRIC: value = KeywordStatistics.getLevel(sourceNode); break;
                 //case BRANCH_INDEX: value = KeywordStatistics.getBranchIndex(); break;
                 default: value = -1;
             }
@@ -104,7 +103,7 @@ public class ProjectStatistics {
         return distribution;
     }
 
-    private <T extends Node> Set<T> getNodes(Class<T> type) throws InvalidTypeException {
+    private <T extends SourceNode> Set<T> getNodes(Class<T> type) throws InvalidTypeException {
         if(type == UserKeyword.class){
             return (Set<T>)userKeywords;
         }

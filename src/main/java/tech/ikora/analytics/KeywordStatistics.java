@@ -2,45 +2,46 @@ package tech.ikora.analytics;
 
 import tech.ikora.analytics.visitor.*;
 import tech.ikora.model.KeywordDefinition;
-import tech.ikora.model.Sequence;
 import tech.ikora.model.Node;
+import tech.ikora.model.Sequence;
+import tech.ikora.model.SourceNode;
 
 import java.util.Set;
 
 public class KeywordStatistics {
     private KeywordStatistics() {}
 
-    public static int getConnectivity(Node node){
+    public static int getConnectivity(SourceNode sourceNode){
         ConnectivityVisitor visitor = new ConnectivityVisitor();
-        node.accept(visitor, new PathMemory());
+        sourceNode.accept(visitor, new PathMemory());
 
         return visitor.getConnectivity();
     }
 
-    public static int getSize(Node node){
+    public static int getSize(SourceNode sourceNode){
         SizeVisitor visitor = new SizeVisitor();
-        node.accept(visitor, new PathMemory());
+        sourceNode.accept(visitor, new PathMemory());
 
         return visitor.getSize();
     }
 
-    public static int getLevel(Node node){
+    public static int getLevel(SourceNode sourceNode){
         LevelVisitor visitor = new LevelVisitor();
-        node.accept(visitor, new LevelMemory());
+        sourceNode.accept(visitor, new LevelMemory());
 
         return visitor.getLevel();
     }
 
-    public static int getSequenceSize(Node node){
+    public static int getSequenceSize(SourceNode sourceNode){
         SequenceVisitor visitor = new SequenceVisitor();
-        node.accept(visitor, new PathMemory());
+        sourceNode.accept(visitor, new PathMemory());
 
         return visitor.getSequenceSize();
     }
 
-    public static Sequence getSequence(Node node){
+    public static Sequence getSequence(SourceNode sourceNode){
         SequenceVisitor visitor = new SequenceVisitor();
-        node.accept(visitor, new PathMemory());
+        sourceNode.accept(visitor, new PathMemory());
 
         return visitor.getSequence();
     }

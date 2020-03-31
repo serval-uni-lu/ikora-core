@@ -8,7 +8,7 @@ import tech.ikora.utils.LevenshteinDistance;
 
 import java.util.*;
 
-public abstract class KeywordDefinition extends Keyword implements Iterable<Step>, Delayable {
+public abstract class KeywordDefinition extends SourceNode implements Keyword, Iterable<Step>, Delayable {
     private Token name;
     private Tokens documentation;
     private Set<Token> tags;
@@ -51,7 +51,7 @@ public abstract class KeywordDefinition extends Keyword implements Iterable<Step
 
     @Override
     public String toString() {
-        return String.format("%s - %s", getFileName(), getName());
+        return String.format("%s - %s", getLibraryName(), getNameToken());
     }
 
     public List<Step> getSteps() {
@@ -63,7 +63,7 @@ public abstract class KeywordDefinition extends Keyword implements Iterable<Step
     }
 
     @Override
-    public Token getName() {
+    public Token getNameToken() {
         return name;
     }
 
@@ -128,7 +128,7 @@ public abstract class KeywordDefinition extends Keyword implements Iterable<Step
         KeywordDefinition keyword = (KeywordDefinition)other;
 
         // check name change
-        if(!this.getName().equalsIgnorePosition(keyword.getName())){
+        if(!this.getNameToken().equalsIgnorePosition(keyword.getNameToken())){
             actions.add(Action.changeName(this, other));
         }
 

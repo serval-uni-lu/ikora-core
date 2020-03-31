@@ -4,7 +4,6 @@ import tech.ikora.Helpers;
 import tech.ikora.error.ErrorManager;
 import tech.ikora.error.ErrorMessages;
 import tech.ikora.model.Settings;
-import tech.ikora.model.Token;
 import tech.ikora.model.Tokens;
 import org.junit.jupiter.api.Test;
 
@@ -38,8 +37,8 @@ public class SettingsTableParserTest {
 
         final Settings settings = createSettings(settingText, errors);
 
-        assertEquals("Do Something", settings.getSuiteSetup().getName().getText());
-        assertEquals("${MESSAGE}", settings.getSuiteSetup().getArgumentList().get(0).getName().getText());
+        assertEquals("Do Something", settings.getSuiteSetup().getNameToken().getText());
+        assertEquals("${MESSAGE}", settings.getSuiteSetup().getArgumentList().get(0).getNameToken().getText());
     }
 
     @Test
@@ -52,8 +51,8 @@ public class SettingsTableParserTest {
         final Settings settings = createSettings(settingText, errors);
         assertTrue(errors.in(null).isEmpty());
 
-        assertEquals("Do Something", settings.getTestSetup().getName().getText());
-        assertEquals("${MESSAGE}", settings.getTestSetup().getArgumentList().get(0).getName().getText());
+        assertEquals("Do Something", settings.getTestSetup().getNameToken().getText());
+        assertEquals("${MESSAGE}", settings.getTestSetup().getArgumentList().get(0).getNameToken().getText());
     }
 
     @Test
@@ -66,8 +65,8 @@ public class SettingsTableParserTest {
         final Settings settings = createSettings(settingText, errors);
         assertTrue(errors.in(null).isEmpty());
 
-        assertEquals("Do Something", settings.getSuiteTeardown().getName().getText());
-        assertEquals("${MESSAGE}", settings.getSuiteTeardown().getArgumentList().get(0).getName().getText());
+        assertEquals("Do Something", settings.getSuiteTeardown().getNameToken().getText());
+        assertEquals("${MESSAGE}", settings.getSuiteTeardown().getArgumentList().get(0).getNameToken().getText());
     }
 
     @Test
@@ -80,8 +79,8 @@ public class SettingsTableParserTest {
         final Settings settings = createSettings(settingText, errors);
         assertTrue(errors.in(null).isEmpty());
 
-        assertEquals("Do Something", settings.getTestTeardown().getName().getText());
-        assertEquals("${MESSAGE}", settings.getTestTeardown().getArgumentList().get(0).getName().getText());
+        assertEquals("Do Something", settings.getTestTeardown().getNameToken().getText());
+        assertEquals("${MESSAGE}", settings.getTestTeardown().getArgumentList().get(0).getNameToken().getText());
     }
 
     @Test
@@ -94,8 +93,8 @@ public class SettingsTableParserTest {
         final Settings settings = createSettings(settingText, errors);
         assertTrue(errors.in(null).isEmpty());
 
-        assertEquals("Do Something", settings.getTemplate().getName().getText());
-        assertEquals("${MESSAGE}", settings.getTemplate().getArgumentList().get(0).getName().getText());
+        assertEquals("Do Something", settings.getTemplate().getNameToken().getText());
+        assertEquals("${MESSAGE}", settings.getTemplate().getArgumentList().get(0).getNameToken().getText());
     }
 
     @Test

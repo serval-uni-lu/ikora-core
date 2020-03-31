@@ -5,7 +5,7 @@ import tech.ikora.model.Token;
 
 public class ElementSeparator extends LibraryVariable {
     @Override
-    public Token getName() {
-        return Token.fromString("${:}");
+    public String getName() {
+        return "${:}";
     }
 }

@@ -1,6 +1,6 @@
 package tech.ikora.analytics.violations;
 
-import tech.ikora.model.Node;
+import tech.ikora.model.SourceNode;
 
 public class Violation {
     public enum Level{
@@ -17,12 +17,12 @@ public class Violation {
     }
 
     private final Level level;
-    private final Node node;
+    private final SourceNode sourceNode;
     private final Cause cause;
 
-    public Violation(Level level, Node node, Cause cause) {
+    public Violation(Level level, SourceNode sourceNode, Cause cause) {
         this.level = level;
-        this.node = node;
+        this.sourceNode = sourceNode;
         this.cause = cause;
     }
 
@@ -30,8 +30,8 @@ public class Violation {
         return level;
     }
 
-    public Node getNode() {
-        return node;
+    public SourceNode getSourceNode() {
+        return sourceNode;
     }
 
     public Cause getCause() {

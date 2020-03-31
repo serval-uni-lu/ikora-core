@@ -1,12 +1,12 @@
 package tech.ikora.analytics.clones;
 
-import tech.ikora.model.Node;
+import tech.ikora.model.SourceNode;
 
 import java.util.*;
 
 
 //TODO: Review this class to make it a proper graph
-public class Clones<T extends Node> implements Iterable<Clone<T>> {
+public class Clones<T extends SourceNode> implements Iterable<Clone<T>> {
     private Map<Clone.Type, Map<T, Clone<T>>> cloneMap;
 
     public Clones(){

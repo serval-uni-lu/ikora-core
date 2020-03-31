@@ -30,7 +30,7 @@ class BuilderTest {
         assertEquals(1, step.getArgumentList().size());
 
         final Argument argument = step.getArgumentList().get(0);
-        assertTrue(argument.getName().getText().contains("Test Status"));
+        assertTrue(argument.getNameToken().getText().contains("Test Status"));
     }
 
     @Test
@@ -72,14 +72,14 @@ class BuilderTest {
 
         Optional<Keyword> resources1Step0 = ((KeywordCall)fromResources1.iterator().next().getStep(0)).getKeyword();
         assertTrue(resources1Step0.isPresent());
-        assertEquals("resources1", resources1Step0.get().getLibraryName());
+        assertEquals("resources1.robot", resources1Step0.get().getLibraryName());
 
         Set<UserKeyword> fromResources2 = project.findUserKeyword(Token.fromString("Load keyword from resource2"));
         assertEquals(1, fromResources2.size());
 
         Optional<Keyword> resources2Step0 = ((KeywordCall)fromResources2.iterator().next().getStep(0)).getKeyword();
         assertTrue(resources2Step0.isPresent());
-        assertEquals("resources2", resources2Step0.get().getLibraryName());
+        assertEquals("resources2.robot", resources2Step0.get().getLibraryName());
     }
 
     @Test
@@ -132,7 +132,7 @@ class BuilderTest {
         final Assignment assignment = (Assignment) step0;
 
         assertEquals(1, assignment.getLeftHandOperand().size());
-        assertEquals("${EtatRun}", assignment.getLeftHandOperand().get(0).getName().getText());
+        assertEquals("${EtatRun}", assignment.getLeftHandOperand().get(0).getNameToken().getText());
         assertEquals(0, assignment.getLeftHandOperand().get(0).getDependencies().size());
     }
 
@@ -157,7 +157,7 @@ class BuilderTest {
 
         assertTrue(ForLoop.class.isAssignableFrom(step0.getClass()));
         final ForLoop forLoop = (ForLoop) step0;
-        assertEquals("${index}", forLoop.getIterator().getName().getText());
+        assertEquals("${index}", forLoop.getIterator().getNameToken().getText());
 
         final List<Step> steps = forLoop.getSteps();
         assertEquals(2, steps.size());
@@ -184,7 +184,7 @@ class BuilderTest {
 
         assertTrue(ForLoop.class.isAssignableFrom(step0.getClass()));
         final ForLoop forLoop = (ForLoop) step0;
-        assertEquals("${index}", forLoop.getIterator().getName().getText());
+        assertEquals("${index}", forLoop.getIterator().getNameToken().getText());
 
         final List<Step> steps = forLoop.getSteps();
         assertEquals(2, steps.size());

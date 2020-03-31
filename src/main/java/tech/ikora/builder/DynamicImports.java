@@ -21,7 +21,7 @@ public class DynamicImports {
         variables = new HashMap<>();
     }
 
-    public Node findNode(String value){
+    public SourceNode findNode(String value){
         throw new NotImplementedException("Need to get some more work on the imports");
     }
 
@@ -49,7 +49,7 @@ public class DynamicImports {
             libraries.putIfAbsent(parent, new HashSet<>());
             Set<Library> current = libraries.get(parent);
 
-            Library library = new Library(argumentList.get(0).getName(), getParams(argumentList), Token.empty());
+            Library library = new Library(argumentList.get(0).getNameToken(), getParams(argumentList), Token.empty());
             current.add(library);
         }
     }
@@ -59,7 +59,7 @@ public class DynamicImports {
             resources.putIfAbsent(parent, new ResourcesTable());
             ResourcesTable current = resources.get(parent);
 
-            Token name = values.get(0).getName();
+            Token name = values.get(0).getNameToken();
             File file = new File(name.getText());
 
             Resources resource = new Resources(name, file, Collections.emptyList(), Token.empty());
@@ -72,7 +72,7 @@ public class DynamicImports {
             variables.putIfAbsent(parent, new HashMap<>());
             Map<Resources, Set<Token>> current = variables.get(parent);
 
-            Token name = values.get(0).getName();
+            Token name = values.get(0).getNameToken();
             File file = new File(name.getText());
 
             Resources resource = new Resources(name, file, Collections.emptyList(), Token.empty());
@@ -96,7 +96,7 @@ public class DynamicImports {
         }
 
         return argumentList.subList(1, argumentList.size()).stream()
-                .map(Argument::getName)
+                .map(Argument::getNameToken)
                 .collect(Collectors.toList());
     }
 }

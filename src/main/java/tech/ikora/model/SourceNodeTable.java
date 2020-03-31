@@ -9,12 +9,12 @@ import org.apache.commons.lang3.NotImplementedException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class NodeTable<T extends Node> extends Node implements Iterable<T> {
+public class SourceNodeTable<T extends SourceNode> extends SourceNode implements Iterable<T> {
     private Token header;
     private List<T> nodeList;
     private SourceFile file;
 
-    public NodeTable() {
+    public SourceNodeTable() {
         this.header = Token.empty();
         this.nodeList = new ArrayList<>();
     }
@@ -28,7 +28,7 @@ public class NodeTable<T extends Node> extends Node implements Iterable<T> {
     }
 
     public Set<T> findNode(T node){
-        return findNode(node.getFileName(), node.getName());
+        return findNode(node.getLibraryName(), node.getNameToken());
     }
 
     public Set<T> findNode(Token token){
@@ -60,7 +60,7 @@ public class NodeTable<T extends Node> extends Node implements Iterable<T> {
 
     @Override
     public boolean matches(Token name) {
-        return getName().equalsIgnorePosition(name);
+        return getNameToken().equalsIgnorePosition(name);
     }
 
     @Override
@@ -74,7 +74,7 @@ public class NodeTable<T extends Node> extends Node implements Iterable<T> {
     }
 
     @Override
-    public Token getName() {
+    public Token getNameToken() {
         return this.header;
     }
 
@@ -83,7 +83,7 @@ public class NodeTable<T extends Node> extends Node implements Iterable<T> {
             return node.matches(token);
         }
 
-        return file.equalsIgnoreCase(node.getFileName()) && node.matches(token);
+        return file.equalsIgnoreCase(node.getLibraryName()) && node.matches(token);
     }
 
     public int size() {

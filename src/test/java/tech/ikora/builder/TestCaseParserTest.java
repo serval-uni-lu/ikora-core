@@ -23,10 +23,10 @@ public class TestCaseParserTest {
         TestCase testCase = createTestCase(text, errors);
 
         assertNotNull(testCase);
-        assertEquals("Test case with documentation", testCase.getName().getText());
+        assertEquals("Test case with documentation", testCase.getNameToken().getText());
         assertEquals(1, testCase.getSteps().size());
         assertEquals("Some documentationwith continuation", testCase.getDocumentation().clean().toString());
-        assertEquals("Some keyword", testCase.getStep(0).getName().getText());
+        assertEquals("Some keyword", testCase.getStep(0).getNameToken().getText());
     }
 
     @Test
@@ -41,11 +41,11 @@ public class TestCaseParserTest {
         TestCase testCase = createTestCase(text, errors);
 
         assertNotNull(testCase);
-        assertEquals("Test case with control flow elements", testCase.getName().getText());
+        assertEquals("Test case with control flow elements", testCase.getNameToken().getText());
         assertEquals(3, testCase.getSteps().size());
-        assertEquals("First Keyword from project B", testCase.getStep(0).getName().getText());
-        assertEquals(":FOR", testCase.getStep(1).getName().getText());
-        assertEquals("Run Keyword If", testCase.getStep(2).getName().getText());
+        assertEquals("First Keyword from project B", testCase.getStep(0).getNameToken().getText());
+        assertEquals(":FOR", testCase.getStep(1).getNameToken().getText());
+        assertEquals("Run Keyword If", testCase.getStep(2).getNameToken().getText());
     }
 
     private TestCase createTestCase(String text, ErrorManager errors) throws IOException {

@@ -5,7 +5,7 @@ import tech.ikora.model.Token;
 
 public class LineSeparator extends LibraryVariable {
     @Override
-    public Token getName() {
-        return Token.fromString("${\\n}");
+    public String getName() {
+        return "${\\n}";
     }
 }

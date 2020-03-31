@@ -7,7 +7,7 @@ import tech.ikora.runner.Runtime;
 
 import java.util.List;
 
-public class Literal extends Node {
+public class Literal extends SourceNode {
     private Token name;
 
     public Literal(Token name) {
@@ -31,7 +31,7 @@ public class Literal extends Node {
     }
 
     @Override
-    public Token getName() {
+    public Token getNameToken() {
         return this.name;
     }
 

@@ -95,13 +95,13 @@ public class KeywordCall extends Step {
             return 1.;
         }
 
-        Node node = (Node)other;
+        SourceNode sourceNode = (SourceNode)other;
 
-        double distName = this.getName().equalsIgnorePosition(node.getName()) ? 0. : 0.5;
+        double distName = this.getNameToken().equalsIgnorePosition(sourceNode.getNameToken()) ? 0. : 0.5;
 
-        boolean sameArguments = this.getAstChildren().size() == node.getAstChildren().size();
+        boolean sameArguments = this.getAstChildren().size() == sourceNode.getAstChildren().size();
         for(int i = 0; sameArguments && i < this.getAstChildren().size(); ++i) {
-            sameArguments = this.getAstChildren().get(i).equals(node.getAstChildren().get(i));
+            sameArguments = this.getAstChildren().get(i).equals(sourceNode.getAstChildren().get(i));
         }
 
         double distArguments = sameArguments ? 0. : 0.5;
@@ -124,7 +124,7 @@ public class KeywordCall extends Step {
         if(other instanceof KeywordCall){
             KeywordCall call = (KeywordCall)other;
 
-            if(!this.getName().equalsIgnorePosition(call.getName())){
+            if(!this.getNameToken().equalsIgnorePosition(call.getNameToken())){
                 actions.add(Action.changeStepName(this, call));
             }
 
@@ -147,7 +147,7 @@ public class KeywordCall extends Step {
     public String toString(){
         StringBuilder builder = new StringBuilder();
 
-        builder.append(getName());
+        builder.append(getNameToken());
 
         for (Argument argument: getArgumentList()){
             builder.append("\t");

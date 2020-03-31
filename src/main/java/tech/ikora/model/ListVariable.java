@@ -14,7 +14,7 @@ public class ListVariable extends Variable {
     }
 
     @Override
-    public void addValue(Node value) {
+    public void addValue(SourceNode value) {
         if(this.values == null){
             this.values = new ArrayList<>();
         }
@@ -22,7 +22,7 @@ public class ListVariable extends Variable {
         this.values.add(value);
     }
 
-    public void setValues(List<Node> values){
+    public void setValues(List<SourceNode> values){
         this.values = values;
     }
 

@@ -11,10 +11,10 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public abstract class Variable extends Node {
+public abstract class Variable extends SourceNode {
     protected Token name;
     protected Pattern pattern;
-    protected List<Node> values;
+    protected List<SourceNode> values;
 
     public Variable(Token name) {
         setName(name);
@@ -23,7 +23,7 @@ public abstract class Variable extends Node {
         this.values = new ArrayList<>();
     }
 
-    public List<Node> getValues(){
+    public List<SourceNode> getValues(){
         return values;
     }
 
@@ -32,7 +32,7 @@ public abstract class Variable extends Node {
     }
 
     @Override
-    public Token getName() {
+    public Token getNameToken() {
         return this.name;
     }
 
@@ -54,7 +54,7 @@ public abstract class Variable extends Node {
             return 1;
         }
 
-        return this.getName().equalsIgnorePosition(((Variable)other).getName()) ? 0 : 1;
+        return this.getNameToken().equalsIgnorePosition(((Variable)other).getNameToken()) ? 0 : 1;
     }
 
     @Override
@@ -67,7 +67,7 @@ public abstract class Variable extends Node {
             return Collections.singletonList(Action.changeType(this, other));
         }
 
-        if(!this.getName().equalsIgnorePosition(((Variable)other).getName())){
+        if(!this.getNameToken().equalsIgnorePosition(((Variable)other).getNameToken())){
             return Collections.singletonList(Action.changeName(this, other));
         }
 
@@ -94,7 +94,7 @@ public abstract class Variable extends Node {
         StringBuilder builder = new StringBuilder();
         builder.append(name.getText());
 
-        for(Node value: values){
+        for(SourceNode value: values){
             builder.append("\t");
             builder.append(value.toString());
         }
@@ -103,6 +103,6 @@ public abstract class Variable extends Node {
     }
 
     protected abstract void setName(Token name);
-    public abstract void addValue(Node value) throws InvalidArgumentException;
+    public abstract void addValue(SourceNode value) throws InvalidArgumentException;
 
 }

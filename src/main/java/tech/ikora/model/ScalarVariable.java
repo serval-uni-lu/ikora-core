@@ -15,7 +15,7 @@ public class ScalarVariable extends Variable {
     }
 
     @Override
-    public void addValue(Node value) throws InvalidArgumentException {
+    public void addValue(SourceNode value) throws InvalidArgumentException {
         if(!values.isEmpty()){
             throw new InvalidArgumentException("Scalar variable only accept one element");
         }
@@ -23,7 +23,7 @@ public class ScalarVariable extends Variable {
         this.values.add(value);
     }
 
-    public Optional<Node> getValue() {
+    public Optional<SourceNode> getValue() {
         if(values.isEmpty()){
             return Optional.empty();
         }

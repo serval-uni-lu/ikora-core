@@ -10,29 +10,29 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-public class Argument extends Node {
+public class Argument extends SourceNode {
     public enum Type{
         STRING, OBJECT, KEYWORD, LOCATOR, CONDITION, KEYWORDS, KWARGS
     }
 
-    private Node definition;
+    private SourceNode definition;
     private final Token name;
 
-    public Argument(Node definition) {
+    public Argument(SourceNode definition) {
         if(definition == null){
             this.name = Token.empty();
             this.definition = null;
             return;
         }
 
-        this.name = definition.getName();
+        this.name = definition.getNameToken();
         this.definition = definition;
         addTokens(this.definition.getTokens());
 
         this.addAstChild(this.definition);
     }
 
-    public Optional<Node> getDefinition() {
+    public Optional<SourceNode> getDefinition() {
         return Optional.ofNullable(this.definition);
     }
 
@@ -68,7 +68,7 @@ public class Argument extends Node {
             sameCall = this.definition.distance(argument.definition) == 0.0;
         }
 
-        boolean sameName = this.name.equalsIgnorePosition(argument.getName());
+        boolean sameName = this.name.equalsIgnorePosition(argument.getNameToken());
 
         return sameName && sameCall ? 0.0 : 1.0;
     }
@@ -91,7 +91,7 @@ public class Argument extends Node {
     }
 
     @Override
-    public Token getName() {
+    public Token getNameToken() {
         return this.name;
     }
 

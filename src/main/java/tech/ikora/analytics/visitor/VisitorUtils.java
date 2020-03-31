@@ -52,7 +52,7 @@ public class VisitorUtils {
     }
 
     public static void traverseValues(TreeVisitor treeVisitor, VariableAssignment variableAssignment, VisitorMemory memory) {
-        for(Node value: variableAssignment.getValues()){
+        for(SourceNode value: variableAssignment.getValues()){
             value.accept(treeVisitor, memory);
         }
     }
