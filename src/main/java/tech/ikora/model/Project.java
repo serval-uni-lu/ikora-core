@@ -76,6 +76,16 @@ public class Project implements Comparable<Project> {
         return userKeywords;
     }
 
+    public Set<TestCase> findTestCase(String library, String name) {
+        Set<TestCase> testCasesFound = new HashSet<>();
+
+        for(SourceFile file: files.values()){
+            testCasesFound.addAll(file.findTestCase(library, Token.fromString(name)));
+        }
+
+        return testCasesFound;
+    }
+
     public Set<UserKeyword> findUserKeyword(Token name) {
         Set<UserKeyword> userKeywordsFound = new HashSet<>();
 
@@ -86,11 +96,11 @@ public class Project implements Comparable<Project> {
         return userKeywordsFound;
     }
 
-    public Set<UserKeyword> findUserKeyword(String library, Token name) {
+    public Set<UserKeyword> findUserKeyword(String library, String name) {
         Set<UserKeyword> userKeywordsFound = new HashSet<>();
 
         for(SourceFile file: files.values()){
-            userKeywordsFound.addAll(file.findUserKeyword(library, name));
+            userKeywordsFound.addAll(file.findUserKeyword(library, Token.fromString(name)));
         }
 
         return userKeywordsFound;

@@ -154,6 +154,10 @@ public class SourceFile implements Iterable<UserKeyword> {
         return userKeywordTable.iterator();
     }
 
+    public Set<TestCase> findTestCase(String library, Token name){
+        return findNode(library, name, new HashSet<>(), TestCase.class);
+    }
+
     public Set<UserKeyword> findUserKeyword(Token name) {
         return findNode(null, name, new HashSet<>(), UserKeyword.class);
     }

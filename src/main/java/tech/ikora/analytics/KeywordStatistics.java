@@ -39,6 +39,13 @@ public class KeywordStatistics {
         return visitor.getSequenceSize();
     }
 
+    public static int getStatementCount(SourceNode sourceNode){
+        StatementCounterVisitor visitor = new StatementCounterVisitor();
+        sourceNode.accept(visitor, new PathMemory());
+
+        return visitor.getStatementCount();
+    }
+
     public static Sequence getSequence(SourceNode sourceNode){
         SequenceVisitor visitor = new SequenceVisitor();
         sourceNode.accept(visitor, new PathMemory());
