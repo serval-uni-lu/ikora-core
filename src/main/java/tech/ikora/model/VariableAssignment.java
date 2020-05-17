@@ -17,10 +17,12 @@ public class VariableAssignment extends SourceNode {
 
     public VariableAssignment(Variable variable){
         this.variable = variable;
+        this.addTokens(variable.getTokens());
     }
 
     public void addValue(SourceNode value) throws InvalidArgumentException {
         this.variable.addValue(value);
+        this.addTokens(value.getTokens());
     }
 
     public Variable getVariable(){

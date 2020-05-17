@@ -26,6 +26,8 @@ public class VariableAssignmentParserTest {
         assertEquals(1, assignment.getValues().size());
         assertTrue(assignment.getValues().get(0) instanceof Literal);
         assertEquals("scalar value", assignment.getValues().get(0).getNameToken().toString());
+
+        assertEquals(2, assignment.getTokens().size());
     }
 
     @Test

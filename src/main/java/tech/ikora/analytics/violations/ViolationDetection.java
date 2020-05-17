@@ -34,7 +34,7 @@ public class ViolationDetection {
         return violations;
     }
 
-    public static List<Violation> detect(Set<Project> projects, Violation.Cause cause){
+    public static List<Violation> detect(Projects projects, Violation.Cause cause){
         List<Violation> violations = new ArrayList<>();
 
         for(Project project: projects){
@@ -47,7 +47,7 @@ public class ViolationDetection {
     private static void detect(Violation.Cause cause, List<Violation> violations, List<Step> steps) {
         for(Step step: steps){
             if(step instanceof ForLoop){
-                detect(cause, violations, ((ForLoop)step).getSteps());
+                detect(cause, violations, step.getSteps());
             }
 
             switch (cause){
