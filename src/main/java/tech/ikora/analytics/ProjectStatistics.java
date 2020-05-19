@@ -89,7 +89,7 @@ public class ProjectStatistics {
         for(SourceNode sourceNode : getNodes(type)){
             int value;
             switch (metric){
-                case SIZE: value = KeywordStatistics.getSize(sourceNode); break;
+                case SIZE: value = KeywordStatistics.getSize(sourceNode).getTotalSize(); break;
                 case CONNECTIVITY: value = KeywordStatistics.getConnectivity(sourceNode); break;
                 case SEQUENCE: value = KeywordStatistics.getSequenceSize(sourceNode); break;
                 case LEVEL: value = KeywordStatistics.getLevel(sourceNode); break;

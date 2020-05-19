@@ -8,9 +8,9 @@ import java.util.Collections;
 import java.util.List;
 
 public class TestCase extends KeywordDefinition {
-    private KeywordCall setup;
-    private KeywordCall tearDown;
-    private KeywordCall template;
+    private KeywordCall setup = null;
+    private KeywordCall tearDown = null;
+    private KeywordCall template = null;
 
     public void setSetup(KeywordCall setup){
         this.setup = setup;

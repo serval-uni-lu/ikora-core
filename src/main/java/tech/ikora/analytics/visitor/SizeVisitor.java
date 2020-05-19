@@ -3,31 +3,53 @@ package tech.ikora.analytics.visitor;
 import tech.ikora.model.*;
 
 public class SizeVisitor extends EmptyVisitor {
-    private int size;
+    public class Result{
+        private int totalSize = 0;
+        private int testCaseSize = 0;
+        private int userKeywordSize = 0;
+        private int libraryKeywordSize = 0;
 
-    public SizeVisitor(){
-        size = 0;
+        public int getTotalSize() {
+            return totalSize;
+        }
+
+        public int getTestCaseSize() {
+            return testCaseSize;
+        }
+
+        public int getUserKeywordSize() {
+            return userKeywordSize;
+        }
+
+        public int getLibraryKeywordSize() {
+            return libraryKeywordSize;
+        }
     }
 
-    public int getSize(){
-        return size;
+    private Result result = new Result();
+
+    public Result getResult() {
+        return result;
     }
 
     @Override
     public void visit(TestCase testCase, VisitorMemory memory) {
-        ++size;
+        ++result.totalSize;
+        ++result.testCaseSize;
         VisitorUtils.traverseSteps(this, testCase, memory);
     }
 
     @Override
     public void visit(UserKeyword keyword, VisitorMemory memory) {
-        ++size;
+        ++result.totalSize;
+        ++result.userKeywordSize;
         VisitorUtils.traverseSteps(this, keyword, memory);
     }
 
     @Override
     public void visit(LibraryKeyword keyword, VisitorMemory memory) {
-        ++size;
+        ++result.totalSize;
+        ++result.libraryKeywordSize;
     }
 
     @Override

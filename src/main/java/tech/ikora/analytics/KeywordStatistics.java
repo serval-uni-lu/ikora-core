@@ -18,11 +18,11 @@ public class KeywordStatistics {
         return visitor.getConnectivity();
     }
 
-    public static int getSize(SourceNode sourceNode){
+    public static SizeVisitor.Result getSize(SourceNode sourceNode){
         SizeVisitor visitor = new SizeVisitor();
         sourceNode.accept(visitor, new PathMemory());
 
-        return visitor.getSize();
+        return visitor.getResult();
     }
 
     public static int getLevel(SourceNode sourceNode){
