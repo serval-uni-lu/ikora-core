@@ -4,18 +4,25 @@ import tech.ikora.analytics.visitor.NodeVisitor;
 import tech.ikora.analytics.visitor.VisitorMemory;
 import tech.ikora.builder.ValueLinker;
 import tech.ikora.runner.Runtime;
+import tech.ikora.types.BaseType;
 
 import java.util.*;
 
 public abstract class LibraryKeyword implements Keyword {
-    protected Type type;
+    protected final Type type;
+    protected final List<BaseType> argumentTypes;
 
-    public LibraryKeyword() {
-        this.type = Type.UNKNOWN;
+    protected LibraryKeyword(Type type, List<BaseType> argumentTypes) {
+        this.type = type;
+        this.argumentTypes = argumentTypes;
     }
 
     public Type getType(){
         return this.type;
+    }
+
+    public List<BaseType> getArgumentTypes(){
+        return this.argumentTypes;
     }
 
     @Override
@@ -50,10 +57,6 @@ public abstract class LibraryKeyword implements Keyword {
         return ValueLinker.matches(getName(), name.getText());
     }
 
-    public Argument.Type[] getArgumentTypes() {
-        return new Argument.Type[0];
-    }
-
     @Override
     public void execute(Runtime runtime) throws Exception{
         runtime.enterNode(this);
@@ -72,21 +75,6 @@ public abstract class LibraryKeyword implements Keyword {
     @Override
     public List<Variable> getReturnVariables(){
         return Collections.emptyList();
-    }
-
-    @Override
-    public int getMaxNumberArguments() {
-        Argument.Type[] types = getArgumentTypes();
-
-        if(types.length == 0){
-            return 0;
-        }
-
-        if(types[types.length - 1] == Argument.Type.KWARGS){
-            return -1;
-        }
-
-        return types.length;
     }
 
     @Override

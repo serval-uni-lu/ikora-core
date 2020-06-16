@@ -11,10 +11,6 @@ import java.util.List;
 import java.util.Optional;
 
 public class Argument extends SourceNode {
-    public enum Type{
-        STRING, OBJECT, KEYWORD, LOCATOR, CONDITION, KEYWORDS, KWARGS
-    }
-
     private SourceNode definition;
     private final Token name;
 

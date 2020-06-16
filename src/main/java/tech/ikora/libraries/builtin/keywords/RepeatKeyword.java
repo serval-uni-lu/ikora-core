@@ -1,25 +1,22 @@
 package tech.ikora.libraries.builtin.keywords;
 
-import tech.ikora.model.Argument;
 import tech.ikora.model.LibraryKeyword;
 import tech.ikora.runner.Runtime;
+import tech.ikora.types.KeywordType;
+import tech.ikora.types.StringType;
+
+import java.util.Arrays;
 
 public class RepeatKeyword extends LibraryKeyword {
     public RepeatKeyword(){
-        this.type = Type.CONTROL_FLOW;
+        super(Type.CONTROL_FLOW, Arrays.asList(
+                new StringType("repeat"),
+                new KeywordType("keyword")
+        ));
     }
 
     @Override
     public void run(Runtime runtime) {
         throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public Argument.Type[] getArgumentTypes() {
-        return new Argument.Type[]{
-                Argument.Type.STRING,
-                Argument.Type.KEYWORD,
-                Argument.Type.KWARGS
-        };
     }
 }

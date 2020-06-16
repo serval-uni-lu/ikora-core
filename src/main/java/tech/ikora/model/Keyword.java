@@ -10,5 +10,4 @@ public interface Keyword extends Node {
     Type getType();
     List<Variable> getReturnVariables();
     Tokens getDocumentation();
-    int getMaxNumberArguments();
 }

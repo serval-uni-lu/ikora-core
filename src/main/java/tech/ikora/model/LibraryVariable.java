@@ -4,6 +4,7 @@ import tech.ikora.analytics.visitor.NodeVisitor;
 import tech.ikora.analytics.visitor.VisitorMemory;
 import tech.ikora.builder.ValueLinker;
 import tech.ikora.runner.Runtime;
+import tech.ikora.types.BaseType;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -17,20 +18,18 @@ public abstract class LibraryVariable implements Node {
         SCALAR, LIST, DICTIONARY
     }
 
-    protected Format format;
-    protected Pattern pattern;
-    protected List<SourceNode> values;
-    private Set<Node> dependencies;
+    protected final BaseType type;
+    protected final Format format;
+    protected final Pattern pattern;
 
-    public LibraryVariable(){
-        this.format = Format.SCALAR;
-        this.values = new ArrayList<>();
+    private final Set<Node> dependencies;
+
+    protected LibraryVariable(BaseType type, Format format){
+        this.type = type;
+        this.format = format;
+
         this.dependencies = new HashSet<>();
 
-        initializePattern();
-    }
-
-    private void initializePattern(){
         String patternString = ValueLinker.escape(getName());
         patternString = ValueLinker.getGenericVariableName(patternString);
         this.pattern = Pattern.compile(patternString, Pattern.CASE_INSENSITIVE);

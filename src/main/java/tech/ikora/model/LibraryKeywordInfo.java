@@ -2,16 +2,19 @@ package tech.ikora.model;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import tech.ikora.runner.Runtime;
+import tech.ikora.types.BaseType;
+
+import java.util.List;
 
 @JsonDeserialize(using = LibraryKeywordInfoReader.class)
 public class LibraryKeywordInfo extends LibraryKeyword {
     private final Type type;
     private final String name;
-    private final Argument.Type[] argumentTypes;
+    private final List<? extends BaseType> argumentTypes;
 
     private LibraryInfo library;
 
-    public LibraryKeywordInfo(Type type, String name, Argument.Type[] argumentTypes) {
+    public LibraryKeywordInfo(Type type, String name, List<? extends BaseType> argumentTypes) {
         this.type = type;
         this.name = name;
         this.argumentTypes = argumentTypes;
@@ -37,7 +40,7 @@ public class LibraryKeywordInfo extends LibraryKeyword {
     }
 
     @Override
-    public Argument.Type[] getArgumentTypes() {
+    public List<? extends BaseType> getArgumentTypes() {
         return argumentTypes;
     }
 
