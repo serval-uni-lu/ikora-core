@@ -2,10 +2,15 @@ package tech.ikora.libraries.builtin.keywords;
 
 import tech.ikora.model.LibraryKeyword;
 import tech.ikora.runner.Runtime;
+import tech.ikora.types.ConditionType;
+import tech.ikora.types.ListType;
 
 public class SetVariableIf extends LibraryKeyword {
     public SetVariableIf(){
-        this.type = Type.SET;
+        super(Type.SET,
+                new ConditionType("condition"),
+                new ListType("values")
+        );
     }
 
     @Override

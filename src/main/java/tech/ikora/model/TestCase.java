@@ -69,9 +69,4 @@ public class TestCase extends KeywordDefinition {
     public List<Variable> getReturnVariables() {
         return Collections.emptyList();
     }
-
-    @Override
-    public int getMaxNumberArguments() {
-        return 0;
-    }
 }

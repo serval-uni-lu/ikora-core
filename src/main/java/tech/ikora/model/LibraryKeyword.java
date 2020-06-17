@@ -12,9 +12,14 @@ public abstract class LibraryKeyword implements Keyword {
     protected final Type type;
     protected final List<BaseType> argumentTypes;
 
-    protected LibraryKeyword(Type type, List<BaseType> argumentTypes) {
+    protected LibraryKeyword(Type type, BaseType... argumentTypes) {
         this.type = type;
-        this.argumentTypes = argumentTypes;
+        this.argumentTypes = Arrays.asList(argumentTypes);
+    }
+
+    protected LibraryKeyword(Type type){
+        this.type = type;
+        this.argumentTypes = Collections.emptyList();
     }
 
     public Type getType(){

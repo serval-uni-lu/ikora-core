@@ -4,11 +4,9 @@ import tech.ikora.model.LibraryKeyword;
 import tech.ikora.runner.Runtime;
 import tech.ikora.types.ConditionType;
 
-import java.util.Collections;
-
 public class ContinueForLoopIf extends LibraryKeyword {
     public ContinueForLoopIf(){
-        super(Type.CONTROL_FLOW, Collections.singletonList(new ConditionType("condition")));
+        super(Type.CONTROL_FLOW, new ConditionType("condition"));
     }
 
     @Override

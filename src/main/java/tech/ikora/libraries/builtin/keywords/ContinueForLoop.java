@@ -3,11 +3,9 @@ package tech.ikora.libraries.builtin.keywords;
 import tech.ikora.model.LibraryKeyword;
 import tech.ikora.runner.Runtime;
 
-import java.util.Collections;
-
 public class ContinueForLoop extends LibraryKeyword {
     public ContinueForLoop(){
-        super(Type.CONTROL_FLOW, Collections.emptyList());
+        super(Type.CONTROL_FLOW);
     }
 
     @Override

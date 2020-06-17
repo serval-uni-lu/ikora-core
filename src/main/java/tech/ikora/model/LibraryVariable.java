@@ -42,16 +42,20 @@ public abstract class LibraryVariable implements Node {
 
     @Override
     public String getName() {
-        return toVariable(this.getClass());
+        String prefix = "$";
+
+        switch (this.format) {
+            case SCALAR: prefix = "$"; break;
+            case LIST: prefix = "@"; break;
+            case DICTIONARY: prefix = "&"; break;
+        }
+
+        return String.format("%s{%s}", prefix, this.type.getName());
     }
 
     @Override
     public String getLibraryName() {
         return "builtin";
-    }
-
-    private static String toVariable(Class<? extends LibraryVariable> variableClass) {
-        return String.format("${%s}", variableClass.getSimpleName());
     }
 
     @Override

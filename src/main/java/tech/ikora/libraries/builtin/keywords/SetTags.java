@@ -2,10 +2,11 @@ package tech.ikora.libraries.builtin.keywords;
 
 import tech.ikora.model.LibraryKeyword;
 import tech.ikora.runner.Runtime;
+import tech.ikora.types.ListType;
 
 public class SetTags extends LibraryKeyword {
     public SetTags(){
-        this.type = Type.SET;
+        super(Type.SET, new ListType("values"));
     }
 
     @Override

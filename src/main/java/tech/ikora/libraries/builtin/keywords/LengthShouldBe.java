@@ -9,11 +9,11 @@ import java.util.Arrays;
 
 public class LengthShouldBe extends LibraryKeyword {
     public LengthShouldBe(){
-        super(Type.ASSERTION, Arrays.asList(
+        super(Type.ASSERTION,
                 new StringType("item"),
                 new NumberType("length"),
                 new StringType("message", "None")
-        ));
+        );
     }
 
     @Override

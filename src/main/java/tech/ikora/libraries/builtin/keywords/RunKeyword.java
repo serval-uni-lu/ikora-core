@@ -8,7 +8,7 @@ import java.util.Collections;
 
 public class RunKeyword extends LibraryKeyword {
     public RunKeyword(){
-        super(Type.CONTROL_FLOW, Collections.singletonList(new KeywordType("keyword")));
+        super(Type.CONTROL_FLOW, new KeywordType("keyword"));
     }
 
     @Override

@@ -8,10 +8,10 @@ import java.util.Arrays;
 
 public class ConvertToBytes extends LibraryKeyword {
     public ConvertToBytes(){
-        super(Type.UNKNOWN, Arrays.asList(
+        super(Type.UNKNOWN,
                 new StringType("item"),
                 new StringType("input_type", "text")
-        ));
+        );
     }
 
     @Override

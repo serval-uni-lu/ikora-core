@@ -2134,7 +2134,7 @@
                 "type": "GET",
                 "name": "get cookie",
                 "arguments": [
-                    {"name": "name", "type": "Text"}
+                    {"name": "name", "type": "String"}
                 ]
             },
             {
@@ -2149,9 +2149,9 @@
                 "name": "wait until element contains",
                 "arguments": [
                     {"name": "locator", "type": "Locator"},
-                    {"name": "text", "type": "Text"},
+                    {"name": "text", "type": "String"},
                     {"name": "timeout", "type": "Timeout", "default": "None"},
-                    {"name": "error", "type": "Text", "default": "None"}
+                    {"name": "error", "type": "String", "default": "None"}
                 ]
             },
             {
@@ -2159,8 +2159,8 @@
                 "name": "table should contain",
                 "arguments": [
                     {"name": "locator", "type": "Locator"},
-                    {"name": "expected", "type": "Text"},
-                    {"name": "message", "type": "Text", "default": "None"}
+                    {"name": "expected", "type": "String"},
+                    {"name": "message", "type": "String", "default": "None"}
                 ]
             },
             {
@@ -2192,8 +2192,8 @@
                 "type": "UNKNOWN",
                 "name": "create webdriver",
                 "arguments": [
-                    {"name": "driver_name", "type": "Text"},
-                    {"name": "alias", "type": "Text", "default": "None"},
+                    {"name": "driver_name", "type": "String"},
+                    {"name": "alias", "type": "String", "default": "None"},
                     {"name": "init_kwargs", "type": "Kwargs"}
                 ]
             },
@@ -2202,8 +2202,8 @@
                 "name": "textarea value should be",
                 "arguments": [
                     {"name": "locator", "type": "Locator"},
-                    {"name": "expected", "type": "Text"},
-                    {"name": "message", "type": "Text", "default": "None"}
+                    {"name": "expected", "type": "String"},
+                    {"name": "message", "type": "String", "default": "None"}
                 ]
             },
             {
@@ -2216,7 +2216,7 @@
                 "name": "page should contain image",
                 "arguments": [
                     {"name": "locator", "type": "Locator"},
-                    {"name": "message", "type": "Text", "default": "None"},
+                    {"name": "message", "type": "String", "default": "None"},
                     {"name": "loglevel", "type": "LogLevel", "default": "INFO"}
                 ]
             },
@@ -2225,7 +2225,7 @@
                 "name": "press key",
                 "arguments": [
                     {"name": "locator", "type": "Locator"},
-                    {"name": "key", "type": "Text"}
+                    {"name": "key", "type": "String"}
                 ]
             },
             {
@@ -2238,7 +2238,7 @@
                 "name": "table header should contain",
                 "arguments": [
                     {"name": "locator", "type": "Locator"},
-                    {"name": "message", "type": "Text", "default": "None"},
+                    {"name": "message", "type": "String", "default": "None"},
                     {"name": "loglevel", "type": "LogLevel", "default": "INFO"}
                 ]
             },
@@ -2254,24 +2254,24 @@
                 "name": "wait until element is visible",
                 "arguments": [
                     {"name": "locator", "type": "Locator"},
-                    {"name": "timeout", "type": "TimeOut", "default": "None"},
-                    {"name": "error", "type": "Text", "default": "None"}
+                    {"name": "timeout", "type": "Timeout", "default": "None"},
+                    {"name": "error", "type": "String", "default": "None"}
                 ]
             },
             {
                 "type": "ASSERTION",
                 "name": "alert should be present",
                 "arguments": [
-                    {"name": "text", "type": "Text", "default": ""},
-                    {"name": "action", "type": "Text", "default": "ACCEPT"},
-                    {"name": "timeout", "type": "TimeOut", "default": "None"}
+                    {"name": "text", "type": "String", "default": ""},
+                    {"name": "action", "type": "String", "default": "ACCEPT"},
+                    {"name": "timeout", "type": "Timeout", "default": "None"}
                 ]
             },
             {
                 "type": "ACTION",
                 "name": "switch browser",
                 "arguments": [
-                    {"name": "index_or_alias", "type": "Text"}
+                    {"name": "index_or_alias", "type": "String"}
                 ]
             },
             {
@@ -2286,7 +2286,7 @@
                 "type": "ASSERTION",
                 "name": "current frame contains",
                 "arguments": [
-                    {"name": "expected", "type": "Text"},
+                    {"name": "expected", "type": "String"},
                     {"name": "loglevel", "type": "LogLevel", "default": "INFO"}
                 ]
             },
@@ -2311,9 +2311,9 @@
                 "type": "ACTION",
                 "name": "input text into alert",
                 "arguments": [
-                    {"name": "text", "type": "Text"},
-                    {"name": "action", "type": "Text", "default": "ACCEPT"},
-                    {"name": "timeout", "type": "TimeOut", "default": "None"}
+                    {"name": "text", "type": "String"},
+                    {"name": "action", "type": "String", "default": "ACCEPT"},
+                    {"name": "timeout", "type": "Timeout", "default": "None"}
                 ]
             },
             {
@@ -2321,8 +2321,8 @@
                 "name": "wait until element does not contain",
                 "arguments": [
                     {"name": "locator", "type": "Locator"},
-                    {"name": "timeout", "type": "TimeOut", "default": "None"},
-                    {"name": "error", "type": "Text", "default": "None"}
+                    {"name": "timeout", "type": "Timeout", "default": "None"},
+                    {"name": "error", "type": "String", "default": "None"}
                 ]
             },
             {
@@ -2344,8 +2344,8 @@
                 "name": "element should not contain",
                 "arguments": [
                     {"name": "locator", "type": "Locator"},
-                    {"name":  "expected", "type": "Text"},
-                    {"name": "message", "type": "Text", "default": "None"}
+                    {"name":  "expected", "type": "String"},
+                    {"name": "message", "type": "String", "default": "None"}
                 ]
             },
             {
@@ -2360,7 +2360,7 @@
                 "name": "get element attribute",
                 "arguments": [
                     {"name": "locator", "type": "Locator"},
-                    {"name": "attribute", "type": "Text", "default": "None"}
+                    {"name": "attribute", "type": "String", "default": "None"}
                 ]
             },
             {
@@ -2376,7 +2376,7 @@
                 "arguments": [
                     {"name": "locator", "type": "Locator"},
                     {"name": "row", "type": "Number"},
-                    {"name": "expected", "type": "Text"},
+                    {"name": "expected", "type": "String"},
                     {"name": "loglevel", "type": "LogLevel", "default": "INFO"}
                 ]
             },
@@ -2385,7 +2385,7 @@
                 "name": "page should contain list",
                 "arguments": [
                     {"name": "locator", "type": "Locator"},
-                    {"name": "message", "type": "Text", "default": "None"},
+                    {"name": "message", "type": "String", "default": "None"},
                     {"name": "loglevel", "type": "LogLevel", "default": "INFO"}
                 ]
             },
@@ -2398,7 +2398,7 @@
                 "type": "GET",
                 "name": "get cookie value",
                 "arguments": [
-                    {"name": "name", "type": "Text"}
+                    {"name": "name", "type": "String"}
                 ]
             },
             {
@@ -2413,8 +2413,8 @@
                 "name": "wait until page does not contain element",
                 "arguments": [
                     {"name": "locator", "type": "Locator"},
-                    {"name":  "timeout", "type": "TimeOut", "default": "None"},
-                    {"name": "error", "type": "Text", "default": "None"}
+                    {"name":  "timeout", "type": "Timeout", "default": "None"},
+                    {"name": "error", "type": "String", "default": "None"}
                 ]
             },
             {
@@ -2427,8 +2427,8 @@
                 "name": "textfield should contain",
                 "arguments": [
                     {"name": "locator", "type": "Locator"},
-                    {"name": "expected", "type": "Text"},
-                    {"name": "message", "type": "Text", "default": "None"}
+                    {"name": "expected", "type": "String"},
+                    {"name": "message", "type": "String", "default": "None"}
                 ]
             },
             {
@@ -2443,8 +2443,8 @@
                 "name": "wait until element is enabled",
                 "arguments": [
                     {"name": "locator", "type": "Locator"},
-                    {"name":  "timeout", "type": "TimeOut", "default": "None"},
-                    {"name": "error", "type": "Text", "default": "None"}
+                    {"name":  "timeout", "type": "Timeout", "default": "None"},
+                    {"name": "error", "type": "String", "default": "None"}
                 ]
             },
             {
@@ -2452,22 +2452,22 @@
                 "name": "textarea should contain",
                 "arguments": [
                     {"name": "locator", "type": "Locator"},
-                    {"name": "expected", "type": "Text"},
-                    {"name": "message", "type": "Text", "default": "None"}
+                    {"name": "expected", "type": "String"},
+                    {"name": "message", "type": "String", "default": "None"}
                 ]
             },
             {
                 "type": "SYNCHRONISATION",
                 "name": "set browser implicit wait",
                 "arguments": [
-                    {"name":  "value", "type": "TimeOut"}
+                    {"name":  "value", "type": "Timeout"}
                 ]
             },
             {
                 "type": "ASSERTION",
                 "name": "page should not contain",
                 "arguments": [
-                    {"name": "text", "type": "Text", "default": "None"},
+                    {"name": "text", "type": "String", "default": "None"},
                     {"name": "loglevel", "type": "LogLevel", "default": "INFO"}
                 ]
             },
@@ -2475,7 +2475,7 @@
                 "type": "ACTION",
                 "name": "delete cookie",
                 "arguments": [
-                    {"name": "name", "type": "Text"}
+                    {"name": "name", "type": "String"}
                 ]
             },
             {
@@ -2490,15 +2490,15 @@
                 "name": "wait until page contains",
                 "arguments": [
                     {"name": "locator", "type": "Locator"},
-                    {"name":  "timeout", "type": "TimeOut", "default": "None"},
-                    {"name": "error", "type": "Text", "default": "None"}
+                    {"name":  "timeout", "type": "Timeout", "default": "None"},
+                    {"name": "error", "type": "String", "default": "None"}
                 ]
             },
             {
                 "type": "ASSERTION",
                 "name": "current frame should not contain",
                 "arguments": [
-                    {"name": "text", "type": "Text", "default": "None"},
+                    {"name": "text", "type": "String", "default": "None"},
                     {"name": "loglevel", "type": "LogLevel", "default": "INFO"}
                 ]
             },
@@ -2507,7 +2507,7 @@
                 "name": "frame should contain",
                 "arguments": [
                     {"name": "locator", "type": "Locator"},
-                    {"name": "text", "type": "Text", "default": "None"},
+                    {"name": "text", "type": "String", "default": "None"},
                     {"name": "loglevel", "type": "LogLevel", "default": "INFO"}
                 ]
             },
@@ -2515,7 +2515,7 @@
                 "type": "SYNCHRONISATION",
                 "name": "set selenium timeout",
                 "arguments": [
-                    {"name":  "value", "type": "TimeOut"}
+                    {"name":  "value", "type": "Timeout"}
                 ]
             },
             {
@@ -2539,15 +2539,15 @@
                 "name": "wait for condition",
                 "arguments": [
                     {"name": "condition", "type": "Condition"},
-                    {"name":  "timeout", "type": "TimeOut", "default": "None"},
-                    {"name": "error", "type": "Text", "default": "None"}
+                    {"name":  "timeout", "type": "Timeout", "default": "None"},
+                    {"name": "error", "type": "String", "default": "None"}
                 ]
             },
             {
                 "type": "ACTION",
                 "name": "go to",
                 "arguments": [
-                    {"name": "url", "type": "Text"}
+                    {"name": "url", "type": "String"}
                 ]
             },
             {
@@ -2559,8 +2559,8 @@
                 "type": "ASSERTION",
                 "name": "alert should not be present",
                 "arguments": [
-                    {"name": "action", "type": "Text", "default": "ACCEPT"},
-                    {"name":  "timeout", "type": "TimeOut", "default": "None"}
+                    {"name": "action", "type": "String", "default": "ACCEPT"},
+                    {"name":  "timeout", "type": "Timeout", "default": "None"}
                 ]
             },
             {
@@ -2574,7 +2574,7 @@
                 "type": "SYNCHRONISATION",
                 "name": "set selenium timeout",
                 "arguments": [
-                    {"name":  "value", "type": "TimeOut"}
+                    {"name":  "value", "type": "Timeout"}
                 ]
             },
             {
@@ -2582,8 +2582,8 @@
                 "name": "element should contain",
                 "arguments": [
                     {"name": "locator", "type": "Locator"},
-                    {"name": "expected", "type": "Text"},
-                    {"name": "message", "type": "Text", "default": "None"}
+                    {"name": "expected", "type": "String"},
+                    {"name": "message", "type": "String", "default": "None"}
                 ]
             },
             {
@@ -2603,7 +2603,7 @@
                 "type": "ASSERTION",
                 "name": "location should contain",
                 "arguments": [
-                    {"name": "expected", "type": "Text"}
+                    {"name": "expected", "type": "String"}
                 ]
             },
             {
@@ -2611,7 +2611,7 @@
                 "name": "page should not contain element",
                 "arguments": [
                     {"name": "locator", "type": "Locator"},
-                    {"name": "message", "type": "Text", "default": "None"},
+                    {"name": "message", "type": "String", "default": "None"},
                     {"name": "loglevel", "type": "LogLevel", "default": "INFO"}
                 ]
             },
@@ -2648,8 +2648,8 @@
                 "type": "ASSERTION",
                 "name": "radio button should be set to",
                 "arguments": [
-                    {"name": "group_name", "type": "Text"},
-                    {"name": "name", "type": "Text"}
+                    {"name": "group_name", "type": "String"},
+                    {"name": "name", "type": "String"}
                 ]
             },
             {
@@ -2689,7 +2689,7 @@
                 "type": "ASSERTION",
                 "name": "element should be enabled",
                 "arguments": [
-                    {"name": "strategy_name", "type": "Text"}
+                    {"name": "strategy_name", "type": "String"}
                 ]
             },
             {
@@ -2697,7 +2697,7 @@
                 "name": "page should not contain textfield",
                 "arguments": [
                     {"name": "locator", "type": "Locator"},
-                    {"name": "message", "type": "Text", "default": "None"},
+                    {"name": "message", "type": "String", "default": "None"},
                     {"name": "loglevel", "type": "LogLevel", "default": "INFO"}
                 ]
             },
@@ -2725,7 +2725,7 @@
                 "name": "page should not contain link",
                 "arguments": [
                     {"name": "locator", "type": "Locator"},
-                    {"name": "message", "type": "Text", "default": "None"},
+                    {"name": "message", "type": "String", "default": "None"},
                     {"name": "loglevel", "type": "LogLevel", "default": "INFO"}
                 ]
             },
@@ -2741,7 +2741,7 @@
                 "name": "page should contain textfield",
                 "arguments": [
                     {"name": "locator", "type": "Locator"},
-                    {"name": "message", "type": "Text", "default": "None"},
+                    {"name": "message", "type": "String", "default": "None"},
                     {"name": "loglevel", "type": "LogLevel", "default": "INFO"}
                 ]
             },
@@ -2755,7 +2755,7 @@
                 "name": "page should contain checkbox",
                 "arguments": [
                     {"name": "locator", "type": "Locator"},
-                    {"name": "message", "type": "Text", "default": "None"},
+                    {"name": "message", "type": "String", "default": "None"},
                     {"name": "loglevel", "type": "LogLevel", "default": "INFO"}
                 ]
             },
@@ -2763,7 +2763,7 @@
                 "type": "ASSERTION",
                 "name": "current frame should contain",
                 "arguments": [
-                    {"name": "text", "type": "Text"},
+                    {"name": "text", "type": "String"},
                     {"name": "loglevel", "type": "LogLevel", "default": "INFO"}
                 ]
             },
@@ -2772,7 +2772,7 @@
                 "name": "page should not contain radio button",
                 "arguments": [
                     {"name": "locator", "type": "Locator"},
-                    {"name": "message", "type": "Text", "default": "None"},
+                    {"name": "message", "type": "String", "default": "None"},
                     {"name": "loglevel", "type": "LogLevel", "default": "INFO"}
                 ]
             },
@@ -2787,9 +2787,9 @@
                 "type": "SYNCHRONISATION",
                 "name": "wait until page does not contain",
                 "arguments": [
-                    {"name": "text", "type": "Text"},
-                    {"name": "timeout", "type": "TimeOut, ","default": "None"},
-                    {"name": "error", "type": "Text", "default": "None"}
+                    {"name": "text", "type": "String"},
+                    {"name": "timeout", "type": "Timeout, ","default": "None"},
+                    {"name": "error", "type": "String", "default": "None"}
                 ]
             },
             {
@@ -2797,7 +2797,7 @@
                 "name": "table footer should contain",
                 "arguments": [
                     {"name": "locator", "type": "Locator"},
-                    {"name": "expected", "type": "Text"},
+                    {"name": "expected", "type": "String"},
                     {"name": "loglevel", "type": "LogLevel", "default": "INFO"}
                 ]
             },
@@ -2805,7 +2805,7 @@
                 "type": "ASSERTION",
                 "name": "radio button should not be selected",
                 "arguments": [
-                    {"name": "group_name", "type": "Text"}
+                    {"name": "group_name", "type": "String"}
                 ]
             },
             {
@@ -2819,12 +2819,12 @@
                 "type": "ACTION",
                 "name": "add cookie",
                 "arguments": [
-                    {"name": "name", "type": "Text"},
-                    {"name": "value", "type": "Text"},
-                    {"name": "path", "type": "Text", "default": "None"},
-                    {"name": "domain", "type": "Text", "default": "None"},
-                    {"name": "secure", "type": "Text", "default": "None"},
-                    {"name": "expiry", "type": "Text", "default": "None"}
+                    {"name": "name", "type": "String"},
+                    {"name": "value", "type": "String"},
+                    {"name": "path", "type": "String", "default": "None"},
+                    {"name": "domain", "type": "String", "default": "None"},
+                    {"name": "secure", "type": "String", "default": "None"},
+                    {"name": "expiry", "type": "String", "default": "None"}
                 ]
             },
             {
@@ -2854,14 +2854,14 @@
                 "name": "input password",
                 "arguments": [
                     {"name": "locator", "type": "Locator"},
-                    {"name": "password", "type": "Text"}
+                    {"name": "password", "type": "String"}
                 ]
             },
             {
                 "type": "ASSERTION",
                 "name": "page should contain",
                 "arguments": [
-                    {"name": "expected", "type": "Text"},
+                    {"name": "expected", "type": "String"},
                     {"name": "loglevel", "type": "LogLevel", "default": "INFO"}
                 ]
             },
@@ -2878,7 +2878,7 @@
                 "name": "input text",
                 "arguments": [
                     {"name": "locator", "type": "Locator"},
-                    {"name": "text", "type": "Text"}
+                    {"name": "text", "type": "String"}
                 ]
             },
             {
@@ -2903,7 +2903,7 @@
                 "name": "page should contain radio button",
                 "arguments": [
                     {"name": "locator", "type": "Locator"},
-                    {"name": "message", "type": "Text"},
+                    {"name": "message", "type": "String"},
                     {"name": "loglevel", "type": "LogLevel", "default": "INFO"}
                 ]
             },
@@ -2912,21 +2912,21 @@
                 "name": "simulate event",
                 "arguments": [
                     {"name": "locator", "type": "Locator"},
-                    {"name": "event", "type": "Text"}
+                    {"name": "event", "type": "String"}
                 ]
             },
             {
                 "type": "LOG",
                 "name": "capture page screenshot",
                 "arguments": [
-                    {"name": "filename", "type": "Text", "default": "selenium-screenshot-{index}.png"}
+                    {"name": "filename", "type": "String", "default": "selenium-screenshot-{index}.png"}
                 ]
             },
             {
                 "type": "ACTION",
                 "name": "input text into prompt",
                 "arguments": [
-                    {"name": "text", "type": "Text"}
+                    {"name": "text", "type": "String"}
                 ]
             },
             {
@@ -2948,8 +2948,8 @@
                 "name": "wait until element is not visible",
                 "arguments": [
                     {"name": "locator", "type": "Locator"},
-                    {"name": "timeout", "type": "TimeOut, ","default": "None"},
-                    {"name": "error", "type": "Text", "default": "None"}
+                    {"name": "timeout", "type": "Timeout, ","default": "None"},
+                    {"name": "error", "type": "String", "default": "None"}
                 ]
             },
             {
@@ -2968,7 +2968,7 @@
                 "type": "GET",
                 "name": "get matching xpath count",
                 "arguments": [
-                    {"name": "xpath", "type": "Text"},
+                    {"name": "xpath", "type": "String"},
                     {"name": "return_str", "type": "True"}
                 ]
             },
@@ -2992,7 +2992,7 @@
                 "type": "SYNCHRONISATION",
                 "name": "set selenium implicit wait",
                 "arguments": [
-                    {"name": "value", "type": "TimeOut"}
+                    {"name": "value", "type": "Timeout"}
                 ]
             },
             {
@@ -3002,7 +3002,7 @@
                     {"name": "locator", "type": "Locator"},
                     {"name": "row", "type": "Number"},
                     {"name": "column", "type": "Number"},
-                    {"name": "expected", "type": "Text"},
+                    {"name": "expected", "type": "String"},
                     {"name": "loglevel", "type": "LogLevel", "default": "INFO"}
                 ]
             },
@@ -3018,8 +3018,8 @@
                 "type": "ACTION",
                 "name": "handle alert",
                 "arguments": [
-                    {"name": "action", "type": "Text", "default": "ACCEPT"},
-                    {"name": "timeout", "type": "TimeOut, ","default": "None"}
+                    {"name": "action", "type": "String", "default": "ACCEPT"},
+                    {"name": "timeout", "type": "Timeout, ","default": "None"}
                 ]
             },
             {
@@ -3027,16 +3027,16 @@
                 "name": "wait until page contains element",
                 "arguments": [
                     {"name": "locator", "type": "Locator"},
-                    {"name": "timeout", "type": "TimeOut, ","default": "None"},
-                    {"name": "error", "type": "Text", "default": "None"}
+                    {"name": "timeout", "type": "Timeout, ","default": "None"},
+                    {"name": "error", "type": "String", "default": "None"}
                 ]
             },
             {
                 "type": "UNKNOWN",
                 "name": "set screenshot directory",
                 "arguments": [
-                    {"name": "path", "type": "Text"},
-                    {"name": "persist", "type": "Text", "default": "DEPRECATED"}
+                    {"name": "path", "type": "String"},
+                    {"name": "persist", "type": "String", "default": "DEPRECATED"}
                 ]
             },
             {
@@ -3059,7 +3059,7 @@
                 "name": "page should not contain checkbox",
                 "arguments": [
                     {"name": "locator", "type": "Locator"},
-                    {"name": "message", "type": "Text", "default": "None"},
+                    {"name": "message", "type": "String", "default": "None"},
                     {"name": "loglevel", "type": "LogLevel, ","default": "TRACE"}
                 ]
             },
@@ -3109,14 +3109,14 @@
                 "name": "choose file",
                 "arguments": [
                     {"name": "locator", "type": "Locator"},
-                    {"name": "file_path", "type": "Text"}
+                    {"name": "file_path", "type": "String"}
                 ]
             },
             {
                 "type": "ASSERTION",
                 "name": "title should be",
                 "arguments": [
-                    {"name": "expected", "type": "Text"}
+                    {"name": "expected", "type": "String"}
                 ]
             },
             {
@@ -3124,7 +3124,7 @@
                 "name": "page should contain link",
                 "arguments": [
                     {"name": "locator", "type": "Locator"},
-                    {"name": "message", "type": "Text", "default": "None"},
+                    {"name": "message", "type": "String", "default": "None"},
                     {"name": "loglevel", "type": "LogLevel, ","default": "TRACE"}
                 ]
             },
@@ -3133,7 +3133,7 @@
                 "name": "assign id to element",
                 "arguments": [
                     {"name": "locator", "type": "Locator"},
-                    {"name": "id", "type": "Text"}
+                    {"name": "id", "type": "String"}
                 ]
             },
             {
@@ -3141,7 +3141,7 @@
                 "name": "element should not be visible",
                 "arguments": [
                     {"name": "locator", "type": "Locator"},
-                    {"name": "message", "type": "Text", "default": "None"}
+                    {"name": "message", "type": "String", "default": "None"}
                 ]
             },
             {
@@ -3155,7 +3155,7 @@
                 "arguments": [
                     {"name": "locator", "type": "Locator"},
                     {"name": "column", "type": "Number"},
-                    {"name": "expected", "type": "Text"},
+                    {"name": "expected", "type": "String"},
                     {"name": "loglevel", "type": "LogLevel, ","default": "INFO"}
                 ]
             },
@@ -3169,7 +3169,7 @@
                 "name": "page should contain element",
                 "arguments": [
                     {"name": "locator", "type": "Locator"},
-                    {"name": "message", "type": "Text", "default": "None"},
+                    {"name": "message", "type": "String", "default": "None"},
                     {"name": "loglevel", "type": "LogLevel, ","default": "INFO"},
                     {"name": "limit", "type": "Number", "default": "None"}
                 ]
@@ -3189,7 +3189,7 @@
                 "name": "element should be visible",
                 "arguments": [
                     {"name": "locator", "type": "Locator"},
-                    {"name": "message", "type": "Text", "default": "None"}
+                    {"name": "message", "type": "String", "default": "None"}
                 ]
             },
             {
@@ -3197,8 +3197,8 @@
                 "name": "textfield value should be",
                 "arguments": [
                     {"name": "locator", "type": "Locator"},
-                    {"name": "expected", "type": "Text"},
-                    {"name": "message", "type": "Text", "default": "None"}
+                    {"name": "expected", "type": "String"},
+                    {"name": "message", "type": "String", "default": "None"}
                 ]
             },
             {
@@ -3229,14 +3229,14 @@
                 "type": "SYNCHRONISATION",
                 "name": "set selenium speed",
                 "arguments": [
-                    {"name": "value", "type": "TimeOut"}
+                    {"name": "value", "type": "Timeout"}
                 ]
             },
             {
                 "type": "ASSERTION",
                 "name": "location should be",
                 "arguments": [
-                    {"name": "index_or_alias", "type": "Text"}
+                    {"name": "index_or_alias", "type": "String"}
                 ]
             },
             {
@@ -3263,8 +3263,8 @@
                 "type": "UNKNOWN",
                 "name": "add location strategy",
                 "arguments": [
-                    {"name": "strategy_name", "type": "Text"},
-                    {"name": "strategy_keyword", "type": "Text"},
+                    {"name": "strategy_name", "type": "String"},
+                    {"name": "strategy_keyword", "type": "String"},
                     {"name": "persist", "type": "Boolean", "default": "False"}
                 ]
             },
@@ -3292,12 +3292,12 @@
                 "type": "ACTION",
                 "name": "open browser",
                 "arguments": [
-                    {"name": "url", "type": "Text"},
-                    {"name": "browser", "type": "Text", "default": "firefox"},
-                    {"name": "alias", "type": "Text", "default": "None"},
-                    {"name": "remote_url", "type": "Text", "default": "False"},
-                    {"name": "desired_capabilities", "type": "Text", "default": "None"},
-                    {"name": "ff_profile_dir", "type": "Text", "default": "None"}
+                    {"name": "url", "type": "String"},
+                    {"name": "browser", "type": "String", "default": "firefox"},
+                    {"name": "alias", "type": "String", "default": "None"},
+                    {"name": "remote_url", "type": "String", "default": "False"},
+                    {"name": "desired_capabilities", "type": "String", "default": "None"},
+                    {"name": "ff_profile_dir", "type": "String", "default": "None"}
                 ]
             },
             {
@@ -3326,8 +3326,8 @@
                 "name": "element text should be",
                 "arguments": [
                     {"name": "locator", "type": "Locator"},
-                    {"name": "expected", "type": "Text"},
-                    {"name": "message", "type": "Text", "default": "None"}
+                    {"name": "expected", "type": "String"},
+                    {"name": "message", "type": "String", "default": "None"}
                 ]
             },
             {
@@ -3335,7 +3335,7 @@
                 "name": "page should contain button",
                 "arguments": [
                     {"name": "locator", "type": "Locator"},
-                    {"name": "message", "type": "Text", "default": "None"},
+                    {"name": "message", "type": "String", "default": "None"},
                     {"name": "loglevel", "type": "LogLevel", "default": "Info"}
                 ]
             },
@@ -3344,7 +3344,7 @@
                 "name": "page should not contain image",
                 "arguments": [
                     {"name": "locator", "type": "Locator"},
-                    {"name": "message", "type": "Text", "default": "None"},
+                    {"name": "message", "type": "String", "default": "None"},
                     {"name": "loglevel", "type": "LogLevel", "default": "Info"}
                 ]
             },
@@ -3353,7 +3353,7 @@
                 "name": "page should not contain button",
                 "arguments": [
                     {"name": "locator", "type": "Locator"},
-                    {"name": "message", "type": "Text", "default": "None"},
+                    {"name": "message", "type": "String", "default": "None"},
                     {"name": "loglevel", "type": "LogLevel", "default": "Info"}
                 ]
             }

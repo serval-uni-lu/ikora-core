@@ -4,11 +4,9 @@ import tech.ikora.model.LibraryKeyword;
 import tech.ikora.runner.Runtime;
 import tech.ikora.types.ListType;
 
-import java.util.Collections;
-
 public class CreateDictionary extends LibraryKeyword {
     public CreateDictionary(){
-        super(Type.UNKNOWN, Collections.singletonList(new ListType("items")));
+        super(Type.UNKNOWN, new ListType("items"));
     }
 
     @Override

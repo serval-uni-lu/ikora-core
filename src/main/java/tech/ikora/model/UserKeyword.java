@@ -82,9 +82,4 @@ public class UserKeyword extends KeywordDefinition {
     public void accept(NodeVisitor visitor, VisitorMemory memory){
         visitor.visit(this, memory);
     }
-
-    @Override
-    public int getMaxNumberArguments() {
-        return parameters.size();
-    }
 }

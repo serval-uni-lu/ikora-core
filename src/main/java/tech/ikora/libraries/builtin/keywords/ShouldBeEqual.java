@@ -1,24 +1,24 @@
 package tech.ikora.libraries.builtin.keywords;
 
-import tech.ikora.model.Argument;
 import tech.ikora.model.LibraryKeyword;
 import tech.ikora.runner.Runtime;
+import tech.ikora.types.BooleanType;
+import tech.ikora.types.StringType;
 
 public class ShouldBeEqual extends LibraryKeyword {
     public ShouldBeEqual(){
-        this.type = Type.ASSERTION;
+        super(Type.ASSERTION,
+                new StringType("first"),
+                new StringType("second"),
+                new StringType("message", "None"),
+                new BooleanType("values", "True"),
+                new BooleanType("ignore_case", "False"),
+                new StringType("formatter", "str")
+        );
     }
 
     @Override
     public void run(Runtime runtime) {
         throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public Argument.Type[] getArgumentTypes() {
-        return new Argument.Type[]{
-                Argument.Type.STRING,
-                Argument.Type.STRING
-        };
     }
 }

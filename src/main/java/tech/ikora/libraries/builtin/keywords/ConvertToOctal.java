@@ -5,16 +5,14 @@ import tech.ikora.runner.Runtime;
 import tech.ikora.types.NumberType;
 import tech.ikora.types.StringType;
 
-import java.util.Arrays;
-
 public class ConvertToOctal extends LibraryKeyword {
     public ConvertToOctal() {
-        super(Type.UNKNOWN, Arrays.asList(
+        super(Type.UNKNOWN,
                 new StringType("item"),
                 new NumberType("base", "None"),
                 new StringType("prefix", "None"),
                 new NumberType("length", "None")
-        ));
+        );
     }
 
     @Override

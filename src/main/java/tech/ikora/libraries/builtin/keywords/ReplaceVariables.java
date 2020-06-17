@@ -9,7 +9,7 @@ import java.util.Collections;
 
 public class ReplaceVariables extends LibraryKeyword {
     public ReplaceVariables(){
-        super(Type.UNKNOWN, Collections.singletonList(new StringType("text")));
+        super(Type.UNKNOWN, new StringType("text"));
     }
 
     @Override

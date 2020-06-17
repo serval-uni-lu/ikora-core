@@ -4,12 +4,17 @@ import tech.ikora.analytics.visitor.FindTestCaseVisitor;
 import tech.ikora.analytics.visitor.PathMemory;
 import tech.ikora.model.*;
 import tech.ikora.runner.Runtime;
+import tech.ikora.types.ListType;
+import tech.ikora.types.StringType;
 
 import java.util.List;
 
 public class SetTestVariable extends LibraryKeyword implements ScopeModifier {
     public SetTestVariable(){
-        this.type = Type.SET;
+        super(Type.SET,
+                new StringType("name"),
+                new ListType("values")
+        );
     }
 
     @Override

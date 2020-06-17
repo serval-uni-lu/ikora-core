@@ -1,22 +1,17 @@
 package tech.ikora.libraries.builtin.keywords;
 
-import tech.ikora.model.Argument;
 import tech.ikora.model.LibraryKeyword;
 import tech.ikora.runner.Runtime;
+import tech.ikora.types.KeywordType;
+import tech.ikora.types.TimeoutType;
 
 public class WaitUntilKeywordSucceeds extends LibraryKeyword {
     public WaitUntilKeywordSucceeds(){
-        this.type = Type.SYNCHRONISATION;
-    }
-
-    @Override
-    public Argument.Type[] getArgumentTypes() {
-        return new Argument.Type[]{
-                Argument.Type.STRING,
-                Argument.Type.STRING,
-                Argument.Type.KEYWORD,
-                Argument.Type.KWARGS
-        };
+        super(Type.SYNCHRONISATION,
+                new TimeoutType("retry"),
+                new TimeoutType("retry_interval"),
+                new KeywordType("keyword")
+        );
     }
 
     @Override

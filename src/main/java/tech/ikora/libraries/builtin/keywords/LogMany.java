@@ -8,7 +8,7 @@ import java.util.Collections;
 
 public class LogMany extends LibraryKeyword {
     public LogMany(){
-        super(Type.LOG, Collections.singletonList(new ListType("messages")));
+        super(Type.LOG, new ListType("messages"));
     }
 
     @Override

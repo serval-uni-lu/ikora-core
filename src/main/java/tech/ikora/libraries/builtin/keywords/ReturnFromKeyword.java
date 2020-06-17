@@ -9,7 +9,7 @@ import java.util.Collections;
 
 public class ReturnFromKeyword extends LibraryKeyword {
     public ReturnFromKeyword(){
-        super(Type.CONTROL_FLOW, Collections.singletonList(new ListType("return_values")));
+        super(Type.CONTROL_FLOW, new ListType("return_values"));
     }
 
     @Override

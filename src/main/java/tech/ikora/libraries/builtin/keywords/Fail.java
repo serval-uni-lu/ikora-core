@@ -5,14 +5,12 @@ import tech.ikora.runner.Runtime;
 import tech.ikora.types.ListType;
 import tech.ikora.types.StringType;
 
-import java.util.Arrays;
-
 public class Fail extends LibraryKeyword {
     public Fail(){
-        super(Type.ERROR, Arrays.asList(
+        super(Type.ERROR,
                 new StringType("message", "None"),
                 new ListType("tags", "None")
-        ));
+        );
     }
 
     @Override

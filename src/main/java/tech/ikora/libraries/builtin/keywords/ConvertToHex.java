@@ -6,16 +6,14 @@ import tech.ikora.types.BooleanType;
 import tech.ikora.types.NumberType;
 import tech.ikora.types.StringType;
 
-import java.util.Arrays;
-
 public class ConvertToHex extends LibraryKeyword {
     public ConvertToHex(){
-        super(Type.UNKNOWN, Arrays.asList(
+        super(Type.UNKNOWN,
                 new StringType("item"),
                 new NumberType("base", "None"),
                 new StringType("prefix", "None"),
                 new BooleanType("lowercase", "False")
-        ));
+        );
     }
 
     @Override

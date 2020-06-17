@@ -5,6 +5,6 @@ import tech.ikora.types.PathType;
 
 public class Curdir extends LibraryVariable {
     public Curdir(){
-        super(new PathType("Curdir"), Format.SCALAR);
+        super(new PathType("CURDIR"), Format.SCALAR);
     }
 }

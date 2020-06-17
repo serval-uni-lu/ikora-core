@@ -8,7 +8,7 @@ import java.util.Collections;
 
 public class FatalError extends LibraryKeyword {
     public FatalError(){
-        super(Type.ERROR, Collections.singletonList(new StringType("message", "None")));
+        super(Type.ERROR, new StringType("message", "None"));
     }
 
     @Override

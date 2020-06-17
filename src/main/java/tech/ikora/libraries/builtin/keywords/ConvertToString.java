@@ -8,7 +8,7 @@ import java.util.Collections;
 
 public class ConvertToString extends LibraryKeyword {
     public ConvertToString(){
-        super(Type.UNKNOWN, Collections.singletonList(new StringType("item")));
+        super(Type.UNKNOWN, new StringType("item"));
     }
 
     @Override

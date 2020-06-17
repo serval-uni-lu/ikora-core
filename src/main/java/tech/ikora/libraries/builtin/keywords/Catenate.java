@@ -4,11 +4,9 @@ import tech.ikora.model.LibraryKeyword;
 import tech.ikora.runner.Runtime;
 import tech.ikora.types.ListType;
 
-import java.util.Collections;
-
 public class Catenate extends LibraryKeyword {
     public Catenate() {
-        super(Type.UNKNOWN, Collections.singletonList(new ListType("items")));
+        super(Type.UNKNOWN, new ListType("items"));
     }
 
     @Override

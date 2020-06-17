@@ -5,6 +5,6 @@ import tech.ikora.types.PathType;
 
 public class DebugFile extends LibraryVariable {
     public DebugFile(){
-        super(new PathType("debug file"), Format.SCALAR);
+        super(new PathType("DEBUG FILE"), Format.SCALAR);
     }
 }

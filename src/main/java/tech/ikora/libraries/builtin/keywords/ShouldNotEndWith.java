@@ -2,10 +2,18 @@ package tech.ikora.libraries.builtin.keywords;
 
 import tech.ikora.model.LibraryKeyword;
 import tech.ikora.runner.Runtime;
+import tech.ikora.types.BooleanType;
+import tech.ikora.types.StringType;
 
 public class ShouldNotEndWith extends LibraryKeyword {
     public ShouldNotEndWith(){
-        this.type = Type.ASSERTION;
+        super(Type.ASSERTION,
+                new StringType("string"),
+                new StringType("suffix"),
+                new StringType("message", "None"),
+                new BooleanType("values", "True"),
+                new BooleanType("ignore_case", "False")
+        );
     }
 
     @Override

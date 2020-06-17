@@ -9,10 +9,10 @@ import java.util.Arrays;
 
 public class RepeatKeyword extends LibraryKeyword {
     public RepeatKeyword(){
-        super(Type.CONTROL_FLOW, Arrays.asList(
+        super(Type.CONTROL_FLOW,
                 new StringType("repeat"),
                 new KeywordType("keyword")
-        ));
+        );
     }
 
     @Override

@@ -5,14 +5,12 @@ import tech.ikora.runner.Runtime;
 import tech.ikora.types.ListType;
 import tech.ikora.types.StringType;
 
-import java.util.Arrays;
-
 public class ImportLibrary extends LibraryKeyword implements ScopeModifier {
     public ImportLibrary(){
-        super(Type.UNKNOWN, Arrays.asList(
+        super(Type.UNKNOWN,
                 new StringType("name"),
                 new ListType("args")
-        ));
+        );
     }
 
     @Override

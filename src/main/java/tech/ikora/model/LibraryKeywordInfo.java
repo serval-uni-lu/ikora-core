@@ -8,16 +8,13 @@ import java.util.List;
 
 @JsonDeserialize(using = LibraryKeywordInfoReader.class)
 public class LibraryKeywordInfo extends LibraryKeyword {
-    private final Type type;
     private final String name;
-    private final List<? extends BaseType> argumentTypes;
-
     private LibraryInfo library;
 
     public LibraryKeywordInfo(Type type, String name, List<? extends BaseType> argumentTypes) {
-        this.type = type;
+        super(type, argumentTypes.toArray(new BaseType[0]));
+
         this.name = name;
-        this.argumentTypes = argumentTypes;
         this.library = null;
     }
 
@@ -37,11 +34,6 @@ public class LibraryKeywordInfo extends LibraryKeyword {
     @Override
     public String getName() {
         return this.name;
-    }
-
-    @Override
-    public List<? extends BaseType> getArgumentTypes() {
-        return argumentTypes;
     }
 
     @Override

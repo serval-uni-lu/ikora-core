@@ -4,12 +4,17 @@ import tech.ikora.analytics.visitor.FindSuiteVisitor;
 import tech.ikora.analytics.visitor.PathMemory;
 import tech.ikora.model.*;
 import tech.ikora.runner.Runtime;
+import tech.ikora.types.ListType;
+import tech.ikora.types.StringType;
 
 import java.util.List;
 
 public class SetSuiteVariable extends LibraryKeyword implements ScopeModifier {
     public SetSuiteVariable(){
-        this.type = Type.SET;
+        super(Type.SET,
+                new StringType("name"),
+                new ListType("values")
+        );
     }
 
     @Override
@@ -50,10 +55,5 @@ public class SetSuiteVariable extends LibraryKeyword implements ScopeModifier {
                 );
             }
         }
-    }
-
-    @Override
-    public int getMaxNumberArguments() {
-        return -1;
     }
 }

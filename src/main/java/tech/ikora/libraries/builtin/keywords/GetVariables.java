@@ -4,14 +4,12 @@ import tech.ikora.model.LibraryKeyword;
 import tech.ikora.runner.Runtime;
 import tech.ikora.types.StringType;
 
-import java.util.Arrays;
-
 public class GetVariables extends LibraryKeyword {
     public GetVariables(){
-        super(Type.UNKNOWN, Arrays.asList(
+        super(Type.UNKNOWN,
                 new StringType("name"),
                 new StringType("default", "None")
-        ));
+        );
     }
 
     @Override

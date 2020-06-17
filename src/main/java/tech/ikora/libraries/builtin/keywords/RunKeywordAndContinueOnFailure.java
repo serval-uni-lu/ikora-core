@@ -4,11 +4,9 @@ import tech.ikora.model.LibraryKeyword;
 import tech.ikora.runner.Runtime;
 import tech.ikora.types.KeywordType;
 
-import java.util.Collections;
-
 public class RunKeywordAndContinueOnFailure extends LibraryKeyword {
     public RunKeywordAndContinueOnFailure(){
-        super(Type.CONTROL_FLOW, Collections.singletonList(new KeywordType("keyword")));
+        super(Type.CONTROL_FLOW, new KeywordType("keyword"));
     }
 
     @Override
