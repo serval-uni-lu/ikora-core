@@ -1,5 +1,7 @@
 package tech.ikora.model;
 
+import tech.ikora.types.BaseTypeList;
+
 import java.util.List;
 
 public interface Keyword extends Node {
@@ -10,4 +12,5 @@ public interface Keyword extends Node {
     Type getType();
     List<Variable> getReturnVariables();
     Tokens getDocumentation();
+    BaseTypeList getArgumentTypes();
 }

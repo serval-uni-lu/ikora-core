@@ -1,4 +1,4 @@
-package tech.ikora.model;
+package tech.ikora.libraries;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
@@ -6,11 +6,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
+import tech.ikora.types.BaseTypeList;
+import tech.ikora.model.Keyword;
 import tech.ikora.types.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class LibraryKeywordInfoReader extends StdDeserializer<LibraryKeywordInfo> {
@@ -29,7 +29,7 @@ public class LibraryKeywordInfoReader extends StdDeserializer<LibraryKeywordInfo
         final Keyword.Type type = Keyword.Type.valueOf(node.get("type").textValue());
         final String name = node.get("name").textValue();
 
-        final List<BaseType> argumentTypes = new ArrayList<>();
+        final BaseTypeList argumentTypes = new BaseTypeList();
         for(final JsonNode argumentNode: node.get("arguments")){
             argumentTypes.add(createArgumentType(jsonParser, argumentNode));
         }

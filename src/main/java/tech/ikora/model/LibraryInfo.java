@@ -1,5 +1,7 @@
 package tech.ikora.model;
 
+import tech.ikora.libraries.LibraryKeywordInfo;
+
 import java.util.Set;
 
 public class LibraryInfo {

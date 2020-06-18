@@ -3,6 +3,7 @@ package tech.ikora.model;
 import tech.ikora.analytics.visitor.NodeVisitor;
 import tech.ikora.analytics.visitor.VisitorMemory;
 import tech.ikora.exception.InvalidTypeException;
+import tech.ikora.types.BaseTypeList;
 
 import java.util.Collections;
 import java.util.List;
@@ -68,5 +69,10 @@ public class TestCase extends KeywordDefinition {
     @Override
     public List<Variable> getReturnVariables() {
         return Collections.emptyList();
+    }
+
+    @Override
+    public BaseTypeList getArgumentTypes() {
+        return new BaseTypeList();
     }
 }

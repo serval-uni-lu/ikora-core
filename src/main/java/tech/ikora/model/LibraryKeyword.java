@@ -5,28 +5,29 @@ import tech.ikora.analytics.visitor.VisitorMemory;
 import tech.ikora.builder.ValueLinker;
 import tech.ikora.runner.Runtime;
 import tech.ikora.types.BaseType;
+import tech.ikora.types.BaseTypeList;
 
 import java.util.*;
 
 public abstract class LibraryKeyword implements Keyword {
     protected final Type type;
-    protected final List<BaseType> argumentTypes;
+    protected final BaseTypeList argumentTypes;
 
     protected LibraryKeyword(Type type, BaseType... argumentTypes) {
         this.type = type;
-        this.argumentTypes = Arrays.asList(argumentTypes);
+        this.argumentTypes = new BaseTypeList(argumentTypes);
     }
 
     protected LibraryKeyword(Type type){
         this.type = type;
-        this.argumentTypes = Collections.emptyList();
+        this.argumentTypes = new BaseTypeList();
     }
 
     public Type getType(){
         return this.type;
     }
 
-    public List<BaseType> getArgumentTypes(){
+    public BaseTypeList getArgumentTypes(){
         return this.argumentTypes;
     }
 

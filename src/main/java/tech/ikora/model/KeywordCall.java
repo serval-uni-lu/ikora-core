@@ -39,19 +39,25 @@ public class KeywordCall extends Step {
     public void addArgument(Argument argument) {
         this.addAstChild(argument);
         addTokens(argument.getTokens());
-    }
 
-    public void addArgument(int index, Argument argument) {
-        this.addAstChild(index, argument);
-    }
-
-    public void clearArguments() {
-        this.clearAstChildren();
+        argument.getDefinition().ifPresent(node -> node.addDependency(this));
     }
 
     @Override
-    public List<Argument> getArgumentList() {
-        return getAstChildren().stream().map(node -> (Argument)node).collect(Collectors.toList());
+    public ArgumentList getArgumentList() {
+        final List<Argument> arguments = getAstChildren().stream()
+                .map(node -> (Argument) node)
+                .collect(Collectors.toList());
+
+        return new ArgumentList(arguments);
+    }
+
+    public void setArgumentList(ArgumentList argumentList) {
+        this.getAstChildren().clear();
+
+        for(Argument argument: argumentList){
+            addArgument(argument);
+        }
     }
 
     @Override

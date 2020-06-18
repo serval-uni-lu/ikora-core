@@ -24,7 +24,7 @@ public class SetTestVariable extends LibraryKeyword implements ScopeModifier {
 
     @Override
     public void addToScope(Runtime runtime, KeywordCall call) {
-        List<Argument> argumentList = call.getArgumentList();
+        ArgumentList argumentList = call.getArgumentList();
 
         if(argumentList.size() < 2){
             runtime.getErrors().registerInternalError(

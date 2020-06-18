@@ -3,6 +3,7 @@ package tech.ikora.model;
 import tech.ikora.analytics.visitor.NodeVisitor;
 import tech.ikora.analytics.visitor.VisitorMemory;
 import tech.ikora.exception.InvalidTypeException;
+import tech.ikora.types.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.Set;
 
 public class UserKeyword extends KeywordDefinition {
     private List<Variable> parameters;
+    private BaseTypeList parameterTypes;
     private List<Variable> embeddedVariables;
     private SourceNodeTable<Variable> localVariables;
 
@@ -18,6 +20,7 @@ public class UserKeyword extends KeywordDefinition {
 
     public UserKeyword() {
         parameters = new ArrayList<>();
+        parameterTypes = new BaseTypeList();
         embeddedVariables = new ArrayList<>();
 
         localVariables = new SourceNodeTable<>();
@@ -58,16 +61,19 @@ public class UserKeyword extends KeywordDefinition {
         return returnVariables;
     }
 
-    public void addParameter(Variable parameter){
+    @Override
+    public BaseTypeList getArgumentTypes() {
+        return parameterTypes;
+    }
+
+    public void addExplicitParameter(Variable parameter){
         parameters.add(parameter);
-        localVariables.add(parameter);
-        this.addAstChild(parameter);
+        addParameter(parameter);
     }
 
     public void addEmbeddedVariable(Variable embeddedVariable) {
         embeddedVariables.add(embeddedVariable);
-        localVariables.add(embeddedVariable);
-        this.addAstChild(embeddedVariable);
+        addParameter(embeddedVariable);
     }
 
     public List<Variable> getParameters() {
@@ -81,5 +87,12 @@ public class UserKeyword extends KeywordDefinition {
     @Override
     public void accept(NodeVisitor visitor, VisitorMemory memory){
         visitor.visit(this, memory);
+    }
+
+    private void addParameter(Variable parameter){
+        localVariables.add(parameter);
+        this.addAstChild(parameter);
+
+        parameterTypes.add(BaseTypeFactory.fromVariable(parameter));
     }
 }

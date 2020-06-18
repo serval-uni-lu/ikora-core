@@ -2194,7 +2194,7 @@
                 "arguments": [
                     {"name": "driver_name", "type": "String"},
                     {"name": "alias", "type": "String", "default": "None"},
-                    {"name": "init_kwargs", "type": "Kwargs"}
+                    {"name": "init_kwargs", "type": "Dictionary"}
                 ]
             },
             {
@@ -2780,7 +2780,7 @@
                 "type": "ACTION",
                 "name": "execute javascript",
                 "arguments": [
-                    {"name": "code", "type": "Kwargs"}
+                    {"name": "code", "type": "List"}
                 ]
             },
             {
@@ -2788,7 +2788,7 @@
                 "name": "wait until page does not contain",
                 "arguments": [
                     {"name": "text", "type": "String"},
-                    {"name": "timeout", "type": "Timeout, ","default": "None"},
+                    {"name": "timeout", "type": "Timeout","default": "None"},
                     {"name": "error", "type": "String", "default": "None"}
                 ]
             },
@@ -2948,7 +2948,7 @@
                 "name": "wait until element is not visible",
                 "arguments": [
                     {"name": "locator", "type": "Locator"},
-                    {"name": "timeout", "type": "Timeout, ","default": "None"},
+                    {"name": "timeout", "type": "Timeout","default": "None"},
                     {"name": "error", "type": "String", "default": "None"}
                 ]
             },
@@ -2969,7 +2969,7 @@
                 "name": "get matching xpath count",
                 "arguments": [
                     {"name": "xpath", "type": "String"},
-                    {"name": "return_str", "type": "True"}
+                    {"name": "return_str", "type": "Boolean", "default": "True"}
                 ]
             },
             {
@@ -3019,7 +3019,7 @@
                 "name": "handle alert",
                 "arguments": [
                     {"name": "action", "type": "String", "default": "ACCEPT"},
-                    {"name": "timeout", "type": "Timeout, ","default": "None"}
+                    {"name": "timeout", "type": "Timeout","default": "None"}
                 ]
             },
             {
@@ -3027,7 +3027,7 @@
                 "name": "wait until page contains element",
                 "arguments": [
                     {"name": "locator", "type": "Locator"},
-                    {"name": "timeout", "type": "Timeout, ","default": "None"},
+                    {"name": "timeout", "type": "Timeout","default": "None"},
                     {"name": "error", "type": "String", "default": "None"}
                 ]
             },
@@ -3060,7 +3060,7 @@
                 "arguments": [
                     {"name": "locator", "type": "Locator"},
                     {"name": "message", "type": "String", "default": "None"},
-                    {"name": "loglevel", "type": "LogLevel, ","default": "TRACE"}
+                    {"name": "loglevel", "type": "LogLevel","default": "TRACE"}
                 ]
             },
             {
@@ -3125,7 +3125,7 @@
                 "arguments": [
                     {"name": "locator", "type": "Locator"},
                     {"name": "message", "type": "String", "default": "None"},
-                    {"name": "loglevel", "type": "LogLevel, ","default": "TRACE"}
+                    {"name": "loglevel", "type": "LogLevel","default": "TRACE"}
                 ]
             },
             {
@@ -3156,7 +3156,7 @@
                     {"name": "locator", "type": "Locator"},
                     {"name": "column", "type": "Number"},
                     {"name": "expected", "type": "String"},
-                    {"name": "loglevel", "type": "LogLevel, ","default": "INFO"}
+                    {"name": "loglevel", "type": "LogLevel","default": "INFO"}
                 ]
             },
             {
@@ -3170,7 +3170,7 @@
                 "arguments": [
                     {"name": "locator", "type": "Locator"},
                     {"name": "message", "type": "String", "default": "None"},
-                    {"name": "loglevel", "type": "LogLevel, ","default": "INFO"},
+                    {"name": "loglevel", "type": "LogLevel","default": "INFO"},
                     {"name": "limit", "type": "Number", "default": "None"}
                 ]
             },
@@ -3205,7 +3205,7 @@
                 "type": "LOG",
                 "name": "log source",
                 "arguments": [
-                    {"name": "loglevel", "type": "LogLevel, ","default": "INFO"}
+                    {"name": "loglevel", "type": "LogLevel","default": "INFO"}
                 ]
             },
             {
@@ -3311,7 +3311,7 @@
                 "type": "ACTION",
                 "name": "execute async javascript",
                 "arguments": [
-                    {"name": "code", "type": "Kwargs"}
+                    {"name": "code", "type": "List"}
                 ]
             },
             {

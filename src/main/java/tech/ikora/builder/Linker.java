@@ -5,6 +5,7 @@ import tech.ikora.error.ErrorMessages;
 import tech.ikora.exception.InvalidDependencyException;
 import tech.ikora.runner.Runtime;
 import tech.ikora.model.*;
+import tech.ikora.types.BaseTypeList;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
@@ -95,70 +96,51 @@ public class Linker {
         }
 
 
-        unresolvedNodes.addAll(linkCallArguments(call));
+        linkCallArguments(call);
 
         return unresolvedNodes;
     }
 
-    private List<UnresolvedNode> linkCallArguments(KeywordCall call) {
-        List<UnresolvedNode> unresolvedNodes = new ArrayList<>();
-        List<Argument> oldArgumentList = new ArrayList<>(call.getArgumentList());
+    private void linkCallArguments(KeywordCall call) {
+        final Optional<Keyword> keyword = call.getKeyword();
 
-        Iterator<Argument> iterator = oldArgumentList.iterator();
+        if(!keyword.isPresent()){
+            return;
+        }
 
-        call.clearArguments();
-        while(iterator.hasNext()){
-            Argument argument = iterator.next();
-            Set<? super Keyword> keywords = getKeywords(argument.getNameToken(), argument.getSourceFile());
+        final ArgumentList argumentList = call.getArgumentList();
+        final BaseTypeList argumentTypes = keyword.get().getArgumentTypes();
 
-            if(keywords.isEmpty()){
-                call.addArgument(argument);
-            }
-            else if(keywords.size() == 1){
-                Keyword keyword = (Keyword)keywords.iterator().next();
-                KeywordCall keywordCall = createKeywordCall(keyword, argument, iterator);
-                Argument keywordArgument = new Argument(keywordCall);
+        if(argumentTypes.containsKeyword()){
+            int keywordIndex = argumentTypes.keywordIndex();
 
-                call.addArgument(keywordArgument);
-            }
-            else{
-                runtime.getErrors().registerSymbolError(
-                        call.getFile(),
-                        ErrorMessages.FOUND_MULTIPLE_MATCHES,
-                        argument.getRange()
-                );
+            final List<Argument> argumentsToProcess = argumentList.subList(keywordIndex, argumentList.size());
+            final Argument callArgument = createCallArgument(argumentsToProcess);
 
-                iterator.forEachRemaining(call::addArgument);
-            }
+            final ArgumentList newArgumentList = new ArgumentList(argumentList.subList(0, keywordIndex));
+            newArgumentList.add(callArgument);
+
+            call.setArgumentList(newArgumentList);
         }
 
         updateScope(call);
-
-        return unresolvedNodes;
     }
 
-    private KeywordCall createKeywordCall(Keyword keyword, Argument first, Iterator<Argument> iterator) {
-        KeywordCall call = new KeywordCall(first.getNameToken());
+    private Argument createCallArgument(List<Argument> arguments) {
+        Argument keywordName = arguments.get(0);
 
-        call.setSourceFile(first.getSourceFile());
-        call.addDependency(keyword);
+        KeywordCall call = new KeywordCall(keywordName.getNameToken());
+        call.setSourceFile(keywordName.getSourceFile());
 
-        Argument last;
-        int i = keyword.getMaxNumberArguments();
-
-        while (iterator.hasNext() && i > 0){
-            last = iterator.next();
-
-            Optional<Variable> optionalVariable = VariableParser.parse(last.getNameToken());
-            Argument current = new Argument(optionalVariable.isPresent() ? optionalVariable.get() : new Literal(last.getNameToken()));
-            call.addArgument(current);
-
-            --i;
+        if(arguments.size() > 1){
+            for(Argument argument: arguments.subList(1, arguments.size())){
+                call.addArgument(argument);
+            }
         }
 
         resolveCall(call);
 
-        return call;
+        return new Argument(call);
     }
 
     private void updateScope(KeywordCall call) {

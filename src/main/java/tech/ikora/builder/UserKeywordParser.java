@@ -89,7 +89,7 @@ class UserKeywordParser {
     private static void parseParameters(LineReader reader, Tokens tokens, UserKeyword userKeyword, ErrorManager errors) throws IOException {
         for(Token token: tokens){
             try {
-                userKeyword.addParameter(Variable.create(token));
+                userKeyword.addExplicitParameter(Variable.create(token));
                 userKeyword.addToken(token);
             } catch (MalformedVariableException e) {
                 errors.registerSyntaxError(

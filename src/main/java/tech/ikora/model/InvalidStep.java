@@ -22,8 +22,8 @@ public class InvalidStep extends Step {
     }
 
     @Override
-    public List<Argument> getArgumentList() {
-        return Collections.emptyList();
+    public ArgumentList getArgumentList() {
+        return new ArgumentList();
     }
 
     @Override

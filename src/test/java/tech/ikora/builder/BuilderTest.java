@@ -308,4 +308,19 @@ class BuilderTest {
         final Set<Project> dependenciesC = projectC.get().getDependencies();
         assertEquals(0, dependenciesC.size());
     }
+
+    @Test
+    void testKeywordParameterLinker() throws IOException, URISyntaxException {
+        final File file = FileUtils.getResourceFile("robot/keyword-parameters.robot");
+        final BuildResult result = Builder.build(file, Helpers.getConfiguration(), true);
+
+        final Project project = result.getProjects().iterator().next();
+
+        final Set<UserKeyword> ofInterest = project.findUserKeyword(Token.fromString("Test keyword with keyword as argument"));
+        final UserKeyword keyword = ofInterest.iterator().next();
+
+        final KeywordCall call = (KeywordCall)keyword.getStep(0);
+        assertEquals(2, call.getArgumentList().size());
+        assertTrue(call.getArgumentList().get(1).getDefinition().get() instanceof KeywordCall);
+    }
 }

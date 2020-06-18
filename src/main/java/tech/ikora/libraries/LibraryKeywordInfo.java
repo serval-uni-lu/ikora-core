@@ -1,17 +1,18 @@
-package tech.ikora.model;
+package tech.ikora.libraries;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import tech.ikora.types.BaseTypeList;
+import tech.ikora.model.LibraryInfo;
+import tech.ikora.model.LibraryKeyword;
 import tech.ikora.runner.Runtime;
 import tech.ikora.types.BaseType;
-
-import java.util.List;
 
 @JsonDeserialize(using = LibraryKeywordInfoReader.class)
 public class LibraryKeywordInfo extends LibraryKeyword {
     private final String name;
     private LibraryInfo library;
 
-    public LibraryKeywordInfo(Type type, String name, List<? extends BaseType> argumentTypes) {
+    public LibraryKeywordInfo(Type type, String name, BaseTypeList argumentTypes) {
         super(type, argumentTypes.toArray(new BaseType[0]));
 
         this.name = name;
