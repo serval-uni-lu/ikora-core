@@ -321,6 +321,21 @@ class BuilderTest {
 
         final KeywordCall call = (KeywordCall)keyword.getStep(0);
         assertEquals(2, call.getArgumentList().size());
-        assertTrue(call.getArgumentList().get(1).getDefinition().get() instanceof KeywordCall);
+        assertEquals(1, call.getArgumentList().findFirst(KeywordCall.class));
+    }
+
+    @Test
+    void testKeywordParameterLinkerWithVariableCollapsed() throws IOException, URISyntaxException {
+        final File file = FileUtils.getResourceFile("robot/keyword-parameters.robot");
+        final BuildResult result = Builder.build(file, Helpers.getConfiguration(), true);
+
+        final Project project = result.getProjects().iterator().next();
+
+        final Set<UserKeyword> ofInterest = project.findUserKeyword(Token.fromString("Test keyword with keyword as argument with collapsed arguments"));
+        final UserKeyword keyword = ofInterest.iterator().next();
+
+        final KeywordCall call = (KeywordCall)keyword.getStep(0);
+        assertEquals(1, call.getArgumentList().size());
+        assertEquals(-1, call.getArgumentList().findFirst(KeywordCall.class));
     }
 }

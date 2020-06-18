@@ -114,16 +114,29 @@ public class Linker {
         if(argumentTypes.containsKeyword()){
             int keywordIndex = argumentTypes.keywordIndex();
 
-            final List<Argument> argumentsToProcess = argumentList.subList(keywordIndex, argumentList.size());
-            final Argument callArgument = createCallArgument(argumentsToProcess);
+            if(isArgumentListExpendedUntilKeyword(argumentList, keywordIndex)){
+                final List<Argument> argumentsToProcess = argumentList.subList(keywordIndex, argumentList.size());
+                final Argument callArgument = createCallArgument(argumentsToProcess);
 
-            final ArgumentList newArgumentList = new ArgumentList(argumentList.subList(0, keywordIndex));
-            newArgumentList.add(callArgument);
+                final ArgumentList newArgumentList = new ArgumentList(argumentList.subList(0, keywordIndex));
+                newArgumentList.add(callArgument);
 
-            call.setArgumentList(newArgumentList);
+                call.setArgumentList(newArgumentList);
+            }
         }
 
         updateScope(call);
+    }
+
+    private boolean isArgumentListExpendedUntilKeyword(ArgumentList argumentList, int keywordIndex){
+        int listIndex = argumentList.findFirst(ListVariable.class);
+        int dictIndex = argumentList.findFirst(DictionaryVariable.class);
+
+        int varIndex = argumentList.size();
+        varIndex = listIndex != -1 ? Math.min(varIndex, listIndex) : varIndex;
+        varIndex = dictIndex != -1 ? Math.min(varIndex, dictIndex) : varIndex;
+
+        return keywordIndex < varIndex;
     }
 
     private Argument createCallArgument(List<Argument> arguments) {

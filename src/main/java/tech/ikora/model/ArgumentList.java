@@ -127,4 +127,14 @@ public class ArgumentList  implements List<Argument> {
     public List<Argument> subList(int fromIndex, int toIndex) {
         return arguments.subList(fromIndex, toIndex);
     }
+
+    public int findFirst(Class<?> type){
+        final Optional<Argument> first = arguments.stream()
+                .filter(a -> a.getDefinition()
+                        .map(n -> type.isAssignableFrom(n.getClass()))
+                        .orElse(false))
+                .findFirst();
+
+        return first.map(a -> arguments.indexOf(a)).orElse(-1);
+    }
 }
