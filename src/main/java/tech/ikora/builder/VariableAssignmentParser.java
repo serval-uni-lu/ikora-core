@@ -61,15 +61,7 @@ public class VariableAssignmentParser {
         }
 
         for(Token value: values){
-            try {
-                variable.addValue(parseValue(value));
-            } catch (InvalidArgumentException e) {
-                errors.registerSyntaxError(
-                        reader.getFile(),
-                        String.format("Invalid value for a variable: %s", e.getMessage()),
-                        Range.fromTokens(values.withoutFirst(), reader.getCurrent())
-                );
-            }
+            variable.addValue(parseValue(value));
         }
     }
 

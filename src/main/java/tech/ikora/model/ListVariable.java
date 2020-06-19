@@ -13,15 +13,6 @@ public class ListVariable extends Variable {
         super(name);
     }
 
-    @Override
-    public void addValue(SourceNode value) {
-        if(this.values == null){
-            this.values = new ArrayList<>();
-        }
-
-        this.values.add(value);
-    }
-
     public void setValues(List<SourceNode> values){
         this.values = values;
     }

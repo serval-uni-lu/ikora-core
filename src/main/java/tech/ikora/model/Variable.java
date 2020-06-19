@@ -23,10 +23,6 @@ public abstract class Variable extends SourceNode {
         this.values = new ArrayList<>();
     }
 
-    public List<SourceNode> getValues(){
-        return values;
-    }
-
     public static Variable invalid() {
         return new InvalidVariable();
     }
@@ -103,6 +99,4 @@ public abstract class Variable extends SourceNode {
     }
 
     protected abstract void setName(Token name);
-    public abstract void addValue(SourceNode value) throws InvalidArgumentException;
-
 }

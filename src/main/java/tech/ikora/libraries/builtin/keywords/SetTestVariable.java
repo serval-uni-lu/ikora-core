@@ -37,10 +37,6 @@ public class SetTestVariable extends LibraryKeyword implements ScopeModifier {
             try {
                 Variable variable = Variable.create(argumentList.get(0).getNameToken());
 
-                for(int i = 1; i < argumentList.size(); ++i){
-                    variable.addValue(argumentList.get(i));
-                }
-
                 FindTestCaseVisitor visitor = new FindTestCaseVisitor();
                 call.accept(visitor, new PathMemory());
 

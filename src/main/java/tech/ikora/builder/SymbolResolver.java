@@ -57,7 +57,15 @@ public class SymbolResolver {
 
     private void resolveSteps(UserKeyword userKeyword) throws RuntimeException {
         for (Step step: userKeyword) {
-            step.getKeywordCall().ifPresent(this::resolveCall);
+            resolveStep(step);
+        }
+    }
+
+    private void resolveStep(Step step){
+        step.getKeywordCall().ifPresent(this::resolveCall);
+
+        for (Step childStep: step.getSteps()) {
+            resolveStep(childStep);
         }
     }
 
@@ -75,7 +83,6 @@ public class SymbolResolver {
                     Range.fromTokens(call.getTokens(), null)
             );
         }
-
 
         resolveCallArguments(call);
     }
@@ -102,9 +109,18 @@ public class SymbolResolver {
 
                 call.setArgumentList(newArgumentList);
             }
+            else{
+                final Optional<List<ArgumentList>> unpacked = tryToUnpackArgumentList(argumentList);
+            }
         }
 
         updateScope(call);
+    }
+
+    private Optional<List<ArgumentList>> tryToUnpackArgumentList(ArgumentList argumentList){
+        List<ArgumentList> unpacked = new ArrayList<>();
+
+        return Optional.empty();
     }
 
     private boolean isArgumentListExpendedUntilKeyword(ArgumentList argumentList, int keywordIndex){
@@ -154,18 +170,14 @@ public class SymbolResolver {
     }
 
     private Set<? super Keyword> getKeywords(Token fullName, SourceFile sourceFile, boolean allowSplit) {
-        String library;
-        Token name;
+        String library = "";
+        Token name = fullName;
 
         if(allowSplit){
             Pair<Token, Token> libraryAndName = fullName.splitLibrary();
 
             library = libraryAndName.getLeft().getText();
             name = libraryAndName.getRight();
-        }
-        else {
-            library = "";
-            name = fullName;
         }
 
         final Set<? super Keyword> keywordsFound = new HashSet<>(sourceFile.findUserKeyword(library, name));

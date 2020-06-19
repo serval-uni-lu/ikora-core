@@ -32,6 +32,30 @@ public class Argument extends SourceNode {
         return Optional.ofNullable(this.definition);
     }
 
+    public boolean isScalarVariable(){
+        return isType(ScalarVariable.class);
+    }
+
+    public boolean isDictionaryVariable(){
+        return isType(DictionaryVariable.class);
+    }
+
+    public boolean isListVariable(){
+        return isType(ListVariable.class);
+    }
+
+    public boolean isLiteral(){
+        return isType(Literal.class);
+    }
+
+    public boolean isKeywordCall(){
+        return isType(KeywordCall.class);
+    }
+
+    public boolean isVariable(){
+        return isType(Variable.class);
+    }
+
     @Override
     public boolean matches(Token name) {
         return ValueResolver.matches(this.name, name);
@@ -98,5 +122,9 @@ public class Argument extends SourceNode {
         }
 
         return "<ARGUMENT>";
+    }
+
+    private boolean isType(Class<?> type){
+        return this.getDefinition().map(d -> type.isAssignableFrom(type)).orElse(false);
     }
 }

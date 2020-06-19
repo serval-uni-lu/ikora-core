@@ -14,23 +14,25 @@ import java.util.List;
 
 public class VariableAssignment extends SourceNode {
     private final Variable variable;
+    private final ArgumentList values;
 
     public VariableAssignment(Variable variable){
         this.variable = variable;
+        this.values = new ArgumentList();
         this.addTokens(variable.getTokens());
     }
 
-    public void addValue(SourceNode value) throws InvalidArgumentException {
-        this.variable.addValue(value);
+    public void addValue(SourceNode value) {
         this.addTokens(value.getTokens());
+        this.values.add(new Argument(value));
     }
 
     public Variable getVariable(){
         return variable;
     }
 
-    public List<SourceNode> getValues() {
-        return this.variable.getValues();
+    public ArgumentList getValues() {
+        return this.values;
     }
 
     @Override

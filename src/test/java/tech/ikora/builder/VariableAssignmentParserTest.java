@@ -24,7 +24,7 @@ public class VariableAssignmentParserTest {
         assertTrue(errors.isEmpty());
 
         assertEquals(1, assignment.getValues().size());
-        assertTrue(assignment.getValues().get(0) instanceof Literal);
+        assertTrue(assignment.getValues().get(0).isLiteral());
         assertEquals("scalar value", assignment.getValues().get(0).getNameToken().toString());
 
         assertEquals(2, assignment.getTokens().size());
@@ -41,23 +41,8 @@ public class VariableAssignmentParserTest {
         assertTrue(errors.isEmpty());
 
         assertEquals(1, assignment.getValues().size());
-        assertTrue(assignment.getValues().get(0) instanceof Variable);
-        assertEquals("@{variable_value}", assignment.getValues().get(0).getNameToken().toString());
-    }
-
-    @Test
-    void testParseScalarWithMultipleValue() throws IOException, MalformedVariableException {
-        LineReader reader = Helpers.lineReader("${scalar}", "scalar value 1", "scalar value 2", "scalar value 3");
-
-        ErrorManager errors = new ErrorManager();
-        Optional<VariableAssignment> optional = VariableAssignmentParser.parse(reader, errors);
-        assertTrue(optional.isPresent());
-        VariableAssignment assignment = optional.get();
-        assertFalse(errors.isEmpty());
-
-        assertEquals(1, assignment.getValues().size());
-        assertTrue(assignment.getValues().get(0) instanceof Literal);
-        assertEquals("scalar value 1", assignment.getValues().get(0).getNameToken().toString());
+        assertTrue(assignment.getValues().get(0).isListVariable());
+        assertEquals("@{variable_value}", assignment.getValues().get(0).toString());
     }
 
     @Test
@@ -72,14 +57,14 @@ public class VariableAssignmentParserTest {
 
         assertFalse(assignment.getValues().isEmpty());
 
-        assertTrue(assignment.getValues().get(0) instanceof Literal);
-        assertEquals("scalar value 1", assignment.getValues().get(0).getNameToken().toString());
+        assertTrue(assignment.getValues().get(0).isLiteral());
+        assertEquals("scalar value 1", assignment.getValues().get(0).toString());
 
-        assertTrue(assignment.getValues().get(1) instanceof Variable);
-        assertEquals("${variable}", assignment.getValues().get(1).getNameToken().toString());
+        assertTrue(assignment.getValues().get(1).isVariable());
+        assertEquals("${variable}", assignment.getValues().get(1).toString());
 
-        assertTrue(assignment.getValues().get(2) instanceof Literal);
-        assertEquals("scalar value 3", assignment.getValues().get(2).getNameToken().toString());
+        assertTrue(assignment.getValues().get(2).isLiteral());
+        assertEquals("scalar value 3", assignment.getValues().get(2).toString());
     }
 
     @Test
@@ -94,15 +79,11 @@ public class VariableAssignmentParserTest {
 
         assertFalse(assignment.getValues().isEmpty());
 
-        assertTrue(assignment.getValues().get(0) instanceof DictionaryEntry);
-        assertEquals("key1", ((DictionaryEntry)assignment.getValues().get(0)).getKey().getNameToken().toString());
-        assertEquals("value1", ((DictionaryEntry)assignment.getValues().get(0)).getValue().getNameToken().toString());
+        assertTrue(assignment.getValues().get(0).isLiteral());
 
-        assertTrue(assignment.getValues().get(1) instanceof Variable);
+        assertTrue(assignment.getValues().get(1).isScalarVariable());
         assertEquals("${variable}", assignment.getValues().get(1).getNameToken().toString());
 
-        assertTrue(assignment.getValues().get(2) instanceof DictionaryEntry);
-        assertEquals("key3", ((DictionaryEntry)assignment.getValues().get(2)).getKey().getNameToken().toString());
-        assertEquals("value3", ((DictionaryEntry)assignment.getValues().get(2)).getValue().getNameToken().toString());
+        assertTrue(assignment.getValues().get(2).isLiteral());
     }
 }
