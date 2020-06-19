@@ -88,6 +88,40 @@ public class SymbolResolver {
     }
 
     private void resolveCallArguments(KeywordCall call) {
+        for(Argument argument: call.getArgumentList()){
+            resolveArgumentVariables(argument);
+        }
+
+        resolveArgumentKeyword(call);
+
+        updateScope(call);
+    }
+
+    private void resolveArgumentVariables(Argument argument) {
+        final Optional<SourceNode> definition = argument.getDefinition();
+
+        if(!definition.isPresent()){
+            return;
+        }
+
+        List<Variable> variables = new ArrayList<>();
+
+        if(Variable.class.isAssignableFrom(definition.get().getClass())){
+            variables.add((Variable)definition.get());
+
+        }
+        else if(Literal.class.isAssignableFrom(definition.get().getClass())){
+            variables.addAll(((Literal)definition.get()).getVariables());
+        }
+
+        for(Variable variable: variables){
+            for(Variable source: resolveVariable(variable)){
+                variable.linkToDefinition(source, Link.Import.STATIC);
+            }
+        }
+    }
+
+    private void resolveArgumentKeyword(KeywordCall call){
         final Optional<Keyword> keyword = call.getKeyword();
 
         if(!keyword.isPresent()){
@@ -113,13 +147,10 @@ public class SymbolResolver {
                 final Optional<List<ArgumentList>> unpacked = tryToUnpackArgumentList(argumentList);
             }
         }
-
-        updateScope(call);
     }
 
     private Optional<List<ArgumentList>> tryToUnpackArgumentList(ArgumentList argumentList){
         List<ArgumentList> unpacked = new ArrayList<>();
-
         return Optional.empty();
     }
 
@@ -157,6 +188,10 @@ public class SymbolResolver {
                 ((ScopeModifier)keyword).addToScope(runtime, call);
             }
         }
+    }
+
+    private Set<Variable> resolveVariable(Variable variable){
+        return runtime.findVariableAssigment(variable);
     }
 
     private Set<? super Keyword> getKeywords(Token fullName, SourceFile sourceFile) {

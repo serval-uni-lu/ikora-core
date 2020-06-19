@@ -14,17 +14,21 @@ import java.util.regex.Pattern;
 public abstract class Variable extends SourceNode {
     protected Token name;
     protected Pattern pattern;
-    protected List<SourceNode> values;
+    protected Link<Variable, Node> link;
 
     public Variable(Token name) {
         setName(name);
 
         this.name.setType(Token.Type.VARIABLE);
-        this.values = new ArrayList<>();
+        this.link = new Link<>(this);
     }
 
     public static Variable invalid() {
         return new InvalidVariable();
+    }
+
+    public void linkToDefinition(Node definition, Link.Import link){
+        this.link.addNode(definition, link);
     }
 
     @Override
@@ -87,15 +91,7 @@ public abstract class Variable extends SourceNode {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append(name.getText());
-
-        for(SourceNode value: values){
-            builder.append("\t");
-            builder.append(value.toString());
-        }
-
-        return builder.toString();
+        return name.getText();
     }
 
     protected abstract void setName(Token name);

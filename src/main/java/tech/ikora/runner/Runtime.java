@@ -50,6 +50,11 @@ public class Runtime {
         return libraries.findKeyword(library, name);
     }
 
+    public Set<Variable> findVariableAssigment(Variable variable) {
+        //TODO: define a strategy to find the variable assignment
+        return Collections.emptySet();
+    }
+
     public void addToGlobalScope(Variable variable){
         this.scope.addToGlobal(variable);
     }

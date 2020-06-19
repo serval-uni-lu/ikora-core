@@ -5,14 +5,29 @@ import tech.ikora.analytics.visitor.NodeVisitor;
 import tech.ikora.analytics.visitor.VisitorMemory;
 import tech.ikora.runner.Runtime;
 
+import java.util.Collections;
 import java.util.List;
 
 public class Literal extends SourceNode {
     private Token name;
+    private List<Variable> variables;
 
     public Literal(Token name) {
         this.name = name;
+        this.variables = Collections.emptyList();
+
         addToken(this.name);
+    }
+
+    public Literal(Token name, List<Variable> variables) {
+        this.name = name;
+        this.variables = variables;
+
+        addToken(this.name);
+    }
+
+    public List<Variable> getVariables() {
+        return this.variables;
     }
 
     @Override

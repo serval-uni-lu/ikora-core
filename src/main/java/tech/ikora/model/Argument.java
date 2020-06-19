@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class Argument extends SourceNode {
-    private SourceNode definition;
+    private final SourceNode definition;
     private final Token name;
 
     public Argument(SourceNode definition) {
