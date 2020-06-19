@@ -3,31 +3,31 @@
 First keyword
     Open Browser  firefox  google.com
     Title Should be  google.com
-    Close All Browser
+    Close All Browsers
 
 Second keyword
     Open Browser  firefox  google.com
     Title Should be  google.com
-    Close All Browser
+    Close All Browsers
 
 Third keyword
     Open Browser  chrome  google.com
     Title Should be  google.com
-    Close All Browser
+    Close All Browsers
 
 Forth keyword
     Log  Opening browser
     Open Browser  firefox  google.com
     Title Should be  google.com
     Log  Closing browser
-    Close All Browser
+    Close All Browsers
 
 Fifth keyword
     Log  Opening browser
     ${result}=  Open Browser  firefox  google.com
     Title Should be  google.com
     Log  Closing browser
-    Close All Browser
+    Close All Browsers
 
 Sixth keyword
     :FOR    ${INDEX}    IN RANGE    1    3
