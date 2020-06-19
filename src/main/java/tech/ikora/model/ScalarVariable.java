@@ -14,14 +14,6 @@ public class ScalarVariable extends Variable {
         super(name);
     }
 
-    public Optional<SourceNode> getValue() {
-        if(values.isEmpty()){
-            return Optional.empty();
-        }
-
-        return Optional.of(values.get(0));
-    }
-
     @Override
     public boolean isDeadCode(){
         return getDependencies().size() == 0;

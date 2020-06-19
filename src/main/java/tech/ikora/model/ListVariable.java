@@ -13,10 +13,6 @@ public class ListVariable extends Variable {
         super(name);
     }
 
-    public void setValues(List<SourceNode> values){
-        this.values = values;
-    }
-
     @Override
     public boolean isDeadCode(){
         return getDependencies().size() == 0;
