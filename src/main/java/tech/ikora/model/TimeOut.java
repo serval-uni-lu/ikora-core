@@ -3,7 +3,7 @@ package tech.ikora.model;
 import tech.ikora.analytics.Action;
 import tech.ikora.analytics.visitor.NodeVisitor;
 import tech.ikora.analytics.visitor.VisitorMemory;
-import tech.ikora.builder.ValueLinker;
+import tech.ikora.builder.ValueResolver;
 import tech.ikora.exception.MalformedVariableException;
 import tech.ikora.runner.Runtime;
 
@@ -25,7 +25,7 @@ public class TimeOut extends SourceNode {
         this.name = name;
         this.errorMessage = errorMessage;
 
-        if(ValueLinker.isVariable(this.name)){
+        if(ValueResolver.isVariable(this.name)){
             this.variable = Variable.create(this.name);
             this.addAstChild(this.variable);
             this.value = null;

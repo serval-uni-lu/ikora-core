@@ -11,7 +11,6 @@ import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
 
@@ -26,10 +25,10 @@ public class Builder {
      * Note that if a relative path to another file is present, it will be included in the analysis as well.
      * @param files List File or Folder containing the files to analyze
      * @param configuration Configuration file
-     * @param link If set to truth, resolve symbols otherwise just parse the files
+     * @param resolve If set to truth, resolve symbols otherwise just parse the files
      * @return Results containing the graph, statistics about the build and eventual errors
      */
-    public static BuildResult build(Set<File> files, BuildConfiguration configuration, boolean link){
+    public static BuildResult build(Set<File> files, BuildConfiguration configuration, boolean resolve){
         BuildResult result = new BuildResult();
         ErrorManager errors = new ErrorManager();
 
@@ -50,15 +49,15 @@ public class Builder {
         resolveDependencies(projects, errors);
         result.setDependencyResolutionTime(Duration.between(startDependencies, Instant.now()).toMillis());
 
-        Instant startLinking = Instant.now();
+        Instant startResolving = Instant.now();
 
         for(Project project: projects) {
                 Runtime runtime = new Runtime(project, new StaticScope(), errors);
                 loadLibraries(runtime);
-                link(runtime, link);
+                resolve(runtime, resolve);
         }
 
-        result.setLinkingTime(Duration.between(startLinking, Instant.now()).toMillis());
+        result.setResolveTime(Duration.between(startResolving, Instant.now()).toMillis());
         result.setBuildTime(Duration.between(start, Instant.now()).toMillis());
 
         result.setErrors(errors);
@@ -88,8 +87,8 @@ public class Builder {
         Instant startLinking = Instant.now();
         Runtime runtime = new Runtime(project, new StaticScope(), errors);
         loadLibraries(runtime);
-        link(runtime, link);
-        result.setLinkingTime(Duration.between(startLinking, Instant.now()).toMillis());
+        resolve(runtime, link);
+        result.setResolveTime(Duration.between(startLinking, Instant.now()).toMillis());
 
         result.setBuildTime(Duration.between(start, Instant.now()).toMillis());
 
@@ -135,12 +134,12 @@ public class Builder {
         runtime.setLibraries(libraries);
     }
 
-    private static void link(Runtime runtime, boolean link) {
-        if(!link){
+    private static void resolve(Runtime runtime, boolean resolve) {
+        if(!resolve){
             return;
         }
 
-        Linker.link(runtime);
+        SymbolResolver.resolve(runtime);
     }
 
     private static Project parse(File file, BuildConfiguration configuration, DynamicImports dynamicImports, ErrorManager errors) {

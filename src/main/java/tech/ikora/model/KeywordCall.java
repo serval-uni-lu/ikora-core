@@ -3,7 +3,7 @@ package tech.ikora.model;
 import tech.ikora.analytics.Action;
 import tech.ikora.analytics.visitor.NodeVisitor;
 import tech.ikora.analytics.visitor.VisitorMemory;
-import tech.ikora.builder.Linker;
+import tech.ikora.builder.SymbolResolver;
 import tech.ikora.runner.Runtime;
 import tech.ikora.utils.LevenshteinDistance;
 
@@ -76,7 +76,7 @@ public class KeywordCall extends Step {
     @Override
     public void execute(Runtime runtime) throws Exception{
         runtime.enterNode(this);
-        Linker.link(this, runtime);
+        SymbolResolver.resolve(this, runtime);
 
         Optional<Keyword> callee = link.getNode();
 

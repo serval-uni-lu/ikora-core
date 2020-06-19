@@ -3,7 +3,7 @@ package tech.ikora.model;
 import tech.ikora.analytics.Action;
 import tech.ikora.analytics.visitor.NodeVisitor;
 import tech.ikora.analytics.visitor.VisitorMemory;
-import tech.ikora.builder.ValueLinker;
+import tech.ikora.builder.ValueResolver;
 import tech.ikora.runner.Runtime;
 
 import java.util.Collections;
@@ -34,7 +34,7 @@ public class Argument extends SourceNode {
 
     @Override
     public boolean matches(Token name) {
-        return ValueLinker.matches(this.name, name);
+        return ValueResolver.matches(this.name, name);
     }
 
     @Override

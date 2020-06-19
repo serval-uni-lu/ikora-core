@@ -2,7 +2,7 @@ package tech.ikora.model;
 
 import tech.ikora.analytics.visitor.NodeVisitor;
 import tech.ikora.analytics.visitor.VisitorMemory;
-import tech.ikora.builder.ValueLinker;
+import tech.ikora.builder.ValueResolver;
 import tech.ikora.runner.Runtime;
 import tech.ikora.types.BaseType;
 import tech.ikora.types.BaseTypeList;
@@ -60,7 +60,7 @@ public abstract class LibraryKeyword implements Keyword {
 
     @Override
     public boolean matches(Token name) {
-        return ValueLinker.matches(getName(), name.getText());
+        return ValueResolver.matches(getName(), name.getText());
     }
 
     @Override

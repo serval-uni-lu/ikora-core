@@ -1,7 +1,7 @@
 package tech.ikora.model;
 
 import tech.ikora.analytics.Action;
-import tech.ikora.builder.ValueLinker;
+import tech.ikora.builder.ValueResolver;
 import tech.ikora.builder.VariableParser;
 import tech.ikora.exception.InvalidArgumentException;
 import tech.ikora.exception.MalformedVariableException;
@@ -38,7 +38,7 @@ public abstract class Variable extends SourceNode {
 
     @Override
     public boolean matches(Token name) {
-        String generic = ValueLinker.getGenericVariableName(name.getText());
+        String generic = ValueResolver.getGenericVariableName(name.getText());
 
         Matcher matcher = pattern.matcher(generic);
         return matcher.matches();

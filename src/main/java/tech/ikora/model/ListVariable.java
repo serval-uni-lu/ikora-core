@@ -2,7 +2,7 @@ package tech.ikora.model;
 
 import tech.ikora.analytics.visitor.NodeVisitor;
 import tech.ikora.analytics.visitor.VisitorMemory;
-import tech.ikora.builder.ValueLinker;
+import tech.ikora.builder.ValueResolver;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,8 +39,8 @@ public class ListVariable extends Variable {
     @Override
     protected void setName(Token name){
         this.name = name;
-        String generic = ValueLinker.getGenericVariableName(this.name.getText());
-        String bareName = ValueLinker.escape(ValueLinker.getBareVariableName(generic));
+        String generic = ValueResolver.getGenericVariableName(this.name.getText());
+        String bareName = ValueResolver.escape(ValueResolver.getBareVariableName(generic));
 
         String patternString = String.format("^[\\$@]\\{%s(\\[\\d+\\])*}$", bareName);
         this.pattern = Pattern.compile(patternString, Pattern.CASE_INSENSITIVE);

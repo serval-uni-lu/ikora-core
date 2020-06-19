@@ -2,7 +2,7 @@ package tech.ikora.model;
 
 import org.apache.commons.lang3.StringUtils;
 import tech.ikora.analytics.Action;
-import tech.ikora.builder.ValueLinker;
+import tech.ikora.builder.ValueResolver;
 import tech.ikora.runner.Runtime;
 import tech.ikora.utils.LevenshteinDistance;
 
@@ -89,7 +89,7 @@ public abstract class KeywordDefinition extends SourceNode implements Keyword, I
             return false;
         }
 
-        return ValueLinker.matches(this.name, token);
+        return ValueResolver.matches(this.name, token);
     }
 
     public Iterator<Step> iterator() {

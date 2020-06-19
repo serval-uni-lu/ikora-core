@@ -8,7 +8,7 @@ public class VariableParser {
     private VariableParser(){}
 
     public static Optional<Variable> parse(final Token name){
-        if(!ValueLinker.isVariable(name)){
+        if(!ValueResolver.isVariable(name)){
             return Optional.empty();
         }
 

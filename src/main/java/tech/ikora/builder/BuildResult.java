@@ -14,7 +14,7 @@ public class BuildResult {
 
     private long parsingTime;
     private long dependencyResolutionTime;
-    private long linkingTime;
+    private long resolveTime;
     private long buildTime;
 
     public BuildResult(){
@@ -23,7 +23,7 @@ public class BuildResult {
 
         parsingTime = -1;
         dependencyResolutionTime = -1;
-        linkingTime = -1;
+        resolveTime = -1;
         buildTime = -1;
     }
 
@@ -59,12 +59,12 @@ public class BuildResult {
         this.dependencyResolutionTime = dependencyResolutionTime;
     }
 
-    public long getLinkingTime() {
-        return linkingTime;
+    public long getResolveTime() {
+        return resolveTime;
     }
 
-    public void setLinkingTime(long linkingTime) {
-        this.linkingTime = linkingTime;
+    public void setResolveTime(long resolveTime) {
+        this.resolveTime = resolveTime;
     }
 
     public long getBuildTime() {

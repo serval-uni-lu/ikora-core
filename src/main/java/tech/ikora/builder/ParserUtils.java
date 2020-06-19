@@ -39,7 +39,7 @@ public class ParserUtils {
 
         List<Variable> embeddedArguments = new ArrayList<>();
 
-        for(Token embeddedArgument: ValueLinker.findVariables(tokens.first())){
+        for(Token embeddedArgument: ValueResolver.findVariables(tokens.first())){
             try {
                 embeddedArguments.add(Variable.create(embeddedArgument));
             } catch (MalformedVariableException e) {

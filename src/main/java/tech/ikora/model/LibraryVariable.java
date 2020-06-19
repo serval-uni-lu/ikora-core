@@ -2,13 +2,11 @@ package tech.ikora.model;
 
 import tech.ikora.analytics.visitor.NodeVisitor;
 import tech.ikora.analytics.visitor.VisitorMemory;
-import tech.ikora.builder.ValueLinker;
+import tech.ikora.builder.ValueResolver;
 import tech.ikora.runner.Runtime;
 import tech.ikora.types.BaseType;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -30,8 +28,8 @@ public abstract class LibraryVariable implements Node {
 
         this.dependencies = new HashSet<>();
 
-        String patternString = ValueLinker.escape(getName());
-        patternString = ValueLinker.getGenericVariableName(patternString);
+        String patternString = ValueResolver.escape(getName());
+        patternString = ValueResolver.getGenericVariableName(patternString);
         this.pattern = Pattern.compile(patternString, Pattern.CASE_INSENSITIVE);
     }
 
@@ -70,7 +68,7 @@ public abstract class LibraryVariable implements Node {
 
     @Override
     public boolean matches(Token name) {
-        String generic = ValueLinker.getGenericVariableName(name.getText());
+        String generic = ValueResolver.getGenericVariableName(name.getText());
 
         Matcher matcher = pattern.matcher(generic);
         return matcher.matches();

@@ -30,7 +30,7 @@ class BuildResultTest {
         assertNull(build.getSourceFile(URI.create("Fake/path/to/file.robot")));
 
         assertTrue(build.getBuildTime() >= 0);
-        assertTrue(build.getLinkingTime() >= 0);
+        assertTrue(build.getResolveTime() >= 0);
         assertTrue(build.getParsingTime() >= 0);
 
         assertTrue(build.getErrors().isEmpty());
@@ -67,7 +67,7 @@ class BuildResultTest {
         final BuildResult build = Builder.build(files, Helpers.getConfiguration(), true);
 
         assertTrue(build.getBuildTime() >= 0);
-        assertTrue(build.getLinkingTime() >= 0);
+        assertTrue(build.getResolveTime() >= 0);
         assertTrue(build.getParsingTime() >= 0);
         assertTrue(build.getDependencyResolutionTime() >= 0);
     }

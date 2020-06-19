@@ -9,33 +9,33 @@ import tech.ikora.types.BaseTypeList;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
-public class Linker {
+public class SymbolResolver {
     private final Runtime runtime;
 
-    private Linker(Runtime runtime){
+    private SymbolResolver(Runtime runtime){
         this.runtime = runtime;
     }
 
-    public static void link(Runtime runtime) {
-        Linker linker = new Linker(runtime);
+    public static void resolve(Runtime runtime) {
+        SymbolResolver symbolResolver = new SymbolResolver(runtime);
 
         for (SourceFile sourceFile : runtime.getSourceFiles()) {
             for(TestCase testCase: sourceFile.getTestCases()) {
-                linker.linkSteps(testCase);
+                symbolResolver.resolveSteps(testCase);
             }
 
             for(UserKeyword userKeyword: sourceFile.getUserKeywords()) {
-                linker.linkSteps(userKeyword);
+                symbolResolver.resolveSteps(userKeyword);
             }
         }
     }
 
-    public static void link(KeywordCall call, Runtime runtime) {
-        Linker linker = new Linker(runtime);
-        linker.resolveCall(call);
+    public static void resolve(KeywordCall call, Runtime runtime) {
+        SymbolResolver symbolResolver = new SymbolResolver(runtime);
+        symbolResolver.resolveCall(call);
     }
 
-    private void linkSteps(TestCase testCase) {
+    private void resolveSteps(TestCase testCase) {
         KeywordCall setup = testCase.getSetup();
         if(setup != null){
             resolveCall(setup);
@@ -55,7 +55,7 @@ public class Linker {
         }
     }
 
-    private void linkSteps(UserKeyword userKeyword) throws RuntimeException {
+    private void resolveSteps(UserKeyword userKeyword) throws RuntimeException {
         for (Step step: userKeyword) {
             step.getKeywordCall().ifPresent(this::resolveCall);
         }
@@ -77,10 +77,10 @@ public class Linker {
         }
 
 
-        linkCallArguments(call);
+        resolveCallArguments(call);
     }
 
-    private void linkCallArguments(KeywordCall call) {
+    private void resolveCallArguments(KeywordCall call) {
         final Optional<Keyword> keyword = call.getKeyword();
 
         if(!keyword.isPresent()){
@@ -95,7 +95,7 @@ public class Linker {
 
             if(isArgumentListExpendedUntilKeyword(argumentList, keywordIndex)){
                 final List<Argument> argumentsToProcess = argumentList.subList(keywordIndex, argumentList.size());
-                final Argument callArgument = createCallArgument(argumentsToProcess);
+                final Argument callArgument = createKeywordArgument(argumentsToProcess);
 
                 final ArgumentList newArgumentList = new ArgumentList(argumentList.subList(0, keywordIndex));
                 newArgumentList.add(callArgument);
@@ -118,7 +118,7 @@ public class Linker {
         return keywordIndex < varIndex;
     }
 
-    private Argument createCallArgument(List<Argument> arguments) {
+    private Argument createKeywordArgument(List<Argument> arguments) {
         Argument keywordName = arguments.get(0);
 
         KeywordCall call = new KeywordCall(keywordName.getNameToken());

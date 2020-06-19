@@ -3,7 +3,7 @@ package tech.ikora.model;
 import tech.ikora.analytics.Action;
 import tech.ikora.analytics.visitor.NodeVisitor;
 import tech.ikora.analytics.visitor.VisitorMemory;
-import tech.ikora.builder.Linker;
+import tech.ikora.builder.SymbolResolver;
 import tech.ikora.exception.ExecutionException;
 import tech.ikora.runner.Runtime;
 import tech.ikora.utils.LevenshteinDistance;
@@ -79,7 +79,7 @@ public class Assignment extends Step {
 
         if(optional.isPresent()){
             KeywordCall call = optional.get();
-            Linker.link(call, runtime);
+            SymbolResolver.resolve(call, runtime);
 
             if(!runtime.getErrors().isEmpty()){
                 throw new ExecutionException(runtime.getErrors());

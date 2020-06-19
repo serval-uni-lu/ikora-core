@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ValueLinker {
+public class ValueResolver {
     private enum Matching{
         IS_VARIABLE, HAS_VARIABLE, FIND_VARIABLE
     }
@@ -25,7 +25,7 @@ public class ValueLinker {
         escapePattern = Pattern.compile("[[<>!={}()\\[\\].+*?^$\\\\|-]]");
     }
 
-    private ValueLinker() {}
+    private ValueResolver() {}
 
     public static boolean matches(Token left, Token right){
         return matches(left.getText(), right.getText());

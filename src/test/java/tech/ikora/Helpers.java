@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class Helpers {
     public static double epsilon = 0.0001;
 
-    public static Project compileProject(String resourcesPath, boolean link) {
+    public static Project compileProject(String resourcesPath, boolean resolve) {
         File projectFolder = null;
         try {
             projectFolder = tech.ikora.utils.FileUtils.getResourceFile(resourcesPath);
@@ -25,7 +25,7 @@ public class Helpers {
             fail(String.format("Failed to load '%s': %s", resourcesPath, e.getMessage()));
         }
 
-        final BuildResult result = Builder.build(projectFolder, getConfiguration(), link);
+        final BuildResult result = Builder.build(projectFolder, getConfiguration(), resolve);
         assertEquals(1, result.getProjects().size());
 
         return result.getProjects().iterator().next();

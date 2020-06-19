@@ -1,6 +1,6 @@
 package tech.ikora.model;
 
-import tech.ikora.builder.ValueLinker;
+import tech.ikora.builder.ValueResolver;
 import tech.ikora.exception.InvalidDependencyException;
 import tech.ikora.exception.InvalidTypeException;
 
@@ -42,7 +42,7 @@ public abstract class Step extends SourceNode {
 
     @Override
     public boolean matches(Token name){
-        return ValueLinker.matches(this.name, name);
+        return ValueResolver.matches(this.name, name);
     }
 
     public abstract Optional<KeywordCall> getKeywordCall();

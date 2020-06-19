@@ -7,13 +7,13 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ValueLinkerTest {
+class ValueSymbolResolverTest {
     @Test
     void testSimpleMatch(){
         Token left = Token.fromString("Input password");
         Token right = Token.fromString("Input password");
 
-        assertTrue(ValueLinker.matches(left, right));
+        assertTrue(ValueResolver.matches(left, right));
     }
 
     @Test
@@ -21,23 +21,23 @@ class ValueLinkerTest {
         Token left = Token.fromString("Login \"${user}\" with password \"${password}\"");
         Token right = Token.fromString("Login \"admin\" with password \"1234\"");
 
-        assertTrue(ValueLinker.matches(left, right));
+        assertTrue(ValueResolver.matches(left, right));
 
         left = Token.fromString("Cancel of withdraw of <${amount}> in USD : creditor <${name_creditor}> account # <${acount_number_creditor}> - beneficiary <${name_beneficiary}> account # <${account_number_beneficiary}>");
         right = Token.fromString("Cancel of withdraw of <2.500,00> in USD : creditor <John> account # <LU00 1234 5678 9123 0000> - beneficiary <Jane> account # <LU22 4321 8765 3219 0000>");
 
-        assertTrue(ValueLinker.matches(left, right));
+        assertTrue(ValueResolver.matches(left, right));
 
         left = Token.fromString("N° Compte: <${account_number}>");
         right = Token.fromString("N° Compte: <LU00 1234 5678 9123 0000>");
 
-        assertTrue(ValueLinker.matches(left, right));
+        assertTrue(ValueResolver.matches(left, right));
     }
 
     @Test
     void testFindVariables(){
         Token raw = Token.fromString("Login \"@{user}\" with password \"${password}\" with options \"&{options}\"");
-        List<Token> variables = ValueLinker.findVariables(raw);
+        List<Token> variables = ValueResolver.findVariables(raw);
 
         assertEquals(3, variables.size());
         assertEquals("@{user}", variables.get(0).getText());
@@ -48,31 +48,31 @@ class ValueLinkerTest {
     @Test
     void testIsVariable() {
         Token scalar = Token.fromString("${ScalarVariable}");
-        assertTrue(ValueLinker.isVariable(scalar));
+        assertTrue(ValueResolver.isVariable(scalar));
 
         Token list = Token.fromString("@{ListVariable}");
-        assertTrue(ValueLinker.isVariable(list));
+        assertTrue(ValueResolver.isVariable(list));
 
         Token dict = Token.fromString("&{DictVariable}");
-        assertTrue(ValueLinker.isVariable(dict));
+        assertTrue(ValueResolver.isVariable(dict));
 
         Token regularString = Token.fromString("String");
-        assertFalse(ValueLinker.isVariable(regularString));
+        assertFalse(ValueResolver.isVariable(regularString));
     }
 
     @Test
     void testHasVariable() {
         Token scalar = Token.fromString("Some text \"${ScalarVariable}\" More text");
-        assertTrue(ValueLinker.hasVariable(scalar));
+        assertTrue(ValueResolver.hasVariable(scalar));
 
         Token list = Token.fromString("Some text \"@{ListVariable}\" More text");
-        assertTrue(ValueLinker.hasVariable(list));
+        assertTrue(ValueResolver.hasVariable(list));
 
         Token dict = Token.fromString("Some text \"&{DictVariable}\" More text");
-        assertTrue(ValueLinker.hasVariable(dict));
+        assertTrue(ValueResolver.hasVariable(dict));
 
         Token regularString = Token.fromString("String with some text");
-        assertFalse(ValueLinker.hasVariable(regularString));
+        assertFalse(ValueResolver.hasVariable(regularString));
     }
 
  /*
@@ -126,42 +126,42 @@ class ValueLinkerTest {
     @Test
     void testScalarBareNameExtraction(){
         String scalar = "${scalar}";
-        String bareScalar = ValueLinker.getBareVariableName(scalar);
+        String bareScalar = ValueResolver.getBareVariableName(scalar);
         assertEquals("scalar", bareScalar);
     }
 
     @Test
     void checkListBareNameExtraction(){
         String list = "@{list}";
-        String bareList = ValueLinker.getBareVariableName(list);
+        String bareList = ValueResolver.getBareVariableName(list);
         assertEquals("list", bareList);
     }
 
     @Test
     void checkDictionaryBareNameExtraction(){
         String dictionary = "${dictionary}";
-        String bareDictionary = ValueLinker.getBareVariableName(dictionary);
+        String bareDictionary = ValueResolver.getBareVariableName(dictionary);
         assertEquals("dictionary", bareDictionary);
     }
 
     @Test
     void checkVariableWithSpaceToGeneric(){
         String variable = "this is a variable with space";
-        String generic = ValueLinker.getGenericVariableName(variable);
+        String generic = ValueResolver.getGenericVariableName(variable);
         assertEquals("thisisavariablewithspace", generic);
     }
 
     @Test
     void checkVariableWithUnderscoreToGeneric(){
         String variable = "this_is_a_variable_with_underscore";
-        String generic = ValueLinker.getGenericVariableName(variable);
+        String generic = ValueResolver.getGenericVariableName(variable);
         assertEquals("thisisavariablewithunderscore", generic);
     }
 
     @Test
     void checkCompositeBareNameExtraction(){
         String composite = "${ENV-${env}}";
-        String bareComposite = ValueLinker.getBareVariableName(composite);
+        String bareComposite = ValueResolver.getBareVariableName(composite);
         assertEquals("ENV-${env}", bareComposite);
     }
 
@@ -170,13 +170,13 @@ class ValueLinkerTest {
         String simple = "${simple}";
         String parenthesis = "${test(with_parenthesis)}";
 
-        assertEquals("\\$\\{simple\\}", ValueLinker.escape(simple));
-        assertEquals("\\$\\{test\\(with_parenthesis\\)\\}", ValueLinker.escape(parenthesis));
+        assertEquals("\\$\\{simple\\}", ValueResolver.escape(simple));
+        assertEquals("\\$\\{test\\(with_parenthesis\\)\\}", ValueResolver.escape(parenthesis));
     }
 
     @Test
     void checkEscapeDash(){
         String dash = "${30-0931-450-32}";
-        assertEquals("\\$\\{30\\-0931\\-450\\-32\\}", ValueLinker.escape(dash));
+        assertEquals("\\$\\{30\\-0931\\-450\\-32\\}", ValueResolver.escape(dash));
     }
 }
