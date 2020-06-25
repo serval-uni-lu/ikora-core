@@ -8,18 +8,21 @@ import tech.ikora.utils.LevenshteinDistance;
 
 import java.util.*;
 
-public abstract class KeywordDefinition extends SourceNode implements Keyword, Iterable<Step>, Delayable {
+public abstract class KeywordDefinition extends SourceNode implements Keyword, Iterable<Step>, Delayable, ScopeNode {
     private Token name;
     private Tokens documentation;
     private Set<Token> tags;
     private List<Step> steps;
     private TimeOut timeOut;
 
+    protected SourceNodeTable<Variable> localVariables;
+
     KeywordDefinition(){
         steps = new ArrayList<>();
         tags = new HashSet<>();
         documentation = new Tokens();
         this.timeOut = TimeOut.none();
+        localVariables = new SourceNodeTable<>();
     }
 
     public void setName(Token name){
@@ -164,5 +167,9 @@ public abstract class KeywordDefinition extends SourceNode implements Keyword, I
     @Override
     public Type getType(){
         return Type.USER;
+    }
+
+    public SourceNodeTable<Variable> getLocalVariables() {
+        return localVariables.clone();
     }
 }

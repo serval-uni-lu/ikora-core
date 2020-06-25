@@ -12,10 +12,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-public class ForLoop extends Step {
+public class ForLoop extends Step implements ScopeNode {
     private final List<Step> steps;
     private final Variable iterator;
     private final Step interval;
+
+    protected SourceNodeTable<Variable> localVariables;
 
     public ForLoop(Token name, Variable iterator, Step interval, List<Step> steps) {
         super(name);
@@ -29,6 +31,8 @@ public class ForLoop extends Step {
         this.addToken(name);
         this.addTokens(this.iterator.getTokens());
         this.addTokens(this.interval.getTokens());
+
+        localVariables = new SourceNodeTable<>();
 
         this.steps = new ArrayList<>(steps.size());
         for(Step step: steps){
@@ -125,5 +129,13 @@ public class ForLoop extends Step {
         for(Step step: steps){
             step.setTemplate(template);
         }
+    }
+
+    @Override
+    public SourceNodeTable<Variable> getLocalVariables() {
+        SourceNodeTable<Variable> localVariables = this.localVariables.clone();
+        localVariables.add(this.iterator);
+
+        return localVariables;
     }
 }

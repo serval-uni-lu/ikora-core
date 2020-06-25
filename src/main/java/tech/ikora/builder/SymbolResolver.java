@@ -5,6 +5,7 @@ import tech.ikora.error.ErrorMessages;
 import tech.ikora.runner.Runtime;
 import tech.ikora.model.*;
 import tech.ikora.types.BaseTypeList;
+import tech.ikora.utils.Ast;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
@@ -115,7 +116,7 @@ public class SymbolResolver {
         }
 
         for(Variable variable: variables){
-            for(Variable source: resolveVariable(variable)){
+            for(Node source: resolveVariable(variable)){
                 variable.linkToDefinition(source, Link.Import.STATIC);
             }
         }
@@ -191,7 +192,28 @@ public class SymbolResolver {
     }
 
     private Set<Variable> resolveVariable(Variable variable){
-        return runtime.findVariableAssigment(variable);
+        final Set<Variable> variablesFound = new HashSet<>();
+
+        Optional<ScopeNode> parentScope = Ast.getParentByType(variable, ScopeNode.class);
+        while(parentScope.isPresent()){
+            final SourceNodeTable<Variable> localVariables = parentScope.get().getLocalVariables();
+            variablesFound.addAll(localVariables.findNode(variable));
+
+            if(!variablesFound.isEmpty()) break;
+
+            parentScope = Ast.getParentByType(parentScope.get(), ScopeNode.class);
+        }
+
+        if(variablesFound.isEmpty()){
+            final SourceFile sourceFile = variable.getSourceFile();
+            variablesFound.addAll(sourceFile.findVariable(variable.getNameToken()));
+        }
+
+        if(variablesFound.isEmpty()){
+            runtime.findLibraryVariable("", variable.getNameToken());
+        }
+
+        return variablesFound;
     }
 
     private Set<? super Keyword> getKeywords(Token fullName, SourceFile sourceFile) {
@@ -219,7 +241,7 @@ public class SymbolResolver {
 
         if(keywordsFound.isEmpty()){
             try {
-                Keyword runtimeKeyword = runtime.findKeyword(library, name);
+                Keyword runtimeKeyword = runtime.findLibraryKeyword(library, name);
 
                 if(runtimeKeyword != null){
                     keywordsFound.add(runtimeKeyword);

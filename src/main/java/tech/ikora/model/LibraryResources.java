@@ -58,7 +58,7 @@ public class LibraryResources {
         return findKeyword(name);
     }
 
-    public LibraryVariable findVariable(Token name) {
+    public LibraryVariable findVariable(String library, Token name) {
         for(LibraryVariable variable: variables){
             if(variable.matches(name)){
                 return variable;

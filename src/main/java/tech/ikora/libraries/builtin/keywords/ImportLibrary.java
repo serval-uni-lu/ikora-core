@@ -4,6 +4,9 @@ import tech.ikora.model.*;
 import tech.ikora.runner.Runtime;
 import tech.ikora.types.ListType;
 import tech.ikora.types.StringType;
+import tech.ikora.utils.Ast;
+
+import java.util.Optional;
 
 public class ImportLibrary extends LibraryKeyword implements ScopeModifier {
     public ImportLibrary(){
@@ -20,30 +23,17 @@ public class ImportLibrary extends LibraryKeyword implements ScopeModifier {
 
     @Override
     public void addToScope(Runtime runtime, KeywordCall call) {
-        KeywordDefinition parent = null;
-        SourceNode current = call.getAstParent();
+        Optional<KeywordDefinition> parent = Ast.getParentByType(call, KeywordDefinition.class);
 
-        while(current != null){
-            if(Step.class.isAssignableFrom(current.getClass())) {
-                current = current.getAstParent();
-            }
-            else if(KeywordDefinition.class.isAssignableFrom(current.getClass())){
-                parent = (KeywordDefinition) current;
-                break;
-            }
-            else{
-                runtime.getErrors().registerSymbolError(
-                        call.getFile(),
-                        "Failed to resolve dynamic import",
-                        call.getRange()
-                );
-
-                break;
-            }
+        if(parent.isPresent()){
+            runtime.addDynamicLibrary(parent.get(), call.getArgumentList());
         }
-
-        if(parent != null){
-            runtime.addDynamicLibrary(parent, call.getArgumentList());
+        else{
+            runtime.getErrors().registerSymbolError(
+                    call.getFile(),
+                    "Failed to resolve dynamic import",
+                    call.getRange()
+            );
         }
     }
 }

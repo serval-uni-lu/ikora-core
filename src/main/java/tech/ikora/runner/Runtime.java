@@ -30,10 +30,6 @@ public class Runtime {
         this.libraries = libraries;
     }
 
-    public Set<LibraryVariable> findLibraryVariable(Token name){
-        return Collections.singleton(this.libraries.findVariable(name));
-    }
-
     public List<SourceFile> getSourceFiles(){
         return project.getSourceFiles();
     }
@@ -42,7 +38,7 @@ public class Runtime {
         return scope.findInScope(testCases, suites, name);
     }
 
-    public Keyword findKeyword(String library, Token name) throws InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+    public Keyword findLibraryKeyword(String library, Token name) throws InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
         if(library == null){
             return null;
         }
@@ -50,9 +46,12 @@ public class Runtime {
         return libraries.findKeyword(library, name);
     }
 
-    public Set<Variable> findVariableAssigment(Variable variable) {
-        //TODO: define a strategy to find the variable assignment
-        return Collections.emptySet();
+    public LibraryVariable findLibraryVariable(String library, Token name) {
+        if(library == null){
+            return null;
+        }
+
+        return libraries.findVariable(library, name);
     }
 
     public void addToGlobalScope(Variable variable){

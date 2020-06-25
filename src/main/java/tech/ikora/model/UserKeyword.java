@@ -10,20 +10,19 @@ import java.util.List;
 import java.util.Set;
 
 public class UserKeyword extends KeywordDefinition {
-    private List<Variable> parameters;
-    private BaseTypeList parameterTypes;
-    private List<Variable> embeddedVariables;
-    private SourceNodeTable<Variable> localVariables;
+    private final SourceNodeTable<Variable> parameters;
+    private final BaseTypeList parameterTypes;
+    private final SourceNodeTable<Variable> embeddedVariables;
+    private final List<Variable> returnVariables;
 
     private KeywordCall tearDown;
-    private List<Variable> returnVariables;
 
     public UserKeyword() {
-        parameters = new ArrayList<>();
-        parameterTypes = new BaseTypeList();
-        embeddedVariables = new ArrayList<>();
+        parameters = new SourceNodeTable<>();
+        embeddedVariables = new SourceNodeTable<>();
 
-        localVariables = new SourceNodeTable<>();
+        parameterTypes = new BaseTypeList();
+
         returnVariables = new ArrayList<>();
     }
 
@@ -76,12 +75,8 @@ public class UserKeyword extends KeywordDefinition {
         addParameter(embeddedVariable);
     }
 
-    public List<Variable> getParameters() {
+    public SourceNodeTable<Variable> getParameters() {
         return parameters;
-    }
-
-    public Set<Variable> findLocalVariable(Token name) {
-        return localVariables.findNode(name);
     }
 
     @Override
@@ -94,5 +89,14 @@ public class UserKeyword extends KeywordDefinition {
         this.addAstChild(parameter);
 
         parameterTypes.add(BaseTypeFactory.fromVariable(parameter));
+    }
+
+    @Override
+    public SourceNodeTable<Variable> getLocalVariables() {
+        SourceNodeTable<Variable> localVariables = super.getLocalVariables();
+        localVariables.addAll(parameters);
+        localVariables.addAll(embeddedVariables);
+
+        return localVariables;
     }
 }
