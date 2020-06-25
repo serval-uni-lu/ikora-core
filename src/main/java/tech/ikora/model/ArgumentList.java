@@ -3,7 +3,7 @@ package tech.ikora.model;
 import java.util.*;
 
 public class ArgumentList  implements List<Argument> {
-    private List<Argument> arguments;
+    private final List<Argument> arguments;
 
     public ArgumentList(){
         this.arguments = new ArrayList<>();
@@ -135,6 +135,6 @@ public class ArgumentList  implements List<Argument> {
                         .orElse(false))
                 .findFirst();
 
-        return first.map(a -> arguments.indexOf(a)).orElse(-1);
+        return first.map(arguments::indexOf).orElse(-1);
     }
 }
