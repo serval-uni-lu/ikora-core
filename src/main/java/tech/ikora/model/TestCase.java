@@ -13,6 +13,10 @@ public class TestCase extends KeywordDefinition {
     private KeywordCall tearDown = null;
     private KeywordCall template = null;
 
+    public TestCase(Token name) {
+        super(name);
+    }
+
     public void setSetup(KeywordCall setup){
         this.setup = setup;
         this.addAstChild(setup);

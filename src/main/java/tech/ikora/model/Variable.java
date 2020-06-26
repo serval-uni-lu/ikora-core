@@ -31,6 +31,10 @@ public abstract class Variable extends SourceNode {
         this.link.addNode(definition, link);
     }
 
+    public Set<Node> getDefinition(Link.Import linkType){
+        return this.link.getAllLinks(linkType);
+    }
+
     @Override
     public Token getNameToken() {
         return this.name;

@@ -6,14 +6,17 @@ import tech.ikora.exception.InvalidArgumentException;
 import tech.ikora.exception.MalformedVariableException;
 import tech.ikora.model.*;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 public class ParserUtils {
     private ParserUtils(){}
 
-    static List<Variable> parseKeywordName(LineReader reader, Tokens tokens, KeywordDefinition keyword, ErrorManager errors) {
+    static <K extends KeywordDefinition> Optional<K> createKeyword(Class<K> type, LineReader reader, Tokens tokens, ErrorManager errors) {
         if(tokens.size() > 1){
             errors.registerSyntaxError(
                     reader.getFile(),
@@ -21,7 +24,7 @@ public class ParserUtils {
                     Range.fromTokens(tokens.withoutFirst(), reader.getCurrent())
             );
 
-            return Collections.emptyList();
+            return Optional.empty();
         }
 
         if(tokens.isEmpty()){
@@ -31,27 +34,25 @@ public class ParserUtils {
                     Range.fromTokens(tokens, reader.getCurrent())
             );
 
-            return Collections.emptyList();
+            return Optional.empty();
         }
 
-        keyword.setName(tokens.first());
-        keyword.addToken(tokens.first());
+        K keyword = null;
 
-        List<Variable> embeddedArguments = new ArrayList<>();
-
-        for(Token embeddedArgument: ValueResolver.findVariables(tokens.first())){
-            try {
-                embeddedArguments.add(Variable.create(embeddedArgument));
-            } catch (MalformedVariableException e) {
-                errors.registerInternalError(
-                        reader.getFile(),
-                        "Failed to parse embedded argument",
-                        Range.fromToken(embeddedArgument, reader.getCurrent())
-                );
-            }
+        try {
+            final Constructor<K> constructor = type.getConstructor(Token.class);
+            keyword = constructor.newInstance(tokens.first());
+            keyword.addToken(tokens.first());
+            setEmbeddedVariables(keyword, reader, tokens, errors);
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e) {
+            errors.registerInternalError(
+                    reader.getFile(),
+                    "Failed to generate keyword",
+                    Range.fromTokens(tokens, reader.getCurrent())
+            );
         }
 
-        return embeddedArguments;
+        return Optional.ofNullable(keyword);
     }
 
     static Token parseHeaderName(LineReader reader, Tokens tokens, ErrorManager errors){
@@ -97,5 +98,26 @@ public class ParserUtils {
         }
 
         return tokens.first();
+    }
+
+    private static <K> void setEmbeddedVariables(K keyword, LineReader reader, Tokens tokens, ErrorManager errors){
+        if(!UserKeyword.class.isAssignableFrom(keyword.getClass())){
+            return;
+        }
+
+        UserKeyword userKeyword = (UserKeyword)keyword;
+
+        for(Token embeddedVariable: ValueResolver.findVariables(tokens.first())){
+            try {
+                userKeyword.addEmbeddedVariable(Variable.create(embeddedVariable));
+                userKeyword.addToken(embeddedVariable);
+            } catch (MalformedVariableException e) {
+                errors.registerInternalError(
+                        reader.getFile(),
+                        "Failed to parse embedded argument",
+                        Range.fromToken(embeddedVariable, reader.getCurrent())
+                );
+            }
+        }
     }
 }

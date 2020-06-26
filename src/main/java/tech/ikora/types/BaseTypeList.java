@@ -1,6 +1,7 @@
 package tech.ikora.types;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class BaseTypeList implements List<BaseType> {
     final private List<BaseType> argumentTypes;
@@ -128,15 +129,22 @@ public class BaseTypeList implements List<BaseType> {
         return argumentTypes.subList(fromIndex, toIndex);
     }
 
-    public boolean containsKeyword(){
-        return argumentTypes.stream().anyMatch(type -> type instanceof KeywordType);
+    public <T extends BaseType> boolean containsType(Class<T> type){
+        return argumentTypes.stream().anyMatch(t -> type.isAssignableFrom(t.getClass()));
     }
 
-    public int keywordIndex(){
+    public int findFirst(Class<?> type){
         return argumentTypes.stream()
-                .filter(type -> type instanceof KeywordType)
+                .filter(t -> type.isAssignableFrom(t.getClass()))
                 .findFirst()
                 .map(this::indexOf)
                 .orElse(-1);
+    }
+
+    public List<Integer> findAll(Class<?> type){
+        return argumentTypes.stream()
+                .filter(t -> type.isAssignableFrom(t.getClass()))
+                .map(this::indexOf)
+                .collect(Collectors.toList());
     }
 }

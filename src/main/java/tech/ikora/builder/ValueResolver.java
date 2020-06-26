@@ -1,10 +1,9 @@
 package tech.ikora.builder;
 
-import tech.ikora.model.Token;
+import tech.ikora.model.*;
 
 import java.security.InvalidParameterException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -102,5 +101,42 @@ public class ValueResolver {
 
     public static String getGenericVariableName(String s){
         return s.replaceAll("[\\s_]", "").toLowerCase().trim();
+    }
+
+    public static List<Node> getValueNodes(Argument argument){
+        final Optional<SourceNode> definition = argument.getDefinition();
+
+        if(!definition.isPresent()){
+            return Collections.emptyList();
+        }
+
+        if(Variable.class.isAssignableFrom(definition.get().getClass())){
+            return getValueNodes((Variable)definition.get());
+        }
+
+        if(Literal.class.isAssignableFrom(definition.get().getClass())){
+            return Collections.singletonList(definition.get());
+        }
+
+        return Collections.emptyList();
+    }
+
+    public static List<Node> getValueNodes(Variable variable){
+        final Set<Node> definition = variable.getDefinition(Link.Import.BOTH);
+        final List<Node> values = new ArrayList<>();
+
+        for(Node node: definition){
+            if(VariableAssignment.class.isAssignableFrom(node.getClass())){
+                values.addAll(((VariableAssignment)node).getValues());
+            }
+            else if(LibraryVariable.class.isAssignableFrom(node.getClass())){
+                values.addAll(Collections.singletonList(node));
+            }
+            else if(Variable.class.isAssignableFrom(node.getClass())){
+                values.addAll(getValueNodes((Variable)node));
+            }
+        }
+
+        return values;
     }
 }

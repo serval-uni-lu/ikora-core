@@ -17,7 +17,9 @@ public class UserKeyword extends KeywordDefinition {
 
     private KeywordCall tearDown;
 
-    public UserKeyword() {
+    public UserKeyword(Token name) {
+        super(name);
+
         parameters = new SourceNodeTable<>();
         embeddedVariables = new SourceNodeTable<>();
 

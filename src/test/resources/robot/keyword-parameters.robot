@@ -1,5 +1,5 @@
 *** Test Cases ***
-    Test keyword with keyword as argument
+Test keyword with keyword as argument
 
 *** Keywords ***
 Test keyword with keyword as argument

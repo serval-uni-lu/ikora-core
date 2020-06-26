@@ -3,21 +3,25 @@ package tech.ikora.builder;
 import tech.ikora.error.ErrorManager;
 import tech.ikora.error.ErrorMessages;
 import tech.ikora.exception.InvalidTypeException;
-import tech.ikora.model.Step;
-import tech.ikora.model.TestCase;
-import tech.ikora.model.Token;
-import tech.ikora.model.Tokens;
+import tech.ikora.model.*;
 import tech.ikora.utils.StringUtils;
 
 import java.io.IOException;
+import java.util.Optional;
 
 class TestCaseParser {
     private TestCaseParser() {}
 
     public static TestCase parse(LineReader reader, Tokens nameTokens, DynamicImports dynamicImports, ErrorManager errors) throws IOException {
-        TestCase testCase = new TestCase();
+        final Optional<TestCase> optionalTestCase = ParserUtils.createKeyword(TestCase.class, reader, nameTokens, errors);
 
-        ParserUtils.parseKeywordName(reader, nameTokens, testCase, errors);
+        if(!optionalTestCase.isPresent()){
+            throw new IOException(String.format("failed to read test case at line %d in file %s",
+                    reader.getCurrent().getNumber(),
+                    reader.getFile().getAbsolutePath()));
+        }
+
+        final TestCase testCase = optionalTestCase.get();
 
         while(reader.getCurrent().isValid()) {
             if(reader.getCurrent().ignore()) {

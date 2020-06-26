@@ -9,20 +9,23 @@ import tech.ikora.model.*;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 class UserKeywordParser {
     private UserKeywordParser(){}
 
     public static UserKeyword parse(LineReader reader, Tokens nameTokens, DynamicImports dynamicImports, ErrorManager errors) throws IOException {
-        UserKeyword userKeyword = new UserKeyword();
         Tokens tokens;
 
-        final List<Variable> embeddedVariables = ParserUtils.parseKeywordName(reader, nameTokens.withoutIndent(), userKeyword, errors);
+        final Optional<UserKeyword> optionalUserKeyword = ParserUtils.createKeyword(UserKeyword.class, reader, nameTokens.withoutIndent(), errors);
 
-        for(Variable embeddedVariable: embeddedVariables){
-            userKeyword.addEmbeddedVariable(embeddedVariable);
-            userKeyword.addToken(embeddedVariable.getNameToken());
+        if(!optionalUserKeyword.isPresent()){
+            throw new IOException(String.format("failed to read keyword at line %d in file %s",
+                    reader.getCurrent().getNumber(),
+                    reader.getFile().getAbsolutePath()));
         }
+
+        final UserKeyword userKeyword = optionalUserKeyword.get();
 
         while(reader.getCurrent().isValid()) {
             if(reader.getCurrent().ignore()) {

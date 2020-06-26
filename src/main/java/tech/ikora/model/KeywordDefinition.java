@@ -17,15 +17,13 @@ public abstract class KeywordDefinition extends SourceNode implements Keyword, I
 
     protected SourceNodeTable<Variable> localVariables;
 
-    KeywordDefinition(){
+    KeywordDefinition(Token name){
         steps = new ArrayList<>();
         tags = new HashSet<>();
         documentation = new Tokens();
         this.timeOut = TimeOut.none();
         localVariables = new SourceNodeTable<>();
-    }
 
-    public void setName(Token name){
         this.name = name;
     }
 

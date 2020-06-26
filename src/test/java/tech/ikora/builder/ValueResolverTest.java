@@ -1,13 +1,22 @@
 package tech.ikora.builder;
 
+import tech.ikora.Helpers;
+import tech.ikora.model.KeywordCall;
+import tech.ikora.model.Project;
 import tech.ikora.model.Token;
 import org.junit.jupiter.api.Test;
+import tech.ikora.model.UserKeyword;
+import tech.ikora.utils.FileUtils;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ValueSymbolResolverTest {
+class ValueResolverTest {
     @Test
     void testSimpleMatch(){
         Token left = Token.fromString("Input password");
@@ -75,54 +84,6 @@ class ValueSymbolResolverTest {
         assertFalse(ValueResolver.hasVariable(regularString));
     }
 
- /*
-    @Test
-    void checkResolvedSimpleValues() throws InvalidDependencyException {
-        ScalarVariable name = new ScalarVariable(Token.fromString("${name}"));
-        name.addArgument(Token.fromString("John Smith"));
-
-        ScalarVariable password = new ScalarVariable(Token.fromString("${password}"));
-        password.addElement(Token.fromString("secret"));
-
-        Value value = new Value(Token.fromString("Login with ${name} and ${password}"));
-        value.setVariable(Token.fromString("${name}"), name);
-        value.setVariable(Token.fromString("${password}"), password);
-
-        Optional<List<Value>> resolvedValues = value.getResolvedValues();
-
-        assertTrue(resolvedValues.isPresent());
-        assertEquals(1, resolvedValues.get().size());
-        assertEquals("Login with John Smith and secret", resolvedValues.get().get(0).toString());
-    }
-
-    @Test
-    void checkResolveCompositeValues() throws InvalidDependencyException {
-        ScalarVariable name = new ScalarVariable(Token.fromString("${name}"));
-        name.addElement(Token.fromString("John Smith"));
-
-        ScalarVariable environment = new ScalarVariable(Token.fromString("${ENV}"));
-        environment.addElement(Token.fromString("testing"));
-
-        ScalarVariable passwordProduction = new ScalarVariable(Token.fromString("${password-testing}"));
-        passwordProduction.addElement(Token.fromString("secret1"));
-
-        ScalarVariable passwordTesting = new ScalarVariable(Token.fromString("${password-production}"));
-        passwordTesting.addElement(Token.fromString("secret2"));
-
-        Value value = new Value(Token.fromString("Login with ${name} and ${password-${ENV}}"));
-        value.setVariable(Token.fromString("${name}"), name);
-        value.setVariable(Token.fromString("${ENV}"), environment);
-        value.setVariable(Token.fromString("${password-testing}"), passwordTesting);
-        value.setVariable(Token.fromString("${password-production}"), passwordProduction);
-
-        //Optional<List<Value>> resolvedValues = value.getResolvedValues();
-
-        //assertTrue(resolvedValues.isPresent());
-        //assertEquals(1, resolvedValues.get().size());
-        //assertEquals("Login with John Smith and secret2", resolvedValues.get().get(0).toString());
-    }
-*/
-
     @Test
     void testScalarBareNameExtraction(){
         String scalar = "${scalar}";
@@ -131,42 +92,42 @@ class ValueSymbolResolverTest {
     }
 
     @Test
-    void checkListBareNameExtraction(){
+    void testListBareNameExtraction(){
         String list = "@{list}";
         String bareList = ValueResolver.getBareVariableName(list);
         assertEquals("list", bareList);
     }
 
     @Test
-    void checkDictionaryBareNameExtraction(){
+    void testDictionaryBareNameExtraction(){
         String dictionary = "${dictionary}";
         String bareDictionary = ValueResolver.getBareVariableName(dictionary);
         assertEquals("dictionary", bareDictionary);
     }
 
     @Test
-    void checkVariableWithSpaceToGeneric(){
+    void testVariableWithSpaceToGeneric(){
         String variable = "this is a variable with space";
         String generic = ValueResolver.getGenericVariableName(variable);
         assertEquals("thisisavariablewithspace", generic);
     }
 
     @Test
-    void checkVariableWithUnderscoreToGeneric(){
+    void testVariableWithUnderscoreToGeneric(){
         String variable = "this_is_a_variable_with_underscore";
         String generic = ValueResolver.getGenericVariableName(variable);
         assertEquals("thisisavariablewithunderscore", generic);
     }
 
     @Test
-    void checkCompositeBareNameExtraction(){
+    void testCompositeBareNameExtraction(){
         String composite = "${ENV-${env}}";
         String bareComposite = ValueResolver.getBareVariableName(composite);
         assertEquals("ENV-${env}", bareComposite);
     }
 
     @Test
-    void checkEscapeParenthesis(){
+    void testEscapeParenthesis(){
         String simple = "${simple}";
         String parenthesis = "${test(with_parenthesis)}";
 
@@ -175,8 +136,32 @@ class ValueSymbolResolverTest {
     }
 
     @Test
-    void checkEscapeDash(){
+    void testEscapeDash(){
         String dash = "${30-0931-450-32}";
         assertEquals("\\$\\{30\\-0931\\-450\\-32\\}", ValueResolver.escape(dash));
+    }
+
+    @Test
+    void testGetValuesWithSimpleAssignment() throws IOException, URISyntaxException {
+        final File file = FileUtils.getResourceFile("robot/assignment/simple-assignment.robot");
+        final BuildResult result = Builder.build(file, Helpers.getConfiguration(), true);
+
+        final Project project = result.getProjects().iterator().next();
+
+        final Set<UserKeyword> ofInterest = project.findUserKeyword(Token.fromString("From direct assignment"));
+        final UserKeyword keyword = ofInterest.iterator().next();
+
+        final KeywordCall call = (KeywordCall)keyword.getStep(0);
+        assertEquals(1, call.getArgumentList().size());
+    }
+
+    @Test
+    void testGetValuesWithMultipleAssignments(){
+
+    }
+
+    @Test
+    void testGetValuesFromKeywordParameters(){
+
     }
 }

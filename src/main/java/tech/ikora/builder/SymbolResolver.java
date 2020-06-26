@@ -5,6 +5,7 @@ import tech.ikora.error.ErrorMessages;
 import tech.ikora.runner.Runtime;
 import tech.ikora.model.*;
 import tech.ikora.types.BaseTypeList;
+import tech.ikora.types.KeywordType;
 import tech.ikora.utils.Ast;
 
 import java.lang.reflect.InvocationTargetException;
@@ -132,10 +133,10 @@ public class SymbolResolver {
         final ArgumentList argumentList = call.getArgumentList();
         final BaseTypeList argumentTypes = keyword.get().getArgumentTypes();
 
-        if(argumentTypes.containsKeyword()){
-            int keywordIndex = argumentTypes.keywordIndex();
+        if(argumentTypes.containsType(KeywordType.class)){
+            int keywordIndex = argumentTypes.findFirst(KeywordType.class);
 
-            if(isArgumentListExpendedUntilKeyword(argumentList, keywordIndex)){
+            if(argumentList.isExpendedUntilPosition(keywordIndex)){
                 final List<Argument> argumentsToProcess = argumentList.subList(keywordIndex, argumentList.size());
                 final Argument callArgument = createKeywordArgument(argumentsToProcess);
 
@@ -155,16 +156,7 @@ public class SymbolResolver {
         return Optional.empty();
     }
 
-    private boolean isArgumentListExpendedUntilKeyword(ArgumentList argumentList, int keywordIndex){
-        int listIndex = argumentList.findFirst(ListVariable.class);
-        int dictIndex = argumentList.findFirst(DictionaryVariable.class);
 
-        int varIndex = argumentList.size();
-        varIndex = listIndex != -1 ? Math.min(varIndex, listIndex) : varIndex;
-        varIndex = dictIndex != -1 ? Math.min(varIndex, dictIndex) : varIndex;
-
-        return keywordIndex < varIndex;
-    }
 
     private Argument createKeywordArgument(List<Argument> arguments) {
         Argument keywordName = arguments.get(0);

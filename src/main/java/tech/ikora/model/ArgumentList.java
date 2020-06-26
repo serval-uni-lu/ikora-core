@@ -1,5 +1,8 @@
 package tech.ikora.model;
 
+import tech.ikora.types.BaseType;
+import tech.ikora.types.BaseTypeList;
+
 import java.util.*;
 
 public class ArgumentList  implements List<Argument> {
@@ -136,5 +139,16 @@ public class ArgumentList  implements List<Argument> {
                 .findFirst();
 
         return first.map(arguments::indexOf).orElse(-1);
+    }
+
+    public boolean isExpendedUntilPosition(int position){
+        int listIndex = findFirst(ListVariable.class);
+        int dictIndex = findFirst(DictionaryVariable.class);
+
+        int varIndex = size();
+        varIndex = listIndex != -1 ? Math.min(varIndex, listIndex) : varIndex;
+        varIndex = dictIndex != -1 ? Math.min(varIndex, dictIndex) : varIndex;
+
+        return position < varIndex;
     }
 }
