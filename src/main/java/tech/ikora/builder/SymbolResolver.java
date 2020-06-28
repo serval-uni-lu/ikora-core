@@ -110,7 +110,6 @@ public class SymbolResolver {
 
         if(Variable.class.isAssignableFrom(definition.get().getClass())){
             variables.add((Variable)definition.get());
-
         }
         else if(Literal.class.isAssignableFrom(definition.get().getClass())){
             variables.addAll(((Literal)definition.get()).getVariables());

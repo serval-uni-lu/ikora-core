@@ -1,17 +1,15 @@
 package tech.ikora.builder;
 
 import tech.ikora.Helpers;
-import tech.ikora.model.KeywordCall;
-import tech.ikora.model.Project;
-import tech.ikora.model.Token;
+import tech.ikora.model.*;
 import org.junit.jupiter.api.Test;
-import tech.ikora.model.UserKeyword;
 import tech.ikora.utils.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -152,16 +150,36 @@ class ValueResolverTest {
         final UserKeyword keyword = ofInterest.iterator().next();
 
         final KeywordCall call = (KeywordCall)keyword.getStep(0);
-        assertEquals(1, call.getArgumentList().size());
+        final Argument argument = call.getArgumentList().get(0);
+
+        final Optional<SourceNode> value = argument.getDefinition();
+        assertTrue(value.isPresent());
+
+        final Set<Node> definitions = ((Variable) value.get()).getDefinition(Link.Import.BOTH);
+        final Node definition = definitions.iterator().next();
+
+        assertTrue(definition instanceof VariableAssignment);
     }
 
     @Test
-    void testGetValuesWithMultipleAssignments(){
+    void testGetValuesFromKeywordParameters() throws IOException, URISyntaxException {
+        final File file = FileUtils.getResourceFile("robot/assignment/parameter-assignment.robot");
+        final BuildResult result = Builder.build(file, Helpers.getConfiguration(), true);
 
-    }
+        final Project project = result.getProjects().iterator().next();
 
-    @Test
-    void testGetValuesFromKeywordParameters(){
+        final Set<UserKeyword> ofInterest = project.findUserKeyword(Token.fromString("From parameter assignment"));
+        final UserKeyword keyword = ofInterest.iterator().next();
 
+        final KeywordCall call = (KeywordCall)keyword.getStep(0);
+        final Argument argument = call.getArgumentList().get(0);
+
+        final Optional<SourceNode> value = argument.getDefinition();
+        assertTrue(value.isPresent());
+
+        final Set<Node> definitions = ((Variable) value.get()).getDefinition(Link.Import.BOTH);
+        final Node definition = definitions.iterator().next();
+
+        assertTrue(definition instanceof ScalarVariable);
     }
 }
