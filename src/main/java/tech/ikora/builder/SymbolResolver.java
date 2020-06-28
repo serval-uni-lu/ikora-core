@@ -144,18 +144,8 @@ public class SymbolResolver {
 
                 call.setArgumentList(newArgumentList);
             }
-            else{
-                final Optional<List<ArgumentList>> unpacked = tryToUnpackArgumentList(argumentList);
-            }
         }
     }
-
-    private Optional<List<ArgumentList>> tryToUnpackArgumentList(ArgumentList argumentList){
-        List<ArgumentList> unpacked = new ArrayList<>();
-        return Optional.empty();
-    }
-
-
 
     private Argument createKeywordArgument(List<Argument> arguments) {
         Argument keywordName = arguments.get(0);
