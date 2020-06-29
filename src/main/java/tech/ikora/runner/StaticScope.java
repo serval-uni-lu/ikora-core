@@ -135,7 +135,7 @@ public class StaticScope implements Scope{
     }
 
     @Override
-    public List<Variable> getReturnVariables() {
+    public List<Argument> getReturnValues() {
         return Collections.emptyList();
     }
 

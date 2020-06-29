@@ -17,7 +17,7 @@ public class ForLoop extends Step implements ScopeNode {
     private final Variable iterator;
     private final Step interval;
 
-    protected SourceNodeTable<Variable> localVariables;
+    protected List<Variable> localVariables;
 
     public ForLoop(Token name, Variable iterator, Step interval, List<Step> steps) {
         super(name);
@@ -32,7 +32,7 @@ public class ForLoop extends Step implements ScopeNode {
         this.addTokens(this.iterator.getTokens());
         this.addTokens(this.interval.getTokens());
 
-        localVariables = new SourceNodeTable<>();
+        localVariables = new ArrayList<>();
 
         this.steps = new ArrayList<>(steps.size());
         for(Step step: steps){
@@ -132,8 +132,8 @@ public class ForLoop extends Step implements ScopeNode {
     }
 
     @Override
-    public SourceNodeTable<Variable> getLocalVariables() {
-        SourceNodeTable<Variable> localVariables = this.localVariables.clone();
+    public List<Variable> getLocalVariables() {
+        List<Variable> localVariables = new ArrayList<>(this.localVariables);
         localVariables.add(this.iterator);
 
         return localVariables;

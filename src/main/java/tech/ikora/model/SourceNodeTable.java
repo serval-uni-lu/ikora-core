@@ -136,6 +136,12 @@ public class SourceNodeTable<T extends SourceNode> extends SourceNode implements
         }
     }
 
+    public void addAll(Collection<T> nodes){
+        for(T node: nodes){
+            add(node);
+        }
+    }
+
     public void clear() {
         this.nodeList.clear();
     }

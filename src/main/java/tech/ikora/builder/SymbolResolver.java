@@ -10,6 +10,7 @@ import tech.ikora.utils.Ast;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class SymbolResolver {
     private final Runtime runtime;
@@ -177,8 +178,8 @@ public class SymbolResolver {
 
         Optional<ScopeNode> parentScope = Ast.getParentByType(variable, ScopeNode.class);
         while(parentScope.isPresent()){
-            final SourceNodeTable<Variable> localVariables = parentScope.get().getLocalVariables();
-            variablesFound.addAll(localVariables.findNode(variable));
+            final List<Variable> localVariables = parentScope.get().getLocalVariables();
+            variablesFound.addAll(localVariables.stream().filter(v -> v.matches(variable.getNameToken())).collect(Collectors.toList()));
 
             if(!variablesFound.isEmpty()) break;
 

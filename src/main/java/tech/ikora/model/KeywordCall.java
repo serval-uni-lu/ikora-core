@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 public class KeywordCall extends Step {
     private Link<KeywordCall, Keyword> link;
-    private List<Variable> returnVariables;
+    private ArgumentList returnValues;
     private Gherkin gherkin;
 
     public KeywordCall(Token name) {
@@ -49,7 +49,7 @@ public class KeywordCall extends Step {
                 .map(node -> (Argument) node)
                 .collect(Collectors.toList());
 
-        return new ArgumentList(arguments);
+        return new ArgumentList(Token.empty(), arguments);
     }
 
     public void setArgumentList(ArgumentList argumentList) {
@@ -82,7 +82,6 @@ public class KeywordCall extends Step {
 
         if(callee.isPresent()){
             callee.get().execute(runtime);
-            returnVariables = runtime.getReturnVariables();
         }
         else{
             throw new Exception("Need to have a better exception");
@@ -163,8 +162,8 @@ public class KeywordCall extends Step {
         return builder.toString();
     }
 
-    public List<Variable> getReturnVariables() {
-        return this.returnVariables;
+    public ArgumentList getReturnValues() {
+        return this.returnValues;
     }
 
     @Override

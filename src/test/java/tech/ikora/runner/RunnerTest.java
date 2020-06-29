@@ -17,6 +17,7 @@ class RunnerTest {
         try {
             Report report = runner.execute();
             assertEquals(Globals.APPLICATION_CANONICAL, report.getGenerator());
+            fail("Should have raised an UnsupportedOperationException at this point.");
         } catch (UnsupportedOperationException e) {
             e.getMessage();
         } catch (Exception e) {
@@ -25,13 +26,16 @@ class RunnerTest {
     }
 
     @Test
-    void ExecuteWithSuiteWithAssignment(){
+    void ExecuteWithSuiteWithAssignment() {
         Project project = Helpers.compileProject("robot/assignment", false);
         Runner runner = new Runner(project);
 
-        try {
+        try{
             Report report = runner.execute();
             assertEquals(Globals.APPLICATION_CANONICAL, report.getGenerator());
+            fail("Should have raised an UnsupportedOperationException at this point.");
+        } catch (UnsupportedOperationException e) {
+            e.getMessage();
         } catch (Exception e) {
             fail(e.getMessage());
         }

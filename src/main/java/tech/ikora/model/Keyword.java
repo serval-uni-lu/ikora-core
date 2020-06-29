@@ -10,7 +10,7 @@ public interface Keyword extends Node {
     }
 
     Type getType();
-    List<Variable> getReturnVariables();
+    ArgumentList getReturnValues();
     Tokens getDocumentation();
     BaseTypeList getArgumentTypes();
 }

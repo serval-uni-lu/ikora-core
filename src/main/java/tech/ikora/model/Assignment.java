@@ -14,13 +14,13 @@ import java.util.List;
 import java.util.Optional;
 
 public class Assignment extends Step {
-    private List<Variable> leftHandOperand;
+    private ParameterList leftHandOperand;
     private Argument rightHandOperand;
 
     public Assignment(Token name, List<Variable> leftHandOperand, KeywordCall rightHandOperand) {
         super(name);
 
-        this.leftHandOperand = new ArrayList<>(leftHandOperand.size());
+        this.leftHandOperand = new ParameterList();
 
         for(Variable returnVariable: leftHandOperand){
             this.addReturnVariable(returnVariable);
@@ -42,7 +42,7 @@ public class Assignment extends Step {
         leftHandOperand.add(variable);
     }
 
-    public List<Variable> getLeftHandOperand() {
+    public ParameterList getLeftHandOperand() {
         return leftHandOperand;
     }
 
@@ -89,7 +89,6 @@ public class Assignment extends Step {
 
             if(callee.isPresent()){
                 callee.get().execute(runtime);
-                assignVariables(runtime.getReturnVariables());
             }
             else{
                 throw new Exception("Need to have a better exception");
@@ -170,7 +169,7 @@ public class Assignment extends Step {
         visitor.visit(this, memory);
     }
 
-    private void assignVariables(List<Variable> returnValues){
+    private void assignVariables(List<Argument> returnValues){
         //TODO: implement assignment
     }
 }

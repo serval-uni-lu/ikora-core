@@ -15,14 +15,14 @@ public abstract class KeywordDefinition extends SourceNode implements Keyword, I
     private List<Step> steps;
     private TimeOut timeOut;
 
-    protected SourceNodeTable<Variable> localVariables;
+    protected List<Variable> localVariables;
 
     KeywordDefinition(Token name){
         steps = new ArrayList<>();
         tags = new HashSet<>();
         documentation = new Tokens();
         this.timeOut = TimeOut.none();
-        localVariables = new SourceNodeTable<>();
+        localVariables = new ArrayList<>();
 
         this.name = name;
     }
@@ -167,7 +167,7 @@ public abstract class KeywordDefinition extends SourceNode implements Keyword, I
         return Type.USER;
     }
 
-    public SourceNodeTable<Variable> getLocalVariables() {
-        return localVariables.clone();
+    public List<Variable> getLocalVariables() {
+        return new ArrayList<>(localVariables);
     }
 }

@@ -1,18 +1,33 @@
 package tech.ikora.model;
 
-import tech.ikora.types.BaseType;
-import tech.ikora.types.BaseTypeList;
+import tech.ikora.analytics.Action;
+import tech.ikora.analytics.visitor.NodeVisitor;
+import tech.ikora.analytics.visitor.VisitorMemory;
+import tech.ikora.runner.Runtime;
 
 import java.util.*;
 
-public class ArgumentList  implements List<Argument> {
+public class ArgumentList extends SourceNode implements List<Argument> {
+    private final Token tag;
     private final List<Argument> arguments;
 
     public ArgumentList(){
+        this.tag = Token.empty();
+        this.arguments = new ArrayList<>();
+    }
+
+    public ArgumentList(Token tag){
+        this.tag = tag;
         this.arguments = new ArrayList<>();
     }
 
     public ArgumentList(List<Argument> arguments) {
+        this.tag = Token.empty();
+        this.arguments = arguments;
+    }
+
+    public ArgumentList(Token tag, List<Argument> arguments) {
+        this.tag = tag;
         this.arguments = arguments;
     }
 
@@ -48,11 +63,16 @@ public class ArgumentList  implements List<Argument> {
 
     @Override
     public boolean add(Argument argument) {
+        this.addAstChild(argument);
         return arguments.add(argument);
     }
 
     @Override
     public boolean remove(Object o) {
+        if(arguments.contains(o)){
+            this.removeAstChild((Argument)o);
+        }
+
         return arguments.remove(o);
     }
 
@@ -63,22 +83,34 @@ public class ArgumentList  implements List<Argument> {
 
     @Override
     public boolean addAll(Collection<? extends Argument> c) {
-        return arguments.addAll(c);
+        boolean success = true;
+
+        for(Argument argument: c){
+            success &= add(argument);
+        }
+
+        return success;
     }
 
     @Override
     public boolean addAll(int index, Collection<? extends Argument> c) {
-        return arguments.addAll(index, c);
+        throw new UnsupportedOperationException("This addAll(Collection) is not supported by the ArgumentList");
     }
 
     @Override
     public boolean removeAll(Collection<?> c) {
-        return arguments.removeAll(c);
+        boolean success = true;
+
+        for(Object o: c){
+            success &= remove(o);
+        }
+
+        return success;
     }
 
     @Override
     public boolean retainAll(Collection<?> c) {
-        return arguments.retainAll(c);
+        throw new UnsupportedOperationException("This retainAll(Collection) is not supported by the ArgumentList");
     }
 
     @Override
@@ -97,13 +129,17 @@ public class ArgumentList  implements List<Argument> {
     }
 
     @Override
-    public void add(int index, Argument element) {
-        arguments.add(index, element);
+    public void add(int index, Argument argument) {
+        this.addAstChild(argument);
+        arguments.add(index, argument);
     }
 
     @Override
     public Argument remove(int index) {
-        return arguments.remove(index);
+        Argument argument = arguments.get(index);
+        remove(argument);
+
+        return argument;
     }
 
     @Override
@@ -150,5 +186,39 @@ public class ArgumentList  implements List<Argument> {
         varIndex = dictIndex != -1 ? Math.min(varIndex, dictIndex) : varIndex;
 
         return position < varIndex;
+    }
+
+    @Override
+    public Token getNameToken() {
+        return this.tag;
+    }
+
+    @Override
+    public double distance(Differentiable other) {
+        return 0;
+    }
+
+    @Override
+    public List<Action> differences(Differentiable other) {
+        return null;
+    }
+
+    @Override
+    public boolean matches(Token name) {
+        if(this.tag.isEmpty()){
+            return false;
+        }
+
+        return this.tag.equalsIgnorePosition(name);
+    }
+
+    @Override
+    public void accept(NodeVisitor visitor, VisitorMemory memory) {
+
+    }
+
+    @Override
+    public void execute(Runtime runtime) throws Exception {
+
     }
 }

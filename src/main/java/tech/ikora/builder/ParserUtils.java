@@ -105,12 +105,11 @@ public class ParserUtils {
             return;
         }
 
-        UserKeyword userKeyword = (UserKeyword)keyword;
+        ParameterList arguments = new ParameterList(Token.empty());
 
         for(Token embeddedVariable: ValueResolver.findVariables(tokens.first())){
             try {
-                userKeyword.addEmbeddedVariable(Variable.create(embeddedVariable));
-                userKeyword.addToken(embeddedVariable);
+                arguments.add(Variable.create(embeddedVariable));
             } catch (MalformedVariableException e) {
                 errors.registerInternalError(
                         reader.getFile(),
@@ -119,5 +118,7 @@ public class ParserUtils {
                 );
             }
         }
+
+        ((UserKeyword)keyword).setArgumentList(arguments);
     }
 }

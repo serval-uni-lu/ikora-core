@@ -45,7 +45,7 @@ public abstract class SourceNode implements Node, Differentiable {
         this.setSourceFile(astParent.getSourceFile());
     }
 
-    public void addAstChild(SourceNode astChild){
+    protected void addAstChild(SourceNode astChild){
         if(astChild == null || astChildren.contains(astChild)){
             return;
         }
@@ -61,6 +61,15 @@ public abstract class SourceNode implements Node, Differentiable {
 
         astChild.setAstParent(this);
         astChildren.add(index, astChild);
+    }
+
+    protected void removeAstChild(SourceNode astChild){
+        if(astChild == null || !astChildren.contains(astChild)){
+            return;
+        }
+
+        astChild.setAstParent(null);
+        astChildren.remove(astChild);
     }
 
     protected void clearAstChildren() {

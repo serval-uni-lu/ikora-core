@@ -79,8 +79,8 @@ public abstract class LibraryKeyword implements Keyword {
     }
 
     @Override
-    public List<Variable> getReturnVariables(){
-        return Collections.emptyList();
+    public ArgumentList getReturnValues(){
+        return new ArgumentList();
     }
 
     @Override

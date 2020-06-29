@@ -1,5 +1,7 @@
 package tech.ikora.model;
 
+import java.util.List;
+
 public interface ScopeNode {
-    SourceNodeTable<Variable> getLocalVariables();
+    List<Variable> getLocalVariables();
 }

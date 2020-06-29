@@ -1,35 +1,35 @@
 package tech.ikora.model;
 
+
 import tech.ikora.analytics.visitor.NodeVisitor;
 import tech.ikora.analytics.visitor.VisitorMemory;
 import tech.ikora.exception.InvalidTypeException;
 import tech.ikora.types.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public class UserKeyword extends KeywordDefinition {
-    private final SourceNodeTable<Variable> parameters;
-    private final BaseTypeList parameterTypes;
-    private final SourceNodeTable<Variable> embeddedVariables;
-    private final List<Variable> returnVariables;
+    private ParameterList arguments;
+    private ArgumentList returnVariables;
 
     private KeywordCall tearDown;
 
     public UserKeyword(Token name) {
         super(name);
-
-        parameters = new SourceNodeTable<>();
-        embeddedVariables = new SourceNodeTable<>();
-
-        parameterTypes = new BaseTypeList();
-
-        returnVariables = new ArrayList<>();
+        this.arguments = new ParameterList(Token.empty());
+        this.returnVariables = new ArgumentList(Token.empty());
     }
 
-    public KeywordCall getTearDown() {
-        return tearDown;
+    public void setArgumentList(ParameterList arguments){
+        this.arguments = arguments;
+        this.addAstChild(this.arguments);
+        addTokens(arguments.getTokens());
+    }
+
+    public void setReturnVariables(ArgumentList returnVariables){
+        this.returnVariables = returnVariables;
+        this.addAstChild(this.returnVariables);
+        addTokens(returnVariables.getTokens());
     }
 
     public void setTearDown(KeywordCall tearDown) {
@@ -41,44 +41,23 @@ public class UserKeyword extends KeywordDefinition {
         setTearDown(tearDown.toCall());
     }
 
-    public void addReturnVariable(Variable returnVariable) {
-        returnVariables.add(returnVariable);
-        this.addAstChild(returnVariable);
-    }
-
     @Override
     public void addStep(Step step) throws Exception {
         super.addStep(step);
 
         if(Assignment.class.isAssignableFrom(step.getClass())){
-            for (Variable variable: ((Assignment)step).getLeftHandOperand()){
-                localVariables.add(variable);
-            }
+            localVariables.addAll(((Assignment) step).getLeftHandOperand());
         }
     }
 
     @Override
-    public List<Variable> getReturnVariables() {
+    public ArgumentList getReturnValues() {
         return returnVariables;
     }
 
     @Override
     public BaseTypeList getArgumentTypes() {
-        return parameterTypes;
-    }
-
-    public void addExplicitParameter(Variable parameter){
-        parameters.add(parameter);
-        addParameter(parameter);
-    }
-
-    public void addEmbeddedVariable(Variable embeddedVariable) {
-        embeddedVariables.add(embeddedVariable);
-        addParameter(embeddedVariable);
-    }
-
-    public SourceNodeTable<Variable> getParameters() {
-        return parameters;
+        return arguments.getBaseTypes();
     }
 
     @Override
@@ -86,18 +65,10 @@ public class UserKeyword extends KeywordDefinition {
         visitor.visit(this, memory);
     }
 
-    private void addParameter(Variable parameter){
-        localVariables.add(parameter);
-        this.addAstChild(parameter);
-
-        parameterTypes.add(BaseTypeFactory.fromVariable(parameter));
-    }
-
     @Override
-    public SourceNodeTable<Variable> getLocalVariables() {
-        SourceNodeTable<Variable> localVariables = super.getLocalVariables();
-        localVariables.addAll(parameters);
-        localVariables.addAll(embeddedVariables);
+    public List<Variable> getLocalVariables() {
+        List<Variable> localVariables = super.getLocalVariables();
+        localVariables.addAll(arguments);
 
         return localVariables;
     }

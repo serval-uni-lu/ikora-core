@@ -8,7 +8,6 @@ import tech.ikora.utils.StringUtils;
 import tech.ikora.model.*;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Optional;
 
 class UserKeywordParser {
@@ -52,12 +51,12 @@ class UserKeywordParser {
                 parseTags(reader, tokens.withoutFirst(), userKeyword);
             }
             else if (StringUtils.compareNoCase(label, "\\[arguments\\]")) {
-                userKeyword.addToken(label.setType(Token.Type.LABEL));
-                parseParameters(reader, tokens.withoutFirst(), userKeyword, errors);
+                ParameterList arguments = parseArguments(reader, label, tokens.withoutFirst(), errors);
+                userKeyword.setArgumentList(arguments);
             }
             else if (StringUtils.compareNoCase(label, "\\[return\\]")) {
-                userKeyword.addToken(label.setType(Token.Type.LABEL));
-                parseReturn(reader, tokens.withoutFirst(), userKeyword, errors);
+                ArgumentList returnValues = parseReturn(reader, label, tokens.withoutFirst(), errors);
+                userKeyword.setReturnVariables(returnValues);
             }
             else if (StringUtils.compareNoCase(label, "\\[teardown\\]")) {
                 userKeyword.addToken(label.setType(Token.Type.LABEL));
@@ -89,11 +88,12 @@ class UserKeywordParser {
         }
     }
 
-    private static void parseParameters(LineReader reader, Tokens tokens, UserKeyword userKeyword, ErrorManager errors) throws IOException {
-        for(Token token: tokens){
+    private static ParameterList parseArguments(LineReader reader, Token label, Tokens values, ErrorManager errors) {
+        ParameterList arguments = new ParameterList(label);
+
+        for(Token token: values){
             try {
-                userKeyword.addExplicitParameter(Variable.create(token));
-                userKeyword.addToken(token);
+                arguments.add(Variable.create(token));
             } catch (MalformedVariableException e) {
                 errors.registerSyntaxError(
                         reader.getFile(),
@@ -102,12 +102,16 @@ class UserKeywordParser {
                 );
             }
         }
+
+        return arguments;
     }
 
-    private static void parseReturn(LineReader reader, Tokens tokens, UserKeyword userKeyword, ErrorManager errors) throws IOException {
+    private static ArgumentList parseReturn(LineReader reader, Token label, Tokens tokens, ErrorManager errors) {
+        ArgumentList returnValues = new ArgumentList(label.setType(Token.Type.LABEL));
+
         for(Token token: tokens){
             try {
-                userKeyword.addReturnVariable(Variable.create(token));
+                returnValues.add(new Argument(Variable.create(token)));
             } catch (MalformedVariableException e) {
                 errors.registerSyntaxError(
                         reader.getFile(),
@@ -116,6 +120,8 @@ class UserKeywordParser {
                 );
             }
         }
+
+        return returnValues;
     }
 
     private static void parseTeardown(LineReader reader, Tokens tokens, UserKeyword userKeyword, ErrorManager errors) throws IOException {

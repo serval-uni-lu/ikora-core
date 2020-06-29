@@ -6,7 +6,6 @@ import tech.ikora.report.ReportBuilder;
 import tech.ikora.model.*;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -111,8 +110,8 @@ public class Runtime {
         return scope.getTestCase();
     }
 
-    public List<Variable> getReturnVariables() {
-        return scope.getReturnVariables();
+    public List<Argument> getReturnValues() {
+        return scope.getReturnValues();
     }
 
     public ErrorManager getErrors() {

@@ -4,10 +4,7 @@ import tech.ikora.Helpers;
 import tech.ikora.error.ErrorManager;
 import tech.ikora.error.ErrorMessages;
 import tech.ikora.error.Errors;
-import tech.ikora.model.Assignment;
-import tech.ikora.model.KeywordCall;
-import tech.ikora.model.Tokens;
-import tech.ikora.model.Variable;
+import tech.ikora.model.*;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
