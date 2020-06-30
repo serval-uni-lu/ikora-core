@@ -20,6 +20,18 @@ public class UserKeyword extends KeywordDefinition {
         this.returnVariables = new NodeList<>(Token.empty());
     }
 
+    public NodeList<Variable> getArguments() {
+        return arguments;
+    }
+
+    public NodeList<Value> getReturnVariables() {
+        return returnVariables;
+    }
+
+    public KeywordCall getTearDown() {
+        return tearDown;
+    }
+
     public void setArgumentList(NodeList<Variable> arguments){
         this.arguments = arguments;
         this.addAstChild(this.arguments);
