@@ -47,15 +47,15 @@ class UserKeywordParser {
                 parseDocumentation(reader, tokens.withoutFirst(), userKeyword);
             }
             else if (StringUtils.compareNoCase(label, "\\[tags\\]")) {
-                userKeyword.addToken(label.setType(Token.Type.LABEL));
-                parseTags(reader, tokens.withoutFirst(), userKeyword);
+                final NodeList<Literal> tags = ParserUtils.parseTags(label, tokens.withoutFirst());
+                userKeyword.setTags(tags);
             }
             else if (StringUtils.compareNoCase(label, "\\[arguments\\]")) {
-                ParameterList arguments = parseArguments(reader, label, tokens.withoutFirst(), errors);
+                NodeList<Variable> arguments = parseArguments(reader, label, tokens.withoutFirst(), errors);
                 userKeyword.setArgumentList(arguments);
             }
             else if (StringUtils.compareNoCase(label, "\\[return\\]")) {
-                ArgumentList returnValues = parseReturn(reader, label, tokens.withoutFirst(), errors);
+                NodeList<Value> returnValues = parseReturn(label, tokens.withoutFirst());
                 userKeyword.setReturnVariables(returnValues);
             }
             else if (StringUtils.compareNoCase(label, "\\[teardown\\]")) {
@@ -79,17 +79,8 @@ class UserKeywordParser {
         userKeyword.setDocumentation(tokens);
     }
 
-    private static void parseTags(LineReader reader, Tokens tokens, UserKeyword userKeyword) throws IOException {
-        userKeyword.addTokens(tokens);
-
-        for(Token token: tokens){
-            userKeyword.addTag(token);
-            userKeyword.addToken(token.setType(Token.Type.TAG));
-        }
-    }
-
-    private static ParameterList parseArguments(LineReader reader, Token label, Tokens values, ErrorManager errors) {
-        ParameterList arguments = new ParameterList(label);
+    private static NodeList<Variable> parseArguments(LineReader reader, Token label, Tokens values, ErrorManager errors) {
+        NodeList<Variable> arguments = new NodeList<>(label);
 
         for(Token token: values){
             try {
@@ -106,19 +97,11 @@ class UserKeywordParser {
         return arguments;
     }
 
-    private static ArgumentList parseReturn(LineReader reader, Token label, Tokens tokens, ErrorManager errors) {
-        ArgumentList returnValues = new ArgumentList(label.setType(Token.Type.LABEL));
+    private static NodeList<Value> parseReturn(Token label, Tokens tokens) {
+        NodeList<Value> returnValues = new NodeList<>(label.setType(Token.Type.LABEL));
 
         for(Token token: tokens){
-            try {
-                returnValues.add(new Argument(Variable.create(token)));
-            } catch (MalformedVariableException e) {
-                errors.registerSyntaxError(
-                        reader.getFile(),
-                        String.format("%s: %s", ErrorMessages.RETURN_VALUE_SHOULD_BE_A_VARIABLE, e.getMessage()),
-                        Range.fromToken(token, reader.getCurrent())
-                );
-            }
+            returnValues.add(ValueParser.parseValue(token));
         }
 
         return returnValues;

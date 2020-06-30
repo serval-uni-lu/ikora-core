@@ -110,7 +110,7 @@ public class Runtime {
         return scope.getTestCase();
     }
 
-    public List<Argument> getReturnValues() {
+    public NodeList<Value> getReturnValues() {
         return scope.getReturnValues();
     }
 

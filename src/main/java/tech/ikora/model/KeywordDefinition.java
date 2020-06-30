@@ -1,6 +1,5 @@
 package tech.ikora.model;
 
-import org.apache.commons.lang3.StringUtils;
 import tech.ikora.analytics.Action;
 import tech.ikora.builder.ValueResolver;
 import tech.ikora.runner.Runtime;
@@ -9,17 +8,17 @@ import tech.ikora.utils.LevenshteinDistance;
 import java.util.*;
 
 public abstract class KeywordDefinition extends SourceNode implements Keyword, Iterable<Step>, Delayable, ScopeNode {
-    private Token name;
+    private final Token name;
     private Tokens documentation;
-    private Set<Token> tags;
+    private NodeList<Literal> tags;
     private List<Step> steps;
     private TimeOut timeOut;
 
-    protected List<Variable> localVariables;
+    private final List<Variable> localVariables;
 
     KeywordDefinition(Token name){
         steps = new ArrayList<>();
-        tags = new HashSet<>();
+        tags = new NodeList<>();
         documentation = new Tokens();
         this.timeOut = TimeOut.none();
         localVariables = new ArrayList<>();
@@ -44,10 +43,18 @@ public abstract class KeywordDefinition extends SourceNode implements Keyword, I
         addTokens(step.getTokens());
     }
 
-    public void addTag(Token tag){
-        if(!StringUtils.isBlank(tag.getText())) {
-            this.tags.add(tag);
-        }
+    public void setTags(NodeList<Literal> tags) {
+        this.addAstChild(tags);
+        this.tags = tags;
+        addTokens(this.tags.getTokens());
+    }
+
+    public void addLocalVariables(NodeList<Variable> variables){
+        localVariables.addAll(variables);
+    }
+
+    public void addLocalVariable(Variable variable){
+        localVariables.add(variable);
     }
 
     @Override
@@ -73,7 +80,7 @@ public abstract class KeywordDefinition extends SourceNode implements Keyword, I
         return documentation;
     }
 
-    public Set<Token> getTags() {
+    public NodeList<Literal> getTags() {
         return tags;
     }
 

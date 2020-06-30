@@ -135,8 +135,8 @@ public class StaticScope implements Scope{
     }
 
     @Override
-    public List<Argument> getReturnValues() {
-        return Collections.emptyList();
+    public NodeList<Value> getReturnValues() {
+        return new NodeList<>();
     }
 
     private Set<Variable> findTestVariable(TestCase testCase, Token name) {

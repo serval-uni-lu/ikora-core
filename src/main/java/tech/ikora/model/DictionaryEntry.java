@@ -7,7 +7,7 @@ import tech.ikora.runner.Runtime;
 
 import java.util.List;
 
-public class DictionaryEntry extends SourceNode {
+public class DictionaryEntry extends Value {
     private SourceNode key;
     private SourceNode value;
 

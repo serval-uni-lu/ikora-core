@@ -11,7 +11,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public abstract class Variable extends SourceNode {
+public abstract class Variable extends Value {
     protected Token name;
     protected Pattern pattern;
     protected Link<Variable, Node> link;

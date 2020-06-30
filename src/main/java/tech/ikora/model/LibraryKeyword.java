@@ -79,8 +79,8 @@ public abstract class LibraryKeyword implements Keyword {
     }
 
     @Override
-    public ArgumentList getReturnValues(){
-        return new ArgumentList();
+    public NodeList<Value> getReturnValues(){
+        return new NodeList<>();
     }
 
     @Override

@@ -43,8 +43,8 @@ class TestCaseParser {
                 parseDocumentation(reader, tokens.withoutTag("\\[documentation\\]"), testCase);
             }
             else if (StringUtils.compareNoCase(label, "\\[tags\\]")) {
-                testCase.addToken(label.setType(Token.Type.LABEL));
-                parseTags(reader, tokens, testCase);
+                final NodeList<Literal> tags = ParserUtils.parseTags(label, tokens);
+                testCase.setTags(tags);
             }
             else if (StringUtils.compareNoCase(label, "\\[setup\\]")) {
                 testCase.addToken(label.setType(Token.Type.LABEL));
@@ -114,14 +114,6 @@ class TestCaseParser {
         }
 
         dynamicImports.add(testCase, step);
-    }
-
-    private static void parseTags(LineReader reader, Tokens tokens, TestCase testCase) {
-        tokens = tokens.withoutIndent();
-
-        for(Token token: tokens){
-            testCase.addTag(token);
-        }
     }
 
     private static void parseDocumentation(LineReader reader, Tokens tokens, TestCase testCase) {

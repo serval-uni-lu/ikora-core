@@ -8,9 +8,6 @@ import tech.ikora.model.*;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
 public class ParserUtils {
@@ -105,7 +102,7 @@ public class ParserUtils {
             return;
         }
 
-        ParameterList arguments = new ParameterList(Token.empty());
+        NodeList arguments = new NodeList(Token.empty());
 
         for(Token embeddedVariable: ValueResolver.findVariables(tokens.first())){
             try {
@@ -120,5 +117,15 @@ public class ParserUtils {
         }
 
         ((UserKeyword)keyword).setArgumentList(arguments);
+    }
+
+    public static NodeList<Literal> parseTags(Token label, Tokens tokens) {
+        NodeList<Literal> tags = new NodeList<>(label.setType(Token.Type.LABEL));
+
+        for(Token token: tokens){
+            tags.add(new Literal(token));
+        }
+
+        return tags;
     }
 }

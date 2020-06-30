@@ -5,9 +5,6 @@ import tech.ikora.analytics.visitor.VisitorMemory;
 import tech.ikora.exception.InvalidTypeException;
 import tech.ikora.types.BaseTypeList;
 
-import java.util.Collections;
-import java.util.List;
-
 public class TestCase extends KeywordDefinition {
     private KeywordCall setup = null;
     private KeywordCall tearDown = null;
@@ -71,8 +68,8 @@ public class TestCase extends KeywordDefinition {
     }
 
     @Override
-    public ArgumentList getReturnValues() {
-        return new ArgumentList();
+    public NodeList<Value> getReturnValues() {
+        return new NodeList<>();
     }
 
     @Override

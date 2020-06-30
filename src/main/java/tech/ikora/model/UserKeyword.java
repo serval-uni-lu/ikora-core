@@ -9,24 +9,24 @@ import tech.ikora.types.*;
 import java.util.List;
 
 public class UserKeyword extends KeywordDefinition {
-    private ParameterList arguments;
-    private ArgumentList returnVariables;
+    private NodeList<Variable> arguments;
+    private NodeList<Value> returnVariables;
 
     private KeywordCall tearDown;
 
     public UserKeyword(Token name) {
         super(name);
-        this.arguments = new ParameterList(Token.empty());
-        this.returnVariables = new ArgumentList(Token.empty());
+        this.arguments = new NodeList<>(Token.empty());
+        this.returnVariables = new NodeList<>(Token.empty());
     }
 
-    public void setArgumentList(ParameterList arguments){
+    public void setArgumentList(NodeList<Variable> arguments){
         this.arguments = arguments;
         this.addAstChild(this.arguments);
         addTokens(arguments.getTokens());
     }
 
-    public void setReturnVariables(ArgumentList returnVariables){
+    public void setReturnVariables(NodeList<Value> returnVariables){
         this.returnVariables = returnVariables;
         this.addAstChild(this.returnVariables);
         addTokens(returnVariables.getTokens());
@@ -46,18 +46,20 @@ public class UserKeyword extends KeywordDefinition {
         super.addStep(step);
 
         if(Assignment.class.isAssignableFrom(step.getClass())){
-            localVariables.addAll(((Assignment) step).getLeftHandOperand());
+            addLocalVariables(((Assignment) step).getLeftHandOperand());
         }
     }
 
     @Override
-    public ArgumentList getReturnValues() {
+    public NodeList<Value> getReturnValues() {
         return returnVariables;
     }
 
     @Override
     public BaseTypeList getArgumentTypes() {
-        return arguments.getBaseTypes();
+        return new BaseTypeList(arguments.stream()
+                .map(BaseTypeFactory::fromVariable)
+                .toArray(BaseType[]::new));
     }
 
     @Override

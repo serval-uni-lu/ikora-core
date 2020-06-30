@@ -1,9 +1,7 @@
 package tech.ikora.builder;
 
-import org.apache.commons.math3.util.Pair;
 import tech.ikora.error.ErrorManager;
 import tech.ikora.error.ErrorMessages;
-import tech.ikora.exception.InvalidArgumentException;
 import tech.ikora.model.*;
 
 import java.io.IOException;
@@ -61,38 +59,11 @@ public class VariableAssignmentParser {
         }
 
         for(Token value: values){
-            variable.addValue(parseValue(value));
+            variable.addValue(ValueParser.parseValue(value));
         }
     }
 
     public static Token trimEquals(Token token) {
         return  token.trim(equalsFinder);
-    }
-
-    public static SourceNode parseValue(Token token){
-        final Optional<Variable> variable = VariableParser.parse(token);
-        if(variable.isPresent()){
-            return variable.get();
-        }
-
-        final Optional<DictionaryEntry> entry = parseEntry(token);
-        if(entry.isPresent()){
-            return entry.get();
-        }
-
-        return new Literal(token);
-    }
-
-    public static Optional<DictionaryEntry> parseEntry(Token token){
-        final Pair<Token, Token> keyValuePair = LexerUtils.getKeyValuePair(token);
-
-        if(keyValuePair.getKey().isEmpty() || keyValuePair.getValue().isEmpty()){
-            return Optional.empty();
-        }
-
-        final SourceNode key = parseValue(keyValuePair.getKey());
-        final SourceNode value = parseValue(keyValuePair.getValue());
-
-        return Optional.of(new DictionaryEntry(key, value));
     }
 }

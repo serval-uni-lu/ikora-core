@@ -72,7 +72,7 @@ public class ReportBuilder {
 
         test.setName(testCase.getNameToken().getText());
         test.setDocumentation(testCase.getDocumentation().toString());
-        test.setTags(testCase.getTags().stream().map(Token::getText).collect(Collectors.toSet()));
+        test.setTags(testCase.getTags().stream().map(Value::getName).collect(Collectors.toSet()));
 
         return test;
     }

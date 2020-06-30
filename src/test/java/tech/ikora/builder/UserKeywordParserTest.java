@@ -64,9 +64,9 @@ class UserKeywordParserTest {
 
         assertEquals("Keyword with tags", keyword.getNameToken().toString());
         assertEquals(3, keyword.getTags().size());
-        assertEquals(1, keyword.getTags().stream().filter(token -> token.toString().equals("tag1")).count());
-        assertEquals(1, keyword.getTags().stream().filter(token -> token.toString().equals("tag2 with space")).count());
-        assertEquals(1, keyword.getTags().stream().filter(token -> token.toString().equals("tag3")).count());
+        assertEquals(1, keyword.getTags().stream().filter(t -> t.getName().equals("tag1")).count());
+        assertEquals(1, keyword.getTags().stream().filter(t -> t.getName().equals("tag2 with space")).count());
+        assertEquals(1, keyword.getTags().stream().filter(t -> t.getName().equals("tag3")).count());
         assertEquals(6, keyword.getTokens().size());
     }
 

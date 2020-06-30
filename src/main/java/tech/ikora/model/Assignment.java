@@ -14,13 +14,13 @@ import java.util.List;
 import java.util.Optional;
 
 public class Assignment extends Step {
-    private ParameterList leftHandOperand;
-    private Argument rightHandOperand;
+    private final NodeList<Variable> leftHandOperand;
+    private final Argument rightHandOperand;
 
     public Assignment(Token name, List<Variable> leftHandOperand, KeywordCall rightHandOperand) {
         super(name);
 
-        this.leftHandOperand = new ParameterList();
+        this.leftHandOperand = new NodeList<>();
 
         for(Variable returnVariable: leftHandOperand){
             this.addReturnVariable(returnVariable);
@@ -42,7 +42,7 @@ public class Assignment extends Step {
         leftHandOperand.add(variable);
     }
 
-    public ParameterList getLeftHandOperand() {
+    public NodeList<Variable> getLeftHandOperand() {
         return leftHandOperand;
     }
 
@@ -167,9 +167,5 @@ public class Assignment extends Step {
     @Override
     public void accept(NodeVisitor visitor, VisitorMemory memory){
         visitor.visit(this, memory);
-    }
-
-    private void assignVariables(List<Argument> returnValues){
-        //TODO: implement assignment
     }
 }

@@ -8,7 +8,7 @@ import tech.ikora.runner.Runtime;
 import java.util.Collections;
 import java.util.List;
 
-public class Literal extends SourceNode {
+public class Literal extends Value {
     private Token name;
     private List<Variable> variables;
 

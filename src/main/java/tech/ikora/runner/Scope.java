@@ -26,5 +26,5 @@ public interface Scope {
 
     TestCase getTestCase();
 
-    List<Argument> getReturnValues();
+    NodeList<Value> getReturnValues();
 }

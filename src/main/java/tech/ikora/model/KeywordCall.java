@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 public class KeywordCall extends Step {
     private Link<KeywordCall, Keyword> link;
-    private ArgumentList returnValues;
+    private NodeList<Value> returnValues;
     private Gherkin gherkin;
 
     public KeywordCall(Token name) {
@@ -162,7 +162,7 @@ public class KeywordCall extends Step {
         return builder.toString();
     }
 
-    public ArgumentList getReturnValues() {
+    public NodeList<Value> getReturnValues() {
         return this.returnValues;
     }
 

@@ -10,7 +10,7 @@ public class DynamicScope implements Scope {
     private Deque<Block<TestCase, Variable>> testStack;
     private Deque<Block<Keyword, Variable>> keywordStack;
     private Deque<Block<Step, Argument>> argumentStack;
-    private ArgumentList returnValues;
+    private NodeList<Value> returnValues;
 
     public DynamicScope(){
         global = new SourceNodeTable<>();
@@ -18,7 +18,7 @@ public class DynamicScope implements Scope {
         testStack = new LinkedList<>();
         keywordStack = new LinkedList<>();
         argumentStack = new LinkedList<>();
-        returnValues = new ArgumentList(Token.empty());
+        returnValues = new NodeList<>();
     }
 
     @Override
@@ -124,7 +124,7 @@ public class DynamicScope implements Scope {
     }
 
     @Override
-    public List<Argument> getReturnValues() {
+    public NodeList<Value> getReturnValues() {
         return returnValues;
     }
 
