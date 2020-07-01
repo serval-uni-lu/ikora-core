@@ -130,13 +130,28 @@ public class ValueResolver {
                 values.addAll(((VariableAssignment)node).getValues());
             }
             else if(LibraryVariable.class.isAssignableFrom(node.getClass())){
-                values.addAll(Collections.singletonList(node));
+                values.add(node);
             }
             else if(Variable.class.isAssignableFrom(node.getClass())){
-                values.addAll(getValueNodes((Variable)node));
+                final Variable v = (Variable)node;
+                values.addAll(isKeywordArgument(v) ? Collections.singletonList(v): getValueNodes(v));
             }
         }
 
         return values;
+    }
+
+    public static boolean isKeywordArgument(final Variable variable){
+        final Optional<UserKeyword> userKeyword = getUserKeywordFromArgument(variable);
+        return userKeyword.map(steps -> steps.getArguments().contains(variable)).orElse(false);
+    }
+
+    public static Optional<UserKeyword> getUserKeywordFromArgument(final Variable variable){
+        if(variable.getAstParent() == null || !(variable.getAstParent().getAstParent() instanceof UserKeyword)){
+            return Optional.empty();
+        }
+
+        UserKeyword userKeyword = (UserKeyword)variable.getAstParent().getAstParent();
+        return userKeyword.getArguments() == variable.getAstParent() ? Optional.of(userKeyword) : Optional.empty();
     }
 }
