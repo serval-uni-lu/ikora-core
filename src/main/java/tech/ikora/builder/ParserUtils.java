@@ -16,7 +16,7 @@ public class ParserUtils {
     static <K extends KeywordDefinition> Optional<K> createKeyword(Class<K> type, LineReader reader, Tokens tokens, ErrorManager errors) {
         if(tokens.size() > 1){
             errors.registerSyntaxError(
-                    reader.getFile(),
+                    reader.getSource(),
                     "Keyword definition cannot take arguments",
                     Range.fromTokens(tokens.withoutFirst(), reader.getCurrent())
             );
@@ -26,7 +26,7 @@ public class ParserUtils {
 
         if(tokens.isEmpty()){
             errors.registerInternalError(
-                    reader.getFile(),
+                    reader.getSource(),
                     "Should have at least one token, but found none",
                     Range.fromTokens(tokens, reader.getCurrent())
             );
@@ -43,7 +43,7 @@ public class ParserUtils {
             setEmbeddedVariables(keyword, reader, tokens, errors);
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e) {
             errors.registerInternalError(
-                    reader.getFile(),
+                    reader.getSource(),
                     "Failed to generate keyword",
                     Range.fromTokens(tokens, reader.getCurrent())
             );
@@ -56,13 +56,13 @@ public class ParserUtils {
         Token header = tokens.first();
 
         if(header.isEmpty()){
-            errors.registerSyntaxError(reader.getFile(),
+            errors.registerSyntaxError(reader.getSource(),
                     "Failed to parse block header",
                     Range.fromLine(reader.getCurrent())
             );
         }
         else if(!header.isBlock()){
-            errors.registerSyntaxError(reader.getFile(),
+            errors.registerSyntaxError(reader.getSource(),
                     "Expecting block header",
                     Range.fromToken(header, reader.getCurrent())
             );
@@ -76,7 +76,7 @@ public class ParserUtils {
             TimeOut timeOut = TimeoutParser.parse(tokens);
             delayable.setTimeOut(timeOut);
         } catch (InvalidArgumentException | MalformedVariableException e) {
-            errors.registerSyntaxError(reader.getFile(),
+            errors.registerSyntaxError(reader.getSource(),
                     String.format("%s: %s", ErrorMessages.FAILED_TO_PARSE_TIMEOUT, e.getMessage()),
                     Range.fromTokens(tokens, reader.getCurrent())
             );
@@ -86,7 +86,7 @@ public class ParserUtils {
     static Token getLabel(LineReader reader, Tokens tokens, ErrorManager errors){
         if(tokens.isEmpty()){
             errors.registerInternalError(
-                    reader.getFile(),
+                    reader.getSource(),
                     "Not expecting an empty token",
                     Range.fromTokens(tokens, reader.getCurrent())
             );
@@ -102,14 +102,14 @@ public class ParserUtils {
             return;
         }
 
-        NodeList arguments = new NodeList(Token.empty());
+        NodeList<Variable> arguments = new NodeList<>(Token.empty());
 
         for(Token embeddedVariable: ValueResolver.findVariables(tokens.first())){
             try {
                 arguments.add(Variable.create(embeddedVariable));
             } catch (MalformedVariableException e) {
                 errors.registerInternalError(
-                        reader.getFile(),
+                        reader.getSource(),
                         "Failed to parse embedded argument",
                         Range.fromToken(embeddedVariable, reader.getCurrent())
                 );

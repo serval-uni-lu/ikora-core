@@ -26,7 +26,7 @@ public class SetGlobalVariable extends LibraryKeyword implements ScopeModifier {
 
         if(argumentList.size() < 2){
             runtime.getErrors().registerInternalError(
-                    call.getFile(),
+                    call.getSource(),
                     "Failed to update global scope: not enough arguments found. Need 2!",
                     call.getRange()
             );
@@ -37,7 +37,7 @@ public class SetGlobalVariable extends LibraryKeyword implements ScopeModifier {
                 runtime.addToGlobalScope(variable);
             } catch (Exception e) {
                 runtime.getErrors().registerInternalError(
-                        call.getFile(),
+                        call.getSource(),
                         "Failed to update global scope: malformed variable.",
                         call.getRange()
                 );

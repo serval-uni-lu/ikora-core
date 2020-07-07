@@ -69,10 +69,14 @@ public class StaticScope implements Scope{
             return;
         }
 
+        if(keyword.getSourceFile().getSource().isInMemory()){
+            return;
+        }
+
         File filePath = new File(argumentList.get(0).getName());
 
         if(!filePath.isAbsolute() && keyword.getSourceFile() != null) {
-            filePath = new File(keyword.getSourceFile().getFile(), filePath.getPath());
+            filePath = new File(keyword.getSourceFile().getSource().asFile(), filePath.getPath());
         }
 
         dynamicLibrary.putIfAbsent(keyword, new ResourcesTable());

@@ -8,8 +8,6 @@ import tech.ikora.model.Project;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.Reader;
-import java.io.StringReader;
 import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -61,8 +59,7 @@ public class Helpers {
     }
 
     public static LineReader lineReader(String text) throws IOException {
-        Reader targetReader = new StringReader(text);
-        LineReader lineReader = new LineReader(targetReader);
+        LineReader lineReader = new LineReader(text);
         lineReader.readLine();
 
         return lineReader;

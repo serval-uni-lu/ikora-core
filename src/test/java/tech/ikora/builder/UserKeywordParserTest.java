@@ -6,8 +6,6 @@ import tech.ikora.model.UserKeyword;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.io.Reader;
-import java.io.StringReader;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -86,8 +84,7 @@ class UserKeywordParserTest {
 
     private UserKeyword createKeyword(String text, ErrorManager errors) throws IOException {
         DynamicImports dynamicImports = new DynamicImports();
-        Reader targetReader = new StringReader(text);
-        LineReader reader = new LineReader(targetReader);
+        LineReader reader = new LineReader(text);
         reader.readLine();
 
         Tokens tokens = LexerUtils.tokenize(reader);

@@ -11,12 +11,12 @@ public class Project implements Comparable<Project> {
     private Map<String, SourceFile> files;
     private Set<Project> dependencies;
 
-    private File rootFolder;
+    private Source rootFolder;
     private Date date;
     private int loc;
 
-    public Project(File file){
-        rootFolder = file;
+    public Project(Source source){
+        rootFolder = source;
         suites = new ArrayList<>();
         files = new HashMap<>();
         dependencies = new HashSet<>();
@@ -27,7 +27,7 @@ public class Project implements Comparable<Project> {
         return rootFolder.getName();
     }
 
-    public File getRootFolder() {
+    public Source getRootFolder() {
         return rootFolder;
     }
 
@@ -48,7 +48,7 @@ public class Project implements Comparable<Project> {
     }
 
     public Optional<SourceFile> getSourceFile(URI uri){
-        String name = generateFileName(new File(uri.getPath()));
+        String name = generateFileName(new Source(new File(uri.getPath())));
         return getSourceFile(name);
     }
 
@@ -166,8 +166,8 @@ public class Project implements Comparable<Project> {
         return this.dependencies.contains(project);
     }
 
-    public void addFile(File file){
-        String key = generateFileName(file);
+    public void addFile(Source source){
+        String key = generateFileName(source);
 
         if(files.containsKey(key)){
             return;
@@ -205,8 +205,8 @@ public class Project implements Comparable<Project> {
     }
 
     private void updateFiles(Settings settings){
-        for(Resources resources: settings.getResources()){
-            addFile(resources.getFile());
+        for(Resources resources: settings.getInternalResources()){
+            addFile(new Source(resources.getFile()));
         }
     }
 
@@ -216,8 +216,12 @@ public class Project implements Comparable<Project> {
         }
     }
 
-    public String generateFileName(File file) {
-        File rootFolder = this.getRootFolder();
+    public String generateFileName(Source source) {
+        if(source.isInMemory()){
+            return source.getName();
+        }
+
+        File rootFolder = this.getRootFolder().asFile();
 
         if(rootFolder.isFile()){
             rootFolder = rootFolder.getParentFile();
@@ -225,7 +229,7 @@ public class Project implements Comparable<Project> {
 
         Path base = Paths.get(rootFolder.getAbsolutePath().trim());
 
-        Path path = Paths.get(file.getAbsolutePath().trim()).normalize();
+        Path path = Paths.get(source.getAbsolutePath().trim()).normalize();
 
         return base.relativize(path).toString();
     }

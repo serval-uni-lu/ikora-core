@@ -34,9 +34,14 @@ public class FileUtils {
         return getSubFolders(new File(location));
     }
 
-    public static boolean isSubDirectory(File base, File child) throws IOException {
-        base = base.getCanonicalFile();
-        child = child.getCanonicalFile();
+    public static boolean isSubDirectory(File base, File child) {
+        try {
+            base = base.getCanonicalFile();
+            child = child.getCanonicalFile();
+        } catch (IOException e) {
+            return false;
+        }
+
 
         File parentFile = child;
         while (parentFile != null) {

@@ -1,54 +1,86 @@
 package tech.ikora.error;
 
 import tech.ikora.model.Range;
+import tech.ikora.model.Source;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 public class ErrorManager {
-    private final Map<File, Errors> fileErrors;
+    private final Errors inMemory;
+    private final Map<Source, Errors> sourceErrors;
     private final Set<LibraryError> libraryErrors;
 
     public ErrorManager() {
-        this.fileErrors = new HashMap<>();
+        inMemory = new Errors();
+        this.sourceErrors = new HashMap<>();
         this.libraryErrors = new HashSet<>();
     }
 
-    public Errors in(File file){
-        return fileErrors.getOrDefault(file, new Errors());
+    public Errors in(Source source){
+        return sourceErrors.getOrDefault(source, new Errors());
     }
 
-    public void registerSyntaxError(File file, String message, Range range){
-        Errors errors = fileErrors.getOrDefault(file, new Errors());
-        errors.registerSyntaxError(message, range);
-        fileErrors.putIfAbsent(file, errors);
+    public Errors inMemory(){
+        return inMemory;
     }
 
-    public void registerSymbolError(File file, String message, Range range){
-        Errors errors = fileErrors.getOrDefault(file, new Errors());
-        errors.registerSymbolError(message, range);
-        fileErrors.putIfAbsent(file, errors);
+    public void registerSyntaxError(Source source, String message, Range range){
+        if(source == null || source.isInMemory()){
+            inMemory.registerSyntaxError(message, range);
+        }
+        else{
+            Errors errors = sourceErrors.getOrDefault(source, new Errors());
+            errors.registerSyntaxError(message, range);
+            sourceErrors.putIfAbsent(source, errors);
+        }
+
     }
 
-    public void registerIOError(File file, String message){
-        Errors errors = fileErrors.getOrDefault(file, new Errors());
-        errors.registerIOError(message, file);
-        fileErrors.putIfAbsent(file, errors);
+    public void registerSymbolError(Source source, String message, Range range){
+        if(source == null || source.isInMemory()){
+            inMemory.registerSymbolError(message, range);
+        }
+        else {
+            Errors errors = sourceErrors.getOrDefault(source, new Errors());
+            errors.registerSymbolError(message, range);
+            sourceErrors.putIfAbsent(source, errors);
+        }
     }
 
-    public void registerInternalError(File file, String message, Range range){
-        Errors errors = fileErrors.getOrDefault(file, new Errors());
-        errors.registerInternalError(message, range);
-        fileErrors.putIfAbsent(file, errors);
+    public void registerIOError(Source source, String message){
+        if(source == null || source.isInMemory()){
+            inMemory.registerIOError(message, source);
+        }
+        else {
+            Errors errors = sourceErrors.getOrDefault(source, new Errors());
+            errors.registerIOError(message, source);
+            sourceErrors.putIfAbsent(source, errors);
+        }
     }
 
-    public void registerUnhandledError(File file, String message, Exception exception){
-        Errors errors = fileErrors.getOrDefault(file, new Errors());
-        errors.registerUnhandledError(message, exception);
-        fileErrors.putIfAbsent(file, errors);
+    public void registerInternalError(Source source, String message, Range range){
+        if(source == null || source.isInMemory()){
+            inMemory.registerInternalError(message, range);
+        }
+        else {
+            Errors errors = sourceErrors.getOrDefault(source, new Errors());
+            errors.registerInternalError(message, range);
+            sourceErrors.putIfAbsent(source, errors);
+        }
+    }
+
+    public void registerUnhandledError(Source source, String message, Exception exception){
+        if(source == null || source.isInMemory()){
+            inMemory.registerUnhandledError(message, exception);
+        }
+        else {
+            Errors errors = sourceErrors.getOrDefault(source, new Errors());
+            errors.registerUnhandledError(message, exception);
+            sourceErrors.putIfAbsent(source, errors);
+        }
     }
 
     public void registerLibraryError(String library, String message){
@@ -56,6 +88,6 @@ public class ErrorManager {
     }
 
     public boolean isEmpty() {
-        return fileErrors.isEmpty() && libraryErrors.isEmpty();
+        return sourceErrors.isEmpty() && libraryErrors.isEmpty();
     }
 }

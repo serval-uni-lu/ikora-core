@@ -76,12 +76,12 @@ public abstract class SourceNode implements Node, Differentiable {
         this.astChildren.clear();
     }
 
-    public File getFile(){
+    public Source getSource(){
         if(sourceFile == null){
             return null;
         }
 
-        return sourceFile.getFile();
+        return sourceFile.getSource();
     }
 
     @Override

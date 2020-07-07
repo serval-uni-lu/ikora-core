@@ -14,7 +14,7 @@ public class KeywordCallParser {
 
         if(callTokens.isEmpty()){
             errors.registerInternalError(
-                    reader.getFile(),
+                    reader.getSource(),
                     ErrorMessages.EMPTY_TOKEN_SHOULD_BE_KEYWORD,
                     Range.fromLine(reader.getCurrent())
             );

@@ -1,16 +1,16 @@
 package tech.ikora.error;
 
-import java.io.File;
+import tech.ikora.model.Source;
 
 public class IOError extends Error {
-    private File file;
+    private Source source;
 
-    public IOError(String message, File file) {
+    public IOError(String message, Source source) {
         super(message);
-        this.file = file;
+        this.source = source;
     }
 
-    public File getFile() {
-        return file;
+    public Source getSource() {
+        return source;
     }
 }

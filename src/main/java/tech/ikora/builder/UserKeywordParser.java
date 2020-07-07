@@ -21,7 +21,7 @@ class UserKeywordParser {
         if(!optionalUserKeyword.isPresent()){
             throw new IOException(String.format("failed to read keyword at line %d in file %s",
                     reader.getCurrent().getNumber(),
-                    reader.getFile().getAbsolutePath()));
+                    reader.getSource().getAbsolutePath()));
         }
 
         final UserKeyword userKeyword = optionalUserKeyword.get();
@@ -87,7 +87,7 @@ class UserKeywordParser {
                 arguments.add(Variable.create(token));
             } catch (MalformedVariableException e) {
                 errors.registerSyntaxError(
-                        reader.getFile(),
+                        reader.getSource(),
                         String.format("%s: %s", ErrorMessages.FAILED_TO_PARSE_PARAMETER, e.getMessage()),
                         Range.fromToken(token, reader.getCurrent())
                 );
@@ -115,7 +115,7 @@ class UserKeywordParser {
             userKeyword.addTokens(step.getTokens());
         } catch (InvalidTypeException e) {
             errors.registerSyntaxError(
-                    step.getFile(),
+                    step.getSource(),
                     String.format("%s: %s", ErrorMessages.FAILED_TO_PARSE_TEARDOWN, e.getMessage()),
                     step.getRange()
             );
@@ -131,7 +131,7 @@ class UserKeywordParser {
             userKeyword.addTokens(step.getTokens());
         } catch (Exception e) {
            errors.registerSyntaxError(
-                   step.getSourceFile().getFile(),
+                   step.getSourceFile().getSource(),
                    ErrorMessages.FAILED_TO_ADD_STEP_TO_KEYWORD,
                    step.getRange()
             );

@@ -1,6 +1,7 @@
 package tech.ikora.builder;
 
 import org.apache.commons.io.input.BOMInputStream;
+import tech.ikora.model.Source;
 import tech.ikora.model.SourceFile;
 import tech.ikora.utils.FileUtils;
 
@@ -11,11 +12,11 @@ import java.nio.charset.StandardCharsets;
 public class LineReader {
     private LineNumberReader reader;
     private Line current;
-    private File file;
+    private Source source;
     private SourceFile sourceFile;
 
     public LineReader(File file) throws FileNotFoundException {
-        this.file = file;
+        this.source = new Source(file);
 
         Charset charset = FileUtils.detectCharset(file, StandardCharsets.UTF_8);
         InputStreamReader input = new InputStreamReader(new BOMInputStream(new FileInputStream(file)), charset);
@@ -24,17 +25,18 @@ public class LineReader {
         this.sourceFile = null;
     }
 
-    public LineReader(Reader reader) {
-        this.file = new File("<null>");
-        this.reader = new LineNumberReader(reader);
+    public LineReader(String inMemory) {
+        this.source = new Source(inMemory);
+
+        this.reader = new LineNumberReader(new StringReader(inMemory));
         this.sourceFile = null;
     }
 
     public LineReader(SourceFile sourceFile) throws FileNotFoundException {
-        this.file = sourceFile.getFile();
+        this.source = sourceFile.getSource();
 
-        Charset charset = FileUtils.detectCharset(this.file, StandardCharsets.UTF_8);
-        InputStreamReader input = new InputStreamReader(new FileInputStream(this.file), charset);
+        Charset charset = FileUtils.detectCharset(this.source.asFile(), StandardCharsets.UTF_8);
+        InputStreamReader input = new InputStreamReader(new FileInputStream(this.source.asFile()), charset);
         this.reader = new LineNumberReader(input);
 
         this.sourceFile = sourceFile;
@@ -57,8 +59,8 @@ public class LineReader {
         return this.current;
     }
 
-    public File getFile() {
-        return file;
+    public Source getSource() {
+        return source;
     }
 
     void close() throws IOException {

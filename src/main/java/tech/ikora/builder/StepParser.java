@@ -37,7 +37,7 @@ class StepParser {
     private static boolean isAssignment(LineReader reader, Tokens tokens, ErrorManager errors){
         if(tokens.isEmpty()) {
             errors.registerInternalError(
-                    reader.getFile(),
+                    reader.getSource(),
                     ErrorMessages.EMPTY_TOKEN_SHOULD_BE_KEYWORD,
                     Range.fromLine(reader.getCurrent())
             );
@@ -51,7 +51,7 @@ class StepParser {
     private static boolean isForLoop(LineReader reader, Tokens tokens, ErrorManager errors) {
         if(tokens.isEmpty()){
             errors.registerInternalError(
-                    reader.getFile(),
+                    reader.getSource(),
                     ErrorMessages.EMPTY_TOKEN_SHOULD_BE_KEYWORD,
                     Range.fromLine(reader.getCurrent())
             );

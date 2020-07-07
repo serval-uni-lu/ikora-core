@@ -18,7 +18,7 @@ public class VariableAssignmentParser {
 
         if(tokens.isEmpty()){
             errors.registerInternalError(
-                    reader.getFile(),
+                    reader.getSource(),
                     ErrorMessages.EMPTY_TOKEN_NOT_EXPECTED,
                     Range.fromLine(reader.getCurrent())
             );
@@ -30,7 +30,7 @@ public class VariableAssignmentParser {
 
         if(!optional.isPresent()){
             errors.registerSyntaxError(
-                    reader.getFile(),
+                    reader.getSource(),
                     String.format("Invalid variable: %s", tokens.first().getText()),
                     Range.fromToken(tokens.first(), reader.getCurrent())
             );
@@ -52,7 +52,7 @@ public class VariableAssignmentParser {
     public static void parseValues(final VariableAssignment variable, Tokens values, LineReader reader, ErrorManager errors){
         if(values.isEmpty()){
             errors.registerSyntaxError(
-                    reader.getFile(),
+                    reader.getSource(),
                     String.format("Empty variable definition: %s", variable.getNameToken()),
                     Range.fromTokens(variable.getTokens(), reader.getCurrent())
             );

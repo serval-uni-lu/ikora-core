@@ -31,7 +31,7 @@ class SuiteFactory {
 
         if(parent != null){
             Path base = Paths.get(parent.getSource().getAbsolutePath().trim());
-            Path path = Paths.get(sourceFile.getFile().getAbsolutePath().trim()).normalize();
+            Path path = Paths.get(sourceFile.getSource().getAbsolutePath().trim()).normalize();
 
             name = base.relativize(path).toString();
         }
@@ -47,13 +47,17 @@ class SuiteFactory {
     }
 
     private static File computeSource(Suite parent, SourceFile sourceFile){
+        if(sourceFile.getSource().isInMemory()){
+            return null;
+        }
+
         File base;
 
         if(parent != null){
             base = parent.getSource();
         }
         else {
-            base = sourceFile.getProject().getRootFolder();
+            base = sourceFile.getProject().getRootFolder().asFile();
 
             if(base.isFile()){
                 base = base.getParentFile();

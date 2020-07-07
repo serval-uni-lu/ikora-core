@@ -15,9 +15,8 @@ import java.util.List;
 class SettingsTableParser {
     private SettingsTableParser(){ }
 
-    public static Settings parse(LineReader reader, Tokens blockTokens, SourceFile sourceFile, ErrorManager errors) throws IOException {
+    public static Settings parse(LineReader reader, Tokens blockTokens, ErrorManager errors) throws IOException {
         Settings settings = new Settings();
-        settings.setFile(sourceFile);
         settings.setHeader(ParserUtils.parseHeaderName(reader, blockTokens, errors));
 
         while(reader.getCurrent().isValid() && !LexerUtils.isBlock(reader.getCurrent().getText())){
@@ -81,7 +80,7 @@ class SettingsTableParser {
             settings.setTemplate(step);
         } catch (InvalidTypeException e) {
             errors.registerSyntaxError(
-                    step.getFile(),
+                    step.getSource(),
                     ErrorMessages.FAILED_TO_PARSE_TEMPLATE,
                     step.getRange()
             );
@@ -95,7 +94,7 @@ class SettingsTableParser {
             settings.setTestTeardown(step);
         } catch (InvalidTypeException e) {
             errors.registerSyntaxError(
-                    step.getFile(),
+                    step.getSource(),
                     String.format("%s: %s", ErrorMessages.FAILED_TO_PARSE_TEARDOWN, e.getMessage()),
                     step.getRange()
             );
@@ -109,7 +108,7 @@ class SettingsTableParser {
             settings.setTestSetup(step);
         } catch (InvalidTypeException e) {
             errors.registerSyntaxError(
-                    step.getFile(),
+                    step.getSource(),
                     String.format("%s: %s", ErrorMessages.FAILED_TO_PARSE_SETUP, e.getMessage()),
                     step.getRange()
             );
@@ -135,7 +134,7 @@ class SettingsTableParser {
             settings.setSuiteTeardown(step);
         } catch (InvalidTypeException e) {
             errors.registerSyntaxError(
-                    step.getFile(),
+                    step.getSource(),
                     String.format("%s: %s", ErrorMessages.FAILED_TO_PARSE_TEARDOWN, e.getMessage()),
                     step.getRange()
             );
@@ -149,7 +148,7 @@ class SettingsTableParser {
             settings.setSuiteSetup(step);
         } catch (InvalidTypeException e) {
             errors.registerSyntaxError(
-                    step.getFile(),
+                    step.getSource(),
                     String.format("%s: %s", ErrorMessages.FAILED_TO_PARSE_SETUP, e.getMessage()),
                     step.getRange()
             );
@@ -165,7 +164,7 @@ class SettingsTableParser {
 
             if(tokens.size() > 2){
                 errors.registerSyntaxError(
-                        reader.getFile(),
+                        reader.getSource(),
                         ErrorMessages.TOO_MANY_METADATA_ARGUMENTS,
                         Range.fromTokens(tokens.withoutFirst(2), reader.getCurrent())
                 );
@@ -173,7 +172,7 @@ class SettingsTableParser {
 
         } catch (InvalidMetadataException e){
             errors.registerSyntaxError(
-                    reader.getFile(),
+                    reader.getSource(),
                     String.format("%s: %s", ErrorMessages.FAILED_TO_PARSE_METADATA, e.getMessage()),
                     Range.fromTokens(tokens, reader.getCurrent())
             );
@@ -207,7 +206,7 @@ class SettingsTableParser {
         Token label = ParserUtils.getLabel(reader, tokens, errors);
         File filePath = new File(label.getText());
         if(!filePath.isAbsolute()) {
-            filePath = new File(reader.getFile().getParentFile(), filePath.getPath());
+            filePath = new File(reader.getSource().asFile().getParentFile(), filePath.getPath());
         }
 
         Resources resources = new Resources(label, filePath, new ArrayList<>(), Token.empty());

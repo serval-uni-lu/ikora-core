@@ -45,7 +45,7 @@ public class ForLoopParser {
 
         if(loop.isEmpty()){
             errors.registerInternalError(
-                    reader.getFile(),
+                    reader.getSource(),
                     ErrorMessages.FAILED_TO_PARSE_FORLOOP,
                     Range.fromLine(reader.getCurrent())
             );
@@ -61,7 +61,7 @@ public class ForLoopParser {
 
         if(loop.isEmpty()){
             errors.registerInternalError(
-                    reader.getFile(),
+                    reader.getSource(),
                     ErrorMessages.FAILED_TO_LOCATE_ITERATOR_IN_FOR_LOOP,
                     Range.fromLine(reader.getCurrent())
             );
@@ -71,7 +71,7 @@ public class ForLoopParser {
                 variable = Variable.create(loop.withoutIndent().get(1));
             } catch (MalformedVariableException e) {
                 errors.registerInternalError(
-                        reader.getFile(),
+                        reader.getSource(),
                         ErrorMessages.FAILED_TO_CREATE_ITERATOR_IN_FOR_LOOP,
                         Range.fromToken(loop.withoutIndent().get(1), reader.getCurrent())
                 );
@@ -88,7 +88,7 @@ public class ForLoopParser {
 
         if(rangeTokens.isEmpty()){
             errors.registerInternalError(
-                    reader.getFile(),
+                    reader.getSource(),
                     ErrorMessages.EMPTY_TOKEN_SHOULD_BE_KEYWORD,
                     Range.fromTokens(loop.withoutIndent(), reader.getCurrent())
             );

@@ -7,8 +7,6 @@ import tech.ikora.runner.Runtime;
 import tech.ikora.types.ListType;
 import tech.ikora.types.StringType;
 
-import java.util.List;
-
 public class SetTestVariable extends LibraryKeyword implements ScopeModifier {
     public SetTestVariable(){
         super(Type.SET,
@@ -28,7 +26,7 @@ public class SetTestVariable extends LibraryKeyword implements ScopeModifier {
 
         if(argumentList.size() < 2){
             runtime.getErrors().registerInternalError(
-                    call.getFile(),
+                    call.getSource(),
                     "Failed to update test scope: no argument found.",
                     call.getRange()
             );
@@ -45,7 +43,7 @@ public class SetTestVariable extends LibraryKeyword implements ScopeModifier {
                 }
             } catch (Exception e) {
                 runtime.getErrors().registerInternalError(
-                        call.getFile(),
+                        call.getSource(),
                         "Failed to update test scope: malformed variable.",
                         call.getRange()
                 );

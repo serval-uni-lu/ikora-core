@@ -26,23 +26,15 @@ class FileUtilsTest {
 
     @Test
     void testIsSubfolderDetectsWhenTrue() {
-        try {
-            assertTrue(FileUtils.isSubDirectory(base, base));
-            assertTrue(FileUtils.isSubDirectory(base, child1));
-            assertTrue(FileUtils.isSubDirectory(base, child2));
-        } catch (IOException e) {
-            fail("Io exception raised: " + e.getMessage());
-        }
+        assertTrue(FileUtils.isSubDirectory(base, base));
+        assertTrue(FileUtils.isSubDirectory(base, child1));
+        assertTrue(FileUtils.isSubDirectory(base, child2));
     }
 
     @Test
     void testIsSubfolderDetectsWhenFalse() {
-        try {
-            assertFalse(FileUtils.isSubDirectory(child1, base));
-            assertFalse(FileUtils.isSubDirectory(child2, base));
-        } catch (IOException e) {
-            fail("Io exception raised: " + e.getMessage());
-        }
+        assertFalse(FileUtils.isSubDirectory(child1, base));
+        assertFalse(FileUtils.isSubDirectory(child2, base));
     }
 
     @Test

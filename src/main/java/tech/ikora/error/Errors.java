@@ -1,6 +1,7 @@
 package tech.ikora.error;
 
 import tech.ikora.model.Range;
+import tech.ikora.model.Source;
 
 import java.io.File;
 import java.util.HashSet;
@@ -31,8 +32,8 @@ public class Errors {
         symbolErrors.add(error);
     }
 
-    public void registerIOError(String message, File file){
-        IOError error = new IOError(message, file);
+    public void registerIOError(String message, Source source){
+        IOError error = new IOError(message, source);
         ioErrors.add(error);
     }
 

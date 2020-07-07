@@ -81,7 +81,7 @@ public class SymbolResolver {
 
         if(keywords.isEmpty()){
             runtime.getErrors().registerSymbolError(
-                    call.getFile(),
+                    call.getSource(),
                     ErrorMessages.FOUND_NO_MATCH,
                     Range.fromTokens(call.getTokens(), null)
             );
@@ -230,7 +230,7 @@ public class SymbolResolver {
                 }
             } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException exception) {
                 runtime.getErrors().registerUnhandledError(
-                        sourceFile.getFile(),
+                        sourceFile.getSource(),
                         ErrorMessages.FAILED_TO_LOAD_LIBRARY_KEYWORD,
                         exception
                 );

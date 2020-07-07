@@ -10,12 +10,12 @@ import java.io.IOException;
 class SourceFileParser {
     private SourceFileParser() {}
 
-    public static void parse(File file, Project project, DynamicImports dynamicImports, ErrorManager errors) {
+    public static void parse(Source source, Project project, DynamicImports dynamicImports, ErrorManager errors) {
         LineReader reader = null;
         SourceFile sourceFile = null;
 
         try {
-            sourceFile = new SourceFile(project, file);
+            sourceFile = new SourceFile(project, source);
             reader = new LineReader(sourceFile);
             reader.readLine();
 
@@ -28,7 +28,7 @@ class SourceFileParser {
                 Tokens tokens = LexerUtils.tokenize(reader);
 
                 if(isSettings(tokens.toString())){
-                    Settings settings = SettingsTableParser.parse(reader, tokens, sourceFile, errors);
+                    Settings settings = SettingsTableParser.parse(reader, tokens, errors);
                     sourceFile.setSettings(settings);
                 }
                 else if(isTestCases(tokens.toString())){
@@ -45,9 +45,9 @@ class SourceFileParser {
                 }
             }
         } catch (FileNotFoundException e) {
-            errors.registerIOError(file, "File not found");
+            errors.registerIOError(source, "File not found");
         } catch (IOException e) {
-            errors.registerIOError(file, "Failed to read line");
+            errors.registerIOError(source, "Failed to read line");
         } finally {
             project.addSourceFile(sourceFile);
 
@@ -55,7 +55,7 @@ class SourceFileParser {
                 try {
                     reader.close();
                 } catch (IOException e) {
-                    errors.registerIOError(file,"Failed to properly close reader for file %s");
+                    errors.registerIOError(source,"Failed to properly close reader for file %s");
                 }
             }
         }

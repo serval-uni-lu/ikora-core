@@ -14,7 +14,6 @@ public class Settings implements Delayable {
     private Token header;
 
     private List<Resources> resourcesTable;
-    private List<Resources> externalResourcesTable;
     private List<Library> libraryTable;
 
     private Set<Token> defaultTags;
@@ -37,7 +36,6 @@ public class Settings implements Delayable {
         this.header = Token.empty();
 
         this.resourcesTable = new ArrayList<>();
-        this.externalResourcesTable = new ArrayList<>();
         this.libraryTable = new ArrayList<>();
         this.defaultTags = new HashSet<>();
         this.forceTags = new HashSet<>();
@@ -58,17 +56,26 @@ public class Settings implements Delayable {
         return documentation;
     }
 
-    public List<Resources> getResources() {
-        return resourcesTable;
+    public List<Resources> getInternalResources() {
+        Project project = this.file.getProject();
+        File rootFolder = project.getRootFolder().asFile();
+
+        return this.resourcesTable.stream()
+                .filter(r -> FileUtils.isSubDirectory(rootFolder, r.getFile()))
+                .collect(Collectors.toList());
     }
 
     public List<Resources> getExternalResources() {
-        return externalResourcesTable;
+        Project project = this.file.getProject();
+        File rootFolder = project.getRootFolder().asFile();
+
+        return this.resourcesTable.stream()
+                .filter(r -> !FileUtils.isSubDirectory(rootFolder, r.getFile()))
+                .collect(Collectors.toList());
     }
 
-    public List<Resources> getAllResources() {
-        return Stream.concat(resourcesTable.stream(), externalResourcesTable.stream())
-                .collect(Collectors.toList());
+    public List<Resources> getResources() {
+        return resourcesTable;
     }
 
     public List<Library> getLibraries() {
@@ -145,21 +152,8 @@ public class Settings implements Delayable {
         this.documentation = documentation;
     }
 
-    public void addResources(Resources resources) throws IOException {
-        if(this.file == null){
-            resourcesTable.add(resources);
-        }
-        else{
-            Project project = this.file.getProject();
-            File rootFolder = project.getRootFolder();
-
-            if(FileUtils.isSubDirectory(rootFolder, resources.getFile())){
-                resourcesTable.add(resources);
-            }
-            else{
-                externalResourcesTable.add(resources);
-            }
-        }
+    public void addResources(Resources resources) {
+        resourcesTable.add(resources);
     }
 
     public void addLibrary(Library library) {

@@ -18,7 +18,7 @@ class TestCaseParser {
         if(!optionalTestCase.isPresent()){
             throw new IOException(String.format("failed to read test case at line %d in file %s",
                     reader.getCurrent().getNumber(),
-                    reader.getFile().getAbsolutePath()));
+                    reader.getSource().getAbsolutePath()));
         }
 
         final TestCase testCase = optionalTestCase.get();
@@ -77,7 +77,7 @@ class TestCaseParser {
             testCase.setTemplate(step);
         } catch (InvalidTypeException e) {
             errors.registerSyntaxError(
-                    step.getFile(),
+                    step.getSource(),
                     String.format("%s: %s", ErrorMessages.FAILED_TO_PARSE_TEMPLATE, e.getMessage()),
                     step.getRange()
             );
@@ -91,7 +91,7 @@ class TestCaseParser {
             testCase.setTearDown(step);
         } catch (InvalidTypeException e) {
             errors.registerSyntaxError(
-                    step.getFile(),
+                    step.getSource(),
                     String.format("%s: %s", ErrorMessages.FAILED_TO_PARSE_TEARDOWN, e.getMessage()),
                     step.getRange()
             );
@@ -107,7 +107,7 @@ class TestCaseParser {
             testCase.setSetup(step);
         } catch (InvalidTypeException e) {
             errors.registerSyntaxError(
-                    step.getFile(),
+                    step.getSource(),
                     String.format("%s: %s", ErrorMessages.FAILED_TO_PARSE_SETUP, e.getMessage()),
                     step.getRange()
             );
@@ -128,7 +128,7 @@ class TestCaseParser {
             testCase.addStep(step);
         } catch (Exception e) {
             errors.registerSyntaxError(
-                    step.getFile(),
+                    step.getSource(),
                     ErrorMessages.FAILED_TO_ADD_STEP_TO_TEST_CASE,
                     step.getRange()
             );

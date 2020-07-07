@@ -2,6 +2,7 @@ package tech.ikora.builder;
 
 import tech.ikora.BuildConfiguration;
 import tech.ikora.error.ErrorManager;
+import tech.ikora.exception.InvalidArgumentException;
 import tech.ikora.model.*;
 import tech.ikora.runner.Runtime;
 import tech.ikora.runner.StaticScope;
@@ -100,22 +101,19 @@ public class Builder {
 
     private static void resolveDependencies(Projects projects, ErrorManager errors) {
         for(Project project: projects){
+            if(project.getRootFolder().isInMemory()){
+                continue;
+            }
+
             Set<Resources> externals =  project.getExternalResources();
 
             for(Resources external: externals) {
                 for(Project dependency: projects) {
-                    File base = dependency.getRootFolder();
+                    File base = dependency.getRootFolder().asFile();
 
-                    try {
-                        if(FileUtils.isSubDirectory(base, external.getFile())){
-                            updateDependencies(project, dependency, external);
-                            break;
-                        }
-                    } catch (IOException e) {
-                        errors.registerIOError(
-                                base,
-                                String.format("Failed to resolve dependency: %s", e.getMessage())
-                        );
+                    if(FileUtils.isSubDirectory(base, external.getFile())){
+                        updateDependencies(project, dependency, external);
+                        break;
                     }
                 }
             }
@@ -124,7 +122,7 @@ public class Builder {
 
     private static void updateDependencies(Project project, Project dependency, Resources external) {
         project.addDependency(dependency);
-        String name = dependency.generateFileName(external.getFile());
+        String name = dependency.generateFileName(new Source(external.getFile()));
         Optional<SourceFile> sourceFile = dependency.getSourceFile(name);
         sourceFile.ifPresent(external::setSourceFile);
     }
@@ -143,6 +141,11 @@ public class Builder {
     }
 
     private static Project parse(File file, BuildConfiguration configuration, DynamicImports dynamicImports, ErrorManager errors) {
-        return ProjectParser.parse(file, configuration, dynamicImports, errors);
+        try {
+            return ProjectParser.parse(file, configuration, dynamicImports, errors);
+        } catch (InvalidArgumentException e) {
+            errors.registerUnhandledError(null, e.getMessage(), e);
+            return null;
+        }
     }
 }

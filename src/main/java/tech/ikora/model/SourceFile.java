@@ -3,12 +3,11 @@ package tech.ikora.model;
 import org.apache.commons.io.FilenameUtils;
 import tech.ikora.builder.Line;
 
-import java.io.File;
 import java.util.*;
 
-public class SourceFile implements Iterable<UserKeyword> {
+public class SourceFile {
     final private Project project;
-    final private File file;
+    final private Source source;
     final private List<Line> lines;
 
     private String name;
@@ -17,9 +16,9 @@ public class SourceFile implements Iterable<UserKeyword> {
     private SourceNodeTable<UserKeyword> userKeywordTable;
     private SourceNodeTable<VariableAssignment> variableTable;
 
-    public SourceFile(Project project, File file){
+    public SourceFile(Project project, Source source){
         this.project = project;
-        this.file = file;
+        this.source = source;
         this.lines = new ArrayList<>();
 
         setSettings(new Settings());
@@ -27,7 +26,7 @@ public class SourceFile implements Iterable<UserKeyword> {
         setKeywordTable(new SourceNodeTable<>());
         setVariableTable(new SourceNodeTable<>());
 
-        String name = this.project.generateFileName(this.file);
+        String name = this.project.generateFileName(this.source);
         setName(name);
     }
 
@@ -110,16 +109,16 @@ public class SourceFile implements Iterable<UserKeyword> {
         return project;
     }
 
-    public File getFile() {
-        return file;
+    public Source getSource() {
+        return source;
     }
 
     public String getDirectory(){
-        return this.file.getParent();
+        return this.source.getDirectory();
     }
 
     public String getPath() {
-        return this.file.getPath();
+        return this.source.getPath();
     }
 
     public String getName() {
@@ -191,7 +190,7 @@ public class SourceFile implements Iterable<UserKeyword> {
             }
         }
 
-        for(Resources resources: settings.getAllResources()){
+        for(Resources resources: settings.getResources()){
             if(resources.isValid() && memory.add(resources.getSourceFile())) {
                 SourceFile file = resources.getSourceFile();
                 nodes.addAll(file.findNode(library, name, memory, type));
@@ -215,7 +214,7 @@ public class SourceFile implements Iterable<UserKeyword> {
             return true;
         }
 
-        for(Resources resources: settings.getAllResources()){
+        for(Resources resources: settings.getResources()){
             if(resources.getSourceFile() == file){
                 return true;
             }

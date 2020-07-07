@@ -3,10 +3,7 @@ package tech.ikora.builder;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import tech.ikora.error.ErrorManager;
-import tech.ikora.model.LibraryInfo;
-import tech.ikora.model.LibraryKeyword;
-import tech.ikora.model.LibraryResources;
-import tech.ikora.model.LibraryVariable;
+import tech.ikora.model.*;
 import org.reflections.Reflections;
 
 import java.io.*;
@@ -51,7 +48,7 @@ public class LibraryLoader {
             libraries.addExternalLibraries(libraryInfos);
         } catch (IOException e) {
             errors.registerIOError(
-                    new File("libraries.json"),
+                    new Source(new File("libraries.json")),
                     "Failed to load internal file libraries.json containing definitions for library keywords"
             );
         }

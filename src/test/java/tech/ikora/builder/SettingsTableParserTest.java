@@ -4,10 +4,10 @@ import tech.ikora.Helpers;
 import tech.ikora.error.ErrorManager;
 import tech.ikora.error.ErrorMessages;
 import tech.ikora.model.Settings;
+import tech.ikora.model.Source;
 import tech.ikora.model.Tokens;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -22,7 +22,7 @@ public class SettingsTableParserTest {
         ErrorManager errors = new ErrorManager();
 
         final Settings settings = createSettings(settingText, errors);
-        assertTrue(errors.in(null).isEmpty());
+        assertTrue(errors.inMemory().isEmpty());
 
         assertEquals("Example suite", settings.getDocumentation());
     }
@@ -33,7 +33,7 @@ public class SettingsTableParserTest {
                 "Suite Setup    Do Something    ${MESSAGE}";
 
         ErrorManager errors = new ErrorManager();
-        assertTrue(errors.in(null).isEmpty());
+        assertTrue(errors.inMemory().isEmpty());
 
         final Settings settings = createSettings(settingText, errors);
 
@@ -49,7 +49,7 @@ public class SettingsTableParserTest {
         ErrorManager errors = new ErrorManager();
 
         final Settings settings = createSettings(settingText, errors);
-        assertTrue(errors.in(null).isEmpty());
+        assertTrue(errors.inMemory().isEmpty());
 
         assertEquals("Do Something", settings.getTestSetup().getName());
         assertEquals("${MESSAGE}", settings.getTestSetup().getArgumentList().get(0).getName());
@@ -63,7 +63,7 @@ public class SettingsTableParserTest {
         ErrorManager errors = new ErrorManager();
 
         final Settings settings = createSettings(settingText, errors);
-        assertTrue(errors.in(null).isEmpty());
+        assertTrue(errors.inMemory().isEmpty());
 
         assertEquals("Do Something", settings.getSuiteTeardown().getName());
         assertEquals("${MESSAGE}", settings.getSuiteTeardown().getArgumentList().get(0).getName());
@@ -77,7 +77,7 @@ public class SettingsTableParserTest {
         ErrorManager errors = new ErrorManager();
 
         final Settings settings = createSettings(settingText, errors);
-        assertTrue(errors.in(null).isEmpty());
+        assertTrue(errors.inMemory().isEmpty());
 
         assertEquals("Do Something", settings.getTestTeardown().getName());
         assertEquals("${MESSAGE}", settings.getTestTeardown().getArgumentList().get(0).getName());
@@ -91,7 +91,7 @@ public class SettingsTableParserTest {
         ErrorManager errors = new ErrorManager();
 
         final Settings settings = createSettings(settingText, errors);
-        assertTrue(errors.in(null).isEmpty());
+        assertTrue(errors.inMemory().isEmpty());
 
         assertEquals("Do Something", settings.getTemplate().getName());
         assertEquals("${MESSAGE}", settings.getTemplate().getArgumentList().get(0).getName());
@@ -105,9 +105,9 @@ public class SettingsTableParserTest {
         ErrorManager errors = new ErrorManager();
         createSettings(settingText, errors);
 
-        assertEquals(1, errors.in(null).getSize());
+        assertEquals(1, errors.inMemory().getSize());
 
-        String errorMessage = errors.in(null).getSyntaxErrors().iterator().next().getMessage();
+        String errorMessage = errors.inMemory().getSyntaxErrors().iterator().next().getMessage();
         assertEquals(ErrorMessages.FAILED_TO_PARSE_TEMPLATE, errorMessage);
     }
 
@@ -119,7 +119,7 @@ public class SettingsTableParserTest {
         ErrorManager errors = new ErrorManager();
 
         final Settings settings = createSettings(settingText, errors);
-        assertTrue(errors.in(null).isEmpty());
+        assertTrue(errors.inMemory().isEmpty());
 
         assertEquals(1, settings.getMetadata().size());
         assertEquals("2.0", settings.getMetadata("Version").getText());
@@ -133,7 +133,7 @@ public class SettingsTableParserTest {
         ErrorManager errors = new ErrorManager();
 
         final Settings settings = createSettings(settingText, errors);
-        assertEquals(1, errors.in(new File("<null>")).getSize());
+        assertEquals(1, errors.inMemory().getSize());
 
         assertEquals(0, settings.getMetadata().size());
     }
@@ -145,7 +145,7 @@ public class SettingsTableParserTest {
 
         final ErrorManager errors = new ErrorManager();
         final Settings settings = createSettings(settingText, errors);
-        assertEquals(1, errors.in(new File("<null>")).getSize());
+        assertEquals(1, errors.inMemory().getSize());
 
         assertEquals(1, settings.getMetadata().size());
         assertEquals("2.0", settings.getMetadata("Version").getText());
@@ -158,7 +158,7 @@ public class SettingsTableParserTest {
 
         final ErrorManager errors = new ErrorManager();
         final Settings settings = createSettings(settingText, errors);
-        assertTrue(errors.in(new File("\\")).isEmpty());
+        assertTrue(errors.in(new Source("\\")).isEmpty());
 
         assertTrue(settings.hasDefaultTag("default tag 1"));
         assertTrue(settings.hasDefaultTag("default tag 2"));
@@ -176,7 +176,7 @@ public class SettingsTableParserTest {
 
         final ErrorManager errors = new ErrorManager();
         final Settings settings = createSettings(settingText, errors);
-        assertTrue(errors.in(new File("\\")).isEmpty());
+        assertTrue(errors.in(new Source("\\")).isEmpty());
 
         assertTrue(settings.hasForceTag("tag 1"));
         assertTrue(settings.hasForceTag("tag 2"));
@@ -194,7 +194,7 @@ public class SettingsTableParserTest {
 
         final ErrorManager errors = new ErrorManager();
         final Settings settings = createSettings(settingText, errors);
-        assertTrue(errors.in(new File("<null>")).isEmpty());
+        assertTrue(errors.in(new Source("<null>")).isEmpty());
 
         assertEquals("2 minutes", settings.getTimeOut().getTokens().toString());
     }
@@ -206,7 +206,7 @@ public class SettingsTableParserTest {
 
         final ErrorManager errors = new ErrorManager();
         final Settings settings = createSettings(settingText, errors);
-        assertTrue(errors.in(new File("<null>")).isEmpty());
+        assertTrue(errors.in(new Source("<null>")).isEmpty());
 
         assertEquals(1, settings.getVariableFiles().size());
     }
@@ -218,7 +218,7 @@ public class SettingsTableParserTest {
 
         final ErrorManager errors = new ErrorManager();
         final Settings settings = createSettings(settingText, errors);
-        assertTrue(errors.in(new File("<null>")).isEmpty());
+        assertTrue(errors.in(new Source("<null>")).isEmpty());
 
         assertEquals(1, settings.getVariableFiles().size());
     }
@@ -227,6 +227,6 @@ public class SettingsTableParserTest {
         LineReader reader = Helpers.lineReader(text);
         Tokens tokens = LexerUtils.tokenize(reader);
 
-        return SettingsTableParser.parse(reader, tokens,null, errors);
+        return SettingsTableParser.parse(reader, tokens, errors);
     }
 }

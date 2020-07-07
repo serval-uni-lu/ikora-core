@@ -161,8 +161,7 @@ class LexerUtilsTest {
         LineReader reader = null;
 
         try {
-            Reader targetReader = new StringReader(text);
-            reader = new LineReader(targetReader);
+            reader = new LineReader(text);
             reader.readLine();
         } catch (IOException e) {
             fail("Error while creating LineReader: " + e.getMessage());

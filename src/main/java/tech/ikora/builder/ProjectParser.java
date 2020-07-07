@@ -3,8 +3,10 @@ package tech.ikora.builder;
 import tech.ikora.BuildConfiguration;
 import tech.ikora.error.ErrorManager;
 import org.apache.commons.io.FileUtils;
+import tech.ikora.exception.InvalidArgumentException;
 import tech.ikora.model.Project;
 import tech.ikora.model.Resources;
+import tech.ikora.model.Source;
 import tech.ikora.model.SourceFile;
 
 import java.io.*;
@@ -14,20 +16,31 @@ import java.util.*;
 class ProjectParser {
     private ProjectParser(){}
 
-    public static Project parse(File file, BuildConfiguration configuration, DynamicImports dynamicImports, ErrorManager errors) {
-        Project project = new Project(file);
+    public static Project parse(File file, BuildConfiguration configuration, DynamicImports dynamicImports, ErrorManager errors) throws InvalidArgumentException {
+        Source source = new Source(file);
+
+        Project project = new Project(source);
 
         if(file.isDirectory()){
-            file = addRobotFiles(file, project, configuration);
+            source = addRobotFiles(file, project, configuration);
         }
 
-        parseFiles(file, project, dynamicImports, errors);
+        parseFiles(source, project, dynamicImports, errors);
         resolveResources(project, errors);
 
         return project;
     }
 
-    private static File addRobotFiles(File directory, Project project, BuildConfiguration configuration) {
+    public static Project parse(String string, DynamicImports dynamicImports, ErrorManager errors){
+        Source source = new Source(string);
+
+        Project project = new Project(source);
+        SourceFileParser.parse(source, project, dynamicImports, errors);
+
+        return project;
+    }
+
+    private static Source addRobotFiles(File directory, Project project, BuildConfiguration configuration) throws InvalidArgumentException {
         String[] extensions = configuration.getExtensions().toArray(new String[0]);
         List<File> robots = (List<File>) FileUtils.listFiles(directory, extensions, true);
 
@@ -35,43 +48,43 @@ class ProjectParser {
 
         for(File robot: robots){
             if(!isIgnored(robot, ignoreList)){
-                project.addFile(robot);
+                project.addFile(new Source(robot));
             }
         }
 
         return getNextNotParsedFile(project);
     }
 
-    private static void parseFiles(File file, Project project, DynamicImports dynamicImports, ErrorManager errors){
-        if(file == null){
+    private static void parseFiles(Source source, Project project, DynamicImports dynamicImports, ErrorManager errors) throws InvalidArgumentException {
+        if(source == null){
             return;
         }
 
-        SourceFileParser.parse(file, project, dynamicImports, errors);
+        SourceFileParser.parse(source, project, dynamicImports, errors);
 
         parseFiles(getNextNotParsedFile(project), project, dynamicImports, errors);
     }
 
-    private static void resolveResources(Project project, ErrorManager errors) {
+    private static void resolveResources(Project project, ErrorManager errors) throws InvalidArgumentException {
         for(SourceFile sourceFile : project.getSourceFiles()) {
-            for (Resources resources: sourceFile.getSettings().getResources()) {
-                String name = project.generateFileName(resources.getFile());
+            for (Resources resources: sourceFile.getSettings().getInternalResources()) {
+                String name = project.generateFileName(new Source(resources.getFile()));
                 Optional<SourceFile> resourceFile = project.getSourceFile(name);
 
                 if(resourceFile.isPresent()) {
                     resources.setSourceFile(resourceFile.get());
                 }
                 else{
-                    errors.registerIOError(new File(project.getRootFolder(), name),"File not found");
+                    errors.registerIOError(new Source(project.getRootFolder(), name),"File not found");
                 }
             }
         }
     }
 
-    private static File getNextNotParsedFile(Project project){
+    private static Source getNextNotParsedFile(Project project) throws InvalidArgumentException {
         for (Map.Entry<String, SourceFile> file: project.getFiles().entrySet()){
             if(file.getValue() == null){
-                return new File(project.getRootFolder(), file.getKey());
+                return new Source(project.getRootFolder(), file.getKey());
             }
         }
 
@@ -82,22 +95,17 @@ class ProjectParser {
         List<File> ignoreList = new ArrayList<>();
 
         for(String path: ignorePaths){
-            ignoreList.add(new File(project.getRootFolder(), path));
+            ignoreList.add(new File(project.getRootFolder().asFile(), path));
         }
 
         return ignoreList;
     }
 
     private static boolean isIgnored(File file, List<File> ignoreList) {
-        try {
-            for(File ignoreFolder: ignoreList){
-                if(tech.ikora.utils.FileUtils.isSubDirectory(ignoreFolder, file)){
-                    return true;
-                }
+        for(File ignoreFolder: ignoreList){
+            if(tech.ikora.utils.FileUtils.isSubDirectory(ignoreFolder, file)){
+                return true;
             }
-        }
-        catch (IOException e){
-            return false;
         }
 
         return false;

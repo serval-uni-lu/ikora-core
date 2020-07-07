@@ -7,7 +7,6 @@ import tech.ikora.error.Errors;
 import tech.ikora.model.*;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
@@ -62,7 +61,7 @@ class AssignmentParserTest {
         final Optional<KeywordCall> expression = assignment.getKeywordCall();
         assertFalse(expression.isPresent());
 
-        final Errors fileError = errors.in(new File("<null>"));
+        final Errors fileError = errors.inMemory();
         assertEquals(1, fileError.getSize());
         assertEquals(ErrorMessages.ASSIGNMENT_SHOULD_HAVE_LEFT_HAND_OPERAND,
                 fileError.getSyntaxErrors().iterator().next().getMessage());

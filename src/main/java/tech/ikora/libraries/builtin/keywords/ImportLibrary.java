@@ -30,7 +30,7 @@ public class ImportLibrary extends LibraryKeyword implements ScopeModifier {
         }
         else{
             runtime.getErrors().registerSymbolError(
-                    call.getFile(),
+                    call.getSource(),
                     "Failed to resolve dynamic import",
                     call.getRange()
             );

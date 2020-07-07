@@ -164,7 +164,11 @@ public class Suite {
     }
 
     void addSourceFile(SourceFile sourceFile) {
-        if(sourceFile.getFile().equals(this.getSource())){
+        if(sourceFile.getSource().isInMemory()){
+            return;
+        }
+
+        if(sourceFile.getSource().asFile().equals(this.getSource())){
             this.sourceFile = sourceFile;
         }
         else{

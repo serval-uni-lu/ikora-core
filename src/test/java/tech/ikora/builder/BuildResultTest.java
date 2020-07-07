@@ -4,6 +4,7 @@ import tech.ikora.BuildConfiguration;
 import tech.ikora.Helpers;
 import tech.ikora.error.Errors;
 import tech.ikora.error.SymbolError;
+import tech.ikora.model.Source;
 import tech.ikora.utils.FileUtils;
 import org.junit.jupiter.api.Test;
 
@@ -45,8 +46,8 @@ class BuildResultTest {
         assertNotNull(build.getSourceFile(getFileUri("robot/connected-projects/project-a/test-cases.robot")));
         assertFalse(build.getErrors().isEmpty());
 
-        File file = build.getSourceFile(getFileUri("robot/connected-projects/project-a/test-cases.robot")).getFile();
-        Errors errors = build.getErrors().in(file);
+        Source source = build.getSourceFile(getFileUri("robot/connected-projects/project-a/test-cases.robot")).getSource();
+        Errors errors = build.getErrors().in(source);
 
         Set<SymbolError> symbolErrors = errors.getSymbolErrors();
         assertEquals(1, symbolErrors.size());

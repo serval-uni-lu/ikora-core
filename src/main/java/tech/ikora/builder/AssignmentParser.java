@@ -45,7 +45,7 @@ public class AssignmentParser {
 
         if(!assignment.getKeywordCall().isPresent()){
             errors.registerSyntaxError(
-                    reader.getFile(),
+                    reader.getSource(),
                     ErrorMessages.ASSIGNMENT_SHOULD_HAVE_LEFT_HAND_OPERAND,
                     Range.fromTokens(tokens, reader.getCurrent())
             );
