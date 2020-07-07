@@ -15,14 +15,18 @@ import static org.junit.jupiter.api.Assertions.*;
 class BuilderTest {
     @Test
     void testParseLibraryVariable(){
-        final Project project = Helpers.compileProject("robot/library-variable.robot", true);
+        final String code =
+                "*** Test Cases ***\n" +
+                "Environment variables\n" +
+                "    Log    Test Status: ${TEST STATUS}";
 
+        final BuildResult result = Builder.build(code, true);
+        assertEquals(1, result.getProjects().size());
+
+        final Project project = result.getProjects().iterator().next();
         assertEquals(1, project.getTestCases().size());
 
-        final Optional<SourceFile> sourceFile = project.getSourceFile("library-variable.robot");
-        assertTrue(sourceFile.isPresent());
-
-        final TestCase testCase = sourceFile.get().getTestCases().get(0);
+        final TestCase testCase = project.findTestCase("<IN_MEMORY>", "Environment variables").iterator().next();
         assertEquals(1, testCase.getSteps().size());
         assertEquals(2, testCase.getRange().getStart().getLine());
 
@@ -34,11 +38,17 @@ class BuilderTest {
     }
 
     @Test
-    void testBuildWithValueForVariableContainingDot() throws IOException, URISyntaxException {
-        final File robot = FileUtils.getResourceFile("robot/keyword-with-dot.robot");
-        assertNotNull(robot);
+    void testBuildWithValueForVariableContainingDot() {
+        final String code =
+                "*** Test Cases ***\n" +
+                "001 - Execute\n" +
+                "    Show the content of 45.6 is a value with a dot in it\n" +
+                "\n" +
+                "*** Keywords ***\n" +
+                "Show the content of ${value}\n" +
+                "    Log    ${value}\n";
 
-        final BuildResult result = Builder.build(robot, Helpers.getConfiguration(), true);
+        final BuildResult result = Builder.build(code, true);
         assertEquals(1, result.getProjects().size());
 
         final Project project = result.getProjects().iterator().next();
@@ -46,14 +56,13 @@ class BuilderTest {
         final Set<UserKeyword> keywords = project.findUserKeyword(Token.fromString("Show the content of ${value}"));
         assertEquals(1, keywords.size());
 
-        final Optional<SourceFile> sourceFile = project.getSourceFile("keyword-with-dot.robot");
-        assertTrue(sourceFile.isPresent());
-
-        final TestCase testCase = sourceFile.get().getTestCases().get(0);
+        final TestCase testCase = project.findTestCase("<IN_MEMORY>", "001 - Execute").iterator().next();
         assertEquals(1, testCase.getSteps().size());
 
-        final Tokens tokens = sourceFile.get().getTokens();
-        assertEquals(8, tokens.size());
+        final Optional<SourceFile> sourceFile = project.getSourceFile("<IN_MEMORY>");
+        assertTrue(sourceFile.isPresent());
+
+        assertEquals(8, sourceFile.get().getTokens().size());
     }
 
     @Test
@@ -110,11 +119,20 @@ class BuilderTest {
     }
 
     @Test
-    void testAssignmentFromKeyword() throws IOException, URISyntaxException {
-        final File robot = FileUtils.getResourceFile("robot/assignment/keyword.robot");
-        assertNotNull(robot);
+    void testAssignmentFromKeyword() {
+        final String code =
+                "*** Keywords ***\n" +
+                "\n" +
+                "Test with a simple test case to see how assignment works\n" +
+                "    [Arguments]  ${user}    ${pwd}\n" +
+                "    ${EtatRun}=    Run Keyword And Return Status    Connexion to the service    ${user}    ${pwd}\n" +
+                "    Log    ${EtatRun}\n" +
+                "\n" +
+                "Connexion to the service\n" +
+                "    [Arguments]  ${user}    ${pwd}\n" +
+                "    Log    Connecting to service with ${user} and ${pwd}";
 
-        final BuildResult result = Builder.build(robot, Helpers.getConfiguration(), true);
+        final BuildResult result = Builder.build(code, true);
         assertEquals(1, result.getProjects().size());
 
         final Project project = result.getProjects().iterator().next();
@@ -137,11 +155,15 @@ class BuilderTest {
     }
 
     @Test
-    void testForLoopWithRange() throws IOException, URISyntaxException {
-        final File robot = FileUtils.getResourceFile("robot/for-loop/simple.robot");
-        assertNotNull(robot);
+    void testForLoopWithRange() {
+        final String code =
+                "*** Keywords ***\n" +
+                "Simple for loop\n" +
+                "    :FOR  ${index}  IN  RANGE  1  3\n" +
+                "    \\    LOG    ${index}\n" +
+                "    \\    LOG    Another line";
 
-        final BuildResult result = Builder.build(robot, Helpers.getConfiguration(), true);
+        final BuildResult result = Builder.build(code, true);
         assertEquals(1, result.getProjects().size());
 
         final Project project = result.getProjects().iterator().next();
@@ -164,11 +186,15 @@ class BuilderTest {
     }
 
     @Test
-    void testForLoopWithRangeWithoutTabAfterIn() throws IOException, URISyntaxException {
-        final File robot = FileUtils.getResourceFile("robot/for-loop/simple-without-tab-after-in.robot");
-        assertNotNull(robot);
+    void testForLoopWithRangeWithoutTabAfterIn() {
+        final String code =
+                "*** Keywords ***\n" +
+                "Simple for loop\n" +
+                "    :FOR  ${index}  IN RANGE  1  3\n" +
+                "    \\    LOG    ${index}\n" +
+                "    \\    LOG    Another line";
 
-        final BuildResult result = Builder.build(robot, Helpers.getConfiguration(), true);
+        final BuildResult result = Builder.build(code, true);
         assertEquals(1, result.getProjects().size());
 
         final Project project = result.getProjects().iterator().next();
@@ -191,11 +217,13 @@ class BuilderTest {
     }
 
     @Test
-    void testAssignmentFromVariableWithEqualSign() throws IOException, URISyntaxException {
-        final File robot = FileUtils.getResourceFile("robot/assignment/variable.robot");
-        assertNotNull(robot);
+    void testAssignmentFromVariableWithEqualSign() {
+        final String code =
+                "*** Variables ***\n" +
+                "\n" +
+                "${variable}=    some random value";
 
-        final BuildResult result = Builder.build(robot, Helpers.getConfiguration(),true);
+        final BuildResult result = Builder.build(code, true);
         assertEquals(1, result.getProjects().size());
 
         final Project project = result.getProjects().iterator().next();
@@ -205,11 +233,23 @@ class BuilderTest {
     }
 
     @Test
-    void testTestCaseSetupWithCall() throws IOException, URISyntaxException {
-        final File robot = FileUtils.getResourceFile("robot/setup-and-teardown.robot");
-        assertNotNull(robot);
+    void testTestCaseSetupWithCall() {
+        final String code =
+                "*** Test Cases ***\n" +
+                "\n" +
+                "Test with setup and teardown\n" +
+                "    [Setup]  Setup the test case\n" +
+                "    Do Something Cool\n" +
+                "\n" +
+                "*** Keywords ***\n" +
+                "\n" +
+                "Setup the test case\n" +
+                "    Log    Setup environment\n" +
+                "\n" +
+                "Do Something Cool\n" +
+                "    Log    Perform some cool action\n";
 
-        final BuildResult result = Builder.build(robot, Helpers.getConfiguration(), true);
+        final BuildResult result = Builder.build(code, true);
         assertEquals(1, result.getProjects().size());
 
         final Project project = result.getProjects().iterator().next();
@@ -226,11 +266,23 @@ class BuilderTest {
     }
 
     @Test
-    void testTestCaseTeardownWithCall() throws IOException, URISyntaxException {
-        final File robot = FileUtils.getResourceFile("robot/setup-and-teardown.robot");
-        assertNotNull(robot);
+    void testTestCaseTeardownWithCall() {
+        final String code =
+                "*** Test Cases ***\n" +
+                "\n" +
+                "Test with setup and teardown\n" +
+                "    Do Something Cool\n" +
+                "    [Teardown]  Clean the environment\n" +
+                "\n" +
+                "*** Keywords ***\n" +
+                "\n" +
+                "Do Something Cool\n" +
+                "    Log    Perform some cool action\n" +
+                "\n" +
+                "Clean the environment\n" +
+                "    Log    Make sure nothing is polluting the environment";
 
-        final BuildResult result = Builder.build(robot, Helpers.getConfiguration(), true);
+        final BuildResult result = Builder.build(code, true);
         assertEquals(1, result.getProjects().size());
 
         final Project project = result.getProjects().iterator().next();
@@ -247,11 +299,22 @@ class BuilderTest {
     }
 
     @Test
-    void testTestCaseWithSimpleTemplate() throws IOException, URISyntaxException {
-        final File robot = FileUtils.getResourceFile("robot/template.robot");
-        assertNotNull(robot);
+    void testTestCaseWithSimpleTemplate() {
+        final String code =
+                "*** Test Cases ***\n" +
+                "\n" +
+                "Test Case using template with explicit arguments\n" +
+                "    [Template]  This is a template\n" +
+                "    Just a little\n" +
+                "    A little more\n" +
+                "    Are you crazy\n" +
+                "\n" +
+                "*** Keywords ***\n" +
+                "This is a template\n" +
+                "    [Arguments]  ${value}\n" +
+                "    Log  ${value}";
 
-        final BuildResult result = Builder.build(robot, Helpers.getConfiguration(), true);
+        final BuildResult result = Builder.build(code, true);
         assertEquals(1, result.getProjects().size());
 
         final Project project = result.getProjects().iterator().next();
@@ -310,9 +373,16 @@ class BuilderTest {
     }
 
     @Test
-    void testKeywordParameterLinker() throws IOException, URISyntaxException {
-        final File file = FileUtils.getResourceFile("robot/keyword-parameters.robot");
-        final BuildResult result = Builder.build(file, Helpers.getConfiguration(), true);
+    void testKeywordParameterLinker() {
+        final String code =
+                "*** Test Cases ***\n" +
+                "Test keyword with keyword as argument\n" +
+                "\n" +
+                "*** Keywords ***\n" +
+                "Test keyword with keyword as argument\n" +
+                "    Run Keyword If    'two' == 'two'    Log    Execute\n";
+
+        final BuildResult result = Builder.build(code, true);
 
         final Project project = result.getProjects().iterator().next();
 
@@ -325,9 +395,19 @@ class BuilderTest {
     }
 
     @Test
-    void testKeywordParameterLinkerWithVariableCollapsed() throws IOException, URISyntaxException {
-        final File file = FileUtils.getResourceFile("robot/keyword-parameters.robot");
-        final BuildResult result = Builder.build(file, Helpers.getConfiguration(), true);
+    void testKeywordParameterLinkerWithVariableCollapsed() {
+        final String code =
+                "*** Test Cases ***\n" +
+                "Test keyword with keyword as argument\n" +
+                "\n" +
+                "*** Keywords ***\n" +
+                "Test keyword with keyword as argument with collapsed arguments\n" +
+                "    Run Keyword If    @{params}\n" +
+                "\n" +
+                "*** Variables ***\n" +
+                "@{params}    Run Keyword If    'two' == 'two'    Log    Execute";
+
+        final BuildResult result = Builder.build(code, true);
 
         final Project project = result.getProjects().iterator().next();
 

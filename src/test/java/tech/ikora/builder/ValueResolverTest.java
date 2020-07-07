@@ -1,13 +1,8 @@
 package tech.ikora.builder;
 
-import tech.ikora.Helpers;
 import tech.ikora.model.*;
 import org.junit.jupiter.api.Test;
-import tech.ikora.utils.FileUtils;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -140,9 +135,16 @@ class ValueResolverTest {
     }
 
     @Test
-    void testGetValuesFromVariableTable() throws IOException, URISyntaxException {
-        final File file = FileUtils.getResourceFile("robot/assignment/simple-assignment.robot");
-        final BuildResult result = Builder.build(file, Helpers.getConfiguration(), true);
+    void testGetValuesFromVariableTable() {
+       final String code =
+               "*** Keywords ***\n" +
+               "From direct assignment\n" +
+               "    Log  ${variable}\n" +
+               "\n" +
+               "*** Variables ***\n" +
+               " ${variable}  Some variable";
+
+        final BuildResult result = Builder.build(code, true);
 
         final Project project = result.getProjects().iterator().next();
 
@@ -162,9 +164,21 @@ class ValueResolverTest {
     }
 
     @Test
-    void testGetValuesFromKeywordParameters() throws IOException, URISyntaxException {
-        final File file = FileUtils.getResourceFile("robot/assignment/parameter-assignment.robot");
-        final BuildResult result = Builder.build(file, Helpers.getConfiguration(), true);
+    void testGetValuesFromKeywordParameters() {
+        final String code =
+                "*** Test Cases ***\n" +
+                "Simple call\n" +
+                "    From parameter assignment    the value\n" +
+                "\n" +
+                "*** Keywords ***\n" +
+                "From parameter assignment\n" +
+                "    [Arguments]    ${local}\n" +
+                "    Log    ${local}\n" +
+                "\n" +
+                "*** Variables ***\n" +
+                " ${variable}  Some variable";
+
+        final BuildResult result = Builder.build(code, true);
 
         final Project project = result.getProjects().iterator().next();
 
@@ -187,9 +201,20 @@ class ValueResolverTest {
     }
 
     @Test
-    void testGetValuesFromKeywordAssignment() throws IOException, URISyntaxException {
-        final File file = FileUtils.getResourceFile("robot/assignment/keyword.robot");
-        final BuildResult result = Builder.build(file, Helpers.getConfiguration(), true);
+    void testGetValuesFromKeywordAssignment() {
+        final String code =
+                "*** Keywords ***\n" +
+                "\n" +
+                "Test with a simple test case to see how assignment works\n" +
+                "    [Arguments]  ${user}    ${pwd}\n" +
+                "    ${EtatRun}=    Run Keyword And Return Status    Connexion to the service    ${user}    ${pwd}\n" +
+                "    Log    ${EtatRun}\n" +
+                "\n" +
+                "Connexion to the service\n" +
+                "    [Arguments]  ${user}    ${pwd}\n" +
+                "    Log    Connecting to service with ${user} and ${pwd}";
+
+        final BuildResult result = Builder.build(code, true);
 
         final Project project = result.getProjects().iterator().next();
 

@@ -99,6 +99,37 @@ public class Builder {
         return result;
     }
 
+    /**
+     * Build a project from a folder or from a single file.
+     * Note that if a relative path to another file is present, it will be included in the analysis as well.
+     * @param code String containing the code to be analazed
+     * @param link If set to truth, resolve symbols otherwise just parse the files
+     * @return Results containing the graph, statistics about the build and eventual errors
+     */
+    public static BuildResult build(String code, boolean link) {
+        BuildResult result = new BuildResult();
+        ErrorManager errors = new ErrorManager();
+
+        Instant start = Instant.now();
+
+        DynamicImports dynamicImports = new DynamicImports();
+        Project project = parse(code, dynamicImports, errors);
+        result.setParsingTime(Duration.between(start, Instant.now()).toMillis());
+
+        Instant startLinking = Instant.now();
+        Runtime runtime = new Runtime(project, new StaticScope(), errors);
+        loadLibraries(runtime);
+        resolve(runtime, link);
+        result.setResolveTime(Duration.between(startLinking, Instant.now()).toMillis());
+
+        result.setBuildTime(Duration.between(start, Instant.now()).toMillis());
+
+        result.setErrors(errors);
+        result.setProjects(new Projects(project));
+
+        return result;
+    }
+
     private static void resolveDependencies(Projects projects, ErrorManager errors) {
         for(Project project: projects){
             if(project.getRootFolder().isInMemory()){
@@ -147,5 +178,9 @@ public class Builder {
             errors.registerUnhandledError(null, e.getMessage(), e);
             return null;
         }
+    }
+
+    private static Project parse(String string, DynamicImports dynamicImports, ErrorManager errors) {
+            return ProjectParser.parse(string, dynamicImports, errors);
     }
 }

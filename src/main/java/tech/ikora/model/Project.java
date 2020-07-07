@@ -193,6 +193,10 @@ public class Project implements Comparable<Project> {
             return;
         }
 
+        if(sourceFile.getSource().isInMemory()){
+            return;
+        }
+
         String name = SuiteFactory.computeName(sourceFile, true);
         Optional<Suite> suite = suites.stream().filter(s -> s.getName().equals(name)).findAny();
 

@@ -75,4 +75,8 @@ public class Source {
     public File asFile() {
         return this.file;
     }
+
+    public String asString() {
+        return this.inMemory;
+    }
 }

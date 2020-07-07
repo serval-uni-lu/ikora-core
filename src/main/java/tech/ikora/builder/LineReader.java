@@ -33,13 +33,18 @@ public class LineReader {
     }
 
     public LineReader(SourceFile sourceFile) throws FileNotFoundException {
-        this.source = sourceFile.getSource();
-
-        Charset charset = FileUtils.detectCharset(this.source.asFile(), StandardCharsets.UTF_8);
-        InputStreamReader input = new InputStreamReader(new FileInputStream(this.source.asFile()), charset);
-        this.reader = new LineNumberReader(input);
-
         this.sourceFile = sourceFile;
+        this.source = this.sourceFile.getSource();
+
+
+        if(this.source.isInMemory()){
+            this.reader = new LineNumberReader(new StringReader(this.source.asString()));
+        }
+        else {
+            Charset charset = FileUtils.detectCharset(this.source.asFile(), StandardCharsets.UTF_8);
+            InputStreamReader input = new InputStreamReader(new FileInputStream(this.source.asFile()), charset);
+            this.reader = new LineNumberReader(input);
+        }
     }
 
     public Line readLine() throws IOException {
