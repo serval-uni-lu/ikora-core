@@ -16,21 +16,21 @@ public class TimeoutParserTest {
     void testParseValidTimeoutWithRawValue() throws IOException, InvalidArgumentException, MalformedVariableException {
         TimeOut timeout = parse("[TimeOut]  1 minute 30 seconds");
         assertTrue(timeout.isValid());
-        assertEquals("1 minute 30 seconds", timeout.getNameToken().getText());
+        assertEquals("1 minute 30 seconds", timeout.getName());
     }
 
     @Test
     void testParseValidTimeoutWithVariable() throws IOException, InvalidArgumentException, MalformedVariableException {
         TimeOut timeout = parse("[TimeOut]  ${value}");
         assertTrue(timeout.isValid());
-        assertEquals("${value}", timeout.getNameToken().getText());
+        assertEquals("${value}", timeout.getName());
     }
 
     @Test
     void testParseNoneTimeout() throws IOException, InvalidArgumentException, MalformedVariableException {
         TimeOut timeout = parse("[TimeOut]  None");
         assertTrue(timeout.isValid());
-        assertEquals("None", timeout.getNameToken().getText());
+        assertEquals("None", timeout.getName());
     }
 
     @Test

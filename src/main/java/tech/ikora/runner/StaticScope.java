@@ -69,7 +69,7 @@ public class StaticScope implements Scope{
             return;
         }
 
-        File filePath = new File(argumentList.get(0).getNameToken().getText());
+        File filePath = new File(argumentList.get(0).getName());
 
         if(!filePath.isAbsolute() && keyword.getSourceFile() != null) {
             filePath = new File(keyword.getSourceFile().getFile(), filePath.getPath());

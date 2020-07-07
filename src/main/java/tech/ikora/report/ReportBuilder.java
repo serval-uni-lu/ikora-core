@@ -70,7 +70,7 @@ public class ReportBuilder {
     private Test createTestNode(TestCase testCase){
         Test test = new Test();
 
-        test.setName(testCase.getNameToken().getText());
+        test.setName(testCase.getName());
         test.setDocumentation(testCase.getDocumentation().toString());
         test.setTags(testCase.getTags().stream().map(Value::getName).collect(Collectors.toSet()));
 

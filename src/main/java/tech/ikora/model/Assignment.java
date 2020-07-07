@@ -21,15 +21,15 @@ public class Assignment extends Step {
         super(name);
 
         this.leftHandOperand = new NodeList<>();
+        this.addAstChild(this.leftHandOperand);
 
         for(Variable returnVariable: leftHandOperand){
             this.addReturnVariable(returnVariable);
-            this.addAstChild(returnVariable);
-            this.addTokens(returnVariable.getTokens());
         }
 
         this.rightHandOperand = new Argument(rightHandOperand);
-        this.addAstChild(rightHandOperand);
+        this.addAstChild(this.rightHandOperand);
+
         this.addTokens(this.rightHandOperand.getTokens());
     }
 
@@ -39,6 +39,8 @@ public class Assignment extends Step {
         }
 
         this.addAstChild(variable);
+        this.addTokens(variable.getTokens());
+
         leftHandOperand.add(variable);
     }
 

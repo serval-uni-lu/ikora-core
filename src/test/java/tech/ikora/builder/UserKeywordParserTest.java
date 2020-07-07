@@ -24,11 +24,11 @@ class UserKeywordParserTest {
         assertNotNull(keyword);
         assertTrue(errors.isEmpty());
 
-        assertEquals("Keyword with cool name", keyword.getNameToken().getText());
+        assertEquals("Keyword with cool name", keyword.getName());
         assertEquals(3, keyword.getSteps().size());
-        assertEquals("Step one", keyword.getStep(0).getNameToken().getText());
-        assertEquals("Step two without args", keyword.getStep(1).getNameToken().getText());
-        assertEquals("Step three \"Embedded arg\"", keyword.getStep(2).getNameToken().getText());
+        assertEquals("Step one", keyword.getStep(0).getName());
+        assertEquals("Step two without args", keyword.getStep(1).getName());
+        assertEquals("Step three \"Embedded arg\"", keyword.getStep(2).getName());
         assertEquals(5, keyword.getTokens().size());
     }
 

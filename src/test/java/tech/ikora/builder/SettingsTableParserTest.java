@@ -37,8 +37,8 @@ public class SettingsTableParserTest {
 
         final Settings settings = createSettings(settingText, errors);
 
-        assertEquals("Do Something", settings.getSuiteSetup().getNameToken().getText());
-        assertEquals("${MESSAGE}", settings.getSuiteSetup().getArgumentList().get(0).getNameToken().getText());
+        assertEquals("Do Something", settings.getSuiteSetup().getName());
+        assertEquals("${MESSAGE}", settings.getSuiteSetup().getArgumentList().get(0).getName());
     }
 
     @Test
@@ -51,8 +51,8 @@ public class SettingsTableParserTest {
         final Settings settings = createSettings(settingText, errors);
         assertTrue(errors.in(null).isEmpty());
 
-        assertEquals("Do Something", settings.getTestSetup().getNameToken().getText());
-        assertEquals("${MESSAGE}", settings.getTestSetup().getArgumentList().get(0).getNameToken().getText());
+        assertEquals("Do Something", settings.getTestSetup().getName());
+        assertEquals("${MESSAGE}", settings.getTestSetup().getArgumentList().get(0).getName());
     }
 
     @Test
@@ -65,8 +65,8 @@ public class SettingsTableParserTest {
         final Settings settings = createSettings(settingText, errors);
         assertTrue(errors.in(null).isEmpty());
 
-        assertEquals("Do Something", settings.getSuiteTeardown().getNameToken().getText());
-        assertEquals("${MESSAGE}", settings.getSuiteTeardown().getArgumentList().get(0).getNameToken().getText());
+        assertEquals("Do Something", settings.getSuiteTeardown().getName());
+        assertEquals("${MESSAGE}", settings.getSuiteTeardown().getArgumentList().get(0).getName());
     }
 
     @Test
@@ -79,8 +79,8 @@ public class SettingsTableParserTest {
         final Settings settings = createSettings(settingText, errors);
         assertTrue(errors.in(null).isEmpty());
 
-        assertEquals("Do Something", settings.getTestTeardown().getNameToken().getText());
-        assertEquals("${MESSAGE}", settings.getTestTeardown().getArgumentList().get(0).getNameToken().getText());
+        assertEquals("Do Something", settings.getTestTeardown().getName());
+        assertEquals("${MESSAGE}", settings.getTestTeardown().getArgumentList().get(0).getName());
     }
 
     @Test
@@ -93,8 +93,8 @@ public class SettingsTableParserTest {
         final Settings settings = createSettings(settingText, errors);
         assertTrue(errors.in(null).isEmpty());
 
-        assertEquals("Do Something", settings.getTemplate().getNameToken().getText());
-        assertEquals("${MESSAGE}", settings.getTemplate().getArgumentList().get(0).getNameToken().getText());
+        assertEquals("Do Something", settings.getTemplate().getName());
+        assertEquals("${MESSAGE}", settings.getTemplate().getArgumentList().get(0).getName());
     }
 
     @Test

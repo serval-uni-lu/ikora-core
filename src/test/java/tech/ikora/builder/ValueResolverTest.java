@@ -140,7 +140,7 @@ class ValueResolverTest {
     }
 
     @Test
-    void testGetValuesWithSimpleAssignment() throws IOException, URISyntaxException {
+    void testGetValuesFromVariableTable() throws IOException, URISyntaxException {
         final File file = FileUtils.getResourceFile("robot/assignment/simple-assignment.robot");
         final BuildResult result = Builder.build(file, Helpers.getConfiguration(), true);
 
@@ -181,5 +181,33 @@ class ValueResolverTest {
         final Node definition = definitions.iterator().next();
 
         assertTrue(definition instanceof ScalarVariable);
+
+        final SourceNode astParent = ((ScalarVariable) definition).getAstParent().getAstParent();
+        assertTrue(astParent instanceof UserKeyword);
+    }
+
+    @Test
+    void testGetValuesFromKeywordAssignment() throws IOException, URISyntaxException {
+        final File file = FileUtils.getResourceFile("robot/assignment/keyword.robot");
+        final BuildResult result = Builder.build(file, Helpers.getConfiguration(), true);
+
+        final Project project = result.getProjects().iterator().next();
+
+        final Set<UserKeyword> ofInterest = project.findUserKeyword(Token.fromString("Test with a simple test case to see how assignment works"));
+        final UserKeyword keyword = ofInterest.iterator().next();
+
+        final KeywordCall call = (KeywordCall)keyword.getStep(1);
+        final Argument argument = call.getArgumentList().get(0);
+
+        final Optional<SourceNode> value = argument.getDefinition();
+        assertTrue(value.isPresent());
+
+        final Set<Node> definitions = ((Variable) value.get()).getDefinition(Link.Import.BOTH);
+        final Node definition = definitions.iterator().next();
+
+        assertTrue(definition instanceof ScalarVariable);
+
+        final SourceNode astParent = ((ScalarVariable) definition).getAstParent().getAstParent();
+        assertTrue(astParent instanceof Assignment);
     }
 }

@@ -30,7 +30,7 @@ class BuilderTest {
         assertEquals(1, step.getArgumentList().size());
 
         final Argument argument = step.getArgumentList().get(0);
-        assertTrue(argument.getNameToken().getText().contains("Test Status"));
+        assertTrue(argument.getName().contains("Test Status"));
     }
 
     @Test
@@ -120,7 +120,7 @@ class BuilderTest {
         final Project project = result.getProjects().iterator().next();
 
         final Set<UserKeyword> userKeywords = project.getUserKeywords();
-        assertEquals(3, userKeywords.size());
+        assertEquals(2, userKeywords.size());
 
         final Set<UserKeyword> ofInterest = project.findUserKeyword(Token.fromString("Test with a simple test case to see how assignment works"));
         assertEquals(1, ofInterest.size());
@@ -132,8 +132,8 @@ class BuilderTest {
         final Assignment assignment = (Assignment) step0;
 
         assertEquals(1, assignment.getLeftHandOperand().size());
-        assertEquals("${EtatRun}", assignment.getLeftHandOperand().get(0).getNameToken().getText());
-        assertEquals(0, assignment.getLeftHandOperand().get(0).getDependencies().size());
+        assertEquals("${EtatRun}", assignment.getLeftHandOperand().get(0).getName());
+        assertEquals(1, assignment.getLeftHandOperand().get(0).getDependencies().size());
     }
 
     @Test
@@ -157,7 +157,7 @@ class BuilderTest {
 
         assertTrue(ForLoop.class.isAssignableFrom(step0.getClass()));
         final ForLoop forLoop = (ForLoop) step0;
-        assertEquals("${index}", forLoop.getIterator().getNameToken().getText());
+        assertEquals("${index}", forLoop.getIterator().getName());
 
         final List<Step> steps = forLoop.getSteps();
         assertEquals(2, steps.size());
@@ -184,7 +184,7 @@ class BuilderTest {
 
         assertTrue(ForLoop.class.isAssignableFrom(step0.getClass()));
         final ForLoop forLoop = (ForLoop) step0;
-        assertEquals("${index}", forLoop.getIterator().getNameToken().getText());
+        assertEquals("${index}", forLoop.getIterator().getName());
 
         final List<Step> steps = forLoop.getSteps();
         assertEquals(2, steps.size());

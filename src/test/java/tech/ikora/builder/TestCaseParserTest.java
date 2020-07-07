@@ -23,10 +23,10 @@ public class TestCaseParserTest {
         TestCase testCase = createTestCase(text, errors);
 
         assertNotNull(testCase);
-        assertEquals("Test case with documentation", testCase.getNameToken().getText());
+        assertEquals("Test case with documentation", testCase.getName());
         assertEquals(1, testCase.getSteps().size());
         assertEquals("Some documentationwith continuation", testCase.getDocumentation().clean().toString());
-        assertEquals("Some keyword", testCase.getStep(0).getNameToken().getText());
+        assertEquals("Some keyword", testCase.getStep(0).getName());
     }
 
     @Test
@@ -41,11 +41,11 @@ public class TestCaseParserTest {
         TestCase testCase = createTestCase(text, errors);
 
         assertNotNull(testCase);
-        assertEquals("Test case with control flow elements", testCase.getNameToken().getText());
+        assertEquals("Test case with control flow elements", testCase.getName());
         assertEquals(3, testCase.getSteps().size());
-        assertEquals("First Keyword from project B", testCase.getStep(0).getNameToken().getText());
-        assertEquals(":FOR", testCase.getStep(1).getNameToken().getText());
-        assertEquals("Run Keyword If", testCase.getStep(2).getNameToken().getText());
+        assertEquals("First Keyword from project B", testCase.getStep(0).getName());
+        assertEquals(":FOR", testCase.getStep(1).getName());
+        assertEquals("Run Keyword If", testCase.getStep(2).getName());
     }
 
     private TestCase createTestCase(String text, ErrorManager errors) throws IOException {
