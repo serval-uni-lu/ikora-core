@@ -138,21 +138,21 @@ public class SymbolResolver {
 
             if(argumentList.isExpendedUntilPosition(keywordIndex)){
                 final List<Argument> argumentsToProcess = argumentList.subList(keywordIndex, argumentList.size());
-                final Argument callArgument = createKeywordArgument(argumentsToProcess);
-
+                final KeywordCall callArgument = createKeywordArgument(argumentsToProcess);
                 final ArgumentList newArgumentList = new ArgumentList(argumentList.subList(0, keywordIndex));
-                newArgumentList.add(callArgument);
 
+                newArgumentList.add(new Argument(callArgument));
                 call.setArgumentList(newArgumentList);
+
+                resolveCall(callArgument);
             }
         }
     }
 
-    private Argument createKeywordArgument(List<Argument> arguments) {
+    private KeywordCall createKeywordArgument(List<Argument> arguments) {
         Argument keywordName = arguments.get(0);
 
         KeywordCall call = new KeywordCall(keywordName.getNameToken());
-        call.setSourceFile(keywordName.getSourceFile());
 
         if(arguments.size() > 1){
             for(Argument argument: arguments.subList(1, arguments.size())){
@@ -160,9 +160,7 @@ public class SymbolResolver {
             }
         }
 
-        resolveCall(call);
-
-        return new Argument(call);
+        return call;
     }
 
     private void updateScope(KeywordCall call) {

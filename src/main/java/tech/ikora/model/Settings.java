@@ -1,16 +1,19 @@
 package tech.ikora.model;
 
+import org.apache.commons.lang3.NotImplementedException;
+import tech.ikora.analytics.Action;
+import tech.ikora.analytics.visitor.NodeVisitor;
+import tech.ikora.analytics.visitor.VisitorMemory;
 import tech.ikora.exception.InvalidMetadataException;
 import tech.ikora.exception.InvalidTypeException;
+import tech.ikora.runner.Runtime;
 import tech.ikora.utils.FileUtils;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-public class Settings implements Delayable {
+public class Settings extends SourceNode implements Delayable {
     private Token header;
 
     private List<Resources> resourcesTable;
@@ -21,7 +24,6 @@ public class Settings implements Delayable {
 
     private String documentation;
 
-    private SourceFile file;
     private TimeOut timeOut;
     private Metadata metadata;
     private List<VariableFile> variableFiles;
@@ -44,12 +46,13 @@ public class Settings implements Delayable {
         this.variableFiles = new ArrayList<>();
     }
 
-    public Token getHeader() {
-        return header;
+    @Override
+    public Token getNameToken() {
+        return this.header;
     }
 
-    public SourceFile getFile() {
-        return file;
+    public Token getHeader() {
+        return header;
     }
 
     public String getDocumentation() {
@@ -57,7 +60,12 @@ public class Settings implements Delayable {
     }
 
     public List<Resources> getInternalResources() {
-        Project project = this.file.getProject();
+        Project project = getProject();
+
+        if(project == null){
+            return Collections.emptyList();
+        }
+
         File rootFolder = project.getRootFolder().asFile();
 
         return this.resourcesTable.stream()
@@ -66,7 +74,12 @@ public class Settings implements Delayable {
     }
 
     public List<Resources> getExternalResources() {
-        Project project = this.file.getProject();
+        Project project = getProject();
+
+        if(project == null){
+            return Collections.emptyList();
+        }
+
         File rootFolder = project.getRootFolder().asFile();
 
         return this.resourcesTable.stream()
@@ -142,10 +155,6 @@ public class Settings implements Delayable {
 
     public void setHeader(Token header){
         this.header = header;
-    }
-
-    public void setFile(SourceFile file) {
-        this.file = file;
     }
 
     public void setDocumentation(String documentation){
@@ -236,5 +245,30 @@ public class Settings implements Delayable {
 
     public void setSuiteTeardown(KeywordCall suiteTeardown) {
         this.suiteTeardown = suiteTeardown;
+    }
+
+    @Override
+    public double distance(Differentiable other) {
+        return 1;
+    }
+
+    @Override
+    public List<Action> differences(Differentiable other) {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public boolean matches(Token name) {
+        return this.header.equalsIgnorePosition(name);
+    }
+
+    @Override
+    public void accept(NodeVisitor visitor, VisitorMemory memory) {
+
+    }
+
+    @Override
+    public void execute(Runtime runtime) throws Exception {
+        throw new NotImplementedException("Execution is not implemented yet");
     }
 }

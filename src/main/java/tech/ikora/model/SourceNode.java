@@ -1,13 +1,11 @@
 package tech.ikora.model;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 public abstract class SourceNode implements Node, Differentiable {
-    private SourceFile sourceFile;
     private SourceNode astParent;
     private final List<SourceNode> astChildren;
     private final Set<Node> dependencies;
@@ -24,16 +22,12 @@ public abstract class SourceNode implements Node, Differentiable {
         return getNameToken().getText();
     }
 
-    public final void setSourceFile(SourceFile sourceFile) {
-        this.sourceFile = sourceFile;
-
-        for(SourceNode astChild: this.astChildren){
-            astChild.setSourceFile(sourceFile);
-        }
-    }
-
     public SourceFile getSourceFile() {
-        return sourceFile;
+        if(astParent == null){
+            return null;
+        }
+
+        return astParent.getSourceFile();
     }
 
     public void setAstParent(SourceNode astParent){
@@ -42,7 +36,6 @@ public abstract class SourceNode implements Node, Differentiable {
         }
 
         this.astParent = astParent;
-        this.setSourceFile(astParent.getSourceFile());
     }
 
     protected void addAstChild(SourceNode astChild){
@@ -77,24 +70,28 @@ public abstract class SourceNode implements Node, Differentiable {
     }
 
     public Source getSource(){
-        if(sourceFile == null){
+        if(getSourceFile() == null){
             return null;
         }
 
-        return sourceFile.getSource();
+        return getSourceFile().getSource();
     }
 
     @Override
     public String getLibraryName() {
-        if(this.sourceFile == null){
+        if(this.getSourceFile() == null){
             return "<NONE>";
         }
 
-        return this.sourceFile.getName();
+        return this.getSourceFile().getName();
     }
 
     public long getEpoch() {
-        return sourceFile.getEpoch();
+        if(getSourceFile() == null){
+            return -1;
+        }
+
+        return getSourceFile().getEpoch();
     }
 
     public Project getProject(){
@@ -156,10 +153,14 @@ public abstract class SourceNode implements Node, Differentiable {
     }
 
     public int getLoc() {
+        if(getSourceFile() == null){
+            return -1;
+        }
+
         int startLine = getRange().getStart().getLine();
         int endLine = getRange().getEnd().getLine();
 
-        return this.sourceFile.getLinesOfCode(startLine, endLine);
+        return this.getSourceFile().getLinesOfCode(startLine, endLine);
     }
 
     public abstract Token getNameToken();

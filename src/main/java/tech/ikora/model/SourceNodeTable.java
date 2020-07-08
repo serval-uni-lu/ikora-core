@@ -12,21 +12,19 @@ import java.util.stream.Collectors;
 public class SourceNodeTable<T extends SourceNode> extends SourceNode implements Iterable<T> {
     private Token header;
     private List<T> nodeList;
-    private SourceFile sourceFile;
 
     public SourceNodeTable() {
         this.header = Token.empty();
         this.nodeList = new ArrayList<>();
     }
 
-    private SourceNodeTable(Token header, SourceFile sourceFile, List<T> nodeList){
+    private SourceNodeTable(Token header, List<T> nodeList){
         this.header = header;
-        this.sourceFile = sourceFile;
         this.nodeList = new ArrayList<>(nodeList);
     }
 
     public SourceNodeTable<T> clone(){
-        return new SourceNodeTable<>(header, sourceFile, nodeList);
+        return new SourceNodeTable<>(header, nodeList);
     }
 
     public void setHeader(Token header){

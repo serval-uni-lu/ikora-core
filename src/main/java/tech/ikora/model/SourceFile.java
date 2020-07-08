@@ -1,11 +1,15 @@
 package tech.ikora.model;
 
 import org.apache.commons.io.FilenameUtils;
+import tech.ikora.analytics.Action;
+import tech.ikora.analytics.visitor.NodeVisitor;
+import tech.ikora.analytics.visitor.VisitorMemory;
 import tech.ikora.builder.Line;
+import tech.ikora.runner.Runtime;
 
 import java.util.*;
 
-public class SourceFile {
+public class SourceFile extends SourceNode {
     final private Project project;
     final private Source source;
     final private List<Line> lines;
@@ -32,11 +36,6 @@ public class SourceFile {
 
     private void setName(String name) {
         this.name = name;
-
-        this.settings.setFile(this);
-        this.testCaseTable.setSourceFile(this);
-        this.userKeywordTable.setSourceFile(this);
-        this.variableTable.setSourceFile(this);
     }
 
     public List<Line> getLines(){
@@ -51,6 +50,11 @@ public class SourceFile {
         fileTokens.addAll(variableTable.getTokens());
 
         return fileTokens;
+    }
+
+    @Override
+    public Token getNameToken() {
+        return Token.fromString(this.name);
     }
 
     public int getDeadLoc() {
@@ -85,24 +89,45 @@ public class SourceFile {
         return loc;
     }
 
+    @Override
+    public SourceFile getSourceFile() {
+        return this;
+    }
+
     public void setSettings(Settings settings) {
+        if(this.settings != null){
+            removeAstChild(this.settings);
+        }
+
         this.settings = settings;
-        this.settings.setFile(this);
+        addAstChild(settings);
     }
 
     public void setTestCaseTable(SourceNodeTable<TestCase> testCaseTable) {
+        if(this.testCaseTable != null){
+            removeAstChild(this.testCaseTable);
+        }
+
         this.testCaseTable = testCaseTable;
-        this.testCaseTable.setSourceFile(this);
+        addAstChild(testCaseTable);
     }
 
-    public void setKeywordTable(SourceNodeTable<UserKeyword> nodeTable) {
-        this.userKeywordTable = nodeTable;
-        this.userKeywordTable.setSourceFile(this);
+    public void setKeywordTable(SourceNodeTable<UserKeyword> userKeywordTable) {
+        if(this.userKeywordTable != null){
+            removeAstChild(this.userKeywordTable);
+        }
+
+        this.userKeywordTable = userKeywordTable;
+        addAstChild(userKeywordTable);
     }
 
     public void setVariableTable(SourceNodeTable<VariableAssignment> variableTable) {
+        if(this.variableTable != null){
+            removeAstChild(this.variableTable);
+        }
+
         this.variableTable = variableTable;
-        this.variableTable.setSourceFile(this);
+        addAstChild(variableTable);
     }
 
     public Project getProject() {
@@ -123,6 +148,21 @@ public class SourceFile {
 
     public String getName() {
         return this.name;
+    }
+
+    @Override
+    public boolean matches(Token name) {
+        return this.name.equalsIgnoreCase(name.getText());
+    }
+
+    @Override
+    public void accept(NodeVisitor visitor, VisitorMemory memory) {
+
+    }
+
+    @Override
+    public void execute(Runtime runtime) throws Exception {
+
     }
 
     public Settings getSettings() {
@@ -237,5 +277,15 @@ public class SourceFile {
         }
 
         return path.equalsIgnoreCase(FilenameUtils.getBaseName(getPath()));
+    }
+
+    @Override
+    public double distance(Differentiable other) {
+        return other == this ? 0 : 1;
+    }
+
+    @Override
+    public List<Action> differences(Differentiable other) {
+        return Collections.emptyList();
     }
 }
