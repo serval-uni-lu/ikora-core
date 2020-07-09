@@ -4,7 +4,6 @@ import org.apache.commons.lang3.NotImplementedException;
 import tech.ikora.analytics.Action;
 import tech.ikora.analytics.visitor.NodeVisitor;
 import tech.ikora.analytics.visitor.VisitorMemory;
-import tech.ikora.exception.InvalidArgumentException;
 import tech.ikora.runner.Runtime;
 import tech.ikora.utils.LevenshteinDistance;
 

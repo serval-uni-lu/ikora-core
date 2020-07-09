@@ -120,7 +120,14 @@ public class Assignment extends Step {
         Assignment assignment = (Assignment)other;
 
         double distReturn = LevenshteinDistance.index(this.leftHandOperand, assignment.leftHandOperand) * 0.2;
-        double distExpression = rightHandOperand.distance(assignment.rightHandOperand) * 0.8;
+
+        double distExpression;
+        if(rightHandOperand == null){
+            distExpression = assignment.rightHandOperand == null ? 0. : 0.8;
+        }
+        else{
+            distExpression = rightHandOperand.distance(assignment.rightHandOperand) * 0.8;
+        }
 
         return distReturn + distExpression;
     }
