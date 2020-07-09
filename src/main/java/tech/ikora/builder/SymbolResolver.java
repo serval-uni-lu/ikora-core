@@ -39,23 +39,14 @@ public class SymbolResolver {
     }
 
     private void resolveSteps(TestCase testCase) {
-        KeywordCall setup = testCase.getSetup();
-        if(setup != null){
-            resolveCall(setup);
-        }
+        testCase.getSetup().ifPresent(this::resolveCall);
 
         for (Step step: testCase) {
-            if(testCase.hasTemplate()){
-                step.setTemplate(testCase.getTemplate());
-            }
-
+            testCase.getTemplate().ifPresent(step::setTemplate);
             step.getKeywordCall().ifPresent(this::resolveCall);
         }
 
-        KeywordCall teardown = testCase.getTearDown();
-        if(teardown != null){
-            resolveCall(teardown);
-        }
+        testCase.getTearDown().ifPresent(this::resolveCall);
     }
 
     private void resolveSteps(UserKeyword userKeyword) throws RuntimeException {

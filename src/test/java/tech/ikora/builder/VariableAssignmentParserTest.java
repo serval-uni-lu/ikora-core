@@ -80,10 +80,12 @@ public class VariableAssignmentParserTest {
         assertFalse(assignment.getValues().isEmpty());
 
         assertTrue(assignment.getValues().get(0).isDictionaryEntry());
+        assertEquals("key1", assignment.getValues().get(0).getName());
 
         assertTrue(assignment.getValues().get(1).isScalarVariable());
-        assertEquals("${variable}", assignment.getValues().get(1).getNameToken().toString());
+        assertEquals("${variable}", assignment.getValues().get(1).toString());
 
         assertTrue(assignment.getValues().get(2).isDictionaryEntry());
+        assertEquals("key3", assignment.getValues().get(2).toString());
     }
 }

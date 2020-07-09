@@ -5,6 +5,8 @@ import tech.ikora.analytics.visitor.VisitorMemory;
 import tech.ikora.exception.InvalidTypeException;
 import tech.ikora.types.BaseTypeList;
 
+import java.util.Optional;
+
 public class TestCase extends KeywordDefinition {
     private KeywordCall setup = null;
     private KeywordCall tearDown = null;
@@ -41,16 +43,16 @@ public class TestCase extends KeywordDefinition {
         setTemplate(template.toCall());
     }
 
-    public KeywordCall getSetup(){
-        return setup;
+    public Optional<KeywordCall> getSetup(){
+        return Optional.ofNullable(setup);
     }
 
-    public KeywordCall getTearDown(){
-        return tearDown;
+    public Optional<KeywordCall> getTearDown(){
+        return Optional.ofNullable(tearDown);
     }
 
-    public KeywordCall getTemplate() {
-        return template;
+    public Optional<KeywordCall> getTemplate() {
+        return Optional.ofNullable(template);
     }
 
     public boolean hasTemplate(){
