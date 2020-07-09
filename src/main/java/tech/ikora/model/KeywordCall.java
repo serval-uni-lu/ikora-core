@@ -40,7 +40,7 @@ public class KeywordCall extends Step {
         this.addAstChild(argument);
         addTokens(argument.getTokens());
 
-        argument.getDefinition().ifPresent(node -> node.addDependency(this));
+        argument.getDefinition().addDependency(this);
     }
 
     @Override

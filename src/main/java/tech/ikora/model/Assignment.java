@@ -27,10 +27,15 @@ public class Assignment extends Step {
             this.addReturnVariable(returnVariable);
         }
 
-        this.rightHandOperand = new Argument(rightHandOperand);
-        this.addAstChild(this.rightHandOperand);
+        if(rightHandOperand != null){
+            this.rightHandOperand = new Argument(rightHandOperand);
+            this.addAstChild(this.rightHandOperand);
 
-        this.addTokens(this.rightHandOperand.getTokens());
+            this.addTokens(this.rightHandOperand.getTokens());
+        }
+        else{
+            this.rightHandOperand = null;
+        }
     }
 
     public void addReturnVariable(Variable variable)  {
@@ -64,10 +69,8 @@ public class Assignment extends Step {
             return Optional.empty();
         }
 
-        SourceNode sourceNode = rightHandOperand.getDefinition().orElse(null);
-
-        if(sourceNode instanceof KeywordCall){
-            return Optional.of((KeywordCall) sourceNode);
+        if(rightHandOperand.isType(KeywordCall.class)){
+            return Optional.of((KeywordCall) rightHandOperand.getDefinition());
         }
 
         return Optional.empty();

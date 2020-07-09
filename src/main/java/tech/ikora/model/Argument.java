@@ -16,9 +16,7 @@ public class Argument extends SourceNode {
 
     public Argument(SourceNode definition) {
         if(definition == null){
-            this.name = Token.empty();
-            this.definition = null;
-            return;
+            throw new NullPointerException("Argument cannot be initialize with null value");
         }
 
         this.name = definition.getNameToken();
@@ -28,8 +26,8 @@ public class Argument extends SourceNode {
         this.addAstChild(this.definition);
     }
 
-    public Optional<SourceNode> getDefinition() {
-        return Optional.ofNullable(this.definition);
+    public SourceNode getDefinition() {
+        return this.definition;
     }
 
     public boolean isScalarVariable(){
@@ -38,6 +36,10 @@ public class Argument extends SourceNode {
 
     public boolean isDictionaryVariable(){
         return isType(DictionaryVariable.class);
+    }
+
+    public boolean isDictionaryEntry(){
+        return isType(DictionaryEntry.class);
     }
 
     public boolean isListVariable(){
@@ -124,7 +126,7 @@ public class Argument extends SourceNode {
         return "<ARGUMENT>";
     }
 
-    private boolean isType(Class<?> type){
-        return this.getDefinition().map(d -> type.isAssignableFrom(type)).orElse(false);
+    public boolean isType(Class<?> type){
+        return type.isAssignableFrom(this.getDefinition().getClass());
     }
 }

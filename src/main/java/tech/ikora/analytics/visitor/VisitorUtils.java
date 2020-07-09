@@ -46,9 +46,7 @@ public class VisitorUtils {
     }
 
     public static void traverseArgument(NodeVisitor visitor, Argument argument, VisitorMemory memory){
-        argument.getDefinition().ifPresent(keyword ->
-                keyword.accept(visitor, memory.getUpdated(argument))
-        );
+        argument.getDefinition().accept(visitor, memory.getUpdated(argument));
     }
 
     public static void traverseValues(TreeVisitor treeVisitor, VariableAssignment variableAssignment, VisitorMemory memory) {

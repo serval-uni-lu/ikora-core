@@ -104,18 +104,14 @@ public class ValueResolver {
     }
 
     public static List<Node> getValueNodes(Argument argument){
-        final Optional<SourceNode> definition = argument.getDefinition();
+        final SourceNode definition = argument.getDefinition();
 
-        if(!definition.isPresent()){
-            return Collections.emptyList();
+        if(Variable.class.isAssignableFrom(definition.getClass())){
+            return getValueNodes((Variable)definition);
         }
 
-        if(Variable.class.isAssignableFrom(definition.get().getClass())){
-            return getValueNodes((Variable)definition.get());
-        }
-
-        if(Literal.class.isAssignableFrom(definition.get().getClass())){
-            return Collections.singletonList(definition.get());
+        if(Literal.class.isAssignableFrom(definition.getClass())){
+            return Collections.singletonList(definition);
         }
 
         return Collections.emptyList();

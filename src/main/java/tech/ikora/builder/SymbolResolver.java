@@ -101,19 +101,15 @@ public class SymbolResolver {
     }
 
     private void resolveArgumentVariables(Argument argument) {
-        final Optional<SourceNode> definition = argument.getDefinition();
-
-        if(!definition.isPresent()){
-            return;
-        }
+        final SourceNode definition = argument.getDefinition();
 
         List<Variable> variables = new ArrayList<>();
 
-        if(Variable.class.isAssignableFrom(definition.get().getClass())){
-            variables.add((Variable)definition.get());
+        if(Variable.class.isAssignableFrom(definition.getClass())){
+            variables.add((Variable)definition);
         }
-        else if(Literal.class.isAssignableFrom(definition.get().getClass())){
-            variables.addAll(((Literal)definition.get()).getVariables());
+        else if(Literal.class.isAssignableFrom(definition.getClass())){
+            variables.addAll(((Literal)definition).getVariables());
         }
 
         for(Variable variable: variables){

@@ -154,10 +154,9 @@ class ValueResolverTest {
         final KeywordCall call = (KeywordCall)keyword.getStep(0);
         final Argument argument = call.getArgumentList().get(0);
 
-        final Optional<SourceNode> value = argument.getDefinition();
-        assertTrue(value.isPresent());
+        final SourceNode value = argument.getDefinition();
 
-        final Set<Node> definitions = ((Variable) value.get()).getDefinition(Link.Import.BOTH);
+        final Set<Node> definitions = ((Variable) value).getDefinition(Link.Import.BOTH);
         final Node definition = definitions.iterator().next();
 
         assertTrue(definition instanceof VariableAssignment);
@@ -188,10 +187,9 @@ class ValueResolverTest {
         final KeywordCall call = (KeywordCall)keyword.getStep(0);
         final Argument argument = call.getArgumentList().get(0);
 
-        final Optional<SourceNode> value = argument.getDefinition();
-        assertTrue(value.isPresent());
+        final SourceNode value = argument.getDefinition();
 
-        final Set<Node> definitions = ((Variable) value.get()).getDefinition(Link.Import.BOTH);
+        final Set<Node> definitions = ((Variable) value).getDefinition(Link.Import.BOTH);
         final Node definition = definitions.iterator().next();
 
         assertTrue(definition instanceof ScalarVariable);
@@ -224,10 +222,9 @@ class ValueResolverTest {
         final KeywordCall call = (KeywordCall)keyword.getStep(1);
         final Argument argument = call.getArgumentList().get(0);
 
-        final Optional<SourceNode> value = argument.getDefinition();
-        assertTrue(value.isPresent());
+        final SourceNode value = argument.getDefinition();
 
-        final Set<Node> definitions = ((Variable) value.get()).getDefinition(Link.Import.BOTH);
+        final Set<Node> definitions = ((Variable) value).getDefinition(Link.Import.BOTH);
         final Node definition = definitions.iterator().next();
 
         assertTrue(definition instanceof ScalarVariable);

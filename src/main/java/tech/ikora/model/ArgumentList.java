@@ -169,9 +169,7 @@ public class ArgumentList extends SourceNode implements List<Argument> {
 
     public int findFirst(Class<?> type){
         final Optional<Argument> first = arguments.stream()
-                .filter(a -> a.getDefinition()
-                        .map(n -> type.isAssignableFrom(n.getClass()))
-                        .orElse(false))
+                .filter(a -> a.isType(type))
                 .findFirst();
 
         return first.map(arguments::indexOf).orElse(-1);

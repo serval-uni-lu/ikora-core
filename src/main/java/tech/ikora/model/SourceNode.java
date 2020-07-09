@@ -80,7 +80,7 @@ public abstract class SourceNode implements Node, Differentiable {
     @Override
     public String getLibraryName() {
         if(this.getSourceFile() == null){
-            return "<NONE>";
+            return "<IN_MEMORY>";
         }
 
         return this.getSourceFile().getName();
