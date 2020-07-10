@@ -4,6 +4,7 @@ import java.util.*;
 
 public class Projects implements Iterable<Project> {
     private Date date;
+    private String versionId;
     private Set<Project> projectSet;
 
     public Projects(){
@@ -43,6 +44,18 @@ public class Projects implements Iterable<Project> {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public String getVersionId() {
+        if(versionId == null && date != null){
+            return date.toString();
+        }
+
+        return versionId;
+    }
+
+    public void setVersionId(String versionId) {
+        this.versionId = versionId;
     }
 
     public boolean contains(Project project){
