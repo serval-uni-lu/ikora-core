@@ -69,6 +69,10 @@ public class KeywordCall extends Step {
         return link.getNode();
     }
 
+    public Keyword.Type getKeywordType(){
+        return link.getNode().map(Keyword::getType).orElse(Keyword.Type.NONE);
+    }
+
     public Set<Keyword> getAllPotentialKeywords(Link.Import importType){
         return link.getAllLinks(importType);
     }

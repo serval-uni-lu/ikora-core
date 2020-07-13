@@ -7,12 +7,17 @@ import tech.ikora.runner.Runtime;
 
 import java.util.*;
 
-public class NodeList<N extends SourceNode> extends SourceNode implements List<N> {
+public class NodeList<N extends SourceNode> extends SourceNode implements List<N> , HiddenAstNode{
     private final Token tag;
     private final List<N> nodes;
 
     public NodeList(){
         this(Token.empty());
+    }
+
+    public NodeList(List<N> nodes){
+        this.tag = Token.empty();
+        this.nodes = nodes;
     }
 
     public NodeList(Token tag) {

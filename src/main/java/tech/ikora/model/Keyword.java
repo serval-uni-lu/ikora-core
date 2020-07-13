@@ -4,7 +4,7 @@ import tech.ikora.types.BaseTypeList;
 
 public interface Keyword extends Node {
     enum Type{
-        USER, CONTROL_FLOW, ASSERTION, ACTION, LOG, ERROR, SYNCHRONISATION, GET, UNKNOWN, SET
+        USER, CONTROL_FLOW, ASSERTION, ACTION, LOG, ERROR, SYNCHRONISATION, GET, UNKNOWN, SET, NONE
     }
 
     Type getType();

@@ -103,6 +103,18 @@ public abstract class SourceNode implements Node, Differentiable {
     }
 
     public SourceNode getAstParent() {
+        return getAstParent(true);
+    }
+
+    public SourceNode getAstParent(boolean ignoreHiddenNodes){
+        if(astParent == null){
+            return null;
+        }
+
+        if(ignoreHiddenNodes && HiddenAstNode.class.isAssignableFrom(astParent.getClass())){
+            return astParent.getAstParent();
+        }
+
         return astParent;
     }
 

@@ -4,7 +4,6 @@ import tech.ikora.model.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -194,7 +193,7 @@ class ValueResolverTest {
 
         assertTrue(definition instanceof ScalarVariable);
 
-        final SourceNode astParent = ((ScalarVariable) definition).getAstParent().getAstParent();
+        final SourceNode astParent = ((ScalarVariable) definition).getAstParent();
         assertTrue(astParent instanceof UserKeyword);
     }
 
@@ -229,7 +228,7 @@ class ValueResolverTest {
 
         assertTrue(definition instanceof ScalarVariable);
 
-        final SourceNode astParent = ((ScalarVariable) definition).getAstParent().getAstParent();
+        final SourceNode astParent = ((ScalarVariable) definition).getAstParent();
         assertTrue(astParent instanceof Assignment);
     }
 }
