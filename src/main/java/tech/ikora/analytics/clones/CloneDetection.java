@@ -7,8 +7,8 @@ import tech.ikora.analytics.Difference;
 import tech.ikora.model.*;
 
 public class CloneDetection<T extends SourceNode> {
-    private static Set<Action.Type> ignoreForType1;
-    private static Set<Action.Type> ignoreForType2;
+    private static final Set<Action.Type> ignoreForType1;
+    private static final Set<Action.Type> ignoreForType2;
 
     static {
         Set<Action.Type> typeI = new HashSet<>(4);
@@ -20,13 +20,14 @@ public class CloneDetection<T extends SourceNode> {
         ignoreForType1 = Collections.unmodifiableSet(typeI);
 
         Set<Action.Type> typeII = new HashSet<>(ignoreForType1);
-        typeII.add(Action.Type.CHANGE_STEP_ARGUMENT);
+        typeII.add(Action.Type.CHANGE_VALUE_NAME);
+        typeII.add(Action.Type.CHANGE_VALUE_TYPE);
 
         ignoreForType2 = Collections.unmodifiableSet(typeII);
     }
 
-    private Set<Project> projects;
-    private Clones<T> clones;
+    private final Set<Project> projects;
+    private final Clones<T> clones;
 
     private CloneDetection(Project project){
         this.projects = Collections.singleton(project);
@@ -79,7 +80,21 @@ public class CloneDetection<T extends SourceNode> {
         List<T> nodes = new ArrayList<>();
 
         for(Project project: projects){
-            nodes.addAll(project.getNodes(type));
+            if(type == TestCase.class){
+                nodes.addAll((Set<T>)project.getTestCases());
+            }
+            else if(type == UserKeyword.class){
+                nodes.addAll((Set<T>)project.getUserKeywords());
+            }
+            else if(type == VariableAssignment.class){
+                nodes.addAll((Set<T>)project.getVariableAssignments());
+            }
+            else{
+                throw new IllegalArgumentException(String.format(
+                        "Cannot perform clone detection for type '%s'",
+                        type.getName())
+                );
+            }
         }
 
         int size = nodes.size();
@@ -137,7 +152,7 @@ public class CloneDetection<T extends SourceNode> {
     private static boolean canIgnoreForType3(Action action) {
 
         switch (action.getType()){
-            case CHANGE_STEP_ARGUMENT:
+            case CHANGE_VALUE_NAME:
             case CHANGE_STEP: return isLogStep(action.getLeft()) && isLogStep(action.getRight());
             case ADD_STEP:
             case REMOVE_STEP: return isLogStep(action.getValue());

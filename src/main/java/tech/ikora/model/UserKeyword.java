@@ -16,8 +16,12 @@ public class UserKeyword extends KeywordDefinition {
 
     public UserKeyword(Token name) {
         super(name);
+
         this.arguments = new NodeList<>(Token.empty());
+        this.addAstChild(this.arguments);
+
         this.returnVariables = new NodeList<>(Token.empty());
+        this.addAstChild(this.returnVariables);
     }
 
     public NodeList<Variable> getArguments() {

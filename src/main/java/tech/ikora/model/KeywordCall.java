@@ -8,10 +8,11 @@ import tech.ikora.runner.Runtime;
 import tech.ikora.utils.LevenshteinDistance;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class KeywordCall extends Step {
-    private Link<KeywordCall, Keyword> link;
+    private final Link<KeywordCall, Keyword> link;
+    private final NodeList<Argument> arguments;
+
     private NodeList<Value> returnValues;
     private Gherkin gherkin;
 
@@ -21,6 +22,9 @@ public class KeywordCall extends Step {
 
         this.gherkin = Gherkin.none();
         this.link = new Link<>(this);
+
+        this.arguments = new NodeList<>();
+        this.addAstChild(this.arguments);
     }
 
     public void setGherkin(Gherkin gherkin) {
@@ -36,24 +40,13 @@ public class KeywordCall extends Step {
         link.addNode(keyword, importLink);
     }
 
-    public void addArgument(Argument argument) {
-        this.addAstChild(argument);
-        addTokens(argument.getTokens());
-
-        argument.getDefinition().addDependency(this);
-    }
-
     @Override
     public NodeList<Argument> getArgumentList() {
-        final List<Argument> arguments = getAstChildren().stream()
-                .map(node -> (Argument) node)
-                .collect(Collectors.toList());
-
-        return new NodeList<>(arguments);
+        return this.arguments;
     }
 
     public void setArgumentList(NodeList<Argument> argumentList) {
-        this.getAstChildren().clear();
+        this.arguments.clear();
 
         for(Argument argument: argumentList){
             addArgument(argument);
@@ -137,7 +130,7 @@ public class KeywordCall extends Step {
                 actions.add(Action.changeStepName(this, call));
             }
 
-            List<Action> argumentActions = LevenshteinDistance.getDifferences(this.getAstChildren(), call.getAstChildren());
+            List<Action> argumentActions = LevenshteinDistance.getDifferences(this.arguments, call.arguments);
             actions.addAll(argumentActions);
         }
         else if(other instanceof Assignment){
@@ -182,5 +175,20 @@ public class KeywordCall extends Step {
         }
 
         return Optional.of(this);
+    }
+
+    private void addArgument(Argument argument) {
+        this.arguments.add(argument);
+
+        addTokens(argument.getTokens());
+        argument.getDefinition().addDependency(this);
+    }
+
+    private void clearArguments(){
+        for(Argument argument: this.arguments){
+            argument.getDefinition().removeDependency(this);
+        }
+
+        this.arguments.clear();
     }
 }

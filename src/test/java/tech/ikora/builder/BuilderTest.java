@@ -107,7 +107,7 @@ class BuilderTest {
 
         final Project project = result.getProjects().iterator().next();
 
-        List<TestCase> mainTest = project.getTestCases();
+        Set<TestCase> mainTest = project.getTestCases();
         assertEquals(1, mainTest.size());
 
         KeywordCall simpleCall = (KeywordCall) mainTest.iterator().next().getStep(0);
@@ -229,7 +229,7 @@ class BuilderTest {
 
         final Project project = result.getProjects().iterator().next();
 
-        Set<VariableAssignment> variables = project.getVariables();
+        Set<VariableAssignment> variables = project.getVariableAssignments();
         assertEquals(1, variables.size());
     }
 

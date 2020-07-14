@@ -20,7 +20,7 @@ public abstract class LibraryVariable implements Node {
     protected final Format format;
     protected final Pattern pattern;
 
-    private final Set<Node> dependencies;
+    private final Set<SourceNode> dependencies;
 
     protected LibraryVariable(BaseType type, Format format){
         this.type = type;
@@ -57,12 +57,21 @@ public abstract class LibraryVariable implements Node {
     }
 
     @Override
-    public void addDependency(Node node) {
+    public void addDependency(SourceNode node) {
+        if(node == null){
+            return;
+        }
+
         this.dependencies.add(node);
     }
 
     @Override
-    public Set<Node> getDependencies() {
+    public void removeDependency(SourceNode node) {
+        this.dependencies.remove(node);
+    }
+
+    @Override
+    public Set<SourceNode> getDependencies() {
         return this.dependencies;
     }
 

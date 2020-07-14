@@ -138,15 +138,16 @@ public class SymbolResolver {
     }
 
     private KeywordCall createKeywordArgument(List<Argument> arguments) {
-        Argument keywordName = arguments.get(0);
+        final Argument keywordName = arguments.get(0);
+        final KeywordCall call = new KeywordCall(keywordName.getNameToken());
 
-        KeywordCall call = new KeywordCall(keywordName.getNameToken());
+        final NodeList<Argument> argumentList = new NodeList<>();
 
         if(arguments.size() > 1){
-            for(Argument argument: arguments.subList(1, arguments.size())){
-                call.addArgument(argument);
-            }
+            argumentList.addAll(arguments.subList(1, arguments.size()));
         }
+
+        call.setArgumentList(argumentList);
 
         return call;
     }

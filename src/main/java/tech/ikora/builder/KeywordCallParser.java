@@ -27,11 +27,15 @@ public class KeywordCallParser {
             KeywordCall call = new KeywordCall(name);
             call.setGherkin(gherkin);
 
+            final NodeList<Argument> arguments = new NodeList<>();
+
             for(Token token: callTokens.withoutFirst()) {
                 Optional<Variable> variable = VariableParser.parse(token);
                 Argument argument = new Argument(variable.isPresent() ? variable.get() : new Literal(token));
-                call.addArgument(argument);
+                arguments.add(argument);
             }
+
+            call.setArgumentList(arguments);
 
             return call;
         }

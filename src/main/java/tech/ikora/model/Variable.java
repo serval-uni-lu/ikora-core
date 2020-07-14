@@ -68,11 +68,11 @@ public abstract class Variable extends Value {
         }
 
         if(this.getClass() != other.getClass()){
-            return Collections.singletonList(Action.changeType(this, other));
+            return Collections.singletonList(Action.changeValueType(this, other));
         }
 
         if(!this.getNameToken().equalsIgnorePosition(((Variable)other).getNameToken())){
-            return Collections.singletonList(Action.changeName(this, other));
+            return Collections.singletonList(Action.changeValueName(this, other));
         }
 
         return Collections.emptyList();

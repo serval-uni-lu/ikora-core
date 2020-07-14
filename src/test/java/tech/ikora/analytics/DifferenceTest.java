@@ -65,6 +65,16 @@ class DifferenceTest {
     }
 
     @Test
+    void testDifferenceKeywordChangeLiteralArgument(){
+        Difference difference = Difference.of(keyword2, keyword3);
+        List<Action> actions = difference.getActions();
+
+        assertEquals(2, actions.size());
+        assertEquals(1, actions.stream().filter(action -> action.getType() == Action.Type.CHANGE_NAME).count());
+        assertEquals(1, actions.stream().filter(action -> action.getType() == Action.Type.CHANGE_VALUE_NAME).count());
+    }
+
+    @Test
     void testDifferenceKeywordAddAndModifySteps(){
         Difference difference = Difference.of(keyword3, keyword4);
         List<Action> actions = difference.getActions();
@@ -72,7 +82,7 @@ class DifferenceTest {
         assertEquals(4, actions.size());
         assertEquals(1, actions.stream().filter(action -> action.getType() == Action.Type.CHANGE_NAME).count());
         assertEquals(2, actions.stream().filter(action -> action.getType() == Action.Type.ADD_STEP).count());
-        assertEquals(1, actions.stream().filter(action -> action.getType() == Action.Type.CHANGE_STEP_ARGUMENT).count());
+        assertEquals(1, actions.stream().filter(action -> action.getType() == Action.Type.CHANGE_VALUE_NAME).count());
     }
 
     @Test
@@ -81,6 +91,7 @@ class DifferenceTest {
         List<Action> actions = difference.getActions();
 
         assertEquals(2, actions.size());
+        assertEquals(1, actions.stream().filter(action -> action.getType() == Action.Type.CHANGE_NAME).count());
         assertEquals(1, actions.stream().filter(action -> action.getType() == Action.Type.ADD_VARIABLE).count());
     }
 
@@ -90,6 +101,7 @@ class DifferenceTest {
         List<Action> actions = difference.getActions();
 
         assertEquals(2, actions.size());
+        assertEquals(1, actions.stream().filter(action -> action.getType() == Action.Type.CHANGE_NAME).count());
         assertEquals(1, actions.stream().filter(action -> action.getType() == Action.Type.REMOVE_VARIABLE).count());
     }
 
@@ -99,7 +111,8 @@ class DifferenceTest {
         List<Action> actions = difference.getActions();
 
         assertEquals(2, actions.size());
-        assertEquals(1, actions.stream().filter(action -> action.getType() == Action.Type.CHANGE_STEP_ARGUMENT).count());
+        assertEquals(1, actions.stream().filter(action -> action.getType() == Action.Type.CHANGE_NAME).count());
+        assertEquals(1, actions.stream().filter(action -> action.getType() == Action.Type.CHANGE_VALUE_NAME).count());
     }
 
     @Test
@@ -108,6 +121,7 @@ class DifferenceTest {
         List<Action> actions = difference.getActions();
 
         assertEquals(2, actions.size());
+        assertEquals(1, actions.stream().filter(action -> action.getType() == Action.Type.CHANGE_NAME).count());
         assertEquals(1, actions.stream().filter(action -> action.getType() == Action.Type.REMOVE_STEP).count());
     }
 }

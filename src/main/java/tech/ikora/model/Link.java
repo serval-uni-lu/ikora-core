@@ -2,7 +2,7 @@ package tech.ikora.model;
 
 import java.util.*;
 
-public class Link<K extends Node,T extends Node> {
+public class Link<K extends SourceNode,T extends Node> {
     public enum Import{
         STATIC,
         DYNAMIC,
@@ -10,8 +10,8 @@ public class Link<K extends Node,T extends Node> {
     }
 
     private final K source;
-    private Set<T> staticCallee;
-    private Set<T> dynamicCallee;
+    private final Set<T> staticCallee;
+    private final Set<T> dynamicCallee;
 
     public Link(K source) {
         this.source = source;

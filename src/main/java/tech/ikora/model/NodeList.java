@@ -17,7 +17,9 @@ public class NodeList<N extends SourceNode> extends SourceNode implements List<N
 
     public NodeList(List<N> nodes){
         this.tag = Token.empty();
-        this.nodes = nodes;
+
+        this.nodes = new ArrayList<>();
+        this.addAll(nodes);
     }
 
     public NodeList(Token tag) {

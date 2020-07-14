@@ -1,5 +1,7 @@
 package tech.ikora.model;
 
+import tech.ikora.exception.InvalidArgumentException;
+
 import java.io.File;
 import java.net.URI;
 import java.nio.file.Path;
@@ -56,8 +58,8 @@ public class Project implements Comparable<Project> {
         return files;
     }
 
-    public List<TestCase> getTestCases(){
-        List<TestCase> testCases = new ArrayList<>();
+    public Set<TestCase> getTestCases(){
+        Set<TestCase> testCases = new HashSet<>();
 
         for(SourceFile file: files.values()){
             testCases.addAll(file.getTestCases());
@@ -106,7 +108,7 @@ public class Project implements Comparable<Project> {
         return userKeywordsFound;
     }
 
-    public Set<VariableAssignment> getVariables(){
+    public Set<VariableAssignment> getVariableAssignments(){
         Set<VariableAssignment> variables = new HashSet<>();
 
         for(SourceFile file: files.values()){
@@ -114,20 +116,6 @@ public class Project implements Comparable<Project> {
         }
 
         return variables;
-    }
-
-    public <T extends SourceNode> Set<T> getNodes(Class<T> type) {
-        if(type == TestCase.class){
-            return (Set<T>)new HashSet<>(getTestCases());
-        }
-        else if(type == UserKeyword.class) {
-            return (Set<T>)new HashSet<>(getUserKeywords());
-        }
-        else if(type == Variable.class) {
-            return (Set<T>)new HashSet<>(getVariables());
-        }
-
-        return Collections.emptySet();
     }
 
     public Set<Resources> getExternalResources() {

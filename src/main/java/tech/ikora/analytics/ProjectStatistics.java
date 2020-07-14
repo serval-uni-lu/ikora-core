@@ -17,8 +17,8 @@ public class ProjectStatistics {
 
     public ProjectStatistics(Project project){
         this.project = project;
-        userKeywords = this.project.getNodes(UserKeyword.class);
-        testCases = this.project.getNodes(TestCase.class);
+        userKeywords = this.project.getUserKeywords();
+        testCases = this.project.getTestCases();
     }
 
     public int getNumberFiles(){

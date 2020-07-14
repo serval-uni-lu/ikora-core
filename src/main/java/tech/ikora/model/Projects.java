@@ -72,14 +72,20 @@ public class Projects implements Iterable<Project> {
         return Optional.empty();
     }
 
-    public <T extends SourceNode> Set<T> getNodes(Class<T> type){
-        Set<T> nodes = new HashSet<>();
+    public int getLoc() {
+        return projectSet.stream().reduce(0, (total, project) -> total + project.getLoc(), Integer::sum);
+    }
 
-        for(Project project: projectSet){
-            nodes.addAll(project.getNodes(type));
-        }
+    public Set<TestCase> getTestCases(){
+        return projectSet.stream().collect(HashSet::new, (total, project) -> total.addAll(project.getTestCases()), HashSet::addAll);
+    }
 
-        return nodes;
+    public Set<UserKeyword> getUserKeywords(){
+        return projectSet.stream().collect(HashSet::new, (total, project) -> total.addAll(project.getUserKeywords()), HashSet::addAll);
+    }
+
+    public Set<VariableAssignment> getVariableAssignments(){
+        return projectSet.stream().collect(HashSet::new, (total, project) -> total.addAll(project.getVariableAssignments()), HashSet::addAll);
     }
 
     @Override

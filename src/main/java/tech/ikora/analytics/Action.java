@@ -22,7 +22,8 @@ public class Action implements Differentiable {
 
         ADD_STEP_ARGUMENT,
         REMOVE_STEP_ARGUMENT,
-        CHANGE_STEP_ARGUMENT,
+        CHANGE_VALUE_NAME,
+        CHANGE_VALUE_TYPE,
 
         ADD_VARIABLE,
         REMOVE_VARIABLE,
@@ -175,8 +176,12 @@ public class Action implements Differentiable {
         return new Action(Type.CHANGE_STEP, left, right);
     }
 
-    public static Action changeStepArgument(Differentiable left, Differentiable right){
-        return new Action(Type.CHANGE_STEP_ARGUMENT, left, right);
+    public static Action changeValueName(Differentiable left, Differentiable right){
+        return new Action(Type.CHANGE_VALUE_NAME, left, right);
+    }
+
+    public static Action changeValueType(Differentiable left, Differentiable right){
+        return new Action(Type.CHANGE_VALUE_TYPE, left, right);
     }
 
     public static Action changeVariableDefinition(Differentiable left, Differentiable right) {

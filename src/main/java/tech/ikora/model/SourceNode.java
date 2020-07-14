@@ -10,7 +10,7 @@ import java.util.Set;
 public abstract class SourceNode implements Node, Differentiable {
     private SourceNode astParent;
     private final List<SourceNode> astChildren;
-    private final Set<Node> dependencies;
+    private final Set<SourceNode> dependencies;
     private final Tokens tokens;
 
     SourceNode(){
@@ -32,20 +32,12 @@ public abstract class SourceNode implements Node, Differentiable {
         return astParent.getSourceFile();
     }
 
-    public void setAstParent(SourceNode astParent){
-        if(astParent == null){
-            return;
-        }
-
-        this.astParent = astParent;
-    }
-
     protected void addAstChild(SourceNode astChild){
         if(astChild == null || astChildren.contains(astChild)){
             return;
         }
 
-        astChild.setAstParent(this);
+        astChild.astParent = this;
         astChildren.add(astChild);
     }
 
@@ -54,7 +46,7 @@ public abstract class SourceNode implements Node, Differentiable {
             return;
         }
 
-        astChild.setAstParent(this);
+        astChild.astParent = this;
         astChildren.add(index, astChild);
     }
 
@@ -63,7 +55,7 @@ public abstract class SourceNode implements Node, Differentiable {
             return;
         }
 
-        astChild.setAstParent(null);
+        astChild.astParent = null;
         astChildren.remove(astChild);
     }
 
@@ -125,16 +117,21 @@ public abstract class SourceNode implements Node, Differentiable {
     }
 
     @Override
-    public void addDependency(Node sourceNode) {
-        if(sourceNode == null || this.dependencies.contains(sourceNode)) {
+    public void addDependency(SourceNode node) {
+        if(node == null) {
             return;
         }
 
-        this.dependencies.add(sourceNode);
+        this.dependencies.add(node);
     }
 
     @Override
-    public Set<Node> getDependencies() {
+    public void removeDependency(SourceNode node) {
+        this.dependencies.remove(node);
+    }
+
+    @Override
+    public Set<SourceNode> getDependencies() {
         return dependencies;
     }
 

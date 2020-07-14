@@ -86,7 +86,7 @@ public class VariableAssignment extends SourceNode {
 
         List<Action> actions = new ArrayList<>();
 
-        if(!this.getNameToken().equalsIgnorePosition(assignment.getNameToken())){
+        if(!this.getName().equals(assignment.getName())){
             actions.add(Action.changeName(this, other));
         }
 

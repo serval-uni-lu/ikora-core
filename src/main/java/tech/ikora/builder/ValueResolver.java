@@ -143,11 +143,11 @@ public class ValueResolver {
     }
 
     public static Optional<UserKeyword> getUserKeywordFromArgument(final Variable variable){
-        if(variable.getAstParent() == null || !(variable.getAstParent().getAstParent() instanceof UserKeyword)){
+        if(variable.getAstParent() == null || !(variable.getAstParent() instanceof UserKeyword)){
             return Optional.empty();
         }
 
-        UserKeyword userKeyword = (UserKeyword)variable.getAstParent().getAstParent();
+        UserKeyword userKeyword = (UserKeyword)variable.getAstParent();
         return userKeyword.getArguments() == variable.getAstParent() ? Optional.of(userKeyword) : Optional.empty();
     }
 }

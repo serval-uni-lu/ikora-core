@@ -12,15 +12,18 @@ import java.util.*;
 public abstract class LibraryKeyword implements Keyword {
     protected final Type type;
     protected final BaseTypeList argumentTypes;
+    private final Set<SourceNode> dependencies;
 
     protected LibraryKeyword(Type type, BaseType... argumentTypes) {
         this.type = type;
         this.argumentTypes = new BaseTypeList(argumentTypes);
+        this.dependencies = new HashSet<>();
     }
 
     protected LibraryKeyword(Type type){
         this.type = type;
         this.argumentTypes = new BaseTypeList();
+        this.dependencies = new HashSet<>();
     }
 
     public Type getType(){
@@ -84,12 +87,21 @@ public abstract class LibraryKeyword implements Keyword {
     }
 
     @Override
-    public void addDependency(Node node) {
+    public void addDependency(SourceNode node) {
+        if(node == null){
+            return;
+        }
 
+        this.dependencies.add(node);
     }
 
     @Override
-    public Set<Node> getDependencies() {
-        return null;
+    public void removeDependency(SourceNode node) {
+        this.dependencies.remove(node);
+    }
+
+    @Override
+    public Set<SourceNode> getDependencies() {
+        return this.dependencies;
     }
 }

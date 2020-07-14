@@ -97,19 +97,19 @@ public class Argument extends SourceNode {
 
     @Override
     public List<Action> differences(Differentiable other) {
+        if(other == null){
+            return Collections.singletonList(Action.removeElement(Argument.class, this));
+        }
+
         if(other == this){
             return Collections.emptyList();
         }
 
-        if(!Argument.class.isAssignableFrom(other.getClass())){
-            return Collections.singletonList(Action.addElement(this.getClass(), this));
+        if(!(other instanceof Argument)){
+            return Collections.singletonList(Action.changeType(this, other));
         }
 
-        if(this.name.equalsIgnorePosition(((Argument)other).name)){
-            return Collections.emptyList();
-        }
-
-        return Collections.singletonList(Action.changeStepArgument(this, other));
+        return this.getDefinition().differences(((Argument) other).getDefinition());
     }
 
     @Override
