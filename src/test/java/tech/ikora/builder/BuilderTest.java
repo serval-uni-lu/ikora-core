@@ -26,7 +26,7 @@ class BuilderTest {
         final Project project = result.getProjects().iterator().next();
         assertEquals(1, project.getTestCases().size());
 
-        final TestCase testCase = project.findTestCase("<IN_MEMORY>", "Environment variables").iterator().next();
+        final TestCase testCase = project.findTestCase(FileUtils.IN_MEMORY, "Environment variables").iterator().next();
         assertEquals(1, testCase.getSteps().size());
         assertEquals(2, testCase.getRange().getStart().getLine());
 
@@ -56,10 +56,10 @@ class BuilderTest {
         final Set<UserKeyword> keywords = project.findUserKeyword(Token.fromString("Show the content of ${value}"));
         assertEquals(1, keywords.size());
 
-        final TestCase testCase = project.findTestCase("<IN_MEMORY>", "001 - Execute").iterator().next();
+        final TestCase testCase = project.findTestCase(FileUtils.IN_MEMORY, "001 - Execute").iterator().next();
         assertEquals(1, testCase.getSteps().size());
 
-        final Optional<SourceFile> sourceFile = project.getSourceFile("<IN_MEMORY>");
+        final Optional<SourceFile> sourceFile = project.getSourceFile(FileUtils.IN_MEMORY);
         assertTrue(sourceFile.isPresent());
 
         assertEquals(8, sourceFile.get().getTokens().size());

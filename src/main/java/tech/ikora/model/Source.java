@@ -1,6 +1,7 @@
 package tech.ikora.model;
 
 import tech.ikora.exception.InvalidArgumentException;
+import tech.ikora.utils.FileUtils;
 
 import java.io.File;
 import java.io.Reader;
@@ -41,7 +42,7 @@ public class Source {
             return this.file.getAbsolutePath();
         }
 
-        return "<IN_MEMORY>";
+        return FileUtils.IN_MEMORY;
     }
 
     public String getPath(){
@@ -49,7 +50,7 @@ public class Source {
             return this.file.getPath();
         }
 
-        return "<IN_MEMORY>";
+        return FileUtils.IN_MEMORY;
     }
 
     public String getName(){
@@ -57,7 +58,7 @@ public class Source {
             return this.file.getName();
         }
 
-        return "<IN_MEMORY>";
+        return FileUtils.IN_MEMORY;
     }
 
     public String getDirectory(){
@@ -65,7 +66,7 @@ public class Source {
             return this.file.getParent();
         }
 
-        return "<IN_MEMORY>";
+        return FileUtils.IN_MEMORY;
     }
 
     public boolean isInMemory() {

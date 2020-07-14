@@ -1,5 +1,7 @@
 package tech.ikora.model;
 
+import tech.ikora.utils.FileUtils;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -80,7 +82,7 @@ public abstract class SourceNode implements Node, Differentiable {
     @Override
     public String getLibraryName() {
         if(this.getSourceFile() == null){
-            return "<IN_MEMORY>";
+            return FileUtils.IN_MEMORY;
         }
 
         return this.getSourceFile().getName();

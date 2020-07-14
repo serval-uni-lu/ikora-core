@@ -14,6 +14,8 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 public class FileUtils {
+    public static final String IN_MEMORY = "<IN_MEMORY>";
+
     private FileUtils() {}
 
     public static Set<File> getSubFolders(File folder) {
