@@ -1,9 +1,6 @@
 package tech.ikora.utils;
 
-import tech.ikora.model.Argument;
-import tech.ikora.model.DictionaryVariable;
-import tech.ikora.model.ListVariable;
-import tech.ikora.model.NodeList;
+import tech.ikora.model.*;
 
 import java.util.Optional;
 
@@ -25,5 +22,9 @@ public class ArgumentUtils {
         varIndex = dictIndex != -1 ? Math.min(varIndex, dictIndex) : varIndex;
 
         return position < varIndex;
+    }
+
+    public static boolean contains(NodeList<Argument> arguments, Value value){
+        return arguments.stream().map(Argument::getDefinition).anyMatch(v -> v == value);
     }
 }

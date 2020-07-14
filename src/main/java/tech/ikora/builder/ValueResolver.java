@@ -12,10 +12,10 @@ public class ValueResolver {
         IS_VARIABLE, HAS_VARIABLE, FIND_VARIABLE
     }
 
-    private static Pattern isVariablePattern;
-    private static Pattern hasVariablePattern;
-    private static Pattern findVariablePattern;
-    private static Pattern escapePattern;
+    private static final Pattern isVariablePattern;
+    private static final Pattern hasVariablePattern;
+    private static final Pattern findVariablePattern;
+    private static final Pattern escapePattern;
 
     static {
         isVariablePattern = Pattern.compile("^(([@$&])\\{)(.*?)(})$");
@@ -143,11 +143,13 @@ public class ValueResolver {
     }
 
     public static Optional<UserKeyword> getUserKeywordFromArgument(final Variable variable){
-        if(variable.getAstParent() == null || !(variable.getAstParent() instanceof UserKeyword)){
+        final SourceNode parent = variable.getAstParent();
+
+        if(!(parent instanceof UserKeyword)){
             return Optional.empty();
         }
 
-        UserKeyword userKeyword = (UserKeyword)variable.getAstParent();
-        return userKeyword.getArguments() == variable.getAstParent() ? Optional.of(userKeyword) : Optional.empty();
+        UserKeyword userKeyword = (UserKeyword)parent;
+        return userKeyword.getArguments().contains(variable) ? Optional.of(userKeyword) : Optional.empty();
     }
 }

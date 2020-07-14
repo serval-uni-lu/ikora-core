@@ -46,7 +46,7 @@ public class KeywordCall extends Step {
     }
 
     public void setArgumentList(NodeList<Argument> argumentList) {
-        this.arguments.clear();
+        this.clearArguments();
 
         for(Argument argument: argumentList){
             addArgument(argument);
