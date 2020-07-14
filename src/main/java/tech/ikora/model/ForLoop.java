@@ -57,8 +57,8 @@ public class ForLoop extends Step implements ScopeNode {
     }
 
     @Override
-    public ArgumentList getArgumentList() {
-        return new ArgumentList();
+    public NodeList<Argument> getArgumentList() {
+        return new NodeList<>();
     }
 
     @Override

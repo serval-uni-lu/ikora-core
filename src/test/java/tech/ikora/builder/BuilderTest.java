@@ -3,6 +3,7 @@ package tech.ikora.builder;
 import org.junit.jupiter.api.Test;
 import tech.ikora.Helpers;
 import tech.ikora.model.*;
+import tech.ikora.utils.ArgumentUtils;
 import tech.ikora.utils.FileUtils;
 
 import java.io.File;
@@ -391,7 +392,7 @@ class BuilderTest {
 
         final KeywordCall call = (KeywordCall)keyword.getStep(0);
         assertEquals(2, call.getArgumentList().size());
-        assertEquals(1, call.getArgumentList().findFirst(KeywordCall.class));
+        assertEquals(1, ArgumentUtils.findFirst(call.getArgumentList(), KeywordCall.class));
     }
 
     @Test
@@ -416,6 +417,6 @@ class BuilderTest {
 
         final KeywordCall call = (KeywordCall)keyword.getStep(0);
         assertEquals(1, call.getArgumentList().size());
-        assertEquals(-1, call.getArgumentList().findFirst(KeywordCall.class));
+        assertEquals(-1, ArgumentUtils.findFirst(call.getArgumentList(), KeywordCall.class));
     }
 }

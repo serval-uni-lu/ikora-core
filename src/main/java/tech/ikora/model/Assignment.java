@@ -54,8 +54,8 @@ public class Assignment extends Step {
     }
 
     @Override
-    public ArgumentList getArgumentList() {
-        return getKeywordCall().map(KeywordCall::getArgumentList).orElse(new ArgumentList());
+    public NodeList<Argument> getArgumentList() {
+        return getKeywordCall().map(KeywordCall::getArgumentList).orElse(new NodeList<>());
     }
 
     @Override

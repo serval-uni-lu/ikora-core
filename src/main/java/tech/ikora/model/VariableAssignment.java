@@ -13,11 +13,11 @@ import java.util.List;
 
 public class VariableAssignment extends SourceNode {
     private final Variable variable;
-    private final ArgumentList values;
+    private final NodeList<Argument> values;
 
     public VariableAssignment(Variable variable){
         this.variable = variable;
-        this.values = new ArgumentList();
+        this.values = new NodeList<>();
         this.addTokens(variable.getTokens());
     }
 
@@ -30,7 +30,7 @@ public class VariableAssignment extends SourceNode {
         return variable;
     }
 
-    public ArgumentList getValues() {
+    public NodeList<Argument> getValues() {
         return this.values;
     }
 

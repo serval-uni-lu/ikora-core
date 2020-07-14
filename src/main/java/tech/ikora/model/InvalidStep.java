@@ -22,8 +22,8 @@ public class InvalidStep extends Step {
     }
 
     @Override
-    public ArgumentList getArgumentList() {
-        return new ArgumentList();
+    public NodeList<Argument> getArgumentList() {
+        return new NodeList<>();
     }
 
     @Override

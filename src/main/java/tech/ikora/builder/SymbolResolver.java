@@ -6,6 +6,7 @@ import tech.ikora.runner.Runtime;
 import tech.ikora.model.*;
 import tech.ikora.types.BaseTypeList;
 import tech.ikora.types.KeywordType;
+import tech.ikora.utils.ArgumentUtils;
 import tech.ikora.utils.Ast;
 
 import java.lang.reflect.InvocationTargetException;
@@ -117,16 +118,16 @@ public class SymbolResolver {
             return;
         }
 
-        final ArgumentList argumentList = call.getArgumentList();
+        final NodeList<Argument> argumentList = call.getArgumentList();
         final BaseTypeList argumentTypes = keyword.get().getArgumentTypes();
 
         if(argumentTypes.containsType(KeywordType.class)){
             int keywordIndex = argumentTypes.findFirst(KeywordType.class);
 
-            if(argumentList.isExpendedUntilPosition(keywordIndex)){
+            if(ArgumentUtils.isExpendedUntilPosition(argumentList, keywordIndex)){
                 final List<Argument> argumentsToProcess = argumentList.subList(keywordIndex, argumentList.size());
                 final KeywordCall callArgument = createKeywordArgument(argumentsToProcess);
-                final ArgumentList newArgumentList = new ArgumentList(argumentList.subList(0, keywordIndex));
+                final NodeList<Argument> newArgumentList = new NodeList<>(argumentList.subList(0, keywordIndex));
 
                 newArgumentList.add(new Argument(callArgument));
                 call.setArgumentList(newArgumentList);

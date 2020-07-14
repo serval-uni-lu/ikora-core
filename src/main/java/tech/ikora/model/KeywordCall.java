@@ -44,15 +44,15 @@ public class KeywordCall extends Step {
     }
 
     @Override
-    public ArgumentList getArgumentList() {
+    public NodeList<Argument> getArgumentList() {
         final List<Argument> arguments = getAstChildren().stream()
                 .map(node -> (Argument) node)
                 .collect(Collectors.toList());
 
-        return new ArgumentList(Token.empty(), arguments);
+        return new NodeList<>(arguments);
     }
 
-    public void setArgumentList(ArgumentList argumentList) {
+    public void setArgumentList(NodeList<Argument> argumentList) {
         this.getAstChildren().clear();
 
         for(Argument argument: argumentList){

@@ -4,7 +4,6 @@ import tech.ikora.exception.InvalidArgumentException;
 import tech.ikora.utils.FileUtils;
 
 import java.io.File;
-import java.io.Reader;
 
 public class Source {
     final String inMemory;

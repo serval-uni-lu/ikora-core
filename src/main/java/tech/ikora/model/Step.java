@@ -46,7 +46,7 @@ public abstract class Step extends SourceNode {
     }
 
     public abstract Optional<KeywordCall> getKeywordCall();
-    public abstract ArgumentList getArgumentList();
+    public abstract NodeList<Argument> getArgumentList();
     public abstract boolean hasParameters();
 
     public void setTemplate(KeywordCall template) {
