@@ -96,7 +96,6 @@ public class DynamicScope implements Scope {
         }
         else if(KeywordCall.class.isAssignableFrom(node.getClass())){
             argumentStack.pop();
-            returnValues = ((KeywordCall) node).getReturnValues();
         }
     }
 

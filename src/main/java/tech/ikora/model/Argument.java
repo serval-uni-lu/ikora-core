@@ -8,9 +8,8 @@ import tech.ikora.runner.Runtime;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
-public class Argument extends SourceNode {
+public class Argument extends SourceNode implements HiddenAstNode {
     private final SourceNode definition;
     private final Token name;
 

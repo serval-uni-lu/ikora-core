@@ -13,7 +13,6 @@ public class KeywordCall extends Step {
     private final Link<KeywordCall, Keyword> link;
     private final NodeList<Argument> arguments;
 
-    private NodeList<Value> returnValues;
     private Gherkin gherkin;
 
     public KeywordCall(Token name) {
@@ -157,10 +156,6 @@ public class KeywordCall extends Step {
         }
 
         return builder.toString();
-    }
-
-    public NodeList<Value> getReturnValues() {
-        return this.returnValues;
     }
 
     @Override
