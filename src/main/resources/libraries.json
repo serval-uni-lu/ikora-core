@@ -128,7 +128,7 @@
                 "arguments": []
             },
             {
-                "type": "SUNCHRONIZATION",
+                "type": "SYNCHRONIZATION",
                 "name": "process wait close",
                 "arguments": []
             },
