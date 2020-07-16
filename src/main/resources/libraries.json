@@ -3,487 +3,487 @@
         "name": "autoIt",
         "keywords": [
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "reg delete key",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "control focus",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "win activate",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "win get state",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "control get text",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SYNCHRONIZATION",
                 "name": "run wait",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get auto it version",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "control get pos width",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "win minimize all",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "control command",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "win set trans",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "win active",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "control move",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "win get process",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "control disable",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "reg enum val",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "block input",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "win get caret pos x",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "win get pos height",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "win menu select item",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "send",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "mouse wheel",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "control tree view",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "mouse click down",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "mouse get pos y",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SUNCHRONIZATION",
                 "name": "process wait close",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "win minimize all undo",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "win set on top",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "cd tray",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "mouse click",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "shut down",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "drive map get",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "control get focus",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "control show",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SYNCHRONIZATION",
                 "name": "win wait",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "win get pos y",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "drive map del",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "CONFIGURATION",
                 "name": "init",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "win get client size height",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "pixel checksum",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "win get client size width",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "win get handle",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "clip put",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "reg write",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "win list",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "reg read",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SYNCHRONIZATION",
                 "name": "win wait close",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "control set text",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "run as set",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "mouse click drag",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "control get pos x",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "mouse get pos x",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "control get pos y",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "is admin",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "CONFIGURATION",
                 "name": "auto it set option",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "tool tip",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "statusbar get text",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "process close",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "control click",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "control get pos height",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "process exits",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get version",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "control hide",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "win get caret pos y",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "win close",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get screen image",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "control get handle",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "control enable",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "ini delete",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "win get class list",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "reg enum key",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get active window image",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "mouse get cursor",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SYNCHRONIZATION",
                 "name": "wait for active window",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "win get text",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SYNCHRONIZATION",
                 "name": "process wait",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "control send",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "drive map add",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "CONFIGURATION",
                 "name": "opt",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "clip get",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SYNCHRONIZATION",
                 "name": "win wait not active",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "win move",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "process set priority",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "win get title",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "win get pos width",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "win kill",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "pixel get color",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "control list view",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "reg delete val",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "ini write",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "win exists",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "pixel search",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SYNCHRONIZATION",
                 "name": "win wait active",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "win get pos x",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "win set state",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "ini read",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "win set title",
                 "arguments": []
             }
@@ -493,77 +493,77 @@
         "name": "process",
         "keywords": [
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "send signal to process",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "terminate all processes",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "switch process",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "process should be stopped",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "process should be running",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SET",
                 "name": "join command line",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SYNCHRONIZATION",
                 "name": "wait for process",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get process result",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "start process",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "run process",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get process id",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SET",
                 "name": "split command line",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "terminate process",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "is process running",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get process object",
                 "arguments": []
             }
@@ -573,152 +573,152 @@
         "name": "string",
         "keywords": [
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get line count",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get lines matching pattern",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SET",
                 "name": "replace string using regexp",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get lines matching regexp",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "fetch from right",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SET",
                 "name": "split string from right",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SET",
                 "name": "convert to lowercase",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "should be uppercase",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SET",
                 "name": "split to lines",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "should be titlecase",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SET",
                 "name": "split string",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SET",
                 "name": "convert to uppercase",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SET",
                 "name": "generate random string",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SET",
                 "name": "split string to characters",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "should not be string",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get substring",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SET",
                 "name": "remove string",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get lines containing string",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "should be string",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SET",
                 "name": "remove string using regexp",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SET",
                 "name": "encode string to bytes",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get regexp matches",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get line",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "should be byte string",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SET",
                 "name": "decode bytes to string",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "fetch from left",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SET",
                 "name": "replace string",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "should be lowercase",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SET",
                 "name": "strip string",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "should be unicode string",
                 "arguments": []
             }
@@ -728,187 +728,187 @@
         "name": "sikuli",
         "keywords": [
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get match score",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "paste text",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "CONFIGURATION",
                 "name": "add image path",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "LOG",
                 "name": "capture screen",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "right click in",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "clear highlight",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "CONFIGURATION",
                 "name": "start sikuli process",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "highlight",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "screen should not contain",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SYNCHRONIZATION",
                 "name": "wait for multiple images",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "double click",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "CONFIGURATION",
                 "name": "set capture folder",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "wheel up",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "double click in",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "screen should contain",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SYNCHRONIZATION",
                 "name": "wait until screen not contain",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get current screen id",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SYNCHRONIZATION",
                 "name": "wait until screen contain",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "CONFIGURATION",
                 "name": "set ocr text read",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SYNCHRONIZATION",
                 "name": "wait for image",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "CONFIGURATION",
                 "name": "stop remote server",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "change screen id",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "CONFIGURATION",
                 "name": "set min similarity",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "press special key",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "click",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
-                "name": "cleat all highlights",
+                "type": "ACTION",
+                "name": "clear all highlights",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "exists",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "mouse down",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "right click",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get extended region from",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "mouse move",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "read text from region",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "wheel down",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "click in",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "CONFIGURATION",
                 "name": "remove image path",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "type with modifiers",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "set capture matched image",
                 "arguments": []
             }
@@ -918,7 +918,7 @@
         "name": "requests",
         "keywords": [
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "post",
                 "arguments": []
             },
@@ -928,37 +928,37 @@
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "create ntlm session",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "create digest session",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "create session",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "put",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "delete",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SET",
                 "name": "get request",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SET",
                 "name": "put request",
                 "arguments": []
             },
@@ -968,47 +968,47 @@
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SET",
                 "name": "delete request",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "patch",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "delete all sessions",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SET",
                 "name": "patch request",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SET",
                 "name": "head",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "post request",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SET",
                 "name": "to json",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SET",
                 "name": "head request",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "get",
                 "arguments": []
             }
@@ -1033,22 +1033,22 @@
         "name": "dialogs",
         "keywords": [
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get selection from user",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get value from user",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "execute manual step",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SYNCHRONIZATION",
                 "name": "pause execution",
                 "arguments": []
             }
@@ -1058,917 +1058,917 @@
         "name": "swing",
         "keywords": [
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "dialog should not be open",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get slider value",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get table values",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "close window",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "tree node should be visible",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "select from table cell popup menu on selected cells",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get menu items from popup menu",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "click table header",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "component should be visible",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get list item count",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "radio button should be enabled",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "select from tree node popup menu in separate thread",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "list windows",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get table headers",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get tree node child names",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "select tab pane",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "internal frame should exist",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get button text",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "find table row",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "select table cell area",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "type into text field",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "scroll component to view",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "spinner should exist",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "expand tree node",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "select tab",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "select from table cell popup menu",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "expand all tree nodes",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "list components in context",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "table cell should not be selected",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "check box should be unchecked",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "button should be disabled",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get text field value",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "text field should be disabled",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get combobox values",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get selected table cell value",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "push radio button",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "select window",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get table row values",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "radio button should be selected",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "component should exist",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "increase spinner value",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get tooltip text",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "tree node should not be leaf",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get selected item from combo box",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "click on component",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "decrease spinner value",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "tree node should be leaf",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "tree node should not be visible",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "combo box should be disabled",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "close dialog",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "collapse all tree nodes",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "menu item should not be checked",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "select tree node",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "check all checkboxes",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "tree node popup menu item should be enabled",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "check box should be checked",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "unselect tree node",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "all checkboxes should be checked",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get selected value from list",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "button should be enabled",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "select dialog",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "send keyboard event",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get table row count",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "collapse tree node",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get selected tab label",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "internal frame should be open",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "spinner should not exist",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "start application in separate thread",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "minimize internal frame",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "check check box",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "menu item should not exist",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get label content",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get tree node index",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "menu item should not be enabled",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "select from menu",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "table cell should be selected",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "label should not exist",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "main menu item should not be checked",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "tree node should be selected",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "CONFIGURATION",
                 "name": "set jemmy timeout",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "menu item should exist",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "choose from file chooser",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "select main window",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "select context",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "list should contain",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "set table cell value",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get selected item from dropdown menu",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "start application",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "maximize internal frame",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "all checkboxes should be unchecked",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "select from menu and wait",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "launch application",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "internal frame should not exist",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get main menu item name",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get table cell value",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "click hyper link",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "table cell popup menu should be enabled",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "tree node popup menu item should be disabled",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "type into table cell",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "toggle button should not be selected",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "select from dropdown menu",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "label should exist",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "CONFIGURATION",
                 "name": "set jemmy dispatch model",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "list should not contain",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get menu item names",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "component should not exist",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "push button",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "set spinner string value",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "close internal frame",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "clear table selection",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get list values",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "check box should be disabled",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "de iconify internal frame",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "select table cell",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "slider should not exist",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "cancel file chooser",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "main menu item should exist",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "clear tree selection",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "table cell should be editable",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "click on table cell",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "clear table cell",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "menu item should be disabled",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get spinner value",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "insert into text field",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "close all dialogs",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "component should not be visible",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get table column count",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "table cell should not be editable",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "tree node should not exist",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "focus to component",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "select from popup menu",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "identify internal frame",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "select from combo box",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "tree node should exist",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "select from tree node popup menu",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "select radio button",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "check box should not be checked",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get table cell property",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "set system property",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "select from popup menu on selected tree nodes",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "button should exist",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "uncheck check box",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get tree node count",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "select tab as context",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "select all list items",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get table column values",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "click on list item",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "check box should be enabled",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "main menu item should be checked",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "radio button should be disabled",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "click on tree node",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "right click on component",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "set spinner number value",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get internal frames in context",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "tree node should be expanded",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "select from main menu and wait",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "type into combobox",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "select from main menu",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "menu item should be enabled",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "table cell popup menu should be disabled",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "set slider value",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get selected window title",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "combo box should be enabled",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get current context",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "push toggle button",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "tree node should not be selected",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get main menu item names",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "clear text field",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get tree node label",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "tree node should be collapsed",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "clear selection from list",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "main menu item should not exist",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "menu item should be checked",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "CONFIGURATION",
                 "name": "set jemmy timeouts",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "internal frame should not be open",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "dialog should be open",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "button should not exist",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "run keyword in separate thread",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "toggle button should be selected",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "text field should be enabled",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "add table cell selection",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "slider should exist",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "uncheck all checkboxes",
                 "arguments": []
             }
@@ -1978,42 +1978,42 @@
         "name": "datetime",
         "keywords": [
             {
-                "type": "UNKNOWN",
+                "type": "SET",
                 "name": "subtract time from date",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SET",
                 "name": "subtract time from time",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SET",
                 "name": "add time to date",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
-                "name": "add time to t ime",
+                "type": "SET",
+                "name": "add time to time",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SET",
                 "name": "convert date",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get current date",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SET",
                 "name": "subtract date from date",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SET",
                 "name": "convert time",
                 "arguments": []
             }
@@ -2023,82 +2023,82 @@
         "name": "database",
         "keywords": [
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "connect to database using custom params",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SET",
                 "name": "query",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "table must exist",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "execute sql string",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
-                "name": "row count is0",
+                "type": "ASSERTION",
+                "name": "row count is 0",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "row count is less than x",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "delete all rows from table",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "execute sql script",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "disconnect from database",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "description",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "row count is equal to x",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "check if exists in database",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "row count",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "row count is greater than x",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "check if not exists in database",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "connect to database",
                 "arguments": []
             }
@@ -2145,7 +2145,7 @@
                 ]
             },
             {
-                "type": "SYNCHRONISATION",
+                "type": "SYNCHRONIZATION",
                 "name": "wait until element contains",
                 "arguments": [
                     {"name": "locator", "type": "Locator"},
@@ -2189,7 +2189,7 @@
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "CONFIGURATION",
                 "name": "create webdriver",
                 "arguments": [
                     {"name": "driver_name", "type": "String"},
@@ -2250,7 +2250,7 @@
                 ]
             },
             {
-                "type": "SYNCHRONISATION",
+                "type": "SYNCHRONIZATION",
                 "name": "wait until element is visible",
                 "arguments": [
                     {"name": "locator", "type": "Locator"},
@@ -2317,7 +2317,7 @@
                 ]
             },
             {
-                "type": "SYNCHRONISATION",
+                "type": "SYNCHRONIZATION",
                 "name": "wait until element does not contain",
                 "arguments": [
                     {"name": "locator", "type": "Locator"},
@@ -2409,7 +2409,7 @@
                 ]
             },
             {
-                "type": "SYNCHRONISATION",
+                "type": "SYNCHRONIZATION",
                 "name": "wait until page does not contain element",
                 "arguments": [
                     {"name": "locator", "type": "Locator"},
@@ -2439,7 +2439,7 @@
                 ]
             },
             {
-                "type": "SYNCHRONISATION",
+                "type": "SYNCHRONIZATION",
                 "name": "wait until element is enabled",
                 "arguments": [
                     {"name": "locator", "type": "Locator"},
@@ -2457,7 +2457,7 @@
                 ]
             },
             {
-                "type": "SYNCHRONISATION",
+                "type": "SYNCHRONIZATION",
                 "name": "set browser implicit wait",
                 "arguments": [
                     {"name":  "value", "type": "Timeout"}
@@ -2486,7 +2486,7 @@
                 ]
             },
             {
-                "type": "SYNCHRONISATION",
+                "type": "SYNCHRONIZATION",
                 "name": "wait until page contains",
                 "arguments": [
                     {"name": "locator", "type": "Locator"},
@@ -2512,7 +2512,7 @@
                 ]
             },
             {
-                "type": "SYNCHRONISATION",
+                "type": "SYNCHRONIZATION",
                 "name": "set selenium timeout",
                 "arguments": [
                     {"name":  "value", "type": "Timeout"}
@@ -2535,7 +2535,7 @@
                 ]
             },
             {
-                "type": "SYNCHRONISATION",
+                "type": "SYNCHRONIZATION",
                 "name": "wait for condition",
                 "arguments": [
                     {"name": "condition", "type": "Condition"},
@@ -2571,7 +2571,7 @@
                 ]
             },
             {
-                "type": "SYNCHRONISATION",
+                "type": "SYNCHRONIZATION",
                 "name": "set selenium timeout",
                 "arguments": [
                     {"name":  "value", "type": "Timeout"}
@@ -2784,7 +2784,7 @@
                 ]
             },
             {
-                "type": "SYNCHRONISATION",
+                "type": "SYNCHRONIZATION",
                 "name": "wait until page does not contain",
                 "arguments": [
                     {"name": "text", "type": "String"},
@@ -2944,7 +2944,7 @@
                 ]
             },
             {
-                "type": "SYNCHRONISATION",
+                "type": "SYNCHRONIZATION",
                 "name": "wait until element is not visible",
                 "arguments": [
                     {"name": "locator", "type": "Locator"},
@@ -2989,7 +2989,7 @@
                 ]
             },
             {
-                "type": "SYNCHRONISATION",
+                "type": "SYNCHRONIZATION",
                 "name": "set selenium implicit wait",
                 "arguments": [
                     {"name": "value", "type": "Timeout"}
@@ -3023,7 +3023,7 @@
                 ]
             },
             {
-                "type": "SYNCHRONISATION",
+                "type": "SYNCHRONIZATION",
                 "name": "wait until page contains element",
                 "arguments": [
                     {"name": "locator", "type": "Locator"},
@@ -3032,7 +3032,7 @@
                 ]
             },
             {
-                "type": "UNKNOWN",
+                "type": "CONFIGURATION",
                 "name": "set screenshot directory",
                 "arguments": [
                     {"name": "path", "type": "String"},
@@ -3226,7 +3226,7 @@
                 ]
             },
             {
-                "type": "SYNCHRONISATION",
+                "type": "SYNCHRONIZATION",
                 "name": "set selenium speed",
                 "arguments": [
                     {"name": "value", "type": "Timeout"}
@@ -3260,7 +3260,7 @@
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "CONFIGURATION",
                 "name": "add location strategy",
                 "arguments": [
                     {"name": "strategy_name", "type": "String"},
@@ -3363,212 +3363,212 @@
         "name": "collections",
         "keywords": [
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "dictionary should contain item",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SET",
                 "name": "remove duplicates",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "should contain match",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get dictionary items",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "list should contain sub list",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "LOG",
                 "name": "log dictionary",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get match count",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "should not contain match",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SET",
                 "name": "remove from list",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SET",
                 "name": "sort list",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get index from list",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "dictionary should not contain key",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get from dictionary",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "lists should be equal",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SET",
                 "name": "insert into list",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "dictionary should contain value",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SET",
                 "name": "convert to dictionary",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SET",
                 "name": "remove values from list",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "count values in list",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get slice from list",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get matches",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SET",
                 "name": "pop from dictionary",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get dictionary keys",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "LOG",
                 "name": "log list",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "list should contain value",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SET",
                 "name": "keep in dictionary",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "list should not contain duplicates",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get from list",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SET",
                 "name": "reverse list",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SET",
                 "name": "copy list",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SET",
                 "name": "remove from dictionary",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SET",
                 "name": "set to dictionary",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get dictionary values",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "dictionary should not contain value",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "dictionaries should be equal",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SET",
                 "name": "set list value",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SET",
                 "name": "append to list",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "list should not contain value",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "dictionary should contain key",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SET",
                 "name": "convert to list",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SET",
                 "name": "copy dictionary",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "dictionary should contain sub dictionary",
                 "arguments": []
             }
@@ -3578,102 +3578,102 @@
         "name": "xml",
         "keywords": [
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get element text",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "evaluate xpath",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SET",
                 "name": "remove element attribute",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SET",
                 "name": "element to string",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get element attributes",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SET",
                 "name": "copy element",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "element should not have attribute",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SET",
                 "name": "set elements text",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SET",
                 "name": "remove elements",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get element count",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SET",
                 "name": "remove elements attribute",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SET",
                 "name": "remove element",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "LOG",
                 "name": "log element",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SET",
                 "name": "clear element",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get elements texts",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SET",
                 "name": "set element attribute",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "element text should match",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "elements should match",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SET",
                 "name": "add element",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "element should exist",
                 "arguments": []
             },
@@ -3683,72 +3683,72 @@
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get element",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SET",
                 "name": "parse xml",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "element should not exist",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "element attribute should match",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get child elements",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SET",
                 "name": "set elements attribute",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SET",
                 "name": "set element tag",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "element attribute should be",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get elements",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SET",
                 "name": "remove element attributes",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SET",
                 "name": "set element text",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "elements should be equal",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SET",
                 "name": "remove elements attributes",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SET",
                 "name": "set elements tag",
                 "arguments": []
             }
@@ -3758,102 +3758,102 @@
         "name": "telnet",
         "keywords": [
             {
-                "type": "UNKNOWN",
+                "type": "CONFIGURATION",
                 "name": "set encoding",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "write",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "login",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "CONFIGURATION",
                 "name": "set prompt",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "open connection",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "close connection",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "close all connections",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "read until",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "write until expected output",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "read until regexp",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "switch connection",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "CONFIGURATION",
                 "name": "set timeout",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "read until prompt",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "set newline",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "read",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "execute command",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "CONFIGURATION",
                 "name": "set default log level",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "CONFIGURATION",
                 "name": "set telnetlib log level",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "write bare",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "write control character",
                 "arguments": []
             }
@@ -3863,42 +3863,42 @@
         "name": "operatingSystem",
         "keywords": [
             {
-                "type": "UNKNOWN",
+                "type": "SYNCHRONIZATION",
                 "name": "wait until created",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "set environment variable",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "run and return rc",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get environment variables",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SYNCHRONIZATION",
                 "name": "wait until removed",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "remove files",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "empty directory",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "environment variable should not be set",
                 "arguments": []
             },
@@ -3908,237 +3908,237 @@
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "append to environment variable",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "grep file",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "create file",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "count items in directory",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get modified time",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "directory should be empty",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "file should be empty",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "move file",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "touch",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "count directories in directory",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "file should not exist",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "create binary file",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "should exist",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SET",
                 "name": "join paths",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "copy files",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SET",
                 "name": "split path",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "file should exist",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "remove environment variable",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "append to file",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "LOG",
                 "name": "log environment variables",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "move directory",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get binary file",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SET",
                 "name": "normalize path",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "move files",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get environment variable",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "copy file",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get file",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "get file size",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "directory should exist",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "set modified time",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "LOG",
                 "name": "log file",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "copy directory",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "file should not be empty",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "count files in directory",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "remove directory",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "run and return rc and output",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "remove file",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "list directories in directory",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "list directory",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "should not exist",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "environment variable should be set",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "directory should not exist",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "GET",
                 "name": "list files in directory",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "SET",
                 "name": "join path",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ASSERTION",
                 "name": "directory should not be empty",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "create directory",
                 "arguments": []
             },
             {
-                "type": "UNKNOWN",
+                "type": "ACTION",
                 "name": "run",
                 "arguments": []
             }

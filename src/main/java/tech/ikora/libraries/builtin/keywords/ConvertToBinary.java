@@ -7,7 +7,7 @@ import tech.ikora.types.StringType;
 
 public class ConvertToBinary extends LibraryKeyword {
     public ConvertToBinary() {
-        super(Type.UNKNOWN,
+        super(Type.SET,
                 new StringType("item"),
                 new NumberType("base", "None"),
                 new StringType("prefix", "None"),

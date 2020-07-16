@@ -6,7 +6,7 @@ import tech.ikora.types.StringType;
 
 public class ConvertToBoolean extends LibraryKeyword {
     public ConvertToBoolean(){
-        super(Type.UNKNOWN, new StringType("item"));
+        super(Type.SET, new StringType("item"));
     }
 
     @Override

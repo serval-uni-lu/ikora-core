@@ -6,7 +6,7 @@ import tech.ikora.types.StringType;
 
 public class GetTime extends LibraryKeyword {
     public GetTime(){
-        super(Type.UNKNOWN,
+        super(Type.GET,
                 new StringType("format", "timestamp"),
                 new StringType("time_", "NOW")
         );

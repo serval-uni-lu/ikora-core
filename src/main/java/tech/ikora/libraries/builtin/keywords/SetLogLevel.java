@@ -6,7 +6,7 @@ import tech.ikora.types.LogLevelType;
 
 public class SetLogLevel extends LibraryKeyword {
     public SetLogLevel(){
-        super(Type.SET, new LogLevelType("level"));
+        super(Type.CONFIGURATION, new LogLevelType("level"));
     }
 
     @Override

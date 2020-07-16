@@ -6,7 +6,7 @@ import tech.ikora.types.StringType;
 
 public class GetVariables extends LibraryKeyword {
     public GetVariables(){
-        super(Type.UNKNOWN,
+        super(Type.GET,
                 new StringType("name"),
                 new StringType("default", "None")
         );

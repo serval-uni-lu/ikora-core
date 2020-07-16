@@ -6,7 +6,7 @@ import tech.ikora.types.StringType;
 
 public class GetCount extends LibraryKeyword {
     public GetCount(){
-        super(Type.UNKNOWN,
+        super(Type.GET,
                 new StringType("container"),
                 new StringType("item")
         );

@@ -7,7 +7,7 @@ import tech.ikora.types.StringType;
 
 public class GetLibraryInstance extends LibraryKeyword {
     public GetLibraryInstance(){
-        super(Type.UNKNOWN,
+        super(Type.GET,
                 new StringType("name", "None"),
                 new BooleanType("all", "False")
         );

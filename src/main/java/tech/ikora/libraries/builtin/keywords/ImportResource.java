@@ -7,7 +7,7 @@ import tech.ikora.types.PathType;
 
 public class ImportResource extends LibraryKeyword {
     public ImportResource(){
-        super(Type.UNKNOWN, new PathType("path"));
+        super(Type.CONFIGURATION, new PathType("path"));
     }
 
     @Override

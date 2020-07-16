@@ -6,7 +6,7 @@ import tech.ikora.types.StringType;
 
 public class Evaluate extends LibraryKeyword {
     public Evaluate(){
-        super(Type.UNKNOWN,
+        super(Type.SET,
                 new StringType("expression"),
                 new StringType("modules", "None"),
                 new StringType("namespace", "None")

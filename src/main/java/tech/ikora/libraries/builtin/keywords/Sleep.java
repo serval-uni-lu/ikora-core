@@ -7,7 +7,7 @@ import tech.ikora.types.TimeoutType;
 
 public class Sleep extends LibraryKeyword {
     public Sleep(){
-        super(Type.SYNCHRONISATION,
+        super(Type.SYNCHRONIZATION,
                 new TimeoutType("time"),
                 new StringType("reason", "None")
         );

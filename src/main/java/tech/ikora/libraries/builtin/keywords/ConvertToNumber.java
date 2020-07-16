@@ -7,7 +7,7 @@ import tech.ikora.types.StringType;
 
 public class ConvertToNumber extends LibraryKeyword {
     public ConvertToNumber(){
-        super(Type.UNKNOWN,
+        super(Type.SET,
                 new StringType("item"),
                 new NumberType("precision", "None")
         );

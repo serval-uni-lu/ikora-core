@@ -6,7 +6,7 @@ import tech.ikora.types.ListType;
 
 public class CreateList extends LibraryKeyword {
     public CreateList(){
-        super(Type.UNKNOWN, new ListType("items"));
+        super(Type.SET, new ListType("items"));
     }
 
     @Override

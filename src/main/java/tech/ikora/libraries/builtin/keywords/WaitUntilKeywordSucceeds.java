@@ -7,7 +7,7 @@ import tech.ikora.types.TimeoutType;
 
 public class WaitUntilKeywordSucceeds extends LibraryKeyword {
     public WaitUntilKeywordSucceeds(){
-        super(Type.SYNCHRONISATION,
+        super(Type.SYNCHRONIZATION,
                 new TimeoutType("retry"),
                 new TimeoutType("retry_interval"),
                 new KeywordType("keyword")

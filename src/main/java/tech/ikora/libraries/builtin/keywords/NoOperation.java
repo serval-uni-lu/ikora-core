@@ -5,7 +5,7 @@ import tech.ikora.runner.Runtime;
 
 public class NoOperation extends LibraryKeyword {
     public NoOperation(){
-        super(Type.UNKNOWN);
+        super(Type.NONE);
     }
 
     @Override

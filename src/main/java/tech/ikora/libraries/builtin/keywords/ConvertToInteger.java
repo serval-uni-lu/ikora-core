@@ -7,7 +7,7 @@ import tech.ikora.types.StringType;
 
 public class ConvertToInteger extends LibraryKeyword {
     public ConvertToInteger(){
-        super(Type.UNKNOWN,
+        super(Type.SET,
                 new StringType("item"),
                 new NumberType("base", "None")
         );

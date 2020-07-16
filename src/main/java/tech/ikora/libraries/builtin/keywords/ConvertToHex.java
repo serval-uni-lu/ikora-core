@@ -8,7 +8,7 @@ import tech.ikora.types.StringType;
 
 public class ConvertToHex extends LibraryKeyword {
     public ConvertToHex(){
-        super(Type.UNKNOWN,
+        super(Type.SET,
                 new StringType("item"),
                 new NumberType("base", "None"),
                 new StringType("prefix", "None"),

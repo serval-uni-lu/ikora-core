@@ -6,7 +6,7 @@ import tech.ikora.types.ListType;
 
 public class SetLibrarySearchOrder extends LibraryKeyword {
     public SetLibrarySearchOrder(){
-        super(Type.SET, new ListType("search_order"));
+        super(Type.CONFIGURATION, new ListType("search_order"));
     }
 
     @Override

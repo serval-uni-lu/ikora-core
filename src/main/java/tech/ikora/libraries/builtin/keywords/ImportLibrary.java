@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public class ImportLibrary extends LibraryKeyword implements ScopeModifier {
     public ImportLibrary(){
-        super(Type.UNKNOWN,
+        super(Type.CONFIGURATION,
                 new StringType("name"),
                 new ListType("args")
         );

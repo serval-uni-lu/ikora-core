@@ -7,7 +7,7 @@ import tech.ikora.types.StringType;
 
 public class ConvertToOctal extends LibraryKeyword {
     public ConvertToOctal() {
-        super(Type.UNKNOWN,
+        super(Type.SET,
                 new StringType("item"),
                 new NumberType("base", "None"),
                 new StringType("prefix", "None"),

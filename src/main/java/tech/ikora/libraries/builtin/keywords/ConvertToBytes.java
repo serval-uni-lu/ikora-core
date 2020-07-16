@@ -8,7 +8,7 @@ import java.util.Arrays;
 
 public class ConvertToBytes extends LibraryKeyword {
     public ConvertToBytes(){
-        super(Type.UNKNOWN,
+        super(Type.SET,
                 new StringType("item"),
                 new StringType("input_type", "text")
         );

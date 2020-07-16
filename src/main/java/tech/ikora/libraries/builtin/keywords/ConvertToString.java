@@ -8,7 +8,7 @@ import java.util.Collections;
 
 public class ConvertToString extends LibraryKeyword {
     public ConvertToString(){
-        super(Type.UNKNOWN, new StringType("item"));
+        super(Type.SET, new StringType("item"));
     }
 
     @Override

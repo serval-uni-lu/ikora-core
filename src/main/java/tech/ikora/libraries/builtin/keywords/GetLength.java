@@ -6,7 +6,7 @@ import tech.ikora.types.StringType;
 
 public class GetLength extends LibraryKeyword {
     public GetLength(){
-        super(Type.UNKNOWN, new StringType("item"));
+        super(Type.GET, new StringType("item"));
     }
 
     @Override

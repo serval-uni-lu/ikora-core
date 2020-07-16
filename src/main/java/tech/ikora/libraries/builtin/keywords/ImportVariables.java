@@ -7,7 +7,7 @@ import tech.ikora.types.PathType;
 
 public class ImportVariables extends LibraryKeyword {
     public ImportVariables(){
-        super(Type.UNKNOWN,
+        super(Type.CONFIGURATION,
                 new PathType("path"),
                 new ListType("args")
         );
