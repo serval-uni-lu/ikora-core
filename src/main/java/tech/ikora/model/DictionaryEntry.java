@@ -5,11 +5,13 @@ import tech.ikora.analytics.visitor.NodeVisitor;
 import tech.ikora.analytics.visitor.VisitorMemory;
 import tech.ikora.runner.Runtime;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class DictionaryEntry extends Value {
-    private SourceNode key;
-    private SourceNode value;
+    private final SourceNode key;
+    private final SourceNode value;
 
     public DictionaryEntry(SourceNode key, SourceNode value){
         addToken(key.getNameToken());
@@ -70,6 +72,24 @@ public class DictionaryEntry extends Value {
 
     @Override
     public List<Action> differences(Differentiable other) {
-        return null;
+        if(other == null){
+            return Collections.singletonList(Action.removeElement(DictionaryEntry.class, this));
+        }
+
+        if(other == this){
+            return Collections.emptyList();
+        }
+
+        if(!(other instanceof DictionaryEntry)){
+            return Collections.singletonList(Action.changeValueType(this, other));
+        }
+
+        DictionaryEntry entry = (DictionaryEntry)other;
+
+        List<Action> actions = new ArrayList<>();
+        actions.addAll(this.key.differences(entry.key));
+        actions.addAll(this.value.differences(entry.value));
+
+        return actions;
     }
 }
