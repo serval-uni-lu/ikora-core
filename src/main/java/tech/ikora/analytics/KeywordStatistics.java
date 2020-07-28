@@ -53,8 +53,8 @@ public class KeywordStatistics {
         return visitor.getSequence();
     }
 
-    public static Set<KeywordDefinition> getDependencies(Node node, Set<KeywordDefinition> filter){
-        DependencyCheckerVisitor visitor = new DependencyCheckerVisitor(filter);
+    public static Set<KeywordDefinition> getDependencies(Node node){
+        DependencyCollectorVisitor visitor = new DependencyCollectorVisitor();
         node.accept(visitor, new PathMemory());
 
         return visitor.getDependencies();

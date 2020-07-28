@@ -205,8 +205,8 @@ public class SourceFile extends SourceNode {
         return findNode(library, name, new HashSet<>(), UserKeyword.class);
     }
 
-    public Set<Variable> findVariable(Token name) {
-        return findNode(null, name, new HashSet<>(), Variable.class);
+    public Set<VariableAssignment> findVariable(Token name) {
+        return findNode(null, name, new HashSet<>(), VariableAssignment.class);
     }
 
     public Set<Variable> findVariable(String library, Token name) {
@@ -225,7 +225,7 @@ public class SourceFile extends SourceNode {
                 nodes.addAll((Collection<? extends T>) testCaseTable.findNode(name));
             }
 
-            if(type == Variable.class){
+            if(type == VariableAssignment.class){
                 nodes.addAll((Collection<? extends T>) variableTable.findNode(name));
             }
         }

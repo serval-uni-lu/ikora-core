@@ -155,7 +155,7 @@ class ValueResolverTest {
 
         final SourceNode value = argument.getDefinition();
 
-        final Set<Node> definitions = ((Variable) value).getDefinition(Link.Import.BOTH);
+        final Set<Dependable> definitions = ((Variable) value).getDefinition(Link.Import.BOTH);
         final Node definition = definitions.iterator().next();
 
         assertTrue(definition instanceof VariableAssignment);
@@ -188,13 +188,10 @@ class ValueResolverTest {
 
         final SourceNode value = argument.getDefinition();
 
-        final Set<Node> definitions = ((Variable) value).getDefinition(Link.Import.BOTH);
+        final Set<Dependable> definitions = ((Variable) value).getDefinition(Link.Import.BOTH);
         final Node definition = definitions.iterator().next();
 
-        assertTrue(definition instanceof ScalarVariable);
-
-        final SourceNode astParent = ((ScalarVariable) definition).getAstParent();
-        assertTrue(astParent instanceof UserKeyword);
+        assertTrue(definition instanceof UserKeyword);
     }
 
     @Test
@@ -223,12 +220,9 @@ class ValueResolverTest {
 
         final SourceNode value = argument.getDefinition();
 
-        final Set<Node> definitions = ((Variable) value).getDefinition(Link.Import.BOTH);
+        final Set<Dependable> definitions = ((Variable) value).getDefinition(Link.Import.BOTH);
         final Node definition = definitions.iterator().next();
 
-        assertTrue(definition instanceof ScalarVariable);
-
-        final SourceNode astParent = ((ScalarVariable) definition).getAstParent();
-        assertTrue(astParent instanceof Assignment);
+        assertTrue(definition instanceof Assignment);
     }
 }

@@ -7,10 +7,6 @@ import tech.ikora.runner.Runtime;
 import java.util.Set;
 
 public interface Node {
-    void addDependency(SourceNode node);
-    void removeDependency(SourceNode node);
-    Set<SourceNode> getDependencies();
-
     String getName();
     String getLibraryName();
 

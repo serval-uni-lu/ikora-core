@@ -51,7 +51,6 @@ public abstract class Step extends SourceNode {
 
     public void setTemplate(KeywordCall template) {
         this.template = template;
-        this.template.addDependency(this);
     }
 
     public KeywordCall toCall() throws InvalidTypeException {

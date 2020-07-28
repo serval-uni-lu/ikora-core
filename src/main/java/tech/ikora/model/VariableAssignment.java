@@ -7,17 +7,17 @@ import tech.ikora.analytics.visitor.VisitorMemory;
 import tech.ikora.runner.Runtime;
 import tech.ikora.utils.LevenshteinDistance;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
-public class VariableAssignment extends SourceNode {
+public class VariableAssignment extends SourceNode implements Dependable{
     private final Variable variable;
     private final NodeList<Argument> values;
+    private final Set<SourceNode> dependencies;
 
     public VariableAssignment(Variable variable){
         this.variable = variable;
         this.values = new NodeList<>();
+        this.dependencies = new HashSet<>();
         this.addTokens(variable.getTokens());
     }
 
@@ -93,5 +93,24 @@ public class VariableAssignment extends SourceNode {
         actions.addAll(LevenshteinDistance.getDifferences(this.getValues(), assignment.getValues()));
 
         return actions;
+    }
+
+    @Override
+    public void addDependency(SourceNode node) {
+        if(node == null) {
+            return;
+        }
+
+        this.dependencies.add(node);
+    }
+
+    @Override
+    public void removeDependency(SourceNode node) {
+        this.dependencies.remove(node);
+    }
+
+    @Override
+    public Set<SourceNode> getDependencies() {
+        return dependencies;
     }
 }

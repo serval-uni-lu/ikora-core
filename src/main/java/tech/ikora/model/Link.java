@@ -2,7 +2,7 @@ package tech.ikora.model;
 
 import java.util.*;
 
-public class Link<K extends SourceNode,T extends Node> {
+public class Link<K extends SourceNode,T extends Dependable> {
     public enum Import{
         STATIC,
         DYNAMIC,
@@ -63,6 +63,8 @@ public class Link<K extends SourceNode,T extends Node> {
                 addNode(destination, dynamicCallee);
                 break;
         }
+
+        destination.addDependency(source);
     }
 
     private void addNode(T destination, Set<T> destinations) {
@@ -71,6 +73,5 @@ public class Link<K extends SourceNode,T extends Node> {
         }
 
         destinations.add(destination);
-        destination.addDependency(source);
     }
 }

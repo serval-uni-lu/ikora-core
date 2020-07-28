@@ -152,7 +152,7 @@ class BuilderTest {
 
         assertEquals(1, assignment.getLeftHandOperand().size());
         assertEquals("${EtatRun}", assignment.getLeftHandOperand().get(0).getName());
-        assertEquals(1, assignment.getLeftHandOperand().get(0).getDependencies().size());
+        assertEquals(2, assignment.getDependencies().size());
     }
 
     @Test

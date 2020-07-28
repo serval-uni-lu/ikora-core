@@ -8,17 +8,17 @@ import tech.ikora.exception.ExecutionException;
 import tech.ikora.runner.Runtime;
 import tech.ikora.utils.LevenshteinDistance;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
-public class Assignment extends Step {
+public class Assignment extends Step implements Dependable {
     private final NodeList<Variable> leftHandOperand;
     private final Argument rightHandOperand;
+    private final Set<SourceNode> dependencies;
 
     public Assignment(Token name, List<Variable> leftHandOperand, KeywordCall rightHandOperand) {
         super(name);
+
+        this.dependencies = new HashSet<>();
 
         this.leftHandOperand = new NodeList<>();
         this.addAstChild(this.leftHandOperand);
@@ -45,6 +45,7 @@ public class Assignment extends Step {
 
         this.addAstChild(variable);
         this.addTokens(variable.getTokens());
+        variable.linkToDefinition(this, Link.Import.STATIC);
 
         leftHandOperand.add(variable);
     }
@@ -179,5 +180,34 @@ public class Assignment extends Step {
     @Override
     public void accept(NodeVisitor visitor, VisitorMemory memory){
         visitor.visit(this, memory);
+    }
+
+    @Override
+    public void addDependency(SourceNode node) {
+        if(node == null) {
+            return;
+        }
+
+        this.dependencies.add(node);
+    }
+
+    @Override
+    public void removeDependency(SourceNode node) {
+        this.dependencies.remove(node);
+    }
+
+    @Override
+    public Set<SourceNode> getDependencies() {
+        return dependencies;
+    }
+
+    public boolean isDefinition(Variable variable){
+        for(Variable candidate: leftHandOperand){
+            if(candidate.matches(variable.getNameToken())){
+                return true;
+            }
+        }
+
+        return false;
     }
 }

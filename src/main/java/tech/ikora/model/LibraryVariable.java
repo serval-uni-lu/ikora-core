@@ -11,7 +11,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public abstract class LibraryVariable implements Node {
+public abstract class LibraryVariable implements Node, Dependable {
     protected enum Format{
         SCALAR, LIST, DICTIONARY
     }

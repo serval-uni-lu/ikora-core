@@ -36,6 +36,10 @@ public class KeywordCall extends Step {
     }
 
     public void linkKeyword(Keyword keyword, Link.Import importLink) {
+        if(keyword == null){
+            throw new NullPointerException("Cannot link a keywordCall to a null Keyword");
+        }
+
         link.addNode(keyword, importLink);
     }
 
@@ -176,14 +180,9 @@ public class KeywordCall extends Step {
         this.arguments.add(argument);
 
         addTokens(argument.getTokens());
-        argument.getDefinition().addDependency(this);
     }
 
     private void clearArguments(){
-        for(Argument argument: this.arguments){
-            argument.getDefinition().removeDependency(this);
-        }
-
         this.arguments.clear();
     }
 }

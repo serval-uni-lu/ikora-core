@@ -6,10 +6,16 @@ public class VisitorUtils {
     private VisitorUtils(){}
 
     public static void traverseDependencies(NodeVisitor visitor, Node node, VisitorMemory memory){
-        for(Node dependency: node.getDependencies()){
-            if(memory.isAcceptable(dependency)){
-                dependency.accept(visitor, memory.getUpdated(dependency));
+        if(Dependable.class.isAssignableFrom(node.getClass())){
+            for(Node dependency: ((Dependable)node).getDependencies()){
+                if(memory.isAcceptable(dependency)){
+                    dependency.accept(visitor, memory.getUpdated(dependency));
+                }
             }
+        }
+        else if(SourceNode.class.isAssignableFrom(node.getClass())){
+            final SourceNode parent =  ((SourceNode)node).getAstParent();
+            parent.accept(visitor, memory.getUpdated(parent));
         }
     }
 

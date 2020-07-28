@@ -7,12 +7,10 @@ import tech.ikora.model.UserKeyword;
 import java.util.HashSet;
 import java.util.Set;
 
-public class DependencyCheckerVisitor extends DependencyVisitor {
-    private final Set<KeywordDefinition> keywords;
+public class DependencyCollectorVisitor extends DependencyVisitor {
     private Set<KeywordDefinition> dependencies;
 
-    public DependencyCheckerVisitor(Set<KeywordDefinition> keywords){
-        this.keywords = keywords;
+    public DependencyCollectorVisitor(){
         this.dependencies = new HashSet<>();
     }
 
@@ -22,17 +20,13 @@ public class DependencyCheckerVisitor extends DependencyVisitor {
 
     @Override
     public void visit(TestCase testCase, VisitorMemory memory) {
-        if(keywords.contains(testCase)){
-            dependencies.add(testCase);
-        }
+        dependencies.add(testCase);
+        VisitorUtils.traverseDependencies(this, testCase, memory);
     }
 
     @Override
     public void visit(UserKeyword keyword, VisitorMemory memory) {
-        if(keywords.contains(keyword)){
-            dependencies.add(keyword);
-        }
-
+        dependencies.add(keyword);
         VisitorUtils.traverseDependencies(this, keyword, memory);
     }
 }

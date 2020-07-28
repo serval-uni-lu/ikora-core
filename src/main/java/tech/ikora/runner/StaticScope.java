@@ -7,11 +7,11 @@ import java.io.File;
 import java.util.*;
 
 public class StaticScope implements Scope{
-    private SourceNodeTable<Variable> global;
-    private Map<TestCase, SourceNodeTable<Variable>> test;
-    private Map<String, SourceNodeTable<Variable>> suite;
+    private final SourceNodeTable<Variable> global;
+    private final Map<TestCase, SourceNodeTable<Variable>> test;
+    private final Map<String, SourceNodeTable<Variable>> suite;
 
-    private Map<KeywordDefinition, ResourcesTable> dynamicLibrary;
+    private final Map<KeywordDefinition, ResourcesTable> dynamicLibrary;
 
     public StaticScope(){
         global = new SourceNodeTable<>();
@@ -92,13 +92,15 @@ public class StaticScope implements Scope{
 
     @Override
     public ResourcesTable getDynamicResources(Node node) {
-        Set<KeywordDefinition> dependencies = KeywordStatistics.getDependencies(node, dynamicLibrary.keySet());
+        final Set<KeywordDefinition> dependencies = KeywordStatistics.getDependencies(node);
 
         ResourcesTable resourcesTable = new ResourcesTable();
 
         for(KeywordDefinition dependency: dependencies){
             for(Resources resources: dynamicLibrary.get(dependency)){
-                resourcesTable.add(resources);
+                if(resources != null) {
+                    resourcesTable.add(resources);
+                }
             }
         }
 

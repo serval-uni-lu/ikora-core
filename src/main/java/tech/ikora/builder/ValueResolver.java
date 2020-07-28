@@ -118,7 +118,7 @@ public class ValueResolver {
     }
 
     public static List<Node> getValueNodes(Variable variable){
-        final Set<Node> definition = variable.getDefinition(Link.Import.BOTH);
+        final Set<Dependable> definition = variable.getDefinition(Link.Import.BOTH);
         final List<Node> values = new ArrayList<>();
 
         for(Node node: definition){

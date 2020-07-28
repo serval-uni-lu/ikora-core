@@ -14,11 +14,6 @@ public class DictionaryVariable extends Variable {
     }
 
     @Override
-    public boolean isDeadCode(){
-        return getDependencies().size() == 0;
-    }
-
-    @Override
     public void accept(NodeVisitor visitor, VisitorMemory memory){
         visitor.visit(this, memory);
     }

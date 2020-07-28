@@ -2,7 +2,7 @@ package tech.ikora.model;
 
 import tech.ikora.types.BaseTypeList;
 
-public interface Keyword extends Node {
+public interface Keyword extends Node, Dependable {
     enum Type{
         USER, CONFIGURATION, CONTROL_FLOW, ASSERTION, ACTION, LOG, ERROR, SYNCHRONIZATION, GET, SET, UNKNOWN, NONE
     }

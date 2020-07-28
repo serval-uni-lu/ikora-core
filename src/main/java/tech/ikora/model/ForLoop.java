@@ -7,15 +7,14 @@ import tech.ikora.runner.Runtime;
 import tech.ikora.utils.LevenshteinDistance;
 import org.apache.commons.lang3.NotImplementedException;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
-public class ForLoop extends Step implements ScopeNode {
+public class ForLoop extends Step implements Dependable, ScopeNode {
     private final List<Step> steps;
     private final Variable iterator;
     private final Step interval;
+    private final Set<SourceNode> dependencies;
 
     protected List<Variable> localVariables;
 
@@ -32,13 +31,14 @@ public class ForLoop extends Step implements ScopeNode {
         this.addTokens(this.iterator.getTokens());
         this.addTokens(this.interval.getTokens());
 
-        localVariables = new ArrayList<>();
+        this.localVariables = new ArrayList<>();
+        this.dependencies = new HashSet<>();
+
 
         this.steps = new ArrayList<>(steps.size());
         for(Step step: steps){
             this.steps.add(step);
             this.addAstChild(step);
-            step.addDependency(this);
             this.addTokens(step.getTokens());
         }
     }
@@ -132,10 +132,38 @@ public class ForLoop extends Step implements ScopeNode {
     }
 
     @Override
-    public List<Variable> getLocalVariables() {
-        List<Variable> localVariables = new ArrayList<>(this.localVariables);
-        localVariables.add(this.iterator);
+    public List<Dependable> findDefinition(Variable variable) {
+        final List<Dependable> definitions = this.steps.stream()
+                .filter(s -> s instanceof Assignment)
+                .map(s -> (Assignment)s)
+                .filter(a -> a.isDefinition(variable))
+                .map(a -> (Dependable)a)
+                .collect(Collectors.toList());
 
-        return localVariables;
+        if(iterator.matches(variable.getNameToken())){
+            definitions.add(this);
+        }
+
+
+        return definitions;
+    }
+
+    @Override
+    public void addDependency(SourceNode node) {
+        if(node == null) {
+            return;
+        }
+
+        this.dependencies.add(node);
+    }
+
+    @Override
+    public void removeDependency(SourceNode node) {
+        this.dependencies.remove(node);
+    }
+
+    @Override
+    public Set<SourceNode> getDependencies() {
+        return dependencies;
     }
 }

@@ -84,10 +84,13 @@ public class UserKeyword extends KeywordDefinition {
     }
 
     @Override
-    public List<Variable> getLocalVariables() {
-        List<Variable> localVariables = super.getLocalVariables();
-        localVariables.addAll(arguments);
+    public List<Dependable> findDefinition(Variable variable) {
+        final List<Dependable> definitions = super.findDefinition(variable);
 
-        return localVariables;
+        if(arguments.stream().anyMatch(v -> v.matches(variable.getNameToken()))){
+            definitions.add(this);
+        }
+
+        return definitions;
     }
 }

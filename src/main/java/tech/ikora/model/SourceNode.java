@@ -1,11 +1,9 @@
 package tech.ikora.model;
 
+import tech.ikora.utils.Ast;
 import tech.ikora.utils.FileUtils;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public abstract class SourceNode implements Node, Differentiable {
     private SourceNode astParent;
@@ -116,27 +114,14 @@ public abstract class SourceNode implements Node, Differentiable {
         return astChildren;
     }
 
-    @Override
-    public void addDependency(SourceNode node) {
-        if(node == null) {
-            return;
-        }
 
-        this.dependencies.add(node);
-    }
-
-    @Override
-    public void removeDependency(SourceNode node) {
-        this.dependencies.remove(node);
-    }
-
-    @Override
-    public Set<SourceNode> getDependencies() {
-        return dependencies;
-    }
 
     public boolean isDeadCode(){
-        return getDependencies().size() == 0;
+        final Set<SourceNode> dependencies = Ast.getParentByType(this, Dependable.class)
+                .map(Dependable::getDependencies)
+                .orElse(Collections.emptySet());
+
+        return dependencies.size() == 0;
     }
 
     public void addToken(Token token){

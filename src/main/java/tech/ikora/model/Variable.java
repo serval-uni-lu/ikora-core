@@ -3,7 +3,6 @@ package tech.ikora.model;
 import tech.ikora.analytics.Action;
 import tech.ikora.builder.ValueResolver;
 import tech.ikora.builder.VariableParser;
-import tech.ikora.exception.InvalidArgumentException;
 import tech.ikora.exception.MalformedVariableException;
 import tech.ikora.runner.Runtime;
 
@@ -14,7 +13,7 @@ import java.util.regex.Pattern;
 public abstract class Variable extends Value {
     protected Token name;
     protected Pattern pattern;
-    protected Link<Variable, Node> link;
+    protected Link<Variable, Dependable> link;
 
     public Variable(Token name) {
         setName(name);
@@ -27,11 +26,11 @@ public abstract class Variable extends Value {
         return new InvalidVariable();
     }
 
-    public void linkToDefinition(Node definition, Link.Import link){
+    public void linkToDefinition(Dependable definition, Link.Import link){
         this.link.addNode(definition, link);
     }
 
-    public Set<Node> getDefinition(Link.Import linkType){
+    public Set<Dependable> getDefinition(Link.Import linkType){
         return this.link.getAllLinks(linkType);
     }
 
