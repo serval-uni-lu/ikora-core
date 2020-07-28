@@ -45,7 +45,6 @@ public class Assignment extends Step implements Dependable {
 
         this.addAstChild(variable);
         this.addTokens(variable.getTokens());
-        variable.linkToDefinition(this, Link.Import.STATIC);
 
         leftHandOperand.add(variable);
     }
