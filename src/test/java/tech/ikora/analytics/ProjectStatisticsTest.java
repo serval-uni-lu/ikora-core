@@ -3,10 +3,13 @@ package tech.ikora.analytics;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import tech.ikora.Helpers;
+import tech.ikora.builder.BuildResult;
+import tech.ikora.builder.Builder;
 import tech.ikora.exception.InvalidTypeException;
 import tech.ikora.model.Project;
 import tech.ikora.model.TestCase;
 import tech.ikora.model.UserKeyword;
+import tech.ikora.utils.FileUtils;
 
 import java.util.Map;
 
@@ -40,6 +43,30 @@ class ProjectStatisticsTest {
 
         int size7 = userKeywordSizes.getOrDefault(7, 0);
         assertEquals(2, size7);
+    }
+
+    @Test
+    void testSimpleLibraryCallConnectivity() throws InvalidTypeException {
+        final String code =
+                "*** Test Cases ***\n" +
+                "Simple Test\n" +
+                "    Print    Something interesting\n" +
+                "\n" +
+                "*** Keywords ***\n" +
+                "Print\n" +
+                "    [Arguments]    ${message}\n" +
+                "    Log    ${message}\n";
+
+        final BuildResult result = Builder.build(code, true);
+        assertEquals(1, result.getProjects().size());
+
+        final Project project = result.getProjects().iterator().next();
+        final ProjectStatistics projectStatistics = new ProjectStatistics(project);
+        final Map<Integer, Integer> userKeywordConnectivity = projectStatistics.getConnectivityDistribution(UserKeyword.class);
+        assertEquals(1, userKeywordConnectivity.size());
+
+        int connectivity1 = userKeywordConnectivity.getOrDefault(1,0);
+        assertEquals(1, connectivity1);
     }
 
     @Test

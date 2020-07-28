@@ -7,10 +7,15 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class PathMemory implements VisitorMemory {
-    private Set<Node> visited;
+    private final Set<Node> visited;
 
     public PathMemory(){
         visited = new HashSet<>();
+    }
+
+    public PathMemory(Node node){
+        this();
+        visited.add(node);
     }
 
     protected PathMemory(PathMemory other){

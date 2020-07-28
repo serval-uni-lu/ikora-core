@@ -15,7 +15,9 @@ public class VisitorUtils {
         }
         else if(SourceNode.class.isAssignableFrom(node.getClass())){
             final SourceNode parent =  ((SourceNode)node).getAstParent();
-            parent.accept(visitor, memory.getUpdated(parent));
+            if(memory.isAcceptable(parent)){
+                parent.accept(visitor, memory.getUpdated(parent));
+            }
         }
     }
 
