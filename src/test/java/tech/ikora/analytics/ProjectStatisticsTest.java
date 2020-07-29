@@ -25,7 +25,7 @@ class ProjectStatisticsTest {
     }
 
     @Test
-    void checkSizeDistributionWithSimpleProject() throws InvalidTypeException {
+    void testSizeDistributionWithSimpleProject() throws InvalidTypeException {
         Map<Integer, Integer> userKeywordSizes = statistics.getSizeDistribution(UserKeyword.class);
         assertFalse(userKeywordSizes.isEmpty());
 
@@ -70,7 +70,7 @@ class ProjectStatisticsTest {
     }
 
     @Test
-    void checkConnectivityDistributionWithSimpleProject() throws InvalidTypeException {
+    void testConnectivityDistributionWithWebDemoProject() throws InvalidTypeException {
         Map<Integer, Integer> userKeywordConnectivity = statistics.getConnectivityDistribution(UserKeyword.class);
         assertFalse(userKeywordConnectivity.isEmpty());
 
@@ -94,7 +94,7 @@ class ProjectStatisticsTest {
     }
 
     @Test
-    void checkLevelDistributionWithSimpleProject() throws InvalidTypeException {
+    void testLevelDistributionWithWebDemoProject() throws InvalidTypeException {
         Map<Integer, Integer> userKeywordLevels = statistics.getLevelDistribution(UserKeyword.class);
         assertFalse(userKeywordLevels.isEmpty());
 
@@ -115,7 +115,7 @@ class ProjectStatisticsTest {
     }
 
     @Test
-    void checkSequenceDistributionSimpleProject() throws InvalidTypeException {
+    void testSequenceDistributionWebDemoProject() throws InvalidTypeException {
         Map<Integer, Integer> userKeywordSequence = statistics.getSequenceDistribution(UserKeyword.class);
         assertFalse(userKeywordSequence.isEmpty());
 
