@@ -128,18 +128,15 @@ public class ValueResolver {
             else if(LibraryVariable.class.isAssignableFrom(node.getClass())){
                 values.add(node);
             }
+            else if(UserKeyword.class.isAssignableFrom(node.getClass())){
+                ((UserKeyword) node).getParameterByName(variable.getNameToken()).ifPresent(values::add);
+            }
             else if(Variable.class.isAssignableFrom(node.getClass())){
-                final Variable v = (Variable)node;
-                values.addAll(isKeywordArgument(v) ? Collections.singletonList(v): getValueNodes(v));
+                values.addAll(getValueNodes((Variable)node));
             }
         }
 
         return values;
-    }
-
-    public static boolean isKeywordArgument(final Variable variable){
-        final Optional<UserKeyword> userKeyword = getUserKeywordFromArgument(variable);
-        return userKeyword.map(steps -> steps.getArguments().contains(variable)).orElse(false);
     }
 
     public static Optional<UserKeyword> getUserKeywordFromArgument(final Variable variable){

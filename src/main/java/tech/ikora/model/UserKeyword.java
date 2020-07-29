@@ -7,6 +7,7 @@ import tech.ikora.exception.InvalidTypeException;
 import tech.ikora.types.*;
 
 import java.util.List;
+import java.util.Optional;
 
 public class UserKeyword extends KeywordDefinition {
     private NodeList<Variable> arguments;
@@ -34,6 +35,10 @@ public class UserKeyword extends KeywordDefinition {
 
     public KeywordCall getTearDown() {
         return tearDown;
+    }
+
+    public Optional<Variable> getParameterByName(Token name) {
+        return arguments.stream().filter(a -> a.matches(name)).findFirst();
     }
 
     public void setArgumentList(NodeList<Variable> arguments){
