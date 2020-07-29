@@ -1,11 +1,15 @@
 package tech.ikora.analytics.visitor;
 import tech.ikora.model.*;
 
+import java.util.Optional;
+
 
 public class VisitorUtils {
     private VisitorUtils(){}
 
     public static void traverseDependencies(NodeVisitor visitor, Node node, VisitorMemory memory){
+        memory = memory.getUpdated(node);
+
         if(Dependable.class.isAssignableFrom(node.getClass())){
             for(Node dependency: ((Dependable)node).getDependencies()){
                 if(memory.isAcceptable(dependency)){
@@ -22,7 +26,9 @@ public class VisitorUtils {
     }
 
     public static void traverseSteps(NodeVisitor visitor, KeywordDefinition keyword, VisitorMemory memory){
-        for(Step step: keyword.getSteps()){
+       memory = memory.getUpdated(keyword);
+
+       for(Step step: keyword.getSteps()){
             if(memory.isAcceptable(step)){
                 step.accept(visitor, memory.getUpdated(step));
             }
@@ -30,6 +36,8 @@ public class VisitorUtils {
     }
 
     public static void traverseForLoopSteps(NodeVisitor visitor, ForLoop forLoop, VisitorMemory memory){
+        memory = memory.getUpdated(forLoop);
+
         for(Step step: forLoop.getSteps()){
             if(memory.isAcceptable(step)){
                 step.accept(visitor, memory.getUpdated(step));
@@ -44,13 +52,17 @@ public class VisitorUtils {
     }
 
     public static void traverseKeywordCall(NodeVisitor visitor, KeywordCall call, VisitorMemory memory){
-        call.getKeyword().ifPresent(keyword ->{
+        memory = memory.getUpdated(call);
+
+        final Optional<Keyword> keyword = call.getKeyword();
+
+        if(keyword.isPresent()){
             for(Argument argument: call.getArgumentList()){
                 argument.accept(visitor, memory.getUpdated(argument));
             }
 
-            keyword.accept(visitor, memory.getUpdated(keyword));
-        });
+            keyword.get().accept(visitor, memory.getUpdated(keyword.get()));
+        }
     }
 
     public static void traverseArgument(NodeVisitor visitor, Argument argument, VisitorMemory memory){

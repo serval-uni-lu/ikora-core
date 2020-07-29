@@ -21,6 +21,10 @@ public class LevelMemory extends PathMemory {
             return this;
         }
 
+        if(!this.isAcceptable(node)){
+            return this;
+        }
+
         LevelMemory updated = new LevelMemory(this);
         updated.add(node);
         updated.level++;

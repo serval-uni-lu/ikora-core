@@ -13,11 +13,6 @@ public class PathMemory implements VisitorMemory {
         visited = new HashSet<>();
     }
 
-    public PathMemory(Node node){
-        this();
-        visited.add(node);
-    }
-
     protected PathMemory(PathMemory other){
         this.visited = other.visited;
     }

@@ -13,14 +13,14 @@ public class KeywordStatistics {
 
     public static int getConnectivity(SourceNode sourceNode){
         ConnectivityVisitor visitor = new ConnectivityVisitor();
-        sourceNode.accept(visitor, new PathMemory(sourceNode));
+        sourceNode.accept(visitor, new PathMemory());
 
         return visitor.getConnectivity();
     }
 
     public static SizeVisitor.Result getSize(SourceNode sourceNode){
         SizeVisitor visitor = new SizeVisitor();
-        sourceNode.accept(visitor, new PathMemory(sourceNode));
+        sourceNode.accept(visitor, new PathMemory());
 
         return visitor.getResult();
     }
@@ -34,7 +34,7 @@ public class KeywordStatistics {
 
     public static int getSequenceSize(SourceNode sourceNode){
         SequenceVisitor visitor = new SequenceVisitor();
-        sourceNode.accept(visitor, new PathMemory(sourceNode));
+        sourceNode.accept(visitor, new PathMemory());
 
         return visitor.getSequenceSize();
     }
@@ -48,7 +48,7 @@ public class KeywordStatistics {
 
     public static Sequence getSequence(SourceNode sourceNode){
         SequenceVisitor visitor = new SequenceVisitor();
-        sourceNode.accept(visitor, new PathMemory(sourceNode));
+        sourceNode.accept(visitor, new PathMemory());
 
         return visitor.getSequence();
     }
