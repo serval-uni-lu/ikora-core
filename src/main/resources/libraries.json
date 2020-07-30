@@ -2512,7 +2512,7 @@
                 ]
             },
             {
-                "type": "SYNCHRONIZATION",
+                "type": "CONFIGURATION",
                 "name": "set selenium timeout",
                 "arguments": [
                     {"name":  "value", "type": "Timeout"}
@@ -2571,7 +2571,7 @@
                 ]
             },
             {
-                "type": "SYNCHRONIZATION",
+                "type": "CONFIGURATION",
                 "name": "set selenium timeout",
                 "arguments": [
                     {"name":  "value", "type": "Timeout"}
@@ -2989,7 +2989,7 @@
                 ]
             },
             {
-                "type": "SYNCHRONIZATION",
+                "type": "CONFIGURATION",
                 "name": "set selenium implicit wait",
                 "arguments": [
                     {"name": "value", "type": "Timeout"}
@@ -3226,7 +3226,7 @@
                 ]
             },
             {
-                "type": "SYNCHRONIZATION",
+                "type": "CONFIGURATION",
                 "name": "set selenium speed",
                 "arguments": [
                     {"name": "value", "type": "Timeout"}
