@@ -5,6 +5,7 @@ import tech.ikora.analytics.visitor.NodeVisitor;
 import tech.ikora.analytics.visitor.VisitorMemory;
 import tech.ikora.runner.Runtime;
 import org.apache.commons.lang3.NotImplementedException;
+import tech.ikora.utils.LevenshteinDistance;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -23,6 +24,7 @@ public class SourceNodeTable<T extends SourceNode> extends SourceNode implements
         this.nodeList = new ArrayList<>(nodeList);
     }
 
+    @Override
     public SourceNodeTable<T> clone(){
         return new SourceNodeTable<>(header, nodeList);
     }
@@ -55,6 +57,7 @@ public class SourceNodeTable<T extends SourceNode> extends SourceNode implements
         return nodes;
     }
 
+    @Override
     public Tokens getTokens(){
         Tokens tokens = new Tokens();
         tokens.add(header);
@@ -146,11 +149,47 @@ public class SourceNodeTable<T extends SourceNode> extends SourceNode implements
 
     @Override
     public double distance(Differentiable other) {
-        return this.equals(other) ? 0. : 1.;
+        if(other == this){
+            return 0.;
+        }
+
+        if(other == null || other.getClass() != this.getClass()){
+            return 1.;
+        }
+
+        SourceNodeTable<T> nodeTable = (SourceNodeTable<T>)other;
+
+        double distance = this.header.equalsIgnorePosition(nodeTable.header) ? 0. : 0.5;
+        distance += LevenshteinDistance.index(this.nodeList, nodeTable.nodeList) * 0.5;
+
+        return distance;
     }
 
     @Override
     public List<Action> differences(Differentiable other) {
-        return null;
+        if(other == this){
+            return Collections.emptyList();
+        }
+
+        List<Action> actions = new ArrayList<>();
+
+        if(other == null){
+            actions.add(Action.removeElement(SourceNodeTable.class, this));
+            return actions;
+        }
+
+        if(other.getClass() != this.getClass()){
+            actions.add(Action.changeType(this, other));
+        }
+
+        SourceNodeTable<T> nodeTable = (SourceNodeTable<T>)other;
+
+        if(!this.header.equalsIgnorePosition(nodeTable.header)){
+            actions.add(Action.changeName(this, nodeTable));
+        }
+
+        actions.addAll(LevenshteinDistance.getDifferences(this.nodeList, nodeTable.nodeList));
+
+        return actions;
     }
 }
