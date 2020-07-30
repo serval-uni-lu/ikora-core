@@ -13,8 +13,8 @@ public class SourceFile extends SourceNode {
     final private Project project;
     final private Source source;
     final private List<Line> lines;
+    final private String name;
 
-    private String name;
     private Settings settings;
     private SourceNodeTable<TestCase> testCaseTable;
     private SourceNodeTable<UserKeyword> userKeywordTable;
@@ -24,24 +24,19 @@ public class SourceFile extends SourceNode {
         this.project = project;
         this.source = source;
         this.lines = new ArrayList<>();
+        this.name = this.project.generateFileName(this.source);
 
         setSettings(new Settings());
         setTestCaseTable(new SourceNodeTable<>());
         setKeywordTable(new SourceNodeTable<>());
         setVariableTable(new SourceNodeTable<>());
-
-        String name = this.project.generateFileName(this.source);
-        setName(name);
-    }
-
-    private void setName(String name) {
-        this.name = name;
     }
 
     public List<Line> getLines(){
         return this.lines;
     }
 
+    @Override
     public Tokens getTokens() {
         Tokens fileTokens = new Tokens();
 
@@ -130,10 +125,12 @@ public class SourceFile extends SourceNode {
         addAstChild(variableTable);
     }
 
+    @Override
     public Project getProject() {
         return project;
     }
 
+    @Override
     public Source getSource() {
         return source;
     }
@@ -146,6 +143,7 @@ public class SourceFile extends SourceNode {
         return this.source.getPath();
     }
 
+    @Override
     public String getName() {
         return this.name;
     }
@@ -181,6 +179,7 @@ public class SourceFile extends SourceNode {
         return variableTable.asList();
     }
 
+    @Override
     public long getEpoch() {
         return this.project.getEpoch();
     }
