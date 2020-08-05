@@ -19,10 +19,8 @@ public class PathMemory implements VisitorMemory {
 
     @Override
     public VisitorMemory getUpdated(Node node) {
-        PathMemory updated = new PathMemory(this);
-        updated.add(node);
-
-        return updated;
+        add(node);
+        return this;
     }
 
     protected void add(Node node){
