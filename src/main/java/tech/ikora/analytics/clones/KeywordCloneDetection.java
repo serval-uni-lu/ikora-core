@@ -48,29 +48,35 @@ public class KeywordCloneDetection {
 
             for(int j = i + 1; j < size; ++j){
                 CloneHash c2 = nodes.get(j);
-                clones.update(c1.keyword, c2.keyword, getCloneType(c1, c2));
+
+                Clones.Type cloneType = getCloneType(c1, c2);
+
+                if(cloneType != Clones.Type.NONE){
+                    int hash = c1.getHash(cloneType);
+                    clones.update(c1.keyword, c2.keyword, hash, cloneType);
+                }
             }
         }
 
         return clones;
     }
 
-    private Clone.Type getCloneType(CloneHash c1, CloneHash c2){
+    private Clones.Type getCloneType(CloneHash c1, CloneHash c2){
         if(isTooShort(c1.keyword, c2.keyword)){
-            return Clone.Type.NONE;
+            return Clones.Type.NONE;
         }
 
         if(c1.type1 == c2.type1){
-            return Clone.Type.TYPE_1;
+            return Clones.Type.TYPE_1;
         }
         else if(c1.type2 == c2.type2){
-            return Clone.Type.TYPE_2;
+            return Clones.Type.TYPE_2;
         }
         else if(c1.type3 == c2.type3){
-            return Clone.Type.TYPE_3;
+            return Clones.Type.TYPE_3;
         }
 
-        return Clone.Type.NONE;
+        return Clones.Type.NONE;
     }
 
     private static boolean isTooShort(KeywordDefinition keyword1, KeywordDefinition keyword2){
@@ -85,20 +91,23 @@ public class KeywordCloneDetection {
 
         CloneHash(KeywordDefinition keyword){
             this.keyword = keyword;
-            this.type1 = hash(Clone.Type.TYPE_1);
-            this.type2 = hash(Clone.Type.TYPE_2);
-            this.type3 = hash(Clone.Type.TYPE_3);
+            this.type1 = hash(Clones.Type.TYPE_1);
+            this.type2 = hash(Clones.Type.TYPE_2);
+            this.type3 = hash(Clones.Type.TYPE_3);
         }
 
-        private int hash(Clone.Type type){
-            return this.keyword.getSteps().stream().map(s -> toString(s, type)).filter(s -> !s.isEmpty()).reduce(7, this::accumulate, Integer::sum);
+        private int hash(Clones.Type type){
+            return this.keyword.getSteps().stream()
+                    .map(s -> toString(s, type))
+                    .filter(s -> !s.isEmpty())
+                    .reduce(7, this::accumulate, Integer::sum);
         }
 
         private int accumulate(int result, String string) {
             return 31 * result + string.hashCode();
         }
 
-        private String toString(Step step, Clone.Type type){
+        private String toString(Step step, Clones.Type type){
             StringBuilder builder = new StringBuilder();
 
             switch (type){
@@ -176,6 +185,16 @@ public class KeywordCloneDetection {
                     .map(KeywordCall::getKeywordType)
                     .map(t -> t == Keyword.Type.LOG)
                     .orElse(false);
+        }
+
+        public int getHash(Clones.Type type) {
+            switch (type){
+                case TYPE_1: return type1;
+                case TYPE_2: return type2;
+                case TYPE_3: return type3;
+            }
+
+            return 0;
         }
     }
 }

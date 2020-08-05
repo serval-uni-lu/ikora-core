@@ -1,7 +1,5 @@
 package tech.ikora.model;
 
-import tech.ikora.exception.InvalidArgumentException;
-
 import java.io.File;
 import java.net.URI;
 import java.nio.file.Path;
@@ -9,11 +7,11 @@ import java.nio.file.Paths;
 import java.util.*;
 
 public class Project implements Comparable<Project> {
-    private List<Suite> suites;
-    private Map<String, SourceFile> files;
-    private Set<Project> dependencies;
+    private final List<Suite> suites;
+    private final Map<String, SourceFile> files;
+    private final Set<Project> dependencies;
+    private final Source rootFolder;
 
-    private Source rootFolder;
     private Date date;
     private int loc;
 
@@ -23,6 +21,10 @@ public class Project implements Comparable<Project> {
         files = new HashMap<>();
         dependencies = new HashSet<>();
         loc = 0;
+    }
+
+    public void setDate(Date date){
+        this.date = date;
     }
 
     public String getName() {
@@ -78,6 +80,16 @@ public class Project implements Comparable<Project> {
         return userKeywords;
     }
 
+    public Set<VariableAssignment> getVariableAssignments(){
+        Set<VariableAssignment> variables = new HashSet<>();
+
+        for(SourceFile file: files.values()){
+            variables.addAll(file.getVariables());
+        }
+
+        return variables;
+    }
+
     public Set<TestCase> findTestCase(String library, String name) {
         Set<TestCase> testCasesFound = new HashSet<>();
 
@@ -106,16 +118,6 @@ public class Project implements Comparable<Project> {
         }
 
         return userKeywordsFound;
-    }
-
-    public Set<VariableAssignment> getVariableAssignments(){
-        Set<VariableAssignment> variables = new HashSet<>();
-
-        for(SourceFile file: files.values()){
-            variables.addAll(file.getVariables());
-        }
-
-        return variables;
     }
 
     public Set<Resources> getExternalResources() {
