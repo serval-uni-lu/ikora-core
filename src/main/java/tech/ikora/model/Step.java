@@ -26,6 +26,16 @@ public abstract class Step extends SourceNode {
         return Collections.emptyList();
     }
 
+    public int getStepCount(){
+        int count = 0;
+
+        for(Step step: getSteps()){
+            count += step.getStepCount() + 1;
+        }
+
+        return count;
+    }
+
     public KeywordDefinition getCaller() throws InvalidDependencyException {
         SourceNode sourceNode = getAstParent();
 

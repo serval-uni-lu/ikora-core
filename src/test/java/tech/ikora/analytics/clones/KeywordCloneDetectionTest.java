@@ -7,11 +7,11 @@ import tech.ikora.model.Project;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class FastKeywordCloneDetectionTest {
+class KeywordCloneDetectionTest {
     @Test
     void testCloneDetectionInSimpleFile(){
         Project project = Helpers.compileProject("robot/clones.robot", true);
-        Clones<KeywordDefinition> clones = FastKeywordCloneDetection.findClones(project);
+        Clones<KeywordDefinition> clones = KeywordCloneDetection.findClones(project);
 
         assertEquals(2, clones.size(Clone.Type.TYPE_1));
         assertEquals(5, clones.size(Clone.Type.TYPE_2));

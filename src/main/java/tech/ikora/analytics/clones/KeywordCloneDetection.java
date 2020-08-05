@@ -4,27 +4,27 @@ import tech.ikora.model.*;
 
 import java.util.*;
 
-public class FastKeywordCloneDetection {
+public class KeywordCloneDetection {
     private final Set<Project> projects;
     private final Clones<KeywordDefinition> clones;
 
-    private FastKeywordCloneDetection(Project project){
+    private KeywordCloneDetection(Project project){
         this.projects = Collections.singleton(project);
         this.clones = new Clones<>();
     }
 
-    private FastKeywordCloneDetection(Projects projects){
+    private KeywordCloneDetection(Projects projects){
         this.projects = projects.asSet();
         this.clones = new Clones<>();
     }
 
     public static Clones<KeywordDefinition> findClones(Projects projects){
-        FastKeywordCloneDetection detection = new FastKeywordCloneDetection(projects);
+        KeywordCloneDetection detection = new KeywordCloneDetection(projects);
         return detection.run();
     }
 
     public static Clones<KeywordDefinition> findClones(Project project){
-        FastKeywordCloneDetection detection = new FastKeywordCloneDetection(project);
+        KeywordCloneDetection detection = new KeywordCloneDetection(project);
         return detection.run();
     }
 
@@ -56,6 +56,10 @@ public class FastKeywordCloneDetection {
     }
 
     private Clone.Type getCloneType(CloneHash c1, CloneHash c2){
+        if(isTooShort(c1.keyword, c2.keyword)){
+            return Clone.Type.NONE;
+        }
+
         if(c1.type1 == c2.type1){
             return Clone.Type.TYPE_1;
         }
@@ -67,6 +71,10 @@ public class FastKeywordCloneDetection {
         }
 
         return Clone.Type.NONE;
+    }
+
+    private static boolean isTooShort(KeywordDefinition keyword1, KeywordDefinition keyword2){
+        return keyword1.getStepCount() <= 1 || keyword2.getStepCount() <= 1;
     }
 
     static class CloneHash {

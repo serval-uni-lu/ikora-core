@@ -68,6 +68,16 @@ public abstract class KeywordDefinition extends SourceNode implements Keyword, I
         return steps;
     }
 
+    public int getStepCount(){
+        int count = 0;
+
+        for(Step step: steps){
+            count += step.getStepCount() + 1;
+        }
+
+        return count;
+    }
+
     public void setDocumentation(Tokens documentation){
         this.documentation = documentation;
     }
