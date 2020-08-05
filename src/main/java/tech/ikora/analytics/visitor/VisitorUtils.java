@@ -58,20 +58,28 @@ public class VisitorUtils {
 
         if(keyword.isPresent()){
             for(Argument argument: call.getArgumentList()){
-                argument.accept(visitor, memory.getUpdated(argument));
+                if(memory.isAcceptable(argument)){
+                    argument.accept(visitor, memory.getUpdated(argument));
+                }
             }
 
-            keyword.get().accept(visitor, memory.getUpdated(keyword.get()));
+            if(memory.isAcceptable(keyword.get())){
+                keyword.get().accept(visitor, memory.getUpdated(keyword.get()));
+            }
         }
     }
 
     public static void traverseArgument(NodeVisitor visitor, Argument argument, VisitorMemory memory){
-        argument.getDefinition().accept(visitor, memory.getUpdated(argument));
+        if(memory.isAcceptable(argument.getDefinition())) {
+            argument.getDefinition().accept(visitor, memory.getUpdated(argument));
+        }
     }
 
     public static void traverseValues(TreeVisitor treeVisitor, VariableAssignment variableAssignment, VisitorMemory memory) {
         for(SourceNode value: variableAssignment.getValues()){
-            value.accept(treeVisitor, memory);
+            if(memory.isAcceptable(value)) {
+                value.accept(treeVisitor, memory);
+            }
         }
     }
 }

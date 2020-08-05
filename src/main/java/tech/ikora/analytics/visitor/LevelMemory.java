@@ -2,16 +2,22 @@ package tech.ikora.analytics.visitor;
 
 import tech.ikora.model.KeywordDefinition;
 import tech.ikora.model.Node;
+import tech.ikora.model.SourceNode;
 
-public class LevelMemory extends PathMemory {
+import java.util.HashSet;
+import java.util.Set;
+
+public class LevelMemory implements VisitorMemory {
+    private final Set<Node> visited;
     private int level;
 
     public LevelMemory() {
+        this.visited = new HashSet<>();
         this.level = 0;
     }
 
     private LevelMemory(LevelMemory other) {
-        super(other);
+        this.visited = other.visited;
         this.level = other.level;
     }
 
@@ -30,6 +36,19 @@ public class LevelMemory extends PathMemory {
         updated.level++;
 
         return updated;
+    }
+
+    @Override
+    public boolean isAcceptable(Node node) {
+        return !visited.contains(node);
+    }
+
+    protected void add(Node node){
+        if(!SourceNode.class.isAssignableFrom(node.getClass())){
+            return;
+        }
+
+        visited.add(node);
     }
 
     public int getLevel() {

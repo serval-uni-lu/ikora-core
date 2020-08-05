@@ -13,14 +13,15 @@ public class PathMemory implements VisitorMemory {
         visited = new HashSet<>();
     }
 
-    protected PathMemory(PathMemory other){
-        this.visited = other.visited;
-    }
-
     @Override
     public VisitorMemory getUpdated(Node node) {
         add(node);
         return this;
+    }
+
+    @Override
+    public boolean isAcceptable(Node node) {
+        return !visited.contains(node);
     }
 
     protected void add(Node node){
@@ -29,10 +30,5 @@ public class PathMemory implements VisitorMemory {
         }
 
         visited.add(node);
-    }
-
-    @Override
-    public boolean isAcceptable(Node node) {
-        return !visited.contains(node);
     }
 }
