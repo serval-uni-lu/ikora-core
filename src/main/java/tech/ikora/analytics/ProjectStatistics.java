@@ -7,13 +7,13 @@ import java.util.*;
 
 public class ProjectStatistics {
     enum Metric{
-        SIZE, CONNECTIVITY, SEQUENCE, LEVEL, BRANCH_INDEX
+        SIZE, CONNECTIVITY, SEQUENCE, LEVEL
     }
 
     private final Project project;
 
-    private Set<UserKeyword> userKeywords;
-    private Set<TestCase> testCases;
+    private final Set<UserKeyword> userKeywords;
+    private final Set<TestCase> testCases;
 
     public ProjectStatistics(Project project){
         this.project = project;
@@ -79,10 +79,6 @@ public class ProjectStatistics {
         return deadCode;
     }
 
-    <T extends SourceNode> Map<Integer, Integer> getBranchIndex(Class<T> type) throws InvalidTypeException {
-        return getDistribution(type, Metric.BRANCH_INDEX);
-    }
-
     private <T extends SourceNode> Map<Integer, Integer> getDistribution(Class<T> type, Metric metric) throws InvalidTypeException {
         Map<Integer, Integer> distribution = new TreeMap<>();
 
@@ -93,7 +89,6 @@ public class ProjectStatistics {
                 case CONNECTIVITY: value = KeywordStatistics.getConnectivity(sourceNode); break;
                 case SEQUENCE: value = KeywordStatistics.getSequenceSize(sourceNode); break;
                 case LEVEL: value = KeywordStatistics.getLevel(sourceNode); break;
-                //case BRANCH_INDEX: value = KeywordStatistics.getBranchIndex(); break;
                 default: value = -1;
             }
 
