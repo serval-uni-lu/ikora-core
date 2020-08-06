@@ -1,6 +1,6 @@
 package tech.ikora.model;
 
-import tech.ikora.analytics.Action;
+import tech.ikora.analytics.Edit;
 import tech.ikora.analytics.visitor.NodeVisitor;
 import tech.ikora.analytics.visitor.VisitorMemory;
 import tech.ikora.runner.Runtime;
@@ -96,25 +96,25 @@ public class ForLoop extends Step implements Dependable, ScopeNode {
     }
 
     @Override
-    public List<Action> differences(Differentiable other) {
+    public List<Edit> differences(Differentiable other) {
         if(other == this){
             return Collections.emptyList();
         }
 
-        List<Action> actions = new ArrayList<>();
+        List<Edit> edits = new ArrayList<>();
 
         if(other == null || !this.getClass().isAssignableFrom(other.getClass())){
-            actions.add(Action.addElement(ForLoop.class, this));
-            return actions;
+            edits.add(Edit.addElement(ForLoop.class, this));
+            return edits;
         }
 
         ForLoop forLoop = (ForLoop)other;
 
-        actions.addAll(this.iterator.differences(forLoop.iterator));
-        actions.addAll(this.interval.differences(forLoop.interval));
-        actions.addAll(LevenshteinDistance.getDifferences(this.steps, forLoop.steps));
+        edits.addAll(this.iterator.differences(forLoop.iterator));
+        edits.addAll(this.interval.differences(forLoop.interval));
+        edits.addAll(LevenshteinDistance.getDifferences(this.steps, forLoop.steps));
 
-        return actions;
+        return edits;
     }
 
     @Override

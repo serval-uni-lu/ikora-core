@@ -7,23 +7,23 @@ import tech.ikora.model.KeywordDefinition;
 import java.util.*;
 
 public class Difference implements Differentiable {
-    private Differentiable left;
-    private Differentiable right;
-    private List<Action> actions;
+    private final Differentiable left;
+    private final Differentiable right;
+    private final List<Edit> edits;
 
     private Difference(Differentiable left, Differentiable right){
         this.left = left;
         this.right = right;
 
-        this.actions = new ArrayList<>();
+        this.edits = new ArrayList<>();
     }
 
     public boolean isEmpty(){
-        return actions.isEmpty();
+        return edits.isEmpty();
     }
 
-    public boolean isEmpty(Set<Action.Type> ignore){
-        if(actions.isEmpty()){
+    public boolean isEmpty(Set<Edit.Type> ignore){
+        if(edits.isEmpty()){
             return true;
         }
 
@@ -31,8 +31,8 @@ public class Difference implements Differentiable {
             return isEmpty();
         }
 
-        for(Action action: actions){
-            if (!ignore.contains(action.getType())){
+        for(Edit edit : edits){
+            if (!ignore.contains(edit.getType())){
                 return false;
             }
         }
@@ -56,8 +56,8 @@ public class Difference implements Differentiable {
         return right;
     }
 
-    public List<Action> getActions() {
-        return actions;
+    public List<Edit> getEdits() {
+        return edits;
     }
 
     public static Difference of(Differentiable before, Differentiable after) {
@@ -68,16 +68,16 @@ public class Difference implements Differentiable {
         }
 
         if(before == null){
-            difference.actions.add(Action.addElement(after.getClass(), after));
+            difference.edits.add(Edit.addElement(after.getClass(), after));
             return difference;
         }
 
         if(after == null){
-            difference.actions.add(Action.removeElement(before.getClass(), before));
+            difference.edits.add(Edit.removeElement(before.getClass(), before));
             return difference;
         }
 
-        difference.actions.addAll(before.differences(after));
+        difference.edits.addAll(before.differences(after));
 
         return difference;
     }
@@ -146,11 +146,11 @@ public class Difference implements Differentiable {
             return 1.0;
         }
 
-        return LevenshteinDistance.index(this.actions, ((Difference)other).actions);
+        return LevenshteinDistance.index(this.edits, ((Difference)other).edits);
     }
 
     @Override
-    public List<Action> differences(Differentiable other) {
+    public List<Edit> differences(Differentiable other) {
         return Collections.emptyList();
     }
 

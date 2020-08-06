@@ -1,6 +1,6 @@
 package tech.ikora.utils;
 
-import tech.ikora.analytics.Action;
+import tech.ikora.analytics.Edit;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import tech.ikora.Helpers;
@@ -43,10 +43,10 @@ class LevenshteinDistanceTest {
         list2.add(new DifferentiableString("Step 2"));
         list2.add(new DifferentiableString("Step 3"));
 
-        List<Action> differences = LevenshteinDistance.getDifferences(list1, list2);
+        List<Edit> differences = LevenshteinDistance.getDifferences(list1, list2);
 
         assertEquals(1, differences.size());
-        assertEquals(Action.Type.REMOVE_STRING, differences.get(0).getType());
+        assertEquals(Edit.Type.REMOVE_STRING, differences.get(0).getType());
     }
 
     @Test
@@ -60,9 +60,9 @@ class LevenshteinDistanceTest {
         list2.add(new DifferentiableString("Step 2"));
         list2.add(new DifferentiableString("Step 3"));
 
-        List<Action> differences = LevenshteinDistance.getDifferences(list1, list2);
+        List<Edit> differences = LevenshteinDistance.getDifferences(list1, list2);
 
         assertEquals(1, differences.size());
-        assertEquals(Action.Type.ADD_STRING, differences.get(0).getType());
+        assertEquals(Edit.Type.ADD_STRING, differences.get(0).getType());
     }
 }

@@ -1,6 +1,6 @@
 package tech.ikora.model;
 
-import tech.ikora.analytics.Action;
+import tech.ikora.analytics.Edit;
 import tech.ikora.analytics.visitor.NodeVisitor;
 import tech.ikora.analytics.visitor.VisitorMemory;
 import tech.ikora.builder.ValueResolver;
@@ -80,7 +80,7 @@ public class TimeOut extends SourceNode {
     }
 
     @Override
-    public List<Action> differences(Differentiable other) {
+    public List<Edit> differences(Differentiable other) {
         return Collections.emptyList();
     }
 

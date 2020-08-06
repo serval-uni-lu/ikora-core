@@ -1,7 +1,7 @@
 package tech.ikora.model;
 
 import org.junit.jupiter.api.Test;
-import tech.ikora.analytics.Action;
+import tech.ikora.analytics.Edit;
 import tech.ikora.exception.MalformedVariableException;
 
 import java.util.List;
@@ -27,10 +27,10 @@ public class VariableAssignmentTest {
         final VariableAssignment assignment2 = new VariableAssignment(Variable.create(Token.fromString("${variable2}")));
         assignment2.addValue(new Literal(Token.fromString("value")));
 
-        final List<Action> actions = assignment1.differences(assignment2);
+        final List<Edit> edits = assignment1.differences(assignment2);
 
-        assertEquals(1, actions.size());
-        assertEquals(1, actions.stream().filter(action -> action.getType() == Action.Type.CHANGE_NAME).count());
+        assertEquals(1, edits.size());
+        assertEquals(1, edits.stream().filter(action -> action.getType() == Edit.Type.CHANGE_NAME).count());
     }
 
     @Test
@@ -41,10 +41,10 @@ public class VariableAssignmentTest {
         final VariableAssignment assignment2 = new VariableAssignment(Variable.create(Token.fromString("${variable}")));
         assignment2.addValue(new Literal(Token.fromString("value2")));
 
-        final List<Action> actions = assignment1.differences(assignment2);
+        final List<Edit> edits = assignment1.differences(assignment2);
 
-        assertEquals(1, actions.size());
-        assertEquals(1, actions.stream().filter(action -> action.getType() == Action.Type.CHANGE_VALUE_NAME).count());
+        assertEquals(1, edits.size());
+        assertEquals(1, edits.stream().filter(action -> action.getType() == Edit.Type.CHANGE_VALUE_NAME).count());
     }
 
     @Test
@@ -55,9 +55,9 @@ public class VariableAssignmentTest {
         final VariableAssignment assignment2 = new VariableAssignment(Variable.create(Token.fromString("${variable}")));
         assignment2.addValue(Variable.create(Token.fromString("${other}")));
 
-        final List<Action> actions = assignment1.differences(assignment2);
+        final List<Edit> edits = assignment1.differences(assignment2);
 
-        assertEquals(1, actions.size());
-        assertEquals(1, actions.stream().filter(action -> action.getType() == Action.Type.CHANGE_VALUE_TYPE).count());
+        assertEquals(1, edits.size());
+        assertEquals(1, edits.stream().filter(action -> action.getType() == Edit.Type.CHANGE_VALUE_TYPE).count());
     }
 }

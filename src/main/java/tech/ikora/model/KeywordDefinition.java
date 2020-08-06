@@ -1,6 +1,6 @@
 package tech.ikora.model;
 
-import tech.ikora.analytics.Action;
+import tech.ikora.analytics.Edit;
 import tech.ikora.builder.ValueResolver;
 import tech.ikora.runner.Runtime;
 import tech.ikora.utils.LevenshteinDistance;
@@ -133,52 +133,52 @@ public abstract class KeywordDefinition extends SourceNode implements Keyword, I
     }
 
     @Override
-    public List<Action> differences(Differentiable other) {
-        List<Action> actions = new ArrayList<>();
+    public List<Edit> differences(Differentiable other) {
+        List<Edit> edits = new ArrayList<>();
 
         if(other == this){
-            return actions;
+            return edits;
         }
 
         if(other == null || !KeywordDefinition.class.isAssignableFrom(other.getClass())){
-            actions.add(Action.invalid(this, other));
-            return actions;
+            edits.add(Edit.invalid(this, other));
+            return edits;
         }
 
         KeywordDefinition keyword = (KeywordDefinition)other;
 
         // check name change
         if(!this.getNameToken().equalsIgnorePosition(keyword.getNameToken())){
-            actions.add(Action.changeName(this, other));
+            edits.add(Edit.changeName(this, other));
         }
 
         // check documentation change
-        Action documentationAction = differenceDocumentation(keyword);
-        if(documentationAction != null){
-            actions.add(documentationAction);
+        Edit documentationEdit = differenceDocumentation(keyword);
+        if(documentationEdit != null){
+            edits.add(documentationEdit);
         }
 
         // check step changes
-        List<Action> stepActions = LevenshteinDistance.getDifferences(this.getSteps(), keyword.getSteps());
-        actions.addAll(stepActions);
+        List<Edit> stepEdits = LevenshteinDistance.getDifferences(this.getSteps(), keyword.getSteps());
+        edits.addAll(stepEdits);
 
-        return actions;
+        return edits;
     }
 
-    private Action differenceDocumentation(KeywordDefinition keyword) {
-        Action action = null;
+    private Edit differenceDocumentation(KeywordDefinition keyword) {
+        Edit edit = null;
 
         if(this.documentation.isEmpty() && !keyword.documentation.isEmpty()){
-            action = Action.addDocumentation(this, keyword);
+            edit = Edit.addDocumentation(this, keyword);
         }
         else if(!this.documentation.isEmpty() && keyword.documentation.isEmpty()){
-            action = Action.removeDocumentation(this, keyword);
+            edit = Edit.removeDocumentation(this, keyword);
         }
         else if(!this.documentation.equalsIgnorePosition(keyword.documentation)){
-            action = Action.changeDocumentation(this, keyword);
+            edit = Edit.changeDocumentation(this, keyword);
         }
 
-        return action;
+        return edit;
     }
 
     @Override

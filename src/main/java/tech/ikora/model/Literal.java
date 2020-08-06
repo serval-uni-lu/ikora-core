@@ -1,11 +1,10 @@
 package tech.ikora.model;
 
-import tech.ikora.analytics.Action;
+import tech.ikora.analytics.Edit;
 import tech.ikora.analytics.visitor.NodeVisitor;
 import tech.ikora.analytics.visitor.VisitorMemory;
 import tech.ikora.runner.Runtime;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -69,9 +68,9 @@ public class Literal extends Value {
     }
 
     @Override
-    public List<Action> differences(Differentiable other) {
+    public List<Edit> differences(Differentiable other) {
         if(other == null){
-            return Collections.singletonList(Action.removeElement(Literal.class, this));
+            return Collections.singletonList(Edit.removeElement(Literal.class, this));
         }
 
         if(other == this){
@@ -79,12 +78,12 @@ public class Literal extends Value {
         }
 
         if(!(other instanceof Literal)){
-            return Collections.singletonList(Action.changeValueType(this, other));
+            return Collections.singletonList(Edit.changeValueType(this, other));
         }
 
         Literal literal = (Literal)other;
         if(!this.getName().equals(literal.getName())){
-            return Collections.singletonList(Action.changeValueName(this, other));
+            return Collections.singletonList(Edit.changeValueName(this, other));
         }
 
         return Collections.emptyList();

@@ -1,6 +1,6 @@
 package tech.ikora.utils;
 
-import tech.ikora.analytics.Action;
+import tech.ikora.analytics.Edit;
 import tech.ikora.model.Differentiable;
 
 import java.util.ArrayList;
@@ -92,8 +92,8 @@ public class LevenshteinDistance {
         return size > 0 ? distance / size : 0;
     }
 
-    public static List<Action> getDifferences(List<? extends Differentiable> before, List<? extends Differentiable> after){
-        List<Action> actions = new ArrayList<>();
+    public static List<Edit> getDifferences(List<? extends Differentiable> before, List<? extends Differentiable> after){
+        List<Edit> edits = new ArrayList<>();
 
         double[][] distances = LevenshteinDistance.distanceMatrix(before, after);
 
@@ -118,7 +118,7 @@ public class LevenshteinDistance {
                     xPosition -= 1;
                     yPosition -= 1;
 
-                    actions.addAll(beforeStep.differences(afterStep));
+                    edits.addAll(beforeStep.differences(afterStep));
 
                     continue;
                 }
@@ -129,10 +129,10 @@ public class LevenshteinDistance {
                 Differentiable beforeStep = before.get(xPosition - 1);
                 Differentiable afterStep = after.get(yPosition - 1);
 
-                List<Action> differences = beforeStep.differences(afterStep);
+                List<Edit> differences = beforeStep.differences(afterStep);
 
                 if(value > substitution){
-                    actions.addAll(differences);
+                    edits.addAll(differences);
                 }
 
                 value = substitution;
@@ -141,20 +141,20 @@ public class LevenshteinDistance {
             }
             else if (subtraction <= addition){
                 Differentiable beforeStep = before.get(xPosition - 1);
-                actions.add(Action.removeElement(beforeStep.getClass(), beforeStep));
+                edits.add(Edit.removeElement(beforeStep.getClass(), beforeStep));
 
                 value = subtraction;
                 xPosition -= 1;
             }
             else{
                 Differentiable afterStep = after.get(yPosition - 1);
-                actions.add(Action.addElement(afterStep.getClass(), afterStep));
+                edits.add(Edit.addElement(afterStep.getClass(), afterStep));
 
                 value = addition;
                 yPosition -= 1;
             }
         }
 
-        return actions;
+        return edits;
     }
 }

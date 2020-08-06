@@ -1,13 +1,12 @@
 package tech.ikora.model;
 
-import tech.ikora.analytics.Action;
+import tech.ikora.analytics.Edit;
 import tech.ikora.analytics.visitor.NodeVisitor;
 import tech.ikora.analytics.visitor.VisitorMemory;
 import tech.ikora.exception.InvalidTypeException;
 import tech.ikora.runner.Runtime;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,13 +46,13 @@ public class InvalidStep extends Step {
     }
 
     @Override
-    public List<Action> differences(Differentiable other) {
-        List<Action> actions = new ArrayList<>();
+    public List<Edit> differences(Differentiable other) {
+        List<Edit> edits = new ArrayList<>();
 
         if(!(other instanceof InvalidStep)){
-            actions.add(Action.changeType(this, other));
+            edits.add(Edit.changeType(this, other));
         }
 
-        return actions;
+        return edits;
     }
 }

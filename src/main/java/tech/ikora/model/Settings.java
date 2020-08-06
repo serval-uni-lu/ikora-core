@@ -1,7 +1,7 @@
 package tech.ikora.model;
 
 import org.apache.commons.lang3.NotImplementedException;
-import tech.ikora.analytics.Action;
+import tech.ikora.analytics.Edit;
 import tech.ikora.analytics.visitor.NodeVisitor;
 import tech.ikora.analytics.visitor.VisitorMemory;
 import tech.ikora.exception.InvalidMetadataException;
@@ -253,7 +253,7 @@ public class Settings extends SourceNode implements Delayable {
     }
 
     @Override
-    public List<Action> differences(Differentiable other) {
+    public List<Edit> differences(Differentiable other) {
         return Collections.emptyList();
     }
 

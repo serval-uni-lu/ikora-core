@@ -1,7 +1,7 @@
 package tech.ikora.model;
 
 import org.apache.commons.lang3.NotImplementedException;
-import tech.ikora.analytics.Action;
+import tech.ikora.analytics.Edit;
 import tech.ikora.analytics.visitor.NodeVisitor;
 import tech.ikora.analytics.visitor.VisitorMemory;
 import tech.ikora.runner.Runtime;
@@ -73,26 +73,26 @@ public class VariableAssignment extends SourceNode implements Dependable{
     }
 
     @Override
-    public List<Action> differences(Differentiable other) {
+    public List<Edit> differences(Differentiable other) {
         if(other == this){
             return Collections.emptyList();
         }
 
         if(!(other instanceof VariableAssignment)){
-            return Collections.singletonList(Action.changeType(this, other));
+            return Collections.singletonList(Edit.changeType(this, other));
         }
 
         VariableAssignment assignment = (VariableAssignment)other;
 
-        List<Action> actions = new ArrayList<>();
+        List<Edit> edits = new ArrayList<>();
 
         if(!this.getName().equals(assignment.getName())){
-            actions.add(Action.changeName(this, other));
+            edits.add(Edit.changeName(this, other));
         }
 
-        actions.addAll(LevenshteinDistance.getDifferences(this.getValues(), assignment.getValues()));
+        edits.addAll(LevenshteinDistance.getDifferences(this.getValues(), assignment.getValues()));
 
-        return actions;
+        return edits;
     }
 
     @Override

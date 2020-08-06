@@ -1,6 +1,6 @@
 package tech.ikora.utils;
 
-import tech.ikora.analytics.Action;
+import tech.ikora.analytics.Edit;
 import tech.ikora.model.Differentiable;
 
 import java.util.ArrayList;
@@ -25,15 +25,15 @@ public class DifferentiableString implements Differentiable {
     }
 
     @Override
-    public List<Action> differences(Differentiable other) {
-        List<Action> actions = new ArrayList<>();
+    public List<Edit> differences(Differentiable other) {
+        List<Edit> edits = new ArrayList<>();
 
         if(other instanceof DifferentiableString && ((DifferentiableString)other).text.equals(this.text)){
-            return actions;
+            return edits;
         }
 
-        actions.add(Action.changeName(this, other));
+        edits.add(Edit.changeName(this, other));
 
-        return actions;
+        return edits;
     }
 }

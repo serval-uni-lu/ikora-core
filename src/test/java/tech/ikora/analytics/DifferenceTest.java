@@ -58,70 +58,70 @@ class DifferenceTest {
     @Test
     void testDifferenceKeywordOnlyNameChange(){
         Difference difference = Difference.of(keyword1, keyword2);
-        List<Action> actions = difference.getActions();
+        List<Edit> edits = difference.getEdits();
 
-        assertEquals(1, actions.size());
-        assertEquals(1, actions.stream().filter(action -> action.getType() == Action.Type.CHANGE_NAME).count());
+        assertEquals(1, edits.size());
+        assertEquals(1, edits.stream().filter(edit -> edit.getType() == Edit.Type.CHANGE_NAME).count());
     }
 
     @Test
     void testDifferenceKeywordChangeLiteralArgument(){
         Difference difference = Difference.of(keyword2, keyword3);
-        List<Action> actions = difference.getActions();
+        List<Edit> edits = difference.getEdits();
 
-        assertEquals(2, actions.size());
-        assertEquals(1, actions.stream().filter(action -> action.getType() == Action.Type.CHANGE_NAME).count());
-        assertEquals(1, actions.stream().filter(action -> action.getType() == Action.Type.CHANGE_VALUE_NAME).count());
+        assertEquals(2, edits.size());
+        assertEquals(1, edits.stream().filter(edit -> edit.getType() == Edit.Type.CHANGE_NAME).count());
+        assertEquals(1, edits.stream().filter(edit -> edit.getType() == Edit.Type.CHANGE_VALUE_NAME).count());
     }
 
     @Test
     void testDifferenceKeywordAddAndModifySteps(){
         Difference difference = Difference.of(keyword3, keyword4);
-        List<Action> actions = difference.getActions();
+        List<Edit> edits = difference.getEdits();
 
-        assertEquals(4, actions.size());
-        assertEquals(1, actions.stream().filter(action -> action.getType() == Action.Type.CHANGE_NAME).count());
-        assertEquals(2, actions.stream().filter(action -> action.getType() == Action.Type.ADD_STEP).count());
-        assertEquals(1, actions.stream().filter(action -> action.getType() == Action.Type.CHANGE_VALUE_NAME).count());
+        assertEquals(4, edits.size());
+        assertEquals(1, edits.stream().filter(edit -> edit.getType() == Edit.Type.CHANGE_NAME).count());
+        assertEquals(2, edits.stream().filter(edit -> edit.getType() == Edit.Type.ADD_STEP).count());
+        assertEquals(1, edits.stream().filter(edit -> edit.getType() == Edit.Type.CHANGE_VALUE_NAME).count());
     }
 
     @Test
     void testFromCallToAssignment(){
         Difference difference = Difference.of(keyword4, keyword5);
-        List<Action> actions = difference.getActions();
+        List<Edit> edits = difference.getEdits();
 
-        assertEquals(2, actions.size());
-        assertEquals(1, actions.stream().filter(action -> action.getType() == Action.Type.CHANGE_NAME).count());
-        assertEquals(1, actions.stream().filter(action -> action.getType() == Action.Type.ADD_VARIABLE).count());
+        assertEquals(2, edits.size());
+        assertEquals(1, edits.stream().filter(edit -> edit.getType() == Edit.Type.CHANGE_NAME).count());
+        assertEquals(1, edits.stream().filter(edit -> edit.getType() == Edit.Type.ADD_VARIABLE).count());
     }
 
     @Test
     void testFromAssignmentToCall(){
         Difference difference = Difference.of(keyword5, keyword4);
-        List<Action> actions = difference.getActions();
+        List<Edit> edits = difference.getEdits();
 
-        assertEquals(2, actions.size());
-        assertEquals(1, actions.stream().filter(action -> action.getType() == Action.Type.CHANGE_NAME).count());
-        assertEquals(1, actions.stream().filter(action -> action.getType() == Action.Type.REMOVE_VARIABLE).count());
+        assertEquals(2, edits.size());
+        assertEquals(1, edits.stream().filter(edit -> edit.getType() == Edit.Type.CHANGE_NAME).count());
+        assertEquals(1, edits.stream().filter(edit -> edit.getType() == Edit.Type.REMOVE_VARIABLE).count());
     }
 
     @Test
     void testForLoopCondition(){
         Difference difference = Difference.of(keyword6, keyword7);
-        List<Action> actions = difference.getActions();
+        List<Edit> edits = difference.getEdits();
 
-        assertEquals(2, actions.size());
-        assertEquals(1, actions.stream().filter(action -> action.getType() == Action.Type.CHANGE_NAME).count());
-        assertEquals(1, actions.stream().filter(action -> action.getType() == Action.Type.CHANGE_VALUE_NAME).count());
+        assertEquals(2, edits.size());
+        assertEquals(1, edits.stream().filter(edit -> edit.getType() == Edit.Type.CHANGE_NAME).count());
+        assertEquals(1, edits.stream().filter(edit -> edit.getType() == Edit.Type.CHANGE_VALUE_NAME).count());
     }
 
     @Test
     void testForLoopInBody(){
         Difference difference = Difference.of(keyword6, keyword8);
-        List<Action> actions = difference.getActions();
+        List<Edit> edits = difference.getEdits();
 
-        assertEquals(2, actions.size());
-        assertEquals(1, actions.stream().filter(action -> action.getType() == Action.Type.CHANGE_NAME).count());
-        assertEquals(1, actions.stream().filter(action -> action.getType() == Action.Type.REMOVE_STEP).count());
+        assertEquals(2, edits.size());
+        assertEquals(1, edits.stream().filter(edit -> edit.getType() == Edit.Type.CHANGE_NAME).count());
+        assertEquals(1, edits.stream().filter(edit -> edit.getType() == Edit.Type.REMOVE_STEP).count());
     }
 }

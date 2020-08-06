@@ -1,6 +1,6 @@
 package tech.ikora.model;
 
-import tech.ikora.analytics.Action;
+import tech.ikora.analytics.Edit;
 import tech.ikora.analytics.visitor.NodeVisitor;
 import tech.ikora.analytics.visitor.VisitorMemory;
 import tech.ikora.runner.Runtime;
@@ -71,9 +71,9 @@ public class DictionaryEntry extends Value {
     }
 
     @Override
-    public List<Action> differences(Differentiable other) {
+    public List<Edit> differences(Differentiable other) {
         if(other == null){
-            return Collections.singletonList(Action.removeElement(DictionaryEntry.class, this));
+            return Collections.singletonList(Edit.removeElement(DictionaryEntry.class, this));
         }
 
         if(other == this){
@@ -81,15 +81,15 @@ public class DictionaryEntry extends Value {
         }
 
         if(!(other instanceof DictionaryEntry)){
-            return Collections.singletonList(Action.changeValueType(this, other));
+            return Collections.singletonList(Edit.changeValueType(this, other));
         }
 
         DictionaryEntry entry = (DictionaryEntry)other;
 
-        List<Action> actions = new ArrayList<>();
-        actions.addAll(this.key.differences(entry.key));
-        actions.addAll(this.value.differences(entry.value));
+        List<Edit> edits = new ArrayList<>();
+        edits.addAll(this.key.differences(entry.key));
+        edits.addAll(this.value.differences(entry.value));
 
-        return actions;
+        return edits;
     }
 }

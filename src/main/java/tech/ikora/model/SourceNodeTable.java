@@ -1,6 +1,6 @@
 package tech.ikora.model;
 
-import tech.ikora.analytics.Action;
+import tech.ikora.analytics.Edit;
 import tech.ikora.analytics.visitor.NodeVisitor;
 import tech.ikora.analytics.visitor.VisitorMemory;
 import tech.ikora.runner.Runtime;
@@ -166,30 +166,30 @@ public class SourceNodeTable<T extends SourceNode> extends SourceNode implements
     }
 
     @Override
-    public List<Action> differences(Differentiable other) {
+    public List<Edit> differences(Differentiable other) {
         if(other == this){
             return Collections.emptyList();
         }
 
-        List<Action> actions = new ArrayList<>();
+        List<Edit> edits = new ArrayList<>();
 
         if(other == null){
-            actions.add(Action.removeElement(SourceNodeTable.class, this));
-            return actions;
+            edits.add(Edit.removeElement(SourceNodeTable.class, this));
+            return edits;
         }
 
         if(other.getClass() != this.getClass()){
-            actions.add(Action.changeType(this, other));
+            edits.add(Edit.changeType(this, other));
         }
 
         SourceNodeTable<T> nodeTable = (SourceNodeTable<T>)other;
 
         if(!this.header.equalsIgnorePosition(nodeTable.header)){
-            actions.add(Action.changeName(this, nodeTable));
+            edits.add(Edit.changeName(this, nodeTable));
         }
 
-        actions.addAll(LevenshteinDistance.getDifferences(this.nodeList, nodeTable.nodeList));
+        edits.addAll(LevenshteinDistance.getDifferences(this.nodeList, nodeTable.nodeList));
 
-        return actions;
+        return edits;
     }
 }

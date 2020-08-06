@@ -1,6 +1,6 @@
 package tech.ikora.model;
 
-import tech.ikora.analytics.Action;
+import tech.ikora.analytics.Edit;
 import tech.ikora.analytics.visitor.NodeVisitor;
 import tech.ikora.analytics.visitor.VisitorMemory;
 import tech.ikora.builder.SymbolResolver;
@@ -133,31 +133,31 @@ public class Assignment extends Step implements Dependable {
     }
 
     @Override
-    public List<Action> differences(Differentiable other) {
+    public List<Edit> differences(Differentiable other) {
         if(other == null){
-            return Collections.singletonList(Action.addElement(this.getClass(), this));
+            return Collections.singletonList(Edit.addElement(this.getClass(), this));
         }
 
         if(other == this){
             return Collections.emptyList();
         }
 
-        List<Action> actions = new ArrayList<>();
+        List<Edit> edits = new ArrayList<>();
 
         if(other instanceof Assignment){
             Assignment assignment = (Assignment)other;
-            actions.addAll(LevenshteinDistance.getDifferences(this.leftHandOperand, assignment.leftHandOperand));
-            getKeywordCall().ifPresent(call -> actions.addAll(call.differences(assignment.getKeywordCall().orElse(null))));
+            edits.addAll(LevenshteinDistance.getDifferences(this.leftHandOperand, assignment.leftHandOperand));
+            getKeywordCall().ifPresent(call -> edits.addAll(call.differences(assignment.getKeywordCall().orElse(null))));
         }
         else if(other instanceof KeywordCall){
-            actions.addAll(LevenshteinDistance.getDifferences(this.leftHandOperand, Collections.emptyList()));
-            getKeywordCall().ifPresent(call -> actions.addAll(call.differences(other)));
+            edits.addAll(LevenshteinDistance.getDifferences(this.leftHandOperand, Collections.emptyList()));
+            getKeywordCall().ifPresent(call -> edits.addAll(call.differences(other)));
         }
         else {
-            actions.add(Action.changeType(this, other));
+            edits.add(Edit.changeType(this, other));
         }
 
-        return actions;
+        return edits;
     }
 
     @Override

@@ -1,7 +1,7 @@
 package tech.ikora.model;
 
 import org.junit.jupiter.api.Test;
-import tech.ikora.analytics.Action;
+import tech.ikora.analytics.Edit;
 import tech.ikora.exception.MalformedVariableException;
 
 import java.util.List;
@@ -46,9 +46,9 @@ public class KeywordCallTest {
         arguments2.add(new Argument(new Literal(Token.fromString("value2"))));
         call2.setArgumentList(arguments2);
 
-        final List<Action> differences = call1.differences(call2);
+        final List<Edit> differences = call1.differences(call2);
 
         assertEquals(1, differences.size());
-        assertEquals(Action.Type.CHANGE_VALUE_TYPE, differences.get(0).getType());
+        assertEquals(Edit.Type.CHANGE_VALUE_TYPE, differences.get(0).getType());
     }
 }

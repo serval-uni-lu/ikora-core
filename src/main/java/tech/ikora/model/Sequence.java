@@ -1,6 +1,6 @@
 package tech.ikora.model;
 
-import tech.ikora.analytics.Action;
+import tech.ikora.analytics.Edit;
 import tech.ikora.utils.LevenshteinDistance;
 
 import java.util.ArrayList;
@@ -23,34 +23,34 @@ public class Sequence implements Differentiable {
 
     @Override
     public double distance(Differentiable other) {
-        List<Action> actions = differences(other);
+        List<Edit> edits = differences(other);
 
-        for(Action action: actions){
-            if(action.getType() == Action.Type.INVALID){
+        for(Edit edit : edits){
+            if(edit.getType() == Edit.Type.INVALID){
                 return 1.0;
             }
         }
 
-        return (double)actions.size() / this.size();
+        return (double) edits.size() / this.size();
     }
 
     @Override
-    public List<Action> differences(Differentiable other) {
-        List<Action> actions = new ArrayList<>();
+    public List<Edit> differences(Differentiable other) {
+        List<Edit> edits = new ArrayList<>();
 
         if(other == this){
-            return actions;
+            return edits;
         }
 
         if(!(other instanceof Sequence)){
-            actions.add(Action.invalid(this, other));
-            return actions;
+            edits.add(Edit.invalid(this, other));
+            return edits;
         }
 
         Sequence sequence = (Sequence)other;
 
-        actions.addAll(LevenshteinDistance.getDifferences(this.steps, sequence.steps));
+        edits.addAll(LevenshteinDistance.getDifferences(this.steps, sequence.steps));
 
-        return actions;
+        return edits;
     }
 }

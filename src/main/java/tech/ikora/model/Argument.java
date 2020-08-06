@@ -1,6 +1,6 @@
 package tech.ikora.model;
 
-import tech.ikora.analytics.Action;
+import tech.ikora.analytics.Edit;
 import tech.ikora.analytics.visitor.NodeVisitor;
 import tech.ikora.analytics.visitor.VisitorMemory;
 import tech.ikora.builder.ValueResolver;
@@ -95,9 +95,9 @@ public class Argument extends SourceNode implements HiddenAstNode {
     }
 
     @Override
-    public List<Action> differences(Differentiable other) {
+    public List<Edit> differences(Differentiable other) {
         if(other == null){
-            return Collections.singletonList(Action.removeElement(Argument.class, this));
+            return Collections.singletonList(Edit.removeElement(Argument.class, this));
         }
 
         if(other == this){
@@ -105,7 +105,7 @@ public class Argument extends SourceNode implements HiddenAstNode {
         }
 
         if(!(other instanceof Argument)){
-            return Collections.singletonList(Action.changeType(this, other));
+            return Collections.singletonList(Edit.changeType(this, other));
         }
 
         return this.getDefinition().differences(((Argument) other).getDefinition());

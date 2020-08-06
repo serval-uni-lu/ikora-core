@@ -1,9 +1,8 @@
 package tech.ikora.model;
 
-import tech.ikora.analytics.Action;
+import tech.ikora.analytics.Edit;
 import tech.ikora.analytics.visitor.NodeVisitor;
 import tech.ikora.analytics.visitor.VisitorMemory;
-import tech.ikora.exception.InvalidArgumentException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,13 +32,13 @@ public class InvalidVariable extends Variable {
     }
 
     @Override
-    public List<Action> differences(Differentiable other) {
-        List<Action> actions = new ArrayList<>();
+    public List<Edit> differences(Differentiable other) {
+        List<Edit> edits = new ArrayList<>();
 
         if(!(other instanceof InvalidStep)){
-            actions.add(Action.changeVariableDefinition(this, other));
+            edits.add(Edit.changeVariableDefinition(this, other));
         }
 
-        return actions;
+        return edits;
     }
 }

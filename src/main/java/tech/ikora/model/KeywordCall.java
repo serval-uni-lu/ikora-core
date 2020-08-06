@@ -1,6 +1,6 @@
 package tech.ikora.model;
 
-import tech.ikora.analytics.Action;
+import tech.ikora.analytics.Edit;
 import tech.ikora.analytics.visitor.NodeVisitor;
 import tech.ikora.analytics.visitor.VisitorMemory;
 import tech.ikora.builder.SymbolResolver;
@@ -115,37 +115,37 @@ public class KeywordCall extends Step {
     }
 
     @Override
-    public List<Action> differences(Differentiable other) {
+    public List<Edit> differences(Differentiable other) {
         if(other == this){
             return Collections.emptyList();
         }
 
         if(other == null){
-            return Collections.singletonList(Action.addElement(this.getClass(), this));
+            return Collections.singletonList(Edit.addElement(this.getClass(), this));
         }
 
-        List<Action> actions = new ArrayList<>();
+        List<Edit> edits = new ArrayList<>();
 
         if(other instanceof KeywordCall){
             KeywordCall call = (KeywordCall)other;
 
             if(!this.getNameToken().equalsIgnorePosition(call.getNameToken())){
-                actions.add(Action.changeStepName(this, call));
+                edits.add(Edit.changeStepName(this, call));
             }
 
-            List<Action> argumentActions = LevenshteinDistance.getDifferences(this.arguments, call.arguments);
-            actions.addAll(argumentActions);
+            List<Edit> argumentEdits = LevenshteinDistance.getDifferences(this.arguments, call.arguments);
+            edits.addAll(argumentEdits);
         }
         else if(other instanceof Assignment){
             Assignment assignment = (Assignment)other;
-            actions.addAll(this.differences(assignment.getKeywordCall().orElse(null)));
-            actions.addAll(LevenshteinDistance.getDifferences(Collections.emptyList(), assignment.getLeftHandOperand()));
+            edits.addAll(this.differences(assignment.getKeywordCall().orElse(null)));
+            edits.addAll(LevenshteinDistance.getDifferences(Collections.emptyList(), assignment.getLeftHandOperand()));
         }
         else{
-            actions.add(Action.changeType(this, other));
+            edits.add(Edit.changeType(this, other));
         }
 
-        return actions;
+        return edits;
     }
 
     @Override

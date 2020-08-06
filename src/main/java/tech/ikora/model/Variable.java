@@ -1,6 +1,6 @@
 package tech.ikora.model;
 
-import tech.ikora.analytics.Action;
+import tech.ikora.analytics.Edit;
 import tech.ikora.builder.ValueResolver;
 import tech.ikora.builder.VariableParser;
 import tech.ikora.exception.MalformedVariableException;
@@ -61,17 +61,17 @@ public abstract class Variable extends Value {
     }
 
     @Override
-    public List<Action> differences(Differentiable other) {
+    public List<Edit> differences(Differentiable other) {
         if(other == null){
-            return Collections.singletonList(Action.removeElement(this.getClass(), this));
+            return Collections.singletonList(Edit.removeElement(this.getClass(), this));
         }
 
         if(this.getClass() != other.getClass()){
-            return Collections.singletonList(Action.changeValueType(this, other));
+            return Collections.singletonList(Edit.changeValueType(this, other));
         }
 
         if(!this.getNameToken().equalsIgnorePosition(((Variable)other).getNameToken())){
-            return Collections.singletonList(Action.changeValueName(this, other));
+            return Collections.singletonList(Edit.changeValueName(this, other));
         }
 
         return Collections.emptyList();
