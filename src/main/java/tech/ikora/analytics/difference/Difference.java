@@ -1,6 +1,5 @@
-package tech.ikora.analytics;
+package tech.ikora.analytics.difference;
 
-import tech.ikora.model.EmptyNode;
 import tech.ikora.model.SourceNode;
 import tech.ikora.model.KeywordDefinition;
 
@@ -61,23 +60,19 @@ public class Difference {
     }
 
     public static Difference of(SourceNode before, SourceNode after) {
-        if(before == null || after == null){
-            throw new NullPointerException("Cannot find differences between element and null");
-        }
-
         Difference difference = new Difference(before, after);
 
         if(before == after){
             return difference;
         }
 
-        if(before instanceof EmptyNode){
-            difference.edits.add(Edit.addElement(after.getClass(), (EmptyNode)before, after));
+        if(before == null){
+            difference.edits.add(Edit.addElement(after.getClass(), after));
             return difference;
         }
 
-        if(after instanceof EmptyNode){
-            difference.edits.add(Edit.removeElement(before.getClass(), before, (EmptyNode)after));
+        if(after == null){
+            difference.edits.add(Edit.removeElement(before.getClass(), before));
             return difference;
         }
 

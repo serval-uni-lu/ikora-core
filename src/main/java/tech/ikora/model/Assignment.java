@@ -1,6 +1,6 @@
 package tech.ikora.model;
 
-import tech.ikora.analytics.Edit;
+import tech.ikora.analytics.difference.Edit;
 import tech.ikora.analytics.visitor.NodeVisitor;
 import tech.ikora.analytics.visitor.VisitorMemory;
 import tech.ikora.builder.SymbolResolver;
@@ -135,11 +135,7 @@ public class Assignment extends Step implements Dependable {
     @Override
     public List<Edit> differences(SourceNode other) {
         if(other == null){
-            throw new NullPointerException("Cannot find differences between element and null");
-        }
-
-        if(other instanceof EmptyNode){
-            return Collections.singletonList(Edit.removeElement(this.getClass(), this, (EmptyNode)other));
+            return Collections.singletonList(Edit.removeElement(this.getClass(), this));
         }
 
         if(other == this){
@@ -154,7 +150,7 @@ public class Assignment extends Step implements Dependable {
             getKeywordCall().ifPresent(call -> edits.addAll(call.differences(assignment.getKeywordCall().orElse(null))));
         }
         else if(other instanceof KeywordCall){
-            edits.addAll(LevenshteinDistance.getDifferences(this.leftHandOperand, NodeList.emptyList(other)));
+            edits.addAll(LevenshteinDistance.getDifferences(this.leftHandOperand, new NodeList<>()));
             getKeywordCall().ifPresent(call -> edits.addAll(call.differences(other)));
         }
         else {

@@ -1,6 +1,6 @@
 package tech.ikora.model;
 
-import tech.ikora.analytics.Edit;
+import tech.ikora.analytics.difference.Edit;
 import tech.ikora.analytics.visitor.NodeVisitor;
 import tech.ikora.analytics.visitor.VisitorMemory;
 import tech.ikora.builder.SymbolResolver;
@@ -111,11 +111,7 @@ public class KeywordCall extends Step {
     @Override
     public List<Edit> differences(SourceNode other) {
         if(other == null){
-            throw new NullPointerException("Cannot find differences between element and null");
-        }
-
-        if(other instanceof EmptyNode){
-            return Collections.singletonList(Edit.removeElement(this.getClass(), this, (EmptyNode)other));
+            return Collections.singletonList(Edit.removeElement(this.getClass(), this));
         }
 
         if(other == this){
@@ -138,7 +134,7 @@ public class KeywordCall extends Step {
             final Assignment assignment = (Assignment)other;
 
             edits.addAll(this.differences(assignment.getKeywordCall().orElse(null)));
-            edits.addAll(LevenshteinDistance.getDifferences(NodeList.emptyList(assignment), assignment.getLeftHandOperand()));
+            edits.addAll(LevenshteinDistance.getDifferences(new NodeList<>(), assignment.getLeftHandOperand()));
         }
         else{
             edits.add(Edit.changeType(this, other));

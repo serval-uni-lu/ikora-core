@@ -1,4 +1,4 @@
-package tech.ikora.analytics;
+package tech.ikora.analytics.difference;
 
 import tech.ikora.model.*;
 
@@ -68,50 +68,50 @@ public class Edit {
         return this.right;
     }
 
-    public static <T> Edit addElement(Class<T> type, EmptyNode emptyNode, SourceNode node) {
+    public static <T> Edit addElement(Class<T> type, SourceNode node) {
         if(UserKeyword.class.isAssignableFrom(type)){
-            return new Edit(Type.ADD_USER_KEYWORD, emptyNode, node);
+            return new Edit(Type.ADD_USER_KEYWORD, null, node);
         }
         else if(TestCase.class.isAssignableFrom(type)){
-            return new Edit(Type.ADD_TEST_CASE, emptyNode, node);
+            return new Edit(Type.ADD_TEST_CASE, null, node);
         }
         else if(Variable.class.isAssignableFrom(type)){
-            return new Edit(Type.ADD_VARIABLE, emptyNode, node);
+            return new Edit(Type.ADD_VARIABLE, null, node);
         }
         else if(Step.class.isAssignableFrom(type)){
-            return new Edit(Type.ADD_STEP, emptyNode, node);
+            return new Edit(Type.ADD_STEP, null, node);
         }
         else if(Argument.class.isAssignableFrom(type)){
-            return new Edit(Type.ADD_STEP_ARGUMENT, emptyNode, node);
+            return new Edit(Type.ADD_STEP_ARGUMENT, null, node);
         }
         else if(Sequence.class.isAssignableFrom(type)){
-            return new Edit(Type.ADD_SEQUENCE, emptyNode, node);
+            return new Edit(Type.ADD_SEQUENCE, null, node);
         }
 
-        return new Edit(Type.ADD_NODE, emptyNode, node);
+        return new Edit(Type.ADD_NODE, null, node);
     }
 
-    public static <T> Edit removeElement(Class<T> type, SourceNode node, EmptyNode emptyNode){
+    public static <T> Edit removeElement(Class<T> type, SourceNode node){
         if(UserKeyword.class.isAssignableFrom(type)){
-            return new Edit(Type.REMOVE_USER_KEYWORD, node, emptyNode);
+            return new Edit(Type.REMOVE_USER_KEYWORD, node, null);
         }
         else if(TestCase.class.isAssignableFrom(type)){
-            return new Edit(Type.REMOVE_TEST_CASE, node, emptyNode);
+            return new Edit(Type.REMOVE_TEST_CASE, node, null);
         }
         else if(Variable.class.isAssignableFrom(type)){
-            return new Edit(Type.REMOVE_VARIABLE, node, emptyNode);
+            return new Edit(Type.REMOVE_VARIABLE, node, null);
         }
         else if(Step.class.isAssignableFrom(type)){
-            return new Edit(Type.REMOVE_STEP, node, emptyNode);
+            return new Edit(Type.REMOVE_STEP, node, null);
         }
         else if(Argument.class.isAssignableFrom(type)){
-            return new Edit(Type.REMOVE_STEP_ARGUMENT, node, emptyNode);
+            return new Edit(Type.REMOVE_STEP_ARGUMENT, node, null);
         }
         else if(Sequence.class.isAssignableFrom(type)){
-            return new Edit(Type.REMOVE_SEQUENCE, node, emptyNode);
+            return new Edit(Type.REMOVE_SEQUENCE, node, null);
         }
 
-        return new Edit(Type.INVALID, node, emptyNode);
+        return new Edit(Type.INVALID, node, null);
     }
 
     public static Edit changeName(SourceNode left, SourceNode right){

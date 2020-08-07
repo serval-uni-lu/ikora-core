@@ -1,7 +1,7 @@
 package tech.ikora.model;
 
 import org.junit.jupiter.api.Test;
-import tech.ikora.analytics.Edit;
+import tech.ikora.analytics.difference.Edit;
 import tech.ikora.exception.MalformedVariableException;
 
 import java.util.List;

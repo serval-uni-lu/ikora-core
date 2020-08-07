@@ -1,6 +1,6 @@
 package tech.ikora.model;
 
-import tech.ikora.analytics.Edit;
+import tech.ikora.analytics.difference.Edit;
 import tech.ikora.builder.ValueResolver;
 import tech.ikora.builder.VariableParser;
 import tech.ikora.exception.MalformedVariableException;
@@ -63,11 +63,7 @@ public abstract class Variable extends Value {
     @Override
     public List<Edit> differences(SourceNode other) {
         if(other == null){
-            throw new NullPointerException("Cannot find differences between element and null");
-        }
-
-        if(other instanceof EmptyNode){
-            return Collections.singletonList(Edit.removeElement(this.getClass(), this, (EmptyNode)other));
+            return Collections.singletonList(Edit.removeElement(this.getClass(), this));
         }
 
         if(other == this){

@@ -1,6 +1,6 @@
 package tech.ikora.model;
 
-import tech.ikora.analytics.Edit;
+import tech.ikora.analytics.difference.Edit;
 import tech.ikora.utils.Ast;
 import tech.ikora.utils.FileUtils;
 
@@ -29,10 +29,6 @@ public abstract class SourceNode implements Node {
         }
 
         return astParent.getSourceFile();
-    }
-
-    protected void setOneWayParent(SourceNode astParent){
-        this.astParent = astParent;
     }
 
     protected void addAstChild(SourceNode astChild){

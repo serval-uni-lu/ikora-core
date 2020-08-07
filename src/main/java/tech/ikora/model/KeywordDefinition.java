@@ -1,6 +1,6 @@
 package tech.ikora.model;
 
-import tech.ikora.analytics.Edit;
+import tech.ikora.analytics.difference.Edit;
 import tech.ikora.builder.ValueResolver;
 import tech.ikora.runner.Runtime;
 import tech.ikora.utils.LevenshteinDistance;

@@ -1,7 +1,7 @@
 package tech.ikora.model;
 
 import org.apache.commons.io.FilenameUtils;
-import tech.ikora.analytics.Edit;
+import tech.ikora.analytics.difference.Edit;
 import tech.ikora.analytics.visitor.NodeVisitor;
 import tech.ikora.analytics.visitor.VisitorMemory;
 import tech.ikora.builder.Line;
@@ -286,11 +286,7 @@ public class SourceFile extends SourceNode {
     @Override
     public List<Edit> differences(SourceNode other) {
         if(other == null){
-            throw new NullPointerException("Cannot find differences between element and null");
-        }
-
-        if(other instanceof EmptyNode){
-            return Collections.singletonList(Edit.removeElement(this.getClass(), this, (EmptyNode)other));
+            return Collections.singletonList(Edit.removeElement(this.getClass(), this));
         }
 
         if(other == this){

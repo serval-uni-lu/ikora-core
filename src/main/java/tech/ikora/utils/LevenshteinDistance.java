@@ -1,7 +1,6 @@
 package tech.ikora.utils;
 
-import tech.ikora.analytics.Edit;
-import tech.ikora.model.EmptyNode;
+import tech.ikora.analytics.difference.Edit;
 import tech.ikora.model.NodeList;
 import tech.ikora.model.SourceNode;
 
@@ -143,14 +142,14 @@ public class LevenshteinDistance {
             }
             else if (subtraction <= addition){
                 SourceNode beforeStep = before.get(xPosition - 1);
-                edits.add(Edit.removeElement(beforeStep.getClass(), beforeStep, new EmptyNode(after)));
+                edits.add(Edit.removeElement(beforeStep.getClass(), beforeStep));
 
                 value = subtraction;
                 xPosition -= 1;
             }
             else{
                 SourceNode afterStep = after.get(yPosition - 1);
-                edits.add(Edit.addElement(afterStep.getClass(), new EmptyNode(before), afterStep));
+                edits.add(Edit.addElement(afterStep.getClass(), afterStep));
 
                 value = addition;
                 yPosition -= 1;
