@@ -3,6 +3,8 @@ package tech.ikora.analytics;
 import tech.ikora.Helpers;
 import tech.ikora.analytics.difference.Difference;
 import tech.ikora.analytics.difference.Edit;
+import tech.ikora.builder.BuildResult;
+import tech.ikora.builder.Builder;
 import tech.ikora.model.Project;
 import tech.ikora.model.Token;
 import tech.ikora.model.UserKeyword;
@@ -25,30 +27,66 @@ class DifferenceTest {
 
     @BeforeAll
     static void setUp() {
-        Project project = Helpers.compileProject("robot/clones.robot", true);
+        final String code =
+                "*** Keywords ***\n" +
+                "\n" +
+                "First keyword\n" +
+                "    Open Browser  firefox  google.com\n" +
+                "    Title Should be  google.com\n" +
+                "    Close All Browsers\n" +
+                "\n" +
+                "Second keyword\n" +
+                "    Open Browser  firefox  google.com\n" +
+                "    Title Should be  google.com\n" +
+                "    Close All Browsers\n" +
+                "\n" +
+                "Third keyword\n" +
+                "    Open Browser  chrome  google.com\n" +
+                "    Title Should be  google.com\n" +
+                "    Close All Browsers\n" +
+                "\n" +
+                "Forth keyword\n" +
+                "    Log  Opening browser\n" +
+                "    Open Browser  firefox  google.com\n" +
+                "    Title Should be  google.com\n" +
+                "    Log  Closing browser\n" +
+                "    Close All Browsers\n" +
+                "\n" +
+                "Fifth keyword\n" +
+                "    Log  Opening browser\n" +
+                "    ${result}=  Open Browser  firefox  google.com\n" +
+                "    Title Should be  google.com\n" +
+                "    Log  Closing browser\n" +
+                "    Close All Browsers\n" +
+                "\n" +
+                "Sixth keyword\n" +
+                "    :FOR    ${INDEX}    IN RANGE    1    3\n" +
+                "    \\    Log    ${INDEX}\n" +
+                "    \\    ${RANDOM_STRING}=    Generate Random String    ${INDEX}\n" +
+                "    \\    Log    ${RANDOM_STRING}\n" +
+                "\n" +
+                "Seventh keyword\n" +
+                "    :FOR    ${INDEX}    IN RANGE    1    10\n" +
+                "    \\    Log    ${INDEX}\n" +
+                "    \\    ${RANDOM_STRING}=    Generate Random String    ${INDEX}\n" +
+                "    \\    Log    ${RANDOM_STRING}\n" +
+                "\n" +
+                "Eighth keyword\n" +
+                "    :FOR    ${INDEX}    IN RANGE    1    3\n" +
+                "    \\    ${RANDOM_STRING}=    Generate Random String    ${INDEX}\n" +
+                "    \\    Log    ${RANDOM_STRING}";
+
+        final BuildResult result = Builder.build(code, true);
+        final Project project = result.getProjects().iterator().next();
+
         keyword1 = project.findUserKeyword(Token.fromString("First keyword")).iterator().next();
-        assertNotNull(keyword1);
-
         keyword2 = project.findUserKeyword(Token.fromString("Second keyword")).iterator().next();
-        assertNotNull(keyword2);
-
         keyword3 = project.findUserKeyword(Token.fromString("Third keyword")).iterator().next();
-        assertNotNull(keyword3);
-
         keyword4 = project.findUserKeyword(Token.fromString("Forth keyword")).iterator().next();
-        assertNotNull(keyword4);
-
         keyword5 = project.findUserKeyword(Token.fromString("Fifth keyword")).iterator().next();
-        assertNotNull(keyword5);
-
         keyword6 = project.findUserKeyword(Token.fromString("Sixth keyword")).iterator().next();
-        assertNotNull(keyword6);
-
         keyword7 = project.findUserKeyword(Token.fromString("Seventh keyword")).iterator().next();
-        assertNotNull(keyword7);
-
         keyword8 = project.findUserKeyword(Token.fromString("Eighth keyword")).iterator().next();
-        assertNotNull(keyword8);
     }
 
     @Test

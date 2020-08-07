@@ -28,6 +28,10 @@ public class KeywordCloneDetection {
         return detection.run();
     }
 
+    public static Clones.Type getCloneType(KeywordDefinition k1, KeywordDefinition k2){
+        return getCloneType(new CloneHash(k1), new CloneHash(k2));
+    }
+
     private Clones<KeywordDefinition> run(){
         List<CloneHash> nodes = new ArrayList<>();
 
@@ -61,7 +65,7 @@ public class KeywordCloneDetection {
         return clones;
     }
 
-    private Clones.Type getCloneType(CloneHash c1, CloneHash c2){
+    private static Clones.Type getCloneType(CloneHash c1, CloneHash c2){
         if(isTooShort(c1.keyword, c2.keyword)){
             return Clones.Type.NONE;
         }
@@ -134,7 +138,7 @@ public class KeywordCloneDetection {
             builder.append("\n");
 
             for(Step child: step.getSteps()){
-                buildType1(builder, child);
+                buildType2(builder, child);
             }
         }
 
@@ -148,7 +152,7 @@ public class KeywordCloneDetection {
             builder.append("\n");
 
             for(Step child: step.getSteps()){
-                buildType1(builder, child);
+                buildType3(builder, child);
             }
         }
 
