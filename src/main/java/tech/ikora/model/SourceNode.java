@@ -1,11 +1,12 @@
 package tech.ikora.model;
 
+import tech.ikora.analytics.Edit;
 import tech.ikora.utils.Ast;
 import tech.ikora.utils.FileUtils;
 
 import java.util.*;
 
-public abstract class SourceNode implements Node, Differentiable {
+public abstract class SourceNode implements Node {
     private SourceNode astParent;
     private final List<SourceNode> astChildren;
     private final Set<SourceNode> dependencies;
@@ -28,6 +29,10 @@ public abstract class SourceNode implements Node, Differentiable {
         }
 
         return astParent.getSourceFile();
+    }
+
+    protected void setOneWayParent(SourceNode astParent){
+        this.astParent = astParent;
     }
 
     protected void addAstChild(SourceNode astChild){
@@ -160,4 +165,6 @@ public abstract class SourceNode implements Node, Differentiable {
     }
 
     public abstract Token getNameToken();
+    public abstract double distance(SourceNode other);
+    public abstract List<Edit> differences(SourceNode other);
 }

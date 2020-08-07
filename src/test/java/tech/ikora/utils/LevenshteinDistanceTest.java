@@ -1,12 +1,8 @@
 package tech.ikora.utils;
 
-import tech.ikora.analytics.Edit;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import tech.ikora.Helpers;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -30,39 +26,5 @@ class LevenshteinDistanceTest {
         double index = LevenshteinDistance.stringIndex(string1, string2);
 
         Assertions.assertEquals(0.461538461538, index, Helpers.epsilon);
-    }
-
-    @Test
-    void testRemoveStringFromList(){
-        List<DifferentiableString> list1 = new ArrayList<>();
-        list1.add(new DifferentiableString("Step 1"));
-        list1.add(new DifferentiableString("Step 2"));
-        list1.add(new DifferentiableString("Step 3"));
-
-        List<DifferentiableString> list2 = new ArrayList<>();
-        list2.add(new DifferentiableString("Step 2"));
-        list2.add(new DifferentiableString("Step 3"));
-
-        List<Edit> differences = LevenshteinDistance.getDifferences(list1, list2);
-
-        assertEquals(1, differences.size());
-        assertEquals(Edit.Type.REMOVE_STRING, differences.get(0).getType());
-    }
-
-    @Test
-    void testAddStringToList(){
-        List<DifferentiableString> list1 = new ArrayList<>();
-        list1.add(new DifferentiableString("Step 2"));
-        list1.add(new DifferentiableString("Step 3"));
-
-        List<DifferentiableString> list2 = new ArrayList<>();
-        list2.add(new DifferentiableString("Step 1"));
-        list2.add(new DifferentiableString("Step 2"));
-        list2.add(new DifferentiableString("Step 3"));
-
-        List<Edit> differences = LevenshteinDistance.getDifferences(list1, list2);
-
-        assertEquals(1, differences.size());
-        assertEquals(Edit.Type.ADD_STRING, differences.get(0).getType());
     }
 }

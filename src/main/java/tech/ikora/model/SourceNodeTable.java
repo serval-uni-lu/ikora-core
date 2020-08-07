@@ -12,16 +12,18 @@ import java.util.stream.Collectors;
 
 public class SourceNodeTable<T extends SourceNode> extends SourceNode implements Iterable<T> {
     private Token header;
-    private List<T> nodeList;
+    private NodeList<T> nodeList;
 
     public SourceNodeTable() {
         this.header = Token.empty();
-        this.nodeList = new ArrayList<>();
+        this.nodeList = new NodeList<>();
+        this.addAstChild(this.nodeList);
     }
 
     private SourceNodeTable(Token header, List<T> nodeList){
         this.header = header;
-        this.nodeList = new ArrayList<>(nodeList);
+        this.nodeList = new NodeList<>(nodeList);
+        this.addAstChild(this.nodeList);
     }
 
     @Override
@@ -66,7 +68,8 @@ public class SourceNodeTable<T extends SourceNode> extends SourceNode implements
     }
 
     public void remove(T node){
-        nodeList = nodeList.stream().filter(n -> n != node).collect(Collectors.toList());
+        nodeList = nodeList.stream().filter(n -> n != node).collect(Collectors.toCollection(NodeList::new));
+        this.addAstChild(nodeList);
     }
 
     @Override
@@ -148,7 +151,7 @@ public class SourceNodeTable<T extends SourceNode> extends SourceNode implements
     }
 
     @Override
-    public double distance(Differentiable other) {
+    public double distance(SourceNode other) {
         if(other == this){
             return 0.;
         }
@@ -166,17 +169,20 @@ public class SourceNodeTable<T extends SourceNode> extends SourceNode implements
     }
 
     @Override
-    public List<Edit> differences(Differentiable other) {
+    public List<Edit> differences(SourceNode other) {
+        if(other == null){
+            throw new NullPointerException("Cannot find differences between element and null");
+        }
+
+        if(other instanceof EmptyNode){
+            return Collections.singletonList(Edit.removeElement(this.getClass(), this, (EmptyNode)other));
+        }
+
         if(other == this){
             return Collections.emptyList();
         }
 
         List<Edit> edits = new ArrayList<>();
-
-        if(other == null){
-            edits.add(Edit.removeElement(SourceNodeTable.class, this));
-            return edits;
-        }
 
         if(other.getClass() != this.getClass()){
             edits.add(Edit.changeType(this, other));

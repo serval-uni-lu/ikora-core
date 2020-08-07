@@ -16,17 +16,17 @@ import java.util.stream.Collectors;
 public class Settings extends SourceNode implements Delayable {
     private Token header;
 
-    private List<Resources> resourcesTable;
-    private List<Library> libraryTable;
+    private final List<Resources> resourcesTable;
+    private final List<Library> libraryTable;
 
-    private Set<Token> defaultTags;
-    private Set<Token> forceTags;
+    private final Set<Token> defaultTags;
+    private final Set<Token> forceTags;
+
+    private final Metadata metadata;
+    private final List<VariableFile> variableFiles;
 
     private String documentation;
-
     private TimeOut timeOut;
-    private Metadata metadata;
-    private List<VariableFile> variableFiles;
 
     private KeywordCall template;
     private KeywordCall testSetup;
@@ -248,12 +248,24 @@ public class Settings extends SourceNode implements Delayable {
     }
 
     @Override
-    public double distance(Differentiable other) {
+    public double distance(SourceNode other) {
         return 1;
     }
 
     @Override
-    public List<Edit> differences(Differentiable other) {
+    public List<Edit> differences(SourceNode other) {
+        if(other == null){
+            throw new NullPointerException("Cannot find differences between element and null");
+        }
+
+        if(other instanceof EmptyNode){
+            return Collections.singletonList(Edit.removeElement(this.getClass(), this, (EmptyNode)other));
+        }
+
+        if(other == this){
+            return Collections.emptyList();
+        }
+
         return Collections.emptyList();
     }
 

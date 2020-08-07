@@ -23,7 +23,7 @@ public class InvalidVariable extends Variable {
     }
 
     @Override
-    public double distance(Differentiable other) {
+    public double distance(SourceNode other) {
         if(other instanceof InvalidVariable){
             return 0.0;
         }
@@ -32,7 +32,7 @@ public class InvalidVariable extends Variable {
     }
 
     @Override
-    public List<Edit> differences(Differentiable other) {
+    public List<Edit> differences(SourceNode other) {
         List<Edit> edits = new ArrayList<>();
 
         if(!(other instanceof InvalidStep)){

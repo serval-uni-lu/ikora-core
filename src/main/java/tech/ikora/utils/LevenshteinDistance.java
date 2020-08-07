@@ -1,7 +1,9 @@
 package tech.ikora.utils;
 
 import tech.ikora.analytics.Edit;
-import tech.ikora.model.Differentiable;
+import tech.ikora.model.EmptyNode;
+import tech.ikora.model.NodeList;
+import tech.ikora.model.SourceNode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +26,7 @@ public class LevenshteinDistance {
         return (double)stringDistance(string1, string2) / (double)size;
     }
 
-    public static double[][] distanceMatrix(List<? extends Differentiable> before, List<? extends Differentiable> after) {
+    public static double[][] distanceMatrix(List<? extends SourceNode> before, List<? extends SourceNode> after) {
         double[][] d = new double[before.size() + 1][after.size() + 1];
 
         for(int i = 0; i <= before.size(); ++i){
@@ -85,14 +87,14 @@ public class LevenshteinDistance {
         }
     }
 
-    public static double index(List<? extends Differentiable> before, List<? extends Differentiable> after){
+    public static double index(List<? extends SourceNode> before, List<? extends SourceNode> after){
         double size = Math.max(before.size(), after.size());
         double distance = distanceMatrix(before, after)[before.size()][ after.size()];
 
         return size > 0 ? distance / size : 0;
     }
 
-    public static List<Edit> getDifferences(List<? extends Differentiable> before, List<? extends Differentiable> after){
+    public static List<Edit> getDifferences(NodeList<? extends SourceNode> before, NodeList<? extends SourceNode> after){
         List<Edit> edits = new ArrayList<>();
 
         double[][] distances = LevenshteinDistance.distanceMatrix(before, after);
@@ -110,8 +112,8 @@ public class LevenshteinDistance {
 
             // first check if steps are equal
             if(xPosition > 0 && yPosition > 0){
-                Differentiable beforeStep = before.get(xPosition - 1);
-                Differentiable afterStep = after.get(yPosition - 1);
+                SourceNode beforeStep = before.get(xPosition - 1);
+                SourceNode afterStep = after.get(yPosition - 1);
 
                 if(beforeStep.distance(afterStep) == 0){
                     value = substitution;
@@ -126,8 +128,8 @@ public class LevenshteinDistance {
 
             // then check for the rest
             if(substitution <= subtraction && substitution <= addition){
-                Differentiable beforeStep = before.get(xPosition - 1);
-                Differentiable afterStep = after.get(yPosition - 1);
+                SourceNode beforeStep = before.get(xPosition - 1);
+                SourceNode afterStep = after.get(yPosition - 1);
 
                 List<Edit> differences = beforeStep.differences(afterStep);
 
@@ -140,15 +142,15 @@ public class LevenshteinDistance {
                 yPosition -= 1;
             }
             else if (subtraction <= addition){
-                Differentiable beforeStep = before.get(xPosition - 1);
-                edits.add(Edit.removeElement(beforeStep.getClass(), beforeStep));
+                SourceNode beforeStep = before.get(xPosition - 1);
+                edits.add(Edit.removeElement(beforeStep.getClass(), beforeStep, new EmptyNode(after)));
 
                 value = subtraction;
                 xPosition -= 1;
             }
             else{
-                Differentiable afterStep = after.get(yPosition - 1);
-                edits.add(Edit.addElement(afterStep.getClass(), afterStep));
+                SourceNode afterStep = after.get(yPosition - 1);
+                edits.add(Edit.addElement(afterStep.getClass(), new EmptyNode(before), afterStep));
 
                 value = addition;
                 yPosition -= 1;

@@ -4,8 +4,10 @@ import tech.ikora.analytics.Edit;
 import tech.ikora.analytics.visitor.NodeVisitor;
 import tech.ikora.analytics.visitor.VisitorMemory;
 import tech.ikora.runner.Runtime;
+import tech.ikora.utils.LevenshteinDistance;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 public class NodeList<N extends SourceNode> extends SourceNode implements List<N> , HiddenAstNode{
     private final Token tag;
@@ -57,6 +59,10 @@ public class NodeList<N extends SourceNode> extends SourceNode implements List<N
     @Override
     public <T> T[] toArray(T[] a) {
         return nodes.toArray(a);
+    }
+
+    public Stream<N> stream(){
+        return nodes.stream();
     }
 
     @Override
@@ -167,13 +173,29 @@ public class NodeList<N extends SourceNode> extends SourceNode implements List<N
     }
 
     @Override
-    public double distance(Differentiable other) {
-        return 0;
+    public double distance(SourceNode other) {
+        if(this.getClass() == other.getClass()){
+            return 1.;
+        }
+
+        return LevenshteinDistance.index(this, (NodeList<N>)other);
     }
 
     @Override
-    public List<Edit> differences(Differentiable other) {
-        return null;
+    public List<Edit> differences(SourceNode other) {
+        if(other == null){
+            throw new NullPointerException("Cannot find differences between element and null");
+        }
+
+        if(other instanceof EmptyNode){
+            return Collections.singletonList(Edit.removeElement(this.getClass(), this, (EmptyNode)other));
+        }
+
+        if(other == this){
+            return Collections.emptyList();
+        }
+
+        return LevenshteinDistance.getDifferences(this, (NodeList<N>)other);
     }
 
     @Override
@@ -189,5 +211,12 @@ public class NodeList<N extends SourceNode> extends SourceNode implements List<N
     @Override
     public void execute(Runtime runtime) throws Exception {
 
+    }
+
+    public static <N extends SourceNode> NodeList<N> emptyList(SourceNode parent){
+        final NodeList<N> empty = new NodeList<>();
+        empty.setOneWayParent(parent);
+
+        return empty;
     }
 }

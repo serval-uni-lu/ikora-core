@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 public abstract class KeywordDefinition extends SourceNode implements Keyword, Iterable<Step>, Delayable, ScopeNode {
     private final Token name;
-    private final List<Step> steps;
+    private final NodeList<Step> steps;
     private final Set<SourceNode> dependencies;
     private Tokens documentation;
     private NodeList<Literal> tags;
@@ -20,10 +20,17 @@ public abstract class KeywordDefinition extends SourceNode implements Keyword, I
 
     KeywordDefinition(Token name){
         this.dependencies = new HashSet<>();
-        this.steps = new ArrayList<>();
+
+        this.steps = new NodeList<>();
+        this.addAstChild(this.steps);
+
         this.tags = new NodeList<>();
-        this.documentation = new Tokens();
+        this.addAstChild(this.tags);
+
         this.timeOut = TimeOut.none();
+        this.addAstChild(this.timeOut);
+
+        this.documentation = new Tokens();
         this.localVariables = new ArrayList<>();
 
         this.name = name;
@@ -36,18 +43,21 @@ public abstract class KeywordDefinition extends SourceNode implements Keyword, I
 
     @Override
     public void setTimeOut(TimeOut timeOut){
+        this.removeAstChild(this.timeOut);
         this.timeOut = timeOut;
+        this.addAstChild(this.timeOut);
     }
 
     public void addStep(Step step) throws Exception {
         this.steps.add(step);
-        this.addAstChild(step);
         addTokens(step.getTokens());
     }
 
     public void setTags(NodeList<Literal> tags) {
-        this.addAstChild(tags);
+        this.removeAstChild(this.tags);
         this.tags = tags;
+        this.addAstChild(this.tags);
+
         addTokens(this.tags.getTokens());
     }
 
@@ -64,7 +74,7 @@ public abstract class KeywordDefinition extends SourceNode implements Keyword, I
         return String.format("%s - %s", getLibraryName(), getNameToken());
     }
 
-    public List<Step> getSteps() {
+    public NodeList<Step> getSteps() {
         return steps;
     }
 
@@ -128,12 +138,12 @@ public abstract class KeywordDefinition extends SourceNode implements Keyword, I
     }
 
     @Override
-    public double distance(Differentiable other) {
+    public double distance(SourceNode other) {
         return this.equals(other) ? 0. : 1.;
     }
 
     @Override
-    public List<Edit> differences(Differentiable other) {
+    public List<Edit> differences(SourceNode other) {
         List<Edit> edits = new ArrayList<>();
 
         if(other == this){

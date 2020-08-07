@@ -75,12 +75,12 @@ public class TimeOut extends SourceNode {
     }
 
     @Override
-    public double distance(Differentiable other) {
+    public double distance(SourceNode other) {
         return 0;
     }
 
     @Override
-    public List<Edit> differences(Differentiable other) {
+    public List<Edit> differences(SourceNode other) {
         return Collections.emptyList();
     }
 

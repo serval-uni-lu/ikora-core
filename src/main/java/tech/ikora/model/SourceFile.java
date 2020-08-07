@@ -279,12 +279,24 @@ public class SourceFile extends SourceNode {
     }
 
     @Override
-    public double distance(Differentiable other) {
+    public double distance(SourceNode other) {
         return other == this ? 0 : 1;
     }
 
     @Override
-    public List<Edit> differences(Differentiable other) {
+    public List<Edit> differences(SourceNode other) {
+        if(other == null){
+            throw new NullPointerException("Cannot find differences between element and null");
+        }
+
+        if(other instanceof EmptyNode){
+            return Collections.singletonList(Edit.removeElement(this.getClass(), this, (EmptyNode)other));
+        }
+
+        if(other == this){
+            return Collections.emptyList();
+        }
+
         return Collections.emptyList();
     }
 }

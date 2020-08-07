@@ -9,8 +9,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class Literal extends Value {
-    private Token name;
-    private List<Variable> variables;
+    private final Token name;
+    private final List<Variable> variables;
 
     public Literal(Token name) {
         this.name = name;
@@ -51,7 +51,7 @@ public class Literal extends Value {
     }
 
     @Override
-    public double distance(Differentiable other) {
+    public double distance(SourceNode other) {
         if(this == other){
             return 0.;
         }
@@ -68,9 +68,13 @@ public class Literal extends Value {
     }
 
     @Override
-    public List<Edit> differences(Differentiable other) {
+    public List<Edit> differences(SourceNode other) {
         if(other == null){
-            return Collections.singletonList(Edit.removeElement(Literal.class, this));
+            throw new NullPointerException("Cannot find differences between element and null");
+        }
+
+        if(other instanceof EmptyNode){
+            return Collections.singletonList(Edit.removeElement(this.getClass(), this, (EmptyNode)other));
         }
 
         if(other == this){

@@ -11,7 +11,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class ForLoop extends Step implements Dependable, ScopeNode {
-    private final List<Step> steps;
+    private final NodeList<Step> steps;
     private final Variable iterator;
     private final Step interval;
     private final Set<SourceNode> dependencies;
@@ -35,12 +35,8 @@ public class ForLoop extends Step implements Dependable, ScopeNode {
         this.dependencies = new HashSet<>();
 
 
-        this.steps = new ArrayList<>(steps.size());
-        for(Step step: steps){
-            this.steps.add(step);
-            this.addAstChild(step);
-            this.addTokens(step.getTokens());
-        }
+        this.steps = new NodeList<>(steps);
+        this.addAstChild(this.steps);
     }
 
     public Variable getIterator() {
@@ -77,7 +73,7 @@ public class ForLoop extends Step implements Dependable, ScopeNode {
     }
 
     @Override
-    public double distance(Differentiable other) {
+    public double distance(SourceNode other) {
         if(other == this){
             return 0.0;
         }
@@ -96,15 +92,23 @@ public class ForLoop extends Step implements Dependable, ScopeNode {
     }
 
     @Override
-    public List<Edit> differences(Differentiable other) {
+    public List<Edit> differences(SourceNode other) {
+        if(other == null){
+            throw new NullPointerException("Cannot find differences between element and null");
+        }
+
+        if(other instanceof EmptyNode){
+            return Collections.singletonList(Edit.removeElement(this.getClass(), this, (EmptyNode)other));
+        }
+
         if(other == this){
             return Collections.emptyList();
         }
 
         List<Edit> edits = new ArrayList<>();
 
-        if(other == null || !this.getClass().isAssignableFrom(other.getClass())){
-            edits.add(Edit.addElement(ForLoop.class, this));
+        if(!this.getClass().isAssignableFrom(other.getClass())){
+            edits.add(Edit.changeStep(this, other));
             return edits;
         }
 

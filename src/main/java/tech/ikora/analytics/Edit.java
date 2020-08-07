@@ -1,12 +1,8 @@
 package tech.ikora.analytics;
 
-import tech.ikora.utils.DifferentiableString;
 import tech.ikora.model.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class Edit implements Differentiable {
+public class Edit {
     public enum Type{
         ADD_USER_KEYWORD,
         REMOVE_USER_KEYWORD,
@@ -32,9 +28,6 @@ public class Edit implements Differentiable {
         ADD_SEQUENCE,
         REMOVE_SEQUENCE,
 
-        ADD_STRING,
-        REMOVE_STRING,
-
         ADD_DOCUMENTATION,
         REMOVE_DOCUMENTATION,
         CHANGE_DOCUMENTATION,
@@ -46,10 +39,10 @@ public class Edit implements Differentiable {
     }
 
     private final Type type;
-    private final Differentiable left;
-    private final Differentiable right;
+    private final SourceNode left;
+    private final SourceNode right;
 
-    private Edit(Type type, Differentiable left, Differentiable right){
+    private Edit(Type type, SourceNode left, SourceNode right){
         this.type = type;
         this.left = left;
         this.right = right;
@@ -59,15 +52,15 @@ public class Edit implements Differentiable {
         return type;
     }
 
-    public Differentiable getLeft() {
+    public SourceNode getLeft() {
         return left;
     }
 
-    public Differentiable getRight() {
+    public SourceNode getRight() {
         return right;
     }
 
-    public Differentiable getValue() {
+    public SourceNode getValue() {
         if(this.left != null){
             return this.left;
         }
@@ -75,132 +68,93 @@ public class Edit implements Differentiable {
         return this.right;
     }
 
-    @Override
-    public double distance(Differentiable other) {
-        if(other == null){
-            return 1.0;
-        }
-
-        if(other.getClass() != this.getClass()){
-            return 1.0;
-        }
-
-        if(this.type == ((Edit)other).type && this.getValue().toString().equals(((Edit)other).getValue().toString())){
-            return 0.0;
-        }
-
-        return 1.0;
-    }
-
-    @Override
-    public List<Edit> differences(Differentiable other) {
-        List<Edit> differences = new ArrayList<>();
-
-        if(other == null || other.getClass() != this.getClass()){
-            return differences;
-        }
-
-        if(this.type != ((Edit)other).type
-        && this.getValue().toString().equals(((Edit)other).getValue().toString())){
-            differences.add(Edit.changeStep(this, other));
-        }
-
-        return differences;
-    }
-
-    public static <T> Edit addElement(Class<T> type, Differentiable element) {
+    public static <T> Edit addElement(Class<T> type, EmptyNode emptyNode, SourceNode node) {
         if(UserKeyword.class.isAssignableFrom(type)){
-            return new Edit(Type.ADD_USER_KEYWORD, null, element);
+            return new Edit(Type.ADD_USER_KEYWORD, emptyNode, node);
         }
         else if(TestCase.class.isAssignableFrom(type)){
-            return new Edit(Type.ADD_TEST_CASE, null, element);
+            return new Edit(Type.ADD_TEST_CASE, emptyNode, node);
         }
         else if(Variable.class.isAssignableFrom(type)){
-            return new Edit(Type.ADD_VARIABLE, null, element);
+            return new Edit(Type.ADD_VARIABLE, emptyNode, node);
         }
         else if(Step.class.isAssignableFrom(type)){
-            return new Edit(Type.ADD_STEP, null, element);
+            return new Edit(Type.ADD_STEP, emptyNode, node);
         }
         else if(Argument.class.isAssignableFrom(type)){
-            return new Edit(Type.ADD_STEP_ARGUMENT, null, element);
+            return new Edit(Type.ADD_STEP_ARGUMENT, emptyNode, node);
         }
         else if(Sequence.class.isAssignableFrom(type)){
-            return new Edit(Type.ADD_SEQUENCE, null, element);
-        }
-        else if(DifferentiableString.class.isAssignableFrom(type)){
-            return new Edit(Type.ADD_STRING, null, element);
+            return new Edit(Type.ADD_SEQUENCE, emptyNode, node);
         }
 
-        return new Edit(Type.ADD_NODE, null, element);
+        return new Edit(Type.ADD_NODE, emptyNode, node);
     }
 
-    public static <T> Edit removeElement(Class<T> type, Differentiable element){
+    public static <T> Edit removeElement(Class<T> type, SourceNode node, EmptyNode emptyNode){
         if(UserKeyword.class.isAssignableFrom(type)){
-            return new Edit(Type.REMOVE_USER_KEYWORD, element, null);
+            return new Edit(Type.REMOVE_USER_KEYWORD, node, emptyNode);
         }
         else if(TestCase.class.isAssignableFrom(type)){
-            return new Edit(Type.REMOVE_TEST_CASE, element, null);
+            return new Edit(Type.REMOVE_TEST_CASE, node, emptyNode);
         }
         else if(Variable.class.isAssignableFrom(type)){
-            return new Edit(Type.REMOVE_VARIABLE, element, null);
+            return new Edit(Type.REMOVE_VARIABLE, node, emptyNode);
         }
         else if(Step.class.isAssignableFrom(type)){
-            return new Edit(Type.REMOVE_STEP, element, null);
+            return new Edit(Type.REMOVE_STEP, node, emptyNode);
         }
         else if(Argument.class.isAssignableFrom(type)){
-            return new Edit(Type.REMOVE_STEP_ARGUMENT, element, null);
+            return new Edit(Type.REMOVE_STEP_ARGUMENT, node, emptyNode);
         }
         else if(Sequence.class.isAssignableFrom(type)){
-            return new Edit(Type.REMOVE_SEQUENCE, element, null);
-        }
-        else if(DifferentiableString.class.isAssignableFrom(type)){
-            return new Edit(Type.REMOVE_STRING, element, null);
+            return new Edit(Type.REMOVE_SEQUENCE, node, emptyNode);
         }
 
-        return new Edit(Type.INVALID, element, null);
+        return new Edit(Type.INVALID, node, emptyNode);
     }
 
-    public static Edit changeName(Differentiable left, Differentiable right){
+    public static Edit changeName(SourceNode left, SourceNode right){
         return new Edit(Type.CHANGE_NAME, left, right);
     }
 
-    public static Edit changeStep(Differentiable left, Differentiable right){
+    public static Edit changeStep(SourceNode left, SourceNode right){
         return new Edit(Type.CHANGE_STEP, left, right);
     }
 
-    public static Edit changeType(Differentiable left, Differentiable right){
+    public static Edit changeType(SourceNode left, SourceNode right){
         return new Edit(Type.CHANGE_TYPE, left, right);
     }
 
-    public static Edit changeStepName(Differentiable left, Differentiable right){
+    public static Edit changeStepName(SourceNode left, SourceNode right){
         return new Edit(Type.CHANGE_STEP, left, right);
     }
 
-    public static Edit changeValueName(Differentiable left, Differentiable right){
+    public static Edit changeValueName(SourceNode left, SourceNode right){
         return new Edit(Type.CHANGE_VALUE_NAME, left, right);
     }
 
-    public static Edit changeValueType(Differentiable left, Differentiable right){
+    public static Edit changeValueType(SourceNode left, SourceNode right){
         return new Edit(Type.CHANGE_VALUE_TYPE, left, right);
     }
 
-    public static Edit changeVariableDefinition(Differentiable left, Differentiable right) {
+    public static Edit changeVariableDefinition(SourceNode left, SourceNode right) {
         return new Edit(Type.CHANGE_VARIABLE_DEFINITION, left, right);
     }
 
-    public static Edit addDocumentation(Differentiable left, Differentiable right) {
+    public static Edit addDocumentation(SourceNode left, SourceNode right) {
         return new Edit(Type.ADD_DOCUMENTATION, left, right);
     }
 
-    public static Edit removeDocumentation(Differentiable left, Differentiable right) {
+    public static Edit removeDocumentation(SourceNode left, SourceNode right) {
         return new Edit(Type.REMOVE_DOCUMENTATION, left, right);
     }
 
-    public static Edit changeDocumentation(Differentiable left, Differentiable right) {
+    public static Edit changeDocumentation(SourceNode left, SourceNode right) {
         return new Edit(Type.CHANGE_DOCUMENTATION, left, right);
     }
 
-    public static Edit invalid(Differentiable left, Differentiable right) {
+    public static Edit invalid(SourceNode left, SourceNode right) {
         return new Edit(Type.INVALID, left, right);
     }
 }

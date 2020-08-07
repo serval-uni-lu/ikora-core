@@ -51,7 +51,7 @@ public class DictionaryEntry extends Value {
     }
 
     @Override
-    public double distance(Differentiable other) {
+    public double distance(SourceNode other) {
         if(this == other){
             return 0.;
         }
@@ -71,9 +71,13 @@ public class DictionaryEntry extends Value {
     }
 
     @Override
-    public List<Edit> differences(Differentiable other) {
+    public List<Edit> differences(SourceNode other) {
         if(other == null){
-            return Collections.singletonList(Edit.removeElement(DictionaryEntry.class, this));
+            throw new NullPointerException("Cannot find differences between element and null");
+        }
+
+        if(other instanceof EmptyNode){
+            return Collections.singletonList(Edit.removeElement(this.getClass(), this, (EmptyNode)other));
         }
 
         if(other == this){

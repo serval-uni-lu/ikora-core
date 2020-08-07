@@ -91,7 +91,7 @@ public class KeywordCall extends Step {
     }
 
     @Override
-    public double distance(Differentiable other) {
+    public double distance(SourceNode other) {
         if(other == null){
             return 1.;
         }
@@ -100,28 +100,26 @@ public class KeywordCall extends Step {
             return 1.;
         }
 
-        SourceNode sourceNode = (SourceNode)other;
+        KeywordCall call = (KeywordCall)other;
 
-        double distName = this.getNameToken().equalsIgnorePosition(sourceNode.getNameToken()) ? 0. : 0.5;
-
-        boolean sameArguments = this.getAstChildren().size() == sourceNode.getAstChildren().size();
-        for(int i = 0; sameArguments && i < this.getAstChildren().size(); ++i) {
-            sameArguments = this.getAstChildren().get(i).equals(sourceNode.getAstChildren().get(i));
-        }
-
-        double distArguments = sameArguments ? 0. : 0.5;
+        double distName = this.getNameToken().equalsIgnorePosition(call.getNameToken()) ? 0. : 0.5;
+        double distArguments = LevenshteinDistance.index(this.arguments, call.arguments);
 
         return distName + distArguments;
     }
 
     @Override
-    public List<Edit> differences(Differentiable other) {
-        if(other == this){
-            return Collections.emptyList();
+    public List<Edit> differences(SourceNode other) {
+        if(other == null){
+            throw new NullPointerException("Cannot find differences between element and null");
         }
 
-        if(other == null){
-            return Collections.singletonList(Edit.addElement(this.getClass(), this));
+        if(other instanceof EmptyNode){
+            return Collections.singletonList(Edit.removeElement(this.getClass(), this, (EmptyNode)other));
+        }
+
+        if(other == this){
+            return Collections.emptyList();
         }
 
         List<Edit> edits = new ArrayList<>();
@@ -137,9 +135,10 @@ public class KeywordCall extends Step {
             edits.addAll(argumentEdits);
         }
         else if(other instanceof Assignment){
-            Assignment assignment = (Assignment)other;
+            final Assignment assignment = (Assignment)other;
+
             edits.addAll(this.differences(assignment.getKeywordCall().orElse(null)));
-            edits.addAll(LevenshteinDistance.getDifferences(Collections.emptyList(), assignment.getLeftHandOperand()));
+            edits.addAll(LevenshteinDistance.getDifferences(NodeList.emptyList(assignment), assignment.getLeftHandOperand()));
         }
         else{
             edits.add(Edit.changeType(this, other));

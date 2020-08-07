@@ -6,10 +6,11 @@ import java.io.File;
 import java.util.*;
 
 public class Suite {
-    private String name;
-    private String documentation;
-    private File source;
-    private List<Suite> suites;
+    private final String name;
+    private final String documentation;
+    private final File source;
+    private final List<Suite> suites;
+
     private SourceFile sourceFile;
 
     Suite(String name, File source){
@@ -35,7 +36,7 @@ public class Suite {
         List<SourceFile> files = new ArrayList<>();
 
         for(Suite suite: suites){
-            files.addAll(getSourceFiles());
+            files.addAll(suite.getSourceFiles());
         }
 
         if(sourceFile != null){

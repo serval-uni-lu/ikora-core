@@ -108,7 +108,7 @@ public class Assignment extends Step implements Dependable {
     }
 
     @Override
-    public double distance(Differentiable other) {
+    public double distance(SourceNode other) {
         if(other == this){
             return 0.;
         }
@@ -133,9 +133,13 @@ public class Assignment extends Step implements Dependable {
     }
 
     @Override
-    public List<Edit> differences(Differentiable other) {
+    public List<Edit> differences(SourceNode other) {
         if(other == null){
-            return Collections.singletonList(Edit.addElement(this.getClass(), this));
+            throw new NullPointerException("Cannot find differences between element and null");
+        }
+
+        if(other instanceof EmptyNode){
+            return Collections.singletonList(Edit.removeElement(this.getClass(), this, (EmptyNode)other));
         }
 
         if(other == this){
@@ -150,7 +154,7 @@ public class Assignment extends Step implements Dependable {
             getKeywordCall().ifPresent(call -> edits.addAll(call.differences(assignment.getKeywordCall().orElse(null))));
         }
         else if(other instanceof KeywordCall){
-            edits.addAll(LevenshteinDistance.getDifferences(this.leftHandOperand, Collections.emptyList()));
+            edits.addAll(LevenshteinDistance.getDifferences(this.leftHandOperand, NodeList.emptyList(other)));
             getKeywordCall().ifPresent(call -> edits.addAll(call.differences(other)));
         }
         else {

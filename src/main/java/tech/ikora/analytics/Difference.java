@@ -1,17 +1,17 @@
 package tech.ikora.analytics;
 
-import tech.ikora.model.Differentiable;
-import tech.ikora.utils.LevenshteinDistance;
+import tech.ikora.model.EmptyNode;
+import tech.ikora.model.SourceNode;
 import tech.ikora.model.KeywordDefinition;
 
 import java.util.*;
 
-public class Difference implements Differentiable {
-    private final Differentiable left;
-    private final Differentiable right;
+public class Difference {
+    private final SourceNode left;
+    private final SourceNode right;
     private final List<Edit> edits;
 
-    private Difference(Differentiable left, Differentiable right){
+    private Difference(SourceNode left, SourceNode right){
         this.left = left;
         this.right = right;
 
@@ -40,15 +40,15 @@ public class Difference implements Differentiable {
         return true;
     }
 
-    public Differentiable getLeft(){
+    public SourceNode getLeft(){
         return left;
     }
 
-    public Differentiable getRight(){
+    public SourceNode getRight(){
         return right;
     }
 
-    public Differentiable getValue(){
+    public SourceNode getValue(){
         if(left != null){
             return left;
         }
@@ -60,20 +60,24 @@ public class Difference implements Differentiable {
         return edits;
     }
 
-    public static Difference of(Differentiable before, Differentiable after) {
+    public static Difference of(SourceNode before, SourceNode after) {
+        if(before == null || after == null){
+            throw new NullPointerException("Cannot find differences between element and null");
+        }
+
         Difference difference = new Difference(before, after);
 
         if(before == after){
             return difference;
         }
 
-        if(before == null){
-            difference.edits.add(Edit.addElement(after.getClass(), after));
+        if(before instanceof EmptyNode){
+            difference.edits.add(Edit.addElement(after.getClass(), (EmptyNode)before, after));
             return difference;
         }
 
-        if(after == null){
-            difference.edits.add(Edit.removeElement(before.getClass(), before));
+        if(after instanceof EmptyNode){
+            difference.edits.add(Edit.removeElement(before.getClass(), before, (EmptyNode)after));
             return difference;
         }
 
@@ -111,7 +115,7 @@ public class Difference implements Differentiable {
         return hash;
     }
 
-    private int getNodeHash(int hash, Differentiable element){
+    private int getNodeHash(int hash, SourceNode element){
         if(element == null){
             hash = 31 * hash;
         }
@@ -126,32 +130,6 @@ public class Difference implements Differentiable {
         }
 
         return hash;
-    }
-
-    @Override
-    public double distance(Differentiable other) {
-        if(other == null){
-            return 1.0;
-        }
-
-        if(other == this){
-            return 0.0;
-        }
-
-        if(other.getClass() != this.getClass()){
-            return 1.0;
-        }
-
-        if(((Difference)other).getValue().getClass() != this.getValue().getClass()){
-            return 1.0;
-        }
-
-        return LevenshteinDistance.index(this.edits, ((Difference)other).edits);
-    }
-
-    @Override
-    public List<Edit> differences(Differentiable other) {
-        return Collections.emptyList();
     }
 
     public Class<?> getType() {

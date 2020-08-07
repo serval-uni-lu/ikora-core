@@ -48,7 +48,7 @@ public abstract class Variable extends Value {
     }
 
     @Override
-    public double distance(Differentiable other) {
+    public double distance(SourceNode other) {
         if(other == null){
             return 1;
         }
@@ -57,20 +57,28 @@ public abstract class Variable extends Value {
             return 1;
         }
 
-        return this.getNameToken().equalsIgnorePosition(((Variable)other).getNameToken()) ? 0 : 1;
+        return this.getNameToken().equalsIgnorePosition((other).getNameToken()) ? 0 : 1;
     }
 
     @Override
-    public List<Edit> differences(Differentiable other) {
+    public List<Edit> differences(SourceNode other) {
         if(other == null){
-            return Collections.singletonList(Edit.removeElement(this.getClass(), this));
+            throw new NullPointerException("Cannot find differences between element and null");
+        }
+
+        if(other instanceof EmptyNode){
+            return Collections.singletonList(Edit.removeElement(this.getClass(), this, (EmptyNode)other));
+        }
+
+        if(other == this){
+            return Collections.emptyList();
         }
 
         if(this.getClass() != other.getClass()){
             return Collections.singletonList(Edit.changeValueType(this, other));
         }
 
-        if(!this.getNameToken().equalsIgnorePosition(((Variable)other).getNameToken())){
+        if(!this.getNameToken().equalsIgnorePosition((other).getNameToken())){
             return Collections.singletonList(Edit.changeValueName(this, other));
         }
 

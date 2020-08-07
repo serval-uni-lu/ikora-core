@@ -4,7 +4,7 @@ import tech.ikora.model.*;
 
 
 public class SequenceVisitor extends EmptyVisitor {
-    private Sequence sequence;
+    private final Sequence sequence;
 
     public SequenceVisitor(){
         sequence = new Sequence();
