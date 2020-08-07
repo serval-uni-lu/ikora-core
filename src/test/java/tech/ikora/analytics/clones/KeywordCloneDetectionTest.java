@@ -95,7 +95,7 @@ class KeywordCloneDetectionTest {
 
         assertEquals(2, clones.size(Clones.Type.TYPE_1));
         assertEquals(5, clones.size(Clones.Type.TYPE_2));
-        assertEquals(4, clones.size(Clones.Type.TYPE_3));
+        assertEquals(7, clones.size(Clones.Type.TYPE_3));
     }
 
     @Test
