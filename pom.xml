@@ -4,7 +4,7 @@
 
     <groupId>tech.ikora</groupId>
     <artifactId>ikora-core</artifactId>
-    <version>0.1.1-SNAPSHOT</version>
+    <version>0.1.2</version>
 
     <name>Ikora Core: Robot Framework Engine</name>
     <url>https://github.com/kabinja/ikora-core</url>
