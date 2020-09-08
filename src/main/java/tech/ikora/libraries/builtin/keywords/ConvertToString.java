@@ -4,8 +4,6 @@ import tech.ikora.model.LibraryKeyword;
 import tech.ikora.runner.Runtime;
 import tech.ikora.types.StringType;
 
-import java.util.Collections;
-
 public class ConvertToString extends LibraryKeyword {
     public ConvertToString(){
         super(Type.SET, new StringType("item"));

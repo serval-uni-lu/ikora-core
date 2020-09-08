@@ -5,8 +5,6 @@ import tech.ikora.runner.Runtime;
 import tech.ikora.types.KeywordType;
 import tech.ikora.types.StringType;
 
-import java.util.Arrays;
-
 public class RepeatKeyword extends LibraryKeyword {
     public RepeatKeyword(){
         super(Type.CONTROL_FLOW,

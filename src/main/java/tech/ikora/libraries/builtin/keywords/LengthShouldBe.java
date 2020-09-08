@@ -5,8 +5,6 @@ import tech.ikora.runner.Runtime;
 import tech.ikora.types.NumberType;
 import tech.ikora.types.StringType;
 
-import java.util.Arrays;
-
 public class LengthShouldBe extends LibraryKeyword {
     public LengthShouldBe(){
         super(Type.ASSERTION,

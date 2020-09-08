@@ -9,7 +9,6 @@ import tech.ikora.exception.InvalidTypeException;
 import tech.ikora.model.Project;
 import tech.ikora.model.TestCase;
 import tech.ikora.model.UserKeyword;
-import tech.ikora.utils.FileUtils;
 
 import java.util.Map;
 

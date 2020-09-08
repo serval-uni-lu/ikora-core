@@ -1,6 +1,5 @@
 package tech.ikora.model;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.jupiter.api.Test;
 import tech.ikora.builder.LibraryLoader;
 import tech.ikora.error.ErrorManager;
@@ -11,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class LibraryLoaderTest {
     @Test
-    void testLibraryImports() throws JsonProcessingException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+    void testLibraryImports() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         ErrorManager errors = new ErrorManager();
         LibraryResources resources = LibraryLoader.load(errors);
         assertTrue(errors.isEmpty());

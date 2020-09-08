@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import tech.ikora.builder.BuildResult;
 import tech.ikora.builder.Builder;
 import tech.ikora.model.Project;
-import tech.ikora.model.SourceNode;
 import tech.ikora.model.UserKeyword;
 
 import java.util.List;

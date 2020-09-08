@@ -3,7 +3,6 @@ package tech.ikora.builder;
 import org.junit.jupiter.api.Test;
 import tech.ikora.Helpers;
 import tech.ikora.error.ErrorManager;
-import tech.ikora.exception.MalformedVariableException;
 import tech.ikora.model.*;
 
 import java.io.IOException;
@@ -14,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class VariableAssignmentParserTest {
     @Test
-    void testParseScalarSimpleValue() throws IOException, MalformedVariableException {
+    void testParseScalarSimpleValue() throws IOException {
         LineReader reader = Helpers.lineReader("${scalar}", "scalar value");
 
         ErrorManager errors = new ErrorManager();
@@ -31,7 +30,7 @@ public class VariableAssignmentParserTest {
     }
 
     @Test
-    void testParseScalarVariableValue() throws IOException, MalformedVariableException {
+    void testParseScalarVariableValue() throws IOException {
         LineReader reader = Helpers.lineReader("${scalar}", "@{variable_value}");
 
         ErrorManager errors = new ErrorManager();
@@ -46,7 +45,7 @@ public class VariableAssignmentParserTest {
     }
 
     @Test
-    void testParseListWithMultipleValue() throws IOException, MalformedVariableException {
+    void testParseListWithMultipleValue() throws IOException {
         LineReader reader = Helpers.lineReader("@{list}", "scalar value 1", "${variable}", "scalar value 3");
 
         ErrorManager errors = new ErrorManager();
@@ -68,7 +67,7 @@ public class VariableAssignmentParserTest {
     }
 
     @Test
-    void testParseDictionaryWithMultipleEntry() throws IOException, MalformedVariableException {
+    void testParseDictionaryWithMultipleEntry() throws IOException {
         LineReader reader = Helpers.lineReader("&{dictionary}", "key1=value1", "${variable}", "key3=value3");
 
         ErrorManager errors = new ErrorManager();

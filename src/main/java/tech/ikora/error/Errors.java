@@ -3,7 +3,6 @@ package tech.ikora.error;
 import tech.ikora.model.Range;
 import tech.ikora.model.Source;
 
-import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 

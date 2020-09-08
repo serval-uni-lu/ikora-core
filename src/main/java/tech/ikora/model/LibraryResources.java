@@ -7,14 +7,14 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 public class LibraryResources {
-    private Map<String, KeywordObject> keywordsNames;
-    private List<LibraryVariable> variables;
-    private Map<String, LibraryKeywordInfo> libraryKeywordNames;
+    private final Map<String, KeywordObject> keywordsNames;
+    private final List<LibraryVariable> variables;
+    private final Map<String, LibraryKeywordInfo> libraryKeywordNames;
 
     public LibraryResources() {
         this.keywordsNames = new HashMap<>();
         this.variables = new ArrayList<>();
-        this.libraryKeywordNames = new HashMap();
+        this.libraryKeywordNames = new HashMap<>();
     }
 
     public void loadVariable(Class<? extends LibraryVariable> libraryVariable, ErrorManager errors){

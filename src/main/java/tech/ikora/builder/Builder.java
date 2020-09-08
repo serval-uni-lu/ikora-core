@@ -9,7 +9,6 @@ import tech.ikora.runner.StaticScope;
 import tech.ikora.utils.FileUtils;
 
 import java.io.File;
-import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Optional;

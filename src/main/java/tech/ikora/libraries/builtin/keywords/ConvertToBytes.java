@@ -4,8 +4,6 @@ import tech.ikora.model.LibraryKeyword;
 import tech.ikora.runner.Runtime;
 import tech.ikora.types.StringType;
 
-import java.util.Arrays;
-
 public class ConvertToBytes extends LibraryKeyword {
     public ConvertToBytes(){
         super(Type.SET,

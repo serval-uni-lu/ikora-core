@@ -1,6 +1,5 @@
 package tech.ikora.analytics;
 
-import tech.ikora.Helpers;
 import tech.ikora.analytics.difference.Difference;
 import tech.ikora.analytics.difference.Edit;
 import tech.ikora.builder.BuildResult;
