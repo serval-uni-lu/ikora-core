@@ -3,6 +3,7 @@ package tech.ikora.model;
 import tech.ikora.analytics.difference.Edit;
 import tech.ikora.builder.ValueResolver;
 import tech.ikora.runner.Runtime;
+import tech.ikora.utils.Ast;
 import tech.ikora.utils.LevenshteinDistance;
 
 import java.util.*;
@@ -36,18 +37,6 @@ public abstract class KeywordDefinition extends SourceNode implements Keyword, I
         this.name = name;
     }
 
-    @Override
-    public TimeOut getTimeOut() {
-        return timeOut;
-    }
-
-    @Override
-    public void setTimeOut(TimeOut timeOut){
-        this.removeAstChild(this.timeOut);
-        this.timeOut = timeOut;
-        this.addAstChild(this.timeOut);
-    }
-
     public void addStep(Step step) throws Exception {
         this.steps.add(step);
         addTokens(step.getTokens());
@@ -67,6 +56,38 @@ public abstract class KeywordDefinition extends SourceNode implements Keyword, I
 
     public void addLocalVariable(Variable variable){
         localVariables.add(variable);
+    }
+
+    public NodeList<Literal> getTags() {
+        return tags;
+    }
+
+    public Step getStep(int position) {
+        if(steps.size() <= position  || 0 > position){
+            return null;
+        }
+
+        return steps.get(position);
+    }
+
+    public <T> Set<T> getUsages(Class<T> type){
+        return getDependencies().stream()
+                .map(d -> Ast.getParentByType(d, type))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toSet());
+    }
+
+    @Override
+    public TimeOut getTimeOut() {
+        return timeOut;
+    }
+
+    @Override
+    public void setTimeOut(TimeOut timeOut){
+        this.removeAstChild(this.timeOut);
+        this.timeOut = timeOut;
+        this.addAstChild(this.timeOut);
     }
 
     @Override
@@ -102,18 +123,7 @@ public abstract class KeywordDefinition extends SourceNode implements Keyword, I
         return documentation;
     }
 
-    public NodeList<Literal> getTags() {
-        return tags;
-    }
-
-    public Step getStep(int position) {
-        if(steps.size() <= position  || 0 > position){
-            return null;
-        }
-
-        return steps.get(position);
-    }
-
+    @Override
     public boolean matches(Token token) {
         if(token == null){
             return false;
@@ -122,6 +132,7 @@ public abstract class KeywordDefinition extends SourceNode implements Keyword, I
         return ValueResolver.matches(this.name, token);
     }
 
+    @Override
     public Iterator<Step> iterator() {
         return steps.iterator();
     }
@@ -175,22 +186,6 @@ public abstract class KeywordDefinition extends SourceNode implements Keyword, I
         return edits;
     }
 
-    private Edit differenceDocumentation(KeywordDefinition keyword) {
-        Edit edit = null;
-
-        if(this.documentation.isEmpty() && !keyword.documentation.isEmpty()){
-            edit = Edit.addDocumentation(this, keyword);
-        }
-        else if(!this.documentation.isEmpty() && keyword.documentation.isEmpty()){
-            edit = Edit.removeDocumentation(this, keyword);
-        }
-        else if(!this.documentation.equalsIgnorePosition(keyword.documentation)){
-            edit = Edit.changeDocumentation(this, keyword);
-        }
-
-        return edit;
-    }
-
     @Override
     public Type getType(){
         return Type.USER;
@@ -223,5 +218,21 @@ public abstract class KeywordDefinition extends SourceNode implements Keyword, I
     @Override
     public Set<SourceNode> getDependencies() {
         return dependencies;
+    }
+
+    private Edit differenceDocumentation(KeywordDefinition keyword) {
+        Edit edit = null;
+
+        if(this.documentation.isEmpty() && !keyword.documentation.isEmpty()){
+            edit = Edit.addDocumentation(this, keyword);
+        }
+        else if(!this.documentation.isEmpty() && keyword.documentation.isEmpty()){
+            edit = Edit.removeDocumentation(this, keyword);
+        }
+        else if(!this.documentation.equalsIgnorePosition(keyword.documentation)){
+            edit = Edit.changeDocumentation(this, keyword);
+        }
+
+        return edit;
     }
 }
