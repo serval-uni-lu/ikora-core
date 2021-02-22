@@ -5,9 +5,9 @@ on:
     branches: [ master ]
 
 jobs:
-  test:
+  coverage:
     runs-on: ubuntu-latest
-    name: Running tests
+    name: Jacoco analysis (Java 8)
 
     steps:
       - uses: actions/checkout@v2
@@ -41,7 +41,7 @@ jobs:
 
   sonarcloud:
     runs-on: ubuntu-latest
-    name: Sonar analysis
+    name: Sonar analysis (Java 11)
 
     steps:
       - uses: actions/checkout@v2

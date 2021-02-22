@@ -9,6 +9,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class LiteralParser {
+    private LiteralParser() {}
+
     public static Literal parse(Token token){
         final List<Token> variableNames = ValueResolver.findVariables(token);
 
