@@ -1,7 +1,7 @@
 # Ikora Core: Robot Framework engine
 
-[![Build Status](https://travis-ci.com/kabinja/ikora-core.svg?branch=master)](https://travis-ci.com/kabinja/ikora-core)
-[![codecov](https://codecov.io/gh/kabinja/ikora-core/branch/master/graph/badge.svg)](https://codecov.io/gh/kabinja/ikora-core)
+![build](https://github.com/UL-SnT-Serval/ikora-core/.github/workflows/build/badge.svg)
+![codecov](.github/badges/jacoco.svg)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 
