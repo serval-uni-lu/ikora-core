@@ -1,9 +1,10 @@
 package lu.uni.serval.ikora.model;
 
+import java.time.Instant;
 import java.util.*;
 
 public class Projects implements Iterable<Project> {
-    private Date date;
+    private Instant date;
     private String versionId;
     private Set<Project> projectSet;
 
@@ -38,11 +39,11 @@ public class Projects implements Iterable<Project> {
         }
     }
 
-    public Date getDate() {
+    public Instant getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(Instant date) {
         this.date = date;
     }
 

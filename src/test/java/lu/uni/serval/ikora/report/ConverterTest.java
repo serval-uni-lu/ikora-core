@@ -2,11 +2,11 @@ package lu.uni.serval.ikora.report;
 
 import org.junit.jupiter.api.Test;
 
-import java.sql.Date;
 import java.text.ParseException;
 import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeParseException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -15,10 +15,10 @@ class ConverterTest {
     void checkToLocalDateTimeWithValidDate(){
         try {
             final Instant instant = LocalDateTime.of(2017, 2, 20, 14, 19, 7, 693000000)
-                    .atZone(ZoneId.systemDefault()).toInstant();
+                    .atZone(ZoneOffset.UTC).toInstant();
 
-            assertEquals(Date.from(instant), Converter.toDate("20170220 14:19:07.693"));
-        } catch (ParseException e) {
+            assertEquals(instant, Converter.toDate("20170220 14:19:07.693"));
+        } catch (DateTimeParseException e) {
             fail(e.getMessage());
         }
     }
@@ -27,8 +27,8 @@ class ConverterTest {
     void checkToLocalDateTimeWithInvalidDate(){
         try{
             Converter.toDate("Invalid date");
-        } catch (ParseException e){
-            assertTrue(e.getMessage().contains("Unparseable date: \"Invalid date\""));
+        } catch (DateTimeParseException e){
+            assertTrue(e.getMessage().contains("Invalid date"));
         }
     }
 

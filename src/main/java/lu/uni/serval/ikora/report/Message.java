@@ -4,11 +4,11 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlText;
 
 import java.text.ParseException;
-import java.util.Date;
+import java.time.Instant;
 
 public class Message {
     @JacksonXmlProperty(localName = "timestamp", isAttribute = true)
-    private Date timestamp;
+    private Instant timestamp;
     @JacksonXmlProperty(localName = "level", isAttribute = true)
     private String level;
     @JacksonXmlProperty(localName = "html", isAttribute = true)
@@ -16,7 +16,7 @@ public class Message {
     @JacksonXmlText
     private String text;
 
-    public Date getTimestamp() {
+    public Instant getTimestamp() {
         return timestamp;
     }
 
@@ -24,7 +24,7 @@ public class Message {
         setTimestamp(Converter.toDate(timestamp));
     }
 
-    public void setTimestamp(Date timestamp) {
+    public void setTimestamp(Instant timestamp) {
         this.timestamp = timestamp;
     }
 

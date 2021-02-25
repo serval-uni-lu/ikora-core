@@ -4,6 +4,7 @@ import java.io.File;
 import java.net.URI;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Instant;
 import java.util.*;
 
 public class Project implements Comparable<Project> {
@@ -12,7 +13,7 @@ public class Project implements Comparable<Project> {
     private final Set<Project> dependencies;
     private final Source rootFolder;
 
-    private Date date;
+    private Instant date;
     private int loc;
 
     public Project(Source source){
@@ -23,7 +24,7 @@ public class Project implements Comparable<Project> {
         loc = 0;
     }
 
-    public void setDate(Date date){
+    public void setDate(Instant date){
         this.date = date;
     }
 
@@ -39,7 +40,7 @@ public class Project implements Comparable<Project> {
         return suites;
     }
 
-    public Date getDate() {
+    public Instant getDate() {
         return date;
     }
 
@@ -131,7 +132,7 @@ public class Project implements Comparable<Project> {
     }
 
     public long getEpoch() {
-        return this.getDate().toInstant().toEpochMilli();
+        return this.getDate().toEpochMilli();
     }
 
     public int getLoc() {

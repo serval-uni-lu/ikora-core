@@ -7,15 +7,15 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import lu.uni.serval.ikora.exception.BadElementException;
 
 import java.text.ParseException;
+import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @JacksonXmlRootElement(localName = "robot")
 @JsonIgnoreProperties(value ={"statistics", "errors"})
 public class Report implements ReportElement {
     @JacksonXmlProperty(localName = "generated", isAttribute = true)
-    private Date generated;
+    private Instant generated;
     @JacksonXmlProperty(localName = "generator", isAttribute = true)
     private String generator;
     @JacksonXmlElementWrapper(useWrapping = false)
@@ -26,7 +26,7 @@ public class Report implements ReportElement {
         suites = new ArrayList<>();
     }
 
-    public Date getGenerated() {
+    public Instant getGenerated() {
         return generated;
     }
 
@@ -34,7 +34,7 @@ public class Report implements ReportElement {
         setGenerated(Converter.toDate(generated));
     }
 
-    public void setGenerated(Date generated) {
+    public void setGenerated(Instant generated) {
         this.generated = generated;
     }
 

@@ -7,7 +7,6 @@ import lu.uni.serval.ikora.utils.Globals;
 
 import java.time.Instant;
 
-import java.util.Date;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.Optional;
@@ -64,7 +63,7 @@ public class ReportBuilder {
     }
 
     public void finish(){
-        report.setGenerated(Date.from(Instant.now()));
+        report.setGenerated(Instant.now());
     }
 
     private Test createTestNode(TestCase testCase){

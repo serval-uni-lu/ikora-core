@@ -4,7 +4,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlText;
 
 import java.text.ParseException;
-import java.util.Date;
+import java.time.Instant;
 
 public class Status {
     public enum Type{
@@ -14,9 +14,9 @@ public class Status {
     @JacksonXmlProperty(localName = "status", isAttribute = true)
     private Type type;
     @JacksonXmlProperty(localName = "endtime", isAttribute = true)
-    private Date endTime;
+    private Instant endTime;
     @JacksonXmlProperty(localName = "starttime", isAttribute = true)
-    private Date startTime;
+    private Instant startTime;
     @JacksonXmlProperty(localName = "critical", isAttribute = true)
     private boolean critical;
     @JacksonXmlText
@@ -50,11 +50,11 @@ public class Status {
         }
     }
 
-    public Date getEndTime() {
+    public Instant getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Date endTime) {
+    public void setEndTime(Instant endTime) {
         this.endTime = endTime;
     }
 
@@ -62,11 +62,11 @@ public class Status {
         setEndTime(Converter.toDate(endTime));
     }
 
-    public Date getStartTime() {
+    public Instant getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Date startTime) {
+    public void setStartTime(Instant startTime) {
         this.startTime = startTime;
     }
 
