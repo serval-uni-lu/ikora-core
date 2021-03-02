@@ -154,4 +154,37 @@ class ArgumentUtilsTest {
         final List<Pair<String, SourceNode>> valueNodes = ArgumentUtils.getArgumentValues(keyword.getStep(0).getArgumentList().get(0));
         assertEquals(0, valueNodes.size());
     }
+
+    @Test
+    void testMultipleArgumentValues(){
+        final String code =
+            "*** Settings ***\n" +
+            "Library           SeleniumLibrary\n" +
+            "\n" +
+            "*** Test Cases ***\n" +
+            "Run the test\n" +
+            "    Keyword calling other keyword with parameters\n" +
+            "\n" +
+            "*** Keywords ***\n" +
+            "Keyword calling other keyword with parameters\n" +
+            "    Follow the link  ${simple}\n" +
+            "    Follow the link  ${complex}\n" +
+            "\n" +
+            "Follow the link\n" +
+            "    [Arguments]    ${locator}\n" +
+            "    Click Link    ${locator}\n" +
+            "\n" +
+            "*** Variables ***\n" +
+            "${simple}  link_to_click\n" +
+            "${complex}  css:.covid-form > div > div.react-grid-Container > div > div > div.react-grid-Header > div > div > div:nth-child(3) > div";
+
+        final BuildResult result = Builder.build(code, true);
+        final Project project = result.getProjects().iterator().next();
+
+        final UserKeyword followLink = project.findUserKeyword("<IN_MEMORY>", "Follow the link").iterator().next();
+        assertNotNull(followLink);
+
+        final List<Pair<String, SourceNode>> argumentValues = ArgumentUtils.getArgumentValues(followLink.getStep(0).getArgumentList().get(0));
+        assertEquals(2, argumentValues.size());
+    }
 }

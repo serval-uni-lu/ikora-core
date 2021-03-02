@@ -7,10 +7,7 @@ import lu.uni.serval.ikora.core.types.BaseTypeList;
 import lu.uni.serval.ikora.core.types.StringType;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ArgumentUtils {
@@ -37,30 +34,6 @@ public class ArgumentUtils {
         return arguments.stream().map(Argument::getDefinition).anyMatch(v -> v == value);
     }
 
-    public static List<Pair<String, SourceNode>> getArgumentValues(Argument argument){
-        List<Pair<String, SourceNode>> values = new ArrayList<>();
-
-        for(Node node: ValueResolver.getValueNodes(argument)){
-            if(node instanceof Literal){
-                values.add(Pair.of(node.getName(), (SourceNode) node));
-            }
-            else if(node instanceof Argument){
-                values.add(Pair.of(node.getName(), ((Argument)node).getDefinition()));
-            }
-            else if (node instanceof LibraryVariable){
-                values.add(Pair.of(node.getName(), argument));
-            }
-            else if(node instanceof VariableAssignment){
-                values.addAll(getAssignmentValue((VariableAssignment)node));
-            }
-            else if (node instanceof Variable){
-                values.addAll(getParameterValue((Variable)node));
-            }
-        }
-
-        return values;
-    }
-
     public static Class<? extends BaseType> getArgumentType(Argument argument){
         SourceNode parent = argument.getAstParent(true);
 
@@ -84,6 +57,34 @@ public class ArgumentUtils {
         return argumentTypes.get(index).getClass();
     }
 
+    public static List<Pair<String, SourceNode>> getArgumentValues(Argument argument){
+        return getArgumentValues(argument, new HashSet<>());
+    }
+
+    private static List<Pair<String, SourceNode>> getArgumentValues(Argument argument, Set<Keyword> memory){
+        List<Pair<String, SourceNode>> values = new ArrayList<>();
+
+        for(Node node: ValueResolver.getValueNodes(argument)){
+            if(node instanceof Literal){
+                values.add(Pair.of(node.getName(), (SourceNode) node));
+            }
+            else if(node instanceof Argument){
+                values.add(Pair.of(node.getName(), ((Argument)node).getDefinition()));
+            }
+            else if (node instanceof LibraryVariable){
+                values.add(Pair.of(node.getName(), argument));
+            }
+            else if(node instanceof VariableAssignment){
+                values.addAll(getAssignmentValue((VariableAssignment)node));
+            }
+            else if (node instanceof Variable){
+                values.addAll(getParameterValue((Variable)node, memory));
+            }
+        }
+
+        return values;
+    }
+
     private static List<Pair<String, SourceNode>> getAssignmentValue(final VariableAssignment assignment){
         final List<List<String>> values = new ArrayList<>();
 
@@ -96,7 +97,7 @@ public class ArgumentUtils {
                 .collect(Collectors.toList());
     }
 
-    private static List<Pair<String, SourceNode>> getParameterValue(final Variable variable){
+    private static List<Pair<String, SourceNode>> getParameterValue(final Variable variable, Set<Keyword> memory){
         final Optional<UserKeyword> userKeyword = ValueResolver.getUserKeywordFromArgument(variable);
 
         if(!userKeyword.isPresent()){
@@ -107,16 +108,15 @@ public class ArgumentUtils {
         final int position = userKeyword.get().getParameters().indexOf(variable);
 
         for(Node node: userKeyword.get().getDependencies()){
+            final Set<Keyword> localMemory = new HashSet<>(memory);
+
             if(!(node instanceof KeywordCall)){
                 continue;
             }
 
             final KeywordCall call = (KeywordCall) node;
-            final Optional<Keyword> keyword = call.getKeyword();
-            final Optional<UserKeyword> parent =  Ast.getParentByType(call, UserKeyword.class);
 
-            // avoid infinite recursive call if a keyword is calling itself
-            if(keyword.isPresent() && parent.isPresent() && keyword.get() == parent.get()){
+            if(call.getKeyword().map(localMemory::contains).orElse(false)){
                 continue;
             }
 
@@ -126,8 +126,10 @@ public class ArgumentUtils {
                 continue;
             }
 
+            call.getKeyword().ifPresent(localMemory::add);
+
             final Argument argument = argumentList.get(position);
-            values.addAll(getArgumentValues(argument));
+            values.addAll(getArgumentValues(argument, localMemory));
         }
 
         return values;
