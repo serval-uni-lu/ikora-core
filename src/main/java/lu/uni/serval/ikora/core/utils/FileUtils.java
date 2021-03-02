@@ -3,15 +3,14 @@ package lu.uni.serval.ikora.core.utils;
 import lu.uni.serval.ikora.core.utils.charset.CharsetDetector;
 
 import java.io.*;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.Charset;
-import java.nio.file.*;
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 public class FileUtils {
     public static final String IN_MEMORY = "<IN_MEMORY>";
@@ -55,41 +54,16 @@ public class FileUtils {
         return false;
     }
 
-    public static void copyResources(Class<?> caller, final String resources, final File destination) throws IOException, URISyntaxException {
-        final File file = new File(caller.getProtectionDomain().getCodeSource().getLocation().getPath());
-
-        if(isJarFile(file)) {
-            try(ZipFile jar = new ZipFile(file)){
-                List<? extends ZipEntry> entries = jar.stream()
-                        .filter(e -> e.getName().startsWith(resources + "/"))
-                        .sorted(Comparator.comparing(ZipEntry::getName))
-                        .collect(Collectors.toList());
-
-                for (ZipEntry entry : entries) {
-                    String name = StringUtils.removeStart(entry.getName(), resources + "/");
-                    Path entryDest = destination.toPath().resolve(name);
-
-                    if (entry.isDirectory()) {
-                        Files.createDirectory(entryDest);
-                        continue;
-                    }
-
-                    Files.copy(jar.getInputStream(entry), entryDest);
-                }
+    public static void copyResources(Class<?> caller, final String resources, final File destination) throws IOException {
+        try(final InputStream resourceAsStream = caller.getClassLoader().getResourceAsStream(resources)){
+            if(resourceAsStream == null){
+                throw new IOException(String.format("Failed to create stream for resources '%s' called from '%s' class loader",
+                        resources,
+                        caller.getCanonicalName())
+                );
             }
-        } else if(file.isDirectory()) {
-            File resourceFile = FileUtils.getResourceFile(resources);
-            if(resourceFile.exists()){
-                if(resourceFile.isDirectory()){
-                    org.apache.commons.io.FileUtils.copyDirectory(resourceFile, destination);
-                }
-                else{
-                    org.apache.commons.io.FileUtils.copyFile(resourceFile, destination);
-                }
-            }
-        }
-        else{
-            throw new IOException(String.format("Try to extract resources from unsupported file type: %s", file.getAbsolutePath()));
+
+            org.apache.commons.io.FileUtils.copyInputStreamToFile(resourceAsStream, destination);
         }
     }
 
@@ -111,53 +85,6 @@ public class FileUtils {
             return Charset.forName(match);
         } catch (Exception e) {
             return defaultCharset;
-        }
-    }
-
-    public static boolean isJarFile(File file) throws IOException {
-        if (!isZipFile(file)) {
-            return false;
-        }
-
-        ZipFile zip = new ZipFile(file);
-        boolean manifest = zip.getEntry("META-INF/MANIFEST.MF") != null;
-        zip.close();
-
-        return manifest;
-    }
-
-    public static boolean isZipFile(File file) throws IOException {
-        if(file.isDirectory()) {
-            return false;
-        }
-
-        if(!file.canRead()) {
-            throw new IOException("Cannot read file "+file.getAbsolutePath());
-        }
-
-        if(file.length() < 4) {
-            return false;
-        }
-
-        int test;
-        try(DataInputStream in = new DataInputStream(new BufferedInputStream(new FileInputStream(file)))){
-            test = in.readInt();
-        }
-
-        return test == 0x504b0304;
-    }
-
-    private static FileSystem initFileSystem(URI uri) throws IOException
-    {
-        try
-        {
-            return FileSystems.getFileSystem(uri);
-        }
-        catch( FileSystemNotFoundException e )
-        {
-            Map<String, String> env = new HashMap<>();
-            env.put("create", "true");
-            return FileSystems.newFileSystem(uri, env);
         }
     }
 }

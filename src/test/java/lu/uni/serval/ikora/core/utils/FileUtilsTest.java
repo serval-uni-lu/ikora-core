@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.time.Instant;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -38,41 +40,73 @@ class FileUtilsTest {
     }
 
     @Test
+    void testGetSubdirectoriesWithNonEmptyDirectoryByFile() throws IOException, URISyntaxException {
+        final File folder = FileUtils.getResourceFile("files/subdirectories");
+        final Set<File> subFolders = FileUtils.getSubFolders(folder);
+
+        assertEquals(2, subFolders.size());
+    }
+
+    @Test
+    void testGetSubdirectoriesWithNonEmptyDirectoryByName() throws IOException, URISyntaxException {
+        final File folder = FileUtils.getResourceFile("files/subdirectories");
+        final Set<File> subFolders = FileUtils.getSubFolders(folder.getAbsolutePath());
+
+        assertEquals(2, subFolders.size());
+    }
+
+    @Test
     void testDetectCharsetWithUTF8() throws IOException, URISyntaxException {
-        File utf8 = FileUtils.getResourceFile("files/file-in-utf8.txt");
-        Charset charset = FileUtils.detectCharset(utf8, null);
+        final File utf8 = FileUtils.getResourceFile("files/file-in-utf8.txt");
+        final Charset charset = FileUtils.detectCharset(utf8, null);
+
         assertNotNull(charset);
         assertEquals(StandardCharsets.UTF_8, charset);
     }
 
     @Test
     void testDetectCharsetWithISO88591() throws IOException, URISyntaxException {
-        File utf8 = FileUtils.getResourceFile("files/file-in-ISO-8859-1.txt");
-        Charset charset = FileUtils.detectCharset(utf8, null);
+        final File utf8 = FileUtils.getResourceFile("files/file-in-ISO-8859-1.txt");
+        final Charset charset = FileUtils.detectCharset(utf8, null);
+
         assertNotNull(charset);
         assertEquals(StandardCharsets.ISO_8859_1, charset);
     }
 
     @Test
     void testDetectCharsetWithUTF8BOM() throws IOException, URISyntaxException {
-        File utf8 = FileUtils.getResourceFile("files/file-in-utf8-bom.txt");
-        Charset charset = FileUtils.detectCharset(utf8, null);
+        final File utf8 = FileUtils.getResourceFile("files/file-in-utf8-bom.txt");
+        final Charset charset = FileUtils.detectCharset(utf8, null);
+
         assertNotNull(charset);
         assertEquals(StandardCharsets.UTF_8, charset);
     }
 
     @Test
     void testCopyResource(){
-        File destination = Helpers.getNewTmpFolder("with sépcial and space/ikora-copy-resources-test");
+        final File destination = Helpers.getNewTmpFolder("with sépcial and space/ikora-copy-resources-test");
 
         try {
             FileUtils.copyResources(getClass(), "robot/web-demo", destination);
         } catch (Exception e) {
-            System.out.println(e.getClass().getName());
             fail("exception was raised: " + e.getMessage());
         }
 
         assertTrue(destination.exists());
         Helpers.deleteDirectory(destination.getParentFile());
+    }
+
+    @Test
+    void testCopyResourceNotExistingRaiseException(){
+        final File destination = Helpers.getNewTmpFolder("some-folder-" + Instant.now().toEpochMilli());
+
+        try{
+            FileUtils.copyResources(getClass(), "not-existing", destination);
+            fail("Should have raised IOException");
+        }catch (IOException e) {
+            assertTrue(e.getMessage().contains("not-existing"));
+        }
+
+        assertFalse(destination.exists());
     }
 }
