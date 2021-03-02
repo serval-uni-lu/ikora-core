@@ -121,6 +121,35 @@ class BuilderTest {
     }
 
     @Test
+    void testKeywordWithArguments(){
+        final String code =
+                "*** Test Cases ****\n" +
+                "Some Test\n" +
+                "    Connexion to the service    username    password\n" +
+                "*** Keywords ***\n" +
+                "Connexion to the service\n" +
+                "    [Arguments]  ${user}    ${pwd}\n" +
+                "    Log    ${user}";
+
+        final BuildResult result = Builder.build(code, true);
+        Assertions.assertEquals(1, result.getProjects().size());
+
+        final Project project = result.getProjects().iterator().next();
+
+        final Set<UserKeyword> userKeywords = project.getUserKeywords();
+        assertEquals(1, userKeywords.size());
+
+        final Set<UserKeyword> ofInterest = project.findUserKeyword(Token.fromString("Connexion to the service"));
+        assertEquals(1, ofInterest.size());
+
+        final UserKeyword keyword = ofInterest.iterator().next();
+        final Step step0 = keyword.getStep(0);
+        final List<Node> valueNodes = ValueResolver.getValueNodes(step0.getArgumentList().get(0));
+
+        assertEquals(1, valueNodes.size());
+    }
+
+    @Test
     void testAssignmentFromKeyword() {
         final String code =
                 "*** Keywords ***\n" +

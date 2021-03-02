@@ -52,7 +52,7 @@ class UserKeywordParser {
             }
             else if (StringUtils.compareNoCase(label, "\\[arguments\\]")) {
                 NodeList<Variable> arguments = parseArguments(reader, label, tokens.withoutFirst(), errors);
-                userKeyword.setArgumentList(arguments);
+                userKeyword.setParameters(arguments);
             }
             else if (StringUtils.compareNoCase(label, "\\[return\\]")) {
                 NodeList<Value> returnValues = parseReturn(label, tokens.withoutFirst());

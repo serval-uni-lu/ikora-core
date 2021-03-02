@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class UserKeyword extends KeywordDefinition {
-    private NodeList<Variable> arguments;
+    private NodeList<Variable> parameters;
     private NodeList<Value> returnVariables;
 
     private KeywordCall tearDown;
@@ -20,15 +20,15 @@ public class UserKeyword extends KeywordDefinition {
     public UserKeyword(Token name) {
         super(name);
 
-        this.arguments = new NodeList<>(Token.empty());
-        this.addAstChild(this.arguments);
+        this.parameters = new NodeList<>(Token.empty());
+        this.addAstChild(this.parameters);
 
         this.returnVariables = new NodeList<>(Token.empty());
         this.addAstChild(this.returnVariables);
     }
 
-    public NodeList<Variable> getArguments() {
-        return arguments;
+    public NodeList<Variable> getParameters() {
+        return parameters;
     }
 
     public NodeList<Value> getReturnVariables() {
@@ -40,12 +40,12 @@ public class UserKeyword extends KeywordDefinition {
     }
 
     public Optional<Variable> getParameterByName(Token name) {
-        return arguments.stream().filter(a -> a.matches(name)).findFirst();
+        return parameters.stream().filter(a -> a.matches(name)).findFirst();
     }
 
-    public void setArgumentList(NodeList<Variable> arguments){
-        this.arguments = arguments;
-        this.addAstChild(this.arguments);
+    public void setParameters(NodeList<Variable> arguments){
+        this.parameters = arguments;
+        this.addAstChild(this.parameters);
         addTokens(arguments.getTokens());
     }
 
@@ -80,7 +80,7 @@ public class UserKeyword extends KeywordDefinition {
 
     @Override
     public BaseTypeList getArgumentTypes() {
-        return new BaseTypeList(arguments.stream()
+        return new BaseTypeList(parameters.stream()
                 .map(BaseTypeFactory::fromVariable)
                 .toArray(BaseType[]::new));
     }
@@ -94,7 +94,7 @@ public class UserKeyword extends KeywordDefinition {
     public List<Dependable> findDefinition(Variable variable) {
         final List<Dependable> definitions = super.findDefinition(variable);
 
-        if(arguments.stream().anyMatch(v -> v.matches(variable.getNameToken()))){
+        if(parameters.stream().anyMatch(v -> v.matches(variable.getNameToken()))){
             definitions.add(this);
         }
 

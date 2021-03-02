@@ -30,6 +30,10 @@ public class SymbolResolver {
             for(UserKeyword userKeyword: sourceFile.getUserKeywords()) {
                 symbolResolver.resolveSteps(userKeyword);
             }
+
+            for(VariableAssignment variableAssignment: sourceFile.getVariables()){
+                symbolResolver.resolveVariable(variableAssignment.getVariable());
+            }
         }
     }
 
@@ -103,11 +107,7 @@ public class SymbolResolver {
             variables.addAll(((Literal)definition).getVariables());
         }
 
-        for(Variable variable: variables){
-            for(Dependable source: resolveVariable(variable)){
-                variable.linkToDefinition(source, Link.Import.STATIC);
-            }
-        }
+        variables.forEach(this::resolveVariable);
     }
 
     private void resolveArgumentKeyword(KeywordCall call){
@@ -159,27 +159,27 @@ public class SymbolResolver {
         }
     }
 
-    private Set<Dependable> resolveVariable(Variable variable){
-        final Set<Dependable> variablesFound = new HashSet<>();
+    private void resolveVariable(Variable variable){
+        final Set<Dependable> definitions = new HashSet<>();
 
         Optional<ScopeNode> parentScope = Ast.getParentByType(variable, ScopeNode.class);
         while(parentScope.isPresent()){
-            variablesFound.addAll(parentScope.get().findDefinition(variable));
-            if(!variablesFound.isEmpty()) break;
+            definitions.addAll(parentScope.get().findDefinition(variable));
+            if(!definitions.isEmpty()) break;
 
             parentScope = Ast.getParentByType(parentScope.get(), ScopeNode.class);
         }
 
-        if(variablesFound.isEmpty()){
+        if(definitions.isEmpty()){
             final SourceFile sourceFile = variable.getSourceFile();
-            variablesFound.addAll(sourceFile.findVariable(variable.getNameToken()));
+            definitions.addAll(sourceFile.findVariable(variable.getNameToken()));
         }
 
-        if(variablesFound.isEmpty()){
+        if(definitions.isEmpty()){
             runtime.findLibraryVariable("", variable.getNameToken());
         }
 
-        return variablesFound;
+        definitions.forEach(d -> variable.linkToDefinition(d, Link.Import.STATIC));
     }
 
     private Set<? super Keyword> getKeywords(Token fullName, SourceFile sourceFile) {

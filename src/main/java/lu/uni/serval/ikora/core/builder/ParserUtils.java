@@ -116,7 +116,7 @@ public class ParserUtils {
             }
         }
 
-        ((UserKeyword)keyword).setArgumentList(arguments);
+        ((UserKeyword)keyword).setParameters(arguments);
     }
 
     public static NodeList<Literal> parseTags(Token label, Tokens tokens) {

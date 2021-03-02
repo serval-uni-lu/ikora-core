@@ -31,6 +31,10 @@ public abstract class Variable extends Value {
     }
 
     public Set<Dependable> getDefinition(Link.Import linkType){
+        if(getAstParent().getClass() == VariableAssignment.class){
+            return Collections.singleton((VariableAssignment)getAstParent());
+        }
+
         return this.link.getAllLinks(linkType);
     }
 

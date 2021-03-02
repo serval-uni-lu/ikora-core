@@ -147,6 +147,6 @@ public class ValueResolver {
         }
 
         UserKeyword userKeyword = (UserKeyword)parent;
-        return userKeyword.getArguments().contains(variable) ? Optional.of(userKeyword) : Optional.empty();
+        return userKeyword.getParameters().contains(variable) ? Optional.of(userKeyword) : Optional.empty();
     }
 }

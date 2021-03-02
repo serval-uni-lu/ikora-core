@@ -104,14 +104,23 @@ public class ArgumentUtils {
         }
 
         final List<Pair<String, SourceNode>> values = new ArrayList<>();
-        final int position = userKeyword.get().getArguments().indexOf(variable);
+        final int position = userKeyword.get().getParameters().indexOf(variable);
 
         for(Node node: userKeyword.get().getDependencies()){
             if(!(node instanceof KeywordCall)){
                 continue;
             }
 
-            final NodeList<Argument> argumentList = ((KeywordCall) node).getArgumentList();
+            final KeywordCall call = (KeywordCall) node;
+            final Optional<Keyword> keyword = call.getKeyword();
+            final Optional<UserKeyword> parent =  Ast.getParentByType(call, UserKeyword.class);
+
+            // avoid infinite recursive call if a keyword is calling itself
+            if(keyword.isPresent() && parent.isPresent() && keyword.get() == parent.get()){
+                continue;
+            }
+
+            final NodeList<Argument> argumentList = call.getArgumentList();
 
             if(!ArgumentUtils.isExpendedUntilPosition(argumentList, position)){
                 continue;
