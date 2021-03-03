@@ -11,8 +11,8 @@ import java.util.*;
 
 public class KeywordCall extends Step {
     private final Link<KeywordCall, Keyword> link;
-    private final NodeList<Argument> arguments;
 
+    private NodeList<Argument> arguments;
     private Gherkin gherkin;
 
     public KeywordCall(Token name) {
@@ -48,12 +48,11 @@ public class KeywordCall extends Step {
         return this.arguments;
     }
 
-    public void setArgumentList(NodeList<Argument> argumentList) {
-        this.clearArguments();
-
-        for(Argument argument: argumentList){
-            addArgument(argument);
-        }
+    public void setArgumentList(NodeList<Argument> arguments) {
+        this.removeAstChild(this.arguments);
+        this.arguments = arguments;
+        this.arguments.stream().map(Argument::getTokens).forEach(this::addTokens);
+        this.addAstChild(this.arguments);
     }
 
     @Override
@@ -169,15 +168,5 @@ public class KeywordCall extends Step {
         }
 
         return Optional.of(this);
-    }
-
-    private void addArgument(Argument argument) {
-        this.arguments.add(argument);
-
-        addTokens(argument.getTokens());
-    }
-
-    private void clearArguments(){
-        this.arguments.clear();
     }
 }
