@@ -37,6 +37,7 @@ class BuilderTest {
 
         final Argument argument = step.getArgumentList().get(0);
         assertTrue(argument.getName().contains("Test Status"));
+        assertNotNull(argument.getAstParent());
     }
 
     @Test
@@ -183,6 +184,7 @@ class BuilderTest {
         assertEquals(1, assignment.getLeftHandOperand().size());
         assertEquals("${EtatRun}", assignment.getLeftHandOperand().get(0).getName());
         assertEquals(1, assignment.getDependencies().size());
+        assertNotNull(assignment.getAstParent());
     }
 
     @Test
@@ -261,6 +263,7 @@ class BuilderTest {
 
         Set<VariableAssignment> variables = project.getVariableAssignments();
         assertEquals(1, variables.size());
+        assertNotNull(variables.iterator().next().getAstParent());
     }
 
     @Test
@@ -281,19 +284,20 @@ class BuilderTest {
                 "    Log    Perform some cool action\n";
 
         final BuildResult result = Builder.build(code, true);
-        Assertions.assertEquals(1, result.getProjects().size());
+        assertEquals(1, result.getProjects().size());
 
         final Project project = result.getProjects().iterator().next();
 
-        Set<UserKeyword> ofInterest = project.findUserKeyword(Token.fromString("Setup the test case"));
+        final Set<UserKeyword> ofInterest = project.findUserKeyword(Token.fromString("Setup the test case"));
         assertEquals(1, ofInterest.size());
-        Keyword keyword = ofInterest.iterator().next();
+        final Keyword keyword = ofInterest.iterator().next();
 
-        TestCase testCase = project.getTestCases().iterator().next();
+        final TestCase testCase = project.getTestCases().iterator().next();
         assertTrue(testCase.getSetup().map(KeywordCall::getKeyword).isPresent());
-        Keyword setup = testCase.getSetup().get().getKeyword().get();
+        final Optional<Keyword> setup = testCase.getSetup().get().getKeyword();
+        assertTrue(setup.isPresent());
 
-        assertEquals(setup, keyword);
+        assertEquals(keyword, setup.get());
     }
 
     @Test
@@ -314,19 +318,20 @@ class BuilderTest {
                 "    Log    Make sure nothing is polluting the environment";
 
         final BuildResult result = Builder.build(code, true);
-        Assertions.assertEquals(1, result.getProjects().size());
+        assertEquals(1, result.getProjects().size());
 
         final Project project = result.getProjects().iterator().next();
 
-        Set<UserKeyword> ofInterest = project.findUserKeyword(Token.fromString("Clean the environment"));
+        final Set<UserKeyword> ofInterest = project.findUserKeyword(Token.fromString("Clean the environment"));
         assertEquals(1, ofInterest.size());
-        Keyword keyword = ofInterest.iterator().next();
+        final Keyword keyword = ofInterest.iterator().next();
 
-        TestCase testCase = project.getTestCases().iterator().next();
+        final TestCase testCase = project.getTestCases().iterator().next();
         assertTrue(testCase.getTearDown().map(KeywordCall::getKeyword).isPresent());
-        Keyword setup = testCase.getTearDown().get().getKeyword().get();
+        final Optional<Keyword> teardown = testCase.getTearDown().get().getKeyword();
+        assertTrue(teardown.isPresent());
 
-        assertEquals(keyword, setup);
+        assertEquals(keyword, teardown.get());
     }
 
     @Test
