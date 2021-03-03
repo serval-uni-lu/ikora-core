@@ -10,6 +10,8 @@ jobs:
     name: Cache dependencies
 
     steps:
+      - uses: actions/checkout@v2
+
       - name: Cache local Maven repository
         id: cache-m2
         uses: actions/cache@v2
