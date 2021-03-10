@@ -24,6 +24,8 @@ class Converter {
     private static final DateTimeFormatter dateTimeFormatter5 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private static final DateTimeFormatter dateTimeFormatter6 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
+    private Converter() {}
+
     static Instant toDate(String date) throws DateTimeParseException {
         if(datePattern1.matcher(date).matches()){
             return toDate(date, dateTimeFormatter1);

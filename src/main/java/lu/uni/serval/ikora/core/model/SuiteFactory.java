@@ -8,6 +8,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 class SuiteFactory {
+    private SuiteFactory() {}
+
     static Suite create(SourceFile sourceFile){
         return create(null, sourceFile);
     }

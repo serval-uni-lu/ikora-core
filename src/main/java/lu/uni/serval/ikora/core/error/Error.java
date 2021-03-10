@@ -3,7 +3,7 @@ package lu.uni.serval.ikora.core.error;
 public abstract class Error {
     private final String message;
 
-    public Error(String message){
+    protected Error(String message){
         this.message = message;
     }
 

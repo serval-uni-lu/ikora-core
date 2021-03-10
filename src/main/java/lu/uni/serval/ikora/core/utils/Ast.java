@@ -6,6 +6,8 @@ import lu.uni.serval.ikora.core.model.SourceNode;
 import java.util.Optional;
 
 public class Ast {
+    private Ast() {}
+
     public static <T> Optional<T> getParentByType(SourceNode node, Class<T> parentType){
         T parent = null;
         SourceNode current = node.getAstParent();

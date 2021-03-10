@@ -55,6 +55,10 @@ public class Link<K extends SourceNode,T extends Dependable> {
     }
 
     public void addNode(T destination, Import importType) {
+        if(destination == null){
+            return;
+        }
+
         switch (importType) {
             case STATIC:
                 addNode(destination, staticCallee);
@@ -68,10 +72,6 @@ public class Link<K extends SourceNode,T extends Dependable> {
     }
 
     private void addNode(T destination, Set<T> destinations) {
-        if(destination == null){
-            return;
-        }
-
         destinations.add(destination);
     }
 }

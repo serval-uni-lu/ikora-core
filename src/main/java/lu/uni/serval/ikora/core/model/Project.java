@@ -216,13 +216,13 @@ public class Project implements Comparable<Project> {
             return source.getName();
         }
 
-        File rootFolder = this.getRootFolder().asFile();
+        File file = this.getRootFolder().asFile();
 
-        if(rootFolder.isFile()){
-            rootFolder = rootFolder.getParentFile();
+        if(file.isFile()){
+            file = file.getParentFile();
         }
 
-        Path base = Paths.get(rootFolder.getAbsolutePath().trim());
+        Path base = Paths.get(file.getAbsolutePath().trim());
 
         Path path = Paths.get(source.getAbsolutePath().trim()).normalize();
 

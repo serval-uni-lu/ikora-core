@@ -15,7 +15,7 @@ public abstract class Variable extends Value {
     protected Pattern pattern;
     protected Link<Variable, Dependable> link;
 
-    public Variable(Token name) {
+    protected Variable(Token name) {
         setName(name);
 
         this.name.setType(Token.Type.VARIABLE);

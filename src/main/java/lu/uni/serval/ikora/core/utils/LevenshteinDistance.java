@@ -11,6 +11,8 @@ import java.util.List;
 import static org.apache.commons.lang3.math.NumberUtils.min;
 
 public class LevenshteinDistance {
+    private LevenshteinDistance() {}
+
     public static int stringDistance(String string1, String string2){
         int[][] distanceMatrix = levenshteinDistance(string1, string2);
         return distanceMatrix[string1.length()][string2.length()];

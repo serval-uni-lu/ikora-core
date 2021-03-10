@@ -30,7 +30,7 @@ public class Token implements Comparable<Token> {
         this.type = type;
     }
 
-    public Token clone(){
+    public Token copy(){
         return new Token(this.text, this.line, this.startOffset, this.endOffset, this.type);
     }
 
@@ -143,7 +143,7 @@ public class Token implements Comparable<Token> {
             return this.extract(start, end);
         }
 
-        return this.clone();
+        return this.copy();
     }
 
     public Token extract(Pattern pattern){
@@ -153,7 +153,7 @@ public class Token implements Comparable<Token> {
             return this.extract(m.start(), m.end());
         }
 
-        return this.clone();
+        return this.copy();
     }
 
     public Pair<Token, Token> splitLibrary(){

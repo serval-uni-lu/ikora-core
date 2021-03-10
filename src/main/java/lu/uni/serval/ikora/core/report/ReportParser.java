@@ -6,6 +6,8 @@ import java.io.File;
 import java.io.IOException;
 
 public class ReportParser {
+    private ReportParser() {}
+
     public static Report parse(File xmlFile) throws IOException {
         if(!xmlFile.exists()){
             throw new IOException(String.format("Cannot parse report file %s, because it cannot be found",

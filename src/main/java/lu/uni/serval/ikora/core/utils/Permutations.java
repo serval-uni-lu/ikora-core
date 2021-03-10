@@ -8,7 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Permutations {
-
+    private Permutations() {}
 
     public static <T> Collection<List<T>> permutations(List<List<T>> lists) {
         if (lists == null || lists.isEmpty()) {

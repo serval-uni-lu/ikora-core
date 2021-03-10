@@ -9,6 +9,8 @@ import java.util.Optional;
 import java.util.Set;
 
 public class Cfg {
+    private Cfg() {}
+
     public static boolean isCalledBy(SourceNode node, KeywordDefinition caller){
         if(node == caller){
             return true;

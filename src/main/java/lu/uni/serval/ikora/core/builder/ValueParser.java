@@ -6,6 +6,8 @@ import org.apache.commons.math3.util.Pair;
 import java.util.Optional;
 
 public class ValueParser {
+    private ValueParser() {}
+
     public static Optional<DictionaryEntry> parseEntry(Token token){
         final Pair<Token, Token> keyValuePair = LexerUtils.getKeyValuePair(token);
 

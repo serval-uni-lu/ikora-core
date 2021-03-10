@@ -26,8 +26,7 @@ public class SourceNodeTable<T extends SourceNode> extends SourceNode implements
         this.addAstChild(this.nodeList);
     }
 
-    @Override
-    public SourceNodeTable<T> clone(){
+    public SourceNodeTable<T> copy(){
         return new SourceNodeTable<>(header, nodeList);
     }
 

@@ -10,7 +10,7 @@ public abstract class Step extends SourceNode {
     private Token name;
     protected KeywordCall template;
 
-    public Step(Token name) {
+    protected Step(Token name) {
         setName(name);
     }
 
