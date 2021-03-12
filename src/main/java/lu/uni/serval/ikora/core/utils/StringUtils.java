@@ -64,18 +64,12 @@ public class StringUtils {
         return String.format("%s...", line.substring(0, maxSize - 3));
     }
 
-    public static String removeStart(String str, String remove) {
-        if (str.isEmpty() || remove.isEmpty()) {
-            return str;
-        }
-        if (str.startsWith(remove)){
-            return str.substring(remove.length());
-        }
-        return str;
+    public static String trimLeft(String string, String removeChars) {
+        return org.apache.commons.lang3.StringUtils.stripStart(string, removeChars);
     }
 
-    public static String trimLeft(String string, String remove) {
-        return org.apache.commons.lang3.StringUtils.stripEnd(string, remove);
+    public static String trimRight(String string, String removeChars) {
+        return org.apache.commons.lang3.StringUtils.stripEnd(string, removeChars);
     }
 
     public static boolean compareNoCase(Token token, String regex){

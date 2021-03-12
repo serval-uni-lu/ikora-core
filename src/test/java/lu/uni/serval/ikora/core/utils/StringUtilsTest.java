@@ -60,10 +60,18 @@ class StringUtilsTest {
     }
 
     @Test
+    void testTrimRight(){
+        assertEquals("${variable}", StringUtils.trimRight("${variable}=", "="));
+        assertEquals("${variable}", StringUtils.trimRight("${variable} =", " ="));
+        assertEquals("=${variable}", StringUtils.trimRight("=${variable}", "="));
+        assertEquals("${variable}=", StringUtils.trimRight("${variable}=", "<"));
+    }
+
+    @Test
     void testTrimLeft(){
-        assertEquals("${variable}", StringUtils.trimLeft("${variable}=", "="));
-        assertEquals("${variable}", StringUtils.trimLeft("${variable} =", " ="));
-        assertEquals("=${variable}", StringUtils.trimLeft("=${variable}", "="));
-        assertEquals("${variable}=", StringUtils.trimLeft("${variable}=", "<"));
+        assertEquals("{variable}", StringUtils.trimLeft("${variable}", "$"));
+        assertEquals("{variable}", StringUtils.trimLeft(" ${variable}", " $"));
+        assertEquals("{variable}$", StringUtils.trimLeft("{variable}$", "="));
+        assertEquals("${variable}", StringUtils.trimLeft("${variable}", "<"));
     }
 }
