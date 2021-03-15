@@ -11,6 +11,8 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -176,7 +178,7 @@ class ArgumentUtilsTest {
             "\n" +
             "*** Variables ***\n" +
             "${simple}  link_to_click\n" +
-            "${complex}  css:.covid-form > div > div.react-grid-Container > div > div > div.react-grid-Header > div > div > div:nth-child(3) > div";
+            "${complex}  css:.covid-form > div";
 
         final BuildResult result = Builder.build(code, true);
         final Project project = result.getProjects().iterator().next();
@@ -186,5 +188,30 @@ class ArgumentUtilsTest {
 
         final List<Pair<String, SourceNode>> argumentValues = ArgumentUtils.getArgumentValues(followLink.getStep(0).getArgumentList().get(0));
         assertEquals(2, argumentValues.size());
+
+        final Set<String> values = argumentValues.stream().map(Pair::getKey).collect(Collectors.toSet());
+        assertTrue(values.contains("link_to_click"));
+        assertTrue(values.contains("css:.covid-form > div"));
+    }
+
+    @Test
+    void testRecursiveCallWithRunIf(){
+        final String code =
+            "*** Keywords ***\n" +
+            "Run something conditionally\n" +
+            "\t[Arguments]\t${parameter}\n"+
+            "\tRun Keyword If\t'''${should_do_it}'''=='''True'''\tSomething\t${parameter}\n"+
+            "Something\n" +
+            "\t[Arguments]\t${parameter}\n"+
+            "\tRun something conditionally\t${parameter}\n";
+
+        final BuildResult result = Builder.build(code, true);
+        final Project project = result.getProjects().iterator().next();
+
+        final UserKeyword something = project.findUserKeyword("<IN_MEMORY>", "Something").iterator().next();
+        assertNotNull(something);
+
+        final List<Pair<String, SourceNode>> argumentValues = ArgumentUtils.getArgumentValues(something.getStep(0).getArgumentList().get(0));
+        assertEquals(0, argumentValues.size());
     }
 }

@@ -1,7 +1,5 @@
 package lu.uni.serval.ikora.core.utils;
 
-import com.google.common.collect.Lists;
-
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -15,7 +13,7 @@ public class Permutations {
             return Collections.emptyList();
         }
 
-        Collection<List<T>> res = Lists.newLinkedList();
+        Collection<List<T>> res = new LinkedList<>();
         permutationsImpl(lists, res, 0, new LinkedList<>());
 
         return res;
@@ -30,7 +28,7 @@ public class Permutations {
         Collection<T> currentCollection = origin.get(depth);
 
         for (T element : currentCollection) {
-            List<T> copy = Lists.newLinkedList(current);
+            List<T> copy = new LinkedList<>(current);
             copy.add(element);
             permutationsImpl(origin, res, depth + 1, copy);
         }

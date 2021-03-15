@@ -61,7 +61,7 @@ public class ArgumentUtils {
         return getArgumentValues(argument, new HashSet<>());
     }
 
-    private static List<Pair<String, SourceNode>> getArgumentValues(Argument argument, Set<Keyword> memory){
+    private static List<Pair<String, SourceNode>> getArgumentValues(Argument argument, Set<Variable> memory){
         List<Pair<String, SourceNode>> values = new ArrayList<>();
 
         for(Node node: ValueResolver.getValueNodes(argument)){
@@ -78,7 +78,7 @@ public class ArgumentUtils {
                 values.addAll(getAssignmentValue((VariableAssignment)node));
             }
             else if (node instanceof Variable){
-                values.addAll(getParameterValue((Variable)node, memory));
+                values.addAll(getParameterValueFromCalls((Variable)node, memory));
             }
         }
 
@@ -97,7 +97,11 @@ public class ArgumentUtils {
                 .collect(Collectors.toList());
     }
 
-    private static List<Pair<String, SourceNode>> getParameterValue(final Variable variable, Set<Keyword> memory){
+    private static List<Pair<String, SourceNode>> getParameterValueFromCalls(final Variable variable, Set<Variable> memory){
+        if(!memory.add(variable)){
+            return Collections.emptyList();
+        }
+
         final Optional<UserKeyword> userKeyword = ValueResolver.getUserKeywordFromArgument(variable);
 
         if(!userKeyword.isPresent()){
@@ -108,17 +112,11 @@ public class ArgumentUtils {
         final int position = userKeyword.get().getParameters().indexOf(variable);
 
         for(Node node: userKeyword.get().getDependencies()){
-            final Set<Keyword> localMemory = new HashSet<>(memory);
-
             if(!(node instanceof KeywordCall)){
                 continue;
             }
 
             final KeywordCall call = (KeywordCall) node;
-
-            if(call.getKeyword().map(localMemory::contains).orElse(false)){
-                continue;
-            }
 
             final NodeList<Argument> argumentList = call.getArgumentList();
 
@@ -126,10 +124,8 @@ public class ArgumentUtils {
                 continue;
             }
 
-            call.getKeyword().ifPresent(localMemory::add);
-
             final Argument argument = argumentList.get(position);
-            values.addAll(getArgumentValues(argument, localMemory));
+            values.addAll(getArgumentValues(argument, memory));
         }
 
         return values;
