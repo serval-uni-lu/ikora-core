@@ -16,7 +16,7 @@ jobs:
         id: cache-m2
         uses: actions/cache@v2
         with:
-          path: ~/.m2/repository
+          path: ~/.m2
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
 
       - name: Set up JDK 1.8
