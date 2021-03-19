@@ -30,9 +30,4 @@ public class UserKeywordTest {
         assertTrue(keyword.getParameterByName(scalar).isPresent());
         assertEquals(scalar.getText(), keyword.getParameterByName(scalar).get().getName());
     }
-
-    @Test
-    void testDictionaryVariable(){
-
-    }
 }
