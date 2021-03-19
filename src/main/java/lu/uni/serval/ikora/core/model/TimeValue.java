@@ -1,7 +1,8 @@
 package lu.uni.serval.ikora.core.model;
 
+import org.apache.commons.lang3.math.NumberUtils;
+
 import java.util.regex.Pattern;
-import org.apache.commons.lang.math.NumberUtils;
 
 public class TimeValue {
     private static final Pattern stringPattern;
@@ -68,7 +69,7 @@ public class TimeValue {
             return false;
         }
 
-        if(NumberUtils.isNumber(token.getText())){
+        if(NumberUtils.isCreatable(token.getText())){
             return true;
         }
 

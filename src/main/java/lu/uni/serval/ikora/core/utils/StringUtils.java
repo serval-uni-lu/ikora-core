@@ -1,6 +1,5 @@
 package lu.uni.serval.ikora.core.utils;
 
-import org.apache.commons.text.WordUtils;
 import lu.uni.serval.ikora.core.model.Token;
 
 import java.io.UnsupportedEncodingException;
@@ -33,9 +32,25 @@ public class StringUtils {
         return ++count;
     }
 
+    public static String capitalize(String string) {
+        char[] chars = string.toLowerCase().toCharArray();
+        boolean found = false;
+
+        for (int i = 0; i < chars.length; i++) {
+            if (!found && Character.isLetter(chars[i])) {
+                chars[i] = Character.toUpperCase(chars[i]);
+                found = true;
+            } else if (Character.isWhitespace(chars[i])) {
+                found = false;
+            }
+        }
+
+        return String.valueOf(chars);
+    }
+
     public static String toBeautifulName(String raw){
-        String name = org.apache.commons.lang.StringUtils.join(org.apache.commons.lang.StringUtils.splitByCharacterTypeCamelCase(raw.toLowerCase()), ' ');
-        name = WordUtils.capitalize(name.replaceAll("_|-+", " "));
+        String name = String.join(" ", org.apache.commons.lang3.StringUtils.splitByCharacterTypeCamelCase(raw.toLowerCase()));
+        name = capitalize(name.replaceAll("_|-+", " "));
 
         return name.replaceAll("\\s+", " ").trim();
     }
