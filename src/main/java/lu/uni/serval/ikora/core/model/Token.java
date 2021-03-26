@@ -137,7 +137,7 @@ public class Token implements Comparable<Token> {
             }
 
             if(m.end() == this.text.length()){
-                end = m.start();
+                end = start;
             }
 
             return this.extract(start, end);
