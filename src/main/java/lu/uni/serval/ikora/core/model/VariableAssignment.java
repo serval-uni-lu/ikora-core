@@ -20,7 +20,8 @@ public class VariableAssignment extends SourceNode implements Dependable{
         this.dependencies = new HashSet<>();
         this.addTokens(variable.getTokens());
 
-        addAstChild(variable);
+        addAstChild(this.variable);
+        addAstChild(this.values);
     }
 
     public void addValue(SourceNode value) {

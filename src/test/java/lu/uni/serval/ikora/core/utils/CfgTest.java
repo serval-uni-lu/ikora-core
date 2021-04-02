@@ -114,11 +114,23 @@ public class CfgTest {
         final TestCase validLogin = loginProject.findTestCase(FileUtils.IN_MEMORY, "Valid Login")
                 .iterator().next();
 
-        final Argument loginButton = loginProject.findUserKeyword(FileUtils.IN_MEMORY, "Submit Credentials")
-                .iterator().next()
-                .getStep(0)
-                .getArgumentList().get(0);
+        final VariableAssignment server = loginProject.findVariable(FileUtils.IN_MEMORY, "${PASSWORD_FIELD}")
+                .iterator().next();
 
-        assertTrue(Cfg.isCalledBy(loginButton, validLogin));
+        assertTrue(Cfg.isCalledBy(server, validLogin));
+    }
+
+    @Test
+    void testIsCalledFromVariableAssignmentValue(){
+        final TestCase validLogin = loginProject.findTestCase(FileUtils.IN_MEMORY, "Valid Login")
+                .iterator().next();
+
+        final VariableAssignment password = loginProject.findVariable(FileUtils.IN_MEMORY, "${PASSWORD_FIELD}")
+                .iterator().next();
+
+        final Argument passwordField = password.getValues().get(0);
+
+
+        assertTrue(Cfg.isCalledBy(passwordField, validLogin));
     }
 }

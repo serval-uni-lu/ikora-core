@@ -1,10 +1,12 @@
 package lu.uni.serval.ikora.core.utils;
 
 import lu.uni.serval.ikora.core.analytics.KeywordStatistics;
+import lu.uni.serval.ikora.core.model.Dependable;
 import lu.uni.serval.ikora.core.model.KeywordDefinition;
 import lu.uni.serval.ikora.core.model.SourceNode;
 import lu.uni.serval.ikora.core.model.Token;
 
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -16,13 +18,15 @@ public class Cfg {
             return true;
         }
 
-        KeywordDefinition parent = getParentKeywordDefinition(node);
+        final Set<KeywordDefinition> dependencies = new HashSet<>();
+        final KeywordDefinition parent = getParentKeywordDefinition(node);
 
-        if(parent == null){
-            return false;
+        if(parent != null){
+            dependencies.addAll(KeywordStatistics.getDependencies(parent));
         }
-
-        final Set<KeywordDefinition> dependencies = KeywordStatistics.getDependencies(parent);
+        else{
+            dependencies.addAll(KeywordStatistics.getDependencies(node));
+        }
 
         return dependencies.contains(caller);
     }

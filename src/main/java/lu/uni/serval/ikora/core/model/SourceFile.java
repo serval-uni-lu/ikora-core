@@ -208,8 +208,8 @@ public class SourceFile extends SourceNode {
         return findNode(null, name, new HashSet<>(), VariableAssignment.class);
     }
 
-    public Set<Variable> findVariable(String library, Token name) {
-        return findNode(library, name, new HashSet<>(), Variable.class);
+    public Set<VariableAssignment> findVariable(String library, Token name) {
+        return findNode(library, name, new HashSet<>(), VariableAssignment.class);
     }
 
     private <T> Set<T> findNode(String library, Token name, Set<SourceFile> memory, Class<T> type){

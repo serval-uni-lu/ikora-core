@@ -121,6 +121,16 @@ public class Project implements Comparable<Project> {
         return userKeywordsFound;
     }
 
+    public Set<VariableAssignment> findVariable(String library, String name) {
+        Set<VariableAssignment> variablesFound = new HashSet<>();
+
+        for(SourceFile file: files.values()){
+            variablesFound.addAll(file.findVariable(library, Token.fromString(name)));
+        }
+
+        return variablesFound;
+    }
+
     public Set<Resources> getExternalResources() {
         Set<Resources> externalResources = new HashSet<>();
 
