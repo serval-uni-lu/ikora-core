@@ -7,6 +7,12 @@ import java.util.Optional;
 public class VisitorUtils {
     private VisitorUtils(){}
 
+    public static void accept(NodeVisitor visitor, Node node, VisitorMemory memory){
+        if(memory.isAcceptable(node)){
+            node.accept(visitor, memory.getUpdated(node));
+        }
+    }
+
     public static void traverseDependencies(NodeVisitor visitor, Node node, VisitorMemory memory){
         memory = memory.getUpdated(node);
 

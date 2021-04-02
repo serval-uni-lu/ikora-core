@@ -155,7 +155,7 @@ public class SourceFile extends SourceNode {
 
     @Override
     public void accept(NodeVisitor visitor, VisitorMemory memory) {
-
+        visitor.visit(this, memory);
     }
 
     @Override

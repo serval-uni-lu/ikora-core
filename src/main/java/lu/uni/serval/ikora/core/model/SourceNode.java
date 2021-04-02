@@ -9,13 +9,11 @@ import java.util.*;
 public abstract class SourceNode implements Node {
     private SourceNode astParent;
     private final List<SourceNode> astChildren;
-    private final Set<SourceNode> dependencies;
     private final Tokens tokens;
 
     SourceNode(){
         astParent = null;
         astChildren = new ArrayList<>();
-        dependencies = new HashSet<>();
         tokens = new Tokens();
     }
 
@@ -114,8 +112,6 @@ public abstract class SourceNode implements Node {
     public List<SourceNode> getAstChildren() {
         return astChildren;
     }
-
-
 
     public boolean isDeadCode(){
         final Set<SourceNode> dependencies = Ast.getParentByType(this, Dependable.class)

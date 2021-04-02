@@ -272,7 +272,7 @@ public class Settings extends SourceNode implements Delayable {
 
     @Override
     public void accept(NodeVisitor visitor, VisitorMemory memory) {
-
+        visitor.visit(this, memory);
     }
 
     @Override

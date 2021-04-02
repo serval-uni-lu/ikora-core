@@ -199,7 +199,7 @@ public class NodeList<N extends SourceNode> extends SourceNode implements List<N
 
     @Override
     public void accept(NodeVisitor visitor, VisitorMemory memory) {
-
+        visitor.visit(this, memory);
     }
 
     @Override

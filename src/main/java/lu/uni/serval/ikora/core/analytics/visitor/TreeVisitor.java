@@ -6,7 +6,7 @@ import org.apache.commons.lang3.NotImplementedException;
 public class TreeVisitor implements NodeVisitor {
     @Override
     public void visit(SourceNode sourceNode, VisitorMemory memory) {
-        sourceNode.accept(this, memory);
+        VisitorUtils.accept(this, sourceNode, memory);
     }
 
     @Override
