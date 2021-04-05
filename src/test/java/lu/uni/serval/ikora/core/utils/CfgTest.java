@@ -128,7 +128,7 @@ public class CfgTest {
         final VariableAssignment password = loginProject.findVariable(FileUtils.IN_MEMORY, "${PASSWORD_FIELD}")
                 .iterator().next();
 
-        final Argument passwordField = password.getValues().get(0);
+        final SourceNode passwordField = password.getValues().get(0).getDefinition();
 
 
         assertTrue(Cfg.isCalledBy(passwordField, validLogin));

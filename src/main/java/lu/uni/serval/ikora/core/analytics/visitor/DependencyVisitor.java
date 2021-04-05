@@ -5,7 +5,7 @@ import lu.uni.serval.ikora.core.model.*;
 public class DependencyVisitor implements NodeVisitor {
     @Override
     public void visit(SourceNode sourceNode, VisitorMemory memory) {
-        VisitorUtils.accept(this, sourceNode, memory);
+        VisitorUtils.traverseDependencies(this, sourceNode, memory);
     }
 
     @Override
