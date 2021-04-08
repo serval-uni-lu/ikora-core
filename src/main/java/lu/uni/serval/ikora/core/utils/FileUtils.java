@@ -93,7 +93,7 @@ public class FileUtils {
             if(i + 1 < pathList.size()){
                 final String childPath = getRelativeResourcePath(pathList.get(0).toUri(), pathList.get(i + 1).toUri());
 
-                if (childPath.endsWith(relativePath)) {
+                if (childPath.startsWith(relativePath)) {
                     currentDirectory = new File(destination, relativePath);
                     currentDirectory.mkdirs();
                     continue;
@@ -106,8 +106,6 @@ public class FileUtils {
     }
 
     private static void copyResourcesFile(final Class<?> caller, final String resources, final File destination) throws IOException {
-        System.out.println("copyResourcesFile - resources: " + resources);
-        System.out.println("copyResourcesFile - destination: " + destination.getAbsolutePath());
         try(final InputStream resourceAsStream = caller.getClassLoader().getResourceAsStream(resources)){
             if(resourceAsStream == null){
                 throw new IOException(String.format("Failed to create stream for resources '%s' called from '%s' class loader",
@@ -122,12 +120,11 @@ public class FileUtils {
 
     public static String getRelativeResourcePath(URI base, URI child){
         if ("jar".equals(child.getScheme())) {
-            final String schemeSpecificPart = child.getSchemeSpecificPart();
-            return child.getSchemeSpecificPart()
-                    .substring(schemeSpecificPart.indexOf("!") + 1);
-        } else {
-            return base.relativize(child).getPath();
+            base = parseResourceName(base);
+            child = parseResourceName(child);
         }
+
+        return base.relativize(child).getPath();
     }
 
     public static File getResourceFile(String name) throws IOException, URISyntaxException {
@@ -177,6 +174,15 @@ public class FileUtils {
     private static String parseFileName(URI uri) {
         String schemeSpecificPart = uri.getSchemeSpecificPart();
         return schemeSpecificPart.substring(0, schemeSpecificPart.indexOf("!"));
+    }
+
+    private static URI parseResourceName(URI uri){
+        String schemeSpecificPart = uri.getSchemeSpecificPart();
+        return URI.create(
+                schemeSpecificPart
+                .substring(schemeSpecificPart.indexOf("!") + 1)
+                .replaceAll("^/", "")
+        );
     }
 
     private static FileSystem getFileSystem(URI uri) throws IOException {

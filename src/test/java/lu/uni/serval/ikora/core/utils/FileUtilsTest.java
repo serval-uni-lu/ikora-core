@@ -143,7 +143,7 @@ class FileUtilsTest {
 
         final String relativeResourcePath = FileUtils.getRelativeResourcePath(resourceBase, resourceFile);
 
-        assertEquals("/robot", relativeResourcePath);
+        assertEquals("robot", relativeResourcePath);
     }
 
     @Test
