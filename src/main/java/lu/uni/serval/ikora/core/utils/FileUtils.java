@@ -12,6 +12,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class FileUtils {
     public static final String IN_MEMORY = "<IN_MEMORY>";
@@ -152,15 +153,21 @@ public class FileUtils {
         if ("jar".equals(uri.getScheme())) {
             return safeWalkJar(resources, uri);
         } else {
-            return Files.walk(Paths.get(uri)).collect(Collectors.toList());
+            return walkFiles(Paths.get(uri));
         }
     }
 
     private static List<Path> safeWalkJar(String path, URI uri) throws Exception {
         synchronized (getLock(uri)) {
             try (FileSystem fs = getFileSystem(uri)) {
-                return Files.walk(fs.getPath(path)).collect(Collectors.toList());
+                return walkFiles(fs.getPath(path));
             }
+        }
+    }
+
+    private static List<Path> walkFiles(Path path) throws IOException {
+        try (Stream<Path> stream = Files.walk(path)){
+            return stream.collect(Collectors.toList());
         }
     }
 
