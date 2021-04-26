@@ -21,10 +21,18 @@ public class PathMemory implements VisitorMemory {
 
     @Override
     public boolean isAcceptable(Node node) {
+        if(node == null){
+            return false;
+        }
+
         return !visited.contains(node);
     }
 
     protected void add(Node node){
+        if(node == null){
+            return;
+        }
+
         if(!SourceNode.class.isAssignableFrom(node.getClass())){
             return;
         }
