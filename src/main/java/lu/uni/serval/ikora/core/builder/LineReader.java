@@ -1,27 +1,21 @@
 package lu.uni.serval.ikora.core.builder;
 
-import org.apache.commons.io.input.BOMInputStream;
 import lu.uni.serval.ikora.core.model.Source;
 import lu.uni.serval.ikora.core.model.SourceFile;
 import lu.uni.serval.ikora.core.utils.FileUtils;
 
 import java.io.*;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 
 public class LineReader {
-    private LineNumberReader reader;
+    private final LineNumberReader reader;
+    private final Source source;
+    private final SourceFile sourceFile;
+
     private Line current;
-    private Source source;
-    private SourceFile sourceFile;
 
-    public LineReader(File file) throws FileNotFoundException {
+    public LineReader(File file) throws IOException {
         this.source = new Source(file);
-
-        Charset charset = FileUtils.detectCharset(file, StandardCharsets.UTF_8);
-        InputStreamReader input = new InputStreamReader(new BOMInputStream(new FileInputStream(file)), charset);
-        this.reader = new LineNumberReader(input);
-
+        this.reader = new LineNumberReader(FileUtils.getUnicodeReader(file));
         this.sourceFile = null;
     }
 
@@ -32,7 +26,7 @@ public class LineReader {
         this.sourceFile = null;
     }
 
-    public LineReader(SourceFile sourceFile) throws FileNotFoundException {
+    public LineReader(SourceFile sourceFile) throws IOException {
         this.sourceFile = sourceFile;
         this.source = this.sourceFile.getSource();
 
@@ -41,9 +35,7 @@ public class LineReader {
             this.reader = new LineNumberReader(new StringReader(this.source.asString()));
         }
         else {
-            Charset charset = FileUtils.detectCharset(this.source.asFile(), StandardCharsets.UTF_8);
-            InputStreamReader input = new InputStreamReader(new FileInputStream(this.source.asFile()), charset);
-            this.reader = new LineNumberReader(input);
+            this.reader = new LineNumberReader(FileUtils.getUnicodeReader(this.source.asFile()));
         }
     }
 

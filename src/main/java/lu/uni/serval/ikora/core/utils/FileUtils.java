@@ -1,12 +1,13 @@
 package lu.uni.serval.ikora.core.utils;
 
-import lu.uni.serval.ikora.core.utils.charset.CharsetDetector;
+import com.ibm.icu.text.CharsetDetector;
+import com.ibm.icu.text.CharsetMatch;
+import org.apache.commons.io.input.BOMInputStream;
 
 import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.charset.Charset;
 import java.nio.file.*;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -137,16 +138,13 @@ public class FileUtils {
         return Paths.get(resource.toURI()).toFile();
     }
 
-    public static Charset detectCharset(File f, Charset defaultCharset) {
-        try(BufferedInputStream input = new BufferedInputStream(new FileInputStream(f))) {
-            CharsetDetector detector = new CharsetDetector();
-            detector.setText(input);
+    public static Reader getUnicodeReader(File f) throws IOException {
+        final CharsetDetector detector = new CharsetDetector();
+        final BufferedInputStream dataStream = new BufferedInputStream(new BOMInputStream(new FileInputStream(f)));
+        detector.setText(dataStream);
 
-            String match = detector.detect().getName();
-            return Charset.forName(match);
-        } catch (Exception e) {
-            return defaultCharset;
-        }
+        final CharsetMatch match = detector.detect();
+        return match.getReader();
     }
 
     private static List<Path> walk(URI uri, final String resources) throws Exception {

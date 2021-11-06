@@ -1,11 +1,13 @@
 package lu.uni.serval.ikora.core.utils;
 
+import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import lu.uni.serval.ikora.core.Helpers;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Reader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
@@ -59,28 +61,28 @@ class FileUtilsTest {
     @Test
     void testDetectCharsetWithUTF8() throws IOException, URISyntaxException {
         final File utf8 = FileUtils.getResourceFile("files/file-in-utf8.txt");
-        final Charset charset = FileUtils.detectCharset(utf8, null);
+        final Reader unicodeReader = FileUtils.getUnicodeReader(utf8);
+        final String text = IOUtils.toString(unicodeReader);
 
-        assertNotNull(charset);
-        assertEquals(StandardCharsets.UTF_8, charset);
+        assertEquals("Text with strange characters: éèàçù", text);
     }
 
     @Test
     void testDetectCharsetWithISO88591() throws IOException, URISyntaxException {
         final File utf8 = FileUtils.getResourceFile("files/file-in-ISO-8859-1.txt");
-        final Charset charset = FileUtils.detectCharset(utf8, null);
+        final Reader unicodeReader = FileUtils.getUnicodeReader(utf8);
+        final String text = IOUtils.toString(unicodeReader);
 
-        assertNotNull(charset);
-        assertEquals(StandardCharsets.ISO_8859_1, charset);
+        assertEquals("Text with strange characters: éèàçù", text);
     }
 
     @Test
     void testDetectCharsetWithUTF8BOM() throws IOException, URISyntaxException {
         final File utf8 = FileUtils.getResourceFile("files/file-in-utf8-bom.txt");
-        final Charset charset = FileUtils.detectCharset(utf8, null);
+        final Reader unicodeReader = FileUtils.getUnicodeReader(utf8);
+        final String text = IOUtils.toString(unicodeReader);
 
-        assertNotNull(charset);
-        assertEquals(StandardCharsets.UTF_8, charset);
+        assertEquals("Text with strange characters: éèàçù", text);
     }
 
     @Test

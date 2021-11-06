@@ -1,7 +1,6 @@
 package lu.uni.serval.ikora.core.utils;
 
 import lu.uni.serval.ikora.core.analytics.KeywordStatistics;
-import lu.uni.serval.ikora.core.model.Dependable;
 import lu.uni.serval.ikora.core.model.KeywordDefinition;
 import lu.uni.serval.ikora.core.model.SourceNode;
 import lu.uni.serval.ikora.core.model.Token;
