@@ -118,7 +118,7 @@ public abstract class SourceNode implements Node {
                 .map(Dependable::getDependencies)
                 .orElse(Collections.emptySet());
 
-        return dependencies.size() == 0;
+        return dependencies.isEmpty();
     }
 
     public void addToken(Token token){

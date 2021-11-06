@@ -14,7 +14,7 @@ import java.io.IOException;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class SettingsTableParserTest {
+class SettingsTableParserTest {
     @Test
     void testDocumentationParse() throws IOException {
         String settingText = "***Settings***\n\n" +

@@ -8,7 +8,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class LibraryLoaderTest {
+class LibraryLoaderTest {
     @Test
     void testLibraryImports() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         ErrorManager errors = new ErrorManager();

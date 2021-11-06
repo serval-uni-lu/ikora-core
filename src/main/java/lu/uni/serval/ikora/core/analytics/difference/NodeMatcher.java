@@ -9,7 +9,7 @@ import java.util.*;
 
 public class NodeMatcher {
     enum Edit{
-        ChangeName, ChangeFolder, ChangeFile, ChangeAll
+        CHANGE_NAME, CHANGE_FOLDER, CHANGE_FILE, CHANGE_ALL
     }
 
     public static <T extends SourceNode> List<Pair<T,T>> getPairs(Set<T> nodes1, Set<T> nodes2, boolean ignoreProjectName) {
@@ -97,7 +97,7 @@ public class NodeMatcher {
 
     private static <T extends SourceNode> Map<Edit, List<T>> findPotentialCandidates(T t, List<T> unmatched) {
         String fileName = new File(t.getLibraryName()).getName();
-        Map<Edit, List<T>> candidates = new HashMap<>();
+        EnumMap<Edit, List<T>> candidates = new EnumMap<>(Edit.class);
 
         for (T current: unmatched){
             if(t.distance(current) != 0.){
@@ -107,24 +107,24 @@ public class NodeMatcher {
             String currentFileName = current.getLibraryName();
 
             if(current.getLibraryName().equals(t.getLibraryName())){
-                List<T> list = candidates.getOrDefault(Edit.ChangeName, new ArrayList<>());
+                List<T> list = candidates.getOrDefault(Edit.CHANGE_NAME, new ArrayList<>());
                 list.add(current);
-                candidates.put(Edit.ChangeName, list);
+                candidates.put(Edit.CHANGE_NAME, list);
             }
             else if(current.getName().equals(t.getName()) && currentFileName.equals(fileName)){
-                List<T> list = candidates.getOrDefault(Edit.ChangeFolder, new ArrayList<>());
+                List<T> list = candidates.getOrDefault(Edit.CHANGE_FOLDER, new ArrayList<>());
                 list.add(current);
-                candidates.put(Edit.ChangeFolder, list);
+                candidates.put(Edit.CHANGE_FOLDER, list);
             }
             else if(current.getName().equals(t.getName())){
-                List<T> list = candidates.getOrDefault(Edit.ChangeFile, new ArrayList<>());
+                List<T> list = candidates.getOrDefault(Edit.CHANGE_FILE, new ArrayList<>());
                 list.add(current);
-                candidates.put(Edit.ChangeFile, list);
+                candidates.put(Edit.CHANGE_FILE, list);
             }
             else{
-                List<T> list = candidates.getOrDefault(Edit.ChangeAll, new ArrayList<>());
+                List<T> list = candidates.getOrDefault(Edit.CHANGE_ALL, new ArrayList<>());
                 list.add(current);
-                candidates.put(Edit.ChangeAll, list);
+                candidates.put(Edit.CHANGE_ALL, list);
             }
         }
 
@@ -136,17 +136,17 @@ public class NodeMatcher {
 
         T bestCandidate = null;
 
-        if(!candidates.getOrDefault(Edit.ChangeName, new ArrayList<>()).isEmpty()){
-            bestCandidate = candidates.get(Edit.ChangeName).get(0);
+        if(!candidates.getOrDefault(Edit.CHANGE_NAME, new ArrayList<>()).isEmpty()){
+            bestCandidate = candidates.get(Edit.CHANGE_NAME).get(0);
         }
-        else if(!candidates.getOrDefault(Edit.ChangeFolder, new ArrayList<>()).isEmpty()){
-            bestCandidate = candidates.get(Edit.ChangeFolder).get(0);
+        else if(!candidates.getOrDefault(Edit.CHANGE_FOLDER, new ArrayList<>()).isEmpty()){
+            bestCandidate = candidates.get(Edit.CHANGE_FOLDER).get(0);
         }
-        else if(!candidates.getOrDefault(Edit.ChangeFile, new ArrayList<>()).isEmpty()){
-            bestCandidate = candidates.get(Edit.ChangeFile).get(0);
+        else if(!candidates.getOrDefault(Edit.CHANGE_FILE, new ArrayList<>()).isEmpty()){
+            bestCandidate = candidates.get(Edit.CHANGE_FILE).get(0);
         }
-        else if(!candidates.getOrDefault(Edit.ChangeAll, new ArrayList<>()).isEmpty()){
-            bestCandidate = candidates.get(Edit.ChangeAll).get(0);
+        else if(!candidates.getOrDefault(Edit.CHANGE_ALL, new ArrayList<>()).isEmpty()){
+            bestCandidate = candidates.get(Edit.CHANGE_ALL).get(0);
         }
 
         if(bestCandidate != null){

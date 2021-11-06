@@ -59,15 +59,7 @@ public class Link<K extends SourceNode,T extends Dependable> {
             return;
         }
 
-        switch (importType) {
-            case STATIC:
-                addNode(destination, staticCallee);
-                break;
-            case DYNAMIC:
-                addNode(destination, dynamicCallee);
-                break;
-        }
-
+        addNode(destination, importType == Import.STATIC ? staticCallee: dynamicCallee);
         destination.addDependency(source);
     }
 
