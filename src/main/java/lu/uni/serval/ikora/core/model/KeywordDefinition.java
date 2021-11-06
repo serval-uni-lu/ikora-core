@@ -38,7 +38,7 @@ public abstract class KeywordDefinition extends SourceNode implements Keyword, I
         this.name = name;
     }
 
-    public void addStep(Step step) throws Exception {
+    public void addStep(Step step) {
         this.steps.add(step);
         addTokens(step.getTokens());
     }

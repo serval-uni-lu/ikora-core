@@ -6,6 +6,7 @@ import lu.uni.serval.ikora.core.analytics.visitor.VisitorMemory;
 import lu.uni.serval.ikora.core.exception.RunnerException;
 import lu.uni.serval.ikora.core.runner.Runtime;
 import lu.uni.serval.ikora.core.utils.LevenshteinDistance;
+import org.apache.commons.lang3.NotImplementedException;
 
 import java.util.*;
 import java.util.stream.Stream;
@@ -62,6 +63,7 @@ public class NodeList<N extends SourceNode> extends SourceNode implements List<N
         return nodes.toArray(a);
     }
 
+    @Override
     public Stream<N> stream(){
         return nodes.stream();
     }
@@ -205,6 +207,6 @@ public class NodeList<N extends SourceNode> extends SourceNode implements List<N
 
     @Override
     public void execute(Runtime runtime) throws RunnerException {
-
+        throw new NotImplementedException("Runner is not implemented yet");
     }
 }

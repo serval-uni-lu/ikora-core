@@ -15,6 +15,8 @@ public class StringUtils {
         lineBreak = Pattern.compile("\r\n|\r|\n");
     }
 
+    private StringUtils() {}
+
     public static int countLines(String block){
         String begin = String.format("^(%s)", lineBreak);
         String end = String.format("(%s)$", lineBreak);

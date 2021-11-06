@@ -4,7 +4,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class BaseTypeList implements List<BaseType> {
-    final private List<BaseType> argumentTypes;
+    private final List<BaseType> argumentTypes;
 
     public BaseTypeList(){
         this.argumentTypes = new ArrayList<>();

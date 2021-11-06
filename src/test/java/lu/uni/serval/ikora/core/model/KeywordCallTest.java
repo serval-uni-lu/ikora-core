@@ -8,7 +8,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class KeywordCallTest {
+class KeywordCallTest {
     @Test
     void testInitialization() throws MalformedVariableException {
         final Variable variable1 = Variable.create(Token.fromString("${variable1}"));

@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class GherkinTest {
+class GherkinTest {
     @Test
     void testStringConstructorWithValid(){
         Gherkin gherkinGiven = new Gherkin(Token.fromString("Given that this is a gherkin test."));

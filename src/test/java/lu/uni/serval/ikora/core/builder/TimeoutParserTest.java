@@ -6,31 +6,24 @@ import lu.uni.serval.ikora.core.model.TimeOut;
 import lu.uni.serval.ikora.core.model.Tokens;
 import lu.uni.serval.ikora.core.Helpers;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class TimeoutParserTest {
-    @Test
-    void testParseValidTimeoutWithRawValue() throws IOException, InvalidArgumentException, MalformedVariableException {
-        TimeOut timeout = parse("[TimeOut]  1 minute 30 seconds");
+class TimeoutParserTest {
+    @ParameterizedTest
+    @CsvSource({
+            "[TimeOut]  1 minute 30 seconds,1 minute 30 seconds",
+            "[TimeOut]  ${value},${value}",
+            "[TimeOut]  None,None"
+    })
+    void testParseValidTimeoutWithRawValue(String source, String name) throws IOException, InvalidArgumentException, MalformedVariableException {
+        TimeOut timeout = parse(source);
         assertTrue(timeout.isValid());
-        assertEquals("1 minute 30 seconds", timeout.getName());
-    }
-
-    @Test
-    void testParseValidTimeoutWithVariable() throws IOException, InvalidArgumentException, MalformedVariableException {
-        TimeOut timeout = parse("[TimeOut]  ${value}");
-        assertTrue(timeout.isValid());
-        assertEquals("${value}", timeout.getName());
-    }
-
-    @Test
-    void testParseNoneTimeout() throws IOException, InvalidArgumentException, MalformedVariableException {
-        TimeOut timeout = parse("[TimeOut]  None");
-        assertTrue(timeout.isValid());
-        assertEquals("None", timeout.getName());
+        assertEquals(name, timeout.getName());
     }
 
     @Test

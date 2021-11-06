@@ -1,8 +1,8 @@
 package lu.uni.serval.ikora.core.exception;
 
 public class BadElementException extends Exception {
-    private Class<?> expected;
-    private Class<?> observed;
+    private final Class<?> expected;
+    private final Class<?> observed;
 
     public BadElementException(Class<?> expected, Class<?> observed){
         this.expected = expected;

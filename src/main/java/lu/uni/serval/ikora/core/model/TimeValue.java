@@ -43,12 +43,7 @@ public class TimeValue {
     }
 
     public int getSign(){
-        switch (sign) {
-            case POSITIVE: return 1;
-            case NEGATIVE: return -1;
-        }
-
-        return 1;
+        return sign == Sign.NEGATIVE ? -1 : 1;
     }
 
     public double getTimeInSeconds(){
@@ -57,7 +52,7 @@ public class TimeValue {
                 + SECONDS_IN_MINUTE * minutes
                 + seconds
                 + SECONDS_IN_MILLISECOND * milliseconds)
-                * (float)getSign();
+                * getSign();
     }
 
     public double getTimeInMilliseconds(){

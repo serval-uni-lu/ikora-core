@@ -1,6 +1,7 @@
 package lu.uni.serval.ikora.core.runner;
 
 import lu.uni.serval.ikora.core.model.*;
+import org.apache.commons.lang3.NotImplementedException;
 
 import java.util.*;
 
@@ -55,7 +56,7 @@ public class DynamicScope implements Scope {
 
     @Override
     public Set<Node> findInScope(Set<TestCase> testCases, Set<String> suites, Token name) {
-        return null;
+        throw new NotImplementedException("Runner is not implemented yet");
     }
 
     @Override

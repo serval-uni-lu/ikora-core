@@ -10,7 +10,7 @@ import java.net.URISyntaxException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ReportTest {
+class ReportTest {
     @Test
     void testParsingOfReportWithOneFailingTest() throws IOException, URISyntaxException {
         File xmlFile = FileUtils.getResourceFile("robot/reports/report-1.xml");

@@ -118,11 +118,11 @@ public class Token implements Comparable<Token> {
 
     public Token extract(int start, int end) {
         String value = this.text.substring(start, end);
-        int startOffset = this.startOffset + start;
-        int endOffset = this.startOffset + end;
-        Type type = value.isEmpty() ? Type.EMPTY : this.type;
+        int newStartOffset = this.startOffset + start;
+        int newEndOffset = this.startOffset + end;
+        Type newType = value.isEmpty() ? Type.EMPTY : this.type;
 
-        return new Token(value, this.line, startOffset, endOffset, type);
+        return new Token(value, this.line, newStartOffset, newEndOffset, newType);
     }
 
     public Token trim(Pattern pattern){

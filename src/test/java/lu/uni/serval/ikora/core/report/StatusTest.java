@@ -24,7 +24,7 @@ class StatusTest {
         final Instant endTime = LocalDateTime.of(2017, 2, 20, 14, 19,7, 693000000)
                 .atZone(ZoneOffset.UTC).toInstant();
 
-        assertEquals(status.getType(), StatusNode.Type.PASSED);
+        assertEquals(StatusNode.Type.PASSED, status.getType());
         assertEquals(status.getStartTime(), startTime);
         assertEquals(status.getEndTime(), endTime);
     }

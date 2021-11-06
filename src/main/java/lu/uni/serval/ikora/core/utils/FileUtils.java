@@ -73,7 +73,7 @@ public class FileUtils {
         return child.startsWith(base);
     }
 
-    public static void copyResources(final Class<?> caller, final String resources, final File destination) throws Exception {
+    public static void copyResources(final Class<?> caller, final String resources, final File destination) throws IOException, URISyntaxException {
         final URL baseUrl = caller.getClassLoader().getResource(resources);
 
         if(baseUrl == null){
@@ -147,7 +147,7 @@ public class FileUtils {
         return match.getReader();
     }
 
-    private static List<Path> walk(URI uri, final String resources) throws Exception {
+    private static List<Path> walk(URI uri, final String resources) throws IOException {
         if ("jar".equals(uri.getScheme())) {
             return safeWalkJar(resources, uri);
         } else {
@@ -155,7 +155,7 @@ public class FileUtils {
         }
     }
 
-    private static List<Path> safeWalkJar(String path, URI uri) throws Exception {
+    private static List<Path> safeWalkJar(String path, URI uri) throws IOException {
         synchronized (getLock(uri)) {
             try (FileSystem fs = getFileSystem(uri)) {
                 return walkFiles(fs.getPath(path));

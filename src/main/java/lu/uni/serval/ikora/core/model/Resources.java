@@ -4,10 +4,10 @@ import java.io.File;
 import java.util.List;
 
 public class Resources {
-    private Token name;
-    private List<Token> arguments;
-    private Token comment;
-    private File file;
+    private final Token name;
+    private final List<Token> arguments;
+    private final Token comment;
+    private final File file;
 
     private SourceFile sourceFile;
 

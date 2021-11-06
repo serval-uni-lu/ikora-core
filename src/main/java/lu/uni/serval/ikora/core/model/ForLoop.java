@@ -134,10 +134,10 @@ public class ForLoop extends Step implements Dependable, ScopeNode {
     @Override
     public List<Dependable> findDefinition(Variable variable) {
         final List<Dependable> definitions = this.steps.stream()
-                .filter(s -> s instanceof Assignment)
-                .map(s -> (Assignment)s)
+                .filter(Assignment.class::isInstance)
+                .map(Assignment.class::cast)
                 .filter(a -> a.isDefinition(variable))
-                .map(a -> (Dependable)a)
+                .map(Dependable.class::cast)
                 .collect(Collectors.toList());
 
         if(iterator.matches(variable.getNameToken())){

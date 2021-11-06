@@ -8,7 +8,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class VariableAssignmentTest {
+class VariableAssignmentTest {
     @Test
     void testAssignmentInitialization() throws MalformedVariableException {
         final VariableAssignment assignment = new VariableAssignment(Variable.create(Token.fromString("${variable}")));

@@ -121,7 +121,7 @@ public class ValueResolver {
         final Set<Dependable> definition = variable.getDefinition(Link.Import.BOTH);
         final List<Node> values = new ArrayList<>();
 
-        for(Node node: definition){
+        for(Dependable node: definition){
             if(VariableAssignment.class.isAssignableFrom(node.getClass())){
                 values.addAll(((VariableAssignment)node).getValues());
             }

@@ -11,7 +11,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class VariableAssignmentParserTest {
+class VariableAssignmentParserTest {
     @Test
     void testParseScalarSimpleValue() throws IOException {
         LineReader reader = Helpers.lineReader("${scalar}", "scalar value");

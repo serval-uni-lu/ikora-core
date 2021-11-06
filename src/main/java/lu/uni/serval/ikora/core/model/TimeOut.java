@@ -7,6 +7,7 @@ import lu.uni.serval.ikora.core.builder.ValueResolver;
 import lu.uni.serval.ikora.core.exception.MalformedVariableException;
 import lu.uni.serval.ikora.core.exception.RunnerException;
 import lu.uni.serval.ikora.core.runner.Runtime;
+import org.apache.commons.lang3.NotImplementedException;
 
 import java.util.Collections;
 import java.util.List;
@@ -92,6 +93,6 @@ public class TimeOut extends SourceNode {
 
     @Override
     public void execute(Runtime runtime) throws RunnerException {
-        //TODO: implement
+        throw new NotImplementedException("Runner is not implemented yet");
     }
 }

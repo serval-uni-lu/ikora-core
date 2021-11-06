@@ -4,14 +4,14 @@ import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import lu.uni.serval.ikora.core.Helpers;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.Set;
 
@@ -58,27 +58,14 @@ class FileUtilsTest {
         assertEquals(2, subFolders.size());
     }
 
-    @Test
-    void testDetectCharsetWithUTF8() throws IOException, URISyntaxException {
-        final File utf8 = FileUtils.getResourceFile("files/file-in-utf8.txt");
-        final Reader unicodeReader = FileUtils.getUnicodeReader(utf8);
-        final String text = IOUtils.toString(unicodeReader);
-
-        assertEquals("Text with strange characters: éèàçù", text);
-    }
-
-    @Test
-    void testDetectCharsetWithISO88591() throws IOException, URISyntaxException {
-        final File utf8 = FileUtils.getResourceFile("files/file-in-ISO-8859-1.txt");
-        final Reader unicodeReader = FileUtils.getUnicodeReader(utf8);
-        final String text = IOUtils.toString(unicodeReader);
-
-        assertEquals("Text with strange characters: éèàçù", text);
-    }
-
-    @Test
-    void testDetectCharsetWithUTF8BOM() throws IOException, URISyntaxException {
-        final File utf8 = FileUtils.getResourceFile("files/file-in-utf8-bom.txt");
+    @ParameterizedTest
+    @ValueSource(strings = {
+            "file-in-utf8.txt",
+            "file-in-ISO-8859-1.txt",
+            "file-in-utf8-bom.txt"
+    })
+    void testDetectCharset(String fileName) throws IOException, URISyntaxException {
+        final File utf8 = FileUtils.getResourceFile("files/" + fileName);
         final Reader unicodeReader = FileUtils.getUnicodeReader(utf8);
         final String text = IOUtils.toString(unicodeReader);
 

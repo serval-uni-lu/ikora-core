@@ -25,9 +25,9 @@ class Converter {
     private Converter() {}
 
     static Instant toDate(String date) throws DateTimeParseException {
-        for(Pattern pattern: patternToFormatter.keySet()){
-            if(pattern.matcher(date).matches()){
-                return toDate(date, patternToFormatter.get(pattern));
+        for(Map.Entry<Pattern, DateTimeFormatter> entry: patternToFormatter.entrySet()){
+            if(entry.getKey().matcher(date).matches()){
+                return toDate(date, entry.getValue());
             }
         }
 
