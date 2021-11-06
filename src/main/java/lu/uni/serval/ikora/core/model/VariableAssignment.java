@@ -3,6 +3,7 @@ package lu.uni.serval.ikora.core.model;
 import lu.uni.serval.ikora.core.analytics.difference.Edit;
 import lu.uni.serval.ikora.core.analytics.visitor.NodeVisitor;
 import lu.uni.serval.ikora.core.analytics.visitor.VisitorMemory;
+import lu.uni.serval.ikora.core.exception.RunnerException;
 import lu.uni.serval.ikora.core.runner.Runtime;
 import lu.uni.serval.ikora.core.utils.LevenshteinDistance;
 import org.apache.commons.lang3.NotImplementedException;
@@ -48,7 +49,7 @@ public class VariableAssignment extends SourceNode implements Dependable{
     }
 
     @Override
-    public void execute(Runtime runtime) throws Exception {
+    public void execute(Runtime runtime) throws RunnerException {
         throw new NotImplementedException("Runner is not implemented yet");
     }
 

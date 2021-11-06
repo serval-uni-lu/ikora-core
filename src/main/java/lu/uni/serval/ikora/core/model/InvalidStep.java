@@ -4,6 +4,7 @@ import lu.uni.serval.ikora.core.analytics.difference.Edit;
 import lu.uni.serval.ikora.core.analytics.visitor.NodeVisitor;
 import lu.uni.serval.ikora.core.analytics.visitor.VisitorMemory;
 import lu.uni.serval.ikora.core.exception.InvalidTypeException;
+import lu.uni.serval.ikora.core.exception.RunnerException;
 import lu.uni.serval.ikora.core.runner.Runtime;
 
 import java.util.ArrayList;
@@ -36,8 +37,8 @@ public class InvalidStep extends Step {
     }
 
     @Override
-    public void execute(Runtime runtime) throws Exception {
-        throw new InvalidTypeException("Invalid step cannot be executed");
+    public void execute(Runtime runtime) throws RunnerException {
+        runtime.registerInternalErrorAndThrow(this.getSource(), "Invalid step cannot be executed", this.getRange());
     }
 
     @Override

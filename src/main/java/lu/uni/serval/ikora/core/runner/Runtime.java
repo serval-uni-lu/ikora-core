@@ -1,6 +1,8 @@
 package lu.uni.serval.ikora.core.runner;
 
 import lu.uni.serval.ikora.core.error.ErrorManager;
+import lu.uni.serval.ikora.core.exception.BadElementException;
+import lu.uni.serval.ikora.core.exception.RunnerException;
 import lu.uni.serval.ikora.core.model.*;
 import lu.uni.serval.ikora.core.report.Report;
 import lu.uni.serval.ikora.core.report.ReportBuilder;
@@ -78,14 +80,22 @@ public class Runtime {
         this.reportBuilder.reset();
     }
 
-    public void enterSuite(Suite suite) throws Exception {
-        this.scope.enterSuite(suite);
-        this.reportBuilder.enterSuite(suite);
+    public void enterSuite(Suite suite) throws RunnerException {
+        try{
+            this.scope.enterSuite(suite);
+            this.reportBuilder.enterSuite(suite);
+        } catch (BadElementException e){
+            registerUnhandledErrorAndThrow(null, "Failed to register suite to report", e);
+        }
     }
 
-    public void enterNode(Node node) throws Exception {
-        this.scope.enterNode(node);
-        this.reportBuilder.enterNode(node);
+    public void enterNode(Node node) throws RunnerException {
+        try{
+            this.reportBuilder.enterNode(node);
+            this.scope.enterNode(node);
+        } catch (BadElementException e){
+            registerUnhandledErrorAndThrow(null, "Failed to register node to report", e);
+        }
     }
 
     public void exitSuite(Suite suite) {
@@ -112,6 +122,26 @@ public class Runtime {
 
     public NodeList<Value> getReturnValues() {
         return scope.getReturnValues();
+    }
+
+    public void registerIOErrorAndThrow(Source source, String message) throws RunnerException {
+        this.errors.registerIOError(source, message);
+        throw new RunnerException();
+    }
+
+    public void registerSymbolErrorAndThrow(Source source, String message, Range range) throws RunnerException {
+        this.errors.registerSymbolError(source, message, range);
+        throw new RunnerException();
+    }
+
+    public void registerInternalErrorAndThrow(Source source, String message, Range range) throws RunnerException {
+        this.errors.registerInternalError(source, message, range);
+        throw new RunnerException();
+    }
+
+    public void registerUnhandledErrorAndThrow(Source source, String message, Exception exception) throws RunnerException {
+        this.errors.registerUnhandledError(source, message, exception);
+        throw new RunnerException();
     }
 
     public ErrorManager getErrors() {

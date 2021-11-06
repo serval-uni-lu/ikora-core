@@ -123,7 +123,7 @@ public class SuiteNode implements ReportElement {
     }
 
     @Override
-    public void addElement(ReportElement element) throws Exception {
+    public void addElement(ReportElement element) throws BadElementException {
         if(SuiteNode.class.isAssignableFrom(element.getClass())){
             addSuite((SuiteNode)element);
         }

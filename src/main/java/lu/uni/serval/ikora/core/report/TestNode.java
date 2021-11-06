@@ -81,7 +81,7 @@ public class TestNode implements ReportElement {
     }
 
     @Override
-    public void addElement(ReportElement element) throws Exception {
+    public void addElement(ReportElement element) throws BadElementException {
         if(!KeywordNode.class.isAssignableFrom(element.getClass())){
             throw new BadElementException(KeywordNode.class, element.getClass());
         }

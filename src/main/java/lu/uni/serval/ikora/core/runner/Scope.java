@@ -1,5 +1,6 @@
 package lu.uni.serval.ikora.core.runner;
 
+import lu.uni.serval.ikora.core.exception.RunnerException;
 import lu.uni.serval.ikora.core.model.*;
 
 import java.util.List;
@@ -16,7 +17,7 @@ public interface Scope {
     void addDynamicLibrary(KeywordDefinition keyword, List<Argument> argumentList);
     ResourcesTable getDynamicResources(Node node);
 
-    void enterNode(Node node) throws Exception;
+    void enterNode(Node node) throws RunnerException;
     void exitNode(Node node);
 
     void enterSuite(Suite suite);

@@ -2,6 +2,7 @@ package lu.uni.serval.ikora.core.model;
 
 import lu.uni.serval.ikora.core.analytics.difference.Edit;
 import lu.uni.serval.ikora.core.builder.ValueResolver;
+import lu.uni.serval.ikora.core.exception.RunnerException;
 import lu.uni.serval.ikora.core.runner.Runtime;
 import lu.uni.serval.ikora.core.utils.Ast;
 import lu.uni.serval.ikora.core.utils.LevenshteinDistance;
@@ -138,7 +139,7 @@ public abstract class KeywordDefinition extends SourceNode implements Keyword, I
     }
 
     @Override
-    public void execute(Runtime runtime) throws Exception{
+    public void execute(Runtime runtime) throws RunnerException {
         runtime.enterNode(this);
 
         for(Step step: this.steps){
@@ -194,10 +195,10 @@ public abstract class KeywordDefinition extends SourceNode implements Keyword, I
     @Override
     public List<Dependable> findDefinition(Variable variable) {
         return this.steps.stream()
-                .filter(s -> s instanceof Assignment)
-                .map(s -> (Assignment)s)
+                .filter(Assignment.class::isInstance)
+                .map(Assignment.class::cast)
                 .filter(a -> a.isDefinition(variable))
-                .map(a -> (Dependable)a)
+                .map(Dependable.class::cast)
                 .collect(Collectors.toList());
     }
 

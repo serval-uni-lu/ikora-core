@@ -81,7 +81,7 @@ public class Report implements ReportElement {
     }
 
     @Override
-    public void addElement(ReportElement element) throws Exception {
+    public void addElement(ReportElement element) throws BadElementException {
         if(!SuiteNode.class.isAssignableFrom(element.getClass())){
             throw new BadElementException(SuiteNode.class, element.getClass());
         }

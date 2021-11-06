@@ -11,6 +11,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class ArgumentUtils {
+    private ArgumentUtils() {}
+
     public static int findFirst(NodeList<Argument> arguments, Class<?> type){
         final Optional<Argument> first = arguments.stream()
                 .filter(a -> a.isType(type))
@@ -111,21 +113,15 @@ public class ArgumentUtils {
         final List<Pair<String, SourceNode>> values = new ArrayList<>();
         final int position = userKeyword.get().getParameters().indexOf(variable);
 
-        for(Node node: userKeyword.get().getDependencies()){
-            if(!(node instanceof KeywordCall)){
-                continue;
+        for(SourceNode node: userKeyword.get().getDependencies()){
+            if(node instanceof KeywordCall){
+                final NodeList<Argument> argumentList = ((KeywordCall)node).getArgumentList();
+
+                if(ArgumentUtils.isExpendedUntilPosition(argumentList, position)){
+                    final Argument argument = argumentList.get(position);
+                    values.addAll(getArgumentValues(argument, memory));
+                }
             }
-
-            final KeywordCall call = (KeywordCall) node;
-
-            final NodeList<Argument> argumentList = call.getArgumentList();
-
-            if(!ArgumentUtils.isExpendedUntilPosition(argumentList, position)){
-                continue;
-            }
-
-            final Argument argument = argumentList.get(position);
-            values.addAll(getArgumentValues(argument, memory));
         }
 
         return values;

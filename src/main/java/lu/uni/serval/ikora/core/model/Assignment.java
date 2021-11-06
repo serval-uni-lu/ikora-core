@@ -4,7 +4,8 @@ import lu.uni.serval.ikora.core.analytics.difference.Edit;
 import lu.uni.serval.ikora.core.analytics.visitor.NodeVisitor;
 import lu.uni.serval.ikora.core.analytics.visitor.VisitorMemory;
 import lu.uni.serval.ikora.core.builder.SymbolResolver;
-import lu.uni.serval.ikora.core.exception.ExecutionException;
+import lu.uni.serval.ikora.core.exception.InvalidDependencyException;
+import lu.uni.serval.ikora.core.exception.RunnerException;
 import lu.uni.serval.ikora.core.runner.Runtime;
 import lu.uni.serval.ikora.core.utils.LevenshteinDistance;
 
@@ -77,7 +78,7 @@ public class Assignment extends Step implements Dependable {
     }
 
     @Override
-    public void execute(Runtime runtime) throws Exception {
+    public void execute(Runtime runtime) throws RunnerException {
         runtime.enterNode(this);
 
         Optional<KeywordCall> optional = getKeywordCall();
@@ -87,7 +88,7 @@ public class Assignment extends Step implements Dependable {
             SymbolResolver.resolve(call, runtime);
 
             if(!runtime.getErrors().isEmpty()){
-                throw new ExecutionException(runtime.getErrors());
+                throw new RunnerException();
             }
 
             Optional<Keyword> callee = call.getKeyword();
@@ -96,14 +97,23 @@ public class Assignment extends Step implements Dependable {
                 callee.get().execute(runtime);
             }
             else{
-                throw new Exception("Need to have a better exception");
+                runtime.registerSymbolErrorAndThrow(call.getSource(), "Missing definition", call.getRange());
             }
         }
 
         runtime.exitNode(this);
 
         for(Variable variable: leftHandOperand){
-            runtime.addToKeywordScope(this.getCaller(), variable);
+            try {
+                runtime.addToKeywordScope(this.getCaller(), variable);
+            }
+            catch (InvalidDependencyException e){
+                runtime.registerInternalErrorAndThrow(
+                        variable.getSource(),
+                        String.format("[%s] %s", e.getClass().getSimpleName(), e.getMessage()),
+                        variable.getRange()
+                );
+            }
         }
     }
 
@@ -171,7 +181,7 @@ public class Assignment extends Step implements Dependable {
 
         builder.append("\t=\t");
 
-        getKeywordCall().ifPresent(call -> builder.append(call.toString()));
+        getKeywordCall().ifPresent(builder::append);
 
         return builder.toString();
     }

@@ -3,6 +3,7 @@ package lu.uni.serval.ikora.core.model;
 import lu.uni.serval.ikora.core.analytics.visitor.NodeVisitor;
 import lu.uni.serval.ikora.core.analytics.visitor.VisitorMemory;
 import lu.uni.serval.ikora.core.builder.ValueResolver;
+import lu.uni.serval.ikora.core.exception.RunnerException;
 import lu.uni.serval.ikora.core.runner.Runtime;
 import lu.uni.serval.ikora.core.types.BaseType;
 import lu.uni.serval.ikora.core.types.BaseTypeList;
@@ -67,7 +68,7 @@ public abstract class LibraryKeyword implements Keyword {
     }
 
     @Override
-    public void execute(Runtime runtime) throws Exception{
+    public void execute(Runtime runtime) throws RunnerException {
         runtime.enterNode(this);
 
         run(runtime);

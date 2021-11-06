@@ -5,6 +5,7 @@ import lu.uni.serval.ikora.core.analytics.visitor.NodeVisitor;
 import lu.uni.serval.ikora.core.analytics.visitor.VisitorMemory;
 import lu.uni.serval.ikora.core.builder.ValueResolver;
 import lu.uni.serval.ikora.core.exception.MalformedVariableException;
+import lu.uni.serval.ikora.core.exception.RunnerException;
 import lu.uni.serval.ikora.core.runner.Runtime;
 
 import java.util.Collections;
@@ -90,7 +91,7 @@ public class TimeOut extends SourceNode {
     }
 
     @Override
-    public void execute(Runtime runtime) throws Exception {
+    public void execute(Runtime runtime) throws RunnerException {
         //TODO: implement
     }
 }

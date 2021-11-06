@@ -1,5 +1,6 @@
 package lu.uni.serval.ikora.core.report;
 
+import lu.uni.serval.ikora.core.exception.BadElementException;
 import lu.uni.serval.ikora.core.model.*;
 import lu.uni.serval.ikora.core.model.Keyword;
 import lu.uni.serval.ikora.core.model.Suite;
@@ -24,17 +25,17 @@ public class ReportBuilder {
         return Optional.ofNullable(report);
     }
 
-    public void enterSuite(Suite suite) throws Exception {
-        ReportElement element = createSuiteNode(suite);
-        stack.peek().addElement(element);
-        stack.push(element);
+    public void enterSuite(Suite suite) throws BadElementException {
+            ReportElement element = createSuiteNode(suite);
+            stack.peek().addElement(element);
+            stack.push(element);
     }
 
     public void exitSuite(Suite suite) {
         stack.pop();
     }
 
-    public void enterNode(Node node) throws Exception {
+    public void enterNode(Node node) throws BadElementException {
         ReportElement element = null;
 
         if(TestCase.class.isAssignableFrom(node.getClass())){

@@ -4,6 +4,7 @@ import lu.uni.serval.ikora.core.analytics.difference.Edit;
 import lu.uni.serval.ikora.core.analytics.visitor.NodeVisitor;
 import lu.uni.serval.ikora.core.analytics.visitor.VisitorMemory;
 import lu.uni.serval.ikora.core.builder.SymbolResolver;
+import lu.uni.serval.ikora.core.exception.RunnerException;
 import lu.uni.serval.ikora.core.runner.Runtime;
 import lu.uni.serval.ikora.core.utils.LevenshteinDistance;
 
@@ -73,7 +74,7 @@ public class KeywordCall extends Step {
     }
 
     @Override
-    public void execute(Runtime runtime) throws Exception{
+    public void execute(Runtime runtime) throws RunnerException {
         runtime.enterNode(this);
         SymbolResolver.resolve(this, runtime);
 
@@ -83,7 +84,7 @@ public class KeywordCall extends Step {
             callee.get().execute(runtime);
         }
         else{
-            throw new Exception("Need to have a better exception");
+            runtime.registerSymbolErrorAndThrow(this.getSource(), "Missing definition", this.getRange());
         }
 
         runtime.exitNode(this);

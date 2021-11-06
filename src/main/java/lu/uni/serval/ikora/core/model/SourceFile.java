@@ -4,16 +4,18 @@ import lu.uni.serval.ikora.core.analytics.difference.Edit;
 import lu.uni.serval.ikora.core.analytics.visitor.NodeVisitor;
 import lu.uni.serval.ikora.core.analytics.visitor.VisitorMemory;
 import lu.uni.serval.ikora.core.builder.Line;
+import lu.uni.serval.ikora.core.exception.RunnerException;
 import lu.uni.serval.ikora.core.runner.Runtime;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.NotImplementedException;
 
 import java.util.*;
 
 public class SourceFile extends SourceNode {
-    final private Project project;
-    final private Source source;
-    final private List<Line> lines;
-    final private String name;
+    private final Project project;
+    private final Source source;
+    private final List<Line> lines;
+    private final String name;
 
     private Settings settings;
     private SourceNodeTable<TestCase> testCaseTable;
@@ -159,8 +161,8 @@ public class SourceFile extends SourceNode {
     }
 
     @Override
-    public void execute(Runtime runtime) throws Exception {
-
+    public void execute(Runtime runtime) throws RunnerException {
+        throw new NotImplementedException("Runner is not implemented yet");
     }
 
     public Settings getSettings() {
