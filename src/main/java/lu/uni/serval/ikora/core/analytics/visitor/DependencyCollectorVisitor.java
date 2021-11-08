@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class DependencyCollectorVisitor extends DependencyVisitor {
-    private Set<KeywordDefinition> dependencies;
+    private final Set<KeywordDefinition> dependencies;
 
     public DependencyCollectorVisitor(){
         this.dependencies = new HashSet<>();

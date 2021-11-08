@@ -3,7 +3,7 @@ package lu.uni.serval.ikora.core.analytics.visitor;
 import lu.uni.serval.ikora.core.model.*;
 
 public class SizeVisitor extends EmptyVisitor {
-    public class Result{
+    public static class Result{
         private int totalSize = 0;
         private int testCaseSize = 0;
         private int userKeywordSize = 0;
@@ -26,7 +26,7 @@ public class SizeVisitor extends EmptyVisitor {
         }
     }
 
-    private Result result = new Result();
+    private final Result result = new Result();
 
     public Result getResult() {
         return result;

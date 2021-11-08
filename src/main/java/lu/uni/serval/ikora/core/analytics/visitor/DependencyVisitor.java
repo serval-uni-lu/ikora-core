@@ -9,6 +9,11 @@ public class DependencyVisitor implements NodeVisitor {
     }
 
     @Override
+    public void visit(SourceFile sourceFile, VisitorMemory memory) {
+        VisitorUtils.traverseSourceFileDependencies(this, sourceFile, memory);
+    }
+
+    @Override
     public void visit(TestCase testCase, VisitorMemory memory) {
         VisitorUtils.traverseDependencies(this, testCase, memory);
     }

@@ -31,6 +31,18 @@ public class VisitorUtils {
         }
     }
 
+    public static void traverseSourceFileDependencies(NodeVisitor visitor, SourceFile sourceFile, VisitorMemory memory){
+        sourceFile.getTestCases().forEach(t -> traverseDependencies(visitor, t, memory.getUpdated(sourceFile)));
+        sourceFile.getUserKeywords().forEach(u -> traverseDependencies(visitor, u, memory.getUpdated(sourceFile)));
+        sourceFile.getVariables().forEach(v -> traverseDependencies(visitor, v, memory.getUpdated(sourceFile)));
+    }
+
+    public static void traverseSourceFile(NodeVisitor visitor, SourceFile sourceFile, VisitorMemory memory){
+        sourceFile.getTestCases().forEach(t -> accept(visitor, t, memory.getUpdated(sourceFile)));
+        sourceFile.getUserKeywords().forEach(u -> accept(visitor, u, memory.getUpdated(sourceFile)));
+        sourceFile.getVariables().forEach(v -> accept(visitor, v, memory.getUpdated(sourceFile)));
+    }
+
     public static void traverseSteps(NodeVisitor visitor, KeywordDefinition keyword, VisitorMemory memory){
        memory = memory.getUpdated(keyword);
 

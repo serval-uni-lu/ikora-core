@@ -4,6 +4,7 @@ import lu.uni.serval.ikora.core.model.*;
 
 public interface NodeVisitor {
     void visit(SourceNode sourceNode, VisitorMemory memory);
+    void visit(SourceFile sourceFile, VisitorMemory memory);
     void visit(TestCase testCase, VisitorMemory memory);
     void visit(UserKeyword keyword, VisitorMemory memory);
     void visit(KeywordCall call, VisitorMemory memory);
