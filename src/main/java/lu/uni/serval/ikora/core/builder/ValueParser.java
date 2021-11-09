@@ -1,7 +1,7 @@
 package lu.uni.serval.ikora.core.builder;
 
 import lu.uni.serval.ikora.core.model.*;
-import org.apache.commons.math3.util.Pair;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Optional;
 

@@ -1,9 +1,9 @@
 package lu.uni.serval.ikora.core.builder;
 
-import org.apache.commons.math3.util.Pair;
 import lu.uni.serval.ikora.core.model.Token;
 import lu.uni.serval.ikora.core.model.Tokens;
 import lu.uni.serval.ikora.core.utils.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.IOException;
 
@@ -81,7 +81,7 @@ public class LexerUtils {
             escape = false;
         }
 
-        return new Pair<>(token.extract(0, breakPosition), token.extract(Math.min(token.length(), ++breakPosition)));
+        return Pair.of(token.extract(0, breakPosition), token.extract(Math.min(token.length(), ++breakPosition)));
     }
 
     private static boolean isContinuation(Tokens tokens){

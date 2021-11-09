@@ -1,7 +1,7 @@
 package lu.uni.serval.ikora.core.model;
 
+import lu.uni.serval.ikora.core.exception.OutOfRangeException;
 import lu.uni.serval.ikora.core.utils.StringUtils;
-import org.apache.commons.math3.exception.OutOfRangeException;
 
 import java.util.*;
 import java.util.stream.Collectors;
