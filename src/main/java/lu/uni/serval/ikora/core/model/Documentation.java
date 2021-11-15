@@ -10,8 +10,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class Documentation extends SourceNode{
-    Token label;
-    Tokens text;
+    private final Token label;
+    private final Tokens text;
 
     public Documentation(){
         this.label = Token.empty();
@@ -24,6 +24,14 @@ public class Documentation extends SourceNode{
 
         addToken(this.label);
         addTokens(this.text);
+    }
+
+    public Token getLabel() {
+        return this.label;
+    }
+
+    public Tokens getText() {
+        return this.text;
     }
 
     public boolean isPresent(){
