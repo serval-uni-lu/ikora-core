@@ -12,7 +12,7 @@ class UserKeywordTest {
 
         assertEquals(name.getText(), keyword.getName());
         assertEquals(0, keyword.getParameters().size());
-        assertEquals(0, keyword.getDocumentation().size());
+        assertFalse(keyword.getDocumentation().isPresent());
     }
 
     @Test

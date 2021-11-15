@@ -9,7 +9,7 @@ import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class TestCaseParserTest {
+class TestCaseParserTest {
     @Test
     void testTestCaseParsingWithDocumentation() throws IOException {
         String text = "Test case with documentation\n" +
@@ -23,7 +23,7 @@ public class TestCaseParserTest {
         assertNotNull(testCase);
         assertEquals("Test case with documentation", testCase.getName());
         assertEquals(1, testCase.getSteps().size());
-        assertEquals("Some documentationwith continuation", testCase.getDocumentation().clean().toString());
+        assertEquals("Some documentationwith continuation", testCase.getDocumentation().toString());
         assertEquals("Some keyword", testCase.getStep(0).getName());
     }
 

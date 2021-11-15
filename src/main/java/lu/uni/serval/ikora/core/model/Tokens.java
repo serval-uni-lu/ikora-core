@@ -17,6 +17,10 @@ public class Tokens implements Iterable<Token> {
         this.tokenSet = new TreeSet<>(tokenSet);
     }
 
+    public static Tokens empty() {
+        return new Tokens();
+    }
+
     public void add(Token token){
         if(token == null || token.isEmpty()){
             return;

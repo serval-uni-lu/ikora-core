@@ -78,8 +78,8 @@ public abstract class LibraryKeyword implements Keyword {
 
     protected abstract void run(Runtime runtime);
 
-    public Tokens getDocumentation(){
-        return new Tokens();
+    public Documentation getDocumentation(){
+        return new Documentation();
     }
 
     @Override

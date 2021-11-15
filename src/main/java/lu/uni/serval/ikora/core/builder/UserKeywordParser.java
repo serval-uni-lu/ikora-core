@@ -26,14 +26,10 @@ class UserKeywordParser {
 
         final UserKeyword userKeyword = optionalUserKeyword.get();
 
-        while(reader.getCurrent().isValid()) {
+        while(reader.getCurrent().isValid() && !LexerUtils.exitBlock(nameTokens, reader)) {
             if(reader.getCurrent().ignore()) {
                 reader.readLine();
                 continue;
-            }
-
-            if(LexerUtils.exitBlock(nameTokens, reader)){
-                break;
             }
 
             Tokens currentTokens = LexerUtils.tokenize(reader);
@@ -42,9 +38,9 @@ class UserKeywordParser {
 
             Token label = ParserUtils.getLabel(reader, tokens, errors);
 
-            if (StringUtils.compareNoCase(label, "\\[documentation\\]")) {
-                userKeyword.addToken(label.setType(Token.Type.LABEL));
-                parseDocumentation(reader, tokens.withoutFirst(), userKeyword);
+            if (DocumentationParser.is(label)) {
+                final Documentation documentation = DocumentationParser.parse(label, tokens);
+                userKeyword.setDocumentation(documentation);
             }
             else if (StringUtils.compareNoCase(label, "\\[tags\\]")) {
                 final NodeList<Literal> tags = ParserUtils.parseTags(label, tokens.withoutFirst());
@@ -72,11 +68,6 @@ class UserKeywordParser {
         }
 
         return userKeyword;
-    }
-
-    private static void parseDocumentation(LineReader reader, Tokens tokens, UserKeyword userKeyword) throws IOException {
-        userKeyword.addTokens(tokens.setType(Token.Type.DOCUMENTATION));
-        userKeyword.setDocumentation(tokens);
     }
 
     private static NodeList<Variable> parseArguments(LineReader reader, Token label, Tokens values, ErrorManager errors) {

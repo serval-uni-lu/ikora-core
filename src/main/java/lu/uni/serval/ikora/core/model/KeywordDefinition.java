@@ -14,7 +14,7 @@ public abstract class KeywordDefinition extends SourceNode implements Keyword, I
     private final Token name;
     private final NodeList<Step> steps;
     private final Set<SourceNode> dependencies;
-    private Tokens documentation;
+    private Documentation documentation;
     private NodeList<Literal> tags;
     private TimeOut timeOut;
 
@@ -32,7 +32,7 @@ public abstract class KeywordDefinition extends SourceNode implements Keyword, I
         this.timeOut = TimeOut.none();
         this.addAstChild(this.timeOut);
 
-        this.documentation = new Tokens();
+        this.documentation = new Documentation();
         this.localVariables = new ArrayList<>();
 
         this.name = name;
@@ -110,8 +110,9 @@ public abstract class KeywordDefinition extends SourceNode implements Keyword, I
         return count;
     }
 
-    public void setDocumentation(Tokens documentation){
+    public void setDocumentation(Documentation documentation){
         this.documentation = documentation;
+        addTokens(this.documentation.getTokens());
     }
 
     @Override
@@ -120,7 +121,7 @@ public abstract class KeywordDefinition extends SourceNode implements Keyword, I
     }
 
     @Override
-    public Tokens getDocumentation() {
+    public Documentation getDocumentation() {
         return documentation;
     }
 
@@ -167,21 +168,23 @@ public abstract class KeywordDefinition extends SourceNode implements Keyword, I
             return edits;
         }
 
-        KeywordDefinition keyword = (KeywordDefinition)other;
+        KeywordDefinition that = (KeywordDefinition)other;
 
         // check name change
-        if(!this.getNameToken().equalsIgnorePosition(keyword.getNameToken())){
+        if(!this.getNameToken().equalsIgnorePosition(that.getNameToken())){
             edits.add(Edit.changeName(this, other));
         }
 
         // check documentation change
-        Edit documentationEdit = differenceDocumentation(keyword);
-        if(documentationEdit != null){
-            edits.add(documentationEdit);
+        if(this.getDocumentation() == null && that.getDocumentation() != null){
+            edits.add(Edit.addDocumentation(that.documentation));
+        }
+        else{
+            edits.addAll(this.documentation.differences(that.documentation));
         }
 
         // check step changes
-        List<Edit> stepEdits = LevenshteinDistance.getDifferences(this.getSteps(), keyword.getSteps());
+        List<Edit> stepEdits = LevenshteinDistance.getDifferences(this.getSteps(), that.getSteps());
         edits.addAll(stepEdits);
 
         return edits;
@@ -219,21 +222,5 @@ public abstract class KeywordDefinition extends SourceNode implements Keyword, I
     @Override
     public Set<SourceNode> getDependencies() {
         return dependencies;
-    }
-
-    private Edit differenceDocumentation(KeywordDefinition keyword) {
-        Edit edit = null;
-
-        if(this.documentation.isEmpty() && !keyword.documentation.isEmpty()){
-            edit = Edit.addDocumentation(this, keyword);
-        }
-        else if(!this.documentation.isEmpty() && keyword.documentation.isEmpty()){
-            edit = Edit.removeDocumentation(this, keyword);
-        }
-        else if(!this.documentation.equalsIgnorePosition(keyword.documentation)){
-            edit = Edit.changeDocumentation(this, keyword);
-        }
-
-        return edit;
     }
 }

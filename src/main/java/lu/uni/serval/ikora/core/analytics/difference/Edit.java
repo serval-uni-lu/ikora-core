@@ -142,12 +142,12 @@ public class Edit {
         return new Edit(Type.CHANGE_VARIABLE_DEFINITION, left, right);
     }
 
-    public static Edit addDocumentation(SourceNode left, SourceNode right) {
-        return new Edit(Type.ADD_DOCUMENTATION, left, right);
+    public static Edit addDocumentation(SourceNode right) {
+        return new Edit(Type.ADD_DOCUMENTATION, null, right);
     }
 
-    public static Edit removeDocumentation(SourceNode left, SourceNode right) {
-        return new Edit(Type.REMOVE_DOCUMENTATION, left, right);
+    public static Edit removeDocumentation(SourceNode left) {
+        return new Edit(Type.REMOVE_DOCUMENTATION, left, null);
     }
 
     public static Edit changeDocumentation(SourceNode left, SourceNode right) {

@@ -23,24 +23,19 @@ class TestCaseParser {
 
         final TestCase testCase = optionalTestCase.get();
 
-        while(reader.getCurrent().isValid()) {
+        while(reader.getCurrent().isValid() && !LexerUtils.exitBlock(nameTokens, reader)) {
             if(reader.getCurrent().ignore()) {
                 reader.readLine();
                 continue;
             }
 
-            if(LexerUtils.exitBlock(nameTokens, reader)){
-                break;
-            }
-
             Tokens currentTokens = LexerUtils.tokenize(reader);
             Tokens tokens = currentTokens.withoutIndent();
-
             Token label = ParserUtils.getLabel(reader, tokens, errors);
 
-            if (StringUtils.compareNoCase(label, "\\[documentation\\]")) {
-                testCase.addToken(label.setType(Token.Type.LABEL));
-                parseDocumentation(reader, tokens.withoutTag("\\[documentation\\]"), testCase);
+            if (DocumentationParser.is(label)) {
+                final Documentation documentation = DocumentationParser.parse(label, tokens);
+                testCase.setDocumentation(documentation);
             }
             else if (StringUtils.compareNoCase(label, "\\[tags\\]")) {
                 final NodeList<Literal> tags = ParserUtils.parseTags(label, tokens);
@@ -114,11 +109,6 @@ class TestCaseParser {
         }
 
         dynamicImports.add(testCase, step);
-    }
-
-    private static void parseDocumentation(LineReader reader, Tokens tokens, TestCase testCase) {
-        testCase.setDocumentation(tokens);
-        testCase.addTokens(tokens);
     }
 
     private static void parseStep(LineReader reader, Tokens tokens, TestCase testCase, DynamicImports dynamicImports, ErrorManager errors) throws IOException {
