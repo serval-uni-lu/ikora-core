@@ -64,8 +64,8 @@ public class VisitorUtils {
     }
 
     public static void traverseAssignmentCall(NodeVisitor visitor, Assignment assignment, VisitorMemory memory){
-        assignment.getKeywordCall().flatMap(KeywordCall::getKeyword).ifPresent(keyword ->
-                keyword.accept(visitor, memory.getUpdated(assignment))
+        assignment.getKeywordCall().ifPresent(call ->
+                call.accept(visitor, memory.getUpdated(assignment))
         );
     }
 

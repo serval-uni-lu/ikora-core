@@ -87,4 +87,20 @@ class VariableAssignmentParserTest {
         assertTrue(assignment.getValues().get(2).isDictionaryEntry());
         assertEquals("key3", assignment.getValues().get(2).toString());
     }
+
+    @Test
+    void testMultilineVariable() throws IOException {
+        final String code = "${variable}    First Line\n" +
+                "... Second Line\n" +
+                "... Third Line\n";
+
+        final LineReader reader = new LineReader(code);
+        reader.readLine();
+
+        ErrorManager errors = new ErrorManager();
+        Optional<VariableAssignment> optional = VariableAssignmentParser.parse(reader, errors);
+        assertTrue(optional.isPresent());
+        VariableAssignment variableAssignment = optional.get();
+        assertEquals(1, variableAssignment.getValues().size());
+    }
 }

@@ -71,6 +71,56 @@ class AssignmentParserTest {
                 fileError.getSyntaxErrors().iterator().next().getMessage());
     }
 
+    @Test
+    void parseAssignmentWithArguments() throws IOException {
+        final String text = "    ${jsonfile}=    Get File     /file/path/data.json    encoding=UTF-8\n";
+
+        final ErrorManager errors = new ErrorManager();
+        final Assignment assignment = createAssignment(text, errors);
+
+        final List<Variable> variables = assignment.getLeftHandOperand();
+        assertEquals(1, variables.size());
+        assertEquals("${jsonfile}", variables.get(0).getName());
+
+        Optional<KeywordCall> expression = assignment.getKeywordCall();
+        assertTrue(expression.isPresent());
+        assertEquals("Get File", expression.get().getName());
+    }
+
+    @Test
+    void parseAssignmentWithoutEqualSign() throws IOException {
+        final String text = "    ${jsonfile}    Get File     /file/path/data.json    encoding=UTF-8\n";
+
+        final ErrorManager errors = new ErrorManager();
+        final Assignment assignment = createAssignment(text, errors);
+
+        final List<Variable> variables = assignment.getLeftHandOperand();
+        assertEquals(1, variables.size());
+        assertEquals("${jsonfile}", variables.get(0).getName());
+
+        Optional<KeywordCall> expression = assignment.getKeywordCall();
+        assertTrue(expression.isPresent());
+        assertEquals("Get File", expression.get().getName());
+    }
+
+    @Test
+    void parseAssignmentWithoutEqualSignWithMultipleValues() throws IOException {
+        final String text = "    ${jsonfile1}    ${jsonfile2}    ${jsonfile3}    Get File     /file/path/data.json    encoding=UTF-8\n";
+
+        final ErrorManager errors = new ErrorManager();
+        final Assignment assignment = createAssignment(text, errors);
+
+        final List<Variable> variables = assignment.getLeftHandOperand();
+        assertEquals(3, variables.size());
+        assertEquals("${jsonfile1}", variables.get(0).getName());
+        assertEquals("${jsonfile2}", variables.get(1).getName());
+        assertEquals("${jsonfile3}", variables.get(2).getName());
+
+        Optional<KeywordCall> expression = assignment.getKeywordCall();
+        assertTrue(expression.isPresent());
+        assertEquals("Get File", expression.get().getName());
+    }
+
     private Assignment createAssignment(String text, ErrorManager errors) throws IOException {
         LineReader reader = Helpers.lineReader(text);
         Tokens tokens = LexerUtils.tokenize(reader).withoutIndent();

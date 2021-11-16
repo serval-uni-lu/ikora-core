@@ -2,10 +2,7 @@ package lu.uni.serval.ikora.core.builder;
 
 import lu.uni.serval.ikora.core.error.ErrorManager;
 import lu.uni.serval.ikora.core.error.ErrorMessages;
-import lu.uni.serval.ikora.core.model.InvalidStep;
-import lu.uni.serval.ikora.core.model.Range;
-import lu.uni.serval.ikora.core.model.Step;
-import lu.uni.serval.ikora.core.model.Tokens;
+import lu.uni.serval.ikora.core.model.*;
 
 import java.io.IOException;
 
@@ -45,7 +42,7 @@ class StepParser {
             return false;
         }
 
-        return tokens.first().isAssignment();
+        return tokens.first().isAssignment() || tokens.first().isVariable();
     }
 
     private static boolean isForLoop(LineReader reader, Tokens tokens, ErrorManager errors) {

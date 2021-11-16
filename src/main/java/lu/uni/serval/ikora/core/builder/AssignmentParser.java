@@ -6,42 +6,34 @@ import lu.uni.serval.ikora.core.model.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class AssignmentParser {
     private AssignmentParser(){}
 
     public static Assignment parse(LineReader reader, Tokens tokens, ErrorManager errors) {
-        List<Variable> returnValues = new ArrayList<>();
-        KeywordCall expression = null;
+        final List<Variable> returnValues = new ArrayList<>();
+        final Tokens assignmentTokens = tokens.withoutIndent();
 
         int offset = 0;
-        boolean leftSide = true;
-        Tokens assignmentTokens = tokens.withoutIndent();
-        for(Token token: assignmentTokens){
-            Token clean = VariableAssignmentParser.trimEquals(token);
 
-            if(!clean.isEmpty()){
-                if(leftSide && ValueResolver.isVariable(clean)){
-                    Optional<Variable> variable = VariableParser.parse(clean);
+        for(Token token: tokens.withoutIndent()){
+            final Token clean = VariableAssignmentParser.trimEquals(token);
 
-                    if(variable.isPresent()){
-                        Variable returnValue = variable.get();
-                        returnValues.add(returnValue);
-                    }
-                }
-                else if(!leftSide){
-                    expression = KeywordCallParser.parse(reader, assignmentTokens.withoutFirst(offset), false, errors);
-                    break;
-                }
+            if(!ValueResolver.isVariable(clean)){
+                break;
             }
 
-            leftSide &= !token.getText().contains("=");
+            VariableParser.parse(clean).ifPresent(returnValues::add);
+
             ++offset;
         }
 
-        Token name = expression != null ? expression.getNameToken() : Token.empty();
-        Assignment assignment = new Assignment(name, returnValues, expression);
+        final KeywordCall expression = offset < assignmentTokens.size()
+                ? KeywordCallParser.parse(reader, assignmentTokens.withoutFirst(offset), false, errors)
+                : null;
+
+        final Token name = expression != null ? expression.getNameToken() : Token.empty();
+        final Assignment assignment = new Assignment(name, returnValues, expression);
 
         if(!assignment.getKeywordCall().isPresent()){
             errors.registerSyntaxError(
