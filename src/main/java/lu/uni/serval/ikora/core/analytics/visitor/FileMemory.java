@@ -33,6 +33,10 @@ public class FileMemory extends PathMemory {
 
     @Override
     public boolean isAcceptable(Node node) {
-        return super.isAcceptable(node) && ((SourceNode)node).getSourceFile() == this.file;
+        if(SourceNode.class.isAssignableFrom(node.getClass())){
+            return super.isAcceptable(node) && ((SourceNode)node).getSourceFile() == this.file;
+        }
+
+        return true;
     }
 }
