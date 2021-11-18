@@ -52,4 +52,11 @@ class TokenTest {
         final Token token = new Token("given", 0, 0, 5, Token.Type.TEXT);
         assertTrue(token.trim(gherkinPattern).isEmpty());
     }
+
+    @Test
+    void testCompareSameStart(){
+        final Token token1 = new Token("And ", 47, 4, 8, Token.Type.KEYWORD);
+        final Token token2 = new Token("And the user follows the flow to register their organisation", 47, 4, 64, Token.Type.KEYWORD);
+        assertEquals(-1, token1.compareTo(token2));
+    }
 }

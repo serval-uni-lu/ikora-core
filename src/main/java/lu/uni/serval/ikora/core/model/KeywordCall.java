@@ -49,7 +49,6 @@ public class KeywordCall extends Step {
 
     public void setGherkin(Gherkin gherkin) {
         this.gherkin = gherkin;
-        addToken(this.gherkin.getToken());
     }
 
     public Gherkin getGherkin(){
