@@ -68,7 +68,7 @@ public class ForLoop extends Step implements Dependable, ScopeNode {
     }
 
     @Override
-    public List<Step> getSteps(){
+    public NodeList<Step> getSteps(){
         return this.steps;
     }
 

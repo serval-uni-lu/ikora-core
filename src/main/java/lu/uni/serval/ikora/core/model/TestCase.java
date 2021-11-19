@@ -75,6 +75,12 @@ public class TestCase extends KeywordDefinition {
         return Optional.ofNullable(template);
     }
 
+    public NodeList<Step> getExecutedSteps(){
+        return getTemplate()
+                .map(Step::getSteps)
+                .orElseGet(this::getSteps);
+    }
+
     public boolean hasTemplate(){
         return template != null;
     }

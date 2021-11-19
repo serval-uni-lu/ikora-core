@@ -42,8 +42,8 @@ public abstract class Step extends SourceNode {
         return this.name;
     }
 
-    public List<Step> getSteps(){
-        return Collections.emptyList();
+    public NodeList<Step> getSteps(){
+        return new NodeList<>();
     }
 
     public int getStepCount(){

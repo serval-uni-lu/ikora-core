@@ -31,8 +31,6 @@ public class Violation {
     public enum Cause {
         MULTIPLE_DEFINITIONS,
         INFINITE_LOOP,
-        LITERAL_LOCATOR,
-        TRANSITIVE_DEPENDENCY,
         NO_DEFINITION_FOUND
     }
 
