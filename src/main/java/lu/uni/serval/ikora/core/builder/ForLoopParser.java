@@ -42,7 +42,7 @@ public class ForLoopParser {
 
         List<Step> steps = new ArrayList<>();
 
-        while (reader.getCurrent().isValid() && !LexerUtils.exitBlock(tokens, reader)){
+        while (reader.getCurrent().isValid() && LexerUtils.isSameBlock(tokens, reader)){
             if(reader.getCurrent().ignore()) {
                 reader.readLine();
                 continue;

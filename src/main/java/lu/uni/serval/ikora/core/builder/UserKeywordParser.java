@@ -46,7 +46,7 @@ class UserKeywordParser {
 
         final UserKeyword userKeyword = optionalUserKeyword.get();
 
-        while(reader.getCurrent().isValid() && !LexerUtils.exitBlock(nameTokens, reader)) {
+        while(reader.getCurrent().isValid() && LexerUtils.isSameBlock(nameTokens, reader)) {
             if(reader.getCurrent().ignore()) {
                 reader.readLine();
                 continue;

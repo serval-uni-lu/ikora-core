@@ -56,8 +56,8 @@ public class LexerUtils {
         return tokenize(line);
     }
 
-    public static boolean exitBlock(Tokens forLoop, LineReader reader){
-        return !forLoop.isParent(LexerUtils.peek(reader.getCurrent())) || LexerUtils.isBlock(reader.getCurrent().getText());
+    public static boolean isSameBlock(Tokens forLoop, LineReader reader){
+        return forLoop.isParent(LexerUtils.peek(reader.getCurrent())) || LexerUtils.isBlock(reader.getCurrent().getText());
     }
 
     static boolean isBlock(String value) {

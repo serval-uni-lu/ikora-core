@@ -41,6 +41,10 @@ public class Tokens implements Iterable<Token> {
         return new Tokens();
     }
 
+    public SortedSet<Token> asSortedSet(){
+        return this.tokenSet;
+    }
+
     public void add(Token token){
         if(token == null || token.isEmpty()){
             return;
