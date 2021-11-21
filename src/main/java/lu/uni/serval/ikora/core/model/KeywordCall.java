@@ -77,7 +77,7 @@ public class KeywordCall extends Step {
 
     @Override
     public boolean hasParameters() {
-        return !getAstChildren().isEmpty();
+        return !this.arguments.isEmpty();
     }
 
     public Optional<Keyword> getKeyword() {

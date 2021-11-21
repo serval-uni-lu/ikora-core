@@ -40,11 +40,10 @@ public class KeywordCallParser {
             );
         }
         else{
-            Token rawName = callTokens.first();
-            Token name = getKeywordCallName(rawName, allowGherkin);
-            Gherkin gherkin = new Gherkin(rawName);
-
-            KeywordCall call = new KeywordCall(name);
+            final Token rawName = callTokens.first();
+            final Token name = getKeywordCallName(rawName, allowGherkin);
+            final Gherkin gherkin = allowGherkin ? new Gherkin(rawName) : Gherkin.none();
+            final KeywordCall call = new KeywordCall(name);
             call.setGherkin(gherkin);
 
             final NodeList<Argument> arguments = new NodeList<>();
