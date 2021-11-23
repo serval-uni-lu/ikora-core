@@ -1,7 +1,28 @@
 package lu.uni.serval.ikora.core.model;
 
+/*-
+ * #%L
+ * Ikora Core
+ * %%
+ * Copyright (C) 2019 - 2021 University of Luxembourg
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License")
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -68,20 +89,16 @@ public class Token implements Comparable<Token> {
         return endOffset;
     }
 
+    public Type getType(){
+        return this.type;
+    }
+
     public boolean isDelimiter(){
         return this.type == Type.DELIMITER;
     }
 
     public boolean isBlock(){
         return this.type == Type.BLOCK;
-    }
-
-    public boolean isBlock(String name){
-        if(this.type != Type.BLOCK){
-            return false;
-        }
-
-        return this.text.contains(name);
     }
 
     public boolean isComment() {
@@ -108,8 +125,16 @@ public class Token implements Comparable<Token> {
         return this.type == Type.VARIABLE;
     }
 
-    public boolean equalsIgnorePosition(Token name) {
-        return name.text.equalsIgnoreCase(this.text);
+    public boolean matches(Token other) {
+        if(other == null){
+            return false;
+        }
+
+        return matches(other.text);
+    }
+
+    public boolean matches(String text){
+        return this.text.equalsIgnoreCase(text);
     }
 
     public Token extract(int start){
@@ -168,6 +193,24 @@ public class Token implements Comparable<Token> {
         Token nameToken = this.extract(library.length() + 1);
 
         return Pair.of(libraryToken, nameToken);
+    }
+
+    public List<Token> split(String regex) {
+        final Matcher matcher = Pattern.compile(regex).matcher(this.text);
+        final List<Token> tokens = new ArrayList<>();
+
+        int position = 0;
+
+        while(matcher.find()){
+            tokens.add(this.extract(position, matcher.start()));
+            position = matcher.end();
+        }
+
+        if(tokens.isEmpty()){
+            tokens.add(this.copy());
+        }
+
+        return tokens;
     }
 
     public static Token fromString(String text) {

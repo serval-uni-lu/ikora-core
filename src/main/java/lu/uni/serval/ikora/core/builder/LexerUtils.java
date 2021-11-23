@@ -1,5 +1,25 @@
 package lu.uni.serval.ikora.core.builder;
 
+/*-
+ * #%L
+ * Ikora Core
+ * %%
+ * Copyright (C) 2019 - 2021 University of Luxembourg
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License")
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+
 import lu.uni.serval.ikora.core.model.Token;
 import lu.uni.serval.ikora.core.model.Tokens;
 import lu.uni.serval.ikora.core.utils.StringUtils;
@@ -36,8 +56,8 @@ public class LexerUtils {
         return tokenize(line);
     }
 
-    public static boolean exitBlock(Tokens forLoop, LineReader reader){
-        return !forLoop.isParent(LexerUtils.peek(reader.getCurrent())) || LexerUtils.isBlock(reader.getCurrent().getText());
+    public static boolean isSameBlock(Tokens forLoop, LineReader reader){
+        return forLoop.isParent(LexerUtils.peek(reader.getCurrent())) || !LexerUtils.isBlock(reader.getCurrent().getText());
     }
 
     static boolean isBlock(String value) {
@@ -46,7 +66,7 @@ public class LexerUtils {
 
     static boolean isBlock(String value, String name){
         String regex = String.format("^\\*{3}(\\s*)%s(\\s*)(\\**)(\\s*)", name);
-        return StringUtils.compareNoCase(value, regex);
+        return StringUtils.matchesIgnoreCase(value, regex);
     }
 
     static boolean isEmpty(String line) {
@@ -164,13 +184,13 @@ public class LexerUtils {
             else if(value.startsWith("#")){
                 type = Token.Type.COMMENT;
             }
-            else if(StringUtils.compareNoCase(value,"^:(\\s?)FOR")){
+            else if(StringUtils.matchesIgnoreCase(value,"^:(\\s?)FOR")){
                 type = Token.Type.FOR_LOOP;
             }
-            else if(StringUtils.compareNoCase(value, "^((\\$|@|&)\\{)(.*)(\\})(\\s?)(=?)")){
+            else if(StringUtils.matchesIgnoreCase(value, "^((\\$|@|&)\\{)(.*)(\\})(\\s?)(=?)")){
                 type = Token.Type.ASSIGNMENT;
             }
-            else if(StringUtils.compareNoCase(value, "^\\.\\.\\.$")){
+            else if(StringUtils.matchesIgnoreCase(value, "^\\.\\.\\.$")){
                 type = Token.Type.CONTINUATION;
             }
             else{

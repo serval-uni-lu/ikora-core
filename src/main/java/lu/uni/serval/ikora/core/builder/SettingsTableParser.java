@@ -1,16 +1,30 @@
 package lu.uni.serval.ikora.core.builder;
 
-import lu.uni.serval.ikora.core.exception.InvalidMetadataException;
-import lu.uni.serval.ikora.core.exception.InvalidTypeException;
-import lu.uni.serval.ikora.core.error.ErrorManager;
-import lu.uni.serval.ikora.core.error.ErrorMessages;
-import lu.uni.serval.ikora.core.model.*;
-import lu.uni.serval.ikora.core.utils.StringUtils;
+/*-
+ * #%L
+ * Ikora Core
+ * %%
+ * Copyright (C) 2019 - 2021 University of Luxembourg
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License")
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
 
-import java.io.File;
+import lu.uni.serval.ikora.core.error.ErrorManager;
+import lu.uni.serval.ikora.core.model.*;
+
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Iterator;
 
 class SettingsTableParser {
     private SettingsTableParser(){ }
@@ -25,191 +39,66 @@ class SettingsTableParser {
                 continue;
             }
 
-            Tokens tokens = LexerUtils.tokenize(reader);
+            final Iterator<Token> tokenIterator = TokenScanner.from(LexerUtils.tokenize(reader))
+                    .skipIndent(true)
+                    .iterator();
 
-            String label = ParserUtils.getLabel(reader, tokens, errors).getText();
+            final Token label = ParserUtils.getLabel(reader, tokenIterator, errors);
 
-            if(StringUtils.compareNoCase(label, "documentation")){
-                parseDocumentation(reader, tokens.withoutTag("documentation"), settings);
+            if(DocumentationParser.is(label)){
+                final Documentation documentation = DocumentationParser.parse(label, tokenIterator);
+                settings.setDocumentation(documentation);
             }
-            else if(StringUtils.compareNoCase(label, "resource")){
-                parseResource(reader, tokens.withoutTag("resource"), settings, errors);
+            else if(ResourcesParser.is(label)){
+                final Resources resources = ResourcesParser.parse(label, tokenIterator);
+                settings.addResources(resources);
             }
-            else if(StringUtils.compareNoCase(label, "library")){
-                parseLibrary(reader, tokens.withoutTag("library"), settings, errors);
+            else if(LibraryParser.is(label)){
+                final Library library = LibraryParser.parse(label, tokenIterator);
+                settings.addLibrary(library);
             }
-            else if(StringUtils.compareNoCase(label, "variables")) {
-                parseVariable(reader, tokens.withoutTag("variables"), settings);
+            else if(VariableFileParser.is(label)) {
+                final VariableFile variableFile = VariableFileParser.parse(label, tokenIterator);
+                settings.addVariableFile(variableFile);
             }
-            else if(StringUtils.compareNoCase(label, "metadata")) {
-                parseMetadata(reader, tokens.withoutTag("metadata"), settings, errors);
+            else if(MetadataParser.is(label)) {
+                final Metadata metadata = MetadataParser.parse(reader, label, tokenIterator, errors);
+                settings.addMetadata(metadata);
             }
-            else if(StringUtils.compareNoCase(label, "suite setup")) {
-                parseSuiteSetup(reader, tokens.withoutTag("suite setup"), settings, errors);
+            else if(TestProcessingParser.is(label, Scope.SUITE, TestProcessing.Phase.SETUP)) {
+                final TestProcessing suiteSetup = TestProcessingParser.parse(TestProcessing.Phase.SETUP, reader, label, tokenIterator, errors);
+                settings.setSuiteSetup(suiteSetup);
             }
-            else if(StringUtils.compareNoCase(label, "suite teardown")) {
-                parseSuiteTeardown(reader, tokens.withoutTag("suite teardown"), settings, errors);
+            else if(TestProcessingParser.is(label, Scope.TEST, TestProcessing.Phase.SETUP)){
+                final TestProcessing testSetup = TestProcessingParser.parse(TestProcessing.Phase.SETUP, reader, label, tokenIterator, errors);
+                settings.setTestSetup(testSetup);
             }
-            else if(StringUtils.compareNoCase(label, "force tags")) {
-                parseForceTags(reader, tokens.withoutTag("force tags"), settings);
+            else if(TestProcessingParser.is(label, Scope.SUITE, TestProcessing.Phase.TEARDOWN)) {
+                final TestProcessing teardown = TestProcessingParser.parse(TestProcessing.Phase.TEARDOWN, reader, label, tokenIterator, errors);
+                settings.setSuiteTeardown(teardown);
             }
-            else if(StringUtils.compareNoCase(label, "default tags")){
-                parseDefaultTags(reader, tokens.withoutTag("default tags"), settings);
+            else if(TestProcessingParser.is(label, Scope.TEST, TestProcessing.Phase.TEARDOWN)) {
+                final TestProcessing teardown = TestProcessingParser.parse(TestProcessing.Phase.TEARDOWN, reader, label, tokenIterator, errors);
+                settings.setTestTeardown(teardown);
             }
-            else if(StringUtils.compareNoCase(label, "test setup")){
-                parseTestSetup(reader, tokens.withoutTag("test setup"), settings, errors);
+            else if(TestProcessingParser.is(label, Scope.TEST, TestProcessing.Phase.TEMPLATE)){
+                final TestProcessing testTemplate = TestProcessingParser.parse(TestProcessing.Phase.TEMPLATE, reader, label, tokenIterator, errors);
+                settings.setTestTeardown(testTemplate);
             }
-            else if(StringUtils.compareNoCase(label, "test teardown")){
-                parseTestTeardown(reader, tokens.withoutTag("test teardown"), settings, errors);
+            else if(TagsParser.is(label, TagsParser.Type.FORCE)) {
+                final NodeList<Literal> forceTags = TagsParser.parse(label, tokenIterator);
+                settings.setForceTags(forceTags);
             }
-            else if(StringUtils.compareNoCase(label, "test template")){
-                parseTestTemplate(reader, tokens.withoutTag("test template"), settings, errors);
+            else if(TagsParser.is(label, TagsParser.Type.DEFAULT)){
+                final NodeList<Literal> defaultTags = TagsParser.parse(label, tokenIterator);
+                settings.setDefaultTags(defaultTags);
             }
-            else if(StringUtils.compareNoCase(label, "test timeout")){
-                ParserUtils.parseTimeOut(reader, tokens.withoutTag("test timeout"), settings, errors);
+            else if(TimeoutParser.is(label, Scope.TEST)){
+                final TimeOut testTimeout = TimeoutParser.parse(label, tokenIterator);
+                settings.setTimeOut(testTimeout);
             }
         }
 
         return settings;
-    }
-
-    private static void parseTestTemplate(LineReader reader, Tokens tokens, Settings settings, ErrorManager errors) throws IOException {
-        Step step = StepParser.parse(reader, tokens, false, errors);
-
-        try {
-            settings.setTemplate(step);
-        } catch (InvalidTypeException e) {
-            errors.registerSyntaxError(
-                    step.getSource(),
-                    ErrorMessages.FAILED_TO_PARSE_TEMPLATE,
-                    step.getRange()
-            );
-        }
-    }
-
-    private static void parseTestTeardown(LineReader reader, Tokens tokens, Settings settings, ErrorManager errors) throws IOException {
-        Step step = StepParser.parse(reader, tokens, false, errors);
-
-        try {
-            settings.setTestTeardown(step);
-        } catch (InvalidTypeException e) {
-            errors.registerSyntaxError(
-                    step.getSource(),
-                    String.format("%s: %s", ErrorMessages.FAILED_TO_PARSE_TEARDOWN, e.getMessage()),
-                    step.getRange()
-            );
-        }
-    }
-
-    private static void parseTestSetup(LineReader reader, Tokens tokens, Settings settings, ErrorManager errors) throws IOException {
-        Step step = StepParser.parse(reader, tokens, false, errors);
-
-        try {
-            settings.setTestSetup(step);
-        } catch (InvalidTypeException e) {
-            errors.registerSyntaxError(
-                    step.getSource(),
-                    String.format("%s: %s", ErrorMessages.FAILED_TO_PARSE_SETUP, e.getMessage()),
-                    step.getRange()
-            );
-        }
-    }
-
-    private static void parseForceTags(LineReader reader, Tokens tokens, Settings settings) throws IOException {
-        for(Token token: tokens.withoutIndent()){
-            settings.addForceTag(token);
-        }
-    }
-
-    private static void parseDefaultTags(LineReader reader, Tokens tokens, Settings settings) throws IOException {
-        for(Token token: tokens.withoutIndent()){
-            settings.addDefaultTag(token);
-        }
-    }
-
-    private static void parseSuiteTeardown(LineReader reader, Tokens tokens, Settings settings, ErrorManager errors) throws IOException {
-        Step step = StepParser.parse(reader, tokens, false, errors);
-
-        try {
-            settings.setSuiteTeardown(step);
-        } catch (InvalidTypeException e) {
-            errors.registerSyntaxError(
-                    step.getSource(),
-                    String.format("%s: %s", ErrorMessages.FAILED_TO_PARSE_TEARDOWN, e.getMessage()),
-                    step.getRange()
-            );
-        }
-    }
-
-    private static void parseSuiteSetup(LineReader reader, Tokens tokens, Settings settings, ErrorManager errors) throws IOException {
-        Step step = StepParser.parse(reader, tokens, false, errors);
-
-        try {
-            settings.setSuiteSetup(step);
-        } catch (InvalidTypeException e) {
-            errors.registerSyntaxError(
-                    step.getSource(),
-                    String.format("%s: %s", ErrorMessages.FAILED_TO_PARSE_SETUP, e.getMessage()),
-                    step.getRange()
-            );
-        }
-    }
-
-    private static void parseMetadata(LineReader reader, Tokens tokens, Settings settings, ErrorManager errors) throws IOException {
-        try{
-            final Token key = tokens.size() > 0 ? tokens.first() : null;
-            final Token value = tokens.size() > 1 ? tokens.get(1) : null;
-
-            settings.addMetadata(key, value);
-
-            if(tokens.size() > 2){
-                errors.registerSyntaxError(
-                        reader.getSource(),
-                        ErrorMessages.TOO_MANY_METADATA_ARGUMENTS,
-                        Range.fromTokens(tokens.withoutFirst(2), reader.getCurrent())
-                );
-            }
-
-        } catch (InvalidMetadataException e){
-            errors.registerSyntaxError(
-                    reader.getSource(),
-                    String.format("%s: %s", ErrorMessages.FAILED_TO_PARSE_METADATA, e.getMessage()),
-                    Range.fromTokens(tokens, reader.getCurrent())
-            );
-        }
-    }
-
-    private static void parseVariable(LineReader reader, Tokens tokens, Settings settings) throws IOException {
-        Token file = tokens.first();
-
-        List<Token> parameters = new ArrayList<>();
-        for(Token token: tokens.withoutFirst()){
-            if(token.isText()){
-                parameters.add(token);
-            }
-        }
-
-        settings.addVariableFile(new VariableFile(file, parameters));
-    }
-
-    private static void parseDocumentation(LineReader reader, Tokens tokens, Settings settings) throws IOException {
-        settings.setDocumentation(tokens.toString());
-    }
-
-    private static void parseLibrary(LineReader reader, Tokens tokens, Settings settings, ErrorManager errors) throws IOException {
-        Token name = ParserUtils.getLabel(reader, tokens, errors);
-        Library library = new Library(name, new ArrayList<>(), Token.empty());
-        settings.addLibrary(library);
-    }
-
-    private static void parseResource(LineReader reader, Tokens tokens, Settings settings, ErrorManager errors) throws IOException {
-        Token label = ParserUtils.getLabel(reader, tokens, errors);
-        File filePath = new File(label.getText());
-        if(!filePath.isAbsolute()) {
-            filePath = new File(reader.getSource().asFile().getParentFile(), filePath.getPath());
-        }
-
-        Resources resources = new Resources(label, filePath, new ArrayList<>(), Token.empty());
-        settings.addResources(resources);
     }
 }

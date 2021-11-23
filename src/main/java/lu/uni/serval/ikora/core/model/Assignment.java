@@ -1,5 +1,25 @@
 package lu.uni.serval.ikora.core.model;
 
+/*-
+ * #%L
+ * Ikora Core
+ * %%
+ * Copyright (C) 2019 - 2021 University of Luxembourg
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License")
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+
 import lu.uni.serval.ikora.core.analytics.difference.Edit;
 import lu.uni.serval.ikora.core.analytics.visitor.NodeVisitor;
 import lu.uni.serval.ikora.core.analytics.visitor.VisitorMemory;
@@ -15,11 +35,17 @@ public class Assignment extends Step implements Dependable {
     private final NodeList<Variable> leftHandOperand;
     private final Argument rightHandOperand;
     private final Set<SourceNode> dependencies;
+    private final Token equalSign;
 
-    public Assignment(Token name, List<Variable> leftHandOperand, KeywordCall rightHandOperand) {
+    public Assignment(Token name, List<Variable> leftHandOperand, KeywordCall rightHandOperand, Token equalSign) {
         super(name);
 
         this.dependencies = new HashSet<>();
+
+        this.equalSign = equalSign;
+        if(!equalSign.isEmpty()){
+            this.addToken(equalSign);
+        }
 
         this.leftHandOperand = new NodeList<>();
         this.addAstChild(this.leftHandOperand);
@@ -48,6 +74,10 @@ public class Assignment extends Step implements Dependable {
         this.addTokens(variable.getTokens());
 
         leftHandOperand.add(variable);
+    }
+
+    public Token getEqualSign() {
+        return this.equalSign;
     }
 
     public NodeList<Variable> getLeftHandOperand() {
@@ -175,7 +205,7 @@ public class Assignment extends Step implements Dependable {
         StringBuilder builder = new StringBuilder();
 
         for (Variable variable: leftHandOperand){
-            builder.append(variable.getNameToken());
+            builder.append(variable.getDefinitionToken());
             builder.append("\t");
         }
 
@@ -212,7 +242,7 @@ public class Assignment extends Step implements Dependable {
 
     public boolean isDefinition(Variable variable){
         for(Variable candidate: leftHandOperand){
-            if(candidate.matches(variable.getNameToken())){
+            if(candidate.matches(variable.getDefinitionToken())){
                 return true;
             }
         }

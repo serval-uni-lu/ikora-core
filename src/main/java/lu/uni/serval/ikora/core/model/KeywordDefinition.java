@@ -1,5 +1,25 @@
 package lu.uni.serval.ikora.core.model;
 
+/*-
+ * #%L
+ * Ikora Core
+ * %%
+ * Copyright (C) 2019 - 2021 University of Luxembourg
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License")
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+
 import lu.uni.serval.ikora.core.analytics.difference.Edit;
 import lu.uni.serval.ikora.core.builder.ValueResolver;
 import lu.uni.serval.ikora.core.exception.RunnerException;
@@ -14,7 +34,7 @@ public abstract class KeywordDefinition extends SourceNode implements Keyword, I
     private final Token name;
     private final NodeList<Step> steps;
     private final Set<SourceNode> dependencies;
-    private Tokens documentation;
+    private Documentation documentation;
     private NodeList<Literal> tags;
     private TimeOut timeOut;
 
@@ -32,7 +52,7 @@ public abstract class KeywordDefinition extends SourceNode implements Keyword, I
         this.timeOut = TimeOut.none();
         this.addAstChild(this.timeOut);
 
-        this.documentation = new Tokens();
+        this.documentation = new Documentation();
         this.localVariables = new ArrayList<>();
 
         this.name = name;
@@ -93,7 +113,7 @@ public abstract class KeywordDefinition extends SourceNode implements Keyword, I
 
     @Override
     public String toString() {
-        return String.format("%s - %s", getLibraryName(), getNameToken());
+        return String.format("%s - %s", getLibraryName(), getDefinitionToken());
     }
 
     public NodeList<Step> getSteps() {
@@ -110,17 +130,18 @@ public abstract class KeywordDefinition extends SourceNode implements Keyword, I
         return count;
     }
 
-    public void setDocumentation(Tokens documentation){
+    public void setDocumentation(Documentation documentation){
         this.documentation = documentation;
+        addTokens(this.documentation.getTokens());
     }
 
     @Override
-    public Token getNameToken() {
+    public Token getDefinitionToken() {
         return name;
     }
 
     @Override
-    public Tokens getDocumentation() {
+    public Documentation getDocumentation() {
         return documentation;
     }
 
@@ -167,21 +188,23 @@ public abstract class KeywordDefinition extends SourceNode implements Keyword, I
             return edits;
         }
 
-        KeywordDefinition keyword = (KeywordDefinition)other;
+        KeywordDefinition that = (KeywordDefinition)other;
 
         // check name change
-        if(!this.getNameToken().equalsIgnorePosition(keyword.getNameToken())){
+        if(!this.getDefinitionToken().matches(that.getDefinitionToken())){
             edits.add(Edit.changeName(this, other));
         }
 
         // check documentation change
-        Edit documentationEdit = differenceDocumentation(keyword);
-        if(documentationEdit != null){
-            edits.add(documentationEdit);
+        if(this.getDocumentation() == null && that.getDocumentation() != null){
+            edits.add(Edit.addDocumentation(that.documentation));
+        }
+        else{
+            edits.addAll(this.documentation.differences(that.documentation));
         }
 
         // check step changes
-        List<Edit> stepEdits = LevenshteinDistance.getDifferences(this.getSteps(), keyword.getSteps());
+        List<Edit> stepEdits = LevenshteinDistance.getDifferences(this.getSteps(), that.getSteps());
         edits.addAll(stepEdits);
 
         return edits;
@@ -219,21 +242,5 @@ public abstract class KeywordDefinition extends SourceNode implements Keyword, I
     @Override
     public Set<SourceNode> getDependencies() {
         return dependencies;
-    }
-
-    private Edit differenceDocumentation(KeywordDefinition keyword) {
-        Edit edit = null;
-
-        if(this.documentation.isEmpty() && !keyword.documentation.isEmpty()){
-            edit = Edit.addDocumentation(this, keyword);
-        }
-        else if(!this.documentation.isEmpty() && keyword.documentation.isEmpty()){
-            edit = Edit.removeDocumentation(this, keyword);
-        }
-        else if(!this.documentation.equalsIgnorePosition(keyword.documentation)){
-            edit = Edit.changeDocumentation(this, keyword);
-        }
-
-        return edit;
     }
 }

@@ -1,46 +1,52 @@
 package lu.uni.serval.ikora.core.builder;
 
-import lu.uni.serval.ikora.core.exception.InvalidArgumentException;
-import lu.uni.serval.ikora.core.exception.InvalidNumberArgumentException;
-import lu.uni.serval.ikora.core.exception.MalformedVariableException;
+/*-
+ * #%L
+ * Ikora Core
+ * %%
+ * Copyright (C) 2019 - 2021 University of Luxembourg
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License")
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+
+import lu.uni.serval.ikora.core.error.ErrorManager;
+import lu.uni.serval.ikora.core.model.Scope;
 import lu.uni.serval.ikora.core.model.TimeOut;
 import lu.uni.serval.ikora.core.model.Token;
-import lu.uni.serval.ikora.core.model.Tokens;
+import lu.uni.serval.ikora.core.utils.StringUtils;
+
+import java.util.Iterator;
 
 public class TimeoutParser {
     private TimeoutParser() {}
 
-    public static TimeOut parse(Tokens tokens) throws InvalidArgumentException, MalformedVariableException {
-        Tokens fullTokens = tokens.withoutIndent();
-        return parseLine(fullTokens);
-    }
+    public static boolean is(Token label, Scope scope){
+        String scopeString;
 
-    private static TimeOut parseLine(Tokens tokens) throws InvalidArgumentException, MalformedVariableException {
-        if(tokens.size() > 3){
-            throw new InvalidNumberArgumentException(2, 3);
+        switch (scope){
+            case KEYWORD: scopeString = ""; break;
+            case TEST: scopeString = "test "; break;
+            default: return false;
         }
 
-        Token name = parseName(tokens);
-        Token errorMessage = parseErrorMessage(tokens);
-
-        TimeOut timeOut = new TimeOut(name, errorMessage);
-
-        if(!timeOut.isValid()){
-            throw new InvalidArgumentException(String.format("Invalid argument: %s", name));
-        }
-
-        return timeOut;
+        return StringUtils.matchesIgnoreCase(label, "\\[" + scopeString + "timeout\\]");
     }
 
-    private static Token parseName(Tokens tokens) {
-        return tokens.first();
-    }
+    public static TimeOut parse(Token label, Iterator<Token> tokenIterator) {
+        final Token name = tokenIterator.hasNext() ? tokenIterator.next() : Token.empty();
+        final Token errorMessage = tokenIterator.hasNext() ? tokenIterator.next() : Token.empty();
 
-    private static Token parseErrorMessage(Tokens tokens) {
-       if(tokens.size() > 2){
-           return tokens.get(1);
-       }
-
-       return Token.empty();
+        return new TimeOut(label, name, errorMessage);
     }
 }

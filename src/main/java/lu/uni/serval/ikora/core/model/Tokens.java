@@ -1,7 +1,26 @@
 package lu.uni.serval.ikora.core.model;
 
+/*-
+ * #%L
+ * Ikora Core
+ * %%
+ * Copyright (C) 2019 - 2021 University of Luxembourg
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License")
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+
 import lu.uni.serval.ikora.core.exception.OutOfRangeException;
-import lu.uni.serval.ikora.core.utils.StringUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -13,8 +32,20 @@ public class Tokens implements Iterable<Token> {
         this.tokenSet = new TreeSet<>();
     }
 
+    public Tokens(Token... tokens){
+        this(Arrays.asList(tokens));
+    }
+
     private Tokens(List<Token> tokenSet){
         this.tokenSet = new TreeSet<>(tokenSet);
+    }
+
+    public static Tokens empty() {
+        return new Tokens();
+    }
+
+    public SortedSet<Token> asSortedSet(){
+        return this.tokenSet;
     }
 
     public void add(Token token){
@@ -66,37 +97,6 @@ public class Tokens implements Iterable<Token> {
         return this.tokenSet.size();
     }
 
-    public Tokens withoutIndent(){
-        return new Tokens(tokenSet.stream().filter(token -> !token.isDelimiter()).collect(Collectors.toList()));
-    }
-
-    public Tokens withoutFirst(){
-        if(tokenSet.size() < 2){
-            return new Tokens();
-        }
-
-        return withoutFirst(1);
-    }
-
-    public Tokens withoutFirst(int offset){
-        Iterator<Token> iterator = offset(offset);
-        Tokens newTokens = new Tokens();
-        while(iterator.hasNext()) newTokens.add(iterator.next());
-        return newTokens;
-    }
-
-    public Tokens withoutTag(String tag){
-        if(tag.isEmpty()){
-            return this;
-        }
-
-        if(StringUtils.compareNoCase(first().getText(), tag)){
-            return withoutFirst();
-        }
-
-        return this;
-    }
-
     public int getIndentSize() {
         return (int) tokenSet.stream().filter(Token::isDelimiter).count();
     }
@@ -135,7 +135,7 @@ public class Tokens implements Iterable<Token> {
         }
 
         for(int i = 0; i < size(); ++i){
-            if (!this.get(i).equalsIgnorePosition(other.get(i))){
+            if (!this.get(i).matches(other.get(i))){
                 return false;
             }
         }

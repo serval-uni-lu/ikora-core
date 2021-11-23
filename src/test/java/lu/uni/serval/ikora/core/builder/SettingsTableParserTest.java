@@ -1,15 +1,37 @@
 package lu.uni.serval.ikora.core.builder;
 
+/*-
+ * #%L
+ * Ikora Core
+ * %%
+ * Copyright (C) 2019 - 2021 University of Luxembourg
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License")
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+
 import lu.uni.serval.ikora.core.error.ErrorManager;
 import lu.uni.serval.ikora.core.error.ErrorMessages;
 import lu.uni.serval.ikora.core.model.Settings;
 import lu.uni.serval.ikora.core.model.Source;
 import lu.uni.serval.ikora.core.model.Tokens;
+import lu.uni.serval.ikora.core.model.Value;
 import org.junit.jupiter.api.Assertions;
 import lu.uni.serval.ikora.core.Helpers;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -25,7 +47,7 @@ class SettingsTableParserTest {
         final Settings settings = createSettings(settingText, errors);
         assertTrue(errors.inMemory().isEmpty());
 
-        assertEquals("Example suite", settings.getDocumentation());
+        assertEquals("Example suite", settings.getDocumentation().getText());
     }
 
     @Test
@@ -39,7 +61,7 @@ class SettingsTableParserTest {
         final Settings settings = createSettings(settingText, errors);
 
         assertEquals("Do Something", settings.getSuiteSetup().getName());
-        assertEquals("${MESSAGE}", settings.getSuiteSetup().getArgumentList().get(0).getName());
+        assertEquals("${MESSAGE}", settings.getSuiteSetup().getCall().getArgumentList().get(0).getName());
     }
 
     @Test
@@ -53,7 +75,7 @@ class SettingsTableParserTest {
         assertTrue(errors.inMemory().isEmpty());
 
         assertEquals("Do Something", settings.getTestSetup().getName());
-        assertEquals("${MESSAGE}", settings.getTestSetup().getArgumentList().get(0).getName());
+        assertEquals("${MESSAGE}", settings.getTestSetup().getCall().getArgumentList().get(0).getName());
     }
 
     @Test
@@ -67,7 +89,7 @@ class SettingsTableParserTest {
         assertTrue(errors.inMemory().isEmpty());
 
         assertEquals("Do Something", settings.getSuiteTeardown().getName());
-        assertEquals("${MESSAGE}", settings.getSuiteTeardown().getArgumentList().get(0).getName());
+        assertEquals("${MESSAGE}", settings.getSuiteTeardown().getCall().getArgumentList().get(0).getName());
     }
 
     @Test
@@ -81,7 +103,7 @@ class SettingsTableParserTest {
         assertTrue(errors.inMemory().isEmpty());
 
         assertEquals("Do Something", settings.getTestTeardown().getName());
-        assertEquals("${MESSAGE}", settings.getTestTeardown().getArgumentList().get(0).getName());
+        assertEquals("${MESSAGE}", settings.getTestTeardown().getCall().getArgumentList().get(0).getName());
     }
 
     @Test
@@ -95,7 +117,7 @@ class SettingsTableParserTest {
         assertTrue(errors.inMemory().isEmpty());
 
         assertEquals("Do Something", settings.getTemplate().getName());
-        assertEquals("${MESSAGE}", settings.getTemplate().getArgumentList().get(0).getName());
+        assertEquals("${MESSAGE}", settings.getTemplate().getCall().getArgumentList().get(0).getName());
     }
 
     @Test
@@ -122,8 +144,10 @@ class SettingsTableParserTest {
         final Settings settings = createSettings(settingText, errors);
         assertTrue(errors.inMemory().isEmpty());
 
-        assertEquals(1, settings.getMetadata().size());
-        assertEquals("2.0", settings.getMetadata("Version").getText());
+        assertEquals(1, settings.getMetadataList().size());
+        Optional<Value> version = settings.getMetadata("Version");
+        assertTrue(version.isPresent());
+        assertEquals("2.0", version.get().getName());
     }
 
     @Test
@@ -136,7 +160,7 @@ class SettingsTableParserTest {
         final Settings settings = createSettings(settingText, errors);
         assertEquals(1, errors.inMemory().getSize());
 
-        assertEquals(0, settings.getMetadata().size());
+        assertEquals(0, settings.getMetadataList().size());
     }
 
     @Test
@@ -148,8 +172,10 @@ class SettingsTableParserTest {
         final Settings settings = createSettings(settingText, errors);
         assertEquals(1, errors.inMemory().getSize());
 
-        assertEquals(1, settings.getMetadata().size());
-        assertEquals("2.0", settings.getMetadata("Version").getText());
+        assertEquals(1, settings.getMetadataList().size());
+        Optional<Value> version = settings.getMetadata("Version");
+        assertTrue(version.isPresent());
+        assertEquals("2.0", version.get().getName());
     }
 
     @Test

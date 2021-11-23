@@ -1,11 +1,29 @@
 package lu.uni.serval.ikora.core.analytics.violations;
 
+/*-
+ * #%L
+ * Ikora Core
+ * %%
+ * Copyright (C) 2019 - 2021 University of Luxembourg
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License")
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+
 import lu.uni.serval.ikora.core.model.*;
-import org.apache.commons.lang3.NotImplementedException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public class ViolationDetection {
     private ViolationDetection() {}
@@ -54,12 +72,8 @@ public class ViolationDetection {
                 case MULTIPLE_DEFINITIONS:
                     duplicatedKeyword(step, violations);
                     break;
-                case TRANSITIVE_DEPENDENCY:
-                    transitiveDependency(step, violations);
-                    break;
                 case NO_DEFINITION_FOUND:
                 case INFINITE_LOOP:
-                case LITERAL_LOCATOR:
                     throw new UnsupportedOperationException();
             }
         }
@@ -74,41 +88,5 @@ public class ViolationDetection {
                 violations.add(new Violation(Violation.Level.ERROR, call, Violation.Cause.NO_DEFINITION_FOUND));
             }
         });
-    }
-
-    private static void transitiveDependency(Step step, List<Violation> violations) {
-        step.getKeywordCall().ifPresent(call -> {
-            Set<Keyword> keywords = call.getAllPotentialKeywords(Link.Import.STATIC);
-
-            if(keywords.size() != 1){
-                return;
-            }
-
-            Keyword keyword = keywords.iterator().next();
-
-            if(keyword == null){
-                return;
-            }
-
-            if(keyword.getClass() != UserKeyword.class){
-                return;
-            }
-
-            if(!isDirectDependency(keyword, step)){
-                violations.add(new Violation(Violation.Level.WARNING, step, Violation.Cause.TRANSITIVE_DEPENDENCY));
-            }
-        });
-    }
-
-    private static boolean isDirectDependency(Keyword keyword, Step step){
-        if(SourceNode.class.isAssignableFrom(keyword.getClass())){
-            return step.getSourceFile().isDirectDependency(((SourceNode)keyword).getSourceFile());
-        }
-        else if(LibraryKeyword.class.isAssignableFrom(keyword.getClass())){
-            String libraryName = keyword.getLibraryName();
-            return step.getSourceFile().isImportLibrary(libraryName);
-        }
-
-        throw new NotImplementedException("only support keywords in the source code or keyword from libraries for indirect dependency detection");
     }
 }

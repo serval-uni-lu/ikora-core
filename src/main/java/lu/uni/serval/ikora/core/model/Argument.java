@@ -1,5 +1,25 @@
 package lu.uni.serval.ikora.core.model;
 
+/*-
+ * #%L
+ * Ikora Core
+ * %%
+ * Copyright (C) 2019 - 2021 University of Luxembourg
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License")
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+
 import lu.uni.serval.ikora.core.analytics.difference.Edit;
 import lu.uni.serval.ikora.core.analytics.visitor.NodeVisitor;
 import lu.uni.serval.ikora.core.analytics.visitor.VisitorMemory;
@@ -18,7 +38,7 @@ public class Argument extends SourceNode implements HiddenAstNode {
             throw new NullPointerException("Argument cannot be initialize with null value");
         }
 
-        this.name = definition.getNameToken();
+        this.name = definition.getDefinitionToken();
         this.definition = definition;
         addTokens(this.definition.getTokens());
 
@@ -89,7 +109,7 @@ public class Argument extends SourceNode implements HiddenAstNode {
             sameCall = this.definition.distance(argument.definition) == 0.0;
         }
 
-        boolean sameName = this.name.equalsIgnorePosition(argument.getNameToken());
+        boolean sameName = this.name.matches(argument.getDefinitionToken());
 
         return sameName && sameCall ? 0.0 : 1.0;
     }
@@ -112,7 +132,7 @@ public class Argument extends SourceNode implements HiddenAstNode {
     }
 
     @Override
-    public Token getNameToken() {
+    public Token getDefinitionToken() {
         return this.name;
     }
 

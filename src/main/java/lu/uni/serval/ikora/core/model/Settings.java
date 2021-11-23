@@ -1,9 +1,28 @@
 package lu.uni.serval.ikora.core.model;
 
+/*-
+ * #%L
+ * Ikora Core
+ * %%
+ * Copyright (C) 2019 - 2021 University of Luxembourg
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License")
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+
 import lu.uni.serval.ikora.core.analytics.difference.Edit;
 import lu.uni.serval.ikora.core.analytics.visitor.NodeVisitor;
 import lu.uni.serval.ikora.core.analytics.visitor.VisitorMemory;
-import lu.uni.serval.ikora.core.exception.InvalidMetadataException;
 import lu.uni.serval.ikora.core.exception.InvalidTypeException;
 import lu.uni.serval.ikora.core.exception.RunnerException;
 import lu.uni.serval.ikora.core.runner.Runtime;
@@ -20,35 +39,35 @@ public class Settings extends SourceNode implements Delayable {
     private final List<Resources> resourcesTable;
     private final List<Library> libraryTable;
 
-    private final Set<Token> defaultTags;
-    private final Set<Token> forceTags;
-
-    private final Metadata metadata;
+    private final List<Metadata> metadataList;
     private final List<VariableFile> variableFiles;
 
-    private String documentation;
+    private NodeList<Literal> defaultTags;
+    private NodeList<Literal> forceTags;
+
+    private Documentation documentation;
     private TimeOut timeOut;
 
-    private KeywordCall template;
-    private KeywordCall testSetup;
-    private KeywordCall testTeardown;
-    private KeywordCall suiteSetup;
-    private KeywordCall suiteTeardown;
+    private TestProcessing template;
+    private TestProcessing testSetup;
+    private TestProcessing testTeardown;
+    private TestProcessing suiteSetup;
+    private TestProcessing suiteTeardown;
 
     public Settings() {
         this.header = Token.empty();
 
         this.resourcesTable = new ArrayList<>();
         this.libraryTable = new ArrayList<>();
-        this.defaultTags = new HashSet<>();
-        this.forceTags = new HashSet<>();
+        this.defaultTags = new NodeList<>();
+        this.forceTags = new NodeList<>();
         this.timeOut = TimeOut.none();
-        this.metadata = new Metadata();
+        this.metadataList = new ArrayList<>();
         this.variableFiles = new ArrayList<>();
     }
 
     @Override
-    public Token getNameToken() {
+    public Token getDefinitionToken() {
         return this.header;
     }
 
@@ -56,7 +75,7 @@ public class Settings extends SourceNode implements Delayable {
         return header;
     }
 
-    public String getDocumentation() {
+    public Documentation getDocumentation() {
         return documentation;
     }
 
@@ -98,52 +117,47 @@ public class Settings extends SourceNode implements Delayable {
 
     public boolean containsLibrary(String libraryName){
         return libraryTable.stream()
-                .map(l -> l.getName().getText())
-                .anyMatch(n -> n.equalsIgnoreCase(libraryName));
-    }
-
-    public Set<Token> getDefaultTags(){
-        return defaultTags;
+                .map(Library::getDefinitionToken)
+                .anyMatch(n -> n.matches(libraryName));
     }
 
     public boolean hasDefaultTag(String tag){
-        return defaultTags.stream().anyMatch(token -> token.getText().equalsIgnoreCase(tag));
-    }
-
-    public Set<Token> getForceTags(){
-        return forceTags;
+        return defaultTags.stream().anyMatch(literal -> literal.matches(Token.fromString(tag)));
     }
 
     public boolean hasForceTag(String tag){
-        return forceTags.stream().anyMatch(token -> token.getText().equalsIgnoreCase(tag));
+        return forceTags.stream().anyMatch(literal -> literal.matches(Token.fromString(tag)));
     }
 
-    public KeywordCall getTemplate() {
+    public TestProcessing getTemplate() {
         return template;
     }
 
-    public KeywordCall getTestSetup() {
+    public TestProcessing getTestSetup() {
         return testSetup;
     }
 
-    public KeywordCall getTestTeardown() {
+    public TestProcessing getTestTeardown() {
         return testTeardown;
     }
 
-    public KeywordCall getSuiteSetup() {
+    public TestProcessing getSuiteSetup() {
         return suiteSetup;
     }
 
-    public KeywordCall getSuiteTeardown() {
+    public TestProcessing getSuiteTeardown() {
         return suiteTeardown;
     }
 
-    public Metadata getMetadata(){
-        return metadata;
+    public List<Metadata> getMetadataList(){
+        return this.metadataList;
     }
 
-    public Token getMetadata(String key){
-        return metadata.get(key);
+    public Optional<Value> getMetadata(String key){
+        return metadataList.stream()
+                .filter(m -> m.getKey().matches(key))
+                .findFirst()
+                .map(Metadata::getValue);
     }
 
     public List<VariableFile> getVariableFiles() {
@@ -158,7 +172,7 @@ public class Settings extends SourceNode implements Delayable {
         this.header = header;
     }
 
-    public void setDocumentation(String documentation){
+    public void setDocumentation(Documentation documentation){
         this.documentation = documentation;
     }
 
@@ -170,12 +184,12 @@ public class Settings extends SourceNode implements Delayable {
         this.libraryTable.add(library);
     }
 
-    public void addDefaultTag(Token defaultTag){
-        this.defaultTags.add(defaultTag);
+    public void setDefaultTags(NodeList<Literal> defaultTags){
+        this.defaultTags = defaultTags;
     }
 
-    public void addForceTag(Token forceTag){
-        this.forceTags.add(forceTag);
+    public void setForceTags(NodeList<Literal> forceTags){
+        this.forceTags = forceTags;
     }
 
     @Override
@@ -188,16 +202,8 @@ public class Settings extends SourceNode implements Delayable {
         this.timeOut = timeOut;
     }
 
-    public void addMetadata(Token key, Token value) throws InvalidMetadataException {
-        if(key == null || key.isEmpty()){
-            throw new InvalidMetadataException("No key defined");
-        }
-
-        if(value == null || value.isEmpty()){
-            throw new InvalidMetadataException("No value defined");
-        }
-
-        metadata.addEntry(key, value);
+    public void addMetadata(Metadata metadata) {
+        metadataList.add(metadata);
     }
 
     public void addVariableFile(VariableFile variableFile){
@@ -208,43 +214,23 @@ public class Settings extends SourceNode implements Delayable {
         variableFiles.add(variableFile);
     }
 
-    public void setTemplate(Step template) throws InvalidTypeException {
-        setTemplate(template.toCall());
-    }
-
-    public void setTemplate(KeywordCall template) {
+    public void setTemplate(TestProcessing template) {
         this.template = template;
     }
 
-    public void setTestSetup(Step testSetup) throws InvalidTypeException {
-        setTestSetup(testSetup.toCall());
-    }
-
-    public void setTestSetup(KeywordCall testSetup) {
+    public void setTestSetup(TestProcessing testSetup) {
         this.testSetup = testSetup;
     }
 
-    public void setTestTeardown(Step testTeardown) throws InvalidTypeException {
-        setTestTeardown(testTeardown.toCall());
-    }
-
-    public void setTestTeardown(KeywordCall testTeardown) {
+    public void setTestTeardown(TestProcessing testTeardown) {
         this.testTeardown = testTeardown;
     }
 
-    public void setSuiteSetup(Step suiteSetup) throws InvalidTypeException {
-        setSuiteSetup(suiteSetup.toCall());
-    }
-
-    public void setSuiteSetup(KeywordCall suiteSetup) {
+    public void setSuiteSetup(TestProcessing suiteSetup) {
         this.suiteSetup = suiteSetup;
     }
 
-    public void setSuiteTeardown(Step suiteTeardown) throws InvalidTypeException {
-        setSuiteTeardown(suiteTeardown.toCall());
-    }
-
-    public void setSuiteTeardown(KeywordCall suiteTeardown) {
+    public void setSuiteTeardown(TestProcessing suiteTeardown) {
         this.suiteTeardown = suiteTeardown;
     }
 
@@ -268,7 +254,7 @@ public class Settings extends SourceNode implements Delayable {
 
     @Override
     public boolean matches(Token name) {
-        return this.header.equalsIgnorePosition(name);
+        return this.header.matches(name);
     }
 
     @Override

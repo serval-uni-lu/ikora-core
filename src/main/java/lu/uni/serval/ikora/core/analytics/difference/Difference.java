@@ -1,5 +1,25 @@
 package lu.uni.serval.ikora.core.analytics.difference;
 
+/*-
+ * #%L
+ * Ikora Core
+ * %%
+ * Copyright (C) 2019 - 2021 University of Luxembourg
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License")
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+
 import lu.uni.serval.ikora.core.model.SourceNode;
 import lu.uni.serval.ikora.core.model.KeywordDefinition;
 
@@ -118,7 +138,7 @@ public class Difference {
             KeywordDefinition keyword = (KeywordDefinition)element;
 
             hash = 31 * hash + (keyword.getSourceFile() == null ? 0 : keyword.getSourceFile().hashCode());
-            hash = 31 * hash + (keyword.getNameToken() == null ? 0 : keyword.getNameToken().hashCode());
+            hash = 31 * hash + (keyword.getDefinitionToken() == null ? 0 : keyword.getDefinitionToken().hashCode());
         }
         else{
             hash = element.hashCode();

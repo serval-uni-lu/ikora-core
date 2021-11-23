@@ -1,22 +1,42 @@
 package lu.uni.serval.ikora.core.builder;
 
-import lu.uni.serval.ikora.core.exception.InvalidTypeException;
-import lu.uni.serval.ikora.core.exception.MalformedVariableException;
+/*-
+ * #%L
+ * Ikora Core
+ * %%
+ * Copyright (C) 2019 - 2021 University of Luxembourg
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License")
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+
 import lu.uni.serval.ikora.core.error.ErrorManager;
 import lu.uni.serval.ikora.core.error.ErrorMessages;
 import lu.uni.serval.ikora.core.model.*;
-import lu.uni.serval.ikora.core.utils.StringUtils;
 
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.Optional;
 
 class UserKeywordParser {
     private UserKeywordParser(){}
 
     public static UserKeyword parse(LineReader reader, Tokens nameTokens, DynamicImports dynamicImports, ErrorManager errors) throws IOException {
-        Tokens tokens;
+        final Iterator<Token> tokenNameIterator = TokenScanner.from(nameTokens)
+                .skipIndent(true)
+                .iterator();
 
-        final Optional<UserKeyword> optionalUserKeyword = ParserUtils.createKeyword(UserKeyword.class, reader, nameTokens.withoutIndent(), errors);
+        final Optional<UserKeyword> optionalUserKeyword = ParserUtils.createKeyword(UserKeyword.class, reader, tokenNameIterator, errors);
 
         if(!optionalUserKeyword.isPresent()){
             throw new IOException(String.format("failed to read keyword at line %d in file %s",
@@ -26,116 +46,62 @@ class UserKeywordParser {
 
         final UserKeyword userKeyword = optionalUserKeyword.get();
 
-        while(reader.getCurrent().isValid()) {
+        while(reader.getCurrent().isValid() && LexerUtils.isSameBlock(nameTokens, reader)) {
             if(reader.getCurrent().ignore()) {
                 reader.readLine();
                 continue;
             }
 
-            if(LexerUtils.exitBlock(nameTokens, reader)){
-                break;
-            }
+            final Iterator<Token> contentTokenIterator = TokenScanner.from(LexerUtils.tokenize(reader))
+                    .skipIndent(true)
+                    .iterator();
 
-            Tokens currentTokens = LexerUtils.tokenize(reader);
-
-            tokens = currentTokens.withoutIndent();
-
-            Token label = ParserUtils.getLabel(reader, tokens, errors);
-
-            if (StringUtils.compareNoCase(label, "\\[documentation\\]")) {
-                userKeyword.addToken(label.setType(Token.Type.LABEL));
-                parseDocumentation(reader, tokens.withoutFirst(), userKeyword);
-            }
-            else if (StringUtils.compareNoCase(label, "\\[tags\\]")) {
-                final NodeList<Literal> tags = ParserUtils.parseTags(label, tokens.withoutFirst());
-                userKeyword.setTags(tags);
-            }
-            else if (StringUtils.compareNoCase(label, "\\[arguments\\]")) {
-                NodeList<Variable> arguments = parseArguments(reader, label, tokens.withoutFirst(), errors);
-                userKeyword.setParameters(arguments);
-            }
-            else if (StringUtils.compareNoCase(label, "\\[return\\]")) {
-                NodeList<Value> returnValues = parseReturn(label, tokens.withoutFirst());
-                userKeyword.setReturnVariables(returnValues);
-            }
-            else if (StringUtils.compareNoCase(label, "\\[teardown\\]")) {
-                userKeyword.addToken(label.setType(Token.Type.LABEL));
-                parseTeardown(reader, tokens.withoutFirst(), userKeyword, errors);
-            }
-            else if (StringUtils.compareNoCase(label, "\\[timeout\\]")) {
-                userKeyword.addToken(label.setType(Token.Type.LABEL));
-                ParserUtils.parseTimeOut(reader, tokens.withoutFirst(), userKeyword, errors);
-            }
-            else {
-                parseStep(reader, currentTokens, userKeyword, dynamicImports, errors);
-            }
+            parseContentLine(userKeyword, reader, contentTokenIterator, dynamicImports, errors);
         }
 
         return userKeyword;
     }
 
-    private static void parseDocumentation(LineReader reader, Tokens tokens, UserKeyword userKeyword) throws IOException {
-        userKeyword.addTokens(tokens.setType(Token.Type.DOCUMENTATION));
-        userKeyword.setDocumentation(tokens);
-    }
+    private static void parseContentLine(UserKeyword userKeyword, LineReader reader, Iterator<Token> tokenIterator, DynamicImports dynamicImports, ErrorManager errors) throws IOException {
+        final Token label = ParserUtils.getLabel(reader, tokenIterator, errors);
 
-    private static NodeList<Variable> parseArguments(LineReader reader, Token label, Tokens values, ErrorManager errors) {
-        NodeList<Variable> arguments = new NodeList<>(label);
+        if (DocumentationParser.is(label)) {
+            final Documentation documentation = DocumentationParser.parse(label, tokenIterator);
+            userKeyword.setDocumentation(documentation);
+        }
+        else if (TagsParser.is(label, TagsParser.Type.NORMAL)) {
+            final NodeList<Literal> tags = TagsParser.parse(label, tokenIterator);
+            userKeyword.setTags(tags);
+        }
+        else if (ArgumentsParser.is(label)) {
+            final NodeList<Variable> arguments = ArgumentsParser.parse(reader, label, tokenIterator, errors);
+            userKeyword.setParameters(arguments);
+        }
+        else if (ReturnParser.is(label)) {
+            final NodeList<Value> returnValues = ReturnParser.parse(label, tokenIterator);
+            userKeyword.setReturnVariables(returnValues);
+        }
+        else if (TestProcessingParser.is(label, Scope.KEYWORD, TestProcessing.Phase.TEARDOWN)) {
+            final TestProcessing teardown = TestProcessingParser.parse(TestProcessing.Phase.TEARDOWN, reader, label, tokenIterator, errors);
+            userKeyword.setTearDown(teardown);
+        }
+        else if (TimeoutParser.is(label, Scope.KEYWORD)) {
+            final TimeOut timeOut = TimeoutParser.parse(label, tokenIterator);
+            userKeyword.setTimeOut(timeOut);
+        }
+        else {
+            final Step step = StepParser.parse(reader, label, tokenIterator, false, errors);
 
-        for(Token token: values){
             try {
-                arguments.add(Variable.create(token));
-            } catch (MalformedVariableException e) {
+                userKeyword.addStep(step);
+                dynamicImports.add(userKeyword, step);
+            } catch (Exception e) {
                 errors.registerSyntaxError(
-                        reader.getSource(),
-                        String.format("%s: %s", ErrorMessages.FAILED_TO_PARSE_PARAMETER, e.getMessage()),
-                        Range.fromToken(token, reader.getCurrent())
+                        step.getSourceFile().getSource(),
+                        ErrorMessages.FAILED_TO_ADD_STEP_TO_KEYWORD,
+                        step.getRange()
                 );
             }
         }
-
-        return arguments;
     }
-
-    private static NodeList<Value> parseReturn(Token label, Tokens tokens) {
-        NodeList<Value> returnValues = new NodeList<>(label.setType(Token.Type.LABEL));
-
-        for(Token token: tokens){
-            returnValues.add(ValueParser.parseValue(token));
-        }
-
-        return returnValues;
-    }
-
-    private static void parseTeardown(LineReader reader, Tokens tokens, UserKeyword userKeyword, ErrorManager errors) throws IOException {
-        Step step = StepParser.parse(reader, tokens, false, errors);
-
-        try {
-            userKeyword.setTearDown(step);
-            userKeyword.addTokens(step.getTokens());
-        } catch (InvalidTypeException e) {
-            errors.registerSyntaxError(
-                    step.getSource(),
-                    String.format("%s: %s", ErrorMessages.FAILED_TO_PARSE_TEARDOWN, e.getMessage()),
-                    step.getRange()
-            );
-        }
-    }
-
-    private static void parseStep(LineReader reader, Tokens tokens, UserKeyword userKeyword, DynamicImports dynamicImports, ErrorManager errors) throws IOException {
-        Step step = StepParser.parse(reader, tokens, false, errors);
-
-        try {
-            userKeyword.addStep(step);
-            dynamicImports.add(userKeyword, step);
-            userKeyword.addTokens(step.getTokens());
-        } catch (Exception e) {
-           errors.registerSyntaxError(
-                   step.getSourceFile().getSource(),
-                   ErrorMessages.FAILED_TO_ADD_STEP_TO_KEYWORD,
-                   step.getRange()
-            );
-        }
-    }
-
 }

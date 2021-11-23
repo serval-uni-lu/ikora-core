@@ -1,5 +1,25 @@
 package lu.uni.serval.ikora.core.model;
 
+/*-
+ * #%L
+ * Ikora Core
+ * %%
+ * Copyright (C) 2019 - 2021 University of Luxembourg
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License")
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+
 import lu.uni.serval.ikora.core.analytics.difference.Edit;
 import lu.uni.serval.ikora.core.analytics.visitor.NodeVisitor;
 import lu.uni.serval.ikora.core.analytics.visitor.VisitorMemory;
@@ -13,13 +33,16 @@ import java.util.stream.Collectors;
 public class ForLoop extends Step implements Dependable, ScopeNode {
     private final NodeList<Step> steps;
     private final Variable iterator;
-    private final Step interval;
+    private final SourceNode interval;
     private final Set<SourceNode> dependencies;
+    private final Token forToken;
+    private final Token inToken;
+
 
     protected List<Variable> localVariables;
 
-    public ForLoop(Token name, Variable iterator, Step interval, List<Step> steps) {
-        super(name);
+    public ForLoop(Token forToken, Token inToken, Variable iterator, SourceNode interval, List<Step> steps) {
+        super(forToken);
 
         this.iterator = iterator;
         this.addAstChild(this.iterator);
@@ -27,7 +50,6 @@ public class ForLoop extends Step implements Dependable, ScopeNode {
         this.interval = interval;
         this.addAstChild(this.interval);
 
-        this.addToken(name);
         this.addTokens(this.iterator.getTokens());
         this.addTokens(this.interval.getTokens());
 
@@ -37,18 +59,31 @@ public class ForLoop extends Step implements Dependable, ScopeNode {
 
         this.steps = new NodeList<>(steps);
         this.addAstChild(this.steps);
+
+        this.forToken = forToken;
+        this.addToken(forToken);
+        this.inToken = inToken;
+        this.addToken(inToken);
+    }
+
+    public Token getForToken() {
+        return forToken;
+    }
+
+    public Token getInToken() {
+        return inToken;
     }
 
     public Variable getIterator() {
-        return iterator;
+        return this.iterator;
     }
 
-    public Step getInterval() {
-        return interval;
+    public SourceNode getInterval() {
+        return this.interval;
     }
 
     @Override
-    public List<Step> getSteps(){
+    public NodeList<Step> getSteps(){
         return this.steps;
     }
 
@@ -140,7 +175,7 @@ public class ForLoop extends Step implements Dependable, ScopeNode {
                 .map(Dependable.class::cast)
                 .collect(Collectors.toList());
 
-        if(iterator.matches(variable.getNameToken())){
+        if(iterator.matches(variable.getDefinitionToken())){
             definitions.add(this);
         }
 

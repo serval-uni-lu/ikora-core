@@ -1,5 +1,25 @@
 package lu.uni.serval.ikora.core.model;
 
+/*-
+ * #%L
+ * Ikora Core
+ * %%
+ * Copyright (C) 2019 - 2021 University of Luxembourg
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License")
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+
 import lu.uni.serval.ikora.core.analytics.difference.Edit;
 import lu.uni.serval.ikora.core.analytics.visitor.NodeVisitor;
 import lu.uni.serval.ikora.core.analytics.visitor.VisitorMemory;
@@ -40,7 +60,7 @@ public class SourceNodeTable<T extends SourceNode> extends SourceNode implements
     }
 
     public Set<T> findNode(T node){
-        return findNode(node.getLibraryName(), node.getNameToken());
+        return findNode(node.getLibraryName(), node.getDefinitionToken());
     }
 
     public Set<T> findNode(Token token){
@@ -74,7 +94,7 @@ public class SourceNodeTable<T extends SourceNode> extends SourceNode implements
 
     @Override
     public boolean matches(Token name) {
-        return getNameToken().equalsIgnorePosition(name);
+        return getDefinitionToken().matches(name);
     }
 
     @Override
@@ -88,7 +108,7 @@ public class SourceNodeTable<T extends SourceNode> extends SourceNode implements
     }
 
     @Override
-    public Token getNameToken() {
+    public Token getDefinitionToken() {
         return this.header;
     }
 
@@ -162,7 +182,7 @@ public class SourceNodeTable<T extends SourceNode> extends SourceNode implements
 
         SourceNodeTable<T> nodeTable = (SourceNodeTable<T>)other;
 
-        double distance = this.header.equalsIgnorePosition(nodeTable.header) ? 0. : 0.5;
+        double distance = this.header.matches(nodeTable.header) ? 0. : 0.5;
         distance += LevenshteinDistance.index(this.nodeList, nodeTable.nodeList) * 0.5;
 
         return distance;
@@ -186,7 +206,7 @@ public class SourceNodeTable<T extends SourceNode> extends SourceNode implements
 
         SourceNodeTable<T> nodeTable = (SourceNodeTable<T>)other;
 
-        if(!this.header.equalsIgnorePosition(nodeTable.header)){
+        if(!this.header.matches(nodeTable.header)){
             edits.add(Edit.changeName(this, nodeTable));
         }
 

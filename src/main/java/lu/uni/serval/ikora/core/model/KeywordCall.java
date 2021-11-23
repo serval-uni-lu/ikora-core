@@ -1,5 +1,25 @@
 package lu.uni.serval.ikora.core.model;
 
+/*-
+ * #%L
+ * Ikora Core
+ * %%
+ * Copyright (C) 2019 - 2021 University of Luxembourg
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License")
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+
 import lu.uni.serval.ikora.core.analytics.difference.Edit;
 import lu.uni.serval.ikora.core.analytics.visitor.NodeVisitor;
 import lu.uni.serval.ikora.core.analytics.visitor.VisitorMemory;
@@ -29,7 +49,6 @@ public class KeywordCall extends Step {
 
     public void setGherkin(Gherkin gherkin) {
         this.gherkin = gherkin;
-        addToken(this.gherkin.getToken());
     }
 
     public Gherkin getGherkin(){
@@ -58,7 +77,7 @@ public class KeywordCall extends Step {
 
     @Override
     public boolean hasParameters() {
-        return !getAstChildren().isEmpty();
+        return !this.arguments.isEmpty();
     }
 
     public Optional<Keyword> getKeyword() {
@@ -102,7 +121,7 @@ public class KeywordCall extends Step {
 
         KeywordCall call = (KeywordCall)other;
 
-        double distName = this.getNameToken().equalsIgnorePosition(call.getNameToken()) ? 0. : 0.5;
+        double distName = this.getDefinitionToken().matches(call.getDefinitionToken()) ? 0. : 0.5;
         double distArguments = LevenshteinDistance.index(this.arguments, call.arguments);
 
         return distName + distArguments;
@@ -123,7 +142,7 @@ public class KeywordCall extends Step {
         if(other instanceof KeywordCall){
             KeywordCall call = (KeywordCall)other;
 
-            if(!this.getNameToken().equalsIgnorePosition(call.getNameToken())){
+            if(!this.getDefinitionToken().matches(call.getDefinitionToken())){
                 edits.add(Edit.changeStepName(this, call));
             }
 
@@ -147,7 +166,7 @@ public class KeywordCall extends Step {
     public String toString(){
         StringBuilder builder = new StringBuilder();
 
-        builder.append(getNameToken());
+        builder.append(getDefinitionToken());
 
         for (Argument argument: getArgumentList()){
             builder.append("\t");

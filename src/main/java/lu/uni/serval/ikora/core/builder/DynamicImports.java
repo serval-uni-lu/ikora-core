@@ -1,30 +1,43 @@
 package lu.uni.serval.ikora.core.builder;
 
+/*-
+ * #%L
+ * Ikora Core
+ * %%
+ * Copyright (C) 2019 - 2021 University of Luxembourg
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License")
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+
 import lu.uni.serval.ikora.core.libraries.builtin.keywords.ImportResource;
 import lu.uni.serval.ikora.core.libraries.builtin.keywords.ImportLibrary;
 import lu.uni.serval.ikora.core.libraries.builtin.keywords.ImportVariables;
 import lu.uni.serval.ikora.core.model.*;
 import org.apache.commons.lang3.NotImplementedException;
 
-import java.io.File;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class DynamicImports {
-    private Map<KeywordDefinition, ResourcesTable> resources;
-    private Map<KeywordDefinition, Set<Library>> libraries;
-    private Map<KeywordDefinition, Map<Resources, Set<Token>>> variables;
+    private final Map<KeywordDefinition, ResourcesTable> resources = new HashMap<>();
+    private final Map<KeywordDefinition, Set<Library>> libraries = new HashMap<>();
+    private final Map<KeywordDefinition, Map<Resources, Set<Token>>> variables = new HashMap<>();
 
-    public DynamicImports(){
-        resources = new HashMap<>();
-        libraries = new HashMap<>();
-        variables = new HashMap<>();
-    }
 
     public SourceNode findNode(String value){
         throw new NotImplementedException("Need to get some more work on the imports");
     }
-
 
     public void add(KeywordDefinition parent, Step step){
         step.getKeywordCall().ifPresent(call -> {
@@ -49,7 +62,7 @@ public class DynamicImports {
             libraries.putIfAbsent(parent, new HashSet<>());
             Set<Library> current = libraries.get(parent);
 
-            Library library = new Library(argumentList.get(0).getNameToken(), getParams(argumentList), Token.empty());
+            Library library = new Library(Token.empty(), argumentList.get(0).getDefinitionToken(), getParams(argumentList), Token.empty());
             current.add(library);
         }
     }
@@ -59,10 +72,9 @@ public class DynamicImports {
             resources.putIfAbsent(parent, new ResourcesTable());
             ResourcesTable current = resources.get(parent);
 
-            Token name = values.get(0).getNameToken();
-            File file = new File(name.getText());
+            Token name = values.get(0).getDefinitionToken();
 
-            Resources resource = new Resources(name, file, Collections.emptyList(), Token.empty());
+            Resources resource = new Resources(Token.empty(), name, Collections.emptyList(), Token.empty());
             current.add(resource);
         }
     }
@@ -71,11 +83,9 @@ public class DynamicImports {
         if(!values.isEmpty()){
             variables.putIfAbsent(parent, new HashMap<>());
             Map<Resources, Set<Token>> current = variables.get(parent);
+            Token name = values.get(0).getDefinitionToken();
 
-            Token name = values.get(0).getNameToken();
-            File file = new File(name.getText());
-
-            Resources resource = new Resources(name, file, Collections.emptyList(), Token.empty());
+            Resources resource = new Resources(Token.empty(), name, Collections.emptyList(), Token.empty());
 
             current.putIfAbsent(resource, new HashSet<>());
             Set<Token> args = current.get(resource);
@@ -96,7 +106,7 @@ public class DynamicImports {
         }
 
         return argumentList.subList(1, argumentList.size()).stream()
-                .map(Argument::getNameToken)
+                .map(Argument::getDefinitionToken)
                 .collect(Collectors.toList());
     }
 }

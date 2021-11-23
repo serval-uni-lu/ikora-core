@@ -1,5 +1,25 @@
 package lu.uni.serval.ikora.core.builder;
 
+/*-
+ * #%L
+ * Ikora Core
+ * %%
+ * Copyright (C) 2019 - 2021 University of Luxembourg
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License")
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+
 import lu.uni.serval.ikora.core.error.ErrorManager;
 import lu.uni.serval.ikora.core.model.Tokens;
 import lu.uni.serval.ikora.core.model.UserKeyword;
@@ -43,7 +63,7 @@ class UserKeywordParserTest {
         assertNotNull(keyword);
         assertTrue(errors.isEmpty());
 
-        assertEquals("Keyword with documentation", keyword.getNameToken().toString());
+        assertEquals("Keyword with documentation", keyword.getDefinitionToken().toString());
         assertEquals(3, keyword.getSteps().size());
         assertEquals("Simple documentation", keyword.getDocumentation().toString());
         assertEquals(7, keyword.getTokens().size());
@@ -60,7 +80,7 @@ class UserKeywordParserTest {
         assertNotNull(keyword);
         assertTrue(errors.isEmpty());
 
-        assertEquals("Keyword with tags", keyword.getNameToken().toString());
+        assertEquals("Keyword with tags", keyword.getDefinitionToken().toString());
         assertEquals(3, keyword.getTags().size());
         assertEquals(1, keyword.getTags().stream().filter(t -> t.getName().equals("tag1")).count());
         assertEquals(1, keyword.getTags().stream().filter(t -> t.getName().equals("tag2 with space")).count());
@@ -79,7 +99,7 @@ class UserKeywordParserTest {
         assertNotNull(keyword);
         assertTrue(errors.isEmpty());
 
-        assertEquals(keyword.getNameToken().toString(), keyword.getDocumentation().toString());
+        assertEquals(keyword.getDefinitionToken().toString(), keyword.getDocumentation().toString());
     }
 
     private UserKeyword createKeyword(String text, ErrorManager errors) throws IOException {
