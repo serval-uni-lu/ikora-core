@@ -39,6 +39,7 @@ public class AssignmentParser {
         Token current = first;
         Optional<Variable> variable = VariableParser.parse(TokenUtils.trimRightEquals(current));
         Token equalSign = TokenUtils.extractEqualSign(current);
+        KeywordCall expression = null;
 
         if(!variable.isPresent()){
             errors.registerInternalError(
@@ -52,18 +53,18 @@ public class AssignmentParser {
 
         returnValues.add(variable.get());
 
-        while(tokenIterator.hasNext() && equalSign.isEmpty()){
+        while(tokenIterator.hasNext()){
             current = tokenIterator.next();
             variable = VariableParser.parse(TokenUtils.trimRightEquals(current));
 
-            if(!variable.isPresent()) break;
-            returnValues.add(variable.get());
-            equalSign = TokenUtils.extractEqualSign(current);
+            if(variable.isPresent() && equalSign.isEmpty()){
+                returnValues.add(variable.get());
+                equalSign = TokenUtils.extractEqualSign(current);
+            }
+            else {
+                expression = KeywordCallParser.parse(reader, current, tokenIterator, false, errors);
+            }
         }
-
-        final KeywordCall expression = tokenIterator.hasNext()
-                ? KeywordCallParser.parse(reader, tokenIterator.next(), tokenIterator, false, errors)
-                : null;
 
         final Token name = expression != null ? expression.getDefinitionToken() : Token.empty();
         final Assignment assignment = new Assignment(name, returnValues, expression, equalSign);

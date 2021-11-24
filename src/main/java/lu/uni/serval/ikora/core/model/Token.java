@@ -25,6 +25,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -219,6 +220,31 @@ public class Token implements Comparable<Token> {
 
     public static Token empty(){
         return new Token("", -1, -1, -1, Type.EMPTY);
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (this == other) return true;
+        if (other == null) return false;
+        if (this.getClass() != other.getClass()) return false;
+
+        Token that = (Token) other;
+
+        return this.line == that.line
+                && this.startOffset == that.startOffset
+                && this.endOffset == that.endOffset
+                && this.type == that.type
+                && Objects.equals(text, that.text);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = type != null ? type.hashCode() : 0;
+        result = 31 * result + line;
+        result = 31 * result + startOffset;
+        result = 31 * result + endOffset;
+        result = 31 * result + (text != null ? text.hashCode() : 0);
+        return result;
     }
 
     @Override

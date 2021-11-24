@@ -28,6 +28,7 @@ import lu.uni.serval.ikora.core.runner.Runtime;
 
 import java.io.File;
 import java.util.List;
+import java.util.Optional;
 
 public class Resources extends SourceNode {
     private final Token label;
@@ -60,6 +61,10 @@ public class Resources extends SourceNode {
         }
 
         return new File(new File(getSourceFile().getDirectory()), this.filePath.getText());
+    }
+
+    public Optional<SourceFile> getTarget(){
+        return getProject().getSourceFile(getFile().toURI());
     }
 
     public Token getFilePath() {

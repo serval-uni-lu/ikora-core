@@ -26,26 +26,26 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Tokens implements Iterable<Token> {
-    private final SortedSet<Token> tokenSet;
+    private final List<Token> tokenList;
 
     public Tokens(){
-        this.tokenSet = new TreeSet<>();
+        this.tokenList = new ArrayList<>();
     }
 
     public Tokens(Token... tokens){
         this(Arrays.asList(tokens));
     }
 
-    private Tokens(List<Token> tokenSet){
-        this.tokenSet = new TreeSet<>(tokenSet);
+    private Tokens(List<Token> tokenList){
+        this.tokenList = tokenList;
     }
 
     public static Tokens empty() {
         return new Tokens();
     }
 
-    public SortedSet<Token> asSortedSet(){
-        return this.tokenSet;
+    public List<Token> asList(){
+        return this.tokenList;
     }
 
     public void add(Token token){
@@ -55,7 +55,7 @@ public class Tokens implements Iterable<Token> {
 
         if((token.isDelimiter() && containsDelimiterOnly())
             || !token.isDelimiter()){
-            this.tokenSet.add(token);
+            this.tokenList.add(token);
         }
     }
 
@@ -66,7 +66,7 @@ public class Tokens implements Iterable<Token> {
     }
 
     public Tokens setType(Token.Type type){
-        this.tokenSet.stream()
+        this.tokenList.stream()
                 .filter(Token::isText)
                 .forEach(token -> token.setType(type));
         return this;
@@ -78,27 +78,27 @@ public class Tokens implements Iterable<Token> {
     }
 
     public Token first(){
-        if(this.tokenSet.isEmpty()){
+        if(this.tokenList.isEmpty()){
             return Token.empty();
         }
 
-        return this.tokenSet.first();
+        return this.tokenList.get(0);
     }
 
     public Token last() {
-        if(this.tokenSet.isEmpty()){
+        if(this.tokenList.isEmpty()){
             return Token.empty();
         }
 
-        return this.tokenSet.last();
+        return this.tokenList.get(this.tokenList.size() - 1);
     }
 
     public int size(){
-        return this.tokenSet.size();
+        return this.tokenList.size();
     }
 
     public int getIndentSize() {
-        return (int) tokenSet.stream().filter(Token::isDelimiter).count();
+        return (int) tokenList.stream().filter(Token::isDelimiter).count();
     }
 
     public boolean isParent(Tokens tokens) {
@@ -115,12 +115,12 @@ public class Tokens implements Iterable<Token> {
 
     @Override
     public Iterator<Token> iterator() {
-        return this.tokenSet.iterator();
+        return this.tokenList.iterator();
     }
 
     @Override
     public String toString() {
-        return this.tokenSet.stream()
+        return this.tokenList.stream()
                 .map(Token::toString)
                 .collect(Collectors.joining(" "));
     }
@@ -144,11 +144,11 @@ public class Tokens implements Iterable<Token> {
     }
 
     public boolean isEmpty() {
-        return this.tokenSet.isEmpty();
+        return this.tokenList.isEmpty();
     }
 
     private boolean containsDelimiterOnly(){
-        return tokenSet.stream().allMatch(Token::isDelimiter);
+        return tokenList.stream().allMatch(Token::isDelimiter);
     }
 
     private Iterator<Token> offset(int offset){
@@ -157,7 +157,7 @@ public class Tokens implements Iterable<Token> {
         }
 
         int i = 0;
-        Iterator<Token> iterator = this.tokenSet.iterator();
+        Iterator<Token> iterator = this.tokenList.iterator();
 
         while (i++ < offset) iterator.next();
 
@@ -165,14 +165,14 @@ public class Tokens implements Iterable<Token> {
     }
 
     public int getLoc() {
-        return (int)this.tokenSet.stream()
+        return (int)this.tokenList.stream()
                 .map(Token::getLine)
                 .distinct()
                 .count();
     }
 
     public Tokens clean() {
-        return new Tokens(tokenSet.stream()
+        return new Tokens(tokenList.stream()
                 .filter(token -> !token.isComment() && !token.isContinuation() && !token.isDelimiter() && !token.isEmpty())
                 .collect(Collectors.toList()));
     }

@@ -12,7 +12,7 @@ public class VariableFileParser {
     private VariableFileParser() {}
 
     public static boolean is(Token label){
-        return StringUtils.matchesIgnoreCase(label, "\\[variables\\]");
+        return StringUtils.matchesIgnoreCase(label, "variables");
     }
 
     public static VariableFile parse(Token label, Iterator<Token> tokenIterator) {

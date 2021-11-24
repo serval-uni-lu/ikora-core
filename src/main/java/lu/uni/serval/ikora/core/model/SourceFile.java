@@ -170,6 +170,11 @@ public class SourceFile extends SourceNode {
     }
 
     @Override
+    public String toString() {
+        return getName();
+    }
+
+    @Override
     public String getName() {
         return this.name;
     }
@@ -254,10 +259,12 @@ public class SourceFile extends SourceNode {
         }
 
         for(Resources resources: settings.getResources()){
-            if(resources.isValid() && memory.add(resources.getSourceFile())) {
-                project.getSourceFile(resources.getFile().toURI()).ifPresent(
-                        file -> nodes.addAll(file.findNode(library, name, memory, type))
-                );
+            if(resources.isValid()) {
+                final Optional<SourceFile> target = resources.getTarget();
+
+                if(target.isPresent() && memory.add(target.get())){
+                    nodes.addAll(target.get().findNode(library, name, memory, type));
+                }
             }
         }
 
@@ -320,4 +327,5 @@ public class SourceFile extends SourceNode {
 
         return Collections.emptyList();
     }
+
 }

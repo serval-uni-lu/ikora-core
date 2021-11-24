@@ -163,15 +163,14 @@ class SettingsTableParserTest {
 
     @Test
     void testMetadataWithNoValue() throws IOException {
-        String settingText = "***Settings***\n" +
+        final String settingText = "***Settings***\n" +
                 "Metadata    Version";
 
-        ErrorManager errors = new ErrorManager();
-
+        final ErrorManager errors = new ErrorManager();
         final Settings settings = createSettings(settingText, errors);
-        assertEquals(1, errors.inMemory().getSize());
 
-        assertEquals(0, settings.getMetadataList().size());
+        assertEquals(1, errors.inMemory().getSize());
+        assertEquals(1, settings.getMetadataList().size());
     }
 
     @Test

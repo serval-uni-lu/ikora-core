@@ -43,7 +43,7 @@ class TestCaseParserTest {
         assertNotNull(testCase);
         assertEquals("Test case with documentation", testCase.getName());
         assertEquals(1, testCase.getSteps().size());
-        assertEquals("Some documentationwith continuation", testCase.getDocumentation().toString());
+        assertEquals("Some documentation with continuation", testCase.getDocumentation().toString());
         assertEquals("Some keyword", testCase.getStep(0).getName());
     }
 

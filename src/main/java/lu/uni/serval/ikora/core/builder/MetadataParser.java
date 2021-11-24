@@ -17,6 +17,15 @@ public class MetadataParser {
 
     public static Metadata parse(LineReader reader, Token label, Iterator<Token> tokenIterator, ErrorManager errors) {
         final Token key = tokenIterator.hasNext() ? tokenIterator.next() : Token.empty();
+
+        if(!tokenIterator.hasNext()){
+            errors.registerSyntaxError(
+                    reader.getSource(),
+                    ErrorMessages.MISSING_METADATA_VALUE,
+                    Range.fromToken(label, reader.getCurrent())
+            );
+        }
+
         final Value value = tokenIterator.hasNext() ? ValueParser.parseValue(tokenIterator.next()) : new Literal(Token.empty());
 
         if(tokenIterator.hasNext()){

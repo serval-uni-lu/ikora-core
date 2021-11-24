@@ -6,17 +6,17 @@ import lu.uni.serval.ikora.core.model.Tokens;
 import java.util.*;
 
 public class TokenScanner implements Iterable<Token> {
-    private final SortedSet<Token> tokenSet;
+    private final List<Token> tokenSet;
 
     private boolean skipIndent = false;
     private Set<Token.Type> skippedTypes = new HashSet<>();
 
-    private TokenScanner(SortedSet<Token> tokens) {
+    private TokenScanner(List<Token> tokens) {
         this.tokenSet = tokens;
     }
 
     public static TokenScanner from(Tokens tokens){
-        return new TokenScanner(tokens.asSortedSet());
+        return new TokenScanner(tokens.asList());
     }
 
     public TokenScanner skipIndent(boolean skipIndent){
@@ -46,7 +46,13 @@ public class TokenScanner implements Iterable<Token> {
 
         @Override
         public Token next() {
-            return getNext(true);
+            final Token token = getNext(true);
+
+            if(token == null){
+                throw new NoSuchElementException();
+            }
+
+            return token;
         }
 
         private Token getNext(boolean reset){
@@ -66,6 +72,8 @@ public class TokenScanner implements Iterable<Token> {
                 while (skipIndent && next != null && next.isDelimiter()){
                     next = iterator.next();
                 }
+
+                skipIndent = false;
 
                 while (next != null && skippedTypes.contains(next.getType())) {
                     next = iterator.next();

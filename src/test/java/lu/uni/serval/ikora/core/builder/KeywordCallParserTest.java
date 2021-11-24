@@ -70,6 +70,7 @@ class KeywordCallParserTest {
         final LineReader reader = Helpers.getLineReader(text);
         final Iterator<Token> tokenIterator = TokenScanner.from(LexerUtils.tokenize(reader))
                 .skipTypes(Token.Type.CONTINUATION)
+                .skipIndent(true)
                 .iterator();
 
         return KeywordCallParser.parse(reader, tokenIterator.next(), tokenIterator, allowGherkin, errors);

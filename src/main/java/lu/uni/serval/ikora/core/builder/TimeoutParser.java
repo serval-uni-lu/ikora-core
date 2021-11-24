@@ -20,7 +20,6 @@ package lu.uni.serval.ikora.core.builder;
  * #L%
  */
 
-import lu.uni.serval.ikora.core.error.ErrorManager;
 import lu.uni.serval.ikora.core.model.Scope;
 import lu.uni.serval.ikora.core.model.TimeOut;
 import lu.uni.serval.ikora.core.model.Token;
@@ -40,7 +39,10 @@ public class TimeoutParser {
             default: return false;
         }
 
-        return StringUtils.matchesIgnoreCase(label, "\\[" + scopeString + "timeout\\]");
+        String expression = scopeString + "timeout";
+        if(scope == Scope.KEYWORD) expression = "\\[" + expression + "timeout\\]";
+
+        return StringUtils.matchesIgnoreCase(label, expression);
     }
 
     public static TimeOut parse(Token label, Iterator<Token> tokenIterator) {
