@@ -56,10 +56,6 @@ public class LexerUtils {
         return tokenize(line);
     }
 
-    static boolean isSameBlock(Tokens parent, Tokens child){
-        return parent.isParent(child) && !LexerUtils.isBlock(child);
-    }
-
     static boolean isBlock(String value) {
         return isBlock(value, "(.+)");
     }

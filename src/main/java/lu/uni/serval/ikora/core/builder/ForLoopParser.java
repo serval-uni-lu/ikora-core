@@ -58,12 +58,11 @@ public class ForLoopParser {
                 continue;
             }
 
-            final Tokens contentTokens = LexerUtils.tokenize(reader);
-
-            if(indent + 1 != contentTokens.getIndentSize()){
+            if(indent + 1 != LexerUtils.peek(reader.getCurrent()).getIndentSize()){
                 break;
             }
 
+            final Tokens contentTokens = LexerUtils.tokenize(reader);
             final Iterator<Token> contentTokenIterator = TokenScanner.from(contentTokens)
                     .skipIndent(true)
                     .iterator();
