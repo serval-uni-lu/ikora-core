@@ -52,12 +52,12 @@ public class LexerUtils {
         return tokens;
     }
 
-    public static Tokens peek(Line line) {
+    static Tokens peek(Line line) {
         return tokenize(line);
     }
 
-    public static boolean isSameBlock(Tokens forLoop, LineReader reader){
-        return forLoop.isParent(LexerUtils.peek(reader.getCurrent())) || !LexerUtils.isBlock(reader.getCurrent().getText());
+    static boolean isSameBlock(Tokens parent, Tokens child){
+        return parent.isParent(child) && !LexerUtils.isBlock(child);
     }
 
     static boolean isBlock(String value) {
@@ -67,6 +67,10 @@ public class LexerUtils {
     static boolean isBlock(String value, String name){
         String regex = String.format("^\\*{3}(\\s*)%s(\\s*)(\\**)(\\s*)", name);
         return StringUtils.matchesIgnoreCase(value, regex);
+    }
+
+    private static boolean isBlock(Tokens tokens){
+        return isBlock(tokens.toString());
     }
 
     static boolean isEmpty(String line) {

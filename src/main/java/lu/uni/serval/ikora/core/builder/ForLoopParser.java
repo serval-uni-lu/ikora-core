@@ -38,7 +38,7 @@ public class ForLoopParser {
 
     private ForLoopParser() {}
 
-    public static ForLoop parse(LineReader reader, Token forToken, Iterator<Token> tokenIterator, ErrorManager errors) throws IOException {
+    public static ForLoop parse(int indent, LineReader reader, Token forToken, Iterator<Token> tokenIterator, ErrorManager errors) throws IOException {
         if(forToken == null || forToken.isEmpty()){
             errors.registerInternalError(
                     reader.getSource(),
@@ -52,17 +52,23 @@ public class ForLoopParser {
 
         List<Step> steps = new ArrayList<>();
 
-        while (reader.getCurrent().isValid() && LexerUtils.isSameBlock(tokens, reader)){
+        while (reader.getCurrent().isValid() && !LexerUtils.isBlock(reader.getCurrent().getText())){
             if(reader.getCurrent().ignore()) {
                 reader.readLine();
                 continue;
             }
 
-            final Iterator<Token> stepTokenIterator = TokenScanner.from(LexerUtils.tokenize(reader))
+            final Tokens contentTokens = LexerUtils.tokenize(reader);
+
+            if(indent + 1 != contentTokens.getIndentSize()){
+                break;
+            }
+
+            final Iterator<Token> contentTokenIterator = TokenScanner.from(contentTokens)
                     .skipIndent(true)
                     .iterator();
 
-            final Step step = StepParser.parse(reader, stepTokenIterator.next(), stepTokenIterator, false, errors);
+            final Step step = StepParser.parse(contentTokens.getIndentSize(), reader, contentTokenIterator.next(), contentTokenIterator, false, errors);
             steps.add(step);
         }
 

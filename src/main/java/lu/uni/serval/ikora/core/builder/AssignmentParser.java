@@ -59,11 +59,10 @@ public class AssignmentParser {
             if(!variable.isPresent()) break;
             returnValues.add(variable.get());
             equalSign = TokenUtils.extractEqualSign(current);
-            if(!equalSign.isEmpty()) break;
         }
 
         final KeywordCall expression = tokenIterator.hasNext()
-                ? KeywordCallParser.parse(reader, current, tokenIterator, false, errors)
+                ? KeywordCallParser.parse(reader, tokenIterator.next(), tokenIterator, false, errors)
                 : null;
 
         final Token name = expression != null ? expression.getDefinitionToken() : Token.empty();

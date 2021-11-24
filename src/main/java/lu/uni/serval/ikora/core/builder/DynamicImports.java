@@ -62,7 +62,7 @@ public class DynamicImports {
             libraries.putIfAbsent(parent, new HashSet<>());
             Set<Library> current = libraries.get(parent);
 
-            Library library = new Library(Token.empty(), argumentList.get(0).getDefinitionToken(), getParams(argumentList), Token.empty());
+            Library library = new Library(Token.empty(), argumentList.get(0).getDefinitionToken(), getParams(argumentList));
             current.add(library);
         }
     }
@@ -74,7 +74,7 @@ public class DynamicImports {
 
             Token name = values.get(0).getDefinitionToken();
 
-            Resources resource = new Resources(Token.empty(), name, Collections.emptyList(), Token.empty());
+            Resources resource = new Resources(Token.empty(), name, Collections.emptyList());
             current.add(resource);
         }
     }
@@ -85,7 +85,7 @@ public class DynamicImports {
             Map<Resources, Set<Token>> current = variables.get(parent);
             Token name = values.get(0).getDefinitionToken();
 
-            Resources resource = new Resources(Token.empty(), name, Collections.emptyList(), Token.empty());
+            Resources resource = new Resources(Token.empty(), name, Collections.emptyList());
 
             current.putIfAbsent(resource, new HashSet<>());
             Set<Token> args = current.get(resource);

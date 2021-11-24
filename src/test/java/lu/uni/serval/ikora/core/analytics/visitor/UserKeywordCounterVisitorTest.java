@@ -24,6 +24,7 @@ import lu.uni.serval.ikora.core.builder.BuildResult;
 import lu.uni.serval.ikora.core.builder.Builder;
 import lu.uni.serval.ikora.core.model.Project;
 import lu.uni.serval.ikora.core.model.TestCase;
+import lu.uni.serval.ikora.core.utils.FileUtils;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -67,7 +68,7 @@ class UserKeywordCounterVisitorTest {
         final BuildResult result = Builder.build(code, true);
         final Project project = result.getProjects().iterator().next();
 
-        final TestCase testCase = project.findTestCase("<IN_MEMORY>", "Valid Login").iterator().next();
+        final TestCase testCase = project.findTestCase(FileUtils.IN_MEMORY, "Valid Login").iterator().next();
         assertNotNull(testCase);
 
         UserKeywordCounterVisitor visitor = new UserKeywordCounterVisitor();

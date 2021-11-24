@@ -7,6 +7,7 @@ import lu.uni.serval.ikora.core.exception.RunnerException;
 import lu.uni.serval.ikora.core.runner.Runtime;
 
 import java.util.List;
+import java.util.Optional;
 
 public class TestProcessing extends SourceNode {
     public enum Phase {
@@ -22,7 +23,9 @@ public class TestProcessing extends SourceNode {
     public TestProcessing(Phase phase, Token label, KeywordCall call) {
         this.phase = phase;
         this.label = label;
+
         this.call = call;
+        addAstChild(this.call);
     }
 
     public Phase getPhase() {
@@ -33,8 +36,8 @@ public class TestProcessing extends SourceNode {
         return label;
     }
 
-    public KeywordCall getCall() {
-        return call;
+    public Optional<KeywordCall> getCall() {
+        return Optional.ofNullable(call);
     }
 
     @Override

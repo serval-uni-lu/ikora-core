@@ -178,7 +178,7 @@ public class Token implements Comparable<Token> {
             return this.extract(m.start(), m.end());
         }
 
-        return this.copy();
+        return Token.empty();
     }
 
     public Pair<Token, Token> splitLibrary(){

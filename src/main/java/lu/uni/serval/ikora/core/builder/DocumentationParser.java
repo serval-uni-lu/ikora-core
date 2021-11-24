@@ -21,6 +21,7 @@ package lu.uni.serval.ikora.core.builder;
  */
 
 import lu.uni.serval.ikora.core.model.Documentation;
+import lu.uni.serval.ikora.core.model.Scope;
 import lu.uni.serval.ikora.core.model.Token;
 import lu.uni.serval.ikora.core.utils.StringUtils;
 import lu.uni.serval.ikora.core.utils.TokenUtils;
@@ -30,8 +31,9 @@ import java.util.Iterator;
 public class DocumentationParser {
     private DocumentationParser() {}
 
-    public static boolean is(Token label){
-        return StringUtils.matchesIgnoreCase(label, "\\[documentation\\]");
+    public static boolean is(Token label, Scope scope){
+        final String expression = scope == Scope.KEYWORD ? "\\[documentation\\]" : "documentation";
+        return StringUtils.matchesIgnoreCase(label, expression);
     }
 
     public static Documentation parse(Token label, Iterator<Token> iterator){

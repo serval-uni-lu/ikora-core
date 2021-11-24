@@ -65,6 +65,8 @@ public class TestCase extends KeywordDefinition {
     public NodeList<Step> getExecutedSteps(){
         return getTemplate()
                 .map(TestProcessing::getCall)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
                 .map(Step::getSteps)
                 .orElseGet(this::getSteps);
     }

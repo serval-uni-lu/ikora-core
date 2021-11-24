@@ -157,12 +157,16 @@ public class SourceFile extends SourceNode {
         return source;
     }
 
+    public boolean isInMemory() {
+        return this.source.isInMemory();
+    }
+
     public String getDirectory(){
         return this.source.getDirectory();
     }
 
     public String getPath() {
-        return this.source.getPath();
+        return this.source.getAbsolutePath();
     }
 
     @Override
@@ -241,20 +245,19 @@ public class SourceFile extends SourceNode {
             if(type == UserKeyword.class){
                 nodes.addAll((Collection<? extends T>) userKeywordTable.findNode(name));
             }
-
-            if(type == TestCase.class){
+            else if(type == TestCase.class){
                 nodes.addAll((Collection<? extends T>) testCaseTable.findNode(name));
             }
-
-            if(type == VariableAssignment.class){
+            else if(type == VariableAssignment.class){
                 nodes.addAll((Collection<? extends T>) variableTable.findNode(name));
             }
         }
 
         for(Resources resources: settings.getResources()){
             if(resources.isValid() && memory.add(resources.getSourceFile())) {
-                SourceFile file = resources.getSourceFile();
-                nodes.addAll(file.findNode(library, name, memory, type));
+                project.getSourceFile(resources.getFile().toURI()).ifPresent(
+                        file -> nodes.addAll(file.findNode(library, name, memory, type))
+                );
             }
         }
 

@@ -2,6 +2,7 @@ package lu.uni.serval.ikora.core.builder;
 
 import lu.uni.serval.ikora.core.model.Literal;
 import lu.uni.serval.ikora.core.model.NodeList;
+import lu.uni.serval.ikora.core.model.Scope;
 import lu.uni.serval.ikora.core.model.Token;
 import lu.uni.serval.ikora.core.utils.StringUtils;
 
@@ -16,7 +17,7 @@ public class TagsParser {
 
     private TagsParser() {}
 
-    public static boolean is(Token label, Type type){
+    public static boolean is(Token label, Scope scope, Type type){
         String typeString;
 
         switch (type){
@@ -26,7 +27,10 @@ public class TagsParser {
             default: return false;
         }
 
-        return StringUtils.matchesIgnoreCase(label, "\\[" + typeString + "tags\\]");
+        String expression = typeString + "tags";
+        if(scope == Scope.KEYWORD) expression = "\\[" + expression + "\\]";
+
+        return StringUtils.matchesIgnoreCase(label, expression);
     }
 
     public static NodeList<Literal> parse(Token label, Iterator<Token> tokenIterator) {

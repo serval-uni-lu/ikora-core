@@ -12,7 +12,7 @@ public class MetadataParser {
     private MetadataParser() {}
 
     public static boolean is(Token label){
-        return StringUtils.matchesIgnoreCase(label, "\\[metadata\\]");
+        return StringUtils.matchesIgnoreCase(label, "metadata");
     }
 
     public static Metadata parse(LineReader reader, Token label, Iterator<Token> tokenIterator, ErrorManager errors) {

@@ -25,7 +25,6 @@ import lu.uni.serval.ikora.core.BuildConfiguration;
 import lu.uni.serval.ikora.core.error.ErrorManager;
 import org.apache.commons.io.FileUtils;
 import lu.uni.serval.ikora.core.model.Project;
-import lu.uni.serval.ikora.core.model.Resources;
 import lu.uni.serval.ikora.core.model.Source;
 import lu.uni.serval.ikora.core.model.SourceFile;
 
@@ -38,7 +37,6 @@ class ProjectParser {
 
     public static Project parse(File file, BuildConfiguration configuration, DynamicImports dynamicImports, ErrorManager errors) throws InvalidArgumentException {
         Source source = new Source(file);
-
         Project project = new Project(source);
 
         if(file.isDirectory()){
@@ -46,7 +44,6 @@ class ProjectParser {
         }
 
         parseFiles(source, project, dynamicImports, errors);
-        resolveResources(project, errors);
 
         return project;
     }
@@ -83,22 +80,6 @@ class ProjectParser {
         SourceFileParser.parse(source, project, dynamicImports, errors);
 
         parseFiles(getNextNotParsedFile(project), project, dynamicImports, errors);
-    }
-
-    private static void resolveResources(Project project, ErrorManager errors) throws InvalidArgumentException {
-        for(SourceFile sourceFile : project.getSourceFiles()) {
-            for (Resources resources: sourceFile.getSettings().getInternalResources()) {
-                String name = project.generateFileName(new Source(resources.getFile()));
-                Optional<SourceFile> resourceFile = project.getSourceFile(name);
-
-                if(resourceFile.isPresent()) {
-                    resources.setSourceFile(resourceFile.get());
-                }
-                else{
-                    errors.registerIOError(new Source(project.getRootFolder(), name),"File not found");
-                }
-            }
-        }
     }
 
     private static Source getNextNotParsedFile(Project project) throws InvalidArgumentException {

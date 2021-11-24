@@ -55,7 +55,7 @@ class BuildResultTest {
         assertTrue(build.getResolveTime() >= 0);
         assertTrue(build.getParsingTime() >= 0);
 
-        Assertions.assertTrue(build.getErrors().isEmpty());
+        assertTrue(build.getErrors().isEmpty());
     }
 
     @Test
@@ -63,9 +63,9 @@ class BuildResultTest {
         BuildResult build = build("robot/connected-projects");
 
         assertNotNull(build);
-        Assertions.assertEquals(1, build.getProjects().size());
+        assertEquals(1, build.getProjects().size());
         assertNotNull(build.getSourceFile(getFileUri("robot/connected-projects/project-a/test-cases.robot")));
-        Assertions.assertFalse(build.getErrors().isEmpty());
+        assertFalse(build.getErrors().isEmpty());
 
         Source source = build.getSourceFile(getFileUri("robot/connected-projects/project-a/test-cases.robot")).getSource();
         Errors errors = build.getErrors().in(source);

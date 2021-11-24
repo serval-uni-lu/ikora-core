@@ -40,9 +40,8 @@ class TestCaseTableParser {
                 continue;
             }
 
-            Tokens nameTokens = LexerUtils.tokenize(reader);
-
-            TestCase testCase = TestCaseParser.parse(reader, nameTokens, dynamicImports, errors);
+            final Tokens nameTokens = LexerUtils.tokenize(reader);
+            final TestCase testCase = TestCaseParser.parse(reader, nameTokens, dynamicImports, errors);
             testCaseTable.add(testCase);
         }
 

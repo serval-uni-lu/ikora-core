@@ -31,7 +31,7 @@ class KeywordTableParser {
     private KeywordTableParser() {}
 
     public static SourceNodeTable<UserKeyword> parse(LineReader reader, Tokens blockTokens, DynamicImports dynamicImports, ErrorManager errors) throws IOException {
-        SourceNodeTable<UserKeyword> keywordTable = new SourceNodeTable<>();
+        final SourceNodeTable<UserKeyword> keywordTable = new SourceNodeTable<>();
         keywordTable.setHeader(ParserUtils.parseHeaderName(reader, blockTokens, errors));
 
         while(reader.getCurrent().isValid() && !LexerUtils.isBlock(reader.getCurrent().getText())){
@@ -40,9 +40,8 @@ class KeywordTableParser {
                 continue;
             }
 
-            Tokens tokens = LexerUtils.tokenize(reader);
-
-            UserKeyword userKeyword = UserKeywordParser.parse(reader, tokens, dynamicImports, errors);
+            Tokens nameTokens = LexerUtils.tokenize(reader);
+            final UserKeyword userKeyword = UserKeywordParser.parse(reader, nameTokens, dynamicImports, errors);
             keywordTable.add(userKeyword);
         }
 

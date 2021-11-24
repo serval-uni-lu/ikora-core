@@ -46,30 +46,36 @@ class UserKeywordParser {
 
         final UserKeyword userKeyword = optionalUserKeyword.get();
 
-        while(reader.getCurrent().isValid() && LexerUtils.isSameBlock(nameTokens, reader)) {
+        while(reader.getCurrent().isValid() && !LexerUtils.isBlock(reader.getCurrent().getText())) {
             if(reader.getCurrent().ignore()) {
                 reader.readLine();
                 continue;
             }
 
-            final Iterator<Token> contentTokenIterator = TokenScanner.from(LexerUtils.tokenize(reader))
+            final Tokens contentTokens = LexerUtils.tokenize(reader);
+
+            if(nameTokens.getIndentSize() + 1 != contentTokens.getIndentSize()){
+                break;
+            }
+
+            final Iterator<Token> contentTokenIterator = TokenScanner.from(contentTokens)
                     .skipIndent(true)
                     .iterator();
 
-            parseContentLine(userKeyword, reader, contentTokenIterator, dynamicImports, errors);
+            parseContentLine(contentTokens.getIndentSize(), userKeyword, reader, contentTokenIterator, dynamicImports, errors);
         }
 
         return userKeyword;
     }
 
-    private static void parseContentLine(UserKeyword userKeyword, LineReader reader, Iterator<Token> tokenIterator, DynamicImports dynamicImports, ErrorManager errors) throws IOException {
+    private static void parseContentLine(int indent, UserKeyword userKeyword, LineReader reader, Iterator<Token> tokenIterator, DynamicImports dynamicImports, ErrorManager errors) throws IOException {
         final Token label = ParserUtils.getLabel(reader, tokenIterator, errors);
 
-        if (DocumentationParser.is(label)) {
+        if (DocumentationParser.is(label, Scope.KEYWORD)) {
             final Documentation documentation = DocumentationParser.parse(label, tokenIterator);
             userKeyword.setDocumentation(documentation);
         }
-        else if (TagsParser.is(label, TagsParser.Type.NORMAL)) {
+        else if (TagsParser.is(label, Scope.KEYWORD, TagsParser.Type.NORMAL)) {
             final NodeList<Literal> tags = TagsParser.parse(label, tokenIterator);
             userKeyword.setTags(tags);
         }
@@ -90,7 +96,7 @@ class UserKeywordParser {
             userKeyword.setTimeOut(timeOut);
         }
         else {
-            final Step step = StepParser.parse(reader, label, tokenIterator, false, errors);
+            final Step step = StepParser.parse(indent, reader, label, tokenIterator, false, errors);
 
             try {
                 userKeyword.addStep(step);

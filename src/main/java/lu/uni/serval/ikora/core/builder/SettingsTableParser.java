@@ -39,66 +39,71 @@ class SettingsTableParser {
                 continue;
             }
 
-            final Iterator<Token> tokenIterator = TokenScanner.from(LexerUtils.tokenize(reader))
+            final Tokens settingTokens = LexerUtils.tokenize(reader);
+            final Iterator<Token> tokenIterator = TokenScanner.from(settingTokens)
                     .skipIndent(true)
                     .iterator();
 
-            final Token label = ParserUtils.getLabel(reader, tokenIterator, errors);
-
-            if(DocumentationParser.is(label)){
-                final Documentation documentation = DocumentationParser.parse(label, tokenIterator);
-                settings.setDocumentation(documentation);
-            }
-            else if(ResourcesParser.is(label)){
-                final Resources resources = ResourcesParser.parse(label, tokenIterator);
-                settings.addResources(resources);
-            }
-            else if(LibraryParser.is(label)){
-                final Library library = LibraryParser.parse(label, tokenIterator);
-                settings.addLibrary(library);
-            }
-            else if(VariableFileParser.is(label)) {
-                final VariableFile variableFile = VariableFileParser.parse(label, tokenIterator);
-                settings.addVariableFile(variableFile);
-            }
-            else if(MetadataParser.is(label)) {
-                final Metadata metadata = MetadataParser.parse(reader, label, tokenIterator, errors);
-                settings.addMetadata(metadata);
-            }
-            else if(TestProcessingParser.is(label, Scope.SUITE, TestProcessing.Phase.SETUP)) {
-                final TestProcessing suiteSetup = TestProcessingParser.parse(TestProcessing.Phase.SETUP, reader, label, tokenIterator, errors);
-                settings.setSuiteSetup(suiteSetup);
-            }
-            else if(TestProcessingParser.is(label, Scope.TEST, TestProcessing.Phase.SETUP)){
-                final TestProcessing testSetup = TestProcessingParser.parse(TestProcessing.Phase.SETUP, reader, label, tokenIterator, errors);
-                settings.setTestSetup(testSetup);
-            }
-            else if(TestProcessingParser.is(label, Scope.SUITE, TestProcessing.Phase.TEARDOWN)) {
-                final TestProcessing teardown = TestProcessingParser.parse(TestProcessing.Phase.TEARDOWN, reader, label, tokenIterator, errors);
-                settings.setSuiteTeardown(teardown);
-            }
-            else if(TestProcessingParser.is(label, Scope.TEST, TestProcessing.Phase.TEARDOWN)) {
-                final TestProcessing teardown = TestProcessingParser.parse(TestProcessing.Phase.TEARDOWN, reader, label, tokenIterator, errors);
-                settings.setTestTeardown(teardown);
-            }
-            else if(TestProcessingParser.is(label, Scope.TEST, TestProcessing.Phase.TEMPLATE)){
-                final TestProcessing testTemplate = TestProcessingParser.parse(TestProcessing.Phase.TEMPLATE, reader, label, tokenIterator, errors);
-                settings.setTestTeardown(testTemplate);
-            }
-            else if(TagsParser.is(label, TagsParser.Type.FORCE)) {
-                final NodeList<Literal> forceTags = TagsParser.parse(label, tokenIterator);
-                settings.setForceTags(forceTags);
-            }
-            else if(TagsParser.is(label, TagsParser.Type.DEFAULT)){
-                final NodeList<Literal> defaultTags = TagsParser.parse(label, tokenIterator);
-                settings.setDefaultTags(defaultTags);
-            }
-            else if(TimeoutParser.is(label, Scope.TEST)){
-                final TimeOut testTimeout = TimeoutParser.parse(label, tokenIterator);
-                settings.setTimeOut(testTimeout);
-            }
+            parseContentLine(settings, reader, tokenIterator, errors);
         }
 
         return settings;
+    }
+
+    private static void parseContentLine(Settings settings, LineReader reader, Iterator<Token> tokenIterator, ErrorManager errors) {
+        final Token label = ParserUtils.getLabel(reader, tokenIterator, errors);
+
+        if(DocumentationParser.is(label, Scope.SUITE)){
+            final Documentation documentation = DocumentationParser.parse(label, tokenIterator);
+            settings.setDocumentation(documentation);
+        }
+        else if(ResourcesParser.is(label)){
+            final Resources resources = ResourcesParser.parse(label, tokenIterator);
+            settings.addResources(resources);
+        }
+        else if(LibraryParser.is(label)){
+            final Library library = LibraryParser.parse(label, tokenIterator);
+            settings.addLibrary(library);
+        }
+        else if(VariableFileParser.is(label)) {
+            final VariableFile variableFile = VariableFileParser.parse(label, tokenIterator);
+            settings.addVariableFile(variableFile);
+        }
+        else if(MetadataParser.is(label)) {
+            final Metadata metadata = MetadataParser.parse(reader, label, tokenIterator, errors);
+            settings.addMetadata(metadata);
+        }
+        else if(TestProcessingParser.is(label, Scope.SUITE, TestProcessing.Phase.SETUP)) {
+            final TestProcessing suiteSetup = TestProcessingParser.parse(TestProcessing.Phase.SETUP, reader, label, tokenIterator, errors);
+            settings.setSuiteSetup(suiteSetup);
+        }
+        else if(TestProcessingParser.is(label, Scope.TEST, TestProcessing.Phase.SETUP)){
+            final TestProcessing testSetup = TestProcessingParser.parse(TestProcessing.Phase.SETUP, reader, label, tokenIterator, errors);
+            settings.setTestSetup(testSetup);
+        }
+        else if(TestProcessingParser.is(label, Scope.SUITE, TestProcessing.Phase.TEARDOWN)) {
+            final TestProcessing teardown = TestProcessingParser.parse(TestProcessing.Phase.TEARDOWN, reader, label, tokenIterator, errors);
+            settings.setSuiteTeardown(teardown);
+        }
+        else if(TestProcessingParser.is(label, Scope.TEST, TestProcessing.Phase.TEARDOWN)) {
+            final TestProcessing teardown = TestProcessingParser.parse(TestProcessing.Phase.TEARDOWN, reader, label, tokenIterator, errors);
+            settings.setTestTeardown(teardown);
+        }
+        else if(TestProcessingParser.is(label, Scope.TEST, TestProcessing.Phase.TEMPLATE)){
+            final TestProcessing testTemplate = TestProcessingParser.parse(TestProcessing.Phase.TEMPLATE, reader, label, tokenIterator, errors);
+            settings.setTestTemplate(testTemplate);
+        }
+        else if(TagsParser.is(label, Scope.SUITE, TagsParser.Type.FORCE)) {
+            final NodeList<Literal> forceTags = TagsParser.parse(label, tokenIterator);
+            settings.setForceTags(forceTags);
+        }
+        else if(TagsParser.is(label, Scope.SUITE, TagsParser.Type.DEFAULT)){
+            final NodeList<Literal> defaultTags = TagsParser.parse(label, tokenIterator);
+            settings.setDefaultTags(defaultTags);
+        }
+        else if(TimeoutParser.is(label, Scope.TEST)){
+            final TimeOut testTimeout = TimeoutParser.parse(label, tokenIterator);
+            settings.setTimeOut(testTimeout);
+        }
     }
 }

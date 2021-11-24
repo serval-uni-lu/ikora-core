@@ -23,7 +23,6 @@ package lu.uni.serval.ikora.core.model;
 import lu.uni.serval.ikora.core.analytics.difference.Edit;
 import lu.uni.serval.ikora.core.analytics.visitor.NodeVisitor;
 import lu.uni.serval.ikora.core.analytics.visitor.VisitorMemory;
-import lu.uni.serval.ikora.core.exception.InvalidTypeException;
 import lu.uni.serval.ikora.core.exception.RunnerException;
 import lu.uni.serval.ikora.core.runner.Runtime;
 import lu.uni.serval.ikora.core.utils.FileUtils;
@@ -36,8 +35,8 @@ import java.util.stream.Collectors;
 public class Settings extends SourceNode implements Delayable {
     private Token header;
 
-    private final List<Resources> resourcesTable;
-    private final List<Library> libraryTable;
+    private final NodeList<Resources> resourcesTable;
+    private final NodeList<Library> libraryTable;
 
     private final List<Metadata> metadataList;
     private final List<VariableFile> variableFiles;
@@ -48,7 +47,7 @@ public class Settings extends SourceNode implements Delayable {
     private Documentation documentation;
     private TimeOut timeOut;
 
-    private TestProcessing template;
+    private TestProcessing testTemplate;
     private TestProcessing testSetup;
     private TestProcessing testTeardown;
     private TestProcessing suiteSetup;
@@ -57,8 +56,12 @@ public class Settings extends SourceNode implements Delayable {
     public Settings() {
         this.header = Token.empty();
 
-        this.resourcesTable = new ArrayList<>();
-        this.libraryTable = new ArrayList<>();
+        this.resourcesTable = new NodeList<>();
+        addAstChild(this.resourcesTable);
+
+        this.libraryTable = new NodeList<>();
+        addAstChild(this.libraryTable);
+
         this.defaultTags = new NodeList<>();
         this.forceTags = new NodeList<>();
         this.timeOut = TimeOut.none();
@@ -129,8 +132,8 @@ public class Settings extends SourceNode implements Delayable {
         return forceTags.stream().anyMatch(literal -> literal.matches(Token.fromString(tag)));
     }
 
-    public TestProcessing getTemplate() {
-        return template;
+    public TestProcessing getTestTemplate() {
+        return testTemplate;
     }
 
     public TestProcessing getTestSetup() {
@@ -214,24 +217,29 @@ public class Settings extends SourceNode implements Delayable {
         variableFiles.add(variableFile);
     }
 
-    public void setTemplate(TestProcessing template) {
-        this.template = template;
+    public void setTestTemplate(TestProcessing testTemplate) {
+        this.testTemplate = testTemplate;
+        addAstChild(this.testTemplate);
     }
 
     public void setTestSetup(TestProcessing testSetup) {
         this.testSetup = testSetup;
+        addAstChild(this.testSetup);
     }
 
     public void setTestTeardown(TestProcessing testTeardown) {
         this.testTeardown = testTeardown;
+        addAstChild(this.testTeardown);
     }
 
     public void setSuiteSetup(TestProcessing suiteSetup) {
         this.suiteSetup = suiteSetup;
+        addAstChild(this.suiteSetup);
     }
 
     public void setSuiteTeardown(TestProcessing suiteTeardown) {
         this.suiteTeardown = suiteTeardown;
+        addAstChild(this.suiteTeardown);
     }
 
     @Override

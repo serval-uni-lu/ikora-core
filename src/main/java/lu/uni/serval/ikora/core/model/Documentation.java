@@ -59,15 +59,19 @@ public class Documentation extends SourceNode{
     }
 
     public String getText() {
-        final Iterator<Token> iterator = TokenScanner.from(this.content).skipTypes(Token.Type.CONTINUATION).iterator();
-        final StringBuilder builder = new StringBuilder();
+        if(cachedText == null){
+            final Iterator<Token> iterator = TokenScanner.from(this.content).skipTypes(Token.Type.CONTINUATION).iterator();
+            final StringBuilder builder = new StringBuilder();
 
-        while (iterator.hasNext()){
-            builder.append(iterator.next());
-            if(iterator.hasNext()) builder.append(" ");
+            while (iterator.hasNext()){
+                builder.append(iterator.next());
+                if(iterator.hasNext()) builder.append(" ");
+            }
+
+            cachedText = builder.toString();
         }
 
-        return builder.toString();
+        return cachedText;
     }
 
     public boolean isPresent(){

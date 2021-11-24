@@ -22,10 +22,7 @@ package lu.uni.serval.ikora.core.builder;
 
 import lu.uni.serval.ikora.core.error.ErrorManager;
 import lu.uni.serval.ikora.core.error.ErrorMessages;
-import lu.uni.serval.ikora.core.model.Settings;
-import lu.uni.serval.ikora.core.model.Source;
-import lu.uni.serval.ikora.core.model.Tokens;
-import lu.uni.serval.ikora.core.model.Value;
+import lu.uni.serval.ikora.core.model.*;
 import org.junit.jupiter.api.Assertions;
 import lu.uni.serval.ikora.core.Helpers;
 import org.junit.jupiter.api.Test;
@@ -38,7 +35,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class SettingsTableParserTest {
     @Test
-    void testDocumentationParse() throws IOException {
+    void testDocumentationParser() throws IOException {
         String settingText = "***Settings***\n\n" +
                             "Documentation    Example suite";
 
@@ -61,7 +58,9 @@ class SettingsTableParserTest {
         final Settings settings = createSettings(settingText, errors);
 
         assertEquals("Do Something", settings.getSuiteSetup().getName());
-        assertEquals("${MESSAGE}", settings.getSuiteSetup().getCall().getArgumentList().get(0).getName());
+        final Optional<KeywordCall> call = settings.getSuiteSetup().getCall();
+        assertTrue(call.isPresent());
+        assertEquals("${MESSAGE}", call.get().getArgumentList().get(0).getName());
     }
 
     @Test
@@ -75,21 +74,26 @@ class SettingsTableParserTest {
         assertTrue(errors.inMemory().isEmpty());
 
         assertEquals("Do Something", settings.getTestSetup().getName());
-        assertEquals("${MESSAGE}", settings.getTestSetup().getCall().getArgumentList().get(0).getName());
+
+        final Optional<KeywordCall> call = settings.getTestSetup().getCall();
+        assertTrue(call.isPresent());
+        assertEquals("${MESSAGE}", call.get().getArgumentList().get(0).getName());
     }
 
     @Test
     void testSuiteTeardown() throws IOException {
-        String settingText = "***Settings***\n" +
+        final String settingText = "***Settings***\n" +
                 "Suite Teardown    Do Something    ${MESSAGE}";
 
-        ErrorManager errors = new ErrorManager();
-
+        final ErrorManager errors = new ErrorManager();
         final Settings settings = createSettings(settingText, errors);
         assertTrue(errors.inMemory().isEmpty());
 
         assertEquals("Do Something", settings.getSuiteTeardown().getName());
-        assertEquals("${MESSAGE}", settings.getSuiteTeardown().getCall().getArgumentList().get(0).getName());
+
+        final Optional<KeywordCall> call = settings.getSuiteTeardown().getCall();
+        assertTrue(call.isPresent());
+        assertEquals("${MESSAGE}", call.get().getArgumentList().get(0).getName());
     }
 
     @Test
@@ -103,7 +107,10 @@ class SettingsTableParserTest {
         assertTrue(errors.inMemory().isEmpty());
 
         assertEquals("Do Something", settings.getTestTeardown().getName());
-        assertEquals("${MESSAGE}", settings.getTestTeardown().getCall().getArgumentList().get(0).getName());
+
+        final Optional<KeywordCall> call = settings.getTestTeardown().getCall();
+        assertTrue(call.isPresent());
+        assertEquals("${MESSAGE}", call.get().getArgumentList().get(0).getName());
     }
 
     @Test
@@ -116,22 +123,26 @@ class SettingsTableParserTest {
         final Settings settings = createSettings(settingText, errors);
         assertTrue(errors.inMemory().isEmpty());
 
-        assertEquals("Do Something", settings.getTemplate().getName());
-        assertEquals("${MESSAGE}", settings.getTemplate().getCall().getArgumentList().get(0).getName());
+        assertEquals("Do Something", settings.getTestTemplate().getName());
+
+        final Optional<KeywordCall> call = settings.getTestTemplate().getCall();
+        assertTrue(call.isPresent());
+        assertEquals("${MESSAGE}", call.get().getArgumentList().get(0).getName());
     }
 
     @Test
     void tesTemplateWithInvalidType() throws IOException {
-        String settingText = "***Settings***\n" +
+        final String settingText = "***Settings***\n" +
                 "Test Template    ${RESULT}=  Do Something    ${MESSAGE}";
 
-        ErrorManager errors = new ErrorManager();
-        createSettings(settingText, errors);
+        final ErrorManager errors = new ErrorManager();
+        final Settings settings = createSettings(settingText, errors);
 
+        assertFalse(settings.getTestTemplate().getCall().isPresent());
         assertEquals(1, errors.inMemory().getSize());
 
         String errorMessage = errors.inMemory().getSyntaxErrors().iterator().next().getMessage();
-        Assertions.assertEquals(ErrorMessages.FAILED_TO_PARSE_TEMPLATE, errorMessage);
+        Assertions.assertEquals(ErrorMessages.EXPECTED_KEYWORD_CALL, errorMessage);
     }
 
     @Test
@@ -251,8 +262,8 @@ class SettingsTableParserTest {
     }
 
     private Settings createSettings(String text, ErrorManager errors) throws IOException {
-        LineReader reader = Helpers.lineReader(text);
-        Tokens tokens = LexerUtils.tokenize(reader);
+        final LineReader reader = Helpers.getLineReader(text);
+        final Tokens tokens = LexerUtils.tokenize(reader);
 
         return SettingsTableParser.parse(reader, tokens, errors);
     }

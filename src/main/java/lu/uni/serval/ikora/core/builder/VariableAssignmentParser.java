@@ -23,17 +23,16 @@ package lu.uni.serval.ikora.core.builder;
 import lu.uni.serval.ikora.core.error.ErrorManager;
 import lu.uni.serval.ikora.core.error.ErrorMessages;
 import lu.uni.serval.ikora.core.model.*;
+import lu.uni.serval.ikora.core.utils.TokenUtils;
 
-import java.io.IOException;
+import java.util.Iterator;
 import java.util.Optional;
 
 public class VariableAssignmentParser {
     private VariableAssignmentParser(){ }
 
-    public static Optional<VariableAssignment> parse(LineReader reader, ErrorManager errors) throws IOException {
-        Tokens tokens = LexerUtils.tokenize(reader);
-
-        if(tokens.isEmpty()){
+    public static Optional<VariableAssignment> parse(LineReader reader, Iterator<Token> tokenIterator, ErrorManager errors) {
+        if(!tokenIterator.hasNext()){
             errors.registerInternalError(
                     reader.getSource(),
                     ErrorMessages.EMPTY_TOKEN_NOT_EXPECTED,
@@ -43,31 +42,34 @@ public class VariableAssignmentParser {
             return Optional.empty();
         }
 
-        Optional<Variable> optional = VariableAssignmentParser.parseName(tokens.first());
+        final Token variableToken = tokenIterator.next();
+        final Optional<Variable> optional = VariableAssignmentParser.parseName(variableToken);
 
         if(!optional.isPresent()){
             errors.registerSyntaxError(
                     reader.getSource(),
-                    String.format("Invalid variable: %s", tokens.first().getText()),
-                    Range.fromToken(tokens.first(), reader.getCurrent())
+                    String.format("Invalid variable: %s", variableToken.getText()),
+                    Range.fromToken(variableToken, reader.getCurrent())
             );
 
             return Optional.empty();
         }
 
-        VariableAssignment variable = new VariableAssignment(optional.get());
-        VariableAssignmentParser.parseValues(variable, tokens.withoutFirst(), reader, errors);
+        final Token equalSign = TokenUtils.extractEqualSign(variableToken);
+
+        final VariableAssignment variable = new VariableAssignment(optional.get(), equalSign);
+        parseValues(variable, tokenIterator, reader, errors);
 
         return Optional.of(variable);
     }
 
     public static Optional<Variable> parseName(final Token name) {
-        Token cleanName = trimEquals(name);
+        final Token cleanName = TokenUtils.trimRightEquals(name);
         return VariableParser.parse(cleanName);
     }
 
-    public static void parseValues(final VariableAssignment variable, Tokens values, LineReader reader, ErrorManager errors){
-        if(values.isEmpty()){
+    public static void parseValues(final VariableAssignment variable, Iterator<Token> tokenIterator, LineReader reader, ErrorManager errors){
+        if(!tokenIterator.hasNext()){
             errors.registerSyntaxError(
                     reader.getSource(),
                     String.format("Empty variable definition: %s", variable.getDefinitionToken()),
@@ -75,7 +77,8 @@ public class VariableAssignmentParser {
             );
         }
 
-        for(Token value: values){
+        while (tokenIterator.hasNext()){
+            final Token value = tokenIterator.next();
             variable.addValue(ValueParser.parseValue(value));
         }
     }

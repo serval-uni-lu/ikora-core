@@ -32,17 +32,23 @@ public class Library extends SourceNode {
     private final Token label;
     private final Token name;
     private final List<Token> arguments;
-    private final Token comment;
 
-    public Library(Token label, Token name, List<Token> arguments, Token comment) {
+    public Library(Token label, Token name, List<Token> arguments) {
         this.label = label;
         this.name = name;
         this.arguments = arguments;
-        this.comment = comment;
+    }
+
+    public Token getLabel() {
+        return label;
     }
 
     public String getName() {
         return this.name.getText();
+    }
+
+    public List<Token> getArguments() {
+        return arguments;
     }
 
     @Override
@@ -67,11 +73,11 @@ public class Library extends SourceNode {
 
     @Override
     public void accept(NodeVisitor visitor, VisitorMemory memory) {
-
+        visitor.visit(this, memory);
     }
 
     @Override
     public void execute(Runtime runtime) throws RunnerException {
-
+        //runtime not implemented yet
     }
 }

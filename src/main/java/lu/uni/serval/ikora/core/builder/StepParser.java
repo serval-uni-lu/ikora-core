@@ -29,11 +29,11 @@ import java.util.Iterator;
 class StepParser {
     private StepParser() {}
 
-    public static Step parse(LineReader reader, Token first, Iterator<Token> tokenIterator, boolean allowGherkin, ErrorManager errors) throws IOException {
+    public static Step parse(int indent, LineReader reader, Token first, Iterator<Token> tokenIterator, boolean allowGherkin, ErrorManager errors) throws IOException {
         Step step;
 
         if(first.isForLoop()) {
-            step = ForLoopParser.parse(reader, first, tokenIterator, errors);
+            step = ForLoopParser.parse(indent, reader, first, tokenIterator, errors);
         }
         else if (first.isAssignment() || first.isVariable()){
             step = AssignmentParser.parse(reader, first, tokenIterator, errors);

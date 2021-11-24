@@ -23,13 +23,14 @@ package lu.uni.serval.ikora.core.builder;
 import lu.uni.serval.ikora.core.exception.InvalidArgumentException;
 import lu.uni.serval.ikora.core.exception.MalformedVariableException;
 import lu.uni.serval.ikora.core.model.TimeOut;
-import lu.uni.serval.ikora.core.model.Tokens;
+import lu.uni.serval.ikora.core.model.Token;
 import lu.uni.serval.ikora.core.Helpers;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import java.io.IOException;
+import java.util.Iterator;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -47,14 +48,16 @@ class TimeoutParserTest {
     }
 
     @Test
-    void testParseInvalidTimeout() {
-        assertThrows(InvalidArgumentException.class, () -> parse("[TimeOut]  Invalid timeout"));
+    void testParseInvalidTimeout() throws IOException {
+        assertFalse(parse("[TimeOut]  Invalid timeout").isValid());
     }
 
-    private static TimeOut parse(String text) throws IOException, InvalidArgumentException, MalformedVariableException {
-        LineReader reader = Helpers.lineReader(text);
-        Tokens tokens = LexerUtils.tokenize(reader);
+    private static TimeOut parse(String text) throws IOException {
+        final LineReader reader = Helpers.getLineReader(text);
+        final Iterator<Token> tokenIterator = TokenScanner.from(LexerUtils.tokenize(reader))
+                .skipTypes(Token.Type.CONTINUATION)
+                .iterator();
 
-        return TimeoutParser.parse(tokens.withoutTag("\\[TimeOut\\]"));
+        return TimeoutParser.parse(tokenIterator.next(), tokenIterator);
     }
 }

@@ -54,7 +54,7 @@ public class Literal extends Value {
 
     @Override
     public boolean matches(Token name) {
-        return false;
+        return this.name.matches(name);
     }
 
     @Override

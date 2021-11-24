@@ -46,30 +46,36 @@ class TestCaseParser {
 
         final TestCase testCase = optionalTestCase.get();
 
-        while(reader.getCurrent().isValid() && LexerUtils.isSameBlock(nameTokens, reader)) {
+        while(reader.getCurrent().isValid() && !LexerUtils.isBlock(reader.getCurrent().getText())) {
             if(reader.getCurrent().ignore()) {
                 reader.readLine();
                 continue;
             }
 
-            final Iterator<Token> contentTokenIterator = TokenScanner.from(LexerUtils.tokenize(reader))
+            final Tokens contentTokens = LexerUtils.tokenize(reader);
+
+            if(nameTokens.getIndentSize() + 1 != contentTokens.getIndentSize()){
+                break;
+            }
+
+            final Iterator<Token> contentTokenIterator = TokenScanner.from(contentTokens)
                     .skipIndent(true)
                     .iterator();
 
-            parseContentLine(testCase, reader, contentTokenIterator, dynamicImports, errors);
+            parseContentLine(contentTokens.getIndentSize(), testCase, reader, contentTokenIterator, dynamicImports, errors);
         }
 
         return testCase;
     }
 
-    private static void parseContentLine(TestCase testCase, LineReader reader, Iterator<Token> tokenIterator, DynamicImports dynamicImports, ErrorManager errors) throws IOException {
+    private static void parseContentLine(int indent, TestCase testCase, LineReader reader, Iterator<Token> tokenIterator, DynamicImports dynamicImports, ErrorManager errors) throws IOException {
         Token label = ParserUtils.getLabel(reader, tokenIterator, errors);
 
-        if (DocumentationParser.is(label)) {
+        if (DocumentationParser.is(label, Scope.KEYWORD)) {
             final Documentation documentation = DocumentationParser.parse(label, tokenIterator);
             testCase.setDocumentation(documentation);
         }
-        else if (TagsParser.is(label, TagsParser.Type.NORMAL)) {
+        else if (TagsParser.is(label, Scope.KEYWORD, TagsParser.Type.NORMAL)) {
             final NodeList<Literal> tags = TagsParser.parse(label, tokenIterator);
             testCase.setTags(tags);
         }
@@ -90,7 +96,7 @@ class TestCaseParser {
             testCase.setTimeOut(timeOut);
         }
         else {
-            final Step step = StepParser.parse(reader, label, tokenIterator, true, errors);
+            final Step step = StepParser.parse(indent, reader, label, tokenIterator, true, errors);
 
             try {
                 testCase.addStep(step);

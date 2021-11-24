@@ -23,15 +23,13 @@ package lu.uni.serval.ikora.core.builder;
 import lu.uni.serval.ikora.core.error.ErrorManager;
 import lu.uni.serval.ikora.core.error.ErrorMessages;
 import lu.uni.serval.ikora.core.error.Errors;
-import lu.uni.serval.ikora.core.model.Assignment;
-import lu.uni.serval.ikora.core.model.KeywordCall;
-import lu.uni.serval.ikora.core.model.Tokens;
-import lu.uni.serval.ikora.core.model.Variable;
+import lu.uni.serval.ikora.core.model.*;
 import org.junit.jupiter.api.Assertions;
 import lu.uni.serval.ikora.core.Helpers;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -142,9 +140,13 @@ class AssignmentParserTest {
     }
 
     private Assignment createAssignment(String text, ErrorManager errors) throws IOException {
-        LineReader reader = Helpers.lineReader(text);
-        Tokens tokens = LexerUtils.tokenize(reader).withoutIndent();
+        final LineReader reader = Helpers.getLineReader(text);
+        final Iterator<Token> tokenIterator = TokenScanner.from(LexerUtils.tokenize(reader))
+                .skipIndent(true)
+                .skipTypes(Token.Type.CONTINUATION)
+                .iterator();
 
-        return AssignmentParser.parse(reader, tokens, errors);
+
+        return AssignmentParser.parse(reader, tokenIterator.next(), tokenIterator, errors);
     }
 }

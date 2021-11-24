@@ -64,14 +64,6 @@ public class Source {
         return FileUtils.IN_MEMORY;
     }
 
-    public String getPath(){
-        if(this.file != null){
-            return this.file.getPath();
-        }
-
-        return FileUtils.IN_MEMORY;
-    }
-
     public String getName(){
         if(this.file != null){
             return this.file.getName();

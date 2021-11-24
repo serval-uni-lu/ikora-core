@@ -22,17 +22,19 @@ package lu.uni.serval.ikora.core.builder;
 
 import lu.uni.serval.ikora.core.error.ErrorManager;
 import lu.uni.serval.ikora.core.model.SourceNodeTable;
+import lu.uni.serval.ikora.core.model.Token;
 import lu.uni.serval.ikora.core.model.Tokens;
 import lu.uni.serval.ikora.core.model.VariableAssignment;
 
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.Optional;
 
 class VariableTableParser {
     private VariableTableParser() {}
 
     public static SourceNodeTable<VariableAssignment> parse(LineReader reader, Tokens blockTokens, ErrorManager errors) throws IOException {
-        SourceNodeTable<VariableAssignment> variableTable = new SourceNodeTable<>();
+        final SourceNodeTable<VariableAssignment> variableTable = new SourceNodeTable<>();
         variableTable.setHeader(ParserUtils.parseHeaderName(reader, blockTokens, errors));
 
         while(reader.getCurrent().isValid() && !LexerUtils.isBlock(reader.getCurrent().getText())){
@@ -41,7 +43,12 @@ class VariableTableParser {
                 continue;
             }
 
-            Optional<VariableAssignment> variable = VariableAssignmentParser.parse(reader, errors);
+            final Tokens lineTokens = LexerUtils.tokenize(reader);
+            final Iterator<Token> tokenIterator = TokenScanner.from(lineTokens)
+                    .skipIndent(true)
+                    .iterator();
+
+            final Optional<VariableAssignment> variable = VariableAssignmentParser.parse(reader, tokenIterator, errors);
             variable.ifPresent(variableTable::add);
         }
 

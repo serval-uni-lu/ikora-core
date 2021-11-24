@@ -23,7 +23,6 @@ package lu.uni.serval.ikora.core.runner;
 import lu.uni.serval.ikora.core.analytics.KeywordStatistics;
 import lu.uni.serval.ikora.core.model.*;
 
-import java.io.File;
 import java.util.*;
 
 public class StaticScope implements Scope{
@@ -93,20 +92,15 @@ public class StaticScope implements Scope{
             return;
         }
 
-        File filePath = new File(argumentList.get(0).getName());
-
-        if(!filePath.isAbsolute() && keyword.getSourceFile() != null) {
-            filePath = new File(keyword.getSourceFile().getSource().asFile(), filePath.getPath());
-        }
-
         dynamicLibrary.putIfAbsent(keyword, new ResourcesTable());
 
-        List<Token> resourcesParameters = new ArrayList<>();
+        final List<Token> resourcesParameters = new ArrayList<>();
+
         for(int i = 1; i < argumentList.size(); ++i){
             resourcesParameters.add(argumentList.get(i).getDefinitionToken());
         }
 
-        Resources resources = new Resources(argumentList.get(0).getDefinitionToken(), filePath, resourcesParameters, Token.empty());
+        final Resources resources = new Resources(Token.empty(), argumentList.get(0).getDefinitionToken(), resourcesParameters);
         dynamicLibrary.get(keyword).add(resources);
     }
 

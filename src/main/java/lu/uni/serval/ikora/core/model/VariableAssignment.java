@@ -32,11 +32,24 @@ import java.util.*;
 
 public class VariableAssignment extends SourceNode implements Dependable{
     private final Variable variable;
+    private final Token equalSign;
     private final NodeList<Argument> values;
     private final Set<SourceNode> dependencies;
 
     public VariableAssignment(Variable variable){
         this.variable = variable;
+        this.equalSign = Token.empty();
+        this.values = new NodeList<>();
+        this.dependencies = new HashSet<>();
+        this.addTokens(variable.getTokens());
+
+        addAstChild(this.variable);
+        addAstChild(this.values);
+    }
+
+    public VariableAssignment(Variable variable, Token equalSign){
+        this.variable = variable;
+        this.equalSign = equalSign;
         this.values = new NodeList<>();
         this.dependencies = new HashSet<>();
         this.addTokens(variable.getTokens());
@@ -52,6 +65,10 @@ public class VariableAssignment extends SourceNode implements Dependable{
 
     public Variable getVariable(){
         return variable;
+    }
+
+    public Token getEqualSign(){
+        return this.equalSign;
     }
 
     public NodeList<Argument> getValues() {

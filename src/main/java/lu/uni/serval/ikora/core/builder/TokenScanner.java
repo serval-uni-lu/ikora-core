@@ -58,17 +58,18 @@ public class TokenScanner implements Iterable<Token> {
             if(!reset) cached = true;
 
             if(!iterator.hasNext()){
-                return null;
+                next = null;
             }
-
-            next = iterator.next();
-
-            while (skipIndent && next != null && next.isDelimiter()){
+            else{
                 next = iterator.next();
-            }
 
-            while (next != null && skippedTypes.contains(next.getType())) {
-                next = iterator.next();
+                while (skipIndent && next != null && next.isDelimiter()){
+                    next = iterator.next();
+                }
+
+                while (next != null && skippedTypes.contains(next.getType())) {
+                    next = iterator.next();
+                }
             }
 
             return next;

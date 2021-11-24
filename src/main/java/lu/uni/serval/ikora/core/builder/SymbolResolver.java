@@ -63,14 +63,14 @@ public class SymbolResolver {
     }
 
     private void resolveSteps(TestCase testCase) {
-        testCase.getSetup().ifPresent(this::resolveCall);
+        testCase.getSetup().flatMap(TestProcessing::getCall).ifPresent(this::resolveCall);
 
         for (Step step: testCase) {
-            testCase.getTemplate().ifPresent(step::setTemplate);
+            testCase.getTemplate().flatMap(TestProcessing::getCall).ifPresent(step::setTemplate);
             step.getKeywordCall().ifPresent(this::resolveCall);
         }
 
-        testCase.getTearDown().ifPresent(this::resolveCall);
+        testCase.getTearDown().flatMap(TestProcessing::getCall).ifPresent(this::resolveCall);
     }
 
     private void resolveSteps(UserKeyword userKeyword) {
@@ -88,7 +88,7 @@ public class SymbolResolver {
     }
 
     private void resolveCall(KeywordCall call) {
-        Set<? super Keyword> keywords = getKeywords(call.getDefinitionToken(), call.getSourceFile());
+        final Set<? super Keyword> keywords = findKeywords(call.getDefinitionToken(), call.getSourceFile());
 
         for(Object keyword: keywords) {
             call.linkKeyword((Keyword) keyword, Link.Import.STATIC);
@@ -202,17 +202,17 @@ public class SymbolResolver {
         definitions.forEach(d -> variable.linkToDefinition(d, Link.Import.STATIC));
     }
 
-    private Set<? super Keyword> getKeywords(Token fullName, SourceFile sourceFile) {
-        Set<? super Keyword> keywordsFound = getKeywords(fullName, sourceFile, false);
+    private Set<? super Keyword> findKeywords(Token fullName, SourceFile sourceFile) {
+        Set<? super Keyword> keywordsFound = findKeywords(fullName, sourceFile, false);
 
         if(keywordsFound.isEmpty()){
-            keywordsFound = getKeywords(fullName, sourceFile, true);
+            keywordsFound = findKeywords(fullName, sourceFile, true);
         }
 
         return keywordsFound;
     }
 
-    private Set<? super Keyword> getKeywords(Token fullName, SourceFile sourceFile, boolean allowSplit) {
+    private Set<? super Keyword> findKeywords(Token fullName, SourceFile sourceFile, boolean allowSplit) {
         String library = "";
         Token name = fullName;
 

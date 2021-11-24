@@ -122,7 +122,7 @@ public class Tokens implements Iterable<Token> {
     public String toString() {
         return this.tokenSet.stream()
                 .map(Token::toString)
-                .collect(Collectors.joining());
+                .collect(Collectors.joining(" "));
     }
 
     public boolean equalsIgnorePosition(Tokens other){

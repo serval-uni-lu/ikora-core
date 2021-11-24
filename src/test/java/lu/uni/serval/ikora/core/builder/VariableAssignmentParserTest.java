@@ -21,11 +21,13 @@ package lu.uni.serval.ikora.core.builder;
  */
 
 import lu.uni.serval.ikora.core.error.ErrorManager;
+import lu.uni.serval.ikora.core.model.Token;
 import lu.uni.serval.ikora.core.model.VariableAssignment;
 import org.junit.jupiter.api.Test;
 import lu.uni.serval.ikora.core.Helpers;
 
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -34,12 +36,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class VariableAssignmentParserTest {
     @Test
     void testParseScalarSimpleValue() throws IOException {
-        LineReader reader = Helpers.lineReader("${scalar}", "scalar value");
+        final String text = "${scalar}\tscalar value";
+        final ErrorManager errors = new ErrorManager();
+        final Optional<VariableAssignment> variableAssignment = createVariableAssignment(text, errors);
 
-        ErrorManager errors = new ErrorManager();
-        Optional<VariableAssignment> optional = VariableAssignmentParser.parse(reader, errors);
-        assertTrue(optional.isPresent());
-        VariableAssignment assignment = optional.get();
+        assertTrue(variableAssignment.isPresent());
+        VariableAssignment assignment = variableAssignment.get();
         assertTrue(errors.isEmpty());
 
         assertEquals(1, assignment.getValues().size());
@@ -51,12 +53,12 @@ class VariableAssignmentParserTest {
 
     @Test
     void testParseScalarVariableValue() throws IOException {
-        LineReader reader = Helpers.lineReader("${scalar}", "@{variable_value}");
+        final String text = "${scalar}\t@{variable_value}";
+        final ErrorManager errors = new ErrorManager();
+        final Optional<VariableAssignment> variableAssignment = createVariableAssignment(text, errors);
 
-        ErrorManager errors = new ErrorManager();
-        Optional<VariableAssignment> optional = VariableAssignmentParser.parse(reader, errors);
-        assertTrue(optional.isPresent());
-        VariableAssignment assignment = optional.get();
+        assertTrue(variableAssignment.isPresent());
+        VariableAssignment assignment = variableAssignment.get();
         assertTrue(errors.isEmpty());
 
         assertEquals(1, assignment.getValues().size());
@@ -66,12 +68,12 @@ class VariableAssignmentParserTest {
 
     @Test
     void testParseListWithMultipleValue() throws IOException {
-        LineReader reader = Helpers.lineReader("@{list}", "scalar value 1", "${variable}", "scalar value 3");
+        final String text = "@{list}\tscalar value 1\t${variable}\tscalar value 3";
+        final ErrorManager errors = new ErrorManager();
+        final Optional<VariableAssignment> variableAssignment = createVariableAssignment(text, errors);
 
-        ErrorManager errors = new ErrorManager();
-        Optional<VariableAssignment> optional = VariableAssignmentParser.parse(reader, errors);
-        assertTrue(optional.isPresent());
-        VariableAssignment assignment = optional.get();
+        assertTrue(variableAssignment.isPresent());
+        VariableAssignment assignment = variableAssignment.get();
         assertTrue(errors.isEmpty());
 
         assertFalse(assignment.getValues().isEmpty());
@@ -88,12 +90,12 @@ class VariableAssignmentParserTest {
 
     @Test
     void testParseDictionaryWithMultipleEntry() throws IOException {
-        LineReader reader = Helpers.lineReader("&{dictionary}", "key1=value1", "${variable}", "key3=value3");
+        final String text = "&{dictionary}\tkey1=value1\t${variable}\tkey3=value3";
+        final ErrorManager errors = new ErrorManager();
+        final Optional<VariableAssignment> variableAssignment = createVariableAssignment(text, errors);
 
-        ErrorManager errors = new ErrorManager();
-        Optional<VariableAssignment> optional = VariableAssignmentParser.parse(reader, errors);
-        assertTrue(optional.isPresent());
-        VariableAssignment assignment = optional.get();
+        assertTrue(variableAssignment.isPresent());
+        VariableAssignment assignment = variableAssignment.get();
         assertTrue(errors.isEmpty());
 
         assertFalse(assignment.getValues().isEmpty());
@@ -110,17 +112,23 @@ class VariableAssignmentParserTest {
 
     @Test
     void testMultilineVariable() throws IOException {
-        final String code = "${variable}    First Line\n" +
+        final String text = "${variable}    First Line\n" +
                 "... Second Line\n" +
                 "... Third Line\n";
 
-        final LineReader reader = new LineReader(code);
-        reader.readLine();
+        final ErrorManager errors = new ErrorManager();
+        final Optional<VariableAssignment> variableAssignment = createVariableAssignment(text, errors);
 
-        ErrorManager errors = new ErrorManager();
-        Optional<VariableAssignment> optional = VariableAssignmentParser.parse(reader, errors);
-        assertTrue(optional.isPresent());
-        VariableAssignment variableAssignment = optional.get();
-        assertEquals(1, variableAssignment.getValues().size());
+        assertTrue(variableAssignment.isPresent());
+        assertEquals(1, variableAssignment.get().getValues().size());
+    }
+
+    private Optional<VariableAssignment> createVariableAssignment(String text, ErrorManager errors) throws IOException {
+        final LineReader reader = Helpers.getLineReader(text);
+        final Iterator<Token> tokenIterator = TokenScanner.from(LexerUtils.tokenize(reader))
+                .skipTypes(Token.Type.CONTINUATION)
+                .iterator();
+
+        return VariableAssignmentParser.parse(reader, tokenIterator, errors);
     }
 }

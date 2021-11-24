@@ -203,7 +203,7 @@ class ArgumentUtilsTest {
         final BuildResult result = Builder.build(code, true);
         final Project project = result.getProjects().iterator().next();
 
-        final UserKeyword followLink = project.findUserKeyword("<IN_MEMORY>", "Follow the link").iterator().next();
+        final UserKeyword followLink = project.findUserKeyword(FileUtils.IN_MEMORY, "Follow the link").iterator().next();
         assertNotNull(followLink);
 
         final List<Pair<String, SourceNode>> argumentValues = ArgumentUtils.getArgumentValues(followLink.getStep(0).getArgumentList().get(0));
@@ -228,7 +228,7 @@ class ArgumentUtilsTest {
         final BuildResult result = Builder.build(code, true);
         final Project project = result.getProjects().iterator().next();
 
-        final UserKeyword something = project.findUserKeyword("<IN_MEMORY>", "Something").iterator().next();
+        final UserKeyword something = project.findUserKeyword(FileUtils.IN_MEMORY, "Something").iterator().next();
         assertNotNull(something);
 
         final List<Pair<String, SourceNode>> argumentValues = ArgumentUtils.getArgumentValues(something.getStep(0).getArgumentList().get(0));

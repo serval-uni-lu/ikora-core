@@ -20,16 +20,16 @@ package lu.uni.serval.ikora.core;
  * #L%
  */
 
-import lu.uni.serval.ikora.core.builder.BuildResult;
-import lu.uni.serval.ikora.core.builder.Builder;
-import lu.uni.serval.ikora.core.builder.LineReader;
+import lu.uni.serval.ikora.core.builder.*;
 import lu.uni.serval.ikora.core.model.Project;
+import lu.uni.serval.ikora.core.model.Token;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Assertions;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Iterator;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -79,15 +79,22 @@ public class Helpers {
         return configuration;
     }
 
-    public static LineReader lineReader(String text) throws IOException {
+    public static LineReader getLineReader(String text) throws IOException {
         LineReader lineReader = new LineReader(text);
         lineReader.readLine();
 
         return lineReader;
     }
 
-    public static LineReader lineReader(String... tokens) throws IOException {
+    public static LineReader getLineReader(String... tokens) throws IOException {
         String line = String.join("\t", tokens);
-        return lineReader(line);
+        return getLineReader(line);
+    }
+
+    public static Iterator<Token> getTokenIterator(String text) throws IOException {
+        final LineReader reader = Helpers.getLineReader(text);
+        return TokenScanner.from(LexerUtils.tokenize(reader))
+                .skipTypes(Token.Type.CONTINUATION)
+                .iterator();
     }
 }

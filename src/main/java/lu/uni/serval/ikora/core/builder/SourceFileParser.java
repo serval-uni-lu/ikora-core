@@ -44,22 +44,22 @@ class SourceFileParser {
                     continue;
                 }
 
-                Tokens tokens = LexerUtils.tokenize(reader);
+                final Tokens tokens = LexerUtils.tokenize(reader);
 
                 if(isSettings(tokens.toString())){
-                    Settings settings = SettingsTableParser.parse(reader, tokens, errors);
+                    final Settings settings = SettingsTableParser.parse(reader, tokens, errors);
                     sourceFile.setSettings(settings);
                 }
                 else if(isTestCases(tokens.toString())){
-                    SourceNodeTable<TestCase> testCaseTable = TestCaseTableParser.parse(reader, tokens, dynamicImports, errors);
+                    final SourceNodeTable<TestCase> testCaseTable = TestCaseTableParser.parse(reader, tokens, dynamicImports, errors);
                     sourceFile.setTestCaseTable(testCaseTable);
                 }
                 else if(isKeywords(tokens.toString())){
-                    SourceNodeTable<UserKeyword> nodeTable = KeywordTableParser.parse(reader, tokens, dynamicImports, errors);
+                    final SourceNodeTable<UserKeyword> nodeTable = KeywordTableParser.parse(reader, tokens, dynamicImports, errors);
                     sourceFile.setKeywordTable(nodeTable);
                 }
                 else if(isVariable(tokens.toString())){
-                    SourceNodeTable<VariableAssignment> variableTable = VariableTableParser.parse(reader, tokens, errors);
+                    final SourceNodeTable<VariableAssignment> variableTable = VariableTableParser.parse(reader, tokens, errors);
                     sourceFile.setVariableTable(variableTable);
                 }
             }

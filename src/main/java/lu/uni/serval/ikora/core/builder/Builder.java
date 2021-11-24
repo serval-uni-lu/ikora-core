@@ -31,7 +31,6 @@ import lu.uni.serval.ikora.core.utils.FileUtils;
 import java.io.File;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -66,7 +65,7 @@ public class Builder {
         result.setParsingTime(parsingTime);
 
         Instant startDependencies = Instant.now();
-        resolveDependencies(projects, errors);
+        resolveDependencies(projects);
         result.setDependencyResolutionTime(Duration.between(startDependencies, Instant.now()).toMillis());
 
         Instant startResolving = Instant.now();
@@ -149,7 +148,7 @@ public class Builder {
         return result;
     }
 
-    private static void resolveDependencies(Projects projects, ErrorManager errors) {
+    private static void resolveDependencies(Projects projects) {
         for(Project project: projects){
             if(project.getRootFolder().isInMemory()){
                 continue;
@@ -162,7 +161,7 @@ public class Builder {
                     File base = dependency.getRootFolder().asFile();
 
                     if(FileUtils.isSubDirectory(base, external.getFile())){
-                        updateDependencies(project, dependency, external);
+                        updateDependencies(project, dependency);
                         break;
                     }
                 }
@@ -170,11 +169,8 @@ public class Builder {
         }
     }
 
-    private static void updateDependencies(Project project, Project dependency, Resources external) {
+    private static void updateDependencies(Project project, Project dependency) {
         project.addDependency(dependency);
-        String name = dependency.generateFileName(new Source(external.getFile()));
-        Optional<SourceFile> sourceFile = dependency.getSourceFile(name);
-        sourceFile.ifPresent(external::setSourceFile);
     }
 
     private static void loadLibraries(Runtime runtime) {

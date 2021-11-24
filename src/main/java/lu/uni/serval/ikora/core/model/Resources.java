@@ -32,29 +32,42 @@ import java.util.List;
 public class Resources extends SourceNode {
     private final Token label;
     private final Token filePath;
-    private final File file;
     private final List<Token> arguments;
-    private final Token comment;
 
-    public Resources(Token label, Token filePath, List<Token> arguments, Token comment) {
+    public Resources(Token label, Token filePath, List<Token> arguments) {
         this.label = label;
         this.arguments = arguments;
-        this.comment = comment;
         this.filePath = filePath;
+    }
 
-        this.file = new File(this.filePath.getText());
+    public Token getLabel() {
+        return this.label;
     }
 
     public boolean isValid(){
+        if(this.filePath.isEmpty()){
+            return false;
+        }
 
+        return getFile().exists();
     }
 
     public File getFile() {
-        return this.file;
+        final File file = new File(this.filePath.getText());
+
+        if(file.isAbsolute()){
+            return file;
+        }
+
+        return new File(new File(getSourceFile().getDirectory()), this.filePath.getText());
     }
 
     public Token getFilePath() {
         return this.filePath;
+    }
+
+    public List<Token> getArguments() {
+        return this.arguments;
     }
 
     @Override
@@ -79,11 +92,11 @@ public class Resources extends SourceNode {
 
     @Override
     public void accept(NodeVisitor visitor, VisitorMemory memory) {
-
+        visitor.visit(this, memory);
     }
 
     @Override
     public void execute(Runtime runtime) throws RunnerException {
-
+        // runtime not implemented yet
     }
 }

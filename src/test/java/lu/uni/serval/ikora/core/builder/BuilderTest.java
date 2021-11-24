@@ -313,8 +313,10 @@ class BuilderTest {
         final Keyword keyword = ofInterest.iterator().next();
 
         final TestCase testCase = project.getTestCases().iterator().next();
-        assertTrue(testCase.getSetup().map(KeywordCall::getKeyword).isPresent());
-        final Optional<Keyword> setup = testCase.getSetup().get().getKeyword();
+        final Optional<Keyword> setup = testCase.getSetup()
+                .flatMap(TestProcessing::getCall)
+                .flatMap(KeywordCall::getKeyword);
+
         assertTrue(setup.isPresent());
 
         assertEquals(keyword, setup.get());
@@ -347,8 +349,10 @@ class BuilderTest {
         final Keyword keyword = ofInterest.iterator().next();
 
         final TestCase testCase = project.getTestCases().iterator().next();
-        assertTrue(testCase.getTearDown().map(KeywordCall::getKeyword).isPresent());
-        final Optional<Keyword> teardown = testCase.getTearDown().get().getKeyword();
+        final Optional<Keyword> teardown = testCase.getTearDown()
+                .flatMap(TestProcessing::getCall)
+                .flatMap(KeywordCall::getKeyword);
+
         assertTrue(teardown.isPresent());
 
         assertEquals(keyword, teardown.get());

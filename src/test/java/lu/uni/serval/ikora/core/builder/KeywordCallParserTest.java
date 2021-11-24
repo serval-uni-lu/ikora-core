@@ -1,13 +1,14 @@
 package lu.uni.serval.ikora.core.builder;
 
-import jdk.nashorn.internal.ir.annotations.Ignore;
+import lu.uni.serval.ikora.core.Helpers;
 import lu.uni.serval.ikora.core.error.ErrorManager;
 import lu.uni.serval.ikora.core.model.Gherkin;
 import lu.uni.serval.ikora.core.model.KeywordCall;
-import lu.uni.serval.ikora.core.model.Tokens;
+import lu.uni.serval.ikora.core.model.Token;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.util.Iterator;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -66,10 +67,11 @@ class KeywordCallParserTest {
     }
 
     private KeywordCall createKeywordCall(String text, ErrorManager errors, boolean allowGherkin) throws IOException {
-        final LineReader reader = new LineReader(text);
-        reader.readLine();
-        final Tokens tokens = LexerUtils.tokenize(reader);
+        final LineReader reader = Helpers.getLineReader(text);
+        final Iterator<Token> tokenIterator = TokenScanner.from(LexerUtils.tokenize(reader))
+                .skipTypes(Token.Type.CONTINUATION)
+                .iterator();
 
-        return KeywordCallParser.parse(reader, tokens, allowGherkin, errors);
+        return KeywordCallParser.parse(reader, tokenIterator.next(), tokenIterator, allowGherkin, errors);
     }
 }
