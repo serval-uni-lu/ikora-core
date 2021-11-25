@@ -89,4 +89,9 @@ public class TreeVisitor extends EmptyVisitor {
     public void visit(VariableAssignment variableAssignment, VisitorMemory memory) {
         VisitorUtils.traverseValues(this, variableAssignment, memory);
     }
+
+    @Override
+    public void visit(TestProcessing testProcessing, VisitorMemory memory) {
+        VisitorUtils.traverseTestProcessing(this, testProcessing, memory);
+    }
 }

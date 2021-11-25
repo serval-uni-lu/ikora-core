@@ -113,11 +113,17 @@ public class VisitorUtils {
         }
     }
 
-    public static void traverseValues(TreeVisitor treeVisitor, VariableAssignment variableAssignment, VisitorMemory memory) {
+    public static void traverseValues(NodeVisitor visitor, VariableAssignment variableAssignment, VisitorMemory memory) {
         for(SourceNode value: variableAssignment.getValues()){
             if(memory.isAcceptable(value)) {
-                value.accept(treeVisitor, memory);
+                value.accept(visitor, memory);
             }
         }
+    }
+
+    public static void traverseTestProcessing(NodeVisitor visitor, TestProcessing testProcessing, VisitorMemory memory){
+        testProcessing.getCall().ifPresent(call ->
+                call.accept(visitor, memory.getUpdated(testProcessing))
+        );
     }
 }

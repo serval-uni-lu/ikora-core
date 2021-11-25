@@ -46,7 +46,9 @@ class KeywordCloneDetectionTest {
     @BeforeAll
     static void setUp() {
         final String code =
-                "*** Keywords ***\n" +
+                "*** Settings ***\n" +
+                        "Library    Selenium2Library\n" +
+                        "*** Keywords ***\n" +
                         "\n" +
                         "First keyword\n" +
                         "    Open Browser  firefox  google.com\n" +

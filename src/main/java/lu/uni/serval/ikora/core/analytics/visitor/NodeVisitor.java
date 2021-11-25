@@ -39,5 +39,6 @@ public interface NodeVisitor {
     void visit(Step step, VisitorMemory memory);
     void visit(VariableAssignment variableAssignment, VisitorMemory memory);
     void visit(LibraryVariable variable, VisitorMemory memory);
+    void visit(TestProcessing testProcessing, VisitorMemory memory);
     <T extends SourceNode> void visit(SourceNodeTable<T> ts, VisitorMemory memory);
 }

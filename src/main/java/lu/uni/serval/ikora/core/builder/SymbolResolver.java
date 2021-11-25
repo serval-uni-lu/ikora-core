@@ -29,7 +29,6 @@ import lu.uni.serval.ikora.core.types.KeywordType;
 import lu.uni.serval.ikora.core.utils.ArgumentUtils;
 import lu.uni.serval.ikora.core.utils.Ast;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 public class SymbolResolver {
@@ -196,7 +195,7 @@ public class SymbolResolver {
         }
 
         if(definitions.isEmpty()){
-            runtime.findLibraryVariable("", variable.getDefinitionToken());
+            runtime.findLibraryVariable("", variable.getDefinitionToken()).ifPresent(definitions::add);
         }
 
         definitions.forEach(d -> variable.linkToDefinition(d, Link.Import.STATIC));
@@ -226,19 +225,7 @@ public class SymbolResolver {
         final Set<? super Keyword> keywordsFound = new HashSet<>(sourceFile.findUserKeyword(library, name));
 
         if(keywordsFound.isEmpty()){
-            try {
-                Keyword runtimeKeyword = runtime.findLibraryKeyword(library, name);
-
-                if(runtimeKeyword != null){
-                    keywordsFound.add(runtimeKeyword);
-                }
-            } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException exception) {
-                runtime.getErrors().registerUnhandledError(
-                        sourceFile.getSource(),
-                        ErrorMessages.FAILED_TO_LOAD_LIBRARY_KEYWORD,
-                        exception
-                );
-            }
+                runtime.findLibraryKeyword(sourceFile.getAllLibraries(), name).ifPresent(keywordsFound::add);
         }
 
         return keywordsFound;

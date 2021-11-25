@@ -243,10 +243,33 @@ public class SourceFile extends SourceNode {
         return findNode(library, name, new HashSet<>(), VariableAssignment.class);
     }
 
-    private <T> Set<T> findNode(String library, Token name, Set<SourceFile> memory, Class<T> type){
+    public Set<Library> getAllLibraries() {
+        final Set<Library> libraries = new HashSet<>();
+        final Set<SourceFile> memory = new HashSet<>();
+
+        getAllLibraries(libraries, memory);
+
+        return libraries;
+    }
+
+    private void getAllLibraries(Set<Library> libraries, Set<SourceFile> memory){
+        libraries.addAll(settings.getLibraries());
+
+        for(Resources resources: settings.getResources()){
+            if(resources.isValid()) {
+                final Optional<SourceFile> target = resources.getTarget();
+
+                if(target.isPresent() && memory.add(target.get())){
+                    getAllLibraries(libraries, memory);
+                }
+            }
+        }
+    }
+
+    private <T> Set<T> findNode(String suite, Token name, Set<SourceFile> memory, Class<T> type){
         HashSet<T> nodes = new HashSet<>();
 
-        if(library == null || library.isEmpty() || matches(library)){
+        if(suite == null || suite.isEmpty() || matches(suite)){
             if(type == UserKeyword.class){
                 nodes.addAll((Collection<? extends T>) userKeywordTable.findNode(name));
             }
@@ -263,7 +286,7 @@ public class SourceFile extends SourceNode {
                 final Optional<SourceFile> target = resources.getTarget();
 
                 if(target.isPresent() && memory.add(target.get())){
-                    nodes.addAll(target.get().findNode(library, name, memory, type));
+                    nodes.addAll(target.get().findNode(suite, name, memory, type));
                 }
             }
         }
@@ -322,5 +345,4 @@ public class SourceFile extends SourceNode {
 
         return Collections.emptyList();
     }
-
 }

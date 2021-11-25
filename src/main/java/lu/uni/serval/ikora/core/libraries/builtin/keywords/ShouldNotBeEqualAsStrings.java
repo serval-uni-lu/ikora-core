@@ -26,8 +26,8 @@ import lu.uni.serval.ikora.core.types.BooleanType;
 import lu.uni.serval.ikora.core.types.NumberType;
 import lu.uni.serval.ikora.core.types.StringType;
 
-public class ShouldNotBeEqualAsString extends LibraryKeyword {
-    public ShouldNotBeEqualAsString(){
+public class ShouldNotBeEqualAsStrings extends LibraryKeyword {
+    public ShouldNotBeEqualAsStrings(){
         super(Type.ASSERTION,
                 new NumberType("first"),
                 new NumberType("second"),

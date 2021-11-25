@@ -22,23 +22,58 @@ package lu.uni.serval.ikora.core.model;
 
 import lu.uni.serval.ikora.core.builder.LibraryLoader;
 import lu.uni.serval.ikora.core.error.ErrorManager;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.reflections.Reflections;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class LibraryLoaderTest {
-    @Test
-    void testLibraryImports() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        ErrorManager errors = new ErrorManager();
-        LibraryResources resources = LibraryLoader.load(errors);
+    private static LibraryResources resources;
+
+    @BeforeAll
+    static void setup(){
+        final ErrorManager errors = new ErrorManager();
+        resources = LibraryLoader.load(errors);
         assertTrue(errors.isEmpty());
+    }
 
-        final Keyword builtin = resources.findKeyword(Token.fromString("Call Method"));
-        assertNotNull(builtin);
+    @Test
+    void testRegisterKeywordsIsComplete() throws InvocationTargetException, IllegalAccessException, InstantiationException, NoSuchMethodException {
+        final Reflections keywordReflections = new Reflections("lu.uni.serval.ikora.core.libraries.builtin.keywords");
+        final Set<Class<? extends LibraryKeyword>> builtInKeywords = keywordReflections.getSubTypesOf(LibraryKeyword.class);
 
-        final Keyword external = resources.findKeyword(Token.fromString("Page Should Not Contain"));
-        assertNotNull(external);
+        for(Class<? extends LibraryKeyword> keywordClass: builtInKeywords){
+            final Token name = Token.fromString(LibraryKeyword.toKeyword(keywordClass));
+            if(!resources.findKeyword("", name).isPresent()){
+                fail(String.format("BuiltIn Keyword not properly registered: %s", keywordClass.getCanonicalName()));
+            }
+        }
+    }
+
+    @Test
+    void testRegisterVariableIsComplete() throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+        final Reflections variableReflections = new Reflections("lu.uni.serval.ikora.core.libraries.builtin.variables");
+        final Set<Class<? extends LibraryVariable>> variableClasses = variableReflections.getSubTypesOf(LibraryVariable.class);
+
+        for(Class<? extends LibraryVariable> variableClass: variableClasses){
+            final Token name = Token.fromString(variableClass.getConstructor().newInstance().getName());
+            if(!resources.findVariable("", name).isPresent()){
+                fail(String.format("BuiltIn Variable not properly registered: %s", variableClass.getCanonicalName()));
+            }
+        }
+    }
+
+    @Test
+    void testLibraryImports() {
+        final Optional<Keyword> builtin = resources.findKeyword("", Token.fromString("Call Method"));
+        assertTrue(builtin.isPresent());
+
+        final Optional<Keyword> external = resources.findKeyword("Selenium2Library", Token.fromString("Page Should Not Contain"));
+        assertTrue(external.isPresent());
     }
 }

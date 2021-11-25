@@ -38,7 +38,7 @@ public class Runtime {
     private final ReportBuilder reportBuilder;
     private final ErrorManager errors;
 
-    private LibraryResources libraries;
+    private LibraryResources libraryResources;
 
     public Runtime(Project project, Scope scope, ErrorManager errors){
         this.project = project;
@@ -47,8 +47,8 @@ public class Runtime {
         this.errors = errors;
     }
 
-    public void setLibraries(LibraryResources libraries) {
-        this.libraries = libraries;
+    public void setLibraryResources(LibraryResources libraryResources) {
+        this.libraryResources = libraryResources;
     }
 
     public List<SourceFile> getSourceFiles(){
@@ -59,20 +59,17 @@ public class Runtime {
         return scope.findInScope(testCases, suites, name);
     }
 
-    public Keyword findLibraryKeyword(String library, Token name) throws InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
-        if(library == null){
-            return null;
-        }
-
-        return libraries.findKeyword(library, name);
+    public Optional<Keyword> findLibraryKeyword(Set<Library> libraries, Token name) {
+        return libraries.stream()
+                .map(Library::getName)
+                .map(library -> libraryResources.findKeyword(library, name))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .findFirst();
     }
 
-    public LibraryVariable findLibraryVariable(String library, Token name) {
-        if(library == null){
-            return null;
-        }
-
-        return libraries.findVariable(library, name);
+    public Optional<LibraryVariable> findLibraryVariable(String library, Token name) {
+        return libraryResources.findVariable(library, name);
     }
 
     public void addToGlobalScope(Variable variable){

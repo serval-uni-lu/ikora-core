@@ -175,7 +175,7 @@ public class Builder {
 
     private static void loadLibraries(Runtime runtime) {
         LibraryResources libraries = LibraryLoader.load(runtime.getErrors());
-        runtime.setLibraries(libraries);
+        runtime.setLibraryResources(libraries);
     }
 
     private static void resolve(Runtime runtime, boolean resolve) {

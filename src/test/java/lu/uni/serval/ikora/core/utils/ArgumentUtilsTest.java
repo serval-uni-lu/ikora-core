@@ -86,10 +86,12 @@ class ArgumentUtilsTest {
     @Test
     void testGetArgumentTypeForLibraryKeywordWithLocator(){
         final String code =
+                "*** Settings ***\n" +
+                "Library    Selenium2Library\n" +
                 "*** Test Cases ***\n" +
-                        "\n" +
-                        "Test click button\n" +
-                        "    Click Button    button_id\n";
+                "\n" +
+                "Test click button\n" +
+                "    Click Button    button_id\n";
 
         final BuildResult result = Builder.build(code, true);
         final Project project = result.getProjects().iterator().next();

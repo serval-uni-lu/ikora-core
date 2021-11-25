@@ -21,78 +21,69 @@ package lu.uni.serval.ikora.core.model;
  */
 
 import lu.uni.serval.ikora.core.libraries.LibraryKeywordInfo;
-import lu.uni.serval.ikora.core.error.ErrorManager;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 public class LibraryResources {
-    private final Map<String, KeywordObject> keywordsNames;
-    private final List<LibraryVariable> variables;
-    private final Map<String, LibraryKeywordInfo> libraryKeywordNames;
+    private final Map<String, KeywordObject> builtInKeywords;
+    private final List<LibraryVariable> builtInVariables;
+    private final Map<String, Map<String, LibraryKeywordInfo>> externalKeywords;
 
     public LibraryResources() {
-        this.keywordsNames = new HashMap<>();
-        this.variables = new ArrayList<>();
-        this.libraryKeywordNames = new HashMap<>();
+        this.builtInKeywords = new HashMap<>();
+        this.builtInVariables = new ArrayList<>();
+        this.externalKeywords = new HashMap<>();
     }
 
-    public void loadVariable(Class<? extends LibraryVariable> libraryVariable, ErrorManager errors){
-        try {
-            variables.add(libraryVariable.getConstructor().newInstance());
-        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
-            errors.registerLibraryError(
-                    libraryVariable.getName(),
-                    String.format("Failed to load library variable: %s", e.getMessage())
-            );
+    public void registerVariable(LibraryVariable libraryVariable){
+        builtInVariables.add(libraryVariable);
+    }
+
+    public void registerKeyword(Class<? extends LibraryKeyword> libraryKeyword){
+        final String keyword = LibraryKeyword.toKeyword(libraryKeyword);
+        builtInKeywords.put(keyword, new KeywordObject(libraryKeyword));
+    }
+
+    public Optional<Keyword> findKeyword(String library, Token nameToken) {
+        library = library != null ? library.toLowerCase() : "";
+        String name = nameToken.getText().toLowerCase();
+
+        LibraryKeyword keyword = null;
+
+        if(!library.isEmpty()){
+            keyword = externalKeywords.getOrDefault(library, new HashMap<>()).get(name);
         }
-    }
-
-    public void loadKeyword(Class<? extends LibraryKeyword> libraryKeyword, ErrorManager errors){
-        String keyword = LibraryKeyword.toKeyword(libraryKeyword);
-        keywordsNames.put(keyword, new KeywordObject(libraryKeyword));
-    }
-
-    public Keyword findKeyword(Token name) throws InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
-        String key = name.toString().toLowerCase();
-
-        LibraryKeyword keyword = libraryKeywordNames.get(key);
 
         if(keyword == null){
-            KeywordObject object = keywordsNames.get(name.getText().toLowerCase());
+            final KeywordObject object = builtInKeywords.get(name);
 
             if(object != null){
-                keyword = object.getKeyword();
+                try {
+                    keyword = object.getKeyword();
+                } catch (Exception e) {}
             }
         }
 
-        return keyword;
+        return Optional.ofNullable(keyword);
     }
 
-    public Keyword findKeyword(String library, Token name) throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
-        if(library.isEmpty()){
-            return findKeyword(name);
-        }
-
-        //TODO: define a way to a set of library names;
-        return findKeyword(name);
-    }
-
-    public LibraryVariable findVariable(String library, Token name) {
-        for(LibraryVariable variable: variables){
+    public Optional<LibraryVariable> findVariable(String library, Token name) {
+        for(LibraryVariable variable: builtInVariables){
             if(variable.matches(name)){
-                return variable;
+                return Optional.of(variable);
             }
         }
 
-        return null;
+        return Optional.empty();
     }
 
     public void addExternalLibraries(List<LibraryInfo> librariesInfo) {
         for(LibraryInfo library: librariesInfo){
             for(LibraryKeywordInfo keyword: library.getKeywords()){
                 keyword.setLibrary(library);
-                this.libraryKeywordNames.put(keyword.getName(), keyword);
+                this.externalKeywords.putIfAbsent(library.getName().toLowerCase(), new HashMap<>());
+                this.externalKeywords.get(library.getName().toLowerCase()).put(keyword.getName(), keyword);
             }
         }
     }
@@ -102,7 +93,6 @@ public class LibraryResources {
         private LibraryKeyword itemObject;
 
         KeywordObject(Class<? extends LibraryKeyword> libraryClass) {
-            libraryClass.getPackage().getName();
             this.itemClass = libraryClass;
             this.itemObject = null;
         }
