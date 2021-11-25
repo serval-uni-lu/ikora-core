@@ -91,9 +91,9 @@ public class Helpers {
         return getLineReader(line);
     }
 
-    public static Iterator<Token> getTokenIterator(String text) throws IOException {
-        final LineReader reader = Helpers.getLineReader(text);
+    public static Iterator<Token> getTokenIterator(LineReader reader) throws IOException {
         return TokenScanner.from(LexerUtils.tokenize(reader))
+                .skipIndent(true)
                 .skipTypes(Token.Type.CONTINUATION)
                 .iterator();
     }

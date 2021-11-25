@@ -16,7 +16,7 @@ public class ArgumentsParser {
     }
 
     public static NodeList<Variable> parse(LineReader reader, Token label, Iterator<Token> tokenIterator, ErrorManager errors) {
-        NodeList<Variable> arguments = new NodeList<>(label);
+        final NodeList<Variable> arguments = new NodeList<>(label);
 
         while (tokenIterator.hasNext()){
             Token token = tokenIterator.next();

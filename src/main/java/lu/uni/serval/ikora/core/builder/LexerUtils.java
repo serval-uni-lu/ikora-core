@@ -65,10 +65,6 @@ public class LexerUtils {
         return StringUtils.matchesIgnoreCase(value, regex);
     }
 
-    private static boolean isBlock(Tokens tokens){
-        return isBlock(tokens.toString());
-    }
-
     static boolean isEmpty(String line) {
         return line == null || line.trim().isEmpty();
     }

@@ -58,6 +58,7 @@ class TestCaseParser {
 
             final Tokens contentTokens = LexerUtils.tokenize(reader);
             final Iterator<Token> contentTokenIterator = TokenScanner.from(contentTokens)
+                    .skipTypes(Token.Type.CONTINUATION)
                     .skipIndent(true)
                     .iterator();
 

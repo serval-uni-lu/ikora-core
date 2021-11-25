@@ -108,6 +108,6 @@ public class ErrorManager {
     }
 
     public boolean isEmpty() {
-        return sourceErrors.isEmpty() && libraryErrors.isEmpty();
+        return sourceErrors.isEmpty() && libraryErrors.isEmpty() && inMemory.isEmpty();
     }
 }

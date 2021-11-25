@@ -23,7 +23,7 @@ package lu.uni.serval.ikora.core.analytics.visitor;
 import lu.uni.serval.ikora.core.model.*;
 import org.apache.commons.lang3.NotImplementedException;
 
-public class TreeVisitor implements NodeVisitor {
+public class TreeVisitor extends EmptyVisitor {
     @Override
     public void visit(SourceNode sourceNode, VisitorMemory memory) {
         VisitorUtils.accept(this, sourceNode, memory);
@@ -76,31 +76,6 @@ public class TreeVisitor implements NodeVisitor {
     }
 
     @Override
-    public void visit(LibraryKeyword keyword, VisitorMemory memory) {
-        //leaf node
-    }
-
-    @Override
-    public void visit(ScalarVariable scalar, VisitorMemory memory) {
-        //leaf node
-    }
-
-    @Override
-    public void visit(DictionaryVariable dictionary, VisitorMemory memory) {
-        //leaf node
-    }
-
-    @Override
-    public void visit(ListVariable list, VisitorMemory memory) {
-        //leaf node
-    }
-
-    @Override
-    public void visit(TimeOut timeOut, VisitorMemory memory) {
-        //leaf node
-    }
-
-    @Override
     public void visit(Argument argument, VisitorMemory memory) {
         VisitorUtils.traverseArgument(this, argument, memory);
     }
@@ -113,10 +88,5 @@ public class TreeVisitor implements NodeVisitor {
     @Override
     public void visit(VariableAssignment variableAssignment, VisitorMemory memory) {
         VisitorUtils.traverseValues(this, variableAssignment, memory);
-    }
-
-    @Override
-    public void visit(LibraryVariable libraryVariable, VisitorMemory memory) {
-        //leaf node
     }
 }

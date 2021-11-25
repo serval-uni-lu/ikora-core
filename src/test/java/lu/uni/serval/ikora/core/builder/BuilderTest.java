@@ -60,6 +60,7 @@ class BuilderTest {
         assertNotNull(argument.getAstParent());
     }
 
+    @Test
     void testBuildWithMultilineKeywordCall(){
         final String code =
                 "*** Test Cases ***\n" +
