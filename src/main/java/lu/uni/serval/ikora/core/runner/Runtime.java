@@ -27,7 +27,6 @@ import lu.uni.serval.ikora.core.model.*;
 import lu.uni.serval.ikora.core.report.Report;
 import lu.uni.serval.ikora.core.report.ReportBuilder;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
