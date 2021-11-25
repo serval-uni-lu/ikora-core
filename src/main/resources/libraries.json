@@ -3860,7 +3860,7 @@
         ]
     },
     {
-        "name": "operatingSystem",
+        "name": "OperatingSystem",
         "keywords": [
             {
                 "type": "SYNCHRONIZATION",
