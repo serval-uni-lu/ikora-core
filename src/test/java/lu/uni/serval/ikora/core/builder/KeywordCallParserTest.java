@@ -55,6 +55,7 @@ class KeywordCallParserTest {
         assertEquals(Gherkin.Type.NONE, call.getGherkin().getType());
     }
 
+    @Test
     void testContinuationToken() throws IOException {
         final String text = "    Given Log    \n...    Hello there";
         final ErrorManager errorManager = new ErrorManager();

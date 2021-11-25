@@ -60,7 +60,10 @@ public class Documentation extends SourceNode{
 
     public String getText() {
         if(cachedText == null){
-            final Iterator<Token> iterator = TokenScanner.from(this.content).skipTypes(Token.Type.CONTINUATION).iterator();
+            final Iterator<Token> iterator = TokenScanner.from(this.content)
+                    .skipTypes(Token.Type.CONTINUATION)
+                    .iterator();
+
             final StringBuilder builder = new StringBuilder();
 
             while (iterator.hasNext()){

@@ -33,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class LexerUtilsTest {
 
     @Test
-    void checkTokenizerWith2spaceIndent() throws IOException {
+    void testTokenizerWith2spaceIndent() throws IOException {
         String line = "  Some text";
         Tokens tokens = LexerUtils.tokenize(Helpers.getLineReader(line));
 
@@ -49,7 +49,7 @@ class LexerUtilsTest {
     }
 
     @Test
-    void checkTokenizerWith1spaceIndent() throws IOException {
+    void testTokenizerWith1spaceIndent() throws IOException {
         String line = " Some text";
         Tokens tokens = LexerUtils.tokenize(Helpers.getLineReader(line));
 
@@ -61,7 +61,7 @@ class LexerUtilsTest {
     }
 
     @Test
-    void checkTokenizeWith4spaceIndent() throws IOException {
+    void testTokenizeWith4spaceIndent() throws IOException {
         String line = "    Some text";
 
         Tokens tokens = LexerUtils.tokenize(Helpers.getLineReader(line));
@@ -78,7 +78,7 @@ class LexerUtilsTest {
     }
 
     @Test
-    void checkTokenizeWithTabIndent() throws IOException {
+    void testTokenizeWithTabIndent() throws IOException {
         String line = "\tSome text";
 
         Tokens tokens = LexerUtils.tokenize(Helpers.getLineReader(line));
@@ -90,7 +90,7 @@ class LexerUtilsTest {
     }
 
     @Test
-    void checkTokenizeWithComments() throws IOException {
+    void testTokenizeWithComments() throws IOException {
         String line = "\tSome text #Comments in line";
 
         Tokens tokens = LexerUtils.tokenize(Helpers.getLineReader(line));
@@ -134,7 +134,7 @@ class LexerUtilsTest {
     }
 
     @Test
-    void checkMultiLineDocumentation(){
+    void testMultiLineDocumentation(){
         String documentation = "\t[Documentation]\tFirst line\n" +
                 "\t...\tSecond line\n" +
                 "\t...\tThird line\n" +
@@ -158,7 +158,17 @@ class LexerUtilsTest {
     }
 
     @Test
-    void checkIsBlockWithoutBlockName(){
+    void testMultilineWithIndent() throws IOException {
+        final String text = "    Log\n" +
+                "    ...  Test Status: ${TEST STATUS}";
+
+        final Tokens tokens = LexerUtils.tokenize(Helpers.getLineReader(text));
+        assertEquals(4, tokens.size());
+        assertEquals("...", tokens.get(2).getText());
+    }
+
+    @Test
+    void testIsBlockWithoutBlockName(){
         assertTrue(LexerUtils.isBlock("***Block***"));
         assertTrue(LexerUtils.isBlock("***Block"));
         assertTrue(LexerUtils.isBlock("*** Block***"));
@@ -169,7 +179,7 @@ class LexerUtilsTest {
     }
 
     @Test
-    void checkIsBlockWithBlockName(){
+    void testIsBlockWithBlockName(){
         assertTrue(LexerUtils.isBlock("***Block***", "Block"));
         assertTrue(LexerUtils.isBlock("***BLOCK***", "Block"));
         assertTrue(LexerUtils.isBlock("*** BLOCK***", "Block"));

@@ -60,6 +60,21 @@ class BuilderTest {
         assertNotNull(argument.getAstParent());
     }
 
+    void testBuildWithMultilineKeywordCall(){
+        final String code =
+                "*** Test Cases ***\n" +
+                "Environment variables\n" +
+                "    Log\n" +
+                "    ...    Test Status: ${TEST STATUS}";
+
+        final BuildResult result = Builder.build(code, true);
+        final Project project = result.getProjects().iterator().next();
+        final TestCase testCase = project.findTestCase(FileUtils.IN_MEMORY, "Environment variables").iterator().next();
+
+        final KeywordCall step = (KeywordCall)testCase.getSteps().get(0);
+        assertEquals(1, step.getArgumentList().size());
+    }
+
     @Test
     void testBuildWithValueForVariableContainingDot() {
         final String code =
