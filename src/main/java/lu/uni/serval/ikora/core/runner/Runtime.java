@@ -60,12 +60,14 @@ public class Runtime {
     }
 
     public Optional<Keyword> findLibraryKeyword(Set<Library> libraries, Token name) {
-        return libraries.stream()
+        final Optional<Keyword> libraryKeyword = libraries.stream()
                 .map(Library::getName)
                 .map(library -> libraryResources.findKeyword(library, name))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .findFirst();
+
+        return libraryKeyword.isPresent() ? libraryKeyword : libraryResources.findKeyword("", name);
     }
 
     public Optional<LibraryVariable> findLibraryVariable(String library, Token name) {
