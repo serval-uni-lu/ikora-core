@@ -110,24 +110,6 @@ public class KeywordCall extends Step {
     }
 
     @Override
-    public double distance(SourceNode other) {
-        if(other == null){
-            return 1.;
-        }
-
-        if (!(other instanceof KeywordCall)){
-            return 1.;
-        }
-
-        KeywordCall call = (KeywordCall)other;
-
-        double distName = this.getDefinitionToken().matches(call.getDefinitionToken()) ? 0. : 0.5;
-        double distArguments = LevenshteinDistance.index(this.arguments, call.arguments);
-
-        return distName + distArguments;
-    }
-
-    @Override
     public List<Edit> differences(SourceNode other) {
         if(other == null){
             return Collections.singletonList(Edit.removeElement(this.getClass(), this));

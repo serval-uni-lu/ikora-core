@@ -171,11 +171,6 @@ public abstract class KeywordDefinition extends SourceNode implements Keyword, I
     }
 
     @Override
-    public double distance(SourceNode other) {
-        return this.equals(other) ? 0. : 1.;
-    }
-
-    @Override
     public List<Edit> differences(SourceNode other) {
         List<Edit> edits = new ArrayList<>();
 

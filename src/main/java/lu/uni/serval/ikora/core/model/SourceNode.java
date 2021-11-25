@@ -177,6 +177,5 @@ public abstract class SourceNode implements Node {
     }
 
     public abstract Token getDefinitionToken();
-    public abstract double distance(SourceNode other);
     public abstract List<Edit> differences(SourceNode other);
 }

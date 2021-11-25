@@ -41,8 +41,6 @@ class LevenshteinDistanceTest {
     private static UserKeyword keyword2;
     private static UserKeyword keyword3;
 
-    private static Project project;
-
     @BeforeAll
     static void setUp() {
         final String code =
@@ -68,7 +66,7 @@ class LevenshteinDistanceTest {
 
         final BuildResult result = Builder.build(code, true);
 
-        project = result.getProjects().iterator().next();
+        Project project = result.getProjects().iterator().next();
 
         keyword1 = project.findUserKeyword(Token.fromString("First keyword")).iterator().next();
         keyword2 = project.findUserKeyword(Token.fromString("Second keyword")).iterator().next();

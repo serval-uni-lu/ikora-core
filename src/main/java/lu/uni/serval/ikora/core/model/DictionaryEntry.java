@@ -73,26 +73,6 @@ public class DictionaryEntry extends Value {
     }
 
     @Override
-    public double distance(SourceNode other) {
-        if(this == other){
-            return 0.;
-        }
-
-        if(other == null){
-            return 1.;
-        }
-
-        if(DictionaryEntry.class.isAssignableFrom(other.getClass())){
-            double distance = this.getKey().distance(((DictionaryEntry)other).getKey()) / 2;
-            distance += this.getValue().distance(((DictionaryEntry)other).getValue()) / 2;
-
-            return distance;
-        }
-
-        return 1.;
-    }
-
-    @Override
     public List<Edit> differences(SourceNode other) {
         if(other == null){
             return Collections.singletonList(Edit.removeElement(this.getClass(), this));

@@ -93,28 +93,6 @@ public class Argument extends SourceNode implements HiddenAstNode {
     }
 
     @Override
-    public double distance(SourceNode other) {
-        if(other == this){
-            return 0.0;
-        }
-
-        if(other == null || !Argument.class.isAssignableFrom(other.getClass())){
-            return 1.0;
-        }
-
-        Argument argument = (Argument)other;
-
-        boolean sameCall = true;
-        if(this.definition != null && this.definition != argument.definition){
-            sameCall = this.definition.distance(argument.definition) == 0.0;
-        }
-
-        boolean sameName = this.name.matches(argument.getDefinitionToken());
-
-        return sameName && sameCall ? 0.0 : 1.0;
-    }
-
-    @Override
     public List<Edit> differences(SourceNode other) {
         if(other == null){
             return Collections.singletonList(Edit.removeElement(this.getClass(), this));

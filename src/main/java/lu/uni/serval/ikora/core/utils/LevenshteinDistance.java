@@ -60,7 +60,7 @@ public class LevenshteinDistance {
                     d[i][j] = i;
                 }
                 else {
-                    double substitution = d[i - 1][j - 1] + before.get(i - 1).distance(after.get(j - 1));
+                    double substitution = d[i - 1][j - 1] + (before.get(i - 1).differences(after.get(j - 1)).isEmpty() ? 0. : 1.);
                     double addition = d[i - 1][j] + 1;
                     double subtraction = d[i][j - 1] + 1;
 
@@ -109,13 +109,6 @@ public class LevenshteinDistance {
         }
     }
 
-    public static double index(List<? extends SourceNode> before, List<? extends SourceNode> after){
-        double size = Math.max(before.size(), after.size());
-        double distance = distanceMatrix(before, after)[before.size()][ after.size()];
-
-        return size > 0 ? distance / size : 0;
-    }
-
     public static List<Edit> getDifferences(NodeList<? extends SourceNode> before, NodeList<? extends SourceNode> after){
         List<Edit> edits = new ArrayList<>();
 
@@ -137,7 +130,7 @@ public class LevenshteinDistance {
                 SourceNode beforeStep = before.get(xPosition - 1);
                 SourceNode afterStep = after.get(yPosition - 1);
 
-                if(beforeStep.distance(afterStep) == 0){
+                if(beforeStep.differences(afterStep).isEmpty()){
                     value = substitution;
                     xPosition -= 1;
                     yPosition -= 1;
@@ -203,7 +196,7 @@ public class LevenshteinDistance {
                 T beforeStep = before.get(xPosition - 1);
                 T afterStep = after.get(yPosition - 1);
 
-                if(beforeStep.distance(afterStep) == 0){
+                if(beforeStep.differences(afterStep).isEmpty()){
                     value = substitution;
                     xPosition -= 1;
                     yPosition -= 1;

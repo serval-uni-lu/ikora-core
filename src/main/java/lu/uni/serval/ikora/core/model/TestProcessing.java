@@ -65,11 +65,6 @@ public class TestProcessing extends SourceNode {
     }
 
     @Override
-    public double distance(SourceNode other) {
-        return 0;
-    }
-
-    @Override
     public List<Edit> differences(SourceNode other) {
         return null;
     }

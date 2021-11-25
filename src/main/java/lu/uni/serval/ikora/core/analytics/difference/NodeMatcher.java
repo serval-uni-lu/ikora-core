@@ -120,7 +120,7 @@ public class NodeMatcher {
         EnumMap<Edit, List<T>> candidates = new EnumMap<>(Edit.class);
 
         for (T current: unmatched){
-            if(t.distance(current) != 0.){
+            if(!t.differences(current).isEmpty()){
                 continue;
             }
 

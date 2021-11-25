@@ -194,15 +194,6 @@ public class NodeList<N extends SourceNode> extends SourceNode implements List<N
     }
 
     @Override
-    public double distance(SourceNode other) {
-        if(this.getClass() == other.getClass()){
-            return 1.;
-        }
-
-        return LevenshteinDistance.index(this, (NodeList<N>)other);
-    }
-
-    @Override
     public List<Edit> differences(SourceNode other) {
         if(other == null){
             return Collections.singletonList(Edit.removeElement(this.getClass(), this));

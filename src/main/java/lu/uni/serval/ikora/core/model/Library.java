@@ -43,6 +43,7 @@ public class Library extends SourceNode {
         return label;
     }
 
+    @Override
     public String getName() {
         return this.name.getText();
     }
@@ -54,11 +55,6 @@ public class Library extends SourceNode {
     @Override
     public Token getDefinitionToken() {
         return this.name;
-    }
-
-    @Override
-    public double distance(SourceNode other) {
-        return 0;
     }
 
     @Override

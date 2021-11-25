@@ -148,31 +148,6 @@ public class Assignment extends Step implements Dependable {
     }
 
     @Override
-    public double distance(SourceNode other) {
-        if(other == this){
-            return 0.;
-        }
-
-        if(!(other instanceof Assignment)){
-            return 1.;
-        }
-
-        Assignment assignment = (Assignment)other;
-
-        double distReturn = LevenshteinDistance.index(this.leftHandOperand, assignment.leftHandOperand) * 0.2;
-
-        double distExpression;
-        if(rightHandOperand == null){
-            distExpression = assignment.rightHandOperand == null ? 0. : 0.8;
-        }
-        else{
-            distExpression = rightHandOperand.distance(assignment.rightHandOperand) * 0.8;
-        }
-
-        return distReturn + distExpression;
-    }
-
-    @Override
     public List<Edit> differences(SourceNode other) {
         if(other == null){
             return Collections.singletonList(Edit.removeElement(this.getClass(), this));

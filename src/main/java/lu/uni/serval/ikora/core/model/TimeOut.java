@@ -23,9 +23,7 @@ package lu.uni.serval.ikora.core.model;
 import lu.uni.serval.ikora.core.analytics.difference.Edit;
 import lu.uni.serval.ikora.core.analytics.visitor.NodeVisitor;
 import lu.uni.serval.ikora.core.analytics.visitor.VisitorMemory;
-import lu.uni.serval.ikora.core.builder.ValueResolver;
 import lu.uni.serval.ikora.core.builder.VariableParser;
-import lu.uni.serval.ikora.core.exception.MalformedVariableException;
 import lu.uni.serval.ikora.core.exception.RunnerException;
 import lu.uni.serval.ikora.core.runner.Runtime;
 import org.apache.commons.lang3.NotImplementedException;
@@ -93,6 +91,36 @@ public class TimeOut extends SourceNode {
         return this.variable != null || this.value != null || this.isNone;
     }
 
+    public Token getLabel() {
+        return label;
+    }
+
+    @Override
+    public String getName() {
+        return this.name.getText();
+    }
+
+    @Override
+    public Token getDefinitionToken() {
+        return name;
+    }
+
+    public Token getErrorMessage() {
+        return errorMessage;
+    }
+
+    public Variable getVariable() {
+        return variable;
+    }
+
+    public TimeValue getValue() {
+        return value;
+    }
+
+    public boolean isNone() {
+        return isNone;
+    }
+
     @Override
     public void accept(NodeVisitor visitor, VisitorMemory memory) {
         visitor.visit(this, memory);
@@ -104,18 +132,8 @@ public class TimeOut extends SourceNode {
     }
 
     @Override
-    public double distance(SourceNode other) {
-        return 0;
-    }
-
-    @Override
     public List<Edit> differences(SourceNode other) {
         return Collections.emptyList();
-    }
-
-    @Override
-    public Token getDefinitionToken() {
-        return name;
     }
 
     @Override

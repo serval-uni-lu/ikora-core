@@ -171,24 +171,6 @@ public class SourceNodeTable<T extends SourceNode> extends SourceNode implements
     }
 
     @Override
-    public double distance(SourceNode other) {
-        if(other == this){
-            return 0.;
-        }
-
-        if(other == null || other.getClass() != this.getClass()){
-            return 1.;
-        }
-
-        SourceNodeTable<T> nodeTable = (SourceNodeTable<T>)other;
-
-        double distance = this.header.matches(nodeTable.header) ? 0. : 0.5;
-        distance += LevenshteinDistance.index(this.nodeList, nodeTable.nodeList) * 0.5;
-
-        return distance;
-    }
-
-    @Override
     public List<Edit> differences(SourceNode other) {
         if(other == null){
             return Collections.singletonList(Edit.removeElement(this.getClass(), this));

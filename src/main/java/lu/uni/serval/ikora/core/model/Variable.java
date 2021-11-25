@@ -72,19 +72,6 @@ public abstract class Variable extends Value {
     }
 
     @Override
-    public double distance(SourceNode other) {
-        if(other == null){
-            return 1;
-        }
-
-        if(this.getClass() != other.getClass()){
-            return 1;
-        }
-
-        return this.getDefinitionToken().matches((other).getDefinitionToken()) ? 0 : 1;
-    }
-
-    @Override
     public List<Edit> differences(SourceNode other) {
         if(other == null){
             return Collections.singletonList(Edit.removeElement(this.getClass(), this));

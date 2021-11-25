@@ -96,24 +96,6 @@ public class VariableAssignment extends SourceNode implements Dependable{
     }
 
     @Override
-    public double distance(SourceNode other) {
-        if(other == this){
-            return 0;
-        }
-
-        if(!(other instanceof VariableAssignment)){
-            return 1;
-        }
-
-        VariableAssignment assignment = (VariableAssignment)other;
-
-        double distanceName = this.getDefinitionToken().matches(assignment.getDefinitionToken()) ? 0. : 0.5;
-        double distanceValues = LevenshteinDistance.index(this.getValues(), assignment.getValues()) == 0. ? 0. : 0.5;
-
-        return distanceName + distanceValues;
-    }
-
-    @Override
     public List<Edit> differences(SourceNode other) {
         if(other == null){
             return Collections.singletonList(Edit.removeElement(this.getClass(), this));

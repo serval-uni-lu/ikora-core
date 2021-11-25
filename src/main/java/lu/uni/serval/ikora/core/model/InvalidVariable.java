@@ -43,15 +43,6 @@ public class InvalidVariable extends Variable {
     }
 
     @Override
-    public double distance(SourceNode other) {
-        if(other instanceof InvalidVariable){
-            return 0.0;
-        }
-
-        return 1.0;
-    }
-
-    @Override
     public List<Edit> differences(SourceNode other) {
         List<Edit> edits = new ArrayList<>();
 

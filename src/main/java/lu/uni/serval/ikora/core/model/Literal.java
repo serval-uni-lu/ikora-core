@@ -73,23 +73,6 @@ public class Literal extends Value {
     }
 
     @Override
-    public double distance(SourceNode other) {
-        if(this == other){
-            return 0.;
-        }
-
-        if(other == null){
-            return 1.;
-        }
-
-        if(Literal.class.isAssignableFrom(other.getClass())){
-            return this.name.matches(((Literal)other).name) ? 0. : 1.;
-        }
-
-        return 1.;
-    }
-
-    @Override
     public List<Edit> differences(SourceNode other) {
         if(other == null){
             return Collections.singletonList(Edit.removeElement(this.getClass(), this));

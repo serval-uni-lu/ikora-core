@@ -108,25 +108,6 @@ public class ForLoop extends Step implements Dependable, ScopeNode {
     }
 
     @Override
-    public double distance(SourceNode other) {
-        if(other == this){
-            return 0.0;
-        }
-
-        if(other == null || !this.getClass().isAssignableFrom(other.getClass())){
-            return 0.0;
-        }
-
-        ForLoop forLoop = (ForLoop)other;
-
-        double sameIterator = this.iterator.distance(forLoop.iterator) * 0.1;
-        double sameRange = this.interval.distance(forLoop.interval) * 0.1;
-        double sameSteps = LevenshteinDistance.index(this.steps, forLoop.steps) * 0.8;
-
-        return sameIterator + sameRange + sameSteps;
-    }
-
-    @Override
     public List<Edit> differences(SourceNode other) {
         if(other == null){
             return Collections.singletonList(Edit.removeElement(this.getClass(), this));
