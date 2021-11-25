@@ -37,9 +37,9 @@ public class Settings extends SourceNode implements Delayable {
 
     private final NodeList<Resources> resourcesTable;
     private final NodeList<Library> libraryTable;
+    private final NodeList<VariableFile> variableFiles;
 
-    private final List<Metadata> metadataList;
-    private final List<VariableFile> variableFiles;
+    private final NodeList<Metadata> metadataList;
 
     private NodeList<Literal> defaultTags;
     private NodeList<Literal> forceTags;
@@ -63,10 +63,19 @@ public class Settings extends SourceNode implements Delayable {
         addAstChild(this.libraryTable);
 
         this.defaultTags = new NodeList<>();
+        addAstChild(this.defaultTags);
+
         this.forceTags = new NodeList<>();
+        addAstChild(this.forceTags);
+
         this.timeOut = TimeOut.none();
-        this.metadataList = new ArrayList<>();
-        this.variableFiles = new ArrayList<>();
+        addAstChild(this.timeOut);
+
+        this.metadataList = new NodeList<>();
+        addAstChild(this.metadataList);
+
+        this.variableFiles = new NodeList<>();
+        addAstChild(this.variableFiles);
     }
 
     @Override
@@ -156,9 +165,9 @@ public class Settings extends SourceNode implements Delayable {
         return this.metadataList;
     }
 
-    public Optional<Value> getMetadata(String key){
+    public Optional<Value> getMetadata(String name){
         return metadataList.stream()
-                .filter(m -> m.getKey().matches(key))
+                .filter(m -> m.getName().matches(name))
                 .findFirst()
                 .map(Metadata::getValue);
     }
@@ -168,7 +177,7 @@ public class Settings extends SourceNode implements Delayable {
     }
 
     public Optional<VariableFile> getVariableFile(String name){
-        return variableFiles.stream().filter(file -> file.getPath().equalsIgnoreCase(name)).findAny();
+        return variableFiles.stream().filter(file -> file.getName().equalsIgnoreCase(name)).findAny();
     }
 
     public void setHeader(Token header){

@@ -22,6 +22,7 @@ package lu.uni.serval.ikora.core.runner;
 
 import lu.uni.serval.ikora.core.builder.LibraryLoader;
 import lu.uni.serval.ikora.core.error.ErrorManager;
+import lu.uni.serval.ikora.core.exception.RunnerException;
 import lu.uni.serval.ikora.core.model.Project;
 import lu.uni.serval.ikora.core.model.Suite;
 import lu.uni.serval.ikora.core.report.Report;
@@ -51,7 +52,7 @@ public class Runner {
         Optional<Report> report = runtime.getReport();
 
         if(!report.isPresent()){
-            throw new Exception("Failed to create report during execution");
+            throw new RunnerException("Failed to create report during execution");
         }
 
         return report.get();

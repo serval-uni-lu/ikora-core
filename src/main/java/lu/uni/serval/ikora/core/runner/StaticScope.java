@@ -22,6 +22,7 @@ package lu.uni.serval.ikora.core.runner;
 
 import lu.uni.serval.ikora.core.analytics.KeywordStatistics;
 import lu.uni.serval.ikora.core.model.*;
+import lu.uni.serval.ikora.core.utils.ArgumentUtils;
 
 import java.util.*;
 
@@ -94,13 +95,9 @@ public class StaticScope implements Scope{
 
         dynamicLibrary.putIfAbsent(keyword, new ResourcesTable());
 
-        final List<Token> resourcesParameters = new ArrayList<>();
+        final Token name = argumentList.get(0).getDefinitionToken();
 
-        for(int i = 1; i < argumentList.size(); ++i){
-            resourcesParameters.add(argumentList.get(i).getDefinitionToken());
-        }
-
-        final Resources resources = new Resources(Token.empty(), argumentList.get(0).getDefinitionToken(), resourcesParameters);
+        final Resources resources = new Resources(Token.empty(), name, ArgumentUtils.toValues(1, argumentList));
         dynamicLibrary.get(keyword).add(resources);
     }
 

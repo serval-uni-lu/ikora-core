@@ -50,10 +50,6 @@ public class UserKeyword extends KeywordDefinition {
         return parameters;
     }
 
-    public NodeList<Value> getReturnVariables() {
-        return returnVariables;
-    }
-
     public Optional<TestProcessing> getTearDown() {
         return Optional.ofNullable(tearDown);
     }

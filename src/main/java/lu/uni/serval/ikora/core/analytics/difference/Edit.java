@@ -52,6 +52,8 @@ public class Edit {
         REMOVE_DOCUMENTATION,
         CHANGE_DOCUMENTATION,
 
+        CHANGE_LABEL,
+
         ADD_NODE,
         REMOVE_NODE,
 
@@ -160,6 +162,10 @@ public class Edit {
 
     public static Edit changeVariableDefinition(SourceNode left, SourceNode right) {
         return new Edit(Type.CHANGE_VARIABLE_DEFINITION, left, right);
+    }
+
+    public static Edit changeLabel(SourceNode left, SourceNode right) {
+        return new Edit(Type.CHANGE_LABEL, left, right);
     }
 
     public static Edit addDocumentation(SourceNode right) {

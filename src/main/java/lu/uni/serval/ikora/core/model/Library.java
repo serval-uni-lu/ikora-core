@@ -26,14 +26,16 @@ import lu.uni.serval.ikora.core.analytics.visitor.VisitorMemory;
 import lu.uni.serval.ikora.core.exception.RunnerException;
 import lu.uni.serval.ikora.core.runner.Runtime;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Library extends SourceNode {
     private final Token label;
     private final Token name;
-    private final List<Token> arguments;
+    private final NodeList<Value> arguments;
 
-    public Library(Token label, Token name, List<Token> arguments) {
+    public Library(Token label, Token name, NodeList<Value> arguments) {
         this.label = label;
         this.name = name;
         this.arguments = arguments;
@@ -48,7 +50,7 @@ public class Library extends SourceNode {
         return this.name.getText();
     }
 
-    public List<Token> getArguments() {
+    public NodeList<Value> getArguments() {
         return arguments;
     }
 
@@ -59,12 +61,29 @@ public class Library extends SourceNode {
 
     @Override
     public List<Edit> differences(SourceNode other) {
-        return null;
+        if(other == null) return Collections.singletonList(Edit.addElement(Library.class, this));
+        if(other == this) return Collections.emptyList();
+        if(this.getClass() != other.getClass()) return Collections.singletonList(Edit.changeType(other, this));
+
+        final Library that = (Library) other;
+        final List<Edit> differenceList = new ArrayList<>();
+
+        if(!this.label.matches(that.label)){
+            differenceList.add(Edit.changeLabel(this, that));
+        }
+
+        if(!this.name.matches(that.name)){
+            differenceList.add(Edit.changeName(this, that));
+        }
+
+        this.arguments.differences(that.arguments);
+
+        return differenceList;
     }
 
     @Override
     public boolean matches(Token name) {
-        return false;
+        return this.name.matches(name);
     }
 
     @Override

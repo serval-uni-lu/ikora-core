@@ -138,6 +138,7 @@ public class KeywordCloneDetection {
                 case TYPE_1: buildType1(builder, step); break;
                 case TYPE_2: buildType2(builder, step); break;
                 case TYPE_3: buildType3(builder, step); break;
+                default: throw new IllegalStateException("Unexpected clone type: " + type);
             }
 
             return builder.toString();
@@ -216,9 +217,8 @@ public class KeywordCloneDetection {
                 case TYPE_1: return type1;
                 case TYPE_2: return type2;
                 case TYPE_3: return type3;
+                default: throw new IllegalStateException("Unexpected clone type: " + type);
             }
-
-            return 0;
         }
     }
 }

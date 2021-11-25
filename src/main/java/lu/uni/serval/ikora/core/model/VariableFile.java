@@ -20,20 +20,80 @@ package lu.uni.serval.ikora.core.model;
  * #L%
  */
 
+import lu.uni.serval.ikora.core.analytics.difference.Edit;
+import lu.uni.serval.ikora.core.analytics.visitor.NodeVisitor;
+import lu.uni.serval.ikora.core.analytics.visitor.VisitorMemory;
+import lu.uni.serval.ikora.core.exception.RunnerException;
+import lu.uni.serval.ikora.core.runner.Runtime;
+
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-public class VariableFile {
+public class VariableFile extends SourceNode {
     private final Token label;
     private final Token filePath;
-    private final List<Token> parameters;
+    private final NodeList<Value> arguments;
 
-    public VariableFile(Token label, Token path, List<Token> parameters) {
+    public VariableFile(Token label, Token path, NodeList<Value> arguments) {
         this.label = label;
         this.filePath = path;
-        this.parameters = parameters;
+        this.arguments = arguments;
     }
 
-    public String getPath() {
+    public Token getLabel() {
+        return label;
+    }
+
+    @Override
+    public String getName() {
         return this.filePath.getText();
+    }
+
+    @Override
+    public Token getDefinitionToken() {
+        return this.filePath;
+    }
+
+    @Override
+    public List<Edit> differences(SourceNode other) {
+        if(other == null) return Collections.singletonList(Edit.addElement(VariableFile.class, this));
+        if(other == this) return Collections.emptyList();
+        if(this.getClass() != other.getClass()) return Collections.singletonList(Edit.changeType(other, this));
+
+        final VariableFile that = (VariableFile) other;
+        final List<Edit> differenceList = new ArrayList<>();
+
+        if(!this.label.matches(that.label)){
+            differenceList.add(Edit.changeLabel(this, that));
+        }
+
+        if(!this.filePath.matches(that.filePath)){
+            differenceList.add(Edit.changeName(this, that));
+        }
+
+        this.arguments.differences(that.arguments);
+
+        return differenceList;
+    }
+
+    @Override
+    public boolean matches(Token name) {
+        return this.filePath.matches(name);
+    }
+
+    @Override
+    public void accept(NodeVisitor visitor, VisitorMemory memory) {
+        visitor.visit(this, memory);
+    }
+
+    @Override
+    public void execute(Runtime runtime) throws RunnerException {
+        //runtime not implemented yet
+
+    }
+
+    public NodeList<Value> getArguments() {
+        return arguments;
     }
 }

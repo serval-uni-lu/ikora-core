@@ -1,12 +1,12 @@
 package lu.uni.serval.ikora.core.builder;
 
+import lu.uni.serval.ikora.core.model.NodeList;
 import lu.uni.serval.ikora.core.model.Resources;
 import lu.uni.serval.ikora.core.model.Token;
+import lu.uni.serval.ikora.core.model.Value;
 import lu.uni.serval.ikora.core.utils.StringUtils;
 
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 public class ResourcesParser {
     private ResourcesParser() {}
@@ -17,10 +17,10 @@ public class ResourcesParser {
 
     public static Resources parse(Token label, Iterator<Token> tokenIterator) {
         final Token filePath = tokenIterator.hasNext() ? tokenIterator.next() : Token.empty();
-        final List<Token> arguments = new ArrayList<>();
+        final NodeList<Value> arguments = new NodeList<>();
 
         while (tokenIterator.hasNext()){
-            arguments.add(tokenIterator.next());
+            arguments.add(ValueParser.parseValue(tokenIterator.next()));
         }
 
         return new Resources(label, filePath, arguments);

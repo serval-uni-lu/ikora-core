@@ -118,7 +118,7 @@ public class Assignment extends Step implements Dependable {
             SymbolResolver.resolve(call, runtime);
 
             if(!runtime.getErrors().isEmpty()){
-                throw new RunnerException();
+                throw new RunnerException("Errors found during build");
             }
 
             Optional<Keyword> callee = call.getKeyword();

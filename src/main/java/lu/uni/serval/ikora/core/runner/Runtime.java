@@ -146,22 +146,22 @@ public class Runtime {
 
     public void registerIOErrorAndThrow(Source source, String message) throws RunnerException {
         this.errors.registerIOError(source, message);
-        throw new RunnerException();
+        throw new RunnerException("IO error encountered");
     }
 
     public void registerSymbolErrorAndThrow(Source source, String message, Range range) throws RunnerException {
         this.errors.registerSymbolError(source, message, range);
-        throw new RunnerException();
+        throw new RunnerException("Symbol error encountered");
     }
 
     public void registerInternalErrorAndThrow(Source source, String message, Range range) throws RunnerException {
         this.errors.registerInternalError(source, message, range);
-        throw new RunnerException();
+        throw new RunnerException("Internal error encountered");
     }
 
     public void registerUnhandledErrorAndThrow(Source source, String message, Exception exception) throws RunnerException {
         this.errors.registerUnhandledError(source, message, exception);
-        throw new RunnerException();
+        throw new RunnerException("Unhandled Error encountered");
     }
 
     public ErrorManager getErrors() {

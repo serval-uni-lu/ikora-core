@@ -20,4 +20,8 @@ package lu.uni.serval.ikora.core.exception;
  * #L%
  */
 
-public class RunnerException extends Exception{}
+public class RunnerException extends Exception{
+    public RunnerException(String message){
+        super(message);
+    }
+}

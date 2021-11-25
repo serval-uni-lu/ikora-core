@@ -27,15 +27,17 @@ import lu.uni.serval.ikora.core.exception.RunnerException;
 import lu.uni.serval.ikora.core.runner.Runtime;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 public class Resources extends SourceNode {
     private final Token label;
     private final Token filePath;
-    private final List<Token> arguments;
+    private final NodeList<Value> arguments;
 
-    public Resources(Token label, Token filePath, List<Token> arguments) {
+    public Resources(Token label, Token filePath, NodeList<Value> arguments) {
         this.label = label;
         this.arguments = arguments;
         this.filePath = filePath;
@@ -71,7 +73,7 @@ public class Resources extends SourceNode {
         return this.filePath;
     }
 
-    public List<Token> getArguments() {
+    public NodeList<Value> getArguments() {
         return this.arguments;
     }
 
@@ -82,7 +84,24 @@ public class Resources extends SourceNode {
 
     @Override
     public List<Edit> differences(SourceNode other) {
-        return null;
+        if(other == null) return Collections.singletonList(Edit.addElement(Resources.class, this));
+        if(other == this) return Collections.emptyList();
+        if(this.getClass() != other.getClass()) return Collections.singletonList(Edit.changeType(other, this));
+
+        final Resources that = (Resources) other;
+        final List<Edit> differenceList = new ArrayList<>();
+
+        if(!this.label.matches(that.label)){
+            differenceList.add(Edit.changeLabel(this, that));
+        }
+
+        if(!this.filePath.matches(that.filePath)){
+            differenceList.add(Edit.changeName(this, that));
+        }
+
+        this.arguments.differences(that.arguments);
+
+        return differenceList;
     }
 
     @Override

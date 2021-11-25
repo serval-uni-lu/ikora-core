@@ -20,14 +20,24 @@ package lu.uni.serval.ikora.core.model;
  * #L%
  */
 
-public class Metadata {
+import lu.uni.serval.ikora.core.analytics.difference.Edit;
+import lu.uni.serval.ikora.core.analytics.visitor.NodeVisitor;
+import lu.uni.serval.ikora.core.analytics.visitor.VisitorMemory;
+import lu.uni.serval.ikora.core.exception.RunnerException;
+import lu.uni.serval.ikora.core.runner.Runtime;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class Metadata extends SourceNode {
     private final Token label;
-    private final Token key;
+    private final Token name;
     private final Value value;
 
     public Metadata(Token label, Token key, Value value) {
         this.label = label;
-        this.key = key;
+        this.name = key;
         this.value = value;
     }
 
@@ -35,11 +45,54 @@ public class Metadata {
         return label;
     }
 
-    public Token getKey() {
-        return key;
+    @Override
+    public String getName(){
+        return this.name.getText();
+    }
+
+    @Override
+    public Token getDefinitionToken() {
+        return null;
     }
 
     public Value getValue() {
         return value;
+    }
+
+    @Override
+    public boolean matches(Token name) {
+        return this.name.matches(name);
+    }
+
+    @Override
+    public void accept(NodeVisitor visitor, VisitorMemory memory) {
+        visitor.visit(this, memory);
+    }
+
+    @Override
+    public void execute(Runtime runtime) throws RunnerException {
+        // runtime not implemented yet
+    }
+
+    @Override
+    public List<Edit> differences(SourceNode other) {
+        if(other == null) return Collections.singletonList(Edit.addElement(Resources.class, this));
+        if(other == this) return Collections.emptyList();
+        if(this.getClass() != other.getClass()) return Collections.singletonList(Edit.changeType(other, this));
+
+        final Metadata that = (Metadata) other;
+        final List<Edit> differenceList = new ArrayList<>();
+
+        if(!this.label.matches(that.label)){
+            differenceList.add(Edit.changeLabel(this, that));
+        }
+
+        if(!this.name.matches(that.name)){
+            differenceList.add(Edit.changeName(this, that));
+        }
+
+        differenceList.addAll(this.value.differences(that.value));
+
+        return differenceList;
     }
 }

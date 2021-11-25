@@ -146,4 +146,16 @@ public class ArgumentUtils {
 
         return values;
     }
+
+    public static NodeList<Value> toValues(int offset, List<Argument> argumentList){
+        final NodeList<Value> values = new NodeList<>();
+
+        for(Argument argument: argumentList.subList(offset, argumentList.size())){
+            if(argument.isType(Value.class)){
+                values.add((Value) argument.getDefinition());
+            }
+        }
+
+        return values;
+    }
 }

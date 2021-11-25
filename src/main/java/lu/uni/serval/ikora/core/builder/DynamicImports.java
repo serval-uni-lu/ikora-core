@@ -24,15 +24,15 @@ import lu.uni.serval.ikora.core.libraries.builtin.keywords.ImportResource;
 import lu.uni.serval.ikora.core.libraries.builtin.keywords.ImportLibrary;
 import lu.uni.serval.ikora.core.libraries.builtin.keywords.ImportVariables;
 import lu.uni.serval.ikora.core.model.*;
+import lu.uni.serval.ikora.core.utils.ArgumentUtils;
 import org.apache.commons.lang3.NotImplementedException;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class DynamicImports {
     private final Map<KeywordDefinition, ResourcesTable> resources = new HashMap<>();
     private final Map<KeywordDefinition, Set<Library>> libraries = new HashMap<>();
-    private final Map<KeywordDefinition, Map<Resources, Set<Token>>> variables = new HashMap<>();
+    private final Map<KeywordDefinition, Set<VariableFile>> variables = new HashMap<>();
 
 
     public SourceNode findNode(String value){
@@ -62,51 +62,34 @@ public class DynamicImports {
             libraries.putIfAbsent(parent, new HashSet<>());
             Set<Library> current = libraries.get(parent);
 
-            Library library = new Library(Token.empty(), argumentList.get(0).getDefinitionToken(), getParams(argumentList));
+            Token name = argumentList.get(0).getDefinitionToken();
+
+            Library library = new Library(Token.empty(), name, ArgumentUtils.toValues(1, argumentList));
             current.add(library);
         }
     }
 
-    private void addResources(KeywordDefinition parent, List<Argument> values){
-        if(!values.isEmpty()){
+    private void addResources(KeywordDefinition parent, List<Argument> argumentList){
+        if(!argumentList.isEmpty()){
             resources.putIfAbsent(parent, new ResourcesTable());
             ResourcesTable current = resources.get(parent);
 
-            Token name = values.get(0).getDefinitionToken();
+            Token name = argumentList.get(0).getDefinitionToken();
 
-            Resources resource = new Resources(Token.empty(), name, Collections.emptyList());
+            Resources resource = new Resources(Token.empty(), name, ArgumentUtils.toValues(1, argumentList));
             current.add(resource);
         }
     }
 
-    private void addVariables(KeywordDefinition parent, List<Argument> values){
-        if(!values.isEmpty()){
-            variables.putIfAbsent(parent, new HashMap<>());
-            Map<Resources, Set<Token>> current = variables.get(parent);
-            Token name = values.get(0).getDefinitionToken();
+    private void addVariables(KeywordDefinition parent, List<Argument> argumentList){
+        if(!argumentList.isEmpty()){
+            variables.putIfAbsent(parent, new HashSet<>());
+            Set<VariableFile> current = variables.get(parent);
 
-            Resources resource = new Resources(Token.empty(), name, Collections.emptyList());
+            Token name = argumentList.get(0).getDefinitionToken();
 
-            current.putIfAbsent(resource, new HashSet<>());
-            Set<Token> args = current.get(resource);
-            List<Token> params = getParams(values);
-
-            if(params.isEmpty()){
-                args.add(Token.empty());
-            }
-            else {
-                args.addAll(params);
-            }
+            VariableFile variableFile = new VariableFile(Token.empty(), name, ArgumentUtils.toValues(1, argumentList));
+            current.add(variableFile);
         }
-    }
-
-    private static List<Token> getParams(List<Argument> argumentList){
-        if(argumentList.size() < 2){
-            return Collections.emptyList();
-        }
-
-        return argumentList.subList(1, argumentList.size()).stream()
-                .map(Argument::getDefinitionToken)
-                .collect(Collectors.toList());
     }
 }
