@@ -22,7 +22,7 @@ public class MetadataParser {
             errors.registerSyntaxError(
                     reader.getSource(),
                     ErrorMessages.MISSING_METADATA_VALUE,
-                    Range.fromToken(label, reader.getCurrent())
+                    Range.fromToken(label)
             );
         }
 
@@ -32,7 +32,7 @@ public class MetadataParser {
             errors.registerSyntaxError(
                     reader.getSource(),
                     ErrorMessages.TOO_MANY_METADATA_ARGUMENTS,
-                    Range.fromTokens(TokenUtils.accumulate(tokenIterator), reader.getCurrent())
+                    Range.fromTokens(TokenUtils.accumulate(tokenIterator))
             );
         }
 

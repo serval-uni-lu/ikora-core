@@ -27,7 +27,7 @@ public class ArgumentsParser {
                 errors.registerSyntaxError(
                         reader.getSource(),
                         String.format("%s: %s", ErrorMessages.FAILED_TO_PARSE_PARAMETER, e.getMessage()),
-                        Range.fromToken(token, reader.getCurrent())
+                        Range.fromToken(token)
                 );
             }
         }

@@ -25,6 +25,8 @@ import lu.uni.serval.ikora.core.analytics.visitor.NodeVisitor;
 import lu.uni.serval.ikora.core.analytics.visitor.VisitorMemory;
 import lu.uni.serval.ikora.core.builder.resolver.ValueResolver;
 import lu.uni.serval.ikora.core.runner.Runtime;
+import lu.uni.serval.ikora.core.types.BaseType;
+import lu.uni.serval.ikora.core.types.UnresolvedType;
 
 import java.util.Collections;
 import java.util.List;
@@ -32,17 +34,23 @@ import java.util.List;
 public class Argument extends SourceNode implements HiddenAstNode {
     private final SourceNode definition;
     private final Token name;
+    private BaseType type;
 
-    public Argument(SourceNode definition) {
+    public Argument(SourceNode definition, BaseType type){
         if(definition == null){
             throw new NullPointerException("Argument cannot be initialize with null value");
         }
 
-        this.name = definition.getDefinitionToken();
         this.definition = definition;
+        this.name = definition.getDefinitionToken();
         addTokens(this.definition.getTokens());
-
         this.addAstChild(this.definition);
+
+        this.type = type;
+    }
+
+    public Argument(SourceNode definition) {
+        this(definition, UnresolvedType.get());
     }
 
     public SourceNode getDefinition() {
@@ -50,31 +58,39 @@ public class Argument extends SourceNode implements HiddenAstNode {
     }
 
     public boolean isScalarVariable(){
-        return isType(ScalarVariable.class);
+        return isClass(ScalarVariable.class);
     }
 
     public boolean isDictionaryVariable(){
-        return isType(DictionaryVariable.class);
+        return isClass(DictionaryVariable.class);
     }
 
     public boolean isDictionaryEntry(){
-        return isType(DictionaryEntry.class);
+        return isClass(DictionaryEntry.class);
     }
 
     public boolean isListVariable(){
-        return isType(ListVariable.class);
+        return isClass(ListVariable.class);
     }
 
     public boolean isLiteral(){
-        return isType(Literal.class);
+        return isClass(Literal.class);
     }
 
     public boolean isKeywordCall(){
-        return isType(KeywordCall.class);
+        return isClass(KeywordCall.class);
     }
 
     public boolean isVariable(){
-        return isType(Variable.class);
+        return isClass(Variable.class);
+    }
+
+    public void setType(BaseType type) {
+        this.type = type;
+    }
+
+    public BaseType getType() {
+        return type;
     }
 
     @Override
@@ -123,11 +139,11 @@ public class Argument extends SourceNode implements HiddenAstNode {
         return "<ARGUMENT>";
     }
 
-    public boolean isType(Class<?> type){
-        return type.isAssignableFrom(this.getDefinition().getClass());
+    public boolean isType(Class<? extends BaseType> testType){
+        return this.type.getClass().isAssignableFrom(testType);
     }
 
-    public String getType(){
-        return this.getDefinition().getClass().getSimpleName();
+    private boolean isClass(Class<? extends SourceNode> clazz){
+        return clazz.isAssignableFrom(this.getDefinition().getClass());
     }
 }

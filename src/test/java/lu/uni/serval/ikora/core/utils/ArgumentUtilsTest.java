@@ -28,6 +28,7 @@ import lu.uni.serval.ikora.core.types.LocatorType;
 import lu.uni.serval.ikora.core.types.StringType;
 import lu.uni.serval.ikora.core.types.TimeoutType;
 import org.apache.commons.lang3.tuple.Pair;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -36,6 +37,7 @@ import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Disabled
 class ArgumentUtilsTest {
     @Test
     void testGetArgumentTypeForUserKeywordWithLiterals(){

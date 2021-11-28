@@ -57,7 +57,7 @@ public class ParserUtils {
             errors.registerInternalError(
                     reader.getSource(),
                     "Failed to generate keyword",
-                    Range.fromToken(token, reader.getCurrent())
+                    Range.fromToken(token)
             );
         }
 
@@ -65,7 +65,7 @@ public class ParserUtils {
             errors.registerSyntaxError(
                     reader.getSource(),
                     "Keyword definition cannot take arguments",
-                    Range.fromTokens(TokenUtils.accumulate(tokenIterator), reader.getCurrent())
+                    Range.fromTokens(TokenUtils.accumulate(tokenIterator))
             );
 
             return Optional.empty();
@@ -86,7 +86,7 @@ public class ParserUtils {
         else if(!header.isBlock()){
             errors.registerSyntaxError(reader.getSource(),
                     "Expecting block header",
-                    Range.fromToken(header, reader.getCurrent())
+                    Range.fromToken(header)
             );
         }
 
@@ -121,7 +121,7 @@ public class ParserUtils {
                 errors.registerInternalError(
                         reader.getSource(),
                         "Failed to parse embedded argument",
-                        Range.fromToken(embeddedVariable, reader.getCurrent())
+                        Range.fromToken(embeddedVariable)
                 );
             }
         }

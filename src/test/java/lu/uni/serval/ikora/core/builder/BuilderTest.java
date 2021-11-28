@@ -22,6 +22,9 @@ package lu.uni.serval.ikora.core.builder;
 
 import lu.uni.serval.ikora.core.builder.resolver.ValueResolver;
 import lu.uni.serval.ikora.core.model.*;
+import lu.uni.serval.ikora.core.types.ConditionType;
+import lu.uni.serval.ikora.core.types.KeywordType;
+import lu.uni.serval.ikora.core.types.UnresolvedType;
 import lu.uni.serval.ikora.core.utils.ArgumentUtils;
 import lu.uni.serval.ikora.core.utils.FileUtils;
 import org.junit.jupiter.api.Assertions;
@@ -468,7 +471,8 @@ class BuilderTest {
 
         final KeywordCall call = (KeywordCall)keyword.getStep(0);
         assertEquals(2, call.getArgumentList().size());
-        Assertions.assertEquals(1, ArgumentUtils.findFirst(call.getArgumentList(), KeywordCall.class));
+        assertEquals(ConditionType.class, call.getArgumentList().get(0).getType().getClass());
+        assertEquals(KeywordType.class, call.getArgumentList().get(1).getType().getClass());
     }
 
     @Test
@@ -479,7 +483,7 @@ class BuilderTest {
                 "\n" +
                 "*** Keywords ***\n" +
                 "Test keyword with keyword as argument with collapsed arguments\n" +
-                "    Run Keyword If    @{params}\n" +
+                "    Run Keyword    @{params}\n" +
                 "\n" +
                 "*** Variables ***\n" +
                 "@{params}    Run Keyword If    'two' == 'two'    Log    Execute";
@@ -493,6 +497,6 @@ class BuilderTest {
 
         final KeywordCall call = (KeywordCall)keyword.getStep(0);
         assertEquals(1, call.getArgumentList().size());
-        assertEquals(-1, ArgumentUtils.findFirst(call.getArgumentList(), KeywordCall.class));
+        assertEquals(UnresolvedType.class, call.getArgumentList().get(0).getType().getClass());
     }
 }

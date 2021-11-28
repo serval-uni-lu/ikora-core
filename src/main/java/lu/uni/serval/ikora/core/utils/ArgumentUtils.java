@@ -24,6 +24,7 @@ import lu.uni.serval.ikora.core.builder.resolver.ValueResolver;
 import lu.uni.serval.ikora.core.model.*;
 import lu.uni.serval.ikora.core.types.BaseType;
 import lu.uni.serval.ikora.core.types.BaseTypeList;
+import lu.uni.serval.ikora.core.types.KeywordType;
 import lu.uni.serval.ikora.core.types.StringType;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -32,25 +33,6 @@ import java.util.stream.Collectors;
 
 public class ArgumentUtils {
     private ArgumentUtils() {}
-
-    public static int findFirst(NodeList<Argument> arguments, Class<?> type){
-        final Optional<Argument> first = arguments.stream()
-                .filter(a -> a.isType(type))
-                .findFirst();
-
-        return first.map(arguments::indexOf).orElse(-1);
-    }
-
-    public static boolean isExpendedUntilPosition(NodeList<Argument> arguments, int position){
-        int listIndex = findFirst(arguments, ListVariable.class);
-        int dictIndex = findFirst(arguments, DictionaryVariable.class);
-
-        int varIndex = arguments.size();
-        varIndex = listIndex != -1 ? Math.min(varIndex, listIndex) : varIndex;
-        varIndex = dictIndex != -1 ? Math.min(varIndex, dictIndex) : varIndex;
-
-        return position < varIndex;
-    }
 
     public static boolean contains(NodeList<Argument> arguments, Value value){
         return arguments.stream().map(Argument::getDefinition).anyMatch(v -> v == value);
@@ -80,11 +62,7 @@ public class ArgumentUtils {
     }
 
     public static List<Pair<String, SourceNode>> getArgumentValues(Argument argument){
-        return getArgumentValues(argument, new HashSet<>());
-    }
-
-    private static List<Pair<String, SourceNode>> getArgumentValues(Argument argument, Set<Variable> memory){
-        List<Pair<String, SourceNode>> values = new ArrayList<>();
+        final List<Pair<String, SourceNode>> values = new ArrayList<>();
 
         for(Node node: ValueResolver.getValueNodes(argument)){
             if(node instanceof Literal){
@@ -98,9 +76,6 @@ public class ArgumentUtils {
             }
             else if(node instanceof VariableAssignment){
                 values.addAll(getAssignmentValue((VariableAssignment)node));
-            }
-            else if (node instanceof Variable){
-                values.addAll(getParameterValueFromCalls((Variable)node, memory));
             }
         }
 
@@ -119,39 +94,11 @@ public class ArgumentUtils {
                 .collect(Collectors.toList());
     }
 
-    private static List<Pair<String, SourceNode>> getParameterValueFromCalls(final Variable variable, Set<Variable> memory){
-        if(!memory.add(variable)){
-            return Collections.emptyList();
-        }
-
-        final Optional<UserKeyword> userKeyword = ValueResolver.getUserKeywordFromArgument(variable);
-
-        if(!userKeyword.isPresent()){
-            return Collections.emptyList();
-        }
-
-        final List<Pair<String, SourceNode>> values = new ArrayList<>();
-        final int position = userKeyword.get().getParameters().indexOf(variable);
-
-        for(SourceNode node: userKeyword.get().getDependencies()){
-            if(node instanceof KeywordCall){
-                final NodeList<Argument> argumentList = ((KeywordCall)node).getArgumentList();
-
-                if(ArgumentUtils.isExpendedUntilPosition(argumentList, position)){
-                    final Argument argument = argumentList.get(position);
-                    values.addAll(getArgumentValues(argument, memory));
-                }
-            }
-        }
-
-        return values;
-    }
-
     public static NodeList<Value> toValues(int offset, List<Argument> argumentList){
         final NodeList<Value> values = new NodeList<>();
 
         for(Argument argument: argumentList.subList(offset, argumentList.size())){
-            if(argument.isType(Value.class)){
+            if(!argument.isType(KeywordType.class)){
                 values.add((Value) argument.getDefinition());
             }
         }

@@ -59,7 +59,7 @@ public class TestProcessingParser {
                 errors.registerInternalError(
                         reader.getSource(),
                         ErrorMessages.FAILED_TO_PARSE_STEP,
-                        Range.fromToken(label, reader.getCurrent())
+                        Range.fromToken(label)
                 );
 
                 call = null;
@@ -69,7 +69,7 @@ public class TestProcessingParser {
             errors.registerSyntaxError(
                     reader.getSource(),
                     ErrorMessages.EXPECTED_KEYWORD_CALL,
-                    Range.fromToken(label, reader.getCurrent())
+                    Range.fromToken(label)
             );
 
             call = null;

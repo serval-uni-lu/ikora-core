@@ -27,6 +27,8 @@ import lu.uni.serval.ikora.core.builder.resolver.StepResolver;
 import lu.uni.serval.ikora.core.exception.InvalidDependencyException;
 import lu.uni.serval.ikora.core.exception.RunnerException;
 import lu.uni.serval.ikora.core.runner.Runtime;
+import lu.uni.serval.ikora.core.types.KeywordType;
+import lu.uni.serval.ikora.core.types.UnresolvedType;
 import lu.uni.serval.ikora.core.utils.LevenshteinDistance;
 
 import java.util.*;
@@ -100,7 +102,7 @@ public class Assignment extends Step implements Dependable {
             return Optional.empty();
         }
 
-        if(rightHandOperand.isType(KeywordCall.class)){
+        if(rightHandOperand.isType(KeywordType.class) || rightHandOperand.isType(UnresolvedType.class)){
             return Optional.of((KeywordCall) rightHandOperand.getDefinition());
         }
 

@@ -23,7 +23,7 @@ public class CallResolver {
             runtime.getErrors().registerSymbolError(
                     call.getSource(),
                     ErrorMessages.FOUND_NO_MATCH,
-                    Range.fromTokens(call.getTokens(), null)
+                    Range.fromTokens(call.getTokens())
             );
         }
 

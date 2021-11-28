@@ -49,7 +49,7 @@ public class VariableAssignmentParser {
             errors.registerSyntaxError(
                     reader.getSource(),
                     String.format("Invalid variable: %s", variableToken.getText()),
-                    Range.fromToken(variableToken, reader.getCurrent())
+                    Range.fromToken(variableToken)
             );
 
             return Optional.empty();
@@ -73,7 +73,7 @@ public class VariableAssignmentParser {
             errors.registerSyntaxError(
                     reader.getSource(),
                     String.format("Empty variable definition: %s", variable.getDefinitionToken()),
-                    Range.fromTokens(variable.getTokens(), reader.getCurrent())
+                    Range.fromTokens(variable.getTokens())
             );
         }
 

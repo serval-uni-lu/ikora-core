@@ -158,15 +158,4 @@ public class ValueResolver {
 
         return values;
     }
-
-    public static Optional<UserKeyword> getUserKeywordFromArgument(final Variable variable){
-        final SourceNode parent = variable.getAstParent();
-
-        if(!(parent instanceof UserKeyword)){
-            return Optional.empty();
-        }
-
-        UserKeyword userKeyword = (UserKeyword)parent;
-        return userKeyword.getParameters().contains(variable) ? Optional.of(userKeyword) : Optional.empty();
-    }
 }

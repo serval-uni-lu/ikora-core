@@ -162,7 +162,7 @@ public abstract class SourceNode implements Node {
     }
 
     public Range getRange(){
-        return Range.fromTokens(tokens, null);
+        return Range.fromTokens(tokens);
     }
 
     public int getLoc() {

@@ -45,7 +45,7 @@ public class AssignmentParser {
             errors.registerInternalError(
                     reader.getSource(),
                     ErrorMessages.ASSIGNMENT_SHOULD_START_WITH_VARIABLE,
-                    Range.fromToken(current, reader.getCurrent())
+                    Range.fromToken(current)
             );
 
             return null;
@@ -73,7 +73,7 @@ public class AssignmentParser {
             errors.registerSyntaxError(
                     reader.getSource(),
                     ErrorMessages.ASSIGNMENT_SHOULD_HAVE_LEFT_HAND_OPERAND,
-                    Range.fromTokens(assignment.getTokens(), reader.getCurrent())
+                    Range.fromTokens(assignment.getTokens())
             );
         }
 

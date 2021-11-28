@@ -1,10 +1,9 @@
 package lu.uni.serval.ikora.core.builder.resolver;
 
 import lu.uni.serval.ikora.core.builder.CallResolver;
+import lu.uni.serval.ikora.core.error.ErrorMessages;
 import lu.uni.serval.ikora.core.model.*;
-import lu.uni.serval.ikora.core.types.BaseTypeList;
-import lu.uni.serval.ikora.core.types.KeywordType;
-import lu.uni.serval.ikora.core.utils.ArgumentUtils;
+import lu.uni.serval.ikora.core.types.*;
 import lu.uni.serval.ikora.core.runner.Runtime;
 
 import java.util.ArrayList;
@@ -27,18 +26,52 @@ public class ArgumentResolver {
         final NodeList<Argument> argumentList = call.getArgumentList();
         final BaseTypeList argumentTypes = keyword.getArgumentTypes();
 
-        if(argumentTypes.containsType(KeywordType.class)){
-            int keywordIndex = argumentTypes.findFirst(KeywordType.class);
+        boolean canResolve = true;
+        int position = 0;
+        for(; position < argumentList.size() && canResolve; ++position){
+            if(position >= argumentTypes.size()){
+                runtime.getErrors().registerSyntaxError(
+                        call.getSource(),
+                        ErrorMessages.FAILED_TO_LOCATE_ITERATOR_IN_FOR_LOOP,
+                        Range.fromToken(call.getDefinitionToken())
+                );
+            }
 
-            if(ArgumentUtils.isExpendedUntilPosition(argumentList, keywordIndex)){
-                final List<Argument> argumentsToProcess = argumentList.subList(keywordIndex, argumentList.size());
+            final Argument argument = argumentList.get(position);
+            final BaseType type = argumentTypes.get(position);
+
+            if(argument.isListVariable()){
+                if(type.getClass().isAssignableFrom(ListType.class)){
+                    argument.setType(type);
+                }
+                else {
+                    argument.setType(UnresolvedType.get());
+                    canResolve = false;
+                }
+            }
+            else if(argument.isDictionaryVariable()){
+                if(type.getClass().isAssignableFrom(DictionaryType.class)){
+                    argument.setType(type);
+                }
+                else {
+                    argument.setType(UnresolvedType.get());
+                    canResolve = false;
+                }
+            }
+            else if(KeywordType.class.isAssignableFrom(type.getClass())){
+                final List<Argument> argumentsToProcess = argumentList.subList(position, argumentList.size());
                 final KeywordCall callArgument = createKeywordArgument(argumentsToProcess);
-                final NodeList<Argument> newArgumentList = new NodeList<>(argumentList.subList(0, keywordIndex));
+                final NodeList<Argument> newArgumentList = new NodeList<>(argumentList.subList(0, position));
 
-                newArgumentList.add(new Argument(callArgument));
+                newArgumentList.add(new Argument(callArgument, type));
                 call.setArgumentList(newArgumentList);
 
                 CallResolver.resolve(callArgument, runtime);
+
+                break;
+            }
+            else {
+                argument.setType(type);
             }
         }
     }

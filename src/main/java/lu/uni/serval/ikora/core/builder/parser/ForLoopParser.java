@@ -94,7 +94,7 @@ public class ForLoopParser {
                 errors.registerInternalError(
                         reader.getSource(),
                         ErrorMessages.FAILED_TO_CREATE_ITERATOR_IN_FOR_LOOP,
-                        Range.fromToken(token, reader.getCurrent())
+                        Range.fromToken(token)
                 );
             }
         }

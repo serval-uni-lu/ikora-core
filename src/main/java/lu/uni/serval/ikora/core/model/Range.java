@@ -52,23 +52,19 @@ public class Range {
         return new Range(null, null);
     }
 
-    public static Range fromTokens(Token startToken, Token endToken, Line line) {
-        if(startToken == null || endToken == null || startToken.isEmpty() || endToken.isEmpty()){
-            return Range.fromLine(line);
-        }
-
+    public static Range fromTokens(Token startToken, Token endToken) {
         Pointer start = new Pointer(startToken.getLine(), startToken.getStartOffset());
         Pointer end = new Pointer(endToken.getLine(), endToken.getEndOffset());
 
         return new Range(start, end);
     }
 
-    public static Range fromTokens(Tokens tokens, Line line) {
-        return Range.fromTokens(tokens.first(), tokens.last(), line);
+    public static Range fromTokens(Tokens tokens) {
+        return Range.fromTokens(tokens.first(), tokens.last());
     }
 
-    public static Range fromToken(Token token, Line line){
-        return Range.fromTokens(token, token, line);
+    public static Range fromToken(Token token){
+        return Range.fromTokens(token, token);
     }
 
     public static Range fromLine(Line line) {
