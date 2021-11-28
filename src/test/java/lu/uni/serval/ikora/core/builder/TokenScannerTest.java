@@ -1,5 +1,6 @@
 package lu.uni.serval.ikora.core.builder;
 
+import lu.uni.serval.ikora.core.builder.parser.TokenScanner;
 import lu.uni.serval.ikora.core.model.Token;
 import lu.uni.serval.ikora.core.model.Tokens;
 import org.junit.jupiter.api.BeforeAll;

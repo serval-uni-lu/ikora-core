@@ -22,7 +22,7 @@ package lu.uni.serval.ikora.core.model;
 
 import lu.uni.serval.ikora.core.analytics.visitor.NodeVisitor;
 import lu.uni.serval.ikora.core.analytics.visitor.VisitorMemory;
-import lu.uni.serval.ikora.core.builder.ValueResolver;
+import lu.uni.serval.ikora.core.builder.resolver.ValueResolver;
 
 import java.util.regex.Pattern;
 

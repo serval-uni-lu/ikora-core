@@ -20,6 +20,8 @@ package lu.uni.serval.ikora.core.builder;
  * #L%
  */
 
+import lu.uni.serval.ikora.core.builder.parser.ProjectParser;
+import lu.uni.serval.ikora.core.builder.resolver.SymbolResolver;
 import lu.uni.serval.ikora.core.exception.InvalidArgumentException;
 import lu.uni.serval.ikora.core.BuildConfiguration;
 import lu.uni.serval.ikora.core.error.ErrorManager;

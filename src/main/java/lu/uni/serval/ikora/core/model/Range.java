@@ -20,7 +20,7 @@ package lu.uni.serval.ikora.core.model;
  * #L%
  */
 
-import lu.uni.serval.ikora.core.builder.Line;
+import lu.uni.serval.ikora.core.builder.parser.Line;
 
 public class Range {
     private final Pointer start;

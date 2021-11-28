@@ -20,7 +20,7 @@ package lu.uni.serval.ikora.core.utils;
  * #L%
  */
 
-import lu.uni.serval.ikora.core.builder.ValueResolver;
+import lu.uni.serval.ikora.core.builder.resolver.ValueResolver;
 import lu.uni.serval.ikora.core.model.*;
 import lu.uni.serval.ikora.core.types.BaseType;
 import lu.uni.serval.ikora.core.types.BaseTypeList;
