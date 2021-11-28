@@ -23,7 +23,7 @@ package lu.uni.serval.ikora.core.model;
 import lu.uni.serval.ikora.core.analytics.difference.Edit;
 import lu.uni.serval.ikora.core.analytics.visitor.NodeVisitor;
 import lu.uni.serval.ikora.core.analytics.visitor.VisitorMemory;
-import lu.uni.serval.ikora.core.builder.SymbolResolver;
+import lu.uni.serval.ikora.core.builder.CallResolver;
 import lu.uni.serval.ikora.core.exception.RunnerException;
 import lu.uni.serval.ikora.core.runner.Runtime;
 import lu.uni.serval.ikora.core.utils.LevenshteinDistance;
@@ -95,7 +95,7 @@ public class KeywordCall extends Step {
     @Override
     public void execute(Runtime runtime) throws RunnerException {
         runtime.enterNode(this);
-        SymbolResolver.resolve(this, runtime);
+        CallResolver.resolve(this, runtime);
 
         Optional<Keyword> callee = link.getNode();
 

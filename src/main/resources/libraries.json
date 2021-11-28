@@ -490,7 +490,7 @@
         ]
     },
     {
-        "name": "process",
+        "name": "Process",
         "keywords": [
             {
                 "type": "ACTION",
@@ -570,7 +570,7 @@
         ]
     },
     {
-        "name": "string",
+        "name": "String",
         "keywords": [
             {
                 "type": "GET",
@@ -1015,7 +1015,7 @@
         ]
     },
     {
-        "name": "screenshot",
+        "name": "Screenshot",
         "keywords": [
             {
                 "type": "LOG",
@@ -1030,7 +1030,7 @@
         ]
     },
     {
-        "name": "dialogs",
+        "name": "Dialogs",
         "keywords": [
             {
                 "type": "GET",
@@ -1975,7 +1975,7 @@
         ]
     },
     {
-        "name": "datetime",
+        "name": "DateTime",
         "keywords": [
             {
                 "type": "SET",
@@ -3360,7 +3360,7 @@
         ]
     },
     {
-        "name": "collections",
+        "name": "Collections",
         "keywords": [
             {
                 "type": "ASSERTION",
@@ -3575,7 +3575,7 @@
         ]
     },
     {
-        "name": "xml",
+        "name": "XML",
         "keywords": [
             {
                 "type": "GET",
@@ -3755,7 +3755,7 @@
         ]
     },
     {
-        "name": "telnet",
+        "name": "Telnet",
         "keywords": [
             {
                 "type": "CONFIGURATION",

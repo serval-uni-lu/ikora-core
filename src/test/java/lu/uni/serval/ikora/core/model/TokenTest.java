@@ -22,7 +22,10 @@ package lu.uni.serval.ikora.core.model;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -58,5 +61,22 @@ class TokenTest {
         final Token token1 = new Token("And ", 47, 4, 8, Token.Type.KEYWORD);
         final Token token2 = new Token("And the user follows the flow to register their organisation", 47, 4, 64, Token.Type.KEYWORD);
         assertEquals(-1, token1.compareTo(token2));
+    }
+
+    @Test
+    void testSorted(){
+        final Token token1 = new Token("12", 18, 14, 16, Token.Type.KEYWORD);
+        final Token token2 = new Token("1234567890", 18, 4, 14, Token.Type.TEXT);
+        final Token token3 = new Token("345", 18, 7, 10, Token.Type.VARIABLE);
+        final List<Token> tokens = new ArrayList<>(2);
+        tokens.add(token1);
+        tokens.add(token2);
+        tokens.add(token3);
+
+        final List<Token> sorted = tokens.stream().sorted().collect(Collectors.toList());
+
+        assertEquals(sorted.get(0), token2);
+        assertEquals(sorted.get(1), token3);
+        assertEquals(sorted.get(2), token1);
     }
 }

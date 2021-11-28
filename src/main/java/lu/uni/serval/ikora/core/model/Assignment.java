@@ -23,7 +23,7 @@ package lu.uni.serval.ikora.core.model;
 import lu.uni.serval.ikora.core.analytics.difference.Edit;
 import lu.uni.serval.ikora.core.analytics.visitor.NodeVisitor;
 import lu.uni.serval.ikora.core.analytics.visitor.VisitorMemory;
-import lu.uni.serval.ikora.core.builder.SymbolResolver;
+import lu.uni.serval.ikora.core.builder.StepResolver;
 import lu.uni.serval.ikora.core.exception.InvalidDependencyException;
 import lu.uni.serval.ikora.core.exception.RunnerException;
 import lu.uni.serval.ikora.core.runner.Runtime;
@@ -115,7 +115,7 @@ public class Assignment extends Step implements Dependable {
 
         if(optional.isPresent()){
             KeywordCall call = optional.get();
-            SymbolResolver.resolve(call, runtime);
+            StepResolver.resolve(call, runtime);
 
             if(!runtime.getErrors().isEmpty()){
                 throw new RunnerException("Errors found during build");
