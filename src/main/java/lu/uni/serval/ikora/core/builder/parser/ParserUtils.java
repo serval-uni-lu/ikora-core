@@ -24,6 +24,7 @@ import lu.uni.serval.ikora.core.builder.resolver.ValueResolver;
 import lu.uni.serval.ikora.core.exception.MalformedVariableException;
 import lu.uni.serval.ikora.core.error.ErrorManager;
 import lu.uni.serval.ikora.core.model.*;
+import lu.uni.serval.ikora.core.types.StringType;
 import lu.uni.serval.ikora.core.utils.TokenUtils;
 
 import java.lang.reflect.Constructor;
@@ -112,11 +113,19 @@ public class ParserUtils {
             return;
         }
 
-        NodeList<Variable> arguments = new NodeList<>(Token.empty());
+        NodeList<Argument> arguments = new NodeList<>(Token.empty());
 
+        int position = 0;
         for(Token embeddedVariable: ValueResolver.findVariables(token)){
             try {
-                arguments.add(Variable.create(embeddedVariable));
+                final Argument argument = new Argument(
+                        Variable.create(embeddedVariable),
+                        new StringType(token.getText()),
+                        position++
+                );
+
+                arguments.add(argument);
+
             } catch (MalformedVariableException e) {
                 errors.registerInternalError(
                         reader.getSource(),
@@ -126,6 +135,6 @@ public class ParserUtils {
             }
         }
 
-        ((UserKeyword)keyword).setParameters(arguments);
+        ((UserKeyword)keyword).setArguments(arguments);
     }
 }

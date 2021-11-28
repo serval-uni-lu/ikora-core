@@ -20,6 +20,7 @@ package lu.uni.serval.ikora.core.model;
  * #L%
  */
 
+import lu.uni.serval.ikora.core.types.StringType;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -31,7 +32,7 @@ class UserKeywordTest {
         final UserKeyword keyword = new UserKeyword(name);
 
         assertEquals(name.getText(), keyword.getName());
-        assertEquals(0, keyword.getParameters().size());
+        assertEquals(0, keyword.getArguments().size());
         assertFalse(keyword.getDocumentation().isPresent());
     }
 
@@ -41,12 +42,12 @@ class UserKeywordTest {
         final UserKeyword keyword = new UserKeyword(name);
         final Token scalar = Token.fromString("${Scalar}");
 
-        final NodeList<Variable> parameters = new NodeList<>();
-        parameters.add(new ScalarVariable(scalar));
+        final NodeList<Argument> parameters = new NodeList<>();
+        parameters.add(new Argument(new ScalarVariable(scalar), new StringType(scalar.getText()), 0));
 
-        keyword.setParameters(parameters);
+        keyword.setArguments(parameters);
 
-        assertEquals(1, keyword.getParameters().size());
+        assertEquals(1, keyword.getArguments().size());
         assertTrue(keyword.getParameterByName(scalar).isPresent());
         assertEquals(scalar.getText(), keyword.getParameterByName(scalar).get().getName());
     }

@@ -27,11 +27,10 @@ import lu.uni.serval.ikora.core.types.ListType;
 import lu.uni.serval.ikora.core.types.LocatorType;
 import lu.uni.serval.ikora.core.types.StringType;
 import lu.uni.serval.ikora.core.types.TimeoutType;
-import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -58,8 +57,8 @@ class ArgumentUtilsTest {
         final TestCase testCase = project.findTestCase("", "Test connexion").iterator().next();
         final NodeList<Argument> argumentList = testCase.getStep(0).getArgumentList();
 
-        assertEquals(StringType.class, ArgumentUtils.getArgumentType(argumentList.get(0)));
-        assertEquals(StringType.class, ArgumentUtils.getArgumentType(argumentList.get(1)));
+        assertEquals(StringType.class, argumentList.get(0).getType().getClass());
+        assertEquals(StringType.class, argumentList.get(1).getType().getClass());
     }
 
     @Test
@@ -82,7 +81,7 @@ class ArgumentUtilsTest {
         final TestCase testCase = project.findTestCase("", "Test connexion").iterator().next();
         final NodeList<Argument> argumentList = testCase.getStep(0).getArgumentList();
 
-        assertEquals(ListType.class, ArgumentUtils.getArgumentType(argumentList.get(0)));
+        assertEquals(ListType.class, argumentList.get(0).getType().getClass());
     }
 
     @Test
@@ -100,7 +99,7 @@ class ArgumentUtilsTest {
         final TestCase testCase = project.findTestCase("", "Test click button").iterator().next();
         final NodeList<Argument> argumentList = testCase.getStep(0).getArgumentList();
 
-        assertEquals(LocatorType.class, ArgumentUtils.getArgumentType(argumentList.get(0)));
+        assertEquals(LocatorType.class, argumentList.get(0).getType().getClass());
     }
 
     @Test
@@ -116,7 +115,7 @@ class ArgumentUtilsTest {
         final TestCase testCase = project.findTestCase("", "Test sleep").iterator().next();
         final NodeList<Argument> argumentList = testCase.getStep(0).getArgumentList();
 
-        assertEquals(TimeoutType.class, ArgumentUtils.getArgumentType(argumentList.get(0)));
+        assertEquals(TimeoutType.class, argumentList.get(0).getType().getClass());
     }
 
     @Test
@@ -135,8 +134,8 @@ class ArgumentUtilsTest {
 
         UserKeyword keyword = project.findUserKeyword(Token.fromString("Some keyword")).iterator().next();
 
-        final List<Pair<String, SourceNode>> valueNodes = ArgumentUtils.getArgumentValues(keyword.getStep(0).getArgumentList().get(0));
-        assertEquals(1, valueNodes.size());
+        final Map<SourceNode, Set<Node>> values = ArgumentUtils.getValues(keyword.getStep(0).getArgumentList().get(0));
+        assertEquals(1, values.size());
     }
 
 
@@ -159,9 +158,9 @@ class ArgumentUtilsTest {
 
         UserKeyword keyword = project.findUserKeyword(Token.fromString("Some keyword")).iterator().next();
 
-        final List<Pair<String, SourceNode>> valueNodes = ArgumentUtils.getArgumentValues(keyword.getStep(0).getArgumentList().get(0));
-        assertEquals(1, valueNodes.size());
-        assertEquals("value-${env}", valueNodes.get(0).getKey());
+        final Map<SourceNode, Set<Node>> values = ArgumentUtils.getValues(keyword.getStep(0).getArgumentList().get(0));
+        assertEquals(1, values.size());
+        assertEquals("value-${env}", values.entrySet().iterator().next().getKey().getName());
     }
 
     @Test
@@ -177,8 +176,8 @@ class ArgumentUtilsTest {
 
         UserKeyword keyword = project.findUserKeyword(Token.fromString("Some keyword")).iterator().next();
 
-        final List<Pair<String, SourceNode>> valueNodes = ArgumentUtils.getArgumentValues(keyword.getStep(0).getArgumentList().get(0));
-        assertEquals(0, valueNodes.size());
+        final Map<SourceNode, Set<Node>> values = ArgumentUtils.getValues(keyword.getStep(0).getArgumentList().get(0));
+        assertEquals(0, values.size());
     }
 
     @Test
@@ -210,12 +209,15 @@ class ArgumentUtilsTest {
         final UserKeyword followLink = project.findUserKeyword(FileUtils.IN_MEMORY, "Follow the link").iterator().next();
         assertNotNull(followLink);
 
-        final List<Pair<String, SourceNode>> argumentValues = ArgumentUtils.getArgumentValues(followLink.getStep(0).getArgumentList().get(0));
-        assertEquals(2, argumentValues.size());
+        final Map<SourceNode, Set<Node>> values = ArgumentUtils.getValues(followLink.getStep(0).getArgumentList().get(0));
+        assertEquals(2, values.size());
 
-        final Set<String> values = argumentValues.stream().map(Pair::getKey).collect(Collectors.toSet());
-        assertTrue(values.contains("link_to_click"));
-        assertTrue(values.contains("css:.covid-form > div"));
+        final Set<String> names = values.keySet().stream()
+                .map(SourceNode::getName)
+                .collect(Collectors.toSet());
+
+        assertTrue(names.contains("link_to_click"));
+        assertTrue(names.contains("css:.covid-form > div"));
     }
 
     @Test
@@ -235,7 +237,7 @@ class ArgumentUtilsTest {
         final UserKeyword something = project.findUserKeyword(FileUtils.IN_MEMORY, "Something").iterator().next();
         assertNotNull(something);
 
-        final List<Pair<String, SourceNode>> argumentValues = ArgumentUtils.getArgumentValues(something.getStep(0).getArgumentList().get(0));
-        assertEquals(0, argumentValues.size());
+        final Map<SourceNode, Set<Node>> values = ArgumentUtils.getValues(something.getStep(0).getArgumentList().get(0));
+        assertEquals(0, values.size());
     }
 }

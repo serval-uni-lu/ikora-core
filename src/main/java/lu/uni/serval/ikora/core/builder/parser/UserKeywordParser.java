@@ -81,8 +81,8 @@ class UserKeywordParser {
             userKeyword.setTags(tags);
         }
         else if (ArgumentsParser.is(label)) {
-            final NodeList<Variable> arguments = ArgumentsParser.parse(reader, label, tokenIterator, errors);
-            userKeyword.setParameters(arguments);
+            final NodeList<Argument> arguments = ArgumentsParser.parse(reader, label, tokenIterator, errors);
+            userKeyword.setArguments(arguments);
         }
         else if (ReturnParser.is(label)) {
             final NodeList<Value> returnValues = ReturnParser.parse(label, tokenIterator);

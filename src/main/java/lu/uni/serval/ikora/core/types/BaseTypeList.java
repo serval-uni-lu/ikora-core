@@ -30,8 +30,8 @@ public class BaseTypeList implements List<BaseType> {
         this.argumentTypes = new ArrayList<>();
     }
 
-    public BaseTypeList(BaseType[] argumentTypeArray) {
-        this.argumentTypes = Arrays.asList(argumentTypeArray);
+    public BaseTypeList(List<BaseType> argumentTypes) {
+        this.argumentTypes =argumentTypes;
     }
 
     @Override

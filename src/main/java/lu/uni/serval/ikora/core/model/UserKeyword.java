@@ -23,15 +23,14 @@ package lu.uni.serval.ikora.core.model;
 
 import lu.uni.serval.ikora.core.analytics.visitor.NodeVisitor;
 import lu.uni.serval.ikora.core.analytics.visitor.VisitorMemory;
-import lu.uni.serval.ikora.core.types.BaseType;
-import lu.uni.serval.ikora.core.types.BaseTypeFactory;
 import lu.uni.serval.ikora.core.types.BaseTypeList;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class UserKeyword extends KeywordDefinition {
-    private NodeList<Variable> parameters;
+    private NodeList<Argument> arguments;
     private NodeList<Value> returnVariables;
 
     private TestProcessing tearDown;
@@ -39,28 +38,28 @@ public class UserKeyword extends KeywordDefinition {
     public UserKeyword(Token name) {
         super(name);
 
-        this.parameters = new NodeList<>(Token.empty());
-        this.addAstChild(this.parameters);
+        this.arguments = new NodeList<>(Token.empty());
+        this.addAstChild(this.arguments);
 
         this.returnVariables = new NodeList<>(Token.empty());
         this.addAstChild(this.returnVariables);
     }
 
-    public NodeList<Variable> getParameters() {
-        return parameters;
+    public NodeList<Argument> getArguments() {
+        return arguments;
     }
 
     public Optional<TestProcessing> getTearDown() {
         return Optional.ofNullable(tearDown);
     }
 
-    public Optional<Variable> getParameterByName(Token name) {
-        return parameters.stream().filter(a -> a.matches(name)).findFirst();
+    public Optional<Argument> getParameterByName(Token name) {
+        return arguments.stream().filter(a -> a.matches(name)).findFirst();
     }
 
-    public void setParameters(NodeList<Variable> arguments){
-        this.parameters = arguments;
-        this.addAstChild(this.parameters);
+    public void setArguments(NodeList<Argument> arguments){
+        this.arguments = arguments;
+        this.addAstChild(this.arguments);
         addTokens(arguments.getTokens());
     }
 
@@ -91,9 +90,11 @@ public class UserKeyword extends KeywordDefinition {
 
     @Override
     public BaseTypeList getArgumentTypes() {
-        return new BaseTypeList(parameters.stream()
-                .map(BaseTypeFactory::fromVariable)
-                .toArray(BaseType[]::new));
+        return new BaseTypeList(
+                arguments.stream()
+                .map(Argument::getType)
+                .collect(Collectors.toList())
+        );
     }
 
     @Override
@@ -105,7 +106,7 @@ public class UserKeyword extends KeywordDefinition {
     public List<Dependable> findDefinition(Variable variable) {
         final List<Dependable> definitions = super.findDefinition(variable);
 
-        if(parameters.stream().anyMatch(v -> v.matches(variable.getDefinitionToken()))){
+        if(arguments.stream().anyMatch(v -> v.matches(variable.getDefinitionToken()))){
             definitions.add(this);
         }
 

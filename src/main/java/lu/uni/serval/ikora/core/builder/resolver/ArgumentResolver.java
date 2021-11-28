@@ -63,7 +63,7 @@ public class ArgumentResolver {
                 final KeywordCall callArgument = createKeywordArgument(argumentsToProcess);
                 final NodeList<Argument> newArgumentList = new NodeList<>(argumentList.subList(0, position));
 
-                newArgumentList.add(new Argument(callArgument, type));
+                newArgumentList.add(new Argument(callArgument, type, position));
                 call.setArgumentList(newArgumentList);
 
                 CallResolver.resolve(callArgument, runtime);

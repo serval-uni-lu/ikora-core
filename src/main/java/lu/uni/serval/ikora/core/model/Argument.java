@@ -35,8 +35,9 @@ public class Argument extends SourceNode implements HiddenAstNode {
     private final SourceNode definition;
     private final Token name;
     private BaseType type;
+    private int position;
 
-    public Argument(SourceNode definition, BaseType type){
+    public Argument(SourceNode definition, BaseType type, int position){
         if(definition == null){
             throw new NullPointerException("Argument cannot be initialize with null value");
         }
@@ -47,10 +48,11 @@ public class Argument extends SourceNode implements HiddenAstNode {
         this.addAstChild(this.definition);
 
         this.type = type;
+        this.position = position;
     }
 
     public Argument(SourceNode definition) {
-        this(definition, UnresolvedType.get());
+        this(definition, UnresolvedType.get(), -1);
     }
 
     public SourceNode getDefinition() {
@@ -91,6 +93,14 @@ public class Argument extends SourceNode implements HiddenAstNode {
 
     public BaseType getType() {
         return type;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
     }
 
     @Override

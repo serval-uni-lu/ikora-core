@@ -4,6 +4,7 @@ import lu.uni.serval.ikora.core.Helpers;
 import lu.uni.serval.ikora.core.builder.parser.ArgumentsParser;
 import lu.uni.serval.ikora.core.builder.parser.LineReader;
 import lu.uni.serval.ikora.core.error.ErrorManager;
+import lu.uni.serval.ikora.core.model.Argument;
 import lu.uni.serval.ikora.core.model.NodeList;
 import lu.uni.serval.ikora.core.model.Token;
 import lu.uni.serval.ikora.core.model.Variable;
@@ -22,7 +23,7 @@ class ArgumentsParserTest {
         final Iterator<Token> tokenIterator = Helpers.getTokenIterator(reader);
         final ErrorManager errors = new ErrorManager();
 
-        final NodeList<Variable> arguments = ArgumentsParser.parse(reader, tokenIterator.next(), tokenIterator, errors);
+        final NodeList<Argument> arguments = ArgumentsParser.parse(reader, tokenIterator.next(), tokenIterator, errors);
 
         assertTrue(errors.isEmpty());
         assertEquals(1, arguments.size());
@@ -36,7 +37,7 @@ class ArgumentsParserTest {
         final Iterator<Token> tokenIterator = Helpers.getTokenIterator(reader);
         final ErrorManager errors = new ErrorManager();
 
-        final NodeList<Variable> arguments = ArgumentsParser.parse(reader, tokenIterator.next(), tokenIterator, errors);
+        final NodeList<Argument> arguments = ArgumentsParser.parse(reader, tokenIterator.next(), tokenIterator, errors);
 
         assertTrue(errors.isEmpty());
         assertEquals(3, arguments.size());
@@ -52,7 +53,7 @@ class ArgumentsParserTest {
         final Iterator<Token> tokenIterator = Helpers.getTokenIterator(reader);
         final ErrorManager errors = new ErrorManager();
 
-        final NodeList<Variable> arguments = ArgumentsParser.parse(reader, tokenIterator.next(), tokenIterator, errors);
+        final NodeList<Argument> arguments = ArgumentsParser.parse(reader, tokenIterator.next(), tokenIterator, errors);
 
         assertTrue(errors.isEmpty());
         assertEquals(0, arguments.size());
@@ -65,7 +66,7 @@ class ArgumentsParserTest {
         final Iterator<Token> tokenIterator = Helpers.getTokenIterator(reader);
         final ErrorManager errors = new ErrorManager();
 
-        final NodeList<Variable> arguments = ArgumentsParser.parse(reader, tokenIterator.next(), tokenIterator, errors);
+        final NodeList<Argument> arguments = ArgumentsParser.parse(reader, tokenIterator.next(), tokenIterator, errors);
 
         assertFalse(errors.isEmpty());
         assertEquals(0, arguments.size());

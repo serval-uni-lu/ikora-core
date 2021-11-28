@@ -37,7 +37,7 @@ public abstract class LibraryKeyword implements Keyword {
 
     protected LibraryKeyword(Type type, BaseType... argumentTypes) {
         this.type = type;
-        this.argumentTypes = new BaseTypeList(argumentTypes);
+        this.argumentTypes = new BaseTypeList(Arrays.asList(argumentTypes));
         this.dependencies = new HashSet<>();
     }
 

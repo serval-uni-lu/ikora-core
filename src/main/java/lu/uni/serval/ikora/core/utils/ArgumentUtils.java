@@ -20,78 +20,19 @@ package lu.uni.serval.ikora.core.utils;
  * #L%
  */
 
-import lu.uni.serval.ikora.core.builder.resolver.ValueResolver;
+import lu.uni.serval.ikora.core.analytics.visitor.PathMemory;
+import lu.uni.serval.ikora.core.analytics.visitor.ValueVisitor;
+import lu.uni.serval.ikora.core.analytics.visitor.VisitorMemory;
 import lu.uni.serval.ikora.core.model.*;
-import lu.uni.serval.ikora.core.types.BaseType;
-import lu.uni.serval.ikora.core.types.BaseTypeList;
 import lu.uni.serval.ikora.core.types.KeywordType;
-import lu.uni.serval.ikora.core.types.StringType;
-import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class ArgumentUtils {
     private ArgumentUtils() {}
 
     public static boolean contains(NodeList<Argument> arguments, Value value){
         return arguments.stream().map(Argument::getDefinition).anyMatch(v -> v == value);
-    }
-
-    public static Class<? extends BaseType> getArgumentType(Argument argument){
-        SourceNode parent = argument.getAstParent(true);
-
-        if(parent == null || parent.getClass() != KeywordCall.class){
-            return StringType.class;
-        }
-
-        final Optional<Keyword> keyword = ((KeywordCall)parent).getKeyword();
-
-        if(!keyword.isPresent()){
-            return StringType.class;
-        }
-
-        final BaseTypeList argumentTypes = keyword.get().getArgumentTypes();
-        int index = ((KeywordCall) parent).getArgumentList().indexOf(argument);
-
-        if(index < 0 || index >= argumentTypes.size()){
-            return StringType.class;
-        }
-
-        return argumentTypes.get(index).getClass();
-    }
-
-    public static List<Pair<String, SourceNode>> getArgumentValues(Argument argument){
-        final List<Pair<String, SourceNode>> values = new ArrayList<>();
-
-        for(Node node: ValueResolver.getValueNodes(argument)){
-            if(node instanceof Literal){
-                values.add(Pair.of(node.getName(), (SourceNode) node));
-            }
-            else if(node instanceof Argument){
-                values.add(Pair.of(node.getName(), ((Argument)node).getDefinition()));
-            }
-            else if (node instanceof LibraryVariable){
-                values.add(Pair.of(node.getName(), argument));
-            }
-            else if(node instanceof VariableAssignment){
-                values.addAll(getAssignmentValue((VariableAssignment)node));
-            }
-        }
-
-        return values;
-    }
-
-    private static List<Pair<String, SourceNode>> getAssignmentValue(final VariableAssignment assignment){
-        final List<List<String>> values = new ArrayList<>();
-
-        for(Argument argument: assignment.getValues()){
-            values.add(getArgumentValues(argument).stream().map(Pair::getLeft).collect(Collectors.toList()));
-        }
-
-        return Permutations.permutations(values).stream()
-                .map(v -> Pair.of(String.join("\t", v), (SourceNode)assignment))
-                .collect(Collectors.toList());
     }
 
     public static NodeList<Value> toValues(int offset, List<Argument> argumentList){
@@ -104,5 +45,14 @@ public class ArgumentUtils {
         }
 
         return values;
+    }
+
+    public static Map<SourceNode, Set<Node>> getValues(Argument argument) {
+        final VisitorMemory memory = new PathMemory();
+        final ValueVisitor visitor = new ValueVisitor();
+
+        visitor.visit(argument, memory);
+
+        return visitor.getNodeToDefinitionMap();
     }
 }
