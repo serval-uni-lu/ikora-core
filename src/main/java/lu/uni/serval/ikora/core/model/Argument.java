@@ -23,7 +23,6 @@ package lu.uni.serval.ikora.core.model;
 import lu.uni.serval.ikora.core.analytics.difference.Edit;
 import lu.uni.serval.ikora.core.analytics.visitor.NodeVisitor;
 import lu.uni.serval.ikora.core.analytics.visitor.VisitorMemory;
-import lu.uni.serval.ikora.core.builder.resolver.ValueResolver;
 import lu.uni.serval.ikora.core.runner.Runtime;
 import lu.uni.serval.ikora.core.types.BaseType;
 import lu.uni.serval.ikora.core.types.UnresolvedType;
@@ -105,7 +104,7 @@ public class Argument extends SourceNode implements HiddenAstNode {
 
     @Override
     public boolean matches(Token name) {
-        return ValueResolver.matches(this.name, name);
+        return this.getDefinition().matches(name);
     }
 
     @Override

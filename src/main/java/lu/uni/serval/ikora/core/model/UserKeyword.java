@@ -106,7 +106,7 @@ public class UserKeyword extends KeywordDefinition {
     public List<Dependable> findDefinition(Variable variable) {
         final List<Dependable> definitions = super.findDefinition(variable);
 
-        if(arguments.stream().anyMatch(v -> v.matches(variable.getDefinitionToken()))){
+        if(arguments.stream().anyMatch(v -> v.getDefinition() != variable && v.matches(variable.getDefinitionToken()))){
             definitions.add(this);
         }
 

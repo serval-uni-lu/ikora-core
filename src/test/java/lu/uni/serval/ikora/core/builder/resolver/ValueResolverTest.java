@@ -25,6 +25,8 @@ import lu.uni.serval.ikora.core.builder.Builder;
 import lu.uni.serval.ikora.core.builder.resolver.ValueResolver;
 import lu.uni.serval.ikora.core.model.*;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import java.util.List;
 import java.util.Set;
@@ -32,10 +34,15 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ValueResolverTest {
-    @Test
-    void testSimpleMatch(){
-        Token left = Token.fromString("Input password");
-        Token right = Token.fromString("Input password");
+    @ParameterizedTest
+    @CsvSource({
+            "Input password, Input password",
+            "input password, INPUT PASSWORD",
+            "${password}, ${password_field}"
+    })
+    void testMatchTrue(String lefText, String rightText){
+        Token left = Token.fromString(lefText);
+        Token right = Token.fromString(rightText);
 
         assertTrue(ValueResolver.matches(left, right));
     }
