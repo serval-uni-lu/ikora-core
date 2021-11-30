@@ -41,22 +41,10 @@ public class ArgumentResolver {
             final BaseType type = argumentTypes.get(position);
 
             if(argument.isListVariable()){
-                if(type.getClass().isAssignableFrom(ListType.class)){
-                    argument.setType(type);
-                }
-                else {
-                    argument.setType(UnresolvedType.get());
-                    canResolve = false;
-                }
+                canResolve = assignType(type, ListType.class, argument);
             }
             else if(argument.isDictionaryVariable()){
-                if(type.getClass().isAssignableFrom(DictionaryType.class)){
-                    argument.setType(type);
-                }
-                else {
-                    argument.setType(UnresolvedType.get());
-                    canResolve = false;
-                }
+                canResolve = assignType(type, DictionaryType.class, argument);
             }
             else if(KeywordType.class.isAssignableFrom(type.getClass())){
                 final List<Argument> argumentsToProcess = argumentList.subList(position, argumentList.size());
@@ -74,6 +62,20 @@ public class ArgumentResolver {
                 argument.setType(type);
             }
         }
+    }
+
+    private static boolean assignType(BaseType type, Class<? extends BaseType> expected, Argument argument){
+        boolean canResolve = true;
+
+        if(type.getClass().isAssignableFrom(expected)){
+            argument.setType(type);
+        }
+        else {
+            argument.setType(UnresolvedType.get());
+            canResolve = false;
+        }
+
+        return canResolve;
     }
 
     private static KeywordCall createKeywordArgument(List<Argument> arguments) {
