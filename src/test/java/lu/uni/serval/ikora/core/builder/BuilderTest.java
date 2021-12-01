@@ -21,6 +21,9 @@ package lu.uni.serval.ikora.core.builder;
  */
 
 import lu.uni.serval.ikora.core.builder.resolver.ValueResolver;
+import lu.uni.serval.ikora.core.error.Error;
+import lu.uni.serval.ikora.core.error.ErrorMessages;
+import lu.uni.serval.ikora.core.error.SyntaxError;
 import lu.uni.serval.ikora.core.model.*;
 import lu.uni.serval.ikora.core.types.ConditionType;
 import lu.uni.serval.ikora.core.types.KeywordType;
@@ -498,5 +501,26 @@ class BuilderTest {
         final KeywordCall call = (KeywordCall)keyword.getStep(0);
         assertEquals(1, call.getArgumentList().size());
         assertEquals(UnresolvedType.class, call.getArgumentList().get(0).getType().getClass());
+    }
+
+    @Test
+    void testTooManyArguments(){
+        final String code =
+                "*** Settings ***\n" +
+                "Library    Selenium2Library\n" +
+                "*** Test Cases ***\n" +
+                "Valid Login\n" +
+                "    Open Browser To Login Page\n" +
+                "\n" +
+                "*** Keywords ***\n" +
+                "Open Browser To Login Page\n" +
+                "    Set Selenium Speed    0    Extra argument";
+
+        final BuildResult build = Builder.build(code, true);
+        assertFalse(build.getErrors().isEmpty());
+
+        final Set<SyntaxError> syntaxErrors = build.getErrors().inMemory().getSyntaxErrors();
+        assertEquals(1, syntaxErrors.size());
+        assertTrue(syntaxErrors.iterator().next().getMessage().startsWith(ErrorMessages.TOO_MANY_KEYWORD_ARGUMENTS));
     }
 }

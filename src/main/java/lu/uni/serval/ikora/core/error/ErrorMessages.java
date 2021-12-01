@@ -40,4 +40,5 @@ public class ErrorMessages {
     public static final String FAILED_TO_PARSE_STEP = "Failed to parse step";
     public static final String ASSIGNMENT_SHOULD_HAVE_LEFT_HAND_OPERAND = "Assignment should have left hand operand";
     public static final String ASSIGNMENT_SHOULD_START_WITH_VARIABLE = "Assignment should start with a variable";
+    public static final String TOO_MANY_KEYWORD_ARGUMENTS = "Too many keywords arguments";
 }

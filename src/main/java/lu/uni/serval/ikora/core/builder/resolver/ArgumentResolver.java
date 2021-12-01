@@ -29,15 +29,22 @@ public class ArgumentResolver {
         boolean canResolve = true;
         int position = 0;
         for(; position < argumentList.size() && canResolve; ++position){
+            final Argument argument = argumentList.get(position);
+
             if(position >= argumentTypes.size()){
                 runtime.getErrors().registerSyntaxError(
                         call.getSource(),
-                        ErrorMessages.FAILED_TO_LOCATE_ITERATOR_IN_FOR_LOOP,
+                        String.format("%s: expected %d but got %d", ErrorMessages.TOO_MANY_KEYWORD_ARGUMENTS, argumentTypes.size(), argumentList.size()),
                         Range.fromToken(call.getDefinitionToken())
                 );
+
+                while (position < argumentList.size()){
+                    argumentList.get(position++).setType(UnresolvedType.get());
+                }
+
+                break;
             }
 
-            final Argument argument = argumentList.get(position);
             final BaseType type = argumentTypes.get(position);
 
             if(argument.isListVariable()){
