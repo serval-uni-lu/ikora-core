@@ -30,4 +30,12 @@ public abstract class Value extends SourceNode {
 
         return first.map(values::indexOf).orElse(-1);
     }
+
+    public boolean isVariable(){
+        return Variable.class.isAssignableFrom(this.getClass());
+    }
+
+    public boolean isLiteral(){
+        return Literal.class.isAssignableFrom(this.getClass());
+    }
 }

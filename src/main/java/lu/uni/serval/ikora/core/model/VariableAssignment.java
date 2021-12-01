@@ -25,6 +25,7 @@ import lu.uni.serval.ikora.core.analytics.visitor.NodeVisitor;
 import lu.uni.serval.ikora.core.analytics.visitor.VisitorMemory;
 import lu.uni.serval.ikora.core.exception.RunnerException;
 import lu.uni.serval.ikora.core.runner.Runtime;
+import lu.uni.serval.ikora.core.types.UnresolvedType;
 import lu.uni.serval.ikora.core.utils.LevenshteinDistance;
 import org.apache.commons.lang3.NotImplementedException;
 
@@ -60,7 +61,7 @@ public class VariableAssignment extends SourceNode implements Dependable{
 
     public void addValue(SourceNode value) {
         this.addTokens(value.getTokens());
-        this.values.add(new Argument(value));
+        this.values.add(new Argument(value, UnresolvedType.get(), this.values.size()));
     }
 
     public Variable getVariable(){

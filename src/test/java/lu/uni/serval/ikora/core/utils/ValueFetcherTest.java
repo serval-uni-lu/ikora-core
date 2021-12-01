@@ -27,17 +27,13 @@ import lu.uni.serval.ikora.core.types.ListType;
 import lu.uni.serval.ikora.core.types.LocatorType;
 import lu.uni.serval.ikora.core.types.StringType;
 import lu.uni.serval.ikora.core.types.TimeoutType;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@Disabled
-class ArgumentUtilsTest {
+class ValueFetcherTest {
     @Test
     void testGetArgumentTypeForUserKeywordWithLiterals(){
         final String code =
@@ -126,16 +122,16 @@ class ArgumentUtilsTest {
                 "    Log    ${value}\n" +
                 "*** Variables ***\n" +
                 "${value}    value-${env}\n" +
-                "${env}    test\n" +
-                "${value-test}    25\n";
+                "${env}    test\n";
 
         final BuildResult result = Builder.build(code, true);
         final Project project = result.getProjects().iterator().next();
 
         UserKeyword keyword = project.findUserKeyword(Token.fromString("Some keyword")).iterator().next();
 
-        final Map<SourceNode, Set<Node>> values = ArgumentUtils.getValues(keyword.getStep(0).getArgumentList().get(0));
+        final Set<String> values = ValueFetcher.getValues(keyword.getStep(0).getArgumentList().get(0));
         assertEquals(1, values.size());
+        assertEquals("value-test", values.iterator().next());
     }
 
 
@@ -150,17 +146,16 @@ class ArgumentUtilsTest {
                 "    Log    ${arg}\n" +
                 "*** Variables ***\n" +
                 "${value}    value-${env}\n" +
-                "${env}    test\n" +
-                "${value-test}    25\n";
+                "${env}    test\n";
 
         final BuildResult result = Builder.build(code, true);
         final Project project = result.getProjects().iterator().next();
 
         UserKeyword keyword = project.findUserKeyword(Token.fromString("Some keyword")).iterator().next();
 
-        final Map<SourceNode, Set<Node>> values = ArgumentUtils.getValues(keyword.getStep(0).getArgumentList().get(0));
+        final Set<String> values = ValueFetcher.getValues(keyword.getStep(0).getArgumentList().get(0));
         assertEquals(1, values.size());
-        assertEquals("value-${env}", values.entrySet().iterator().next().getKey().getName());
+        assertEquals("value-test", values.iterator().next());
     }
 
     @Test
@@ -176,7 +171,7 @@ class ArgumentUtilsTest {
 
         UserKeyword keyword = project.findUserKeyword(Token.fromString("Some keyword")).iterator().next();
 
-        final Map<SourceNode, Set<Node>> values = ArgumentUtils.getValues(keyword.getStep(0).getArgumentList().get(0));
+        final Set<String> values = ValueFetcher.getValues(keyword.getStep(0).getArgumentList().get(0));
         assertEquals(0, values.size());
     }
 
@@ -209,15 +204,11 @@ class ArgumentUtilsTest {
         final UserKeyword followLink = project.findUserKeyword(FileUtils.IN_MEMORY, "Follow the link").iterator().next();
         assertNotNull(followLink);
 
-        final Map<SourceNode, Set<Node>> values = ArgumentUtils.getValues(followLink.getStep(0).getArgumentList().get(0));
+        final Set<String> values = ValueFetcher.getValues(followLink.getStep(0).getArgumentList().get(0));
         assertEquals(2, values.size());
 
-        final Set<String> names = values.keySet().stream()
-                .map(SourceNode::getName)
-                .collect(Collectors.toSet());
-
-        assertTrue(names.contains("link_to_click"));
-        assertTrue(names.contains("css:.covid-form > div"));
+        assertTrue(values.contains("link_to_click"));
+        assertTrue(values.contains("css:.covid-form > div"));
     }
 
     @Test
@@ -237,7 +228,7 @@ class ArgumentUtilsTest {
         final UserKeyword something = project.findUserKeyword(FileUtils.IN_MEMORY, "Something").iterator().next();
         assertNotNull(something);
 
-        final Map<SourceNode, Set<Node>> values = ArgumentUtils.getValues(something.getStep(0).getArgumentList().get(0));
+        final Set<String> values = ValueFetcher.getValues(something.getStep(0).getArgumentList().get(0));
         assertEquals(0, values.size());
     }
 }

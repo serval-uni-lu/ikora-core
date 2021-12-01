@@ -21,8 +21,8 @@ package lu.uni.serval.ikora.core.runner;
  */
 
 import lu.uni.serval.ikora.core.analytics.KeywordStatistics;
+import lu.uni.serval.ikora.core.builder.DynamicImports;
 import lu.uni.serval.ikora.core.model.*;
-import lu.uni.serval.ikora.core.utils.ArgumentUtils;
 
 import java.util.*;
 
@@ -97,7 +97,7 @@ public class StaticScope implements Scope{
 
         final Token name = argumentList.get(0).getDefinitionToken();
 
-        final Resources resources = new Resources(Token.empty(), name, ArgumentUtils.toValues(1, argumentList));
+        final Resources resources = new Resources(Token.empty(), name, DynamicImports.getImportArguments(argumentList));
         dynamicLibrary.get(keyword).add(resources);
     }
 

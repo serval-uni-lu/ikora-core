@@ -21,14 +21,12 @@ package lu.uni.serval.ikora.core.builder;
  */
 
 import lu.uni.serval.ikora.core.builder.resolver.ValueResolver;
-import lu.uni.serval.ikora.core.error.Error;
 import lu.uni.serval.ikora.core.error.ErrorMessages;
 import lu.uni.serval.ikora.core.error.SyntaxError;
 import lu.uni.serval.ikora.core.model.*;
 import lu.uni.serval.ikora.core.types.ConditionType;
 import lu.uni.serval.ikora.core.types.KeywordType;
 import lu.uni.serval.ikora.core.types.UnresolvedType;
-import lu.uni.serval.ikora.core.utils.ArgumentUtils;
 import lu.uni.serval.ikora.core.utils.FileUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

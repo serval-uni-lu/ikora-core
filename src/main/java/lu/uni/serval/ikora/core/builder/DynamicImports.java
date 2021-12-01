@@ -24,7 +24,7 @@ import lu.uni.serval.ikora.core.libraries.builtin.keywords.ImportResource;
 import lu.uni.serval.ikora.core.libraries.builtin.keywords.ImportLibrary;
 import lu.uni.serval.ikora.core.libraries.builtin.keywords.ImportVariables;
 import lu.uni.serval.ikora.core.model.*;
-import lu.uni.serval.ikora.core.utils.ArgumentUtils;
+import lu.uni.serval.ikora.core.types.KeywordType;
 import org.apache.commons.lang3.NotImplementedException;
 
 import java.util.*;
@@ -64,7 +64,7 @@ public class DynamicImports {
 
             Token name = argumentList.get(0).getDefinitionToken();
 
-            Library library = new Library(Token.empty(), name, ArgumentUtils.toValues(1, argumentList));
+            Library library = new Library(Token.empty(), name, getImportArguments(argumentList));
             current.add(library);
         }
     }
@@ -76,7 +76,7 @@ public class DynamicImports {
 
             Token name = argumentList.get(0).getDefinitionToken();
 
-            Resources resource = new Resources(Token.empty(), name, ArgumentUtils.toValues(1, argumentList));
+            Resources resource = new Resources(Token.empty(), name, getImportArguments(argumentList));
             current.add(resource);
         }
     }
@@ -88,8 +88,20 @@ public class DynamicImports {
 
             Token name = argumentList.get(0).getDefinitionToken();
 
-            VariableFile variableFile = new VariableFile(Token.empty(), name, ArgumentUtils.toValues(1, argumentList));
+            VariableFile variableFile = new VariableFile(Token.empty(), name, getImportArguments(argumentList));
             current.add(variableFile);
         }
+    }
+
+    public static NodeList<Value> getImportArguments(List<Argument> argumentList){
+        final NodeList<Value> values = new NodeList<>();
+
+        for(Argument argument: argumentList.subList(1, argumentList.size())){
+            if(!argument.isType(KeywordType.class)){
+                values.add((Value) argument.getDefinition());
+            }
+        }
+
+        return values;
     }
 }

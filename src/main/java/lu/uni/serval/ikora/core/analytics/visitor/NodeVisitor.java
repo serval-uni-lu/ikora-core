@@ -40,5 +40,6 @@ public interface NodeVisitor {
     void visit(VariableAssignment variableAssignment, VisitorMemory memory);
     void visit(LibraryVariable variable, VisitorMemory memory);
     void visit(TestProcessing testProcessing, VisitorMemory memory);
+    void visit(Literal literal, VisitorMemory memory);
     <T extends SourceNode> void visit(SourceNodeTable<T> ts, VisitorMemory memory);
 }

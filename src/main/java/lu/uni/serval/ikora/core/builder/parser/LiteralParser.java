@@ -22,6 +22,7 @@ package lu.uni.serval.ikora.core.builder.parser;
 
 import lu.uni.serval.ikora.core.builder.resolver.ValueResolver;
 import lu.uni.serval.ikora.core.model.Literal;
+import lu.uni.serval.ikora.core.model.NodeList;
 import lu.uni.serval.ikora.core.model.Token;
 import lu.uni.serval.ikora.core.model.Variable;
 
@@ -40,6 +41,6 @@ public class LiteralParser {
                 .map(Optional::get)
                 .collect(Collectors.toList());
 
-        return new Literal(token, variables);
+        return new Literal(token, new NodeList<>(variables));
     }
 }

@@ -112,4 +112,9 @@ public class DependencyVisitor implements NodeVisitor {
     public void visit(TestProcessing testProcessing, VisitorMemory memory) {
         VisitorUtils.traverseDependencies(this, testProcessing, memory);
     }
+
+    @Override
+    public void visit(Literal literal, VisitorMemory memory) {
+        VisitorUtils.traverseDependencies(this, literal, memory);
+    }
 }

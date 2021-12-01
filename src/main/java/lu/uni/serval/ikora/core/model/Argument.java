@@ -25,7 +25,6 @@ import lu.uni.serval.ikora.core.analytics.visitor.NodeVisitor;
 import lu.uni.serval.ikora.core.analytics.visitor.VisitorMemory;
 import lu.uni.serval.ikora.core.runner.Runtime;
 import lu.uni.serval.ikora.core.types.BaseType;
-import lu.uni.serval.ikora.core.types.UnresolvedType;
 
 import java.util.Collections;
 import java.util.List;
@@ -48,10 +47,6 @@ public class Argument extends SourceNode implements HiddenAstNode {
 
         this.type = type;
         this.position = position;
-    }
-
-    public Argument(SourceNode definition) {
-        this(definition, UnresolvedType.get(), -1);
     }
 
     public SourceNode getDefinition() {

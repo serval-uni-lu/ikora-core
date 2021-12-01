@@ -112,4 +112,9 @@ public class EmptyVisitor implements NodeVisitor{
     public void visit(TestProcessing testProcessing, VisitorMemory memory) {
         //nothing to do in this node
     }
+
+    @Override
+    public void visit(Literal literal, VisitorMemory memory) {
+        //nothing to do in this node
+    }
 }

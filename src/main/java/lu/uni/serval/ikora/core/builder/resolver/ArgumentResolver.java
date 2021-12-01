@@ -12,9 +12,22 @@ import java.util.List;
 public class ArgumentResolver {
     private ArgumentResolver() {}
 
+    public static void resolve(Argument argument, Runtime runtime) {
+        final List<Variable> variables = new ArrayList<>();
+
+        if(argument.isVariable()){
+            variables.add((Variable)argument.getDefinition());
+        }
+        else if(argument.isLiteral()){
+            variables.addAll(((Literal)argument.getDefinition()).getVariables());
+        }
+
+        variables.forEach(v -> VariableResolver.resolve(v, runtime));
+    }
+
     public static void resolve(KeywordCall call, Runtime runtime) {
         for(Argument argument: call.getArgumentList()){
-            resolveArgumentVariables(argument, runtime);
+            resolve(argument, runtime);
         }
 
         call.getKeyword().ifPresent(k -> resolveTypes(call, k, runtime));
@@ -22,7 +35,7 @@ public class ArgumentResolver {
         updateScope(call, runtime);
     }
 
-    public static void resolveTypes(KeywordCall call, Keyword keyword, Runtime runtime){
+    private static void resolveTypes(KeywordCall call, Keyword keyword, Runtime runtime){
         final NodeList<Argument> argumentList = call.getArgumentList();
         final BaseTypeList argumentTypes = keyword.getArgumentTypes();
 
@@ -98,20 +111,6 @@ public class ArgumentResolver {
         call.setArgumentList(argumentList);
 
         return call;
-    }
-
-    private static void resolveArgumentVariables(Argument argument, Runtime runtime) {
-        final SourceNode definition = argument.getDefinition();
-        final List<Variable> variables = new ArrayList<>();
-
-        if(Variable.class.isAssignableFrom(definition.getClass())){
-            variables.add((Variable)definition);
-        }
-        else if(Literal.class.isAssignableFrom(definition.getClass())){
-            variables.addAll(((Literal)definition).getVariables());
-        }
-
-        variables.forEach(v -> VariableResolver.resolve(v, runtime));
     }
 
     private static void updateScope(KeywordCall call, Runtime runtime) {

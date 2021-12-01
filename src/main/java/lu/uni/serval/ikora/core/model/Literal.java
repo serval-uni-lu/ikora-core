@@ -32,20 +32,21 @@ import java.util.List;
 
 public class Literal extends Value {
     private final Token name;
-    private final List<Variable> variables;
+    private final NodeList<Variable> variables;
 
     public Literal(Token name) {
         this.name = name;
-        this.variables = Collections.emptyList();
+        this.variables = new NodeList<>();
 
         addToken(this.name);
     }
 
-    public Literal(Token name, List<Variable> variables) {
+    public Literal(Token name, NodeList<Variable> variables) {
         this.name = name;
         this.variables = variables;
 
         addToken(this.name);
+        addAstChild(variables);
     }
 
     public List<Variable> getVariables() {

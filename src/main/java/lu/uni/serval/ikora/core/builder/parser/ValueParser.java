@@ -52,6 +52,6 @@ public class ValueParser {
             return entry.get();
         }
 
-        return new Literal(token);
+        return LiteralParser.parse(token);
     }
 }

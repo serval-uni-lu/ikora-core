@@ -23,6 +23,7 @@ package lu.uni.serval.ikora.core.builder.parser;
 import lu.uni.serval.ikora.core.error.ErrorManager;
 import lu.uni.serval.ikora.core.error.ErrorMessages;
 import lu.uni.serval.ikora.core.model.*;
+import lu.uni.serval.ikora.core.types.UnresolvedType;
 
 import java.util.Iterator;
 import java.util.Optional;
@@ -48,10 +49,11 @@ public class KeywordCallParser {
 
         final NodeList<Argument> arguments = new NodeList<>();
 
+        int position = 0;
         while(tokenIterator.hasNext()) {
             final Token token = tokenIterator.next();
             final Optional<Variable> variable = VariableParser.parse(token);
-            final Argument argument = new Argument(variable.isPresent() ? variable.get() : new Literal(token));
+            final Argument argument = new Argument(variable.isPresent() ? variable.get() : new Literal(token), UnresolvedType.get(), position);
             arguments.add(argument);
         }
 

@@ -20,6 +20,7 @@ package lu.uni.serval.ikora.core.model;
  * #L%
  */
 
+import lu.uni.serval.ikora.core.exception.InvalidArgumentException;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
@@ -212,6 +213,27 @@ public class Token implements Comparable<Token> {
         }
 
         return tokens;
+    }
+
+    public Token replace(Token token, String value) {
+        return replace(token.startOffset, token.endOffset, value);
+    }
+
+    public Token replace(int startOffset, int endOffset, String value){
+        if(startOffset < this.startOffset){
+            throw new IndexOutOfBoundsException(String.format("Start Offset [%d] can not be lower than token Start Offset [%d]", startOffset, this.startOffset));
+        }
+
+        if(endOffset > this.endOffset){
+            throw new IndexOutOfBoundsException(String.format("End Offset [%d] can not be higher than token End Offset [%d]", endOffset, this.endOffset));
+        }
+
+        if(startOffset > endOffset){
+            throw new InvalidArgumentException(String.format("End Offset [%d] cannot be lower than Start Offset [%d]", endOffset, startOffset));
+        }
+
+        final String newText = this.text.substring(0, startOffset - this.startOffset) + value + this.text.substring(endOffset - this.startOffset, this.endOffset - this.startOffset);
+        return new Token(newText, this.line, this.startOffset, this.startOffset + newText.length(), this.type);
     }
 
     public static Token fromString(String text) {

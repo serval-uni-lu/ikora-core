@@ -22,6 +22,7 @@ package lu.uni.serval.ikora.core.model;
 
 import lu.uni.serval.ikora.core.analytics.difference.Edit;
 import lu.uni.serval.ikora.core.exception.MalformedVariableException;
+import lu.uni.serval.ikora.core.types.StringType;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -36,9 +37,9 @@ class KeywordCallTest {
         final Literal literal = new Literal(Token.fromString("value"));
 
         final NodeList<Argument> arguments = new NodeList<>();
-        arguments.add(new Argument(variable1));
-        arguments.add(new Argument(variable2));
-        arguments.add(new Argument(literal));
+        arguments.add(new Argument(variable1, new StringType("user keyword argument"), 0));
+        arguments.add(new Argument(variable2, new StringType("user keyword argument"), 0));
+        arguments.add(new Argument(literal, new StringType("user keyword argument"), 0));
 
         final KeywordCall call = new KeywordCall(Token.fromString("Call"));
         call.setArgumentList(arguments);
@@ -56,14 +57,14 @@ class KeywordCallTest {
     void testDifferenceWithChangeInArgumentType() throws MalformedVariableException {
         final KeywordCall call1 = new KeywordCall(Token.fromString("Call"));
         final NodeList<Argument> arguments1 = new NodeList<>();
-        arguments1.add(new Argument(new Literal(Token.fromString("value1"))));
-        arguments1.add(new Argument(new Literal(Token.fromString("value2"))));
+        arguments1.add(new Argument(new Literal(Token.fromString("value1")), new StringType("user keyword argument"), 0));
+        arguments1.add(new Argument(new Literal(Token.fromString("value2")), new StringType("user keyword argument"), 0));
         call1.setArgumentList(arguments1);
 
         final KeywordCall call2 = new KeywordCall(Token.fromString("Call"));
         final NodeList<Argument> arguments2 = new NodeList<>();
-        arguments2.add(new Argument(Variable.create(Token.fromString("${variable}"))));
-        arguments2.add(new Argument(new Literal(Token.fromString("value2"))));
+        arguments2.add(new Argument(Variable.create(Token.fromString("${variable}")), new StringType("user keyword argument"), 0));
+        arguments2.add(new Argument(new Literal(Token.fromString("value2")), new StringType("user keyword argument"), 0));
         call2.setArgumentList(arguments2);
 
         final List<Edit> differences = call1.differences(call2);

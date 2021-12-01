@@ -112,4 +112,14 @@ public class UserKeyword extends KeywordDefinition {
 
         return definitions;
     }
+
+    public Optional<Argument> findArgument(Token name) {
+        for(Argument current: arguments){
+            if(current.matches(name)){
+                return Optional.of(current);
+            }
+        }
+
+        return Optional.empty();
+    }
 }

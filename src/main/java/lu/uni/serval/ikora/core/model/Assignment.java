@@ -57,7 +57,7 @@ public class Assignment extends Step implements Dependable {
         }
 
         if(rightHandOperand != null){
-            this.rightHandOperand = new Argument(rightHandOperand);
+            this.rightHandOperand = new Argument(rightHandOperand, new KeywordType("Assignment"), 0);
             this.addAstChild(this.rightHandOperand);
 
             this.addTokens(this.rightHandOperand.getTokens());

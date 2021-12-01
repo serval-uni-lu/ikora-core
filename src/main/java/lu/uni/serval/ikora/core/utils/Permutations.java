@@ -20,15 +20,12 @@ package lu.uni.serval.ikora.core.utils;
  * #L%
  */
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class Permutations {
     private Permutations() {}
 
-    public static <T> Collection<List<T>> permutations(List<List<T>> lists) {
+    public static <T> Collection<List<T>> permutations(List<Set<T>> lists) {
         if (lists == null || lists.isEmpty()) {
             return Collections.emptyList();
         }
@@ -39,7 +36,7 @@ public class Permutations {
         return res;
     }
 
-    private static <T> void permutationsImpl(List<List<T>> origin, Collection<List<T>> res, int depth, List<T> current) {
+    private static <T> void permutationsImpl(List<Set<T>> origin, Collection<List<T>> res, int depth, List<T> current) {
         if (depth == origin.size()) {
             res.add(current);
             return;

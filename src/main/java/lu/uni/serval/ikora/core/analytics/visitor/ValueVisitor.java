@@ -2,31 +2,40 @@ package lu.uni.serval.ikora.core.analytics.visitor;
 
 import lu.uni.serval.ikora.core.model.*;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class ValueVisitor extends EmptyVisitor {
-    private final Map<SourceNode, Set<Node>> nodeToDefinitionMap = new HashMap<>();
+    private final Map<Variable, Set<Value>> nodeToDefinitionMap = new HashMap<>();
+    private final Deque<Variable> variableStack = new LinkedList<>();
+    private final Deque<Argument> argumentStack = new LinkedList<>();
 
-    private Argument previousArgument = null;
-
-    public Map<SourceNode, Set<Node>> getNodeToDefinitionMap() {
+    public Map<Variable, Set<Value>> getVariableToValue() {
         return nodeToDefinitionMap;
     }
 
-    private void addToMap(SourceNode origin, Node definition){
-        nodeToDefinitionMap.putIfAbsent(origin, new HashSet<>());
-        nodeToDefinitionMap.get(origin).add(definition);
+    private void addToMap(Variable variable, Value value){
+        nodeToDefinitionMap.putIfAbsent(variable, new HashSet<>());
+        nodeToDefinitionMap.get(variable).add(value);
     }
 
     @Override
     public void visit(Assignment assignment, VisitorMemory memory) {
-        if(memory.isAcceptable(assignment)){
-            memory.getUpdated(assignment);
-            addToMap(assignment, assignment.getKeywordCall().orElse(null));
+        addToMap(variableStack.peek(), null);
+    }
+
+    @Override
+    public void visit(UserKeyword keyword, VisitorMemory memory) {
+        if(!argumentStack.isEmpty()){
+            final Optional<Argument> argument = keyword.findArgument(argumentStack.peek().getDefinitionToken());
+
+            if(argument.isPresent()){
+
+                argumentStack.push(argument.get());
+                VisitorUtils.traverseDependencies(this, keyword, memory);
+                argumentStack.pop();
+            }
         }
+
     }
 
     @Override
@@ -46,42 +55,68 @@ public class ValueVisitor extends EmptyVisitor {
 
     @Override
     public void visit(KeywordCall call, VisitorMemory memory){
-        final int position = previousArgument.getPosition();
-        previousArgument = null;
+        if(!argumentStack.isEmpty()){
+            final int position = argumentStack.peek().getPosition();
 
-        if(position <= call.getArgumentList().size()){
-            final Argument argument = call.getArgumentList().get(position);
-            addToMap(previousArgument, argument);
-            argument.accept(this, memory);
+            if(position < call.getArgumentList().size()){
+                final Argument argument = call.getArgumentList().get(position);
+                visit(argument, memory);
+            }
         }
     }
 
     @Override
     public void visit(Argument argument, VisitorMemory memory) {
-        previousArgument = argument;
-        traverse(argument, memory);
+        argumentStack.push(argument);
+        argument.getDefinition().accept(this, memory);
+        argumentStack.pop();
     }
 
     @Override
     public void visit(VariableAssignment assignment, VisitorMemory memory) {
-        traverse(assignment, memory);
+        addToMap(variableStack.peek(), assignment.getVariable());
+        variableStack.push(assignment.getVariable());
+
+        for(Argument argument: assignment.getValues()){
+            argument.accept(this, memory);
+        }
+
+        variableStack.pop();
     }
 
-    private void traverse(Node node, VisitorMemory memory){
-        memory = memory.getUpdated(node);
+    @Override
+    public void visit(Literal literal, VisitorMemory memory){
+        if(memory.isAcceptable(literal)){
+            if(!variableStack.isEmpty()){
+                addToMap(variableStack.peek(), literal);
+            }
+            else {
+                addToMap(null, literal);
+            }
 
-        if(Dependable.class.isAssignableFrom(node.getClass())){
-            for(Node dependency: ((Dependable)node).getDependencies()){
-                if(memory.isAcceptable(dependency)){
-                    dependency.accept(this, memory.getUpdated(dependency));
-                }
+            for(Variable variable: literal.getVariables()){
+                variableStack.push(null);
+                variable.accept(this, memory);
+                variableStack.pop();
             }
         }
-        else if(SourceNode.class.isAssignableFrom(node.getClass())){
-            final SourceNode parent =  ((SourceNode)node).getAstParent();
-            if(memory.isAcceptable(parent)){
-                parent.accept(this, memory.getUpdated(parent));
+    }
+
+    private void traverse(Variable variable, VisitorMemory memory){
+        if(memory.isAcceptable(variable)){
+            memory = memory.getUpdated(variable);
+
+            if(variableStack.peek() != null){
+                addToMap(variableStack.peek(), variable);
             }
+
+            variableStack.push(variable);
+
+            for(Dependable dependable: variable.getDefinition(Link.Import.BOTH)){
+                dependable.accept(this, memory);
+            }
+
+            variableStack.pop();
         }
     }
 }
