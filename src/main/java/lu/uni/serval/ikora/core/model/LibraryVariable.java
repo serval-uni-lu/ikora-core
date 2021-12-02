@@ -74,7 +74,7 @@ public abstract class LibraryVariable implements Node, Dependable {
 
     @Override
     public String getLibraryName() {
-        return "builtin";
+        return Library.BUILTIN;
     }
 
     @Override

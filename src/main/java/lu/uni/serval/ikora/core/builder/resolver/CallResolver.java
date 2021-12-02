@@ -1,6 +1,5 @@
-package lu.uni.serval.ikora.core.builder;
+package lu.uni.serval.ikora.core.builder.resolver;
 
-import lu.uni.serval.ikora.core.builder.resolver.ArgumentResolver;
 import lu.uni.serval.ikora.core.error.ErrorMessages;
 import lu.uni.serval.ikora.core.model.*;
 import lu.uni.serval.ikora.core.runner.Runtime;

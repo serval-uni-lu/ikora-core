@@ -31,6 +31,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class Library extends SourceNode {
+    public static final String BUILTIN = "builtin";
+
     private final Token label;
     private final Token name;
     private final NodeList<Value> arguments;

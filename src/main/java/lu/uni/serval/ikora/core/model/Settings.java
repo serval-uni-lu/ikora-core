@@ -128,6 +128,10 @@ public class Settings extends SourceNode implements Delayable {
     }
 
     public boolean containsLibrary(String libraryName){
+        if(libraryName.equalsIgnoreCase(Library.BUILTIN)){
+            return true;
+        }
+
         return libraryTable.stream()
                 .map(Library::getDefinitionToken)
                 .anyMatch(n -> n.matches(libraryName));

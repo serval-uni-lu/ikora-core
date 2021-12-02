@@ -48,6 +48,11 @@ public class LibraryKeywordInfo extends LibraryKeyword {
     }
 
     @Override
+    public String getLibraryName(){
+        return this.library.getName();
+    }
+
+    @Override
     public Type getType() {
         return type;
     }

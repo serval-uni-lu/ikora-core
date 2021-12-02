@@ -43,7 +43,7 @@ class LibraryLoaderTest {
     }
 
     @Test
-    void testRegisterKeywordsIsComplete() throws InvocationTargetException, IllegalAccessException, InstantiationException, NoSuchMethodException {
+    void testRegisterKeywordsIsComplete() {
         final Reflections keywordReflections = new Reflections("lu.uni.serval.ikora.core.libraries.builtin.keywords");
         final Set<Class<? extends LibraryKeyword>> builtInKeywords = keywordReflections.getSubTypesOf(LibraryKeyword.class);
 
