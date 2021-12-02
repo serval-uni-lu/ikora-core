@@ -30,7 +30,7 @@ public class Violation {
 
     public enum Cause {
         MULTIPLE_DEFINITIONS,
-        INFINITE_LOOP,
+        INFINITE_CALL_RECURSION,
         NO_DEFINITION_FOUND
     }
 

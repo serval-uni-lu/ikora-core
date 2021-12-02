@@ -42,7 +42,10 @@ public class FixedMemory implements VisitorMemory {
 
     @Override
     public boolean isAcceptable(Node node) {
-        return visitsCount < maxVisits;
+        if(type == null || type.isAssignableFrom(node.getClass()))
+            return visitsCount < maxVisits;
+
+        return true;
     }
 
     @Override

@@ -73,7 +73,7 @@ public class ViolationDetection {
                     duplicatedKeyword(step, violations);
                     break;
                 case NO_DEFINITION_FOUND:
-                case INFINITE_LOOP:
+                case INFINITE_CALL_RECURSION:
                     throw new UnsupportedOperationException();
             }
         }

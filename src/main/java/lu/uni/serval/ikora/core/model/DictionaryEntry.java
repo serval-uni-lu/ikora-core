@@ -54,12 +54,12 @@ public class DictionaryEntry extends Value {
 
     @Override
     public boolean matches(Token name) {
-        return false;
+        return key.matches(name);
     }
 
     @Override
     public void accept(NodeVisitor visitor, VisitorMemory memory) {
-        //nothing to do on leaf node
+        visitor.visit(this, memory);
     }
 
     @Override
