@@ -66,21 +66,58 @@ public class ArgumentResolver {
                 canResolve = assignType(type, DictionaryType.class, argument);
             }
             else if(KeywordType.class.isAssignableFrom(type.getClass())){
-                final List<Argument> argumentsToProcess = argumentList.subList(position, argumentList.size());
-                final KeywordCall callArgument = createKeywordArgument(argumentsToProcess);
-                final NodeList<Argument> newArgumentList = new NodeList<>(argumentList.subList(0, position));
-
-                newArgumentList.add(new Argument(callArgument, type, position));
-                call.setArgumentList(newArgumentList);
-
-                CallResolver.resolve(callArgument, runtime);
-
-                break;
+                position = assignKeywordType(type, call, argumentList, position, argumentList.size(), runtime);
+            }
+            else if(KeywordListType.class.isAssignableFrom(type.getClass())){
+                position = assignKeywordListType(type, call, argumentList, position, runtime);
             }
             else {
                 argument.setType(type);
             }
         }
+    }
+
+    private static int assignKeywordListType(BaseType type, KeywordCall call, NodeList<Argument> argumentList, int position, Runtime runtime){
+        final NodeList<Argument> newArgumentList = new NodeList<>(argumentList.subList(0, position));
+        call.setArgumentList(newArgumentList);
+
+        int start = position;
+
+        while (position < argumentList.size()){
+            if(argumentList.get(position).getDefinition().getName().equalsIgnoreCase("and")) {
+                final List<Argument> argumentsToProcess = argumentList.subList(start, position);
+                final KeywordCall callArgument = createKeywordArgument(argumentsToProcess);
+                newArgumentList.add(new Argument(callArgument, new KeywordType(type.getName()), start));
+
+                CallResolver.resolve(callArgument, runtime);
+                start = position + 1;
+            }
+
+            ++position;
+        }
+
+        if(start < position){
+            final List<Argument> argumentsToProcess = argumentList.subList(start, position);
+            final KeywordCall callArgument = createKeywordArgument(argumentsToProcess);
+            newArgumentList.add(new Argument(callArgument, new KeywordType(type.getName()), start));
+
+            CallResolver.resolve(callArgument, runtime);
+        }
+
+        return position;
+    }
+
+    private static int assignKeywordType(BaseType type, KeywordCall call, NodeList<Argument> argumentList, int start, int end, Runtime runtime){
+        final List<Argument> argumentsToProcess = argumentList.subList(start, end);
+        final KeywordCall callArgument = createKeywordArgument(argumentsToProcess);
+        final NodeList<Argument> newArgumentList = new NodeList<>(argumentList.subList(0, start));
+
+        newArgumentList.add(new Argument(callArgument, type, start));
+        call.setArgumentList(newArgumentList);
+
+        CallResolver.resolve(callArgument, runtime);
+
+        return end;
     }
 
     private static boolean assignType(BaseType type, Class<? extends BaseType> expected, Argument argument){

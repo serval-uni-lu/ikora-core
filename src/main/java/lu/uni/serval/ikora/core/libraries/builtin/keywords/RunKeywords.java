@@ -22,11 +22,11 @@ package lu.uni.serval.ikora.core.libraries.builtin.keywords;
 
 import lu.uni.serval.ikora.core.model.LibraryKeyword;
 import lu.uni.serval.ikora.core.runner.Runtime;
-import lu.uni.serval.ikora.core.types.ListType;
+import lu.uni.serval.ikora.core.types.KeywordListType;
 
 public class RunKeywords extends LibraryKeyword {
     public RunKeywords(){
-        super(Type.CONTROL_FLOW, new ListType("keywords"));
+        super(Type.CONTROL_FLOW, new KeywordListType("keywords"));
     }
 
     @Override
