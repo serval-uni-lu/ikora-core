@@ -37,8 +37,6 @@ public class SymbolResolver {
             }
 
             for(VariableAssignment variableAssignment: sourceFile.getVariables()){
-                VariableResolver.resolve(variableAssignment.getVariable(), runtime);
-
                 for(Argument argument: variableAssignment.getValues()){
                     ArgumentResolver.resolve(argument, runtime);
                 }
