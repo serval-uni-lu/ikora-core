@@ -61,7 +61,9 @@ public class LibraryResources {
             if(object != null){
                 try {
                     keyword = object.getKeyword();
-                } catch (Exception e) {}
+                } catch (Exception e) {
+                    //failed to retrieve information from libraries, so it is ignored.
+                }
             }
         }
 
