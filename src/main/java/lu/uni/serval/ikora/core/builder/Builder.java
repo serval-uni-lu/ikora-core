@@ -96,27 +96,12 @@ public class Builder {
      * @return Results containing the graph, statistics about the build and eventual errors
      */
     public static BuildResult build(File file, BuildConfiguration configuration, boolean link) {
-        BuildResult result = new BuildResult();
-        ErrorManager errors = new ErrorManager();
+        final ErrorManager errors = new ErrorManager();
+        final Instant start = Instant.now();
+        final DynamicImports dynamicImports = new DynamicImports();
+        final Project project = parse(file, configuration, dynamicImports, errors);
 
-        Instant start = Instant.now();
-
-        DynamicImports dynamicImports = new DynamicImports();
-        Project project = parse(file, configuration, dynamicImports, errors);
-        result.setParsingTime(Duration.between(start, Instant.now()).toMillis());
-
-        Instant startLinking = Instant.now();
-        Runtime runtime = new Runtime(project, new StaticScope(), errors);
-        loadLibraries(runtime);
-        resolve(runtime, link);
-        result.setResolveTime(Duration.between(startLinking, Instant.now()).toMillis());
-
-        result.setBuildTime(Duration.between(start, Instant.now()).toMillis());
-
-        result.setErrors(errors);
-        result.setProjects(new Projects(project));
-
-        return result;
+        return build(project, start, link, errors);
     }
 
     /**
@@ -127,13 +112,16 @@ public class Builder {
      * @return Results containing the graph, statistics about the build and eventual errors
      */
     public static BuildResult build(String code, boolean link) {
+        final ErrorManager errors = new ErrorManager();
+        final Instant start = Instant.now();
+        final DynamicImports dynamicImports = new DynamicImports();
+        final Project project = parse(code, dynamicImports, errors);
+
+        return build(project, start, link, errors);
+    }
+
+    private static BuildResult build(Project project, Instant start, boolean link, ErrorManager errors){
         BuildResult result = new BuildResult();
-        ErrorManager errors = new ErrorManager();
-
-        Instant start = Instant.now();
-
-        DynamicImports dynamicImports = new DynamicImports();
-        Project project = parse(code, dynamicImports, errors);
         result.setParsingTime(Duration.between(start, Instant.now()).toMillis());
 
         Instant startLinking = Instant.now();

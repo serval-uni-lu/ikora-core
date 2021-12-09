@@ -28,7 +28,7 @@ public class VariableResolver {
         }
 
         if(definitions.isEmpty()){
-            runtime.findLibraryVariable("", variable.getDefinitionToken()).ifPresent(definitions::add);
+            runtime.findLibraryVariable(variable.getDefinitionToken()).ifPresent(definitions::add);
         }
 
         definitions.forEach(d -> variable.linkToDefinition(d, Link.Import.STATIC));

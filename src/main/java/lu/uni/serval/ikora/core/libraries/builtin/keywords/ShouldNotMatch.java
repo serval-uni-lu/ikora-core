@@ -31,8 +31,8 @@ public class ShouldNotMatch extends LibraryKeyword {
                 new StringType("string"),
                 new StringType("pattern"),
                 new StringType("message"),
-                new BooleanType("values", "True"),
-                new BooleanType("ignore_case", "False")
+                new BooleanType("values", BooleanType.TRUE),
+                new BooleanType("ignore_case", BooleanType.FALSE)
         );
     }
 

@@ -31,8 +31,8 @@ public class ShouldEndWith extends LibraryKeyword {
                 new StringType("string"),
                 new StringType("suffix"),
                 new StringType("message", "None"),
-                new BooleanType("values", "True"),
-                new BooleanType("ignore_case", "False")
+                new BooleanType("values", BooleanType.TRUE),
+                new BooleanType("ignore_case", BooleanType.FALSE)
         );
     }
 

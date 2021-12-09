@@ -20,6 +20,8 @@ package lu.uni.serval.ikora.core.report;
  * #L%
  */
 
+import lu.uni.serval.ikora.core.types.BooleanType;
+
 import java.text.ParseException;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -64,11 +66,11 @@ class Converter {
 
     static boolean toBoolean(String text) throws ParseException {
         if(text.equalsIgnoreCase("yes")
-        || text.equalsIgnoreCase("true")){
+        || text.equalsIgnoreCase(BooleanType.TRUE)){
             return true;
         }
         else if(text.equalsIgnoreCase("no")
-                || text.equalsIgnoreCase("false")){
+                || text.equalsIgnoreCase(BooleanType.FALSE)){
             return false;
         }
 

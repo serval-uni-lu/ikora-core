@@ -68,7 +68,7 @@ public class LibraryResources {
         return Optional.ofNullable(keyword);
     }
 
-    public Optional<LibraryVariable> findVariable(String library, Token name) {
+    public Optional<LibraryVariable> findVariable(Token name) {
         for(LibraryVariable variable: builtInVariables){
             if(variable.matches(name)){
                 return Optional.of(variable);

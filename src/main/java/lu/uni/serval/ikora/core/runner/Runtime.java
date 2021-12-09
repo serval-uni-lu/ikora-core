@@ -69,8 +69,8 @@ public class Runtime {
         return libraryKeyword.isPresent() ? libraryKeyword : libraryResources.findKeyword("", name);
     }
 
-    public Optional<LibraryVariable> findLibraryVariable(String library, Token name) {
-        return libraryResources.findVariable(library, name);
+    public Optional<LibraryVariable> findLibraryVariable(Token name) {
+        return libraryResources.findVariable(name);
     }
 
     public void addToGlobalScope(Variable variable){

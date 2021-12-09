@@ -29,7 +29,7 @@ public class GetLibraryInstance extends LibraryKeyword {
     public GetLibraryInstance(){
         super(Type.GET,
                 new StringType("name", "None"),
-                new BooleanType("all", "False")
+                new BooleanType("all", BooleanType.FALSE)
         );
     }
 

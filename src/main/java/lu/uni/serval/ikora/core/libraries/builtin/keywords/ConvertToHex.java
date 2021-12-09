@@ -32,7 +32,7 @@ public class ConvertToHex extends LibraryKeyword {
                 new StringType("item"),
                 new NumberType("base", "None"),
                 new StringType("prefix", "None"),
-                new BooleanType("lowercase", "False")
+                new BooleanType("lowercase", BooleanType.FALSE)
         );
     }
 
