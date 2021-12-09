@@ -259,6 +259,8 @@ public class Project implements Comparable<Project> {
         return base.relativize(path).toString();
     }
 
+
+
     @Override
     public int compareTo(Project other) {
         return date.compareTo(other.date);
