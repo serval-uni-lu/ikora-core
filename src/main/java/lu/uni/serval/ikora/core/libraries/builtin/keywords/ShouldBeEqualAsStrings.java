@@ -33,7 +33,7 @@ public class ShouldBeEqualAsStrings extends LibraryKeyword {
                new NumberType("second"),
                new StringType("message", "None"),
                new BooleanType("values", "None"),
-               new BooleanType("ignore_case", "False"),
+               new BooleanType("ignore_case", BooleanType.FALSE),
                new StringType("formatter", "str")
        );
     }

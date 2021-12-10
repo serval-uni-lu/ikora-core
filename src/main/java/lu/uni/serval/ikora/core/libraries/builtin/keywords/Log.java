@@ -31,9 +31,9 @@ public class Log extends LibraryKeyword {
         super(Type.LOG,
                 new StringType("message"),
                 new LogLevelType("level", "INFO"),
-                new BooleanType("html", "False"),
-                new BooleanType("console", "False"),
-                new BooleanType("repr", "False"),
+                new BooleanType("html", BooleanType.FALSE),
+                new BooleanType("console", BooleanType.FALSE),
+                new BooleanType("repr", BooleanType.FALSE),
                 new StringType("formatter", "str")
         );
     }

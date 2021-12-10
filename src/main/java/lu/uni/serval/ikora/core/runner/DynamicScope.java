@@ -26,11 +26,11 @@ import org.apache.commons.lang3.NotImplementedException;
 import java.util.*;
 
 public class DynamicScope implements Scope {
-    private SourceNodeTable<Variable> global;
-    private Deque<Block<Suite, Variable>> suiteStack;
-    private Deque<Block<TestCase, Variable>> testStack;
-    private Deque<Block<Keyword, Variable>> keywordStack;
-    private Deque<Block<Step, Argument>> argumentStack;
+    private final SourceNodeTable<Variable> global;
+    private final Deque<Block<Suite, Variable>> suiteStack;
+    private final Deque<Block<TestCase, Variable>> testStack;
+    private final Deque<Block<Keyword, Variable>> keywordStack;
+    private final Deque<Block<Step, Argument>> argumentStack;
     private NodeList<Value> returnValues;
 
     public DynamicScope(){

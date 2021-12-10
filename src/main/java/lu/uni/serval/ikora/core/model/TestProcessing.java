@@ -6,6 +6,8 @@ import lu.uni.serval.ikora.core.analytics.visitor.VisitorMemory;
 import lu.uni.serval.ikora.core.exception.RunnerException;
 import lu.uni.serval.ikora.core.runner.Runtime;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -66,6 +68,16 @@ public class TestProcessing extends SourceNode {
 
     @Override
     public List<Edit> differences(SourceNode other) {
-        return null;
+        if(other == null) return Collections.singletonList(Edit.removeElement(TestProcessing.class, this));
+        if(other == this) return Collections.emptyList();
+        if(this.getClass() != other.getClass()) return Collections.singletonList(Edit.changeType(this, other));
+
+        final List<Edit> edits = new ArrayList<>();
+        final TestProcessing that = (TestProcessing) other;
+
+        if(this.getPhase() != that.getPhase()) edits.add(Edit.changeType(this, other));
+        edits.addAll(this.call.differences(that.call));
+
+        return edits;
     }
 }

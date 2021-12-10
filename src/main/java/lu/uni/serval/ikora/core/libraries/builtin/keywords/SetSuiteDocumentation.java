@@ -29,8 +29,8 @@ public class SetSuiteDocumentation extends LibraryKeyword {
     public SetSuiteDocumentation(){
         super(Type.SET,
                 new StringType("documentation"),
-                new BooleanType("append", "False"),
-                new BooleanType("top", "False")
+                new BooleanType("append", BooleanType.FALSE),
+                new BooleanType("top", BooleanType.FALSE)
         );
     }
 

@@ -21,6 +21,9 @@ package lu.uni.serval.ikora.core.types;
  */
 
 public class BooleanType extends BaseType {
+    public static final String TRUE = "True";
+    public static final String FALSE = "FALSE";
+
     public BooleanType(String name){
         super(name, null);
     }

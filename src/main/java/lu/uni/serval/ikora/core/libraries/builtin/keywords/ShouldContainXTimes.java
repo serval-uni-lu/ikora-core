@@ -34,7 +34,7 @@ public class ShouldContainXTimes extends LibraryKeyword {
                 new StringType("item"),
                 new NumberType("count"),
                 new StringType("message", "None"),
-                new BooleanType("ignore_case", "False")
+                new BooleanType("ignore_case", BooleanType.FALSE)
         );
     }
 

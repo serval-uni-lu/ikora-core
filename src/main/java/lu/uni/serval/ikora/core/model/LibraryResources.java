@@ -61,14 +61,16 @@ public class LibraryResources {
             if(object != null){
                 try {
                     keyword = object.getKeyword();
-                } catch (Exception e) {}
+                } catch (Exception e) {
+                    //failed to retrieve information from libraries, so it is ignored.
+                }
             }
         }
 
         return Optional.ofNullable(keyword);
     }
 
-    public Optional<LibraryVariable> findVariable(String library, Token name) {
+    public Optional<LibraryVariable> findVariable(Token name) {
         for(LibraryVariable variable: builtInVariables){
             if(variable.matches(name)){
                 return Optional.of(variable);

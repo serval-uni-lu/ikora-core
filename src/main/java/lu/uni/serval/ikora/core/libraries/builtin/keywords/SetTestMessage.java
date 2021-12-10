@@ -29,7 +29,7 @@ public class SetTestMessage extends LibraryKeyword {
     public SetTestMessage(){
         super(Type.SET,
                 new StringType("message"),
-                new BooleanType("append", "False")
+                new BooleanType("append", BooleanType.FALSE)
         );
     }
 

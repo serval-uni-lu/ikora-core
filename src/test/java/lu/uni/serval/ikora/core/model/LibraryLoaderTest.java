@@ -62,7 +62,7 @@ class LibraryLoaderTest {
 
         for(Class<? extends LibraryVariable> variableClass: variableClasses){
             final Token name = Token.fromString(variableClass.getConstructor().newInstance().getName());
-            if(!resources.findVariable("", name).isPresent()){
+            if(!resources.findVariable(name).isPresent()){
                 fail(String.format("BuiltIn Variable not properly registered: %s", variableClass.getCanonicalName()));
             }
         }

@@ -85,7 +85,7 @@ public class ValueResolver {
 
         String pattern = matcher.replaceAll(placeholder).trim();
         pattern = escape(pattern);
-        pattern = pattern.replaceAll(placeholder, "(.*)");
+        pattern = pattern.replace(placeholder, "(.*)");
 
         return Pattern.compile("^" + pattern + "$", Pattern.CASE_INSENSITIVE);
     }

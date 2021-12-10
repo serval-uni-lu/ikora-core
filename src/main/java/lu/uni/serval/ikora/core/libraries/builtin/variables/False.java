@@ -25,6 +25,6 @@ import lu.uni.serval.ikora.core.types.BooleanType;
 
 public class False extends LibraryVariable {
     public False(){
-        super(new BooleanType("FALSE"), Format.SCALAR);
+        super(new BooleanType(BooleanType.FALSE), Format.SCALAR);
     }
 }

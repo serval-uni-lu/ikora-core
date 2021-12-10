@@ -29,7 +29,7 @@ public class SetTestDocumentation extends LibraryKeyword {
     public SetTestDocumentation(){
         super(Type.SET,
                 new StringType("documentation"),
-                new BooleanType("False")
+                new BooleanType(BooleanType.FALSE)
         );
     }
 
