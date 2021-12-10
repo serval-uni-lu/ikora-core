@@ -26,7 +26,7 @@ import lu.uni.serval.ikora.core.types.KeywordType;
 
 public class RunKeywordAndReturnStatus extends LibraryKeyword {
     public RunKeywordAndReturnStatus(){
-        super(Type.CONTROL_FLOW, new KeywordType("keyword"));
+        super(Type.RUN, new KeywordType("keyword"));
     }
 
     @Override

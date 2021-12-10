@@ -25,7 +25,7 @@ import lu.uni.serval.ikora.core.runner.Runtime;
 
 public class ContinueForLoop extends LibraryKeyword {
     public ContinueForLoop(){
-        super(Type.CONTROL_FLOW);
+        super(Type.BRANCHING);
     }
 
     @Override

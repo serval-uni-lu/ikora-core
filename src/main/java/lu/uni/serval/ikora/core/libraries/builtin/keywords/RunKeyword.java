@@ -26,7 +26,7 @@ import lu.uni.serval.ikora.core.types.KeywordType;
 
 public class RunKeyword extends LibraryKeyword {
     public RunKeyword(){
-        super(Type.CONTROL_FLOW, new KeywordType("keyword"));
+        super(Type.RUN, new KeywordType("keyword"));
     }
 
     @Override

@@ -27,7 +27,7 @@ import lu.uni.serval.ikora.core.types.KeywordType;
 
 public class RunKeywordIf extends LibraryKeyword {
     public RunKeywordIf(){
-        super(Type.CONTROL_FLOW,
+        super(Type.BRANCHING,
                 new ConditionType("condition"),
                 new KeywordType("keyword")
         );

@@ -26,7 +26,7 @@ import lu.uni.serval.ikora.core.types.ConditionType;
 
 public class ExitForLoopIf extends LibraryKeyword {
     public ExitForLoopIf(){
-        super(Type.CONTROL_FLOW, new ConditionType("condition"));
+        super(Type.BRANCHING, new ConditionType("condition"));
     }
 
     @Override

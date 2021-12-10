@@ -27,7 +27,7 @@ import lu.uni.serval.ikora.core.types.StringType;
 
 public class RunKeywordAndExpectError extends LibraryKeyword {
     public RunKeywordAndExpectError(){
-        super(Type.CONTROL_FLOW,
+        super(Type.ASSERTION,
                 new StringType("expected_error"),
                 new KeywordType("keyword")
         );

@@ -26,7 +26,7 @@ import lu.uni.serval.ikora.core.types.KeywordType;
 
 public class RunKeywordIfTestPassed extends LibraryKeyword {
     public RunKeywordIfTestPassed(){
-        super(Type.CONTROL_FLOW, new KeywordType("keyword"));
+        super(Type.BRANCHING, new KeywordType("keyword"));
     }
 
     @Override

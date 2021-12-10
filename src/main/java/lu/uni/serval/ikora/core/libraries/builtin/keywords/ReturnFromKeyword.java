@@ -26,7 +26,7 @@ import lu.uni.serval.ikora.core.types.ListType;
 
 public class ReturnFromKeyword extends LibraryKeyword {
     public ReturnFromKeyword(){
-        super(Type.CONTROL_FLOW, new ListType("return_values"));
+        super(Type.BRANCHING, new ListType("return_values"));
     }
 
     @Override

@@ -26,7 +26,7 @@ import lu.uni.serval.ikora.core.types.ConditionType;
 
 public class ContinueForLoopIf extends LibraryKeyword {
     public ContinueForLoopIf(){
-        super(Type.CONTROL_FLOW, new ConditionType("condition"));
+        super(Type.BRANCHING, new ConditionType("condition"));
     }
 
     @Override

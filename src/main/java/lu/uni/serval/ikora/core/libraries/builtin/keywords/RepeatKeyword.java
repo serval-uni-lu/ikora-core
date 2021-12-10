@@ -27,7 +27,7 @@ import lu.uni.serval.ikora.core.types.StringType;
 
 public class RepeatKeyword extends LibraryKeyword {
     public RepeatKeyword(){
-        super(Type.CONTROL_FLOW,
+        super(Type.RUN,
                 new StringType("repeat"),
                 new KeywordType("keyword")
         );

@@ -27,7 +27,7 @@ import lu.uni.serval.ikora.core.types.StringType;
 
 public class PassExecutionIf extends LibraryKeyword {
     public PassExecutionIf(){
-        super(Type.CONTROL_FLOW,
+        super(Type.BRANCHING,
                 new StringType("message"),
                 new ListType("tags")
         );

@@ -25,7 +25,7 @@ import lu.uni.serval.ikora.core.runner.Runtime;
 
 public class ExitForLoop extends LibraryKeyword {
     public ExitForLoop(){
-        super(Type.CONTROL_FLOW);
+        super(Type.BRANCHING);
     }
 
     @Override
