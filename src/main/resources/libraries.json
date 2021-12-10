@@ -2479,7 +2479,7 @@
                 ]
             },
             {
-                "type": "CONTROL_FLOW",
+                "type": "RUN",
                 "name": "register keyword to run on failure",
                 "arguments": [
                     {"name": "keyword", "type": "Keyword"}
