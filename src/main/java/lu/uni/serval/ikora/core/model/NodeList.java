@@ -199,6 +199,10 @@ public class NodeList<N extends SourceNode> extends SourceNode implements List<N
             return Collections.singletonList(Edit.removeElement(this.getClass(), this));
         }
 
+        if(other.getClass() != this.getClass()){
+            return Collections.singletonList(Edit.changeType(this, other));
+        }
+
         if(other == this){
             return Collections.emptyList();
         }

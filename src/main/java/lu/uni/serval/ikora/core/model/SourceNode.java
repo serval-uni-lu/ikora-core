@@ -141,6 +141,10 @@ public abstract class SourceNode implements Node {
         return dependencies.isEmpty();
     }
 
+    public boolean isHidden(){
+        return HiddenAstNode.class.isAssignableFrom(this.getClass());
+    }
+
     public void addToken(Token token){
         if(token == null || token.isEmpty()){
             return;

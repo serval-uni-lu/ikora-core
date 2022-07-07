@@ -415,6 +415,23 @@ class BuilderTest {
         assertEquals(keyword, template.get());
     }
 
+//    @Test
+//    void testIndirectLibraryImport() throws IOException, URISyntaxException {
+//        final File projectFolder = FileUtils.getResourceFile("robot/indirect-library-import");
+//        assertNotNull(projectFolder);
+//
+//        final BuildResult result = Builder.build(projectFolder, Helpers.getConfiguration(), true);
+//        final Project project = result.getProjects().iterator().next();
+//        assertNotNull(project);
+//
+//        final UserKeyword inputPassword = project.findUserKeyword(null, "Input Password").iterator().next();
+//        final Optional<KeywordCall> inputText = inputPassword.getStep(0).getKeywordCall();
+//        assertTrue(inputText.isPresent());
+//
+//        final Optional<Keyword> keyword = inputText.get().getKeyword();
+//        assertTrue(keyword.isPresent());
+//    }
+
     @Test
     void testParseConnectedProject() throws IOException, URISyntaxException {
         final File projectAFile = FileUtils.getResourceFile("robot/connected-projects/project-a");

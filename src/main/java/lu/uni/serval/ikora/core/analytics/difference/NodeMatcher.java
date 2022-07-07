@@ -20,19 +20,34 @@ package lu.uni.serval.ikora.core.analytics.difference;
  * #L%
  */
 
-import lu.uni.serval.ikora.core.model.Project;
-import lu.uni.serval.ikora.core.model.SourceNode;
+import lu.uni.serval.ikora.core.model.*;
+import lu.uni.serval.ikora.core.utils.LevenshteinDistance;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.File;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class NodeMatcher {
-    enum Edit{
+    enum Change {
         CHANGE_NAME, CHANGE_FOLDER, CHANGE_FILE, CHANGE_ALL
     }
 
-    public static <T extends SourceNode> List<Pair<T,T>> getPairs(Set<T> nodes1, Set<T> nodes2, boolean ignoreProjectName) {
+    public static VersionPairs computeVersionsPairs(Projects version1, Projects version2, boolean ignoreProjectName){
+        final List<Pair<TestCase, TestCase>> testCases = getPairs(version1.getTestCases(), version2.getTestCases(), ignoreProjectName);
+        final List<Pair<UserKeyword, UserKeyword>> keywords = getPairs(version1.getUserKeywords(), version2.getUserKeywords(), ignoreProjectName);
+        final List<Pair<VariableAssignment, VariableAssignment>> variables = getPairs(version1.getVariableAssignments(), version2.getVariableAssignments(), ignoreProjectName);
+
+        int size = testCases.size() + keywords.size() + variables.size();
+        final List<Pair<SourceNode, SourceNode>> pairs = new ArrayList<>(size);
+        pairs.addAll(testCases.stream().map(p -> Pair.of((SourceNode)p.getLeft(), (SourceNode)p.getRight())).collect(Collectors.toList()));
+        pairs.addAll(keywords.stream().map(p -> Pair.of((SourceNode)p.getLeft(), (SourceNode)p.getRight())).collect(Collectors.toList()));
+        pairs.addAll(variables.stream().map(p -> Pair.of((SourceNode)p.getLeft(), (SourceNode)p.getRight())).collect(Collectors.toList()));
+
+        return new VersionPairs(resolvePairs(pairs, ignoreProjectName), version1, version2);
+    }
+
+    public static <T extends SourceNode> List<Pair<T,T>> getPairs(Collection<T> nodes1, Collection<T> nodes2, boolean ignoreProjectName) {
         List<Pair<T,T>> pairs = new ArrayList<>();
         List<T> unmatched = new ArrayList<>();
 
@@ -72,7 +87,7 @@ public class NodeMatcher {
         return pairs;
     }
 
-    private static <T extends SourceNode> Set<T> matchNode(Set<T> nodeList, T node, boolean ignoreProjectName){
+    private static <T extends SourceNode> Set<T> matchNode(Collection<T> nodeList, T node, boolean ignoreProjectName){
         Set<T> nodesFound = new HashSet<>();
 
         for(T currentNode: nodeList){
@@ -90,6 +105,14 @@ public class NodeMatcher {
         }
 
         if(!isSameFile(node1, node2)){
+            return false;
+        }
+
+        if(Difference.of(node1, node2).isEmpty()){
+            return true;
+        }
+
+        if(node1.isHidden() || node2.isHidden()){
             return false;
         }
 
@@ -115,9 +138,9 @@ public class NodeMatcher {
         return node1.getLibraryName().equalsIgnoreCase(node2.getLibraryName());
     }
 
-    private static <T extends SourceNode> Map<Edit, List<T>> findPotentialCandidates(T t, List<T> unmatched) {
+    private static <T extends SourceNode> Map<Change, List<T>> findPotentialCandidates(T t, List<T> unmatched) {
         String fileName = new File(t.getLibraryName()).getName();
-        EnumMap<Edit, List<T>> candidates = new EnumMap<>(Edit.class);
+        EnumMap<Change, List<T>> candidates = new EnumMap<>(Change.class);
 
         for (T current: unmatched){
             if(!t.differences(current).isEmpty()){
@@ -127,24 +150,24 @@ public class NodeMatcher {
             String currentFileName = current.getLibraryName();
 
             if(current.getLibraryName().equals(t.getLibraryName())){
-                List<T> list = candidates.getOrDefault(Edit.CHANGE_NAME, new ArrayList<>());
+                List<T> list = candidates.getOrDefault(Change.CHANGE_NAME, new ArrayList<>());
                 list.add(current);
-                candidates.put(Edit.CHANGE_NAME, list);
+                candidates.put(Change.CHANGE_NAME, list);
             }
             else if(current.getName().equals(t.getName()) && currentFileName.equals(fileName)){
-                List<T> list = candidates.getOrDefault(Edit.CHANGE_FOLDER, new ArrayList<>());
+                List<T> list = candidates.getOrDefault(Change.CHANGE_FOLDER, new ArrayList<>());
                 list.add(current);
-                candidates.put(Edit.CHANGE_FOLDER, list);
+                candidates.put(Change.CHANGE_FOLDER, list);
             }
             else if(current.getName().equals(t.getName())){
-                List<T> list = candidates.getOrDefault(Edit.CHANGE_FILE, new ArrayList<>());
+                List<T> list = candidates.getOrDefault(Change.CHANGE_FILE, new ArrayList<>());
                 list.add(current);
-                candidates.put(Edit.CHANGE_FILE, list);
+                candidates.put(Change.CHANGE_FILE, list);
             }
             else{
-                List<T> list = candidates.getOrDefault(Edit.CHANGE_ALL, new ArrayList<>());
+                List<T> list = candidates.getOrDefault(Change.CHANGE_ALL, new ArrayList<>());
                 list.add(current);
-                candidates.put(Edit.CHANGE_ALL, list);
+                candidates.put(Change.CHANGE_ALL, list);
             }
         }
 
@@ -152,21 +175,21 @@ public class NodeMatcher {
     }
 
     private static <T extends SourceNode> T findBestCandidate(T t, List<T> unmatched){
-        Map<Edit, List<T>> candidates = findPotentialCandidates(t, unmatched);
+        Map<Change, List<T>> candidates = findPotentialCandidates(t, unmatched);
 
         T bestCandidate = null;
 
-        if(!candidates.getOrDefault(Edit.CHANGE_NAME, new ArrayList<>()).isEmpty()){
-            bestCandidate = candidates.get(Edit.CHANGE_NAME).get(0);
+        if(!candidates.getOrDefault(Change.CHANGE_NAME, new ArrayList<>()).isEmpty()){
+            bestCandidate = candidates.get(Change.CHANGE_NAME).get(0);
         }
-        else if(!candidates.getOrDefault(Edit.CHANGE_FOLDER, new ArrayList<>()).isEmpty()){
-            bestCandidate = candidates.get(Edit.CHANGE_FOLDER).get(0);
+        else if(!candidates.getOrDefault(Change.CHANGE_FOLDER, new ArrayList<>()).isEmpty()){
+            bestCandidate = candidates.get(Change.CHANGE_FOLDER).get(0);
         }
-        else if(!candidates.getOrDefault(Edit.CHANGE_FILE, new ArrayList<>()).isEmpty()){
-            bestCandidate = candidates.get(Edit.CHANGE_FILE).get(0);
+        else if(!candidates.getOrDefault(Change.CHANGE_FILE, new ArrayList<>()).isEmpty()){
+            bestCandidate = candidates.get(Change.CHANGE_FILE).get(0);
         }
-        else if(!candidates.getOrDefault(Edit.CHANGE_ALL, new ArrayList<>()).isEmpty()){
-            bestCandidate = candidates.get(Edit.CHANGE_ALL).get(0);
+        else if(!candidates.getOrDefault(Change.CHANGE_ALL, new ArrayList<>()).isEmpty()){
+            bestCandidate = candidates.get(Change.CHANGE_ALL).get(0);
         }
 
         if(bestCandidate != null){
@@ -174,5 +197,31 @@ public class NodeMatcher {
         }
 
         return bestCandidate;
+    }
+
+    private static List<Pair<SourceNode, SourceNode>> resolvePairs(List<Pair<SourceNode, SourceNode>> pairs, boolean ignoreProjectName){
+        final List<Pair<SourceNode, SourceNode>> resolved = new ArrayList<>(pairs);
+
+        for(Pair<SourceNode, SourceNode> pair: pairs){
+            resolved.addAll(matchChildren(pair.getLeft(), pair.getRight(), ignoreProjectName));
+        }
+
+        return resolved;
+    }
+
+    private static List<Pair<SourceNode, SourceNode>> matchChildren(SourceNode node1, SourceNode node2, boolean ignoreProjectName){
+        if(node1 == null || node2 == null){
+            return Collections.emptyList();
+        }
+
+        List<Pair<SourceNode, SourceNode>> pairs;
+        if(node1 instanceof NodeList && node2 instanceof NodeList){
+            pairs = LevenshteinDistance.getMapping((NodeList<SourceNode>)node1, (NodeList<SourceNode>)node2);
+        }
+        else{
+            pairs = LevenshteinDistance.getMapping(node1.getAstChildren(), node2.getAstChildren());
+        }
+
+        return resolvePairs(pairs, ignoreProjectName);
     }
 }

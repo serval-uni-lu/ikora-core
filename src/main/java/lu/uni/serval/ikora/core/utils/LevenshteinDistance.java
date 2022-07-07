@@ -175,7 +175,7 @@ public class LevenshteinDistance {
         return edits;
     }
 
-    public static <T extends SourceNode> List<Pair<T, T>> getMapping(NodeList<T> before, NodeList<T> after){
+    public static <T extends SourceNode> List<Pair<T, T>> getMapping(List<T> before, List<T> after){
         final List<Pair<T, T>> map = new ArrayList<>();
 
         double[][] distances = LevenshteinDistance.distanceMatrix(before, after);
