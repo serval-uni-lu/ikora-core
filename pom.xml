@@ -4,7 +4,7 @@
 
     <groupId>lu.uni.serval</groupId>
     <artifactId>ikora-core</artifactId>
-    <version>0.1.20</version>
+    <version>0.1.21-SNAPSHOT</version>
 
     <name>Ikora Core: Robot Framework Engine</name>
     <url>https://github.com/serval-uni-lu/ikora-core</url>
@@ -18,7 +18,7 @@
         <connection>scm:git:git://github.com/serval-uni-lu/ikora-core.git</connection>
         <developerConnection>scm:git:git@github.com:kabinja/kabinja.git</developerConnection>
         <url>https://github.com/serval-uni-lu/ikora-core</url>
-        <tag>ikora-core-0.1.20</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <licenses>
