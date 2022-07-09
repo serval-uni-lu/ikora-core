@@ -44,7 +44,11 @@ public class NodeMatcher {
         pairs.addAll(keywords.stream().map(p -> Pair.of((SourceNode)p.getLeft(), (SourceNode)p.getRight())).collect(Collectors.toList()));
         pairs.addAll(variables.stream().map(p -> Pair.of((SourceNode)p.getLeft(), (SourceNode)p.getRight())).collect(Collectors.toList()));
 
-        return new VersionPairs(resolvePairs(pairs, ignoreProjectName), version1, version2);
+        final Set<Edit> edits = pairs.stream()
+                .flatMap(p -> Difference.of(p.getLeft(), p.getRight()).getEdits().stream())
+                .collect(Collectors.toSet());
+
+        return new VersionPairs(resolvePairs(pairs, ignoreProjectName), edits, version1, version2);
     }
 
     public static <T extends SourceNode> List<Pair<T,T>> getPairs(Collection<T> nodes1, Collection<T> nodes2, boolean ignoreProjectName) {
