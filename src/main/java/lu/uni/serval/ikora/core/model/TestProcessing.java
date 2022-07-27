@@ -96,7 +96,13 @@ public class TestProcessing extends SourceNode {
         final TestProcessing that = (TestProcessing) other;
 
         if(this.getPhase() != that.getPhase()) edits.add(Edit.changeType(this, other));
-        edits.addAll(this.call.differences(that.call));
+
+        if(this.call == null && that.call != null){
+            edits.add(Edit.addElement(KeywordCall.class, that.call));
+        }
+        else if(this.call != null){
+            edits.addAll(this.call.differences(that.call));
+        }
 
         return edits;
     }
