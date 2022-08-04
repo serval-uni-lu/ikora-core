@@ -1,4 +1,4 @@
-package lu.uni.serval.ikora.core.runner;
+package lu.uni.serval.ikora.core.runtime;
 
 /*-
  * #%L
@@ -26,7 +26,7 @@ import lu.uni.serval.ikora.core.model.*;
 
 import java.util.*;
 
-public class StaticScope implements Scope{
+public class StaticScope implements RuntimeScope {
     private final SourceNodeTable<Variable> global;
     private final Map<TestCase, SourceNodeTable<Variable>> test;
     private final Map<String, SourceNodeTable<Variable>> suite;

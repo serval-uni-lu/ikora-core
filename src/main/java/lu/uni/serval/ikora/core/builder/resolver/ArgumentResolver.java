@@ -23,7 +23,7 @@ package lu.uni.serval.ikora.core.builder.resolver;
 import lu.uni.serval.ikora.core.error.ErrorMessages;
 import lu.uni.serval.ikora.core.model.*;
 import lu.uni.serval.ikora.core.types.*;
-import lu.uni.serval.ikora.core.runner.Runtime;
+import lu.uni.serval.ikora.core.runtime.Runtime;
 
 import java.util.ArrayList;
 import java.util.List;

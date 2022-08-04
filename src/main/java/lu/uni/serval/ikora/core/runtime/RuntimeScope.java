@@ -1,4 +1,4 @@
-package lu.uni.serval.ikora.core.runner;
+package lu.uni.serval.ikora.core.runtime;
 
 /*-
  * #%L
@@ -26,7 +26,7 @@ import lu.uni.serval.ikora.core.model.*;
 import java.util.List;
 import java.util.Set;
 
-public interface Scope {
+public interface RuntimeScope {
     void addToKeyword(Keyword keyword, Variable variable);
     void addToTest(TestCase testCase, Variable variable);
     void addToSuite(String suite, Variable variable);

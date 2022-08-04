@@ -24,7 +24,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lu.uni.serval.ikora.core.types.BaseTypeList;
 import lu.uni.serval.ikora.core.model.LibraryInfo;
 import lu.uni.serval.ikora.core.model.LibraryKeyword;
-import lu.uni.serval.ikora.core.runner.Runtime;
+import lu.uni.serval.ikora.core.runtime.Runtime;
 import lu.uni.serval.ikora.core.types.BaseType;
 
 @JsonDeserialize(using = LibraryKeywordInfoReader.class)

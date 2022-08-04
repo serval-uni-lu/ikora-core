@@ -24,10 +24,7 @@ import lu.uni.serval.ikora.core.analytics.difference.Edit;
 import lu.uni.serval.ikora.core.analytics.visitor.NodeVisitor;
 import lu.uni.serval.ikora.core.analytics.visitor.VisitorMemory;
 import lu.uni.serval.ikora.core.builder.parser.Line;
-import lu.uni.serval.ikora.core.exception.RunnerException;
-import lu.uni.serval.ikora.core.runner.Runtime;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.NotImplementedException;
 
 import java.util.*;
 
@@ -187,11 +184,6 @@ public class SourceFile extends SourceNode {
     @Override
     public void accept(NodeVisitor visitor, VisitorMemory memory) {
         visitor.visit(this, memory);
-    }
-
-    @Override
-    public void execute(Runtime runtime) throws RunnerException {
-        throw new NotImplementedException("Runner is not implemented yet");
     }
 
     public Settings getSettings() {

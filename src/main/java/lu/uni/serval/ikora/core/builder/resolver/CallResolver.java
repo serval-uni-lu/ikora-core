@@ -22,7 +22,7 @@ package lu.uni.serval.ikora.core.builder.resolver;
 
 import lu.uni.serval.ikora.core.error.ErrorMessages;
 import lu.uni.serval.ikora.core.model.*;
-import lu.uni.serval.ikora.core.runner.Runtime;
+import lu.uni.serval.ikora.core.runtime.Runtime;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.HashSet;

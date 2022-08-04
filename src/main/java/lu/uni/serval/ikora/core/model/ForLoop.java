@@ -23,9 +23,7 @@ package lu.uni.serval.ikora.core.model;
 import lu.uni.serval.ikora.core.analytics.difference.Edit;
 import lu.uni.serval.ikora.core.analytics.visitor.NodeVisitor;
 import lu.uni.serval.ikora.core.analytics.visitor.VisitorMemory;
-import lu.uni.serval.ikora.core.runner.Runtime;
 import lu.uni.serval.ikora.core.utils.LevenshteinDistance;
-import org.apache.commons.lang3.NotImplementedException;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -100,11 +98,6 @@ public class ForLoop extends Step implements Dependable, ScopeNode {
     @Override
     public Optional<KeywordCall> getKeywordCall() {
         return Optional.empty();
-    }
-
-    @Override
-    public void execute(Runtime runtime) {
-        throw new NotImplementedException("Didn't implemented the execution module yet");
     }
 
     @Override

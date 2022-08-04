@@ -26,8 +26,8 @@ import lu.uni.serval.ikora.core.exception.InvalidArgumentException;
 import lu.uni.serval.ikora.core.BuildConfiguration;
 import lu.uni.serval.ikora.core.error.ErrorManager;
 import lu.uni.serval.ikora.core.model.*;
-import lu.uni.serval.ikora.core.runner.Runtime;
-import lu.uni.serval.ikora.core.runner.StaticScope;
+import lu.uni.serval.ikora.core.runtime.Runtime;
+import lu.uni.serval.ikora.core.runtime.StaticScope;
 import lu.uni.serval.ikora.core.utils.FileUtils;
 
 import java.io.File;

@@ -21,7 +21,7 @@ package lu.uni.serval.ikora.core.libraries.builtin.keywords;
  */
 
 import lu.uni.serval.ikora.core.model.*;
-import lu.uni.serval.ikora.core.runner.Runtime;
+import lu.uni.serval.ikora.core.runtime.Runtime;
 import lu.uni.serval.ikora.core.types.ListType;
 import lu.uni.serval.ikora.core.types.StringType;
 

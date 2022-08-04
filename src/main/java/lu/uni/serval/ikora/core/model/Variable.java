@@ -24,7 +24,6 @@ import lu.uni.serval.ikora.core.analytics.difference.Edit;
 import lu.uni.serval.ikora.core.builder.resolver.ValueResolver;
 import lu.uni.serval.ikora.core.builder.parser.VariableParser;
 import lu.uni.serval.ikora.core.exception.MalformedVariableException;
-import lu.uni.serval.ikora.core.runner.Runtime;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -100,11 +99,6 @@ public abstract class Variable extends Value {
         }
 
         return variable.get();
-    }
-
-    @Override
-    public void execute(Runtime runtime) {
-        // nothing to do for variables
     }
 
     @Override

@@ -1,4 +1,4 @@
-package lu.uni.serval.ikora.core.runner;
+package lu.uni.serval.ikora.core.runtime;
 
 /*-
  * #%L
@@ -32,14 +32,14 @@ import java.util.Optional;
 import java.util.Set;
 
 public class Runtime {
-    private final Scope scope;
+    private final RuntimeScope scope;
     private final Project project;
     private final ReportBuilder reportBuilder;
     private final ErrorManager errors;
 
     private LibraryResources libraryResources;
 
-    public Runtime(Project project, Scope scope, ErrorManager errors){
+    public Runtime(Project project, RuntimeScope scope, ErrorManager errors){
         this.project = project;
         this.scope = scope;
         this.reportBuilder = new ReportBuilder();

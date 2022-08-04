@@ -21,7 +21,7 @@ package lu.uni.serval.ikora.core.builder.resolver;
  */
 
 import lu.uni.serval.ikora.core.model.*;
-import lu.uni.serval.ikora.core.runner.Runtime;
+import lu.uni.serval.ikora.core.runtime.Runtime;
 
 public class SymbolResolver {
     private SymbolResolver() {}

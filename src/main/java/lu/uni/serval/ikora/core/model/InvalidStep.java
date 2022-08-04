@@ -23,8 +23,6 @@ package lu.uni.serval.ikora.core.model;
 import lu.uni.serval.ikora.core.analytics.difference.Edit;
 import lu.uni.serval.ikora.core.analytics.visitor.NodeVisitor;
 import lu.uni.serval.ikora.core.analytics.visitor.VisitorMemory;
-import lu.uni.serval.ikora.core.exception.RunnerException;
-import lu.uni.serval.ikora.core.runner.Runtime;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,11 +51,6 @@ public class InvalidStep extends Step {
     @Override
     public void accept(NodeVisitor visitor, VisitorMemory memory) {
         // should not be visited
-    }
-
-    @Override
-    public void execute(Runtime runtime) throws RunnerException {
-        runtime.registerInternalErrorAndThrow(this.getSource(), "Invalid step cannot be executed", this.getRange());
     }
 
     @Override

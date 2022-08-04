@@ -23,10 +23,6 @@ package lu.uni.serval.ikora.core.model;
 import lu.uni.serval.ikora.core.analytics.difference.Edit;
 import lu.uni.serval.ikora.core.analytics.visitor.NodeVisitor;
 import lu.uni.serval.ikora.core.analytics.visitor.VisitorMemory;
-import lu.uni.serval.ikora.core.builder.resolver.StepResolver;
-import lu.uni.serval.ikora.core.exception.InvalidDependencyException;
-import lu.uni.serval.ikora.core.exception.RunnerException;
-import lu.uni.serval.ikora.core.runner.Runtime;
 import lu.uni.serval.ikora.core.types.KeywordType;
 import lu.uni.serval.ikora.core.types.UnresolvedType;
 import lu.uni.serval.ikora.core.utils.LevenshteinDistance;
@@ -107,46 +103,6 @@ public class Assignment extends Step implements Dependable {
         }
 
         return Optional.empty();
-    }
-
-    @Override
-    public void execute(Runtime runtime) throws RunnerException {
-        runtime.enterNode(this);
-
-        Optional<KeywordCall> optional = getKeywordCall();
-
-        if(optional.isPresent()){
-            KeywordCall call = optional.get();
-            StepResolver.resolve(call, runtime);
-
-            if(!runtime.getErrors().isEmpty()){
-                throw new RunnerException("Errors found during build");
-            }
-
-            Optional<Keyword> callee = call.getKeyword();
-
-            if(callee.isPresent()){
-                callee.get().execute(runtime);
-            }
-            else{
-                runtime.registerSymbolErrorAndThrow(call.getSource(), "Missing definition", call.getRange());
-            }
-        }
-
-        runtime.exitNode(this);
-
-        for(Variable variable: leftHandOperand){
-            try {
-                runtime.addToKeywordScope(this.getCaller(), variable);
-            }
-            catch (InvalidDependencyException e){
-                runtime.registerInternalErrorAndThrow(
-                        variable.getSource(),
-                        String.format("[%s] %s", e.getClass().getSimpleName(), e.getMessage()),
-                        variable.getRange()
-                );
-            }
-        }
     }
 
     @Override

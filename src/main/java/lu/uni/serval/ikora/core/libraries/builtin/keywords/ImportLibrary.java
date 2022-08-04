@@ -24,7 +24,7 @@ import lu.uni.serval.ikora.core.model.KeywordCall;
 import lu.uni.serval.ikora.core.model.KeywordDefinition;
 import lu.uni.serval.ikora.core.model.LibraryKeyword;
 import lu.uni.serval.ikora.core.model.ScopeModifier;
-import lu.uni.serval.ikora.core.runner.Runtime;
+import lu.uni.serval.ikora.core.runtime.Runtime;
 import lu.uni.serval.ikora.core.types.ListType;
 import lu.uni.serval.ikora.core.types.StringType;
 import lu.uni.serval.ikora.core.utils.Ast;

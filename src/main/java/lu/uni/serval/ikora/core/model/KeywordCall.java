@@ -23,9 +23,6 @@ package lu.uni.serval.ikora.core.model;
 import lu.uni.serval.ikora.core.analytics.difference.Edit;
 import lu.uni.serval.ikora.core.analytics.visitor.NodeVisitor;
 import lu.uni.serval.ikora.core.analytics.visitor.VisitorMemory;
-import lu.uni.serval.ikora.core.builder.resolver.CallResolver;
-import lu.uni.serval.ikora.core.exception.RunnerException;
-import lu.uni.serval.ikora.core.runner.Runtime;
 import lu.uni.serval.ikora.core.utils.LevenshteinDistance;
 
 import java.util.*;
@@ -90,23 +87,6 @@ public class KeywordCall extends Step {
 
     public Set<Keyword> getAllPotentialKeywords(Link.Import importType){
         return link.getAllLinks(importType);
-    }
-
-    @Override
-    public void execute(Runtime runtime) throws RunnerException {
-        runtime.enterNode(this);
-        CallResolver.resolve(this, runtime);
-
-        Optional<Keyword> callee = link.getNode();
-
-        if(callee.isPresent()){
-            callee.get().execute(runtime);
-        }
-        else{
-            runtime.registerSymbolErrorAndThrow(this.getSource(), "Missing definition", this.getRange());
-        }
-
-        runtime.exitNode(this);
     }
 
     @Override

@@ -23,8 +23,6 @@ package lu.uni.serval.ikora.core.model;
 import lu.uni.serval.ikora.core.analytics.difference.Edit;
 import lu.uni.serval.ikora.core.analytics.visitor.NodeVisitor;
 import lu.uni.serval.ikora.core.analytics.visitor.VisitorMemory;
-import lu.uni.serval.ikora.core.exception.RunnerException;
-import lu.uni.serval.ikora.core.runner.Runtime;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -91,10 +89,5 @@ public class Library extends SourceNode {
     @Override
     public void accept(NodeVisitor visitor, VisitorMemory memory) {
         visitor.visit(this, memory);
-    }
-
-    @Override
-    public void execute(Runtime runtime) throws RunnerException {
-        //runtime not implemented yet
     }
 }

@@ -23,10 +23,7 @@ package lu.uni.serval.ikora.core.model;
 import lu.uni.serval.ikora.core.analytics.difference.Edit;
 import lu.uni.serval.ikora.core.analytics.visitor.NodeVisitor;
 import lu.uni.serval.ikora.core.analytics.visitor.VisitorMemory;
-import lu.uni.serval.ikora.core.exception.RunnerException;
-import lu.uni.serval.ikora.core.runner.Runtime;
 import lu.uni.serval.ikora.core.utils.FileUtils;
-import org.apache.commons.lang3.NotImplementedException;
 
 import java.io.File;
 import java.util.*;
@@ -276,10 +273,5 @@ public class Settings extends SourceNode implements Delayable {
     @Override
     public void accept(NodeVisitor visitor, VisitorMemory memory) {
         visitor.visit(this, memory);
-    }
-
-    @Override
-    public void execute(Runtime runtime) throws RunnerException {
-        throw new NotImplementedException("Execution is not implemented yet");
     }
 }

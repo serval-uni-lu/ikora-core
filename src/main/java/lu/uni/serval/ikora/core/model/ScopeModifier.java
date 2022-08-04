@@ -20,7 +20,7 @@ package lu.uni.serval.ikora.core.model;
  * #L%
  */
 
-import lu.uni.serval.ikora.core.runner.Runtime;
+import lu.uni.serval.ikora.core.runtime.Runtime;
 
 public interface ScopeModifier {
     void addToScope(Runtime runtime, KeywordCall call);

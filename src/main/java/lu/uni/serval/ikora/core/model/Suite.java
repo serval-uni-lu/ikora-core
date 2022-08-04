@@ -20,8 +20,6 @@ package lu.uni.serval.ikora.core.model;
  * #L%
  */
 
-import lu.uni.serval.ikora.core.runner.Runtime;
-
 import java.io.File;
 import java.util.*;
 
@@ -166,22 +164,6 @@ public class Suite {
         }
 
         return deadLoc;
-    }
-
-    public void execute(Runtime runtime) throws Exception {
-        runtime.enterSuite(this);
-
-        for(Suite suite: suites){
-            suite.execute(runtime);
-        }
-
-        if(sourceFile != null){
-            for(TestCase testCase: sourceFile.getTestCases()){
-                testCase.execute(runtime);
-            }
-        }
-
-        runtime.exitSuite(this);
     }
 
     void addSourceFile(SourceFile sourceFile) {

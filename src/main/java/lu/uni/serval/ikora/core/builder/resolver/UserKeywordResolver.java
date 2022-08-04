@@ -22,7 +22,7 @@ package lu.uni.serval.ikora.core.builder.resolver;
 
 import lu.uni.serval.ikora.core.model.Step;
 import lu.uni.serval.ikora.core.model.UserKeyword;
-import lu.uni.serval.ikora.core.runner.Runtime;
+import lu.uni.serval.ikora.core.runtime.Runtime;
 
 public class UserKeywordResolver {
     private UserKeywordResolver() {}
