@@ -20,7 +20,7 @@ package lu.uni.serval.ikora.core.builder;
  * #L%
  */
 
-import lu.uni.serval.ikora.core.builder.resolver.ValueResolver;
+import lu.uni.serval.ikora.core.analytics.resolver.ValueResolver;
 import lu.uni.serval.ikora.core.error.ErrorMessages;
 import lu.uni.serval.ikora.core.error.SyntaxError;
 import lu.uni.serval.ikora.core.model.*;

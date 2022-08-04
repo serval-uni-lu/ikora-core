@@ -21,8 +21,8 @@ package lu.uni.serval.ikora.core.model;
  */
 
 import lu.uni.serval.ikora.core.analytics.difference.Edit;
-import lu.uni.serval.ikora.core.builder.resolver.ValueResolver;
-import lu.uni.serval.ikora.core.builder.parser.VariableParser;
+import lu.uni.serval.ikora.core.analytics.resolver.ValueResolver;
+import lu.uni.serval.ikora.core.parser.VariableParser;
 import lu.uni.serval.ikora.core.exception.MalformedVariableException;
 
 import java.util.*;

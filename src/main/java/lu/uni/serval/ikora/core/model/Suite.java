@@ -50,18 +50,12 @@ public class Suite {
         return documentation;
     }
 
-    public List<SourceFile> getSourceFiles() {
-        List<SourceFile> files = new ArrayList<>();
+    public List<Suite> getSuites() {
+        return suites;
+    }
 
-        for(Suite suite: suites){
-            files.addAll(suite.getSourceFiles());
-        }
-
-        if(sourceFile != null){
-            files.add(sourceFile);
-        }
-
-        return files;
+    public boolean isSourceFile() {
+        return sourceFile != null;
     }
 
     public void addSuite(Suite suite){

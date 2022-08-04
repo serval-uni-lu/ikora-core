@@ -20,7 +20,7 @@ package lu.uni.serval.ikora.core.model;
  * #L%
  */
 
-import lu.uni.serval.ikora.core.builder.resolver.ValueResolver;
+import lu.uni.serval.ikora.core.analytics.resolver.ValueResolver;
 import lu.uni.serval.ikora.core.exception.InvalidDependencyException;
 import lu.uni.serval.ikora.core.exception.InvalidTypeException;
 

@@ -130,7 +130,7 @@ public class Runtime {
         this.reportBuilder.finish();
     }
 
-    Optional<Report> getReport(){
+    public Optional<Report> getReport(){
         return reportBuilder.getReport();
     }
 

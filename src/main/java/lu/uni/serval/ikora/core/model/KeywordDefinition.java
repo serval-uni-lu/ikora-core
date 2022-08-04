@@ -21,7 +21,7 @@ package lu.uni.serval.ikora.core.model;
  */
 
 import lu.uni.serval.ikora.core.analytics.difference.Edit;
-import lu.uni.serval.ikora.core.builder.resolver.ValueResolver;
+import lu.uni.serval.ikora.core.analytics.resolver.ValueResolver;
 import lu.uni.serval.ikora.core.utils.Ast;
 import lu.uni.serval.ikora.core.utils.LevenshteinDistance;
 

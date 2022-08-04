@@ -21,9 +21,9 @@ package lu.uni.serval.ikora.core;
  */
 
 import lu.uni.serval.ikora.core.builder.*;
-import lu.uni.serval.ikora.core.builder.parser.LexerUtils;
-import lu.uni.serval.ikora.core.builder.parser.LineReader;
-import lu.uni.serval.ikora.core.builder.parser.TokenScanner;
+import lu.uni.serval.ikora.core.parser.LexerUtils;
+import lu.uni.serval.ikora.core.parser.LineReader;
+import lu.uni.serval.ikora.core.parser.TokenScanner;
 import lu.uni.serval.ikora.core.model.Project;
 import lu.uni.serval.ikora.core.model.Token;
 import org.apache.commons.io.FileUtils;
