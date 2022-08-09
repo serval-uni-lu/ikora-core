@@ -1,4 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+
+        Copyright © 2019 - 2022 University of Luxembourg
+
+        Licensed under the Apache License, Version 2.0 (the "License")
+        you may not use this file except in compliance with the License.
+        You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+        Unless required by applicable law or agreed to in writing, software
+        distributed under the License is distributed on an "AS IS" BASIS,
+        WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+        See the License for the specific language governing permissions and
+        limitations under the License.
+
+-->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
@@ -157,33 +175,29 @@
             </plugin>
 
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
+                <groupId>com.mycila</groupId>
                 <artifactId>license-maven-plugin</artifactId>
-                <version>2.0.0</version>
+                <version>4.1</version>
                 <configuration>
-                    <verbose>false</verbose>
-                    <organizationName>University of Luxembourg</organizationName>
-                    <inceptionYear>2019</inceptionYear>
-                    <projectName>Ikora Core</projectName>
-                    <licenseName>apache2</licenseName>
-                    <licenseResolver>${project.baseUri}/src/license</licenseResolver>
-                    <excludes>
-                        <exclude>**/*.json</exclude>
-                        <exclude>**/*.properties</exclude>
-                        <exclude>**/*.xml</exclude>
-                        <exclude>**/*.robot</exclude>
-                        <exclude>**/*.txt</exclude>
-                    </excludes>
+                    <properties>
+                        <inceptionYear>2019</inceptionYear>
+                        <year>2022</year>
+                        <owner>University of Luxembourg</owner>
+                    </properties>
+                    <licenseSets>
+                        <licenseSet>
+                            <header>src/license/apache2/header.txt</header>
+                            <excludes>
+                                <exclude>**/README</exclude>
+                                <exclude>src/test/resources/**</exclude>
+                                <exclude>src/main/resources/**</exclude>
+                                <exclude>**/*.txt</exclude>
+                                <exclude>**/AUTHORS</exclude>
+                                <exclude>**/NOTICE</exclude>
+                            </excludes>
+                        </licenseSet>
+                    </licenseSets>
                 </configuration>
-                <executions>
-                    <execution>
-                        <id>license-check</id>
-                        <goals>
-                            <goal>check-file-header</goal>
-                        </goals>
-                        <phase>process-sources</phase>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>
