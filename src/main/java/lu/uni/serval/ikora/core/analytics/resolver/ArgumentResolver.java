@@ -20,10 +20,10 @@ package lu.uni.serval.ikora.core.analytics.resolver;
  * #L%
  */
 
+import lu.uni.serval.ikora.core.error.ErrorManager;
 import lu.uni.serval.ikora.core.error.ErrorMessages;
 import lu.uni.serval.ikora.core.model.*;
 import lu.uni.serval.ikora.core.types.*;
-import lu.uni.serval.ikora.core.runtime.Runtime;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +31,7 @@ import java.util.List;
 public class ArgumentResolver {
     private ArgumentResolver() {}
 
-    public static void resolve(Argument argument, Runtime runtime) {
+    public static void resolve(StaticScope scope, Argument argument) {
         final List<Variable> variables = new ArrayList<>();
 
         if(argument.isVariable()){
@@ -41,20 +41,20 @@ public class ArgumentResolver {
             variables.addAll(((Literal)argument.getDefinition()).getVariables());
         }
 
-        variables.forEach(v -> VariableResolver.resolve(v, runtime));
+        variables.forEach(v -> VariableResolver.resolve(scope, v));
     }
 
-    public static void resolve(KeywordCall call, Runtime runtime) {
+    public static void resolve(StaticScope staticScope, KeywordCall call, ErrorManager errorManager) {
         for(Argument argument: call.getArgumentList()){
-            resolve(argument, runtime);
+            resolve(staticScope, argument);
         }
 
-        call.getKeyword().ifPresent(k -> resolveTypes(call, k, runtime));
+        call.getKeyword().ifPresent(k -> resolveTypes(staticScope, call, k, errorManager));
 
-        updateScope(call, runtime);
+        updateScope(staticScope, call, errorManager);
     }
 
-    private static void resolveTypes(KeywordCall call, Keyword keyword, Runtime runtime){
+    private static void resolveTypes(StaticScope staticScope, KeywordCall call, Keyword keyword, ErrorManager errorManager){
         final NodeList<Argument> argumentList = call.getArgumentList();
         final BaseTypeList argumentTypes = keyword.getArgumentTypes();
 
@@ -64,7 +64,7 @@ public class ArgumentResolver {
             final Argument argument = argumentList.get(position);
 
             if(position >= argumentTypes.size()){
-                runtime.getErrors().registerSyntaxError(
+                errorManager.registerSyntaxError(
                         call.getSource(),
                         String.format("%s: expected %d but got %d", ErrorMessages.TOO_MANY_KEYWORD_ARGUMENTS, argumentTypes.size(), argumentList.size()),
                         Range.fromToken(call.getDefinitionToken())
@@ -86,10 +86,10 @@ public class ArgumentResolver {
                 canResolve = assignType(type, DictionaryType.class, argument);
             }
             else if(KeywordType.class.isAssignableFrom(type.getClass())){
-                position = assignKeywordType(type, call, argumentList, position, argumentList.size(), runtime);
+                position = assignKeywordType(staticScope, type, call, argumentList, position, argumentList.size(), errorManager);
             }
             else if(KeywordListType.class.isAssignableFrom(type.getClass())){
-                position = assignKeywordListType(type, call, argumentList, position, runtime);
+                position = assignKeywordListType(staticScope, type, call, argumentList, position, errorManager);
             }
             else {
                 argument.setType(type);
@@ -97,7 +97,7 @@ public class ArgumentResolver {
         }
     }
 
-    private static int assignKeywordListType(BaseType type, KeywordCall call, NodeList<Argument> argumentList, int position, Runtime runtime){
+    private static int assignKeywordListType(StaticScope staticScope, BaseType type, KeywordCall call, NodeList<Argument> argumentList, int position, ErrorManager errorManager){
         final NodeList<Argument> newArgumentList = new NodeList<>(argumentList.subList(0, position));
         call.setArgumentList(newArgumentList);
 
@@ -109,7 +109,7 @@ public class ArgumentResolver {
                 final KeywordCall callArgument = createKeywordArgument(argumentsToProcess);
                 newArgumentList.add(new Argument(callArgument, new KeywordType(type.getName()), start));
 
-                CallResolver.resolve(callArgument, runtime);
+                CallResolver.resolve(staticScope, callArgument, errorManager);
                 start = position + 1;
             }
 
@@ -121,13 +121,13 @@ public class ArgumentResolver {
             final KeywordCall callArgument = createKeywordArgument(argumentsToProcess);
             newArgumentList.add(new Argument(callArgument, new KeywordType(type.getName()), start));
 
-            CallResolver.resolve(callArgument, runtime);
+            CallResolver.resolve(staticScope, callArgument, errorManager);
         }
 
         return position;
     }
 
-    private static int assignKeywordType(BaseType type, KeywordCall call, NodeList<Argument> argumentList, int start, int end, Runtime runtime){
+    private static int assignKeywordType(StaticScope staticScope, BaseType type, KeywordCall call, NodeList<Argument> argumentList, int start, int end, ErrorManager errorManager){
         final List<Argument> argumentsToProcess = argumentList.subList(start, end);
         final KeywordCall callArgument = createKeywordArgument(argumentsToProcess);
         final NodeList<Argument> newArgumentList = new NodeList<>(argumentList.subList(0, start));
@@ -135,7 +135,7 @@ public class ArgumentResolver {
         newArgumentList.add(new Argument(callArgument, type, start));
         call.setArgumentList(newArgumentList);
 
-        CallResolver.resolve(callArgument, runtime);
+        CallResolver.resolve(staticScope, callArgument, errorManager);
 
         return end;
     }
@@ -169,10 +169,10 @@ public class ArgumentResolver {
         return call;
     }
 
-    private static void updateScope(KeywordCall call, Runtime runtime) {
+    private static void updateScope(StaticScope staticScope, KeywordCall call, ErrorManager errorManager) {
         for(Keyword keyword: call.getAllPotentialKeywords(Link.Import.BOTH)){
             if(keyword instanceof ScopeModifier){
-                ((ScopeModifier)keyword).addToScope(runtime, call);
+                ((ScopeModifier)keyword).modifyScope(staticScope, call, errorManager);
             }
         }
     }

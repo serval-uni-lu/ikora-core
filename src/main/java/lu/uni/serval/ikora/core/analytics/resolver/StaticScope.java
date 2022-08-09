@@ -1,4 +1,4 @@
-package lu.uni.serval.ikora.core.runtime;
+package lu.uni.serval.ikora.core.analytics.resolver;
 
 /*-
  * #%L
@@ -23,24 +23,34 @@ package lu.uni.serval.ikora.core.runtime;
 import lu.uni.serval.ikora.core.analytics.KeywordStatistics;
 import lu.uni.serval.ikora.core.builder.DynamicImports;
 import lu.uni.serval.ikora.core.model.*;
+import lu.uni.serval.ikora.core.utils.Finder;
 
 import java.util.*;
 
-public class StaticScope implements RuntimeScope {
+public class StaticScope implements ScopeManager {
     private final SourceNodeTable<Variable> global;
     private final Map<TestCase, SourceNodeTable<Variable>> test;
     private final Map<String, SourceNodeTable<Variable>> suite;
 
+    private final LibraryResources libraryResources;
     private final Map<KeywordDefinition, ResourcesTable> dynamicLibrary;
 
-    public StaticScope(){
+    public StaticScope(LibraryResources libraryResources){
+        this.libraryResources = libraryResources;
         global = new SourceNodeTable<>();
         suite = new HashMap<>();
         test = new HashMap<>();
         dynamicLibrary = new HashMap<>();
     }
 
-    @Override
+    public Set<? super Keyword> findKeywords(KeywordCall call){
+        return Finder.findKeywords(this.libraryResources, call);
+    }
+
+    public Optional<LibraryVariable> findLibraryVariable(Variable variable) {
+        return Finder.findLibraryVariable(this.libraryResources, variable.getDefinitionToken());
+    }
+
     public Set<Node> findInScope(Set<TestCase> testCases, Set<String> suites, Token name){
         Set<Node> variablesFound = new HashSet<>();
 
@@ -58,29 +68,24 @@ public class StaticScope implements RuntimeScope {
     }
 
     @Override
-    public void addToGlobal(Variable variable) {
+    public void addToGlobalScope(Variable variable) {
         global.add(variable);
     }
 
     @Override
-    public void addToSuite(String suite, Variable variable) {
+    public void addToSuiteScope(String suite, Variable variable) {
         this.suite.putIfAbsent(suite, new SourceNodeTable<>());
         this.suite.get(suite).add(variable);
     }
 
     @Override
-    public void addToKeyword(Keyword keyword, Variable variable) {
-
-    }
-
-    @Override
-    public void addToTest(TestCase testCase, Variable variable) {
+    public void addToTestScope(TestCase testCase, Variable variable) {
         test.putIfAbsent(testCase, new SourceNodeTable<>());
         test.get(testCase).add(variable);
     }
 
     @Override
-    public void addDynamicLibrary(KeywordDefinition keyword, List<Argument> argumentList) {
+    public void addLibraryToScope(KeywordDefinition keyword, List<Argument> argumentList) {
         if(keyword == null){
             return;
         }
@@ -101,7 +106,6 @@ public class StaticScope implements RuntimeScope {
         dynamicLibrary.get(keyword).add(resources);
     }
 
-    @Override
     public ResourcesTable getDynamicResources(Node node) {
         final Set<KeywordDefinition> dependencies = KeywordStatistics.getDependencies(node);
 
@@ -118,42 +122,11 @@ public class StaticScope implements RuntimeScope {
         return resourcesTable;
     }
 
-    @Override
-    public void enterNode(Node node) {
-        // No concept of entering or leaving when performing static analysis
-    }
-
-    @Override
-    public void exitNode(Node node) {
-        // No concept of entering or leaving when performing static analysis
-    }
-
-    @Override
-    public void enterSuite(Suite suite) {
-        // No concept of entering or leaving when performing static analysis
-    }
-
-    @Override
-    public void exitSuite(Suite suite) {
-        // No concept of entering or leaving when performing static analysis
-    }
-
-    @Override
     public void reset() {
         global.clear();
         suite.clear();
         test.clear();
         dynamicLibrary.clear();
-    }
-
-    @Override
-    public TestCase getTestCase() {
-        return null;
-    }
-
-    @Override
-    public NodeList<Value> getReturnValues() {
-        return new NodeList<>();
     }
 
     private Set<Variable> findTestVariable(TestCase testCase, Token name) {
@@ -164,7 +137,6 @@ public class StaticScope implements RuntimeScope {
         return test.get(testCase).findNode(name);
     }
 
-
     private Set<Variable> findSuiteVariable(String suite, Token name) {
         if(!this.suite.containsKey(suite)){
             return Collections.emptySet();
@@ -172,7 +144,6 @@ public class StaticScope implements RuntimeScope {
 
         return this.suite.get(suite).findNode(name);
     }
-
 
     private Set<Variable> findGlobalVariable(Token name) {
         return global.findNode(name);

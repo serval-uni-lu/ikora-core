@@ -1,10 +1,10 @@
-package lu.uni.serval.ikora.core.exception;
+package lu.uni.serval.ikora.core.model;
 
 /*-
  * #%L
  * Ikora Core
  * %%
- * Copyright (C) 2019 - 2021 University of Luxembourg
+ * Copyright (C) 2019 - 2022 University of Luxembourg
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
@@ -20,8 +20,11 @@ package lu.uni.serval.ikora.core.exception;
  * #L%
  */
 
-public class RunnerException extends Exception{
-    public RunnerException(String message){
-        super(message);
-    }
+import java.util.List;
+
+public interface ScopeManager {
+    void addToGlobalScope(Variable variable);
+    void addToSuiteScope(String suite, Variable variable);
+    void addToTestScope(TestCase testCase, Variable variable);
+    void addLibraryToScope(KeywordDefinition keyword, List<Argument> argumentList);
 }

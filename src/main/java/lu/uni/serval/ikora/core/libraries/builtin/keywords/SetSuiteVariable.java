@@ -22,8 +22,8 @@ package lu.uni.serval.ikora.core.libraries.builtin.keywords;
 
 import lu.uni.serval.ikora.core.analytics.visitor.FindSuiteVisitor;
 import lu.uni.serval.ikora.core.analytics.visitor.PathMemory;
+import lu.uni.serval.ikora.core.error.ErrorManager;
 import lu.uni.serval.ikora.core.model.*;
-import lu.uni.serval.ikora.core.runtime.Runtime;
 import lu.uni.serval.ikora.core.types.ListType;
 import lu.uni.serval.ikora.core.types.StringType;
 
@@ -38,16 +38,11 @@ public class SetSuiteVariable extends LibraryKeyword implements ScopeModifier {
     }
 
     @Override
-    public void run(Runtime runtime) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void addToScope(Runtime runtime, KeywordCall call) {
+    public void modifyScope(ScopeManager scopeManager, KeywordCall call, ErrorManager errorManager) {
         List<Argument> argumentList = call.getArgumentList();
 
         if(argumentList.size() < 2){
-            runtime.getErrors().registerInternalError(
+            errorManager.registerInternalError(
                     call.getSource(),
                     "Failed to update suite scope: no argument found.",
                     call.getRange()
@@ -61,10 +56,10 @@ public class SetSuiteVariable extends LibraryKeyword implements ScopeModifier {
                 call.accept(visitor, new PathMemory());
 
                 for(String suite: visitor.getSuites()){
-                    runtime.addToSuiteScope(suite, variable);
+                    scopeManager.addToSuiteScope(suite, variable);
                 }
             } catch (Exception e) {
-                runtime.getErrors().registerInternalError(
+                errorManager.registerInternalError(
                         call.getSource(),
                         "Failed to update suite scope: malformed variable.",
                         call.getRange()

@@ -20,8 +20,8 @@ package lu.uni.serval.ikora.core.model;
  * #L%
  */
 
-import lu.uni.serval.ikora.core.runtime.Runtime;
+import lu.uni.serval.ikora.core.error.ErrorManager;
 
 public interface ScopeModifier {
-    void addToScope(Runtime runtime, KeywordCall call);
+    void modifyScope(ScopeManager scopeManager, KeywordCall call, ErrorManager errorManager);
 }

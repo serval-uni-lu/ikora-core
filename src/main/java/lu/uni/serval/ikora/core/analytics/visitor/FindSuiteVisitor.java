@@ -26,7 +26,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class FindSuiteVisitor extends DependencyVisitor {
-    private Set<String> suites;
+    private final Set<String> suites;
 
     public FindSuiteVisitor() {
         suites = new HashSet<>();

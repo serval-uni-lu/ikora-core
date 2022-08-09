@@ -20,25 +20,25 @@ package lu.uni.serval.ikora.core.analytics.resolver;
  * #L%
  */
 
+import lu.uni.serval.ikora.core.error.ErrorManager;
 import lu.uni.serval.ikora.core.model.*;
-import lu.uni.serval.ikora.core.runtime.Runtime;
 
 public class SymbolResolver {
     private SymbolResolver() {}
 
-    public static void resolve(Runtime runtime) {
-        for (SourceFile sourceFile : runtime.getSourceFiles()) {
+    public static void resolve(Project project, StaticScope staticScope, ErrorManager errorManager) {
+        for (SourceFile sourceFile : project.getSourceFiles()) {
             for(TestCase testCase: sourceFile.getTestCases()) {
-                TestCaseResolver.resolve(testCase, runtime);
+                TestCaseResolver.resolve(staticScope, testCase, errorManager);
             }
 
             for(UserKeyword userKeyword: sourceFile.getUserKeywords()) {
-                UserKeywordResolver.resolve(userKeyword, runtime);
+                UserKeywordResolver.resolve(staticScope, userKeyword, errorManager);
             }
 
             for(VariableAssignment variableAssignment: sourceFile.getVariables()){
                 for(Argument argument: variableAssignment.getValues()){
-                    ArgumentResolver.resolve(argument, runtime);
+                    ArgumentResolver.resolve(staticScope, argument);
                 }
             }
         }

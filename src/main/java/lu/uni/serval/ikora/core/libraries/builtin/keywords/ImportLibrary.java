@@ -20,11 +20,8 @@ package lu.uni.serval.ikora.core.libraries.builtin.keywords;
  * #L%
  */
 
-import lu.uni.serval.ikora.core.model.KeywordCall;
-import lu.uni.serval.ikora.core.model.KeywordDefinition;
-import lu.uni.serval.ikora.core.model.LibraryKeyword;
-import lu.uni.serval.ikora.core.model.ScopeModifier;
-import lu.uni.serval.ikora.core.runtime.Runtime;
+import lu.uni.serval.ikora.core.error.ErrorManager;
+import lu.uni.serval.ikora.core.model.*;
 import lu.uni.serval.ikora.core.types.ListType;
 import lu.uni.serval.ikora.core.types.StringType;
 import lu.uni.serval.ikora.core.utils.Ast;
@@ -40,19 +37,14 @@ public class ImportLibrary extends LibraryKeyword implements ScopeModifier {
     }
 
     @Override
-    public void run(Runtime runtime) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void addToScope(Runtime runtime, KeywordCall call) {
+    public void modifyScope(ScopeManager scopeManager, KeywordCall call, ErrorManager errorManager) {
         Optional<KeywordDefinition> parent = Ast.getParentByType(call, KeywordDefinition.class);
 
         if(parent.isPresent()){
-            runtime.addDynamicLibrary(parent.get(), call.getArgumentList());
+            scopeManager.addLibraryToScope(parent.get(), call.getArgumentList());
         }
         else{
-            runtime.getErrors().registerSymbolError(
+            errorManager.registerSymbolError(
                     call.getSource(),
                     "Failed to resolve dynamic import",
                     call.getRange()

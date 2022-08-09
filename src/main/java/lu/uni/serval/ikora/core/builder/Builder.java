@@ -26,8 +26,7 @@ import lu.uni.serval.ikora.core.exception.InvalidArgumentException;
 import lu.uni.serval.ikora.core.BuildConfiguration;
 import lu.uni.serval.ikora.core.error.ErrorManager;
 import lu.uni.serval.ikora.core.model.*;
-import lu.uni.serval.ikora.core.runtime.Runtime;
-import lu.uni.serval.ikora.core.runtime.StaticScope;
+import lu.uni.serval.ikora.core.analytics.resolver.StaticScope;
 import lu.uni.serval.ikora.core.utils.FileUtils;
 
 import java.io.File;
@@ -51,7 +50,7 @@ public class Builder {
      */
     public static BuildResult build(Set<File> files, BuildConfiguration configuration, boolean resolve){
         BuildResult result = new BuildResult();
-        ErrorManager errors = new ErrorManager();
+        ErrorManager errorManager = new ErrorManager();
 
         Projects projects = new Projects();
 
@@ -59,7 +58,7 @@ public class Builder {
 
         DynamicImports dynamicImports = new DynamicImports();
         for(File file: files) {
-            Project project = parse(file, configuration, dynamicImports, errors);
+            Project project = parse(file, configuration, dynamicImports, errorManager);
             projects.addProject(project);
         }
 
@@ -73,15 +72,13 @@ public class Builder {
         Instant startResolving = Instant.now();
 
         for(Project project: projects) {
-                Runtime runtime = new Runtime(project, new StaticScope(), errors);
-                loadLibraries(runtime);
-                resolve(runtime, resolve);
+                resolve(project, errorManager, resolve);
         }
 
         result.setResolveTime(Duration.between(startResolving, Instant.now()).toMillis());
         result.setBuildTime(Duration.between(start, Instant.now()).toMillis());
 
-        result.setErrors(errors);
+        result.setErrors(errorManager);
         result.setProjects(projects);
 
         return result;
@@ -120,19 +117,17 @@ public class Builder {
         return build(project, start, link, errors);
     }
 
-    private static BuildResult build(Project project, Instant start, boolean link, ErrorManager errors){
+    private static BuildResult build(Project project, Instant start, boolean link, ErrorManager errorManager){
         BuildResult result = new BuildResult();
         result.setParsingTime(Duration.between(start, Instant.now()).toMillis());
 
         Instant startLinking = Instant.now();
-        Runtime runtime = new Runtime(project, new StaticScope(), errors);
-        loadLibraries(runtime);
-        resolve(runtime, link);
+        resolve(project, errorManager, link);
         result.setResolveTime(Duration.between(startLinking, Instant.now()).toMillis());
 
         result.setBuildTime(Duration.between(start, Instant.now()).toMillis());
 
-        result.setErrors(errors);
+        result.setErrors(errorManager);
         result.setProjects(new Projects(project));
 
         return result;
@@ -163,17 +158,19 @@ public class Builder {
         project.addDependency(dependency);
     }
 
-    private static void loadLibraries(Runtime runtime) {
-        LibraryResources libraries = LibraryLoader.load(runtime.getErrors());
-        runtime.setLibraryResources(libraries);
+    private static LibraryResources loadLibraries(ErrorManager errorManager) {
+        return LibraryLoader.load(errorManager);
     }
 
-    private static void resolve(Runtime runtime, boolean resolve) {
+    private static void resolve(Project project, ErrorManager errorManager, boolean resolve) {
         if(!resolve){
             return;
         }
 
-        SymbolResolver.resolve(runtime);
+        final LibraryResources libraryResources = loadLibraries(errorManager);
+        final StaticScope staticScope = new StaticScope(libraryResources);
+
+        SymbolResolver.resolve(project, staticScope, errorManager);
     }
 
     private static Project parse(File file, BuildConfiguration configuration, DynamicImports dynamicImports, ErrorManager errors) {

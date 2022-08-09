@@ -22,8 +22,8 @@ package lu.uni.serval.ikora.core.libraries.builtin.keywords;
 
 import lu.uni.serval.ikora.core.analytics.visitor.FindTestCaseVisitor;
 import lu.uni.serval.ikora.core.analytics.visitor.PathMemory;
+import lu.uni.serval.ikora.core.error.ErrorManager;
 import lu.uni.serval.ikora.core.model.*;
-import lu.uni.serval.ikora.core.runtime.Runtime;
 import lu.uni.serval.ikora.core.types.ListType;
 import lu.uni.serval.ikora.core.types.StringType;
 
@@ -36,16 +36,11 @@ public class SetTestVariable extends LibraryKeyword implements ScopeModifier {
     }
 
     @Override
-    public void run(Runtime runtime) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void addToScope(Runtime runtime, KeywordCall call) {
+    public void modifyScope(ScopeManager manager, KeywordCall call, ErrorManager errorManager) {
         NodeList<Argument> argumentList = call.getArgumentList();
 
         if(argumentList.size() < 2){
-            runtime.getErrors().registerInternalError(
+            errorManager.registerInternalError(
                     call.getSource(),
                     "Failed to update test scope: no argument found.",
                     call.getRange()
@@ -59,10 +54,10 @@ public class SetTestVariable extends LibraryKeyword implements ScopeModifier {
                 call.accept(visitor, new PathMemory());
 
                 for(TestCase testCase: visitor.getTestCases()){
-                    runtime.addToTestScope(testCase, variable);
+                    manager.addToTestScope(testCase, variable);
                 }
             } catch (Exception e) {
-                runtime.getErrors().registerInternalError(
+                errorManager.registerInternalError(
                         call.getSource(),
                         "Failed to update test scope: malformed variable.",
                         call.getRange()

@@ -20,22 +20,22 @@ package lu.uni.serval.ikora.core.analytics.resolver;
  * #L%
  */
 
+import lu.uni.serval.ikora.core.error.ErrorManager;
 import lu.uni.serval.ikora.core.model.Step;
 import lu.uni.serval.ikora.core.model.TestCase;
 import lu.uni.serval.ikora.core.model.TestProcessing;
-import lu.uni.serval.ikora.core.runtime.Runtime;
 
 public class TestCaseResolver {
     private TestCaseResolver() {}
 
-    public static void resolve(TestCase testCase, Runtime runtime) {
-        testCase.getSetup().flatMap(TestProcessing::getCall).ifPresent(c -> CallResolver.resolve(c, runtime));
+    public static void resolve(StaticScope staticScope, TestCase testCase, ErrorManager errorManager) {
+        testCase.getSetup().flatMap(TestProcessing::getCall).ifPresent(c -> CallResolver.resolve(staticScope, c, errorManager));
 
         for (Step step: testCase) {
             testCase.getTemplate().flatMap(TestProcessing::getCall).ifPresent(step::setTemplate);
-            step.getKeywordCall().ifPresent(c -> CallResolver.resolve(c, runtime));
+            step.getKeywordCall().ifPresent(c -> CallResolver.resolve(staticScope, c, errorManager));
         }
 
-        testCase.getTearDown().flatMap(TestProcessing::getCall).ifPresent(c -> CallResolver.resolve(c, runtime));
+        testCase.getTearDown().flatMap(TestProcessing::getCall).ifPresent(c -> CallResolver.resolve(staticScope, c, errorManager));
     }
 }

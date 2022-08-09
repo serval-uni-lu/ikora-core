@@ -23,7 +23,6 @@ package lu.uni.serval.ikora.core.model;
 import lu.uni.serval.ikora.core.analytics.visitor.NodeVisitor;
 import lu.uni.serval.ikora.core.analytics.visitor.VisitorMemory;
 import lu.uni.serval.ikora.core.analytics.resolver.ValueResolver;
-import lu.uni.serval.ikora.core.runtime.Runtime;
 import lu.uni.serval.ikora.core.types.BaseType;
 import lu.uni.serval.ikora.core.types.BaseTypeList;
 
@@ -85,8 +84,6 @@ public abstract class LibraryKeyword implements Keyword {
     public boolean matches(Token name) {
         return ValueResolver.matches(getName(), name.getText());
     }
-
-    protected abstract void run(Runtime runtime);
 
     public Documentation getDocumentation(){
         return new Documentation();

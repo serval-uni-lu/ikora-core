@@ -20,16 +20,16 @@ package lu.uni.serval.ikora.core.analytics.resolver;
  * #L%
  */
 
+import lu.uni.serval.ikora.core.error.ErrorManager;
 import lu.uni.serval.ikora.core.model.Step;
 import lu.uni.serval.ikora.core.model.UserKeyword;
-import lu.uni.serval.ikora.core.runtime.Runtime;
 
 public class UserKeywordResolver {
     private UserKeywordResolver() {}
 
-    public static void resolve(UserKeyword keyword, Runtime runtime){
+    public static void resolve(StaticScope staticScope, UserKeyword keyword, ErrorManager errorManager){
         for (Step step: keyword) {
-            StepResolver.resolve(step, runtime);
+            StepResolver.resolve(staticScope, step, errorManager);
         }
     }
 }

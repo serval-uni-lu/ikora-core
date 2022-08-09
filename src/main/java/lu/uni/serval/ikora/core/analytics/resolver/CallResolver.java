@@ -20,31 +20,30 @@ package lu.uni.serval.ikora.core.analytics.resolver;
  * #L%
  */
 
+import lu.uni.serval.ikora.core.error.ErrorManager;
 import lu.uni.serval.ikora.core.error.ErrorMessages;
 import lu.uni.serval.ikora.core.model.*;
-import lu.uni.serval.ikora.core.runtime.Runtime;
-import lu.uni.serval.ikora.core.utils.Finder;
 
 import java.util.Set;
 
 public class CallResolver {
     private CallResolver() {}
 
-    public static void resolve(KeywordCall call, Runtime runtime){
-        final Set<? super Keyword> keywords = Finder.findKeywords(runtime, call);
+    public static void resolve(StaticScope staticScope, KeywordCall call, ErrorManager errorManager){
+        final Set<? super Keyword> keywords = staticScope.findKeywords(call);
 
         for(Object keyword: keywords) {
             call.linkKeyword((Keyword) keyword, Link.Import.STATIC);
         }
 
         if(keywords.isEmpty()){
-            runtime.getErrors().registerSymbolError(
+            errorManager.registerSymbolError(
                     call.getSource(),
                     ErrorMessages.FOUND_NO_MATCH,
                     Range.fromTokens(call.getTokens())
             );
         }
 
-        ArgumentResolver.resolve(call, runtime);
+        ArgumentResolver.resolve(staticScope, call, errorManager);
     }
 }

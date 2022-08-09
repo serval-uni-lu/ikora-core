@@ -22,7 +22,6 @@ package lu.uni.serval.ikora.core.analytics.resolver;
 
 import lu.uni.serval.ikora.core.model.*;
 import lu.uni.serval.ikora.core.utils.Ast;
-import lu.uni.serval.ikora.core.runtime.Runtime;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -31,7 +30,7 @@ import java.util.Set;
 public class VariableResolver {
     private VariableResolver() {}
 
-    public static void resolve(Variable variable, Runtime runtime){
+    public static void resolve(StaticScope staticScope, Variable variable){
         final Set<Dependable> definitions = new HashSet<>();
 
         Optional<ScopeNode> parentScope = Ast.getParentByType(variable, ScopeNode.class);
@@ -48,7 +47,8 @@ public class VariableResolver {
         }
 
         if(definitions.isEmpty()){
-            runtime.findLibraryVariable(variable.getDefinitionToken()).ifPresent(definitions::add);
+            staticScope.findLibraryVariable(variable).ifPresent(definitions::add);
+            staticScope.findLibraryVariable(variable).ifPresent(definitions::add);
         }
 
         definitions.forEach(d -> variable.linkToDefinition(d, Link.Import.STATIC));

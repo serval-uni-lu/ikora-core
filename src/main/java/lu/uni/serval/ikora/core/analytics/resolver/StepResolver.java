@@ -20,17 +20,17 @@ package lu.uni.serval.ikora.core.analytics.resolver;
  * #L%
  */
 
+import lu.uni.serval.ikora.core.error.ErrorManager;
 import lu.uni.serval.ikora.core.model.Step;
-import lu.uni.serval.ikora.core.runtime.Runtime;
 
 public class StepResolver {
     private StepResolver() {}
 
-    public static void resolve(Step step, Runtime runtime){
-        step.getKeywordCall().ifPresent(c -> CallResolver.resolve(c, runtime));
+    public static void resolve(StaticScope staticScope, Step step, ErrorManager errorManager){
+        step.getKeywordCall().ifPresent(c -> CallResolver.resolve(staticScope, c, errorManager));
 
         for (Step childStep: step.getSteps()) {
-            resolve(childStep, runtime);
+            resolve(staticScope, childStep, errorManager);
         }
     }
 }
