@@ -36,7 +36,7 @@ class LineReaderTest {
 
             line = reader.readLine();
             assertTrue(line.isValid());
-            assertEquals("Line with special characters: �������!", line.getText());
+            assertEquals("Line with special characters: êôçàéèù!", line.getText());
 
             line = reader.readLine();
             assertFalse(line.isValid());
@@ -53,7 +53,7 @@ class LineReaderTest {
 
             Line line = reader.readLine();
             assertTrue(line.isValid());
-            assertEquals("Text with strange characters: �����", line.getText());
+            assertEquals("Text with strange characters: éèàçù", line.getText());
 
             line = reader.readLine();
             assertFalse(line.isValid());

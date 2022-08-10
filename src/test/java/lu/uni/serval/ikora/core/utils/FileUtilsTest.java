@@ -85,7 +85,7 @@ class FileUtilsTest {
         final Reader unicodeReader = FileUtils.getUnicodeReader(utf8);
         final String text = IOUtils.toString(unicodeReader);
 
-        assertEquals("Text with strange characters: �����", text);
+        assertEquals("Text with strange characters: éèàçù", text);
     }
 
     @Test
