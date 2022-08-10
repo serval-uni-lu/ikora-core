@@ -91,7 +91,7 @@ class FileUtilsTest {
     @Test
     void testCopyResourceFile(){
         final File destination = Helpers.getNewTmpFolder("with sépcial and space/ikora-copy-resources-file");
-        final String resources = "robot/clones.robot";
+        final String resources = "projects/clones.robot";
 
         try {
             FileUtils.copyResources(getClass(), resources, destination);
@@ -117,7 +117,7 @@ class FileUtilsTest {
     @Test
     void testCopyResourceFolder(){
         final File destination = Helpers.getNewTmpFolder("with sépcial and space/ikora-copy-resources-folder");
-        final String resources = "robot";
+        final String resources = "projects";
 
         try {
             FileUtils.copyResources(getClass(), resources, destination);
@@ -133,22 +133,22 @@ class FileUtilsTest {
     @Test
     void testGetRelativeResourcePathWithFile(){
         final URI resourceBase = URI.create("D:/projects/ikora-core/target/test-classes");
-        final URI resourceFile = URI.create("D:/projects/ikora-core/target/test-classes/robot");
+        final URI resourceFile = URI.create("D:/projects/ikora-core/target/test-classes/projects");
 
         final String relativeResourcePath = FileUtils.getRelativeResourcePath(resourceBase, resourceFile);
 
-        assertEquals("robot", relativeResourcePath);
+        assertEquals("projects", relativeResourcePath);
     }
 
 
     @Test
     void testGetRelativeResourcePathWithJar(){
         final URI resourceBase = URI.create("file:/C:/Users/user/ikora-test/file:/D:/projects/ikora-core/target/ikora-core-0.0.1.jar!");
-        final URI resourceFile = URI.create("jar:file:///D:/projects/ikora-core/target/ikora-core-0.0.1.jar!/robot");
+        final URI resourceFile = URI.create("jar:file:///D:/projects/ikora-core/target/ikora-core-0.0.1.jar!/projects");
 
         final String relativeResourcePath = FileUtils.getRelativeResourcePath(resourceBase, resourceFile);
 
-        assertEquals("robot", relativeResourcePath);
+        assertEquals("projects", relativeResourcePath);
     }
 
     @Test

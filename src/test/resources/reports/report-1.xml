@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generated="20170220 14:18:54.562" generator="Robot 3.0.2 (Python 2.7.13 on win32)">
+    <suite source="C:\Users\lmfv\Documents\Saco de Features\xray-1238\robot-example\robotframework-webdemo\login_tests" id="s1" name="Login Tests">
+        <suite source="C:\Users\lmfv\Documents\Saco de Features\xray-1238\robot-example\robotframework-webdemo\login_tests\gherkin_login.robot" id="s1-s1" name="Gherkin Login">
+            <test id="s1-s1-t1" name="Gherkin Valid Login">
+                <kw name="Given browser is opened to login page">
+                    <kw name="Login Page Should Be Open" library="resource">
+                        <kw name="Title Should Be" library="Selenium2Library">
+                            <doc>Verifies that current page title equals `title`.</doc>
+                            <arguments>
+                                <arg>Log in - Your Company JIRA</arg>
+                            </arguments>
+                            <msg timestamp="20170220 14:19:07.693" level="INFO">Page title is 'Log in - Your Company JIRA'.</msg>
+                            <status status="PASS" endtime="20170220 14:19:07.693" starttime="20170220 14:19:07.158">
+                            </status>
+                        </kw>
+                        <status status="PASS" endtime="20170220 14:19:07.693" starttime="20170220 14:19:07.158">
+                        </status>
+                    </kw>
+                    <status status="PASS" endtime="20170220 14:19:07.693" starttime="20170220 14:18:55.937">
+                    </status>
+                </kw>
+                <kw name="When user &quot;admin&quot; logs in with password &quot;password123&quot;">
+                    <kw name="Input Username" library="resource">
+                        <arguments>
+                            <arg>${username}</arg>
+                        </arguments>
+                        <kw name="Input Text" library="Selenium2Library">
+                            <doc>Types the given `text` into text field identified by `locator`.</doc>
+                            <arguments>
+                                <arg>login-form-username</arg>
+                                <arg>${username}</arg>
+                            </arguments>
+                            <msg timestamp="20170220 14:19:07.696" level="INFO">Typing text 'admin' into text field 'login-form-username'</msg>
+                            <status status="PASS" endtime="20170220 14:19:09.314" starttime="20170220 14:19:07.696">
+                            </status>
+                        </kw>
+                        <status status="PASS" endtime="20170220 14:19:09.314" starttime="20170220 14:19:07.695">
+                        </status>
+                    </kw>
+                    <kw name="Input Password" library="resource">
+                        <arguments>
+                            <arg>${password}</arg>
+                        </arguments>
+                        <kw name="Input Text" library="Selenium2Library">
+                            <doc>Types the given `text` into text field identified by `locator`.</doc>
+                            <arguments>
+                                <arg>login-form-password</arg>
+                                <arg>${password}</arg>
+                            </arguments>
+                            <msg timestamp="20170220 14:19:09.316" level="INFO">Typing text 'password123' into text field 'login-form-password'</msg>
+                            <status status="PASS" endtime="20170220 14:19:10.956" starttime="20170220 14:19:09.316">
+                            </status>
+                        </kw>
+                        <status status="PASS" endtime="20170220 14:19:10.956" starttime="20170220 14:19:09.315">
+                        </status>
+                    </kw>
+                    <kw name="Submit Credentials" library="resource">
+                        <kw name="Click Button" library="Selenium2Library">
+                            <doc>Clicks a button identified by `locator`.</doc>
+                            <arguments>
+                                <arg>login-form-submit</arg>
+                            </arguments>
+                            <msg timestamp="20170220 14:19:10.958" level="INFO">Clicking button 'login-form-submit'.</msg>
+                            <status status="PASS" endtime="20170220 14:19:17.476" starttime="20170220 14:19:10.958">
+                            </status>
+                        </kw>
+                        <status status="PASS" endtime="20170220 14:19:17.477" starttime="20170220 14:19:10.957">
+                        </status>
+                    </kw>
+                    <status status="PASS" endtime="20170220 14:19:17.478" starttime="20170220 14:19:07.695">
+                    </status>
+                </kw>
+                <kw name="Then welcome page should be open" library="resource">
+                    <kw name="Location Should Be" library="Selenium2Library">
+                        <doc>Verifies that current URL is exactly `url`.</doc>
+                        <arguments>
+                            <arg>${WELCOME URL}</arg>
+                        </arguments>
+                        <kw name="Capture Page Screenshot" library="Selenium2Library">
+                            <doc>Takes a screenshot of the current page and embeds it into the log.</doc>
+                            <msg timestamp="20170220 14:19:18.702" html="yes" level="INFO">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-1.png"&gt;&lt;img src="selenium-screenshot-1.png" width="800px"&gt;&lt;/a&gt;</msg>
+                            <status status="PASS" endtime="20170220 14:19:18.702" starttime="20170220 14:19:18.004">
+                            </status>
+                        </kw>
+                        <msg timestamp="20170220 14:19:18.705" level="FAIL">Location should have been 'http://localhost:8080/secure/Dashboard.jspa' but was 'http://localhost:8080/login.jsp'</msg>
+                        <status status="FAIL" endtime="20170220 14:19:18.705" starttime="20170220 14:19:17.483">
+                        </status>
+                    </kw>
+                    <status status="FAIL" endtime="20170220 14:19:18.706" starttime="20170220 14:19:17.481">
+                    </status>
+                </kw>
+                <kw type="teardown" name="Close Browser" library="Selenium2Library">
+                    <doc>Closes the current browser.</doc>
+                    <status status="PASS" endtime="20170220 14:19:22.382" starttime="20170220 14:19:18.707">
+                    </status>
+                </kw>
+                <tags>
+                    <tag>WEB-1</tag>
+                    <tag>WEB-3</tag>
+                </tags>
+                <status status="FAIL" endtime="20170220 14:19:22.383" critical="yes" starttime="20170220 14:18:55.936">Location should have been 'http://localhost:8080/secure/Dashboard.jspa' but was 'http://localhost:8080/login.jsp'</status>
+            </test>
+            <doc>A test suite with a single Gherkin style test.This test is functionally identical to the example invalid_login.robot file.</doc>
+            <status status="FAIL" endtime="20170220 14:19:22.397" starttime="20170220 14:18:54.670">
+            </status>
+        </suite>
+        <status status="FAIL" endtime="20170220 14:22:12.549" starttime="20170220 14:18:54.567">
+        </status>
+    </suite>
+</robot>

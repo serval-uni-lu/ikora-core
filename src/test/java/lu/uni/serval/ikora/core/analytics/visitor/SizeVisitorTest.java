@@ -31,7 +31,7 @@ class SizeVisitorTest {
 
     @BeforeAll
     static void setup(){
-        project = Helpers.compileProject("robot/web-demo", true);
+        project = Helpers.compileProject("projects/web-demo", true);
     }
 
     @Test

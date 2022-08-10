@@ -38,13 +38,13 @@ import static org.junit.jupiter.api.Assertions.*;
 class BuildResultTest {
     @Test
     void testBuildSimpleProject(){
-        BuildResult build = build("robot/web-demo");
+        BuildResult build = build("projects/web-demo");
         assertNotNull(build);
 
         Assertions.assertEquals(1, build.getProjects().size());
 
-        assertNotNull(build.getSourceFile(getFileUri("robot/web-demo/gherkin_login.robot")));
-        assertNotNull(build.getSourceFile(getFileUri("robot/web-demo/resource.robot")));
+        assertNotNull(build.getSourceFile(getFileUri("projects/web-demo/gherkin_login.robot")));
+        assertNotNull(build.getSourceFile(getFileUri("projects/web-demo/resource.robot")));
         assertNull(build.getSourceFile(URI.create("Fake/path/to/file.robot")));
 
         assertTrue(build.getBuildTime() >= 0);
@@ -56,14 +56,14 @@ class BuildResultTest {
 
     @Test
     void testBuildProjectWithErrors(){
-        BuildResult build = build("robot/connected-projects");
+        BuildResult build = build("projects/connected-projects");
 
         assertNotNull(build);
         assertEquals(1, build.getProjects().size());
-        assertNotNull(build.getSourceFile(getFileUri("robot/connected-projects/project-a/test-cases.robot")));
+        assertNotNull(build.getSourceFile(getFileUri("projects/connected-projects/project-a/test-cases.robot")));
         assertFalse(build.getErrors().isEmpty());
 
-        Source source = build.getSourceFile(getFileUri("robot/connected-projects/project-a/test-cases.robot")).getSource();
+        Source source = build.getSourceFile(getFileUri("projects/connected-projects/project-a/test-cases.robot")).getSource();
         Errors errors = build.getErrors().in(source);
 
         Set<SymbolError> symbolErrors = errors.getSymbolErrors();
@@ -72,13 +72,13 @@ class BuildResultTest {
 
     @Test
     void testProjectsWithDependencies() throws IOException, URISyntaxException {
-        final File projectAFile = FileUtils.getResourceFile("robot/connected-projects/project-a");
+        final File projectAFile = FileUtils.getResourceFile("projects/connected-projects/project-a");
         assertNotNull(projectAFile);
 
-        final File projectBFile = FileUtils.getResourceFile("robot/connected-projects/project-b");
+        final File projectBFile = FileUtils.getResourceFile("projects/connected-projects/project-b");
         assertNotNull(projectBFile);
 
-        final File projectCFile = FileUtils.getResourceFile("robot/connected-projects/project-c");
+        final File projectCFile = FileUtils.getResourceFile("projects/connected-projects/project-c");
         assertNotNull(projectCFile);
 
         Set<File> files = new HashSet<>(Arrays.asList(projectAFile, projectBFile, projectCFile));

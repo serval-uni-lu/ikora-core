@@ -36,7 +36,7 @@ class ProjectStatisticsTest {
 
     @BeforeAll
     static void setup(){
-        Project project = Helpers.compileProject("robot/web-demo", true);
+        Project project = Helpers.compileProject("projects/web-demo", true);
         statistics = new ProjectStatistics(project);
     }
 

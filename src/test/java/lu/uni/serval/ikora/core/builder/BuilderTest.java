@@ -107,7 +107,7 @@ class BuilderTest {
 
     @Test
     void testScopedByPrefixResolution() throws IOException, URISyntaxException {
-        final File robot = FileUtils.getResourceFile("robot/scope-testing");
+        final File robot = FileUtils.getResourceFile("projects/scope-testing");
         assertNotNull(robot);
 
         final BuildResult result = Builder.build(robot, Helpers.getConfiguration(), true);
@@ -136,7 +136,7 @@ class BuilderTest {
         File robot = null;
 
         try{
-        robot = FileUtils.getResourceFile("robot/duplicated-keyword");
+        robot = FileUtils.getResourceFile("projects/duplicated-keyword");
         } catch (Exception e) {
             fail(String.format("Failed to load 'robot/scope-testing' from resources: %s", e.getMessage()));
         }
@@ -430,13 +430,13 @@ class BuilderTest {
 
     @Test
     void testParseConnectedProject() throws IOException, URISyntaxException {
-        final File projectAFile = FileUtils.getResourceFile("robot/connected-projects/project-a");
+        final File projectAFile = FileUtils.getResourceFile("projects/connected-projects/project-a");
         assertNotNull(projectAFile);
 
-        final File projectBFile = FileUtils.getResourceFile("robot/connected-projects/project-b");
+        final File projectBFile = FileUtils.getResourceFile("projects/connected-projects/project-b");
         assertNotNull(projectBFile);
 
-        final File projectCFile = FileUtils.getResourceFile("robot/connected-projects/project-c");
+        final File projectCFile = FileUtils.getResourceFile("projects/connected-projects/project-c");
         assertNotNull(projectCFile);
 
         Set<File> files = new HashSet<>(Arrays.asList(projectAFile, projectBFile, projectCFile));

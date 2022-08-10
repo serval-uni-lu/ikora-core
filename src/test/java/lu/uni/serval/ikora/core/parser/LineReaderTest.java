@@ -27,7 +27,7 @@ class LineReaderTest {
     @Test
     void checkReadLine_SpecialCharacterReading(){
         try {
-            final File robot = FileUtils.getResourceFile("robot/special-characters.robot");
+            final File robot = FileUtils.getResourceFile("projects/special-characters.robot");
             LineReader reader = new LineReader(robot);
 
             Line line = reader.readLine();
