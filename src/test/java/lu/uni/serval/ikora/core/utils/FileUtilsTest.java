@@ -90,7 +90,7 @@ class FileUtilsTest {
 
     @Test
     void testCopyResourceFile(){
-        final File destination = Helpers.getNewTmpFolder("with s�pcial and space/ikora-copy-resources-file");
+        final File destination = Helpers.getNewTmpFolder("with sépcial and space/ikora-copy-resources-file");
         final String resources = "robot/clones.robot";
 
         try {
@@ -116,7 +116,7 @@ class FileUtilsTest {
 
     @Test
     void testCopyResourceFolder(){
-        final File destination = Helpers.getNewTmpFolder("with s�pcial and space/ikora-copy-resources-folder");
+        final File destination = Helpers.getNewTmpFolder("with sépcial and space/ikora-copy-resources-folder");
         final String resources = "robot";
 
         try {

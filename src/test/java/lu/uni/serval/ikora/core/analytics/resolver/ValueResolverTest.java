@@ -54,8 +54,8 @@ class ValueResolverTest {
 
         assertTrue(ValueResolver.matches(left, right));
 
-        left = Token.fromString("N� Compte: <${account_number}>");
-        right = Token.fromString("N� Compte: <LU00 1234 5678 9123 0000>");
+        left = Token.fromString("N° Compte: <${account_number}>");
+        right = Token.fromString("N° Compte: <LU00 1234 5678 9123 0000>");
 
         assertTrue(ValueResolver.matches(left, right));
     }
