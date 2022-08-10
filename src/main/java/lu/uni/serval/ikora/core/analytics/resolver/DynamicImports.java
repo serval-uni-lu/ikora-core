@@ -16,6 +16,7 @@
  */
 package lu.uni.serval.ikora.core.analytics.resolver;
 
+import lu.uni.serval.ikora.core.libraries.LibraryKeyword;
 import lu.uni.serval.ikora.core.libraries.builtin.keywords.ImportResource;
 import lu.uni.serval.ikora.core.libraries.builtin.keywords.ImportLibrary;
 import lu.uni.serval.ikora.core.libraries.builtin.keywords.ImportVariables;

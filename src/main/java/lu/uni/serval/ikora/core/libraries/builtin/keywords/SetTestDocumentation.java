@@ -16,9 +16,11 @@
  */
 package lu.uni.serval.ikora.core.libraries.builtin.keywords;
 
-import lu.uni.serval.ikora.core.model.LibraryKeyword;
+import lu.uni.serval.ikora.core.libraries.LibraryKeyword;
+import lu.uni.serval.ikora.core.runner.Runtime;
 import lu.uni.serval.ikora.core.types.BooleanType;
 import lu.uni.serval.ikora.core.types.StringType;
+import org.apache.commons.lang3.NotImplementedException;
 
 public class SetTestDocumentation extends LibraryKeyword {
     public SetTestDocumentation(){
@@ -26,5 +28,10 @@ public class SetTestDocumentation extends LibraryKeyword {
                 new StringType("documentation"),
                 new BooleanType(BooleanType.FALSE)
         );
+    }
+
+    @Override
+    public void execute(Runtime runtime) {
+        throw new NotImplementedException("Execution logic is not implemented yet!");
     }
 }

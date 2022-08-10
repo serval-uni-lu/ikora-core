@@ -16,9 +16,11 @@
  */
 package lu.uni.serval.ikora.core.libraries.builtin.keywords;
 
-import lu.uni.serval.ikora.core.model.LibraryKeyword;
+import lu.uni.serval.ikora.core.libraries.LibraryKeyword;
+import lu.uni.serval.ikora.core.runner.Runtime;
 import lu.uni.serval.ikora.core.types.NumberType;
 import lu.uni.serval.ikora.core.types.StringType;
+import org.apache.commons.lang3.NotImplementedException;
 
 public class ConvertToBinary extends LibraryKeyword {
     public ConvertToBinary() {
@@ -28,5 +30,10 @@ public class ConvertToBinary extends LibraryKeyword {
                 new StringType("prefix", "None"),
                 new NumberType("length", "None")
         );
+    }
+
+    @Override
+    public void execute(Runtime runtime) {
+        throw new NotImplementedException("Execution logic is not implemented yet!");
     }
 }

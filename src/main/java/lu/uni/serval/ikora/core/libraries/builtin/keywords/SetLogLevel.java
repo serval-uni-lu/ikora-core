@@ -16,11 +16,18 @@
  */
 package lu.uni.serval.ikora.core.libraries.builtin.keywords;
 
-import lu.uni.serval.ikora.core.model.LibraryKeyword;
+import lu.uni.serval.ikora.core.libraries.LibraryKeyword;
+import lu.uni.serval.ikora.core.runner.Runtime;
 import lu.uni.serval.ikora.core.types.LogLevelType;
+import org.apache.commons.lang3.NotImplementedException;
 
 public class SetLogLevel extends LibraryKeyword {
     public SetLogLevel(){
         super(Type.CONFIGURATION, new LogLevelType("level"));
+    }
+
+    @Override
+    public void execute(Runtime runtime) {
+        throw new NotImplementedException("Execution logic is not implemented yet!");
     }
 }

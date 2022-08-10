@@ -19,9 +19,12 @@ package lu.uni.serval.ikora.core.libraries.builtin.keywords;
 import lu.uni.serval.ikora.core.analytics.visitor.FindTestCaseVisitor;
 import lu.uni.serval.ikora.core.analytics.visitor.PathMemory;
 import lu.uni.serval.ikora.core.error.ErrorManager;
+import lu.uni.serval.ikora.core.libraries.LibraryKeyword;
 import lu.uni.serval.ikora.core.model.*;
+import lu.uni.serval.ikora.core.runner.Runtime;
 import lu.uni.serval.ikora.core.types.ListType;
 import lu.uni.serval.ikora.core.types.StringType;
+import org.apache.commons.lang3.NotImplementedException;
 
 public class SetTestVariable extends LibraryKeyword implements ScopeModifier {
     public SetTestVariable(){
@@ -31,6 +34,10 @@ public class SetTestVariable extends LibraryKeyword implements ScopeModifier {
         );
     }
 
+    @Override
+    public void execute(Runtime runtime) {
+        throw new NotImplementedException("Execution logic is not implemented yet!");
+    }
     @Override
     public void modifyScope(ScopeManager manager, KeywordCall call, ErrorManager errorManager) {
         NodeList<Argument> argumentList = call.getArgumentList();

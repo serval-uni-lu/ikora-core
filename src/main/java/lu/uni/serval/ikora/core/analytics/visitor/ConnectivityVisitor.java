@@ -16,7 +16,7 @@
  */
 package lu.uni.serval.ikora.core.analytics.visitor;
 
-import lu.uni.serval.ikora.core.model.LibraryKeyword;
+import lu.uni.serval.ikora.core.libraries.LibraryKeyword;
 import lu.uni.serval.ikora.core.model.TestCase;
 import lu.uni.serval.ikora.core.model.UserKeyword;
 

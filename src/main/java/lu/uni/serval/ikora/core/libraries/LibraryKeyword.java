@@ -14,11 +14,13 @@
  *     See the License for the specific language governing permissions and
  *     limitations under the License.
  */
-package lu.uni.serval.ikora.core.model;
+package lu.uni.serval.ikora.core.libraries;
 
 import lu.uni.serval.ikora.core.analytics.visitor.NodeVisitor;
 import lu.uni.serval.ikora.core.analytics.visitor.VisitorMemory;
 import lu.uni.serval.ikora.core.analytics.resolver.ValueResolver;
+import lu.uni.serval.ikora.core.model.*;
+import lu.uni.serval.ikora.core.runner.Runtime;
 import lu.uni.serval.ikora.core.types.BaseType;
 import lu.uni.serval.ikora.core.types.BaseTypeList;
 
@@ -40,6 +42,8 @@ public abstract class LibraryKeyword implements Keyword {
         this.argumentTypes = new BaseTypeList();
         this.dependencies = new HashSet<>();
     }
+
+    public abstract void execute(Runtime runtime);
 
     public Type getType(){
         return this.type;

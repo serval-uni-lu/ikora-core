@@ -16,11 +16,18 @@
  */
 package lu.uni.serval.ikora.core.libraries.builtin.keywords;
 
-import lu.uni.serval.ikora.core.model.LibraryKeyword;
+import lu.uni.serval.ikora.core.libraries.LibraryKeyword;
+import lu.uni.serval.ikora.core.runner.Runtime;
 import lu.uni.serval.ikora.core.types.ListType;
+import org.apache.commons.lang3.NotImplementedException;
 
 public class CreateDictionary extends LibraryKeyword {
     public CreateDictionary(){
         super(Type.SET, new ListType("items"));
+    }
+
+    @Override
+    public void execute(Runtime runtime) {
+        throw new NotImplementedException("Execution logic is not implemented yet!");
     }
 }

@@ -18,6 +18,7 @@ package lu.uni.serval.ikora.core.model;
 
 import lu.uni.serval.ikora.core.builder.LibraryLoader;
 import lu.uni.serval.ikora.core.error.ErrorManager;
+import lu.uni.serval.ikora.core.libraries.LibraryKeyword;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.reflections.Reflections;

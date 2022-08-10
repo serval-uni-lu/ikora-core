@@ -16,6 +16,7 @@
  */
 package lu.uni.serval.ikora.core.analytics.visitor;
 
+import lu.uni.serval.ikora.core.libraries.LibraryKeyword;
 import lu.uni.serval.ikora.core.model.*;
 
 public class SequenceVisitor extends EmptyVisitor {

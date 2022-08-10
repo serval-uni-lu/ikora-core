@@ -17,6 +17,7 @@
 package lu.uni.serval.ikora.core.model;
 
 import lu.uni.serval.ikora.core.libraries.LibraryKeywordInfo;
+import lu.uni.serval.ikora.core.libraries.LibraryKeyword;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;

@@ -16,10 +16,12 @@
  */
 package lu.uni.serval.ikora.core.libraries.builtin.keywords;
 
-import lu.uni.serval.ikora.core.model.LibraryKeyword;
+import lu.uni.serval.ikora.core.libraries.LibraryKeyword;
+import lu.uni.serval.ikora.core.runner.Runtime;
 import lu.uni.serval.ikora.core.types.ListType;
 import lu.uni.serval.ikora.core.types.ObjectType;
 import lu.uni.serval.ikora.core.types.StringType;
+import org.apache.commons.lang3.NotImplementedException;
 
 public class CallMethod extends LibraryKeyword {
     public CallMethod(){
@@ -28,5 +30,10 @@ public class CallMethod extends LibraryKeyword {
                 new StringType("method_name"),
                 new ListType("kwargs")
         );
+    }
+
+    @Override
+    public void execute(Runtime runtime) {
+        throw new NotImplementedException("Execution logic is not implemented yet!");
     }
 }

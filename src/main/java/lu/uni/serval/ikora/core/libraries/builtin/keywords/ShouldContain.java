@@ -16,10 +16,12 @@
  */
 package lu.uni.serval.ikora.core.libraries.builtin.keywords;
 
-import lu.uni.serval.ikora.core.model.LibraryKeyword;
+import lu.uni.serval.ikora.core.libraries.LibraryKeyword;
+import lu.uni.serval.ikora.core.runner.Runtime;
 import lu.uni.serval.ikora.core.types.BooleanType;
 import lu.uni.serval.ikora.core.types.ObjectType;
 import lu.uni.serval.ikora.core.types.StringType;
+import org.apache.commons.lang3.NotImplementedException;
 
 public class ShouldContain extends LibraryKeyword {
     public ShouldContain(){
@@ -30,5 +32,10 @@ public class ShouldContain extends LibraryKeyword {
                 new BooleanType("values", BooleanType.TRUE),
                 new BooleanType("ignore_case", BooleanType.FALSE)
         );
+    }
+
+    @Override
+    public void execute(Runtime runtime) {
+        throw new NotImplementedException("Execution logic is not implemented yet!");
     }
 }

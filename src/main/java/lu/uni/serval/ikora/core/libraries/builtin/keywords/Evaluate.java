@@ -16,8 +16,10 @@
  */
 package lu.uni.serval.ikora.core.libraries.builtin.keywords;
 
-import lu.uni.serval.ikora.core.model.LibraryKeyword;
+import lu.uni.serval.ikora.core.libraries.LibraryKeyword;
+import lu.uni.serval.ikora.core.runner.Runtime;
 import lu.uni.serval.ikora.core.types.StringType;
+import org.apache.commons.lang3.NotImplementedException;
 
 public class Evaluate extends LibraryKeyword {
     public Evaluate(){
@@ -26,5 +28,10 @@ public class Evaluate extends LibraryKeyword {
                 new StringType("modules", "None"),
                 new StringType("namespace", "None")
         );
+    }
+
+    @Override
+    public void execute(Runtime runtime) {
+        throw new NotImplementedException("Execution logic is not implemented yet!");
     }
 }

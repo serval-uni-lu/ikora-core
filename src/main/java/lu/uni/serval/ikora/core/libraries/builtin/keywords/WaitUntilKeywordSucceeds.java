@@ -16,9 +16,11 @@
  */
 package lu.uni.serval.ikora.core.libraries.builtin.keywords;
 
-import lu.uni.serval.ikora.core.model.LibraryKeyword;
+import lu.uni.serval.ikora.core.libraries.LibraryKeyword;
+import lu.uni.serval.ikora.core.runner.Runtime;
 import lu.uni.serval.ikora.core.types.KeywordType;
 import lu.uni.serval.ikora.core.types.TimeoutType;
+import org.apache.commons.lang3.NotImplementedException;
 
 public class WaitUntilKeywordSucceeds extends LibraryKeyword {
     public WaitUntilKeywordSucceeds(){
@@ -27,5 +29,10 @@ public class WaitUntilKeywordSucceeds extends LibraryKeyword {
                 new TimeoutType("retry_interval"),
                 new KeywordType("keyword")
         );
+    }
+
+    @Override
+    public void execute(Runtime runtime) {
+        throw new NotImplementedException("Execution logic is not implemented yet!");
     }
 }

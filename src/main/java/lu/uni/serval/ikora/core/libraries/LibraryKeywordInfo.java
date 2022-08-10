@@ -17,10 +17,11 @@
 package lu.uni.serval.ikora.core.libraries;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import lu.uni.serval.ikora.core.runner.Runtime;
 import lu.uni.serval.ikora.core.types.BaseTypeList;
 import lu.uni.serval.ikora.core.model.LibraryInfo;
-import lu.uni.serval.ikora.core.model.LibraryKeyword;
 import lu.uni.serval.ikora.core.types.BaseType;
+import org.apache.commons.lang3.NotImplementedException;
 
 @JsonDeserialize(using = LibraryKeywordInfoReader.class)
 public class LibraryKeywordInfo extends LibraryKeyword {
@@ -45,6 +46,11 @@ public class LibraryKeywordInfo extends LibraryKeyword {
     @Override
     public String getLibraryName(){
         return this.library.getName();
+    }
+
+    @Override
+    public void execute(Runtime runtime) {
+        throw new NotImplementedException("Execution logic is not implemented yet!");
     }
 
     @Override
