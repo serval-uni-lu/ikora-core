@@ -19,9 +19,10 @@ package lu.uni.serval.ikora.core.runner;
 import lu.uni.serval.ikora.core.builder.LibraryLoader;
 import lu.uni.serval.ikora.core.error.ErrorManager;
 import lu.uni.serval.ikora.core.model.Project;
+import lu.uni.serval.ikora.core.model.Suite;
 import lu.uni.serval.ikora.core.runner.exception.InternalException;
 import lu.uni.serval.ikora.core.runner.exception.RunnerException;
-import lu.uni.serval.ikora.core.runner.executors.ProjectExecutor;
+import lu.uni.serval.ikora.core.runner.executors.SuiteExecutor;
 import lu.uni.serval.ikora.core.runner.report.Report;
 
 import java.util.Optional;
@@ -38,8 +39,13 @@ public class Runner {
     }
 
     public Report execute() throws RunnerException {
-        final ProjectExecutor executor = new ProjectExecutor(runtime);
-        executor.execute(project);
+        runtime.reset();
+
+        for(Suite suite: project.getSuites()){
+            new SuiteExecutor(runtime, suite).execute();
+        }
+
+        runtime.finish();
 
         final Optional<Report> report = runtime.getReport();
 

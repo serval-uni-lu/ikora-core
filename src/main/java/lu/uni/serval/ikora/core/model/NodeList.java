@@ -76,6 +76,10 @@ public class NodeList<N extends SourceNode> extends SourceNode implements List<N
         return nodes.toArray(a);
     }
 
+    public List<N> toList(){
+        return new ArrayList<>(nodes);
+    }
+
     @Override
     public Stream<N> stream(){
         return nodes.stream();

@@ -16,11 +16,13 @@
  */
 package lu.uni.serval.ikora.core.types;
 
-public class BaseType {
+import lu.uni.serval.ikora.core.model.Argument;
+
+public abstract class BaseType {
     private final String name;
     private final String defaultValue;
 
-    public BaseType(String name, String defaultValue) {
+    protected BaseType(String name, String defaultValue) {
         this.name = name;
         this.defaultValue = defaultValue;
     }
@@ -36,4 +38,8 @@ public class BaseType {
     public boolean hasDefaultValue(){
         return defaultValue != null;
     }
+
+    public abstract boolean isValid(Argument argument);
+
+    public abstract boolean isSingleValue();
 }

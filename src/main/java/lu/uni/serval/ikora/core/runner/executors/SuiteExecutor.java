@@ -21,23 +21,25 @@ import lu.uni.serval.ikora.core.model.TestCase;
 import lu.uni.serval.ikora.core.runner.Runtime;
 import lu.uni.serval.ikora.core.runner.exception.RunnerException;
 
-public class SuiteExecutor extends BaseExecutor{
-    public SuiteExecutor(Runtime runtime) {
-        super(runtime);
+public class SuiteExecutor {
+    private final Runtime runtime;
+    private final Suite suite;
+
+    public SuiteExecutor(Runtime runtime, Suite suite) {
+        this.runtime = runtime;
+        this.suite = suite;
     }
 
-    public void execute(Suite suite) throws RunnerException {
+    public void execute() throws RunnerException {
         runtime.enterSuite(suite);
 
         for(Suite child: suite.getSuites()){
-            execute(child);
+            new SuiteExecutor(runtime, child).execute();
         }
 
         if(suite.isSourceFile()){
-            final TestCaseExecutor executor = new TestCaseExecutor(runtime);
-
             for(TestCase testCase: suite.getTestCases()){
-                executor.execute(testCase);
+                new TestCaseExecutor(runtime, testCase).execute();
             }
         }
 

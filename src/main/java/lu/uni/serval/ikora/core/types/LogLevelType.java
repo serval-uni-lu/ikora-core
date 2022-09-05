@@ -16,12 +16,38 @@
  */
 package lu.uni.serval.ikora.core.types;
 
+import lu.uni.serval.ikora.core.model.Argument;
+
+import java.util.Arrays;
+
 public class LogLevelType extends BaseType {
+    enum Value {
+        EMERGENCY,
+        ALERT,
+        CRITICAL,
+        ERROR,
+        WARN,
+        NOTICE,
+        INFO,
+        DEBUG
+    }
+
     public LogLevelType(String name) {
         super(name, null);
     }
 
     public LogLevelType(String name, String defaultValue) {
         super(name, defaultValue);
+    }
+
+    @Override
+    public boolean isValid(Argument argument) {
+        final String candidate = argument.getName().trim().toUpperCase();
+        return Arrays.stream(Value.values()).anyMatch(v -> v.name().equals(candidate));
+    }
+
+    @Override
+    public boolean isSingleValue() {
+        return true;
     }
 }

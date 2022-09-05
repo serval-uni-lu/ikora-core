@@ -51,6 +51,14 @@ public class Runtime {
         return scope.findInScope(testCases, suites, name);
     }
 
+    public void addArgumentToScope(List<Argument> arguments){
+        this.scope.addToArguments(arguments);
+    }
+
+    public List<Argument> getArguments() {
+        return this.scope.getArguments();
+    }
+
     public void addToGlobalScope(Variable variable){
         this.scope.addToGlobalScope(variable);
     }
@@ -96,12 +104,12 @@ public class Runtime {
 
     public void exitSuite(Suite suite) {
         this.scope.exitSuite(suite);
-        this.reportBuilder.exitSuite();
+        this.reportBuilder.exitSuite(suite);
     }
 
     public void exitNode(Node node){
         this.scope.exitNode(node);
-        this.reportBuilder.exitNode();
+        this.reportBuilder.exitNode(node);
     }
 
     public void finish() {

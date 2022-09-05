@@ -16,6 +16,8 @@
  */
 package lu.uni.serval.ikora.core.types;
 
+import lu.uni.serval.ikora.core.model.Argument;
+
 public class UnresolvedType extends BaseType {
     private UnresolvedType() {
         super("<UNRESOLVED TYPE>", "");
@@ -23,5 +25,15 @@ public class UnresolvedType extends BaseType {
 
     public static UnresolvedType get() {
         return new UnresolvedType();
+    }
+
+    @Override
+    public boolean isValid(Argument argument) {
+        return false;
+    }
+
+    @Override
+    public boolean isSingleValue() {
+        return true;
     }
 }

@@ -17,10 +17,13 @@
 package lu.uni.serval.ikora.core.libraries.builtin.keywords;
 
 import lu.uni.serval.ikora.core.libraries.LibraryKeyword;
+import lu.uni.serval.ikora.core.model.Argument;
 import lu.uni.serval.ikora.core.runner.Runtime;
 import lu.uni.serval.ikora.core.types.BooleanType;
 import lu.uni.serval.ikora.core.types.LogLevelType;
 import lu.uni.serval.ikora.core.types.StringType;
+
+import java.util.List;
 
 public class Log extends LibraryKeyword {
     public Log(){
@@ -36,6 +39,11 @@ public class Log extends LibraryKeyword {
 
     @Override
     public void execute(Runtime runtime) {
-        runtime.setMessage("INFO", "message");
+        final List<Argument> arguments = runtime.getArguments();
+
+        final String message = arguments.get(0).getName();
+        final String level = arguments.size() >= 2 ? arguments.get(1).getName() : "INFO";
+
+        runtime.setMessage(level, message);
     }
 }

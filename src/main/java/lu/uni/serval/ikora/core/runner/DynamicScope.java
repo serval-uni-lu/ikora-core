@@ -26,7 +26,7 @@ public class DynamicScope implements ScopeManager {
     private final Deque<Block<Suite, Variable>> suiteStack;
     private final Deque<Block<TestCase, Variable>> testStack;
     private final Deque<Block<Keyword, Variable>> keywordStack;
-    private final Deque<Block<Step, Argument>> argumentStack;
+    private final Deque<List<Argument>> argumentStack;
     private NodeList<Value> returnValues;
 
     public DynamicScope(){
@@ -53,6 +53,11 @@ public class DynamicScope implements ScopeManager {
         if(block != null && block.is(keyword)){
             block.add(variable);
         }
+    }
+
+
+    public void addToArguments(List<Argument> arguments){
+        argumentStack.add(arguments);
     }
 
     @Override
@@ -102,14 +107,6 @@ public class DynamicScope implements ScopeManager {
         else if(Keyword.class.isAssignableFrom(node.getClass())){
             keywordStack.push(new Block<>((Keyword) node));
         }
-        else if(KeywordCall.class.isAssignableFrom(node.getClass())){
-            final Block<Step, Argument> block = new Block<>((Step) node);
-            argumentStack.push(block);
-
-            for(Argument argument: ((KeywordCall) node).getArgumentList()){
-                block.add(argument);
-            }
-        }
     }
 
     public void exitNode(Node node) {
@@ -118,7 +115,6 @@ public class DynamicScope implements ScopeManager {
         }
         else if(Keyword.class.isAssignableFrom(node.getClass())){
             keywordStack.pop();
-            returnValues = ((Keyword) node).getReturnValues();
         }
         else if(KeywordCall.class.isAssignableFrom(node.getClass())){
             argumentStack.pop();
@@ -141,7 +137,11 @@ public class DynamicScope implements ScopeManager {
         return returnValues;
     }
 
-    class Block<T, U>{
+    public List<Argument> getArguments() {
+        return argumentStack.peek() != null ? argumentStack.peek() : Collections.emptyList();
+    }
+
+    static class Block<T, U>{
         T scope;
         List<U> variables;
 

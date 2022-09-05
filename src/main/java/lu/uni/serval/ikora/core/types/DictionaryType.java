@@ -16,6 +16,8 @@
  */
 package lu.uni.serval.ikora.core.types;
 
+import lu.uni.serval.ikora.core.model.Argument;
+
 public class DictionaryType extends BaseType {
     public DictionaryType(String name) {
         super(name, null);
@@ -23,5 +25,15 @@ public class DictionaryType extends BaseType {
 
     public DictionaryType(String name, String defaultValue) {
         super(name, defaultValue);
+    }
+
+    @Override
+    public boolean isValid(Argument argument) {
+        return false;
+    }
+
+    @Override
+    public boolean isSingleValue() {
+        return true;
     }
 }

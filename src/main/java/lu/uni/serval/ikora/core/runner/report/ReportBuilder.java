@@ -26,12 +26,19 @@ import lu.uni.serval.ikora.core.utils.Globals;
 
 import java.time.Instant;
 
-import java.util.Deque;
-import java.util.LinkedList;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ReportBuilder {
+
+    static final Set<Class<?>> reportedClasses;
+
+    static {
+        reportedClasses = new HashSet<>();
+        reportedClasses.add(Keyword.class);
+        reportedClasses.add(Suite.class);
+    }
+
     private final ErrorManager errorManager;
     private Report report;
     private Deque<ReportElement> stack;
@@ -52,31 +59,35 @@ public class ReportBuilder {
     }
 
     public void enterNode(Node node) throws BadElementException {
-        ReportElement element = null;
+        if(isReported(node)){
+            ReportElement element = null;
 
-        if(TestCase.class.isAssignableFrom(node.getClass())){
-            element = createTestNode((TestCase) node);
-        }
-        else if(Keyword.class.isAssignableFrom(node.getClass())){
-            element = createKeywordNode((Keyword) node);
-        }
+            if(TestCase.class.isAssignableFrom(node.getClass())){
+                element = createTestNode((TestCase) node);
+            }
+            else if(Keyword.class.isAssignableFrom(node.getClass())){
+                element = createKeywordNode((Keyword) node);
+            }
 
-        if(element != null){
-            stack.peek().addElement(element);
-            stack.push(element);
+            if(element != null){
+                stack.peek().addElement(element);
+                stack.push(element);
+            }
         }
     }
 
-    public void exitSuite() {
-        exitNode();
+    public void exitSuite(Suite suite) {
+        exitNode(suite);
     }
 
 
-    public void exitNode() {
-        final ReportElement popped = stack.pop();
-        final StatusNode.Type status = getTypeFromError();
+    public void exitNode(Object node) {
+        if(isReported(node)){
+            final ReportElement popped = stack.pop();
+            final StatusNode.Type status = getTypeFromError();
 
-        popped.updateStatus(status);
+            popped.updateStatus(status);
+        }
     }
 
     public void reset() {
@@ -130,5 +141,9 @@ public class ReportBuilder {
 
     public ReportElement getCurrentElement() {
         return stack.peek();
+    }
+
+    static boolean isReported(Object object){
+        return reportedClasses.stream().anyMatch(c -> c.isAssignableFrom(object.getClass()));
     }
 }

@@ -18,32 +18,37 @@ package lu.uni.serval.ikora.core.runner.executors;
 
 import lu.uni.serval.ikora.core.model.Step;
 import lu.uni.serval.ikora.core.model.TestCase;
+import lu.uni.serval.ikora.core.model.TestProcessing;
 import lu.uni.serval.ikora.core.runner.Runtime;
 import lu.uni.serval.ikora.core.runner.exception.RunnerException;
 
-public class TestCaseExecutor extends BaseExecutor {
-    public TestCaseExecutor(Runtime runtime) {
-        super(runtime);
+import java.util.Optional;
+
+public class TestCaseExecutor extends NodeExecutor {
+    private final TestCase testCase;
+
+    public TestCaseExecutor(Runtime runtime, TestCase testCase) {
+        super(runtime, testCase);
+        this.testCase = testCase;
     }
 
-    public void execute(TestCase testCase) {
+    @Override
+    public void executeImpl() throws RunnerException{
         try{
-            runtime.enterNode(testCase);
-
-            testCase.getSetup().ifPresent(setup -> new TestProcessingExecutor(runtime).execute(setup));
-
-            final StepExecutor executor = new StepExecutor(runtime);
+            final Optional<TestProcessing> setup = testCase.getSetup();
+            if(setup.isPresent()){
+                new TestProcessingExecutor(runtime, setup.get()).execute();
+            }
 
             for(Step step: testCase.getSteps()){
-                executor.execute(step);
+                new StepExecutor(runtime, step).execute();
             }
         }
-        catch (RunnerException e){
-
-        }
         finally {
-            testCase.getTearDown().ifPresent(tearDown -> new TestProcessingExecutor(runtime).execute(tearDown));
-            runtime.exitNode(testCase);
+            final Optional<TestProcessing> tearDown = testCase.getTearDown();
+            if(tearDown.isPresent()){
+                new TestProcessingExecutor(runtime, tearDown.get()).execute();
+            }
         }
     }
 }

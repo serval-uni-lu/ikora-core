@@ -25,12 +25,16 @@ import lu.uni.serval.ikora.core.runner.exception.RunnerException;
 
 import java.util.Set;
 
-public class StepExecutor extends BaseExecutor{
-    StepExecutor(Runtime runtime) {
-        super(runtime);
+public class StepExecutor extends NodeExecutor {
+    private final Step step;
+
+    StepExecutor(Runtime runtime, Step step) {
+        super(runtime, step);
+        this.step = step;
     }
 
-    void execute(Step step) throws RunnerException {
+    @Override
+    protected void executeImpl() throws RunnerException {
         if(step instanceof KeywordCall){
             execute((KeywordCall)step);
         }
@@ -47,6 +51,9 @@ public class StepExecutor extends BaseExecutor{
             runtime.registerSymbolErrorAndThrow(call.getSource(), "Found multiple definition", call.getRange());
         }
 
-        new KeywordExecutor(runtime).execute(keywords.iterator().next());
+        final Keyword keyword = keywords.iterator().next();
+
+        new ArgumentExecutor(runtime, keyword.getArgumentTypes(), call.getArgumentList()).execute();
+        new KeywordExecutor(runtime, keyword).execute();
     }
 }

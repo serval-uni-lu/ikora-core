@@ -19,12 +19,16 @@ package lu.uni.serval.ikora.core.runner.executors;
 import lu.uni.serval.ikora.core.model.TestProcessing;
 import lu.uni.serval.ikora.core.runner.Runtime;
 
-public class TestProcessingExecutor extends BaseExecutor {
-    public TestProcessingExecutor(Runtime runtime) {
-        super(runtime);
+public class TestProcessingExecutor extends NodeExecutor {
+    private final TestProcessing testProcessing;
+
+    public TestProcessingExecutor(Runtime runtime, TestProcessing testProcessing) {
+        super(runtime, testProcessing);
+        this.testProcessing = testProcessing;
     }
 
-    public void execute(TestProcessing testProcessing){
+    @Override
+    protected void executeImpl(){
 
     }
 }

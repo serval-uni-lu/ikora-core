@@ -1,46 +1,35 @@
 package lu.uni.serval.ikora.core.runner.executors;
 
-import lu.uni.serval.ikora.core.model.Keyword;
+import lu.uni.serval.ikora.core.model.*;
 import lu.uni.serval.ikora.core.libraries.LibraryKeyword;
-import lu.uni.serval.ikora.core.model.Step;
-import lu.uni.serval.ikora.core.model.UserKeyword;
 import lu.uni.serval.ikora.core.runner.Runtime;
 import lu.uni.serval.ikora.core.runner.exception.RunnerException;
 
-public class KeywordExecutor extends BaseExecutor {
-    public KeywordExecutor(Runtime runtime) {
-        super(runtime);
+public class KeywordExecutor extends NodeExecutor {
+    private final Keyword keyword;
+
+    public KeywordExecutor(Runtime runtime, Keyword keyword) {
+        super(runtime, keyword);
+        this.keyword = keyword;
     }
 
-    public void execute(Keyword keyword) throws RunnerException {
+    @Override
+    protected void executeImpl() throws RunnerException {
         if(keyword instanceof UserKeyword){
-            execute((UserKeyword) keyword);
+            executeImpl((UserKeyword) keyword);
         }
         else if(keyword instanceof LibraryKeyword){
-            execute((LibraryKeyword)keyword);
+            executeImpl((LibraryKeyword)keyword);
         }
     }
 
-    private void execute(UserKeyword userKeyword) throws RunnerException{
-        try{
-            runtime.enterNode(userKeyword);
-
-            final StepExecutor executor = new StepExecutor(runtime);
-
-            for(Step step: userKeyword.getSteps()){
-                executor.execute(step);
-            }
-        }
-        finally {
-            runtime.exitNode(userKeyword);
+    private void executeImpl(UserKeyword userKeyword) throws RunnerException{
+        for(Step step: userKeyword.getSteps()){
+            new StepExecutor(runtime, step).execute();
         }
     }
 
-    private void execute(LibraryKeyword libraryKeyword) throws RunnerException {
-        runtime.enterNode(libraryKeyword);
-
+    private void executeImpl(LibraryKeyword libraryKeyword) throws RunnerException {
         libraryKeyword.execute(runtime);
-
-        runtime.exitNode(libraryKeyword);
     }
 }
