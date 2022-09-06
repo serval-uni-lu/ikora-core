@@ -82,11 +82,6 @@ public class TestCase extends KeywordDefinition {
     }
 
     @Override
-    public NodeList<Value> getReturnValues() {
-        return new NodeList<>();
-    }
-
-    @Override
     public BaseTypeList getArgumentTypes() {
         return new BaseTypeList();
     }

@@ -18,6 +18,8 @@ package lu.uni.serval.ikora.core.types;
 
 import lu.uni.serval.ikora.core.model.Argument;
 
+import java.util.Optional;
+
 public abstract class BaseType {
     private final String name;
     private final String defaultValue;
@@ -42,4 +44,6 @@ public abstract class BaseType {
     public abstract boolean isValid(Argument argument);
 
     public abstract boolean isSingleValue();
+
+    //public abstract <T> T convert(Argument argument);
 }

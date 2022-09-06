@@ -163,4 +163,12 @@ public class BaseTypeList implements List<BaseType> {
                 .map(this::indexOf)
                 .collect(Collectors.toList());
     }
+
+    public int findByName(String name) {
+        return argumentTypes.stream()
+                .filter(t -> t.getName().equals(name))
+                .findFirst()
+                .map(this::indexOf)
+                .orElse(-1);
+    }
 }

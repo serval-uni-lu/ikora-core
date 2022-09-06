@@ -24,7 +24,6 @@ public interface Keyword extends Node, Dependable {
     }
 
     Type getType();
-    NodeList<Value> getReturnValues();
     Documentation getDocumentation();
     BaseTypeList getArgumentTypes();
 }

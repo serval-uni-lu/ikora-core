@@ -29,17 +29,27 @@ import java.util.*;
 public abstract class LibraryKeyword implements Keyword {
     protected final Type type;
     protected final BaseTypeList argumentTypes;
+    protected final BaseTypeList returnTypes;
     private final Set<SourceNode> dependencies;
 
     protected LibraryKeyword(Type type, BaseType... argumentTypes) {
         this.type = type;
         this.argumentTypes = new BaseTypeList(Arrays.asList(argumentTypes));
+        this.returnTypes = new BaseTypeList();
+        this.dependencies = new HashSet<>();
+    }
+
+    protected LibraryKeyword(Type type, BaseTypeList argumentTypes, BaseTypeList returnTypes) {
+        this.type = type;
+        this.argumentTypes = argumentTypes;
+        this.returnTypes = returnTypes;
         this.dependencies = new HashSet<>();
     }
 
     protected LibraryKeyword(Type type){
         this.type = type;
         this.argumentTypes = new BaseTypeList();
+        this.returnTypes = new BaseTypeList();
         this.dependencies = new HashSet<>();
     }
 
@@ -87,11 +97,6 @@ public abstract class LibraryKeyword implements Keyword {
 
     public Documentation getDocumentation(){
         return new Documentation();
-    }
-
-    @Override
-    public NodeList<Value> getReturnValues(){
-        return new NodeList<>();
     }
 
     @Override

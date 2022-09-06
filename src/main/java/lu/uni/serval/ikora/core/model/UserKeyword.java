@@ -80,11 +80,6 @@ public class UserKeyword extends KeywordDefinition {
     }
 
     @Override
-    public NodeList<Value> getReturnValues() {
-        return returnVariables;
-    }
-
-    @Override
     public BaseTypeList getArgumentTypes() {
         return new BaseTypeList(
                 arguments.stream()
