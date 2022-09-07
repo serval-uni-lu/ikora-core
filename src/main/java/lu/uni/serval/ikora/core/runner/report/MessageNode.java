@@ -18,6 +18,7 @@ package lu.uni.serval.ikora.core.runner.report;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlText;
+import lu.uni.serval.ikora.core.model.LogLevel;
 
 import java.text.ParseException;
 import java.time.Instant;
@@ -46,6 +47,10 @@ public class MessageNode {
 
     public String getLevel() {
         return level;
+    }
+
+    public void setLevel(LogLevel level){
+        this.level = level.name();
     }
 
     public void setLevel(String level) {

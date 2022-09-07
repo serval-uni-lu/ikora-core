@@ -17,14 +17,12 @@
 package lu.uni.serval.ikora.core.libraries.builtin.keywords;
 
 import lu.uni.serval.ikora.core.libraries.LibraryKeyword;
-import lu.uni.serval.ikora.core.model.Argument;
+import lu.uni.serval.ikora.core.model.LogLevel;
 import lu.uni.serval.ikora.core.runner.Runtime;
 import lu.uni.serval.ikora.core.runner.exception.RunnerException;
 import lu.uni.serval.ikora.core.types.BooleanType;
 import lu.uni.serval.ikora.core.types.LogLevelType;
 import lu.uni.serval.ikora.core.types.StringType;
-
-import java.util.List;
 
 import static lu.uni.serval.ikora.core.libraries.ArgumentFetcher.fetch;
 
@@ -42,10 +40,8 @@ public class Log extends LibraryKeyword {
 
     @Override
     public void execute(Runtime runtime) throws RunnerException {
-        final List<Argument> arguments = runtime.getArguments();
-
         final String message = fetch(runtime, "message", this, String.class);
-        final String level = fetch(runtime, "level", this, String.class);
+        final LogLevel level = fetch(runtime, "level", this, LogLevel.class);
 
         runtime.setMessage(level, message);
     }

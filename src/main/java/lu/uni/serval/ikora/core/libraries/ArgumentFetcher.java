@@ -27,8 +27,12 @@ public class ArgumentFetcher {
 
         String value;
 
-        if(position < arguments.size()) {
-            final SourceNode node = argumentByName.orElseGet(() -> arguments.get(position).getDefinition());
+        if(argumentByName.isPresent()){
+            final SourceNode node = argumentByName.get();
+            value = node.getName();
+        }
+        else if(position < arguments.size()) {
+            final SourceNode node = arguments.get(position).getDefinition();
             value = node.getName();
         }
         else {

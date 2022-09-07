@@ -1,0 +1,6 @@
+*** Test Cases ***
+Test 1
+    Log    ${Message}
+
+*** Variables ***
+${Message}    Test 1

@@ -24,8 +24,19 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class RunnerTest {
     @Test
-    void testSimplePassingCall() throws Exception {
-        final Project project = Helpers.compileProject("projects/runner/simple");
+    void testSimplePassingCallWithLiteral() throws Exception {
+        final Project project = Helpers.compileProject("projects/runner/simple/literal.ikora");
+        final Runner runner = new Runner(project);
+        final Report report = runner.execute();
+
+        assertEquals(1, report.getNumberPassingTests());
+        assertEquals(0, report.getNumberFailingTests());
+        assertEquals(0, report.getNumberIgnoredTests());
+    }
+
+    @Test
+    void testSimplePassingCallWithVariable() throws Exception {
+        final Project project = Helpers.compileProject("projects/runner/simple/variable.ikora");
         final Runner runner = new Runner(project);
         final Report report = runner.execute();
 

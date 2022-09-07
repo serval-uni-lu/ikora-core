@@ -1,10 +1,12 @@
 package lu.uni.serval.ikora.core.runner.convertors;
 
-import lu.uni.serval.ikora.core.model.SourceNode;
 import lu.uni.serval.ikora.core.runner.Runtime;
+import lu.uni.serval.ikora.core.runner.exception.InternalException;
 import lu.uni.serval.ikora.core.runner.exception.RunnerException;
 import lu.uni.serval.ikora.core.types.BaseType;
 import lu.uni.serval.ikora.core.types.BooleanType;
+import lu.uni.serval.ikora.core.types.LogLevelType;
+import lu.uni.serval.ikora.core.types.StringType;
 
 public class TypeConvertor {
     private TypeConvertor() {}
@@ -14,6 +16,14 @@ public class TypeConvertor {
             return BooleanConvertor.convert(value, type);
         }
 
-        return null;
+        if(LogLevelType.class.equals(baseType.getClass())) {
+            return LogLevelTypeConvertor.convert(value, type);
+        }
+
+        if(StringType.class.equals(baseType.getClass())) {
+            return StringConvertor.convert(value, type);
+        }
+
+        throw new InternalException("Invalid internal type " + baseType.getClass().getName());
     }
 }

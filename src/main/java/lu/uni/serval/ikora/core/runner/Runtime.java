@@ -164,7 +164,7 @@ public class Runtime {
         return !this.errors.isEmpty();
     }
 
-    public void setMessage(String level, String message) {
+    public void setMessage(LogLevel level, String message) {
         final ReportElement currentElement = this.reportBuilder.getCurrentElement();
 
         if(currentElement instanceof KeywordNode){
