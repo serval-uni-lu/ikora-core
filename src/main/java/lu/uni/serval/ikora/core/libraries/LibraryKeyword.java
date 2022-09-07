@@ -21,6 +21,7 @@ import lu.uni.serval.ikora.core.analytics.visitor.VisitorMemory;
 import lu.uni.serval.ikora.core.analytics.resolver.ValueResolver;
 import lu.uni.serval.ikora.core.model.*;
 import lu.uni.serval.ikora.core.runner.Runtime;
+import lu.uni.serval.ikora.core.runner.exception.RunnerException;
 import lu.uni.serval.ikora.core.types.BaseType;
 import lu.uni.serval.ikora.core.types.BaseTypeList;
 
@@ -53,7 +54,7 @@ public abstract class LibraryKeyword implements Keyword {
         this.dependencies = new HashSet<>();
     }
 
-    public abstract void execute(Runtime runtime);
+    public abstract void execute(Runtime runtime) throws RunnerException;
 
     public Type getType(){
         return this.type;

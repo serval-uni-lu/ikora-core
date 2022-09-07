@@ -33,8 +33,8 @@ public abstract class BaseType {
         return name;
     }
 
-    public String getDefaultValue() {
-        return defaultValue;
+    public Optional<String> getDefaultValue() {
+        return Optional.ofNullable(defaultValue);
     }
 
     public boolean hasDefaultValue(){
@@ -44,6 +44,4 @@ public abstract class BaseType {
     public abstract boolean isValid(Argument argument);
 
     public abstract boolean isSingleValue();
-
-    //public abstract <T> T convert(Argument argument);
 }
