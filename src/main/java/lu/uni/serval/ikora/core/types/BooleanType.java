@@ -16,8 +16,6 @@
  */
 package lu.uni.serval.ikora.core.types;
 
-import lu.uni.serval.ikora.core.model.Argument;
-
 public class BooleanType extends BaseType {
     public static final String TRUE = "TRUE";
     public static final String FALSE = "FALSE";
@@ -28,11 +26,6 @@ public class BooleanType extends BaseType {
 
     public BooleanType(String name, String defaultValue){
         super(name, defaultValue);
-    }
-
-    @Override
-    public boolean isValid(Argument argument) {
-        return argument.getName().equalsIgnoreCase(TRUE) || argument.getName().equalsIgnoreCase(FALSE);
     }
 
     @Override

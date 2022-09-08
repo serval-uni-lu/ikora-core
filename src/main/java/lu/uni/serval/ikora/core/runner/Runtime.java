@@ -47,15 +47,11 @@ public class Runtime {
         this.libraryResources = libraryResources;
     }
 
-    public Set<Node> findInScope(Set<TestCase> testCases, Set<String> suites, Token name){
-        return scope.findInScope(testCases, suites, name);
-    }
-
-    public void addArgumentToScope(List<Argument> arguments){
+    public void addArgumentToScope(List<Resolved> arguments){
         this.scope.addToArguments(arguments);
     }
 
-    public List<Argument> getArguments() {
+    public List<Resolved> getArguments() {
         return this.scope.getArguments();
     }
 
@@ -175,5 +171,9 @@ public class Runtime {
 
             ((KeywordNode)currentElement).setMessage(messageNode);
         }
+    }
+
+    public Set<Node> find(Variable variable) {
+        return scope.find(variable);
     }
 }

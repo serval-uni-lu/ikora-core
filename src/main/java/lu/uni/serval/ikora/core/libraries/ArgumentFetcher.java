@@ -1,8 +1,6 @@
 package lu.uni.serval.ikora.core.libraries;
 
-import lu.uni.serval.ikora.core.model.Argument;
-import lu.uni.serval.ikora.core.model.DictionaryEntry;
-import lu.uni.serval.ikora.core.model.SourceNode;
+import lu.uni.serval.ikora.core.runner.Resolved;
 import lu.uni.serval.ikora.core.runner.Runtime;
 import lu.uni.serval.ikora.core.runner.convertors.TypeConvertor;
 import lu.uni.serval.ikora.core.runner.exception.InternalException;
@@ -22,23 +20,21 @@ public class ArgumentFetcher {
             throw new InternalException("No name found.");
         }
 
-        final String value = getValue(keyword, name, position, runtime);
+        final Resolved resolved = getResolved(keyword, name, position, runtime);
 
-        return TypeConvertor.convert(keyword.getArgumentTypes().get(position), value, runtime, type);
+        return TypeConvertor.convert(keyword.getArgumentTypes().get(position), resolved.getValue(), runtime, type);
     }
 
-    private static String getValue(LibraryKeyword keyword, String name, int position, Runtime runtime) throws InvalidTypeException {
-        final List<Argument> arguments = runtime.getArguments();
-        final Optional<SourceNode> argumentByName = findArgumentByName(name, arguments);
+    private static Resolved getResolved(LibraryKeyword keyword, String name, int position, Runtime runtime) throws InvalidTypeException {
+        final List<Resolved> arguments = runtime.getArguments();
+        final Optional<Resolved> valueByName = findValueByName(name, arguments);
 
-        if(argumentByName.isPresent()){
-            final SourceNode node = argumentByName.get();
-            return node.getName();
+        if(valueByName.isPresent()){
+            return valueByName.get();
         }
 
         if(position < arguments.size()) {
-            final SourceNode node = arguments.get(position).getDefinition();
-            return node.getName();
+            return arguments.get(position);
         }
 
         final Optional<String> defaultValue = keyword.getArgumentTypes().get(position).getDefaultValue();
@@ -47,16 +43,12 @@ public class ArgumentFetcher {
             throw new InvalidTypeException("Missing argument and no default provided for " + name);
         }
 
-        return defaultValue.get();
+        return Resolved.create(defaultValue.get());
     }
 
-    private static Optional<SourceNode> findArgumentByName(String name, List<Argument> arguments){
+    private static Optional<Resolved> findValueByName(String name, List<Resolved> arguments){
         return arguments.stream()
-                .filter(Argument::isDictionaryEntry)
-                .map(Argument::getDefinition)
-                .map(DictionaryEntry.class::cast)
-                .filter(e -> e.getKey().getName().equalsIgnoreCase(name))
-                .map(DictionaryEntry::getValue)
+                .filter(r -> r.is(name))
                 .findFirst();
     }
 }

@@ -17,7 +17,6 @@
 package lu.uni.serval.ikora.core.runner;
 
 import lu.uni.serval.ikora.core.model.*;
-import org.apache.commons.lang3.NotImplementedException;
 
 import java.util.*;
 
@@ -26,7 +25,7 @@ public class DynamicScope implements ScopeManager {
     private final Deque<Block<Suite, Variable>> suiteStack;
     private final Deque<Block<TestCase, Variable>> testStack;
     private final Deque<Block<Keyword, Variable>> keywordStack;
-    private final Deque<List<Argument>> argumentStack;
+    private final Deque<List<Resolved>> argumentStack;
     private NodeList<Value> returnValues;
 
     public DynamicScope(){
@@ -56,7 +55,7 @@ public class DynamicScope implements ScopeManager {
     }
 
 
-    public void addToArguments(List<Argument> arguments){
+    public void addToArguments(List<Resolved> arguments){
         argumentStack.add(arguments);
     }
 
@@ -88,8 +87,19 @@ public class DynamicScope implements ScopeManager {
         global.add(variable);
     }
 
-    public Set<Node> findInScope(Set<TestCase> testCases, Set<String> suites, Token name) {
-        throw new NotImplementedException("Runner is not implemented yet");
+    public Set<Node> find(Variable variable) {
+        final Set<Node> found = new HashSet<>();
+
+        final SourceFile sourceFile = variable.getSourceFile();
+        final List<VariableAssignment> variableAssignmentList = sourceFile.getVariables();
+
+        for(VariableAssignment variableAssignment: variableAssignmentList){
+            if(variableAssignment.matches(variable.getDefinitionToken())){
+                found.add(variableAssignment);
+            }
+        }
+
+        return found;
     }
 
     public void addDynamicLibrary(KeywordDefinition keyword, List<Argument> argumentList) {
@@ -137,7 +147,7 @@ public class DynamicScope implements ScopeManager {
         return returnValues;
     }
 
-    public List<Argument> getArguments() {
+    public List<Resolved> getArguments() {
         return argumentStack.peek() != null ? argumentStack.peek() : Collections.emptyList();
     }
 

@@ -16,8 +16,6 @@
  */
 package lu.uni.serval.ikora.core.types;
 
-import lu.uni.serval.ikora.core.model.Argument;
-
 public class NumberType extends BaseType {
     public NumberType(String name){
         super(name, null);
@@ -25,23 +23,6 @@ public class NumberType extends BaseType {
 
     public NumberType(String name, String defaultValue){
         super(name, defaultValue);
-    }
-
-    @Override
-    public boolean isValid(Argument argument) {
-        final String value = argument.getName();
-
-        if(value.isEmpty()){
-            return false;
-        }
-
-        try {
-            Double.parseDouble(value);
-            return true;
-        }
-        catch (NumberFormatException e) {
-            return false;
-        }
     }
 
     @Override

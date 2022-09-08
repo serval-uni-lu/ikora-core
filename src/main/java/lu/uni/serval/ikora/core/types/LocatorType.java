@@ -16,8 +16,6 @@
  */
 package lu.uni.serval.ikora.core.types;
 
-import lu.uni.serval.ikora.core.model.Argument;
-
 public class LocatorType extends BaseType {
     public LocatorType(String name) {
         super(name, null);
@@ -25,11 +23,6 @@ public class LocatorType extends BaseType {
 
     public LocatorType(String name, String defaultValue) {
         super(name, defaultValue);
-    }
-
-    @Override
-    public boolean isValid(Argument argument) {
-        return false;
     }
 
     @Override

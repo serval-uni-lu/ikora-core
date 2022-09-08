@@ -16,8 +16,6 @@
  */
 package lu.uni.serval.ikora.core.types;
 
-import lu.uni.serval.ikora.core.model.Argument;
-
 import java.util.Optional;
 
 public abstract class BaseType {
@@ -40,8 +38,6 @@ public abstract class BaseType {
     public boolean hasDefaultValue(){
         return defaultValue != null;
     }
-
-    public abstract boolean isValid(Argument argument);
 
     public abstract boolean isSingleValue();
 }

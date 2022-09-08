@@ -16,11 +16,6 @@
  */
 package lu.uni.serval.ikora.core.types;
 
-import lu.uni.serval.ikora.core.model.Argument;
-import lu.uni.serval.ikora.core.model.LogLevel;
-
-import java.util.Arrays;
-
 public class LogLevelType extends BaseType {
 
     public LogLevelType(String name) {
@@ -29,12 +24,6 @@ public class LogLevelType extends BaseType {
 
     public LogLevelType(String name, String defaultValue) {
         super(name, defaultValue);
-    }
-
-    @Override
-    public boolean isValid(Argument argument) {
-        final String candidate = argument.getName().trim().toUpperCase();
-        return Arrays.stream(LogLevel.values()).anyMatch(v -> v.name().equals(candidate));
     }
 
     @Override
