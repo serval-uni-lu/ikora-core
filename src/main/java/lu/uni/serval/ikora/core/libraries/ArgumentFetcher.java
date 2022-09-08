@@ -22,30 +22,32 @@ public class ArgumentFetcher {
             throw new InternalException("No name found.");
         }
 
+        final String value = getValue(keyword, name, position, runtime);
+
+        return TypeConvertor.convert(keyword.getArgumentTypes().get(position), value, runtime, type);
+    }
+
+    private static String getValue(LibraryKeyword keyword, String name, int position, Runtime runtime) throws InvalidTypeException {
         final List<Argument> arguments = runtime.getArguments();
         final Optional<SourceNode> argumentByName = findArgumentByName(name, arguments);
 
-        String value;
-
         if(argumentByName.isPresent()){
             final SourceNode node = argumentByName.get();
-            value = node.getName();
+            return node.getName();
         }
-        else if(position < arguments.size()) {
+
+        if(position < arguments.size()) {
             final SourceNode node = arguments.get(position).getDefinition();
-            value = node.getName();
-        }
-        else {
-            final Optional<String> defaultValue = keyword.getArgumentTypes().get(position).getDefaultValue();
-
-            if(!defaultValue.isPresent()){
-                throw new InvalidTypeException("Missing argument and no default provided for " + name);
-            }
-
-            value = defaultValue.get();
+            return node.getName();
         }
 
-        return TypeConvertor.convert(keyword.getArgumentTypes().get(position), value, runtime, type);
+        final Optional<String> defaultValue = keyword.getArgumentTypes().get(position).getDefaultValue();
+
+        if(!defaultValue.isPresent()){
+            throw new InvalidTypeException("Missing argument and no default provided for " + name);
+        }
+
+        return defaultValue.get();
     }
 
     private static Optional<SourceNode> findArgumentByName(String name, List<Argument> arguments){
