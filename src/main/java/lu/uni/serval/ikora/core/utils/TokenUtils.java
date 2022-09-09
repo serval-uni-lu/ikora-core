@@ -23,7 +23,7 @@ import java.util.Iterator;
 import java.util.regex.Pattern;
 
 public class TokenUtils {
-    public static final Pattern equalsFinder = Pattern.compile("(\\s*=\\s*)$");
+    public static final Pattern equalsFinder = Pattern.compile("(\\s*[^\\\\]=\\s*)$");
 
     private TokenUtils() {}
 

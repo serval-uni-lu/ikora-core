@@ -17,6 +17,7 @@
 package lu.uni.serval.ikora.core.utils;
 
 import lu.uni.serval.ikora.core.model.Token;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -25,11 +26,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class StringUtils {
-    public static final Pattern lineBreak;
-
-    static {
-        lineBreak = Pattern.compile("\r\n|\r|\n");
-    }
+    public static final Pattern lineBreak = Pattern.compile("\r\n|\r|\n");
+    public static final Pattern equalsPattern = Pattern.compile("(^=)|(\\s*[^\\\\]=\\s*)");
 
     private StringUtils() {}
 
@@ -110,9 +108,26 @@ public class StringUtils {
     }
 
     public static boolean matchesIgnoreCase(String text, String regex){
-        Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(text);
+        final Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+        final Matcher matcher = pattern.matcher(text);
 
         return matcher.matches();
+    }
+
+    public static Pair<String, String> splitEqual(String text){
+        final Matcher matcher = equalsPattern.matcher(text);
+        final Pair<String, String> split;
+
+         if(matcher.find()){
+             final int start = matcher.start() > 0 ? matcher.start() + 1 : 0;
+             final int end = matcher.end();
+
+            split = Pair.of(text.substring(0, start), text.substring(end));
+        }
+        else{
+            split = Pair.of("", text);
+        }
+
+        return split;
     }
 }

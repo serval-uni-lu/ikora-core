@@ -15,7 +15,8 @@ class ArgumentExecutorTest {
     @CsvSource(value = {
             "literal:Test 1",
             "variable:Test 1",
-            "composed-variable:Test 1-Test"},
+            "composed-variable:Test 1-Test",
+            "named:Test 1"},
             delimiter = ':'
     )
     void testLiteral(String source, String expected) throws Exception {

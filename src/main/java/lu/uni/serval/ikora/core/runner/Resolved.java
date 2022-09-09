@@ -1,6 +1,8 @@
 package lu.uni.serval.ikora.core.runner;
 
 import lu.uni.serval.ikora.core.model.Argument;
+import lu.uni.serval.ikora.core.utils.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 
 public class Resolved {
     private final String key;
@@ -14,11 +16,8 @@ public class Resolved {
     }
 
     public static Resolved create(String value, Argument origin){
-        return new Resolved("", value, origin);
-    }
-
-    public static Resolved create(String key, String value, Argument origin){
-        return new Resolved(key, value, origin);
+        final Pair<String,String> split = StringUtils.splitEqual(value);
+        return new Resolved(split.getKey(), split.getValue(), origin);
     }
 
     public static Resolved create(String value) {

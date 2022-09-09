@@ -16,7 +16,11 @@
  */
 package lu.uni.serval.ikora.core.utils;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.EmptySource;
 
 import java.io.UnsupportedEncodingException;
 
@@ -89,5 +93,22 @@ class StringUtilsTest {
         assertEquals("{variable}", StringUtils.trimLeft(" ${variable}", " $"));
         assertEquals("{variable}$", StringUtils.trimLeft("{variable}$", "="));
         assertEquals("${variable}", StringUtils.trimLeft("${variable}", "<"));
+    }
+
+    @ParameterizedTest
+    @CsvSource(value = {
+            "value:'':value",
+            "=value:'':value",
+            "param=value:param:value",
+            "param=:param:''",
+            "param\\=value:'':param\\=value",
+            "'':'':''"},
+            delimiter = ':'
+    )
+    void testSplitEquals(String text, String expectedLeft, String expectedRight){
+        final Pair<String, String> split = StringUtils.splitEqual(text);
+
+        assertEquals(expectedLeft, split.getLeft());
+        assertEquals(expectedRight, split.getRight());
     }
 }
