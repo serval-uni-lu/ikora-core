@@ -44,4 +44,15 @@ class RunnerTest {
         assertEquals(0, report.getNumberFailingTests());
         assertEquals(0, report.getNumberIgnoredTests());
     }
+
+    @Test
+    void testSimplePassingCallWithComposedVariable() throws Exception {
+        final Project project = Helpers.compileProject("projects/runner/simple/composed-variable.ikora");
+        final Runner runner = new Runner(project);
+        final Report report = runner.execute();
+
+        assertEquals(1, report.getNumberPassingTests());
+        assertEquals(0, report.getNumberFailingTests());
+        assertEquals(0, report.getNumberIgnoredTests());
+    }
 }

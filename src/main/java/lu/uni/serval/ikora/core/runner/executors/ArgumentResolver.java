@@ -3,6 +3,7 @@ package lu.uni.serval.ikora.core.runner.executors;
 import lu.uni.serval.ikora.core.model.*;
 import lu.uni.serval.ikora.core.runner.Resolved;
 import lu.uni.serval.ikora.core.runner.Runtime;
+import lu.uni.serval.ikora.core.runner.exception.MalformedVariableException;
 import lu.uni.serval.ikora.core.runner.exception.MissingSymbolException;
 import lu.uni.serval.ikora.core.runner.exception.MultipleSymbolException;
 import lu.uni.serval.ikora.core.runner.exception.RunnerException;
@@ -31,14 +32,26 @@ public class ArgumentResolver {
         return resolve(runtime, argument, (Variable) node);
     }
 
-    private static List<Resolved> resolve(Runtime runtime, Argument argument, Literal literal){
+    private static List<Resolved> resolve(Runtime runtime, Argument argument, Literal literal) throws RunnerException {
         final List<Variable> variables = literal.getVariables();
 
         if(variables.isEmpty()){
             return Collections.singletonList(Resolved.create(literal.getName(), argument));
         }
 
-        return Collections.emptyList();
+        String value = literal.getName();
+
+        for(Variable variable: variables){
+            final List<Resolved> resolvedVariables = resolve(runtime, argument, variable);
+
+            if(resolvedVariables.size() > 1){
+                throw new MalformedVariableException("Composite variable can only accept single value " + variable.getName() + " has " + resolvedVariables.size());
+            }
+
+            value = value.replace(variable.getName(), resolvedVariables.get(0).getValue());
+        }
+
+        return Collections.singletonList(Resolved.create(value, argument));
     }
 
     private static List<Resolved> resolve(Runtime runtime, Argument argument, Variable variable) throws RunnerException {
