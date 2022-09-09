@@ -31,7 +31,7 @@ public class Runner {
     private final Project project;
     private final Runtime runtime;
 
-    Runner(Project project){
+    public Runner(Project project){
         this.project = project;
 
         this.runtime = new Runtime(this.project, new DynamicScope(), new ErrorManager());
