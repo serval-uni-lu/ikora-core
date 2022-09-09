@@ -22,6 +22,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -115,19 +116,27 @@ public class StringUtils {
     }
 
     public static Pair<String, String> splitEqual(String text){
+        final Optional<Pair<Integer,Integer>> position = findEqual(text);
+
+        if(position.isPresent()){
+            int start = position.get().getLeft();
+            int stop = position.get().getRight();
+            return Pair.of(text.substring(0, start), text.substring(stop));
+        }
+
+        return Pair.of("", text);
+    }
+
+    public static Optional<Pair<Integer,Integer>> findEqual(String text){
         final Matcher matcher = equalsPattern.matcher(text);
-        final Pair<String, String> split;
 
-         if(matcher.find()){
-             final int start = matcher.start() > 0 ? matcher.start() + 1 : 0;
-             final int end = matcher.end();
+        if(matcher.find()) {
+            final int start = matcher.start() > 0 ? matcher.start() + 1 : 0;
+            final int end = matcher.end();
 
-            split = Pair.of(text.substring(0, start), text.substring(end));
-        }
-        else{
-            split = Pair.of("", text);
+            return Optional.of(Pair.of(start, end));
         }
 
-        return split;
+        return Optional.empty();
     }
 }

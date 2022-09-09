@@ -18,13 +18,12 @@ package lu.uni.serval.ikora.core.utils;
 
 import lu.uni.serval.ikora.core.model.Token;
 import lu.uni.serval.ikora.core.model.Tokens;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Iterator;
-import java.util.regex.Pattern;
+import java.util.Optional;
 
 public class TokenUtils {
-    public static final Pattern equalsFinder = Pattern.compile("(\\s*[^\\\\]=\\s*)$");
-
     private TokenUtils() {}
 
     public static Tokens accumulate(Iterator<Token> tokenIterator){
@@ -35,10 +34,22 @@ public class TokenUtils {
     }
 
     public static Token trimRightEquals(Token token) {
-        return token.trim(equalsFinder);
+        final Optional<Pair<Integer, Integer>> equal = StringUtils.findEqual(token.getText());
+
+        if(equal.isPresent() && equal.get().getRight() == token.getText().length()){
+            return token.extract(0, equal.get().getLeft());
+        }
+
+        return token.copy();
     }
 
     public static Token extractEqualSign(Token token) {
-        return token.extract(equalsFinder);
+        final Optional<Pair<Integer, Integer>> equal = StringUtils.findEqual(token.getText());
+
+        if(equal.isPresent()){
+            return token.extract(equal.get().getLeft(), equal.get().getRight());
+        }
+
+        return Token.empty();
     }
 }
