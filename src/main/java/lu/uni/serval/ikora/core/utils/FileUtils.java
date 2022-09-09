@@ -156,7 +156,7 @@ public class FileUtils {
 
     public static Reader getUnicodeReader(File f) throws IOException {
         final CharsetDetector detector = new CharsetDetector();
-        final BufferedInputStream dataStream = new BufferedInputStream(new BOMInputStream(new FileInputStream(f)));
+        final BufferedInputStream dataStream = new BufferedInputStream(new BOMInputStream(Files.newInputStream(f.toPath())));
         detector.setText(dataStream);
 
         final CharsetMatch match = detector.detect();
