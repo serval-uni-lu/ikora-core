@@ -34,7 +34,7 @@ public class Runner {
     public Runner(Project project){
         this.project = project;
 
-        this.runtime = new Runtime(this.project, new DynamicScope(), new ErrorManager());
+        this.runtime = new Runtime(new DynamicScope(), new ErrorManager());
         runtime.setLibraryResources(LibraryLoader.load(runtime.getErrors()));
     }
 

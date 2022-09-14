@@ -41,6 +41,17 @@ public class VariableAssignment extends SourceNode implements Dependable{
         addAstChild(this.values);
     }
 
+    public VariableAssignment(Variable variable, List<Value> values){
+        this.variable = variable;
+        this.equalSign = Token.empty();
+        this.values = new NodeList<>();
+        this.dependencies = new HashSet<>();
+
+        for(Value value: values){
+            addValue(value);
+        }
+    }
+
     public VariableAssignment(Variable variable, Token equalSign){
         this.variable = variable;
         this.equalSign = equalSign;

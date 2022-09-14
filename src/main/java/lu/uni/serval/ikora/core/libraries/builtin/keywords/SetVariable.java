@@ -17,9 +17,15 @@
 package lu.uni.serval.ikora.core.libraries.builtin.keywords;
 
 import lu.uni.serval.ikora.core.libraries.LibraryKeyword;
+import lu.uni.serval.ikora.core.model.Token;
+import lu.uni.serval.ikora.core.model.Value;
+import lu.uni.serval.ikora.core.parser.ValueParser;
+import lu.uni.serval.ikora.core.runner.Resolved;
 import lu.uni.serval.ikora.core.runner.Runtime;
 import lu.uni.serval.ikora.core.types.ListType;
-import org.apache.commons.lang3.NotImplementedException;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class SetVariable extends LibraryKeyword {
     public SetVariable(){
@@ -28,6 +34,11 @@ public class SetVariable extends LibraryKeyword {
 
     @Override
     public void execute(Runtime runtime) {
-        throw new NotImplementedException("Execution logic is not implemented yet!");
+        final List<Value> values = runtime.getArguments().stream()
+                .map(Resolved::getValue)
+                .map(v -> ValueParser.parseValue(Token.fromString(v)))
+                .collect(Collectors.toList());
+
+        runtime.setReturnValues(values);
     }
 }

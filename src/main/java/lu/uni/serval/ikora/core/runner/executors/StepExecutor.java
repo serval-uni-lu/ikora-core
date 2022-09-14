@@ -16,14 +16,12 @@
  */
 package lu.uni.serval.ikora.core.runner.executors;
 
-import lu.uni.serval.ikora.core.model.Keyword;
-import lu.uni.serval.ikora.core.model.KeywordCall;
-import lu.uni.serval.ikora.core.model.Step;
+import lu.uni.serval.ikora.core.model.*;
 import lu.uni.serval.ikora.core.runner.Runtime;
 import lu.uni.serval.ikora.core.utils.Finder;
 import lu.uni.serval.ikora.core.runner.exception.RunnerException;
 
-import java.util.Set;
+import java.util.*;
 
 public class StepExecutor extends NodeExecutor {
     private final Step step;
@@ -37,6 +35,9 @@ public class StepExecutor extends NodeExecutor {
     protected void executeImpl() throws RunnerException {
         if(step instanceof KeywordCall){
             execute((KeywordCall)step);
+        }
+        else if(step instanceof Assignment){
+            execute((Assignment)step);
         }
     }
 
@@ -55,5 +56,40 @@ public class StepExecutor extends NodeExecutor {
 
         new ArgumentExecutor(runtime, keyword.getArgumentTypes(), call.getArgumentList()).execute();
         new KeywordExecutor(runtime, keyword).execute();
+    }
+
+    private void execute(Assignment assignment) throws RunnerException {
+        final Optional<KeywordCall> call = assignment.getKeywordCall();
+
+        if(call.isPresent()){
+            execute(call.get());
+            final List<Value> returnValues = runtime.getReturnValues();
+            final List<Variable> variables = assignment.getLeftHandOperand();
+            final List<VariableAssignment> variableAssignments = assignValuesToVariables(variables, returnValues);
+
+            for(VariableAssignment variableAssignment: variableAssignments){
+                runtime.addToKeywordScope(variableAssignment);
+            }
+        }
+    }
+
+    private List<VariableAssignment> assignValuesToVariables(List<Variable> variables, List<Value> values){
+        if(values.isEmpty()){
+            return Collections.emptyList();
+        }
+
+        final List<VariableAssignment> assignments = new ArrayList<>(variables.size());
+        final Iterator<Value> valueIt = values.iterator();
+        for(Variable variable: variables){
+            final VariableAssignment assignment = new VariableAssignment(variable);
+            assignments.add(assignment);
+
+            do{
+                assignment.addValue(valueIt.next());
+            }
+            while (valueIt.hasNext() && !(variable instanceof ScalarVariable));
+        }
+
+        return assignments;
     }
 }

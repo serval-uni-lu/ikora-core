@@ -1,0 +1,4 @@
+*** Test Cases ***
+Test 1
+    ${Message}=    Set Variable    Test 1
+    Log    ${Message}

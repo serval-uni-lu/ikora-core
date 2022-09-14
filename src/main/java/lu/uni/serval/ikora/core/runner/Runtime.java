@@ -30,14 +30,12 @@ import java.util.Set;
 
 public class Runtime {
     private final DynamicScope scope;
-    private final Project project;
     private final ReportBuilder reportBuilder;
     private final ErrorManager errors;
 
     private LibraryResources libraryResources;
 
-    public Runtime(Project project, DynamicScope scope, ErrorManager errorManager){
-        this.project = project;
+    public Runtime(DynamicScope scope, ErrorManager errorManager){
         this.scope = scope;
         this.errors = errorManager;
         this.reportBuilder = new ReportBuilder(errorManager);
@@ -67,8 +65,8 @@ public class Runtime {
         this.scope.addToTestScope(testCase, variable);
     }
 
-    public void addToKeywordScope(Keyword keyword, Variable variable) {
-        this.scope.addToKeyword(keyword, variable);
+    public void addToKeywordScope(VariableAssignment variableAssignment) {
+        this.scope.addToKeyword(variableAssignment);
     }
 
     public void addDynamicLibrary(KeywordDefinition keyword, List<Argument> argumentList){
@@ -120,7 +118,7 @@ public class Runtime {
         return scope.getTestCase();
     }
 
-    public NodeList<Value> getReturnValues() {
+    public List<Value> getReturnValues() {
         return scope.getReturnValues();
     }
 
@@ -174,6 +172,10 @@ public class Runtime {
     }
 
     public Set<Node> find(Variable variable) {
-        return scope.find(variable);
+        return scope.findInScope(variable);
+    }
+
+    public void setReturnValues(List<Value> values) {
+        scope.setReturnValues(values);
     }
 }

@@ -24,9 +24,9 @@ public class DynamicScope implements ScopeManager {
     private final SourceNodeTable<Variable> global;
     private final Deque<Block<Suite, Variable>> suiteStack;
     private final Deque<Block<TestCase, Variable>> testStack;
-    private final Deque<Block<Keyword, Variable>> keywordStack;
+    private final Deque<Block<Keyword, VariableAssignment>> keywordStack;
     private final Deque<List<Resolved>> argumentStack;
-    private NodeList<Value> returnValues;
+    private List<Value> returnValues;
 
     public DynamicScope(){
         global = new SourceNodeTable<>();
@@ -34,7 +34,7 @@ public class DynamicScope implements ScopeManager {
         testStack = new LinkedList<>();
         keywordStack = new LinkedList<>();
         argumentStack = new LinkedList<>();
-        returnValues = new NodeList<>();
+        returnValues = Collections.emptyList();
     }
 
     public void reset(){
@@ -46,11 +46,11 @@ public class DynamicScope implements ScopeManager {
         returnValues.clear();
     }
 
-    public void addToKeyword(Keyword keyword, Variable variable) {
-        Block<Keyword, Variable> block = keywordStack.peek();
+    public void addToKeyword(VariableAssignment variableAssignment) {
+        Block<Keyword, VariableAssignment> block = keywordStack.peek();
 
-        if(block != null && block.is(keyword)){
-            block.add(variable);
+        if(block != null){
+            block.add(variableAssignment);
         }
     }
 
@@ -87,8 +87,29 @@ public class DynamicScope implements ScopeManager {
         global.add(variable);
     }
 
-    public Set<Node> find(Variable variable) {
+    public Set<Node> findInScope(Variable variable) {
         final Set<Node> found = new HashSet<>();
+
+        Optional<VariableAssignment> inScope = findInScope(Keyword.class, variable);
+
+        if(inScope.isPresent()){
+            found.add(inScope.get());
+            return found;
+        }
+
+        inScope = findInScope(TestCase.class, variable);
+
+        if(inScope.isPresent()){
+            found.add(inScope.get());
+            return found;
+        }
+
+        inScope = findInScope(Suite.class, variable);
+
+        if(inScope.isPresent()){
+            found.add(inScope.get());
+            return found;
+        }
 
         final SourceFile sourceFile = variable.getSourceFile();
         final List<VariableAssignment> variableAssignmentList = sourceFile.getVariables();
@@ -113,6 +134,7 @@ public class DynamicScope implements ScopeManager {
     public void enterNode(Node node) {
         if (TestCase.class.isAssignableFrom(node.getClass())){
             testStack.push(new Block<>((TestCase) node));
+            keywordStack.push(new Block<>((Keyword) node));
         }
         else if(Keyword.class.isAssignableFrom(node.getClass())){
             keywordStack.push(new Block<>((Keyword) node));
@@ -122,6 +144,7 @@ public class DynamicScope implements ScopeManager {
     public void exitNode(Node node) {
         if (TestCase.class.isAssignableFrom(node.getClass())){
             testStack.pop();
+            keywordStack.pop();
         }
         else if(Keyword.class.isAssignableFrom(node.getClass())){
             keywordStack.pop();
@@ -143,12 +166,26 @@ public class DynamicScope implements ScopeManager {
         return testStack.peek() != null ? Optional.of(testStack.peek().scope) : Optional.empty();
     }
 
-    public NodeList<Value> getReturnValues() {
+    public List<Value> getReturnValues() {
         return returnValues;
     }
 
     public List<Resolved> getArguments() {
         return argumentStack.peek() != null ? argumentStack.peek() : Collections.emptyList();
+    }
+
+    private Optional<VariableAssignment> findInScope(Class<?> scope, Variable variable) {
+        if (Keyword.class.isAssignableFrom(scope) && !keywordStack.isEmpty()){
+            return keywordStack.peek().variables.stream()
+                    .filter(v -> v.getVariable().matches(variable.getDefinitionToken()))
+                    .findAny();
+        }
+
+        return Optional.empty();
+    }
+
+    public void setReturnValues(List<Value> values) {
+        returnValues = values;
     }
 
     static class Block<T, U>{

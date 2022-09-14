@@ -19,7 +19,6 @@ package lu.uni.serval.ikora.core.analytics.difference;
 import lu.uni.serval.ikora.core.builder.BuildResult;
 import lu.uni.serval.ikora.core.builder.Builder;
 import lu.uni.serval.ikora.core.model.Project;
-import lu.uni.serval.ikora.core.model.SourceNode;
 import lu.uni.serval.ikora.core.model.Token;
 import lu.uni.serval.ikora.core.model.UserKeyword;
 import org.apache.commons.lang3.tuple.Pair;
@@ -27,7 +26,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
