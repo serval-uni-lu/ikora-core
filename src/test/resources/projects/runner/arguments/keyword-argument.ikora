@@ -1,0 +1,8 @@
+*** Test Cases ***
+Test 1
+    Print message    Test 1
+
+*** Keywords ***
+Print message
+    [Arguments]    ${Message}
+    Log    ${Message}

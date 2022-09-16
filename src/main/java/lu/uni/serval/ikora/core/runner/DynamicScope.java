@@ -90,27 +90,28 @@ public class DynamicScope implements ScopeManager {
     public Set<Node> findInScope(Variable variable) {
         final Set<Node> found = new HashSet<>();
 
+        // 1. Check if it was defined in the keyword
         Optional<VariableAssignment> inScope = findInScope(Keyword.class, variable);
-
         if(inScope.isPresent()){
             found.add(inScope.get());
             return found;
         }
 
+        // 2. Check if it is a test variable
         inScope = findInScope(TestCase.class, variable);
-
         if(inScope.isPresent()){
             found.add(inScope.get());
             return found;
         }
 
+        // 3. Check if it is a suite variable
         inScope = findInScope(Suite.class, variable);
-
         if(inScope.isPresent()){
             found.add(inScope.get());
             return found;
         }
 
+        // 4. Check if it is defined in a variable block
         final SourceFile sourceFile = variable.getSourceFile();
         final List<VariableAssignment> variableAssignmentList = sourceFile.getVariables();
 

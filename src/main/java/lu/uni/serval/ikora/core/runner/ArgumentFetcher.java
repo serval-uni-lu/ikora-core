@@ -1,11 +1,10 @@
-package lu.uni.serval.ikora.core.libraries;
+package lu.uni.serval.ikora.core.runner;
 
-import lu.uni.serval.ikora.core.runner.Resolved;
-import lu.uni.serval.ikora.core.runner.Runtime;
 import lu.uni.serval.ikora.core.runner.convertors.TypeConvertor;
 import lu.uni.serval.ikora.core.runner.exception.InternalException;
 import lu.uni.serval.ikora.core.runner.exception.InvalidTypeException;
 import lu.uni.serval.ikora.core.runner.exception.RunnerException;
+import lu.uni.serval.ikora.core.types.BaseTypeList;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,20 +12,19 @@ import java.util.Optional;
 public class ArgumentFetcher {
     private ArgumentFetcher() {}
 
-    public static <T> T fetch(Runtime runtime, String name, LibraryKeyword keyword, Class<T> type) throws RunnerException {
-        final int position = keyword.getArgumentTypes().findByName(name);
+    public static <T> T fetch(List<Resolved> arguments, String name, BaseTypeList argumentTypes, Class<T> type) throws RunnerException {
+        final int position = argumentTypes.findByName(name);
 
         if(position == -1){
             throw new InternalException("No name found.");
         }
 
-        final Resolved resolved = getResolved(keyword, name, position, runtime);
+        final Resolved resolved = getResolved(arguments, argumentTypes, name, position);
 
-        return TypeConvertor.convert(keyword.getArgumentTypes().get(position), resolved.getValue(), runtime, type);
+        return TypeConvertor.convert(argumentTypes.get(position), resolved.getValue(), type);
     }
 
-    private static Resolved getResolved(LibraryKeyword keyword, String name, int position, Runtime runtime) throws InvalidTypeException {
-        final List<Resolved> arguments = runtime.getArguments();
+    private static Resolved getResolved(List<Resolved> arguments, BaseTypeList argumentTypes, String name, int position) throws InvalidTypeException {
         final Optional<Resolved> valueByName = findValueByName(name, arguments);
 
         if(valueByName.isPresent()){
@@ -37,7 +35,7 @@ public class ArgumentFetcher {
             return arguments.get(position);
         }
 
-        final Optional<String> defaultValue = keyword.getArgumentTypes().get(position).getDefaultValue();
+        final Optional<String> defaultValue = argumentTypes.get(position).getDefaultValue();
 
         if(!defaultValue.isPresent()){
             throw new InvalidTypeException("Missing argument and no default provided for " + name);

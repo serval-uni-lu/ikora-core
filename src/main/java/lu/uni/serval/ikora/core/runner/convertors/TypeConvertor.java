@@ -1,6 +1,5 @@
 package lu.uni.serval.ikora.core.runner.convertors;
 
-import lu.uni.serval.ikora.core.runner.Runtime;
 import lu.uni.serval.ikora.core.runner.exception.InternalException;
 import lu.uni.serval.ikora.core.runner.exception.RunnerException;
 import lu.uni.serval.ikora.core.types.BaseType;
@@ -11,7 +10,7 @@ import lu.uni.serval.ikora.core.types.StringType;
 public class TypeConvertor {
     private TypeConvertor() {}
 
-    public static <T> T convert(BaseType baseType, String value, Runtime runtime, Class<T> type) throws RunnerException {
+    public static <T> T convert(BaseType baseType, String value, Class<T> type) throws RunnerException {
         if (BooleanType.class.equals(baseType.getClass())) {
             return BooleanConvertor.convert(value, type);
         }

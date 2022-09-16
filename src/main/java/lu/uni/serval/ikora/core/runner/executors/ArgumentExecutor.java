@@ -25,9 +25,9 @@ public class ArgumentExecutor extends NodeExecutor {
     @Override
     protected void executeImpl() throws RunnerException {
         final List<Resolved> resolved = new ArrayList<>(this.arguments.size());
-        registerArguments(resolved);
         resolveArgument(resolved);
         validateNumberArguments(resolved);
+        registerArguments(resolved);
     }
 
     private void registerArguments(List<Resolved> resolved){
