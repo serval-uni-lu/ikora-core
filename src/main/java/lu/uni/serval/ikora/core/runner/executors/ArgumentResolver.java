@@ -4,7 +4,6 @@ import lu.uni.serval.ikora.core.model.*;
 import lu.uni.serval.ikora.core.runner.Resolved;
 import lu.uni.serval.ikora.core.runner.Runtime;
 import lu.uni.serval.ikora.core.runner.exception.MalformedVariableException;
-import lu.uni.serval.ikora.core.runner.exception.MissingSymbolException;
 import lu.uni.serval.ikora.core.runner.exception.MultipleSymbolException;
 import lu.uni.serval.ikora.core.runner.exception.RunnerException;
 
@@ -58,7 +57,7 @@ public class ArgumentResolver {
         final Set<Node> matchingSet = runtime.find(variable);
 
         if(matchingSet.isEmpty()){
-            throw new MissingSymbolException("Could not resolve variable " + variable.getName());
+            return Collections.singletonList(Resolved.createUnresolved(argument));
         }
 
         if(matchingSet.size() > 1){

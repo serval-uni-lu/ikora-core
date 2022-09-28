@@ -15,6 +15,10 @@ public class Resolved {
         this.origin = origin;
     }
 
+    public static Resolved createUnresolved(Argument origin){
+        return new Resolved(null, null, origin);
+    }
+
     public static Resolved create(String value, Argument origin){
         final Pair<String,String> split = StringUtils.splitEqual(value);
         return new Resolved(split.getKey(), split.getValue(), origin);
@@ -24,7 +28,15 @@ public class Resolved {
         return new Resolved("", value, null);
     }
 
+    public boolean isResolved(){
+        return value != null;
+    }
+
     public boolean is(String name){
+        if(key == null){
+            return false;
+        }
+
         if(key.isEmpty()){
             return false;
         }

@@ -45,7 +45,7 @@ public class Runtime {
         this.libraryResources = libraryResources;
     }
 
-    public void addArgumentToScope(List<Resolved> arguments){
+    public void addArgumentToScope(List<Resolved> arguments) throws InternalException {
         this.scope.addToArguments(arguments);
     }
 
@@ -53,24 +53,20 @@ public class Runtime {
         return this.scope.getArguments();
     }
 
-    public void addToGlobalScope(Variable variable){
+    public void addToGlobalScope(VariableAssignment variable){
         this.scope.addToGlobalScope(variable);
     }
 
-    public void addToSuiteScope(String suite, Variable variable){
-        this.scope.addToSuiteScope(suite, variable);
+    public void addToSuiteScope(VariableAssignment variable) throws InternalException {
+        this.scope.addToSuiteScope(variable);
     }
 
-    public void addToTestScope(TestCase testCase, Variable variable){
-        this.scope.addToTestScope(testCase, variable);
+    public void addToTestScope(VariableAssignment variable) throws InternalException {
+        this.scope.addToTestScope(variable);
     }
 
     public void addToKeywordScope(VariableAssignment variableAssignment) {
         this.scope.addToKeyword(variableAssignment);
-    }
-
-    public void addDynamicLibrary(KeywordDefinition keyword, List<Argument> argumentList){
-        this.scope.addDynamicLibrary(keyword, argumentList);
     }
 
     public void reset(){
@@ -97,7 +93,7 @@ public class Runtime {
     }
 
     public void exitSuite(Suite suite) {
-        this.scope.exitSuite(suite);
+        this.scope.exitSuite();
         this.reportBuilder.exitSuite(suite);
     }
 

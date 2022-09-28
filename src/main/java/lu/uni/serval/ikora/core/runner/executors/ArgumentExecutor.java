@@ -4,6 +4,7 @@ import lu.uni.serval.ikora.core.model.Argument;
 import lu.uni.serval.ikora.core.model.NodeList;
 import lu.uni.serval.ikora.core.runner.Resolved;
 import lu.uni.serval.ikora.core.runner.Runtime;
+import lu.uni.serval.ikora.core.runner.exception.InternalException;
 import lu.uni.serval.ikora.core.runner.exception.RunnerException;
 import lu.uni.serval.ikora.core.types.BaseType;
 import lu.uni.serval.ikora.core.types.BaseTypeList;
@@ -26,11 +27,11 @@ public class ArgumentExecutor extends NodeExecutor {
     protected void executeImpl() throws RunnerException {
         final List<Resolved> resolved = new ArrayList<>(this.arguments.size());
         resolveArgument(resolved);
-        validateNumberArguments(resolved);
+        validateArguments(resolved);
         registerArguments(resolved);
     }
 
-    private void registerArguments(List<Resolved> resolved){
+    private void registerArguments(List<Resolved> resolved) throws InternalException {
         runtime.addArgumentToScope(resolved);
     }
 
@@ -40,27 +41,36 @@ public class ArgumentExecutor extends NodeExecutor {
         }
     }
 
-    private void validateNumberArguments(List<Resolved> resolved) throws RunnerException {
+    private void validateArguments(List<Resolved> resolved) throws RunnerException {
         final Iterator<BaseType> typeIt = argumentTypes.iterator();
-        final Iterator<Resolved> argumentIt = resolved.iterator();
+        final Iterator<Resolved> resolvedIt = resolved.iterator();
 
         while(typeIt.hasNext()){
             final BaseType type = typeIt.next();
 
-            if(argumentIt.hasNext()){
-                do{
-                    argumentIt.next();
-                    if(type.isSingleValue()) break;
-                }
-                while(argumentIt.hasNext());
+            if(resolvedIt.hasNext()){
+                validateArgument(resolvedIt, type);
             }
             else if(!type.hasDefaultValue()){
                 throw new RunnerException("Missing argument");
             }
         }
 
-        if(argumentIt.hasNext()){
+        if(resolvedIt.hasNext()){
             throw new RunnerException("Too many argument passed");
         }
+    }
+
+    private void validateArgument(Iterator<Resolved> resolvedIt, BaseType type) throws RunnerException {
+        do{
+            final Resolved current = resolvedIt.next();
+
+            if(!type.isValid(current)){
+                throw new RunnerException("Invalid argument for type " + type.getClass().getName() + ": " + current.getValue());
+            }
+
+            if(type.isSingleValue()) break;
+        }
+        while(resolvedIt.hasNext());
     }
 }

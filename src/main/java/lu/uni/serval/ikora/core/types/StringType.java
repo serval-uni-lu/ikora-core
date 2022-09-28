@@ -16,6 +16,8 @@
  */
 package lu.uni.serval.ikora.core.types;
 
+import lu.uni.serval.ikora.core.runner.Resolved;
+
 public class StringType extends BaseType {
     public StringType(String name) {
         super(name, null);
@@ -28,5 +30,10 @@ public class StringType extends BaseType {
     @Override
     public boolean isSingleValue() {
         return true;
+    }
+
+    @Override
+    public boolean isValid(Resolved resolved) {
+        return resolved.isResolved();
     }
 }

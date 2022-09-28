@@ -21,7 +21,7 @@ public class ArgumentFetcher {
 
         final Resolved resolved = getResolved(arguments, argumentTypes, name, position);
 
-        return TypeConvertor.convert(argumentTypes.get(position), resolved.getValue(), type);
+        return TypeConvertor.convert(argumentTypes.get(position), resolved, type);
     }
 
     private static Resolved getResolved(List<Resolved> arguments, BaseTypeList argumentTypes, String name, int position) throws InvalidTypeException {

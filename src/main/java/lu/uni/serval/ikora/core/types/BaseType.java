@@ -16,6 +16,8 @@
  */
 package lu.uni.serval.ikora.core.types;
 
+import lu.uni.serval.ikora.core.runner.Resolved;
+
 import java.util.Optional;
 
 public abstract class BaseType {
@@ -40,4 +42,6 @@ public abstract class BaseType {
     }
 
     public abstract boolean isSingleValue();
+
+    public abstract boolean isValid(Resolved resolved);
 }

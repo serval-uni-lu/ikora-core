@@ -21,22 +21,51 @@ import lu.uni.serval.ikora.core.analytics.visitor.PathMemory;
 import lu.uni.serval.ikora.core.error.ErrorManager;
 import lu.uni.serval.ikora.core.libraries.LibraryKeyword;
 import lu.uni.serval.ikora.core.model.*;
+import lu.uni.serval.ikora.core.parser.VariableParser;
+import lu.uni.serval.ikora.core.runner.Resolved;
 import lu.uni.serval.ikora.core.runner.Runtime;
+import lu.uni.serval.ikora.core.runner.exception.InvalidArgumentException;
+import lu.uni.serval.ikora.core.runner.exception.RunnerException;
 import lu.uni.serval.ikora.core.types.ListType;
-import lu.uni.serval.ikora.core.types.StringType;
-import org.apache.commons.lang3.NotImplementedException;
+import lu.uni.serval.ikora.core.types.VariableType;
+
+import java.util.List;
+import java.util.Optional;
+
+import static lu.uni.serval.ikora.core.runner.ArgumentFetcher.fetch;
 
 public class SetTestVariable extends LibraryKeyword implements ScopeModifier {
     public SetTestVariable(){
         super(Type.SET,
-                new StringType("name"),
+                new VariableType("name"),
                 new ListType("values")
         );
     }
 
     @Override
-    public void execute(Runtime runtime) {
-        throw new NotImplementedException("Execution logic is not implemented yet!");
+    public void execute(Runtime runtime) throws RunnerException {
+        final List<Resolved> arguments = runtime.getArguments();
+
+        final String name = fetch(arguments, "name", argumentTypes, String.class);
+        final Optional<Variable> parse = VariableParser.parse(Token.fromString(name));
+
+        if(!parse.isPresent()){
+            throw new InvalidArgumentException("Should be a variable but got " + name + " instead");
+        }
+
+        final Variable variable = parse.get();
+
+        if(variable instanceof ScalarVariable){
+            if(arguments.size() != 2){
+                throw new InvalidArgumentException("Should have 1 value assigned to Scalar Variable but got " + (arguments.size() - 1));
+            }
+
+            final VariableAssignment variableAssignment = new VariableAssignment(variable);
+            final Value value = fetch(arguments, "values", argumentTypes, Value.class);
+            variableAssignment.addValue(value);
+
+            runtime.addToTestScope(variableAssignment);
+        }
     }
     @Override
     public void modifyScope(ScopeManager manager, KeywordCall call, ErrorManager errorManager) {

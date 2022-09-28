@@ -1,26 +1,32 @@
 package lu.uni.serval.ikora.core.runner.convertors;
 
+import lu.uni.serval.ikora.core.runner.Resolved;
 import lu.uni.serval.ikora.core.runner.exception.InternalException;
 import lu.uni.serval.ikora.core.runner.exception.RunnerException;
-import lu.uni.serval.ikora.core.types.BaseType;
-import lu.uni.serval.ikora.core.types.BooleanType;
-import lu.uni.serval.ikora.core.types.LogLevelType;
-import lu.uni.serval.ikora.core.types.StringType;
+import lu.uni.serval.ikora.core.types.*;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class TypeConvertor {
+    private static final Set<Convertor> convertors;
+
+    static {
+        convertors = new HashSet<>();
+        convertors.add(new BooleanConvertor());
+        convertors.add(new LogLevelTypeConvertor());
+        convertors.add(new StringConvertor());
+        convertors.add(new VariableConvertor());
+        convertors.add(new ListConvertor());
+    }
+
     private TypeConvertor() {}
 
-    public static <T> T convert(BaseType baseType, String value, Class<T> type) throws RunnerException {
-        if (BooleanType.class.equals(baseType.getClass())) {
-            return BooleanConvertor.convert(value, type);
-        }
-
-        if(LogLevelType.class.equals(baseType.getClass())) {
-            return LogLevelTypeConvertor.convert(value, type);
-        }
-
-        if(StringType.class.equals(baseType.getClass())) {
-            return StringConvertor.convert(value, type);
+    public static <T> T convert(BaseType baseType, Resolved value, Class<T> type) throws RunnerException {
+        for(Convertor convertor: convertors){
+            if(convertor.accept(baseType)){
+                return convertor.convert(value, type);
+            }
         }
 
         throw new InternalException("Invalid internal type " + baseType.getClass().getName());

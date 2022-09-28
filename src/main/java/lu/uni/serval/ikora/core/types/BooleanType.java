@@ -16,6 +16,8 @@
  */
 package lu.uni.serval.ikora.core.types;
 
+import lu.uni.serval.ikora.core.runner.Resolved;
+
 public class BooleanType extends BaseType {
     public static final String TRUE = "TRUE";
     public static final String FALSE = "FALSE";
@@ -31,5 +33,10 @@ public class BooleanType extends BaseType {
     @Override
     public boolean isSingleValue() {
         return true;
+    }
+
+    @Override
+    public boolean isValid(Resolved resolved) {
+        return resolved.isResolved();
     }
 }

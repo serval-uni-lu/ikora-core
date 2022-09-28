@@ -1,20 +1,23 @@
 package lu.uni.serval.ikora.core.runner.convertors;
 
+import lu.uni.serval.ikora.core.runner.Resolved;
 import lu.uni.serval.ikora.core.runner.exception.InternalException;
 import lu.uni.serval.ikora.core.runner.exception.InvalidTypeException;
 import lu.uni.serval.ikora.core.runner.exception.RunnerException;
 import lu.uni.serval.ikora.core.types.BooleanType;
 
-public class BooleanConvertor {
-    private BooleanConvertor() {}
+public class BooleanConvertor extends Convertor{
+    public BooleanConvertor(){
+        super(BooleanType.class);
+    }
 
-    public static <T> T convert(String value, Class<T> type) throws RunnerException {
+    public <T> T convert(Resolved value, Class<T> type) throws RunnerException {
         if(type == Boolean.class){
-            return (T)toBoolean(value);
+            return (T)toBoolean(value.getValue());
         }
 
         if(type == String.class){
-            return (T)value;
+            return (T)value.getValue();
         }
 
         throw new InternalException("Cannot convert " + type.getName() + " using boolean convertor.");

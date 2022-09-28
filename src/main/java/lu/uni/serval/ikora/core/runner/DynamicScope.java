@@ -17,13 +17,14 @@
 package lu.uni.serval.ikora.core.runner;
 
 import lu.uni.serval.ikora.core.model.*;
+import lu.uni.serval.ikora.core.runner.exception.InternalException;
 
 import java.util.*;
 
-public class DynamicScope implements ScopeManager {
-    private final SourceNodeTable<Variable> global;
-    private final Deque<Block<Suite, Variable>> suiteStack;
-    private final Deque<Block<TestCase, Variable>> testStack;
+public class DynamicScope {
+    private final SourceNodeTable<VariableAssignment> global;
+    private final Deque<Block<Suite, VariableAssignment>> suiteStack;
+    private final Deque<Block<TestCase, VariableAssignment>> testStack;
     private final Deque<Block<Keyword, VariableAssignment>> keywordStack;
     private final Deque<List<Resolved>> argumentStack;
     private List<Value> returnValues;
@@ -55,35 +56,37 @@ public class DynamicScope implements ScopeManager {
     }
 
 
-    public void addToArguments(List<Resolved> arguments){
-        argumentStack.add(arguments);
-    }
+    public void addToArguments(List<Resolved> arguments) throws InternalException {
+        final List<Resolved> block = argumentStack.peek();
 
-    @Override
-    public void addToTestScope(TestCase testCase, Variable variable) {
-        Block<TestCase, Variable> block = testStack.peek();
-
-        if(block != null && block.is(testCase)){
-            block.add(variable);
+        if(block == null){
+            throw new InternalException("Expected to be within the scope of a test");
         }
+
+        block.addAll(arguments);
     }
 
-    @Override
-    public void addLibraryToScope(KeywordDefinition keyword, List<Argument> argumentList) {
+    public void addToTestScope(VariableAssignment variable) throws InternalException {
+        Block<TestCase, VariableAssignment> block = testStack.peek();
 
-    }
-
-    @Override
-    public void addToSuiteScope(String suite, Variable variable) {
-        Block<Suite, Variable> block = suiteStack.peek();
-
-        if(block != null && block.is(suite)){
-            block.add(variable);
+        if(block == null){
+            throw new InternalException("Expected to be within the scope of a test");
         }
+
+        block.add(variable);
     }
 
-    @Override
-    public void addToGlobalScope(Variable variable) {
+    public void addToSuiteScope(VariableAssignment variable) throws InternalException {
+        Block<Suite, VariableAssignment> block = suiteStack.peek();
+
+        if(block == null){
+            throw new InternalException("Expected to be within the scope of a suite");
+        }
+
+        block.add(variable);
+    }
+
+    public void addToGlobalScope(VariableAssignment variable) {
         global.add(variable);
     }
 
@@ -124,14 +127,6 @@ public class DynamicScope implements ScopeManager {
         return found;
     }
 
-    public void addDynamicLibrary(KeywordDefinition keyword, List<Argument> argumentList) {
-        throw new UnsupportedOperationException();
-    }
-
-    public ResourcesTable getDynamicResources(Node node) {
-        return null;
-    }
-
     public void enterNode(Node node) {
         if (TestCase.class.isAssignableFrom(node.getClass())){
             testStack.push(new Block<>((TestCase) node));
@@ -139,6 +134,9 @@ public class DynamicScope implements ScopeManager {
         }
         else if(Keyword.class.isAssignableFrom(node.getClass())){
             keywordStack.push(new Block<>((Keyword) node));
+        }
+        else if(Step.class.isAssignableFrom(node.getClass())){
+            argumentStack.push(new ArrayList<>());
         }
     }
 
@@ -150,7 +148,7 @@ public class DynamicScope implements ScopeManager {
         else if(Keyword.class.isAssignableFrom(node.getClass())){
             keywordStack.pop();
         }
-        else if(KeywordCall.class.isAssignableFrom(node.getClass())){
+        else if(Step.class.isAssignableFrom(node.getClass())){
             argumentStack.pop();
         }
     }
@@ -159,7 +157,7 @@ public class DynamicScope implements ScopeManager {
         suiteStack.push(new Block<>(suite));
     }
 
-    public void exitSuite(Suite suite) {
+    public void exitSuite() {
         suiteStack.pop();
     }
 
@@ -176,6 +174,12 @@ public class DynamicScope implements ScopeManager {
     }
 
     private Optional<VariableAssignment> findInScope(Class<?> scope, Variable variable) {
+        if(TestCase.class.isAssignableFrom(scope) && !testStack.isEmpty()) {
+            return testStack.peek().variables.stream()
+                    .filter(v -> v.getVariable().matches(variable.getDefinitionToken()))
+                    .findAny();
+        }
+
         if (Keyword.class.isAssignableFrom(scope) && !keywordStack.isEmpty()){
             return keywordStack.peek().variables.stream()
                     .filter(v -> v.getVariable().matches(variable.getDefinitionToken()))
