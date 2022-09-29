@@ -4,7 +4,9 @@ import lu.uni.serval.ikora.core.runner.Resolved;
 import lu.uni.serval.ikora.core.runner.exception.RunnerException;
 import lu.uni.serval.ikora.core.types.BaseType;
 
+import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 public abstract class Convertor {
@@ -22,5 +24,6 @@ public abstract class Convertor {
         return types.contains(type.getClass());
     }
 
-    abstract <T> T convert(Resolved value, Class<T> type) throws RunnerException;
+    abstract <T> T convert(List<Resolved> resolvedList, Class<T> type) throws RunnerException;
+    abstract <C extends Collection<T>, T> C convert(List<Resolved> resolvedList, Class<T> type, Class<C> container) throws RunnerException;
 }

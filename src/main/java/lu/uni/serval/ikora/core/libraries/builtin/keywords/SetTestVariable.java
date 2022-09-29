@@ -61,8 +61,8 @@ public class SetTestVariable extends LibraryKeyword implements ScopeModifier {
             }
 
             final VariableAssignment variableAssignment = new VariableAssignment(variable);
-            final Value value = fetch(arguments, "values", argumentTypes, Value.class);
-            variableAssignment.addValue(value);
+            final List<Value> values = fetch(arguments, "values", argumentTypes, Value.class, List.class);
+            values.forEach(variableAssignment::addValue);
 
             runtime.addToTestScope(variableAssignment);
         }

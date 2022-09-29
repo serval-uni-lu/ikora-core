@@ -5,7 +5,9 @@ import lu.uni.serval.ikora.core.runner.exception.InternalException;
 import lu.uni.serval.ikora.core.runner.exception.RunnerException;
 import lu.uni.serval.ikora.core.types.*;
 
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class TypeConvertor {
@@ -22,10 +24,20 @@ public class TypeConvertor {
 
     private TypeConvertor() {}
 
-    public static <T> T convert(BaseType baseType, Resolved value, Class<T> type) throws RunnerException {
+    public static <T> T convert(BaseType baseType, List<Resolved> value, Class<T> type) throws RunnerException {
         for(Convertor convertor: convertors){
             if(convertor.accept(baseType)){
                 return convertor.convert(value, type);
+            }
+        }
+
+        throw new InternalException("Invalid internal type " + baseType.getClass().getName());
+    }
+
+    public static <C extends Collection<T>, T> C convert(BaseType baseType, List<Resolved> value, Class<T> type, Class<C> container) throws RunnerException {
+        for(Convertor convertor: convertors){
+            if(convertor.accept(baseType)){
+                return convertor.convert(value, type, container);
             }
         }
 
