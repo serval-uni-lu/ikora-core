@@ -49,7 +49,7 @@ public class ArgumentFetcher {
 
             final List<Resolved> resolvedList = new ArrayList<>();
 
-            while(position < arguments.size() && arguments.get(position).getKey().isEmpty()){
+            while(position < arguments.size()){
                 resolvedList.add(arguments.get(position));
                 ++position;
             }

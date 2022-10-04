@@ -1,8 +1,6 @@
 package lu.uni.serval.ikora.core.runner.convertors;
 
-import lu.uni.serval.ikora.core.model.Token;
-import lu.uni.serval.ikora.core.model.Value;
-import lu.uni.serval.ikora.core.parser.ValueParser;
+import lu.uni.serval.ikora.core.model.*;
 import lu.uni.serval.ikora.core.runner.Resolved;
 import lu.uni.serval.ikora.core.runner.exception.InternalException;
 import lu.uni.serval.ikora.core.runner.exception.RunnerException;
@@ -34,7 +32,7 @@ public class ListConvertor extends Convertor{
             }
             else if(type == Value.class){
                 for(Resolved resolved: resolvedList){
-                    ts.add((T) ValueParser.parseValue(Token.fromString(resolved.getValue())));
+                    ts.add((T)resolved.toValue());
                 }
             }
 

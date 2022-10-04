@@ -55,17 +55,15 @@ public class SetTestVariable extends LibraryKeyword implements ScopeModifier {
 
         final Variable variable = parse.get();
 
-        if(variable instanceof ScalarVariable){
-            if(arguments.size() != 2){
-                throw new InvalidArgumentException("Should have 1 value assigned to Scalar Variable but got " + (arguments.size() - 1));
-            }
-
-            final VariableAssignment variableAssignment = new VariableAssignment(variable);
-            final List<Value> values = fetch(arguments, "values", argumentTypes, Value.class, List.class);
-            values.forEach(variableAssignment::addValue);
-
-            runtime.addToTestScope(variableAssignment);
+        if((variable instanceof ScalarVariable) && arguments.size() != 2){
+            throw new InvalidArgumentException("Should have 1 value assigned to Scalar Variable but got " + (arguments.size() - 1));
         }
+
+        final VariableAssignment variableAssignment = new VariableAssignment(variable);
+        final List<Value> values = fetch(arguments, "values", argumentTypes, Value.class, List.class);
+        values.forEach(variableAssignment::addValue);
+
+        runtime.addToTestScope(variableAssignment);
     }
     @Override
     public void modifyScope(ScopeManager manager, KeywordCall call, ErrorManager errorManager) {

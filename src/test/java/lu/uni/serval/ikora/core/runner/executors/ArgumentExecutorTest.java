@@ -18,7 +18,8 @@ class ArgumentExecutorTest {
             "variable:Test 1:0",
             "composed-variable:Test 1-Test:0",
             "named:Test 1:0",
-            "keyword:Test 1:1"},
+            "keyword:Test 1:1",
+            "expand-dictionary:Test 1:0"},
             delimiter = ':'
     )
     void testArgumentInTest(String source, String expected, int position) throws Exception {
@@ -34,7 +35,8 @@ class ArgumentExecutorTest {
     @ParameterizedTest
     @CsvSource(value = {
             "keyword-argument:Test 1:0",
-            "test-variable:Test 1:1"},
+            "test-variable:Test 1:1",
+            "test-named:Test 1:1"},
             delimiter = ':'
     )
     void testArgumentInKeyword(String source, String expected, int position) throws RunnerException {

@@ -1,0 +1,6 @@
+*** Test Cases ***
+Test 1
+    Log    &{Variables}
+    
+*** Variables ***
+&{Variables}    level=INFO    message=Test 1

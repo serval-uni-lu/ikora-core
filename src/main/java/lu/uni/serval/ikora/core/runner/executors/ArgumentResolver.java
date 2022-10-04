@@ -3,9 +3,7 @@ package lu.uni.serval.ikora.core.runner.executors;
 import lu.uni.serval.ikora.core.model.*;
 import lu.uni.serval.ikora.core.runner.Resolved;
 import lu.uni.serval.ikora.core.runner.Runtime;
-import lu.uni.serval.ikora.core.runner.exception.MalformedVariableException;
-import lu.uni.serval.ikora.core.runner.exception.MultipleSymbolException;
-import lu.uni.serval.ikora.core.runner.exception.RunnerException;
+import lu.uni.serval.ikora.core.runner.exception.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,18 +15,27 @@ public class ArgumentResolver {
 
     public static List<Resolved> resolve(Runtime runtime, Argument argument) throws RunnerException {
         final SourceNode node = argument.getDefinition();
-        return resolve(runtime, argument, node);
+
+        try{
+            return resolve(runtime, argument, node);
+        }
+        catch (MissingSymbolException e){
+            return Collections.singletonList(Resolved.createUnresolved(argument));
+        }
     }
 
     private static List<Resolved> resolve(Runtime runtime, Argument argument, SourceNode node) throws RunnerException {
         if(node instanceof Literal){
             return resolve(runtime, argument, (Literal)node);
         }
-        else if(node instanceof ScalarVariable){
-            return resolve(runtime, argument, (ScalarVariable)node);
+        else if(node instanceof Variable){
+            return resolve(runtime, argument, (Variable) node);
+        }
+        else if(node instanceof DictionaryEntry){
+            return resolve(runtime, argument, (DictionaryEntry)node);
         }
 
-        return resolve(runtime, argument, (Variable) node);
+        throw new InternalException("Type of node not supported for resolution: " + node.getClass().getName());
     }
 
     private static List<Resolved> resolve(Runtime runtime, Argument argument, Literal literal) throws RunnerException {
@@ -54,28 +61,58 @@ public class ArgumentResolver {
     }
 
     private static List<Resolved> resolve(Runtime runtime, Argument argument, Variable variable) throws RunnerException {
-        final Set<Node> matchingSet = runtime.find(variable);
-
-        if(matchingSet.isEmpty()){
-            return Collections.singletonList(Resolved.createUnresolved(argument));
-        }
-
-        if(matchingSet.size() > 1){
-            throw new MultipleSymbolException("Found more than one symbol for variable" + variable.getName());
-        }
-
-        final Node matching = matchingSet.iterator().next();
-
+        final Node matching = find(runtime, variable);
         final List<Resolved> resolved = new ArrayList<>();
 
         if(matching instanceof VariableAssignment){
             final NodeList<Argument> values = ((VariableAssignment) matching).getValues();
 
             for(Argument value: values){
-                resolved.addAll(resolve(runtime, value));
+                try{
+                    resolved.addAll(resolve(runtime, value));
+                }
+                catch (MissingSymbolException e){
+                    resolved.add(Resolved.createUnresolved(argument));
+                }
             }
         }
 
         return resolved;
+    }
+
+    private static List<Resolved> resolve(Runtime runtime, Argument argument, DictionaryEntry entry) throws RunnerException {
+        final Resolved key = getUnique(runtime, argument, entry.getKey());
+        final Resolved value = getUnique(runtime, argument, entry.getValue());
+
+        return Collections.singletonList(Resolved.create(key.getValue(), value.getValue(), argument));
+    }
+
+    private static Node find(Runtime runtime, Variable variable) throws MultipleSymbolException, MissingSymbolException {
+        final Set<Node> matchingSet = runtime.find(variable);
+
+        if(matchingSet.isEmpty()){
+            throw new MissingSymbolException("Found no symbol for variable" + variable.getName());
+        }
+
+        if(matchingSet.size() > 1){
+            throw new MultipleSymbolException("Found more than one symbol for variable" + variable.getName());
+        }
+
+        return matchingSet.iterator().next();
+    }
+
+    private static Resolved getUnique(Runtime runtime, Argument argument, SourceNode node) throws RunnerException {
+        final List<Resolved> valueList = resolve(runtime, argument, node);
+
+        if(valueList.isEmpty()){
+            throw new MissingSymbolException("Resolved value for '" + node.getName() + "' is empty.");
+        }
+
+        if(valueList.size() > 1){
+            throw new MultipleSymbolException("Resolved value for '" + node.getName() + "' should be one but got " + valueList.size() + " instead.");
+        }
+
+
+        return valueList.get(0);
     }
 }
