@@ -97,9 +97,7 @@ public class KeywordCall extends Step {
 
         List<Edit> edits = new ArrayList<>();
 
-        if(other instanceof KeywordCall){
-            KeywordCall call = (KeywordCall)other;
-
+        if(other instanceof KeywordCall call){
             if(!this.getDefinitionToken().matches(call.getDefinitionToken())){
                 edits.add(Edit.changeStepName(this, call));
             }
@@ -107,9 +105,7 @@ public class KeywordCall extends Step {
             List<Edit> argumentEdits = LevenshteinDistance.getDifferences(this.arguments, call.arguments);
             edits.addAll(argumentEdits);
         }
-        else if(other instanceof Assignment){
-            final Assignment assignment = (Assignment)other;
-
+        else if(other instanceof Assignment assignment){
             edits.addAll(this.differences(assignment.getKeywordCall().orElse(null)));
             edits.addAll(LevenshteinDistance.getDifferences(new NodeList<>(), assignment.getLeftHandOperand()));
         }
@@ -141,10 +137,6 @@ public class KeywordCall extends Step {
 
     @Override
     public Optional<KeywordCall> getKeywordCall() {
-        if(template != null){
-            return Optional.of(template);
-        }
-
-        return Optional.of(this);
+        return Optional.of(Objects.requireNonNullElse(template, this));
     }
 }

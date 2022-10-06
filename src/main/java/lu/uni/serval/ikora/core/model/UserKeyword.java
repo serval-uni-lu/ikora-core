@@ -21,9 +21,9 @@ import lu.uni.serval.ikora.core.analytics.visitor.NodeVisitor;
 import lu.uni.serval.ikora.core.analytics.visitor.VisitorMemory;
 import lu.uni.serval.ikora.core.types.BaseTypeList;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class UserKeyword extends KeywordDefinition {
     private NodeList<Argument> arguments;
@@ -84,7 +84,7 @@ public class UserKeyword extends KeywordDefinition {
         return new BaseTypeList(
                 arguments.stream()
                 .map(Argument::getType)
-                .collect(Collectors.toList())
+                .toList()
         );
     }
 
@@ -95,7 +95,7 @@ public class UserKeyword extends KeywordDefinition {
 
     @Override
     public List<Dependable> findDefinition(Variable variable) {
-        final List<Dependable> definitions = super.findDefinition(variable);
+        final List<Dependable> definitions = new ArrayList<>(super.findDefinition(variable));
 
         if(arguments.stream().anyMatch(v -> v.getDefinition() != variable && v.matches(variable.getDefinitionToken()))){
             definitions.add(this);

@@ -168,8 +168,10 @@ public class Tokens implements Iterable<Token> {
     }
 
     public Tokens clean() {
-        return new Tokens(tokenList.stream()
+        return new Tokens(
+                tokenList.stream()
                 .filter(token -> !token.isComment() && !token.isContinuation() && !token.isDelimiter() && !token.isEmpty())
-                .collect(Collectors.toList()));
+                .toList()
+        );
     }
 }

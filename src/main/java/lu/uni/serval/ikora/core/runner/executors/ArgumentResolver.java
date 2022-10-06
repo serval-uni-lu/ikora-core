@@ -25,14 +25,14 @@ public class ArgumentResolver {
     }
 
     private static List<Resolved> resolve(Runtime runtime, Argument argument, SourceNode node) throws RunnerException {
-        if(node instanceof Literal){
-            return resolve(runtime, argument, (Literal)node);
+        if(node instanceof Literal literal){
+            return resolve(runtime, argument, literal);
         }
-        else if(node instanceof Variable){
-            return resolve(runtime, argument, (Variable) node);
+        else if(node instanceof Variable variable){
+            return resolve(runtime, argument, variable);
         }
-        else if(node instanceof DictionaryEntry){
-            return resolve(runtime, argument, (DictionaryEntry)node);
+        else if(node instanceof DictionaryEntry entry){
+            return resolve(runtime, argument, entry);
         }
 
         throw new InternalException("Type of node not supported for resolution: " + node.getClass().getName());
@@ -64,8 +64,8 @@ public class ArgumentResolver {
         final Node matching = find(runtime, variable);
         final List<Resolved> resolved = new ArrayList<>();
 
-        if(matching instanceof VariableAssignment){
-            final NodeList<Argument> values = ((VariableAssignment) matching).getValues();
+        if(matching instanceof VariableAssignment variableAssignment){
+            final NodeList<Argument> values = variableAssignment.getValues();
 
             for(Argument value: values){
                 try{

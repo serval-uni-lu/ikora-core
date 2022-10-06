@@ -59,8 +59,8 @@ public abstract class Step extends SourceNode {
             sourceNode = sourceNode.getAstParent();
         }
 
-        if(sourceNode instanceof KeywordDefinition){
-            return (KeywordDefinition) sourceNode;
+        if(sourceNode instanceof KeywordDefinition definition){
+            return definition;
         }
 
         throw new InvalidDependencyException("Step should always have a keyword definition caller");

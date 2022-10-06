@@ -157,13 +157,13 @@ public class Runtime {
     public void setMessage(LogLevel level, String message) {
         final ReportElement currentElement = this.reportBuilder.getCurrentElement();
 
-        if(currentElement instanceof KeywordNode){
+        if(currentElement instanceof KeywordNode keywordNode){
             final MessageNode messageNode = new MessageNode();
             messageNode.setTimestamp(Instant.now());
             messageNode.setLevel(level);
             messageNode.setText(message);
 
-            ((KeywordNode)currentElement).setMessage(messageNode);
+            keywordNode.setMessage(messageNode);
         }
     }
 

@@ -28,7 +28,6 @@ import java.nio.file.*;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class FileUtils {
@@ -181,7 +180,7 @@ public class FileUtils {
 
     private static List<Path> walkFiles(Path path) throws IOException {
         try (Stream<Path> stream = Files.walk(path)){
-            return stream.collect(Collectors.toList());
+            return stream.toList();
         }
     }
 

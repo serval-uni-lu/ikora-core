@@ -200,7 +200,7 @@ public abstract class KeywordDefinition extends SourceNode implements Keyword, I
                 .map(Assignment.class::cast)
                 .filter(a -> a.isDefinition(variable))
                 .map(Dependable.class::cast)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override

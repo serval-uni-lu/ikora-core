@@ -25,7 +25,6 @@ import lu.uni.serval.ikora.core.runner.Runtime;
 import lu.uni.serval.ikora.core.types.ListType;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class SetVariable extends LibraryKeyword {
     public SetVariable(){
@@ -37,7 +36,7 @@ public class SetVariable extends LibraryKeyword {
         final List<Value> values = runtime.getArguments().stream()
                 .map(Resolved::getValue)
                 .map(v -> ValueParser.parseValue(Token.fromString(v)))
-                .collect(Collectors.toList());
+                .toList();
 
         runtime.setReturnValues(values);
     }

@@ -36,9 +36,9 @@ public class NodeMatcher {
 
         int size = testCases.size() + keywords.size() + variables.size();
         final List<Pair<SourceNode, SourceNode>> pairs = new ArrayList<>(size);
-        pairs.addAll(testCases.stream().map(p -> Pair.of((SourceNode)p.getLeft(), (SourceNode)p.getRight())).collect(Collectors.toList()));
-        pairs.addAll(keywords.stream().map(p -> Pair.of((SourceNode)p.getLeft(), (SourceNode)p.getRight())).collect(Collectors.toList()));
-        pairs.addAll(variables.stream().map(p -> Pair.of((SourceNode)p.getLeft(), (SourceNode)p.getRight())).collect(Collectors.toList()));
+        pairs.addAll(testCases.stream().map(p -> Pair.of((SourceNode)p.getLeft(), (SourceNode)p.getRight())).toList());
+        pairs.addAll(keywords.stream().map(p -> Pair.of((SourceNode)p.getLeft(), (SourceNode)p.getRight())).toList());
+        pairs.addAll(variables.stream().map(p -> Pair.of((SourceNode)p.getLeft(), (SourceNode)p.getRight())).toList());
 
         final Set<Edit> edits = pairs.stream()
                 .flatMap(p -> Difference.of(p.getLeft(), p.getRight()).getEdits().stream())

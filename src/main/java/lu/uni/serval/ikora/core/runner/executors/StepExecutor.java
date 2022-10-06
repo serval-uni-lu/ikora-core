@@ -33,11 +33,11 @@ public class StepExecutor extends NodeExecutor {
 
     @Override
     protected void executeImpl() throws RunnerException {
-        if(step instanceof KeywordCall){
-            execute((KeywordCall)step);
+        if(step instanceof KeywordCall call){
+            execute(call);
         }
-        else if(step instanceof Assignment){
-            execute((Assignment)step);
+        else if(step instanceof Assignment assignment){
+            execute(assignment);
         }
     }
 

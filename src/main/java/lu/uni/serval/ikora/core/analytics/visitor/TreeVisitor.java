@@ -42,14 +42,14 @@ public class TreeVisitor extends EmptyVisitor {
 
     @Override
     public void visit(Step step, VisitorMemory memory) {
-        if(step instanceof KeywordCall){
-            VisitorUtils.traverseKeywordCall(this, (KeywordCall)step, memory);
+        if(step instanceof KeywordCall call){
+            VisitorUtils.traverseKeywordCall(this, call, memory);
         }
-        else if(step instanceof Assignment){
-            VisitorUtils.traverseAssignmentCall(this, (Assignment)step, memory);
+        else if(step instanceof Assignment assignment){
+            VisitorUtils.traverseAssignmentCall(this, assignment, memory);
         }
-        else if(step instanceof ForLoop){
-            VisitorUtils.traverseForLoopSteps(this, (ForLoop)step, memory);
+        else if(step instanceof ForLoop forLoop){
+            VisitorUtils.traverseForLoopSteps(this, forLoop, memory);
         }
         else{
             throw new NotImplementedException(String.format("Visitor does not support class %s", step.getClass()));

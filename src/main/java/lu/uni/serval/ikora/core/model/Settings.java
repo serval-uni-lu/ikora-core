@@ -23,7 +23,6 @@ import lu.uni.serval.ikora.core.utils.FileUtils;
 
 import java.io.File;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Settings extends SourceNode implements Delayable {
     private Token header;
@@ -95,7 +94,7 @@ public class Settings extends SourceNode implements Delayable {
 
         return this.resourcesTable.stream()
                 .filter(r -> FileUtils.isSubDirectory(rootFolder, r.getFile()))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public List<Resources> getExternalResources() {
@@ -109,7 +108,7 @@ public class Settings extends SourceNode implements Delayable {
 
         return this.resourcesTable.stream()
                 .filter(r -> !FileUtils.isSubDirectory(rootFolder, r.getFile()))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public List<Resources> getResources() {

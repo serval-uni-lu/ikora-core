@@ -28,21 +28,21 @@ public class TestProcessingParser {
     private TestProcessingParser() {}
 
     public static boolean is(Token label, Scope scope, TestProcessing.Phase phase){
-        String scopeString;
+        String scopeString = switch (scope) {
+            case TEST -> "test ";
+            case SUITE -> "suite ";
+            default -> "";
+        };
 
-        switch (scope){
-            case TEST: scopeString = "test "; break;
-            case SUITE: scopeString = "suite "; break;
-            default: scopeString = ""; break;
-        }
+        String phaseString = switch (phase) {
+            case SETUP -> "setup";
+            case TEARDOWN -> "teardown";
+            case TEMPLATE -> "template";
+            default -> "";
+        };
 
-        String phaseString;
-
-        switch (phase){
-            case SETUP:  phaseString = "setup"; break;
-            case TEARDOWN: phaseString = "teardown"; break;
-            case TEMPLATE: phaseString = "template"; break;
-            default: return false;
+        if(phaseString.isEmpty()){
+            return false;
         }
 
         String expression = scopeString + phaseString;
@@ -58,8 +58,8 @@ public class TestProcessingParser {
             try {
                 final Step step = StepParser.parse(0, reader, tokenIterator.next(), tokenIterator, false, errors);
 
-                if(step instanceof KeywordCall){
-                    call = (KeywordCall) step;
+                if(step instanceof KeywordCall keywordCall){
+                    call = keywordCall;
                 }
                 else {
                     errors.registerSyntaxError(

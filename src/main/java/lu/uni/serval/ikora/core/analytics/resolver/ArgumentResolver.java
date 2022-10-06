@@ -167,8 +167,8 @@ public class ArgumentResolver {
 
     private static void updateScope(StaticScope staticScope, KeywordCall call, ErrorManager errorManager) {
         for(Keyword keyword: call.getAllPotentialKeywords(Link.Import.BOTH)){
-            if(keyword instanceof ScopeModifier){
-                ((ScopeModifier)keyword).modifyScope(staticScope, call, errorManager);
+            if(keyword instanceof ScopeModifier scopeModifier){
+                scopeModifier.modifyScope(staticScope, call, errorManager);
             }
         }
     }

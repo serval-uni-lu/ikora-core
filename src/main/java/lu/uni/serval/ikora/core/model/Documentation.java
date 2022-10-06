@@ -105,9 +105,7 @@ public class Documentation extends SourceNode{
             return Collections.singletonList(Edit.addDocumentation(this));
         }
 
-        if(other instanceof Documentation){
-            Documentation that = (Documentation) other;
-
+        if(other instanceof Documentation that){
             if(this.content.isEmpty() && !that.content.isEmpty()){
                 return Collections.singletonList(Edit.addDocumentation(that));
             }

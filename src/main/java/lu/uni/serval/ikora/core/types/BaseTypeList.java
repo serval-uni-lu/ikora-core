@@ -161,7 +161,7 @@ public class BaseTypeList implements List<BaseType> {
         return argumentTypes.stream()
                 .filter(t -> type.isAssignableFrom(t.getClass()))
                 .map(this::indexOf)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public int findByName(String name) {

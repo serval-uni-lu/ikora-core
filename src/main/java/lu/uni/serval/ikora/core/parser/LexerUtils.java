@@ -133,8 +133,7 @@ public class LexerUtils {
                 case '\t':
                     ++state.tabs;
                     break;
-                case '\n':
-                case '\r':
+                case '\r', '\n':
                     tokens.add(createToken(line.getNumber(), state.start, text.substring(state.start, state.current)));
                     state.reset();
                     break;

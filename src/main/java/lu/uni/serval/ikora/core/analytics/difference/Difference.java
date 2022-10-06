@@ -130,9 +130,7 @@ public class Difference {
         if(element == null){
             hash = 31 * hash;
         }
-        else if(element instanceof KeywordDefinition){
-            KeywordDefinition keyword = (KeywordDefinition)element;
-
+        else if(element instanceof KeywordDefinition keyword){
             hash = 31 * hash + (keyword.getSourceFile() == null ? 0 : keyword.getSourceFile().hashCode());
             hash = 31 * hash + (keyword.getDefinitionToken() == null ? 0 : keyword.getDefinitionToken().hashCode());
         }

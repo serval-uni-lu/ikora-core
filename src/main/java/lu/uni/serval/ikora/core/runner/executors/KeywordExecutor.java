@@ -19,11 +19,11 @@ public class KeywordExecutor extends NodeExecutor {
 
     @Override
     protected void executeImpl() throws RunnerException {
-        if(keyword instanceof UserKeyword){
-            executeImpl((UserKeyword) keyword);
+        if(keyword instanceof UserKeyword user){
+            executeImpl(user);
         }
-        else if(keyword instanceof LibraryKeyword){
-            executeImpl((LibraryKeyword)keyword);
+        else if(keyword instanceof LibraryKeyword library){
+            executeImpl(library);
         }
     }
 

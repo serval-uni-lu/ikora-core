@@ -174,8 +174,8 @@ public class KeywordCloneDetection {
         }
 
         private void appendReturnValues(StringBuilder builder, Step step){
-            if(step instanceof Assignment){
-                final int valueCount = ((Assignment)step).getLeftHandOperand().size();
+            if(step instanceof Assignment assignment){
+                final int valueCount = assignment.getLeftHandOperand().size();
                 for(int i = 0; i < valueCount; ++i){
                     builder.append("\t");
                     builder.append(String.format("[arg_%d]", i));

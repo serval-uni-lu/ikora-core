@@ -87,11 +87,11 @@ public class LevenshteinDistance {
             }
 
             for(i = 1; i <= wordLength; ++i) {
-                int s_i = left.charAt(i - 1);
+                int si = left.charAt(i - 1);
 
                 for(int j = 1; j <= lemmaLength; ++j) {
                     byte cost;
-                    if (s_i == right.charAt(j - 1)) {
+                    if (si == right.charAt(j - 1)) {
                         cost = 0;
                     } else {
                         cost = 1;

@@ -261,4 +261,33 @@ public class Project implements Comparable<Project> {
     public int compareTo(Project other) {
         return date.compareTo(other.date);
     }
+
+    @Override
+    public boolean equals(Object other) {
+        if(other == null){
+            return false;
+        }
+
+        if(this == other){
+            return true;
+        }
+
+        if(other.getClass() != this.getClass()){
+            return false;
+        }
+
+        final Project that = (Project) other;
+
+        return this.date.equals(that.date) && this.rootFolder.equals(that.rootFolder);
+    }
+
+    @Override
+    public int hashCode() {
+        int hashCode = 7;
+
+        hashCode = 31 * hashCode + (date != null ? date.hashCode() : 0);
+        hashCode = 31 * hashCode + (rootFolder != null ? rootFolder.hashCode() : 0);
+
+        return hashCode;
+    }
 }

@@ -113,8 +113,7 @@ public class Assignment extends Step implements Dependable {
 
         List<Edit> edits = new ArrayList<>();
 
-        if(other instanceof Assignment){
-            Assignment assignment = (Assignment)other;
+        if(other instanceof Assignment assignment){
             edits.addAll(LevenshteinDistance.getDifferences(this.leftHandOperand, assignment.leftHandOperand));
             getKeywordCall().ifPresent(call -> edits.addAll(call.differences(assignment.getKeywordCall().orElse(null))));
         }

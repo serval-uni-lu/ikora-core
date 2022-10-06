@@ -35,7 +35,7 @@ class UserKeywordParser {
 
         final Optional<UserKeyword> optionalUserKeyword = ParserUtils.createKeyword(UserKeyword.class, reader, tokenNameIterator, errors);
 
-        if(!optionalUserKeyword.isPresent()){
+        if(optionalUserKeyword.isEmpty()){
             throw new IOException(String.format("failed to read keyword at line %d in file %s",
                     reader.getCurrent().getNumber(),
                     reader.getSource().getAbsolutePath()));

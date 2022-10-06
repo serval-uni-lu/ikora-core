@@ -24,7 +24,6 @@ import lu.uni.serval.ikora.core.model.Variable;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class LiteralParser {
     private LiteralParser() {}
@@ -35,7 +34,7 @@ public class LiteralParser {
         final List<Variable> variables = variableNames.stream().map(VariableParser::parse)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
-                .collect(Collectors.toList());
+                .toList();
 
         return new Literal(token, new NodeList<>(variables));
     }
