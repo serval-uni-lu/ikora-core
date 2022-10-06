@@ -22,9 +22,10 @@ import lu.uni.serval.ikora.core.error.ErrorManager;
 import lu.uni.serval.ikora.core.libraries.LibraryKeyword;
 import lu.uni.serval.ikora.core.model.*;
 import lu.uni.serval.ikora.core.runner.Runtime;
+import lu.uni.serval.ikora.core.runner.VariableSetter;
+import lu.uni.serval.ikora.core.runner.exception.RunnerException;
 import lu.uni.serval.ikora.core.types.ListType;
 import lu.uni.serval.ikora.core.types.StringType;
-import org.apache.commons.lang3.NotImplementedException;
 
 import java.util.List;
 
@@ -37,8 +38,9 @@ public class SetSuiteVariable extends LibraryKeyword implements ScopeModifier {
     }
 
     @Override
-    public void execute(Runtime runtime) {
-        throw new NotImplementedException("Execution logic is not implemented yet!");
+    public void execute(Runtime runtime) throws RunnerException {
+        final VariableAssignment variableAssignment = VariableSetter.fromArguments(runtime.getArguments(), argumentTypes);
+        runtime.addToSuiteScope(variableAssignment);
     }
 
     @Override

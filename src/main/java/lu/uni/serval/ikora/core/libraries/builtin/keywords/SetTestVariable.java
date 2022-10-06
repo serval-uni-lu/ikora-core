@@ -21,18 +21,11 @@ import lu.uni.serval.ikora.core.analytics.visitor.PathMemory;
 import lu.uni.serval.ikora.core.error.ErrorManager;
 import lu.uni.serval.ikora.core.libraries.LibraryKeyword;
 import lu.uni.serval.ikora.core.model.*;
-import lu.uni.serval.ikora.core.parser.VariableParser;
-import lu.uni.serval.ikora.core.runner.Resolved;
 import lu.uni.serval.ikora.core.runner.Runtime;
-import lu.uni.serval.ikora.core.runner.exception.InvalidArgumentException;
+import lu.uni.serval.ikora.core.runner.VariableSetter;
 import lu.uni.serval.ikora.core.runner.exception.RunnerException;
 import lu.uni.serval.ikora.core.types.ListType;
 import lu.uni.serval.ikora.core.types.VariableType;
-
-import java.util.List;
-import java.util.Optional;
-
-import static lu.uni.serval.ikora.core.runner.ArgumentFetcher.fetch;
 
 public class SetTestVariable extends LibraryKeyword implements ScopeModifier {
     public SetTestVariable(){
@@ -44,25 +37,7 @@ public class SetTestVariable extends LibraryKeyword implements ScopeModifier {
 
     @Override
     public void execute(Runtime runtime) throws RunnerException {
-        final List<Resolved> arguments = runtime.getArguments();
-
-        final String name = fetch(arguments, "name", argumentTypes, String.class);
-        final Optional<Variable> parse = VariableParser.parse(Token.fromString(name));
-
-        if(!parse.isPresent()){
-            throw new InvalidArgumentException("Should be a variable but got " + name + " instead");
-        }
-
-        final Variable variable = parse.get();
-
-        if((variable instanceof ScalarVariable) && arguments.size() != 2){
-            throw new InvalidArgumentException("Should have 1 value assigned to Scalar Variable but got " + (arguments.size() - 1));
-        }
-
-        final VariableAssignment variableAssignment = new VariableAssignment(variable);
-        final List<Value> values = fetch(arguments, "values", argumentTypes, Value.class, List.class);
-        values.forEach(variableAssignment::addValue);
-
+        final VariableAssignment variableAssignment = VariableSetter.fromArguments(runtime.getArguments(), argumentTypes);
         runtime.addToTestScope(variableAssignment);
     }
     @Override
