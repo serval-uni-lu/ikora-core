@@ -19,7 +19,6 @@ package lu.uni.serval.ikora.core.utils;
 import lu.uni.serval.ikora.core.model.Token;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
@@ -72,10 +71,10 @@ public class StringUtils {
         return name.replaceAll("\\s+", " ").trim();
     }
 
-    public static String toBeautifulUrl(String raw, String extension) throws UnsupportedEncodingException {
+    public static String toBeautifulUrl(String raw, String extension) {
         String url = toBeautifulName(raw).toLowerCase();
         url = url.replaceAll("\\s+", "-");
-        url = URLEncoder.encode(url, StandardCharsets.UTF_8.toString());
+        url = URLEncoder.encode(url, StandardCharsets.UTF_8);
 
         if(extension.isEmpty()){
             return url;

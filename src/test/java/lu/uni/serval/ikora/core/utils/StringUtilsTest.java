@@ -21,8 +21,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
-import java.io.UnsupportedEncodingException;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class StringUtilsTest {
@@ -56,14 +54,10 @@ class StringUtilsTest {
 
     @Test
     void testBeautifyUrl(){
-        try {
-            assertEquals("page-1.html", StringUtils.toBeautifulUrl("PAGE-1_", "html"));
-            assertEquals("page-1.html", StringUtils.toBeautifulUrl("Page 1", "html"));
-            assertEquals("page-1.html", StringUtils.toBeautifulUrl("Page1", "html"));
-            assertEquals("page-1.html", StringUtils.toBeautifulUrl("Page_1", "html"));
-        } catch (UnsupportedEncodingException e) {
-            fail("exception caught: " + e.getMessage());
-        }
+        assertEquals("page-1.html", StringUtils.toBeautifulUrl("PAGE-1_", "html"));
+        assertEquals("page-1.html", StringUtils.toBeautifulUrl("Page 1", "html"));
+        assertEquals("page-1.html", StringUtils.toBeautifulUrl("Page1", "html"));
+        assertEquals("page-1.html", StringUtils.toBeautifulUrl("Page_1", "html"));
     }
 
     @Test
