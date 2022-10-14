@@ -168,19 +168,19 @@ public class SourceNodeTable<T extends SourceNode> extends SourceNode implements
             return Collections.emptyList();
         }
 
-        List<Edit> edits = new ArrayList<>();
+        final List<Edit> edits = new ArrayList<>();
 
-        if(other.getClass() != this.getClass()){
-            edits.add(Edit.changeType(this, other));
+        if(other instanceof SourceNodeTable<? extends SourceNode> nodeTable){
+            if(nodeTable.getClass() != this.getClass()){
+                return Collections.singletonList(Edit.changeType(this, other));
+            }
+
+            if(!this.header.matches(nodeTable.header)){
+                edits.add(Edit.changeName(this, nodeTable));
+            }
+
+            edits.addAll(this.nodeList.differences(nodeTable.nodeList));
         }
-
-        SourceNodeTable<T> nodeTable = (SourceNodeTable<T>)other;
-
-        if(!this.header.matches(nodeTable.header)){
-            edits.add(Edit.changeName(this, nodeTable));
-        }
-
-        edits.addAll(LevenshteinDistance.getDifferences(this.nodeList, nodeTable.nodeList));
 
         return edits;
     }

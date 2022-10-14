@@ -211,26 +211,6 @@ public class SourceFile extends SourceNode {
         return userKeywordTable.iterator();
     }
 
-    public Set<TestCase> findTestCase(String library, Token name){
-        return findNode(library, name, new HashSet<>(), TestCase.class);
-    }
-
-    public Set<UserKeyword> findUserKeyword(Token name) {
-        return findNode(null, name, new HashSet<>(), UserKeyword.class);
-    }
-
-    public Set<UserKeyword> findUserKeyword(String library, Token name) {
-        return findNode(library, name, new HashSet<>(), UserKeyword.class);
-    }
-
-    public Set<VariableAssignment> findVariable(Token name) {
-        return findNode(null, name, new HashSet<>(), VariableAssignment.class);
-    }
-
-    public Set<VariableAssignment> findVariable(String library, Token name) {
-        return findNode(library, name, new HashSet<>(), VariableAssignment.class);
-    }
-
     public Set<Library> getAllLibraries() {
         final Set<Library> libraries = new HashSet<>();
         final Set<SourceFile> memory = new HashSet<>();
@@ -254,19 +234,19 @@ public class SourceFile extends SourceNode {
         }
     }
 
-    private <T> Set<T> findNode(String suite, Token name, Set<SourceFile> memory, Class<T> type){
-        HashSet<T> nodes = new HashSet<>();
+    public Set<UserKeyword> findUserKeyword(Token name) {
+        return findUserKeyword(null, name, new HashSet<>());
+    }
+
+    public Set<UserKeyword> findUserKeyword(String library, Token name) {
+        return findUserKeyword(library, name, new HashSet<>());
+    }
+
+    private Set<UserKeyword> findUserKeyword(String suite, Token name, Set<SourceFile> memory){
+        final HashSet<UserKeyword> nodes = new HashSet<>();
 
         if(suite == null || suite.isEmpty() || matches(suite)){
-            if(type == UserKeyword.class){
-                nodes.addAll((Collection<? extends T>) userKeywordTable.findNode(name));
-            }
-            else if(type == TestCase.class){
-                nodes.addAll((Collection<? extends T>) testCaseTable.findNode(name));
-            }
-            else if(type == VariableAssignment.class){
-                nodes.addAll((Collection<? extends T>) variableTable.findNode(name));
-            }
+            nodes.addAll(userKeywordTable.findNode(name));
         }
 
         for(Resources resources: settings.getResources()){
@@ -274,7 +254,59 @@ public class SourceFile extends SourceNode {
                 final Optional<SourceFile> target = resources.getTarget();
 
                 if(target.isPresent() && memory.add(target.get())){
-                    nodes.addAll(target.get().findNode(suite, name, memory, type));
+                    nodes.addAll(target.get().findUserKeyword(suite, name, memory));
+                }
+            }
+        }
+
+        return nodes;
+    }
+
+    public Set<TestCase> findTestCase(String library, Token name){
+        return findTestCase(library, name, new HashSet<>());
+    }
+
+    private Set<TestCase> findTestCase(String suite, Token name, Set<SourceFile> memory){
+        final HashSet<TestCase> nodes = new HashSet<>();
+
+        if(suite == null || suite.isEmpty() || matches(suite)){
+            nodes.addAll(testCaseTable.findNode(name));
+        }
+
+        for(Resources resources: settings.getResources()){
+            if(resources.isValid()) {
+                final Optional<SourceFile> target = resources.getTarget();
+
+                if(target.isPresent() && memory.add(target.get())){
+                    nodes.addAll(target.get().findTestCase(suite, name, memory));
+                }
+            }
+        }
+
+        return nodes;
+    }
+
+    public Set<VariableAssignment> findVariable(Token name) {
+        return findVariable(null, name, new HashSet<>());
+    }
+
+    public Set<VariableAssignment> findVariable(String library, Token name) {
+        return findVariable(library, name, new HashSet<>());
+    }
+
+    private Set<VariableAssignment> findVariable(String suite, Token name, Set<SourceFile> memory){
+        final HashSet<VariableAssignment> nodes = new HashSet<>();
+
+        if(suite == null || suite.isEmpty() || matches(suite)){
+            nodes.addAll(variableTable.findNode(name));
+        }
+
+        for(Resources resources: settings.getResources()){
+            if(resources.isValid()) {
+                final Optional<SourceFile> target = resources.getTarget();
+
+                if(target.isPresent() && memory.add(target.get())){
+                    nodes.addAll(target.get().findVariable(suite, name, memory));
                 }
             }
         }

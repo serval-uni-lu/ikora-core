@@ -40,25 +40,27 @@ class LevenshteinDistanceTest {
     @BeforeAll
     static void setUp() {
         final String code =
-                "*** Keywords ***\n" +
-                        "\n" +
-                        "First keyword\n" +
-                        "    Open Browser  firefox  google.com\n" +
-                        "    Title Should be  google.com\n" +
-                        "    Close All Browsers\n" +
-                        "\n" +
-                        "Second keyword\n" +
-                        "    Open Browser  firefox  google.com\n" +
-                        "    Title Should be  google.com\n" +
-                        "    Close All Browsers\n" +
-                        "\n" +
-                        "Third keyword\n" +
-                        "    Log  Opening browser\n" +
-                        "    Open Browser  firefox  google.com\n" +
-                        "    Title Should be  google.com\n" +
-                        "    Log  Closing browser\n" +
-                        "    Close All Browsers\n" +
-                        "\n";
+                """
+                        *** Keywords ***
+
+                        First keyword
+                            Open Browser  firefox  google.com
+                            Title Should be  google.com
+                            Close All Browsers
+
+                        Second keyword
+                            Open Browser  firefox  google.com
+                            Title Should be  google.com
+                            Close All Browsers
+
+                        Third keyword
+                            Log  Opening browser
+                            Open Browser  firefox  google.com
+                            Title Should be  google.com
+                            Log  Closing browser
+                            Close All Browsers
+
+                        """;
 
         final BuildResult result = Builder.build(code, true);
 
