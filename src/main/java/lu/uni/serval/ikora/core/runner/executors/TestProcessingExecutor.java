@@ -16,8 +16,12 @@
  */
 package lu.uni.serval.ikora.core.runner.executors;
 
+import lu.uni.serval.ikora.core.model.KeywordCall;
 import lu.uni.serval.ikora.core.model.TestProcessing;
 import lu.uni.serval.ikora.core.runner.Runtime;
+import lu.uni.serval.ikora.core.runner.exception.RunnerException;
+
+import java.util.Optional;
 
 public class TestProcessingExecutor extends NodeExecutor {
     private final TestProcessing testProcessing;
@@ -29,6 +33,13 @@ public class TestProcessingExecutor extends NodeExecutor {
 
     @Override
     protected void executeImpl(){
-
+        try {
+            final Optional<KeywordCall> call = this.testProcessing.getCall();
+            if(call.isPresent()){
+                final StepExecutor stepExecutor = new StepExecutor(this.runtime, call.get());
+                stepExecutor.execute();
+            }
+        } catch (RunnerException e) {
+        }
     }
 }

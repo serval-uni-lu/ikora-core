@@ -49,7 +49,7 @@ public class Runner {
 
         final Optional<Report> report = runtime.getReport();
 
-        if(!report.isPresent()){
+        if(report.isEmpty()){
             throw new InternalException("Failed to create report during execution");
         }
 

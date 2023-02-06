@@ -16,37 +16,34 @@
  */
 package lu.uni.serval.ikora.core.runner;
 
-import lu.uni.serval.ikora.core.model.Literal;
 import lu.uni.serval.ikora.core.model.TestCase;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class TestFilter {
-    private Set<Literal> tags;
-    private Set<String> names;
+    private final Set<String> tags;
+    private final Set<String> names;
 
-    TestFilter(Set<Literal> tags, Set<String> names){
-        this.tags = tags;
-        this.names = names;
+    TestFilter(Set<String> tags, Set<String> names){
+        this.tags = tags.stream().map(String::toLowerCase).collect(Collectors.toSet());
+        this.names = names.stream().map(String::toLowerCase).collect(Collectors.toSet());
     }
 
     List<TestCase> filter(List<TestCase> testCases){
-        List<TestCase> filtered = new ArrayList<>(testCases.size());
+        return testCases.stream().filter(this::isTestValid).toList();
+    }
 
-        for(TestCase testCase: testCases){
-            if(!tags.isEmpty() && !tags.retainAll(testCase.getTags())){
-                continue;
-            }
-
-            if(!names.isEmpty() && !names.contains(testCase.getName().toLowerCase())){
-                continue;
-            }
-
-            filtered.add(testCase);
+    private boolean isTestValid(TestCase testCase){
+        if(!names.isEmpty() && !names.contains(testCase.getName().toLowerCase())){
+            return false;
         }
 
-        return filtered;
+        if(tags.isEmpty()){
+            return true;
+        }
+
+        return testCase.getTags().stream().anyMatch(tag -> tags.contains(tag.getName().toLowerCase()));
     }
 }

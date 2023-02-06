@@ -35,7 +35,7 @@ class TestCaseParser {
 
         final Optional<TestCase> optionalTestCase = ParserUtils.createKeyword(TestCase.class, reader, tokenNameIterator, errors);
 
-        if(!optionalTestCase.isPresent()){
+        if(optionalTestCase.isEmpty()){
             throw new IOException(String.format("failed to read test case at line %d in file %s",
                     reader.getCurrent().getNumber(),
                     reader.getSource().getAbsolutePath()));

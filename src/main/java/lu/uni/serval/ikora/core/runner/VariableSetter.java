@@ -17,7 +17,7 @@ public class VariableSetter {
         final String name = fetch(arguments, "name", argumentTypes, String.class);
         final Optional<Variable> parse = VariableParser.parse(Token.fromString(name));
 
-        if(!parse.isPresent()){
+        if(parse.isEmpty()){
             throw new InvalidArgumentException("Should be a variable but got " + name + " instead");
         }
 

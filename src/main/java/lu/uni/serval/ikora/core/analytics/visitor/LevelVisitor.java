@@ -23,8 +23,8 @@ public class LevelVisitor extends EmptyVisitor {
     int level = 0;
 
     private void updateLevel(VisitorMemory memory){
-        if(memory instanceof LevelMemory){
-            int currentLevel = ((LevelMemory)memory).getLevel();
+        if(memory instanceof LevelMemory levelMemory){
+            int currentLevel = levelMemory.getLevel();
             this.level = Math.max(currentLevel, this.level);
         }
     }

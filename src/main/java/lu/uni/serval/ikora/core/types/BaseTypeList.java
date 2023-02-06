@@ -17,7 +17,6 @@
 package lu.uni.serval.ikora.core.types;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class BaseTypeList implements List<BaseType> {
     private final List<BaseType> argumentTypes;
