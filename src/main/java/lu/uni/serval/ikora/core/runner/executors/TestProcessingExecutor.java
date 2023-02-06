@@ -32,14 +32,11 @@ public class TestProcessingExecutor extends NodeExecutor {
     }
 
     @Override
-    protected void executeImpl(){
-        try {
-            final Optional<KeywordCall> call = this.testProcessing.getCall();
-            if(call.isPresent()){
-                final StepExecutor stepExecutor = new StepExecutor(this.runtime, call.get());
-                stepExecutor.execute();
-            }
-        } catch (RunnerException e) {
+    protected void executeImpl() throws RunnerException {
+        final Optional<KeywordCall> call = this.testProcessing.getCall();
+        if(call.isPresent()){
+            final StepExecutor stepExecutor = new StepExecutor(this.runtime, call.get());
+            stepExecutor.execute();
         }
     }
 }

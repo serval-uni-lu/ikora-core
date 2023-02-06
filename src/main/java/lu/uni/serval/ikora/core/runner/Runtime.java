@@ -33,12 +33,15 @@ public class Runtime {
     private final ReportBuilder reportBuilder;
     private final ErrorManager errors;
 
+    private final ExecutionFilter filter;
+
     private LibraryResources libraryResources;
 
-    public Runtime(DynamicScope scope, ErrorManager errorManager){
+    public Runtime(DynamicScope scope, ErrorManager errorManager, ExecutionFilter filter){
         this.scope = scope;
         this.errors = errorManager;
         this.reportBuilder = new ReportBuilder(errorManager);
+        this.filter = filter;
     }
 
     public void setLibraryResources(LibraryResources libraryResources) {
@@ -173,5 +176,9 @@ public class Runtime {
 
     public void setReturnValues(List<Value> values) {
         scope.setReturnValues(values);
+    }
+
+    public List<TestCase> filter(List<TestCase> testCases) {
+        return this.filter.filter(testCases);
     }
 }

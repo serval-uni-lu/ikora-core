@@ -38,7 +38,7 @@ public class SuiteExecutor {
         }
 
         if(suite.isSourceFile()){
-            for(TestCase testCase: suite.getTestCases()){
+            for(TestCase testCase: runtime.filter(suite.getTestCases())){
                 new TestCaseExecutor(runtime, testCase).execute();
             }
         }

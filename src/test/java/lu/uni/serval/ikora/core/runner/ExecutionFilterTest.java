@@ -11,10 +11,10 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class TestFilterTest {
+class ExecutionFilterTest {
     @Test
     void testNoTestCaseNoTags(){
-        final TestFilter filter = new TestFilter(Collections.emptySet(), Collections.emptySet());
+        final ExecutionFilter filter = new ExecutionFilter(Collections.emptySet(), Collections.emptySet());
         final List<TestCase> filtered = filter.filter(Collections.emptyList());
         assertEquals(0, filtered.size());
     }
@@ -22,7 +22,7 @@ class TestFilterTest {
     @Test
     void testTestCaseNoTags(){
         TestCase testCase = new TestCase(Token.fromString("Test case 1"));
-        final TestFilter filter = new TestFilter(Collections.emptySet(), Collections.emptySet());
+        final ExecutionFilter filter = new ExecutionFilter(Collections.emptySet(), Collections.emptySet());
         final List<TestCase> filtered = filter.filter(Collections.singletonList(testCase));
         assertEquals(1, filtered.size());
     }
@@ -30,7 +30,7 @@ class TestFilterTest {
     @Test
     void testTestCaseNoMatchingTags(){
         TestCase testCase = new TestCase(Token.fromString("Test case 1"));
-        final TestFilter filter = new TestFilter(Collections.emptySet(), Collections.singleton("Tag 1"));
+        final ExecutionFilter filter = new ExecutionFilter(Collections.emptySet(), Collections.singleton("Tag 1"));
         final List<TestCase> filtered = filter.filter(Collections.singletonList(testCase));
         assertEquals(0, filtered.size());
     }
@@ -42,7 +42,7 @@ class TestFilterTest {
         tags.add(new Literal(Token.fromString("Tag 2")));
         TestCase testCase = new TestCase(Token.fromString("Test case 1"));
         testCase.setTags(tags);
-        final TestFilter filter = new TestFilter(Collections.singleton("Tag 1"), Collections.emptySet());
+        final ExecutionFilter filter = new ExecutionFilter(Collections.singleton("Tag 1"), Collections.emptySet());
         final List<TestCase> filtered = filter.filter(Collections.singletonList(testCase));
         assertEquals(1, filtered.size());
     }
@@ -54,7 +54,7 @@ class TestFilterTest {
         tags.add(new Literal(Token.fromString("Tag 2")));
         TestCase testCase = new TestCase(Token.fromString("Test case 1"));
         testCase.setTags(tags);
-        final TestFilter filter = new TestFilter(Collections.singleton("Tag 3"), Collections.emptySet());
+        final ExecutionFilter filter = new ExecutionFilter(Collections.singleton("Tag 3"), Collections.emptySet());
         final List<TestCase> filtered = filter.filter(Collections.singletonList(testCase));
         assertEquals(0, filtered.size());
     }
@@ -66,7 +66,7 @@ class TestFilterTest {
         tags.add(new Literal(Token.fromString("Tag 2")));
         TestCase testCase = new TestCase(Token.fromString("Test case 1"));
         testCase.setTags(tags);
-        final TestFilter filter = new TestFilter(Collections.singleton("Tag 1"), Collections.singleton("Other name"));
+        final ExecutionFilter filter = new ExecutionFilter(Collections.singleton("Tag 1"), Collections.singleton("Other name"));
         final List<TestCase> filtered = filter.filter(Collections.singletonList(testCase));
         assertEquals(0, filtered.size());
     }
@@ -78,7 +78,7 @@ class TestFilterTest {
         tags.add(new Literal(Token.fromString("Tag 2")));
         TestCase testCase = new TestCase(Token.fromString("Test case 1"));
         testCase.setTags(tags);
-        final TestFilter filter = new TestFilter(Collections.singleton("Tag 1"), Collections.singleton("Test case 1"));
+        final ExecutionFilter filter = new ExecutionFilter(Collections.singleton("Tag 1"), Collections.singleton("Test case 1"));
         final List<TestCase> filtered = filter.filter(Collections.singletonList(testCase));
         assertEquals(1, filtered.size());
     }

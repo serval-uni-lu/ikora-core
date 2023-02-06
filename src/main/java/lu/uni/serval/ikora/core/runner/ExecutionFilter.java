@@ -18,17 +18,23 @@ package lu.uni.serval.ikora.core.runner;
 
 import lu.uni.serval.ikora.core.model.TestCase;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class TestFilter {
+public class ExecutionFilter {
     private final Set<String> tags;
     private final Set<String> names;
 
-    TestFilter(Set<String> tags, Set<String> names){
+    ExecutionFilter(Set<String> tags, Set<String> names){
         this.tags = tags.stream().map(String::toLowerCase).collect(Collectors.toSet());
         this.names = names.stream().map(String::toLowerCase).collect(Collectors.toSet());
+    }
+
+    public ExecutionFilter() {
+        this.tags = Collections.emptySet();
+        this.names = Collections.emptySet();
     }
 
     List<TestCase> filter(List<TestCase> testCases){
