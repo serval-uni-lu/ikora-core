@@ -1,0 +1,10 @@
+*** Test Cases ***
+Test 1
+    Say Something
+
+*** Keywords ***
+Say Something
+    Log    ${SOMETHING}
+
+*** Variables ***
+${SOMETHING}    Let's get this party started

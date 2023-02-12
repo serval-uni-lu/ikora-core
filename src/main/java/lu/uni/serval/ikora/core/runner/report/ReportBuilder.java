@@ -99,7 +99,23 @@ public class ReportBuilder {
     }
 
     public void finish(){
+        setReportStatus();
         report.setGenerated(Instant.now());
+    }
+
+    private void setReportStatus(){
+        StatusNode.Type type = StatusNode.Type.NOT_EXECUTED;
+
+        if (report.getNumberFailingTests() == 0){
+            type = StatusNode.Type.FAILED;
+        }
+        if (report.getNumberPassingTests() > 0){
+            type = StatusNode.Type.PASSED;
+        }
+
+        StatusNode status = new StatusNode();
+        status.setType(type);
+        report.setStatus(status);
     }
 
     private TestNode createTestNode(TestCase testCase){

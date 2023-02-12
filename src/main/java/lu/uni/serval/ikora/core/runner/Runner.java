@@ -31,10 +31,9 @@ public class Runner {
     private final Project project;
     private final Runtime runtime;
 
-    public Runner(Project project){
+    public Runner(Project project, ExecutionFilter executionFilter){
         this.project = project;
-
-        this.runtime = new Runtime(new DynamicScope(), new ErrorManager(), new ExecutionFilter());
+        this.runtime = new Runtime(new DynamicScope(), new ErrorManager(), executionFilter);
         runtime.setLibraryResources(LibraryLoader.load(runtime.getErrors()));
     }
 
