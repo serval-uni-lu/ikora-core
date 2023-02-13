@@ -70,16 +70,13 @@ public class DictionaryEntry extends Value {
             return Collections.emptyList();
         }
 
-        if(!(other instanceof DictionaryEntry)){
-            return Collections.singletonList(Edit.changeValueType(this, other));
+        if(other instanceof DictionaryEntry entry){
+            final List<Edit> edits = new ArrayList<>();
+            edits.addAll(this.key.differences(entry.key));
+            edits.addAll(this.value.differences(entry.value));
+            return edits;
         }
 
-        DictionaryEntry entry = (DictionaryEntry)other;
-
-        List<Edit> edits = new ArrayList<>();
-        edits.addAll(this.key.differences(entry.key));
-        edits.addAll(this.value.differences(entry.value));
-
-        return edits;
+        return Collections.singletonList(Edit.changeValueType(this, other));
     }
 }

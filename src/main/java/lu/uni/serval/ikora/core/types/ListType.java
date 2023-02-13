@@ -16,15 +16,34 @@
  */
 package lu.uni.serval.ikora.core.types;
 
-import lu.uni.serval.ikora.core.runner.Resolved;
+import lu.uni.serval.ikora.core.runner.exception.InvalidTypeException;
+import org.apache.commons.lang3.NotImplementedException;
+
+import java.util.*;
 
 public class ListType extends BaseType {
+    private List<String> defaultValue = null;
+    private List<String> value = null;
+
     public ListType(String name) {
-        super(name, null);
+        super(name, false);
     }
 
-    public ListType(String name, String defaultValue) {
-        super(name, defaultValue);
+    public ListType(String name, List<String> defaultValue){
+        super(name, true);
+        this.defaultValue = defaultValue;
+    }
+
+    public Optional<List<String>> getValue() {
+        if (value == null){
+            return Optional.of(defaultValue);
+        }
+
+        return Optional.of(value);
+    }
+
+    public void setValue(List<String> value) {
+        this.value = value;
     }
 
     @Override
@@ -33,7 +52,27 @@ public class ListType extends BaseType {
     }
 
     @Override
-    public boolean isValid(Resolved resolved) {
-        return resolved.isResolved();
+    public Optional<String> asString() {
+        return Optional.empty();
+    }
+
+    @Override
+    public <T> T convert(List<BaseType> from, Class<T> to) throws InvalidTypeException {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public <C extends Collection<T>, T> C convert(List<BaseType> from, Class<T> to, Class<C> container) throws InvalidTypeException {
+        if(List.class.isAssignableFrom(container)){
+            final List<T> ts = new ArrayList<>();
+
+            for(BaseType baseType: from){
+                ts.add(baseType.convert(Collections.singletonList(baseType), to));
+            }
+
+            return (C)ts;
+        }
+
+        throw new InvalidTypeException("Cannot convert " + container.getName() + " using list convertor.");
     }
 }

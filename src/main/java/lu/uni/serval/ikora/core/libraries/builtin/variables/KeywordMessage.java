@@ -17,10 +17,18 @@
 package lu.uni.serval.ikora.core.libraries.builtin.variables;
 
 import lu.uni.serval.ikora.core.model.LibraryVariable;
+import lu.uni.serval.ikora.core.runner.Runtime;
+import lu.uni.serval.ikora.core.types.BaseType;
 import lu.uni.serval.ikora.core.types.StringType;
+import org.apache.commons.lang3.NotImplementedException;
 
 public class KeywordMessage extends LibraryVariable {
     public KeywordMessage(){
         super(new StringType("KEYWORD MESSAGE"), Format.SCALAR);
+    }
+
+    @Override
+    public BaseType execute(Runtime runtime) {
+        throw new NotImplementedException();
     }
 }

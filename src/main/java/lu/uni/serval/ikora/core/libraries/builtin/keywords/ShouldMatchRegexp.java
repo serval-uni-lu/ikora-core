@@ -28,7 +28,7 @@ public class ShouldMatchRegexp extends LibraryKeyword {
                 new StringType("string"),
                 new StringType("pattern"),
                 new StringType("message", "None"),
-                new BooleanType("values", BooleanType.TRUE)
+                new BooleanType("values", true)
         );
     }
 

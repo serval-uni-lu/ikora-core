@@ -3,6 +3,7 @@ package lu.uni.serval.ikora.core.runner.executors;
 import lu.uni.serval.ikora.core.model.Project;
 import lu.uni.serval.ikora.core.runner.ExecutionFilter;
 import lu.uni.serval.ikora.core.runner.Helpers;
+import lu.uni.serval.ikora.core.runner.OutputStrategy;
 import lu.uni.serval.ikora.core.runner.Runner;
 import lu.uni.serval.ikora.core.runner.exception.RunnerException;
 import lu.uni.serval.ikora.core.runner.report.MessageNode;
@@ -25,7 +26,7 @@ class ArgumentExecutorTest {
     )
     void testArgumentInTest(String source, String expected, int position) throws Exception {
         final Project project = Helpers.compileProject("projects/runner/arguments/" + source + ".ikora");
-        final Runner runner = new Runner(project, new ExecutionFilter());
+        final Runner runner = new Runner(project, new ExecutionFilter(), new OutputStrategy());
         final Report report = runner.execute();
 
         final MessageNode message = report.getSuites().get(0).getTests().get(0).getKeywords().get(position).getMessage();
@@ -42,7 +43,7 @@ class ArgumentExecutorTest {
     )
     void testArgumentInKeyword(String source, String expected, int position) throws RunnerException {
         final Project project = Helpers.compileProject("projects/runner/arguments/" + source + ".ikora");
-        final Runner runner = new Runner(project, new ExecutionFilter());
+        final Runner runner = new Runner(project, new ExecutionFilter(), new OutputStrategy());
         final Report report = runner.execute();
 
         final MessageNode message = report.getSuites().get(0).getTests().get(0).getKeywords().get(position).getKeywords().get(0).getMessage();

@@ -18,6 +18,7 @@ package lu.uni.serval.ikora.core.runner;
 
 import lu.uni.serval.ikora.core.builder.LibraryLoader;
 import lu.uni.serval.ikora.core.error.ErrorManager;
+import lu.uni.serval.ikora.core.model.LibraryResources;
 import lu.uni.serval.ikora.core.model.Project;
 import lu.uni.serval.ikora.core.model.Suite;
 import lu.uni.serval.ikora.core.runner.exception.InternalException;
@@ -31,10 +32,11 @@ public class Runner {
     private final Project project;
     private final Runtime runtime;
 
-    public Runner(Project project, ExecutionFilter executionFilter){
+    public Runner(Project project, ExecutionFilter executionFilter, OutputStrategy outputStrategy){
         this.project = project;
-        this.runtime = new Runtime(new DynamicScope(), new ErrorManager(), executionFilter);
-        runtime.setLibraryResources(LibraryLoader.load(runtime.getErrors()));
+        ErrorManager errorManager = new ErrorManager();
+        LibraryResources libraryResources = LibraryLoader.load(errorManager);
+        this.runtime = new Runtime(new DynamicScope(libraryResources), errorManager, executionFilter, outputStrategy);
     }
 
     public Report execute() throws RunnerException {

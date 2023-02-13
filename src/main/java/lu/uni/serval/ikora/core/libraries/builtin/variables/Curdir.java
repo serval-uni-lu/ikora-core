@@ -17,10 +17,17 @@
 package lu.uni.serval.ikora.core.libraries.builtin.variables;
 
 import lu.uni.serval.ikora.core.model.LibraryVariable;
+import lu.uni.serval.ikora.core.runner.Runtime;
+import lu.uni.serval.ikora.core.types.BaseType;
 import lu.uni.serval.ikora.core.types.PathType;
 
 public class Curdir extends LibraryVariable {
     public Curdir(){
         super(new PathType("CURDIR"), Format.SCALAR);
+    }
+
+    @Override
+    public BaseType execute(Runtime runtime) {
+        return new PathType("CURDIR", System.getProperty("user.dir"));
     }
 }

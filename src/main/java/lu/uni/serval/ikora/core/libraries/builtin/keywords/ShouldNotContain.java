@@ -29,8 +29,8 @@ public class ShouldNotContain extends LibraryKeyword {
                 new ObjectType("container"),
                 new StringType("item"),
                 new StringType("message", "None"),
-                new BooleanType("values", BooleanType.TRUE),
-                new BooleanType("ignore_case", BooleanType.FALSE)
+                new BooleanType("values", true),
+                new BooleanType("ignore_case", false)
         );
     }
 

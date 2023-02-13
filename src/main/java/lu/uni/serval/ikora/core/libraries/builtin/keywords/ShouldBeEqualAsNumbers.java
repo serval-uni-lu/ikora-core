@@ -29,8 +29,8 @@ public class ShouldBeEqualAsNumbers extends LibraryKeyword {
                 new NumberType("first"),
                 new NumberType("second"),
                 new StringType("message", "None"),
-                new BooleanType("values", "None"),
-                new NumberType("precision", "6")
+                new BooleanType("values", false),
+                new NumberType("precision", 6)
         );
     }
 

@@ -28,8 +28,8 @@ public class ShouldStartWith extends LibraryKeyword {
                 new StringType("string"),
                 new StringType("prefix"),
                 new StringType("message", "None"),
-                new BooleanType("values", BooleanType.TRUE),
-                new BooleanType("ignore_case", BooleanType.FALSE)
+                new BooleanType("values", true),
+                new BooleanType("ignore_case", false)
         );
     }
 

@@ -4,6 +4,7 @@ import lu.uni.serval.ikora.core.runner.convertors.TypeConvertor;
 import lu.uni.serval.ikora.core.runner.exception.InternalException;
 import lu.uni.serval.ikora.core.runner.exception.InvalidTypeException;
 import lu.uni.serval.ikora.core.runner.exception.RunnerException;
+import lu.uni.serval.ikora.core.types.BaseType;
 import lu.uni.serval.ikora.core.types.BaseTypeList;
 
 import java.util.*;
@@ -42,8 +43,10 @@ public class ArgumentFetcher {
             return Collections.singletonList(valueByName.get());
         }
 
+        final BaseType target = argumentTypes.get(position);
+
         if(position < arguments.size()) {
-            if(argumentTypes.get(position).isSingleValue()){
+            if(target.isSingleValue()){
                 return Collections.singletonList(arguments.get(position));
             }
 
@@ -57,13 +60,11 @@ public class ArgumentFetcher {
             return resolvedList;
         }
 
-        final Optional<String> defaultValue = argumentTypes.get(position).getDefaultValue();
-
-        if(!defaultValue.isPresent()){
+        if(!target.isOptional()){
             throw new InvalidTypeException("Missing argument and no default provided for " + name);
         }
 
-        return Collections.singletonList(Resolved.create(defaultValue.get()));
+        return Collections.singletonList(Resolved.create(target));
     }
 
     private static Optional<Resolved> findValueByName(String name, List<Resolved> arguments){

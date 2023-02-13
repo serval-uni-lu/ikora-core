@@ -28,27 +28,29 @@ public class DynamicScope {
     private final Deque<Block<Keyword, VariableAssignment>> keywordStack;
     private final Deque<List<Resolved>> argumentStack;
     private List<Value> returnValues;
+    private final LibraryResources libraryResources;
 
-    public DynamicScope(){
-        global = new SourceNodeTable<>();
-        suiteStack = new LinkedList<>();
-        testStack = new LinkedList<>();
-        keywordStack = new LinkedList<>();
-        argumentStack = new LinkedList<>();
-        returnValues = Collections.emptyList();
+    public DynamicScope(LibraryResources libraryResources){
+        this.global = new SourceNodeTable<>();
+        this.suiteStack = new LinkedList<>();
+        this.testStack = new LinkedList<>();
+        this.keywordStack = new LinkedList<>();
+        this.argumentStack = new LinkedList<>();
+        this.returnValues = Collections.emptyList();
+        this.libraryResources = libraryResources;
     }
 
     public void reset(){
-        global.clear();
-        suiteStack.clear();
-        testStack.clear();
-        keywordStack.clear();
-        argumentStack.clear();
-        returnValues.clear();
+        this.global.clear();
+        this.suiteStack.clear();
+        this.testStack.clear();
+        this.keywordStack.clear();
+        this.argumentStack.clear();
+        this.returnValues.clear();
     }
 
     public void addToKeyword(VariableAssignment variableAssignment) {
-        Block<Keyword, VariableAssignment> block = keywordStack.peek();
+        final Block<Keyword, VariableAssignment> block = keywordStack.peek();
 
         if(block != null){
             block.add(variableAssignment);
@@ -67,7 +69,7 @@ public class DynamicScope {
     }
 
     public void addToTestScope(VariableAssignment variable) throws InternalException {
-        Block<TestCase, VariableAssignment> block = testStack.peek();
+        final Block<TestCase, VariableAssignment> block = testStack.peek();
 
         if(block == null){
             throw new InternalException("Expected to be within the scope of a test");
@@ -77,7 +79,7 @@ public class DynamicScope {
     }
 
     public void addToSuiteScope(VariableAssignment variable) throws InternalException {
-        Block<Suite, VariableAssignment> block = suiteStack.peek();
+        final Block<Suite, VariableAssignment> block = suiteStack.peek();
 
         if(block == null){
             throw new InternalException("Expected to be within the scope of a suite");
@@ -91,40 +93,45 @@ public class DynamicScope {
     }
 
     public Set<Node> findInScope(Variable variable) {
-        final Set<Node> found = new HashSet<>();
-
         // 1. Check if it was defined in the keyword
         Optional<VariableAssignment> inScope = findInScope(Keyword.class, variable);
         if(inScope.isPresent()){
-            found.add(inScope.get());
-            return found;
+            return Collections.singleton(inScope.get());
         }
 
         // 2. Check if it is a test variable
         inScope = findInScope(TestCase.class, variable);
         if(inScope.isPresent()){
-            found.add(inScope.get());
-            return found;
+            return Collections.singleton(inScope.get());
         }
 
         // 3. Check if it is a suite variable
         inScope = findInScope(Suite.class, variable);
         if(inScope.isPresent()){
-            found.add(inScope.get());
-            return found;
+            return Collections.singleton(inScope.get());
         }
 
         // 4. Check if it is defined in a variable block
+        final Set<Node> found = new HashSet<>();
         final SourceFile sourceFile = variable.getSourceFile();
         final List<VariableAssignment> variableAssignmentList = sourceFile.getVariables();
-
         for(VariableAssignment variableAssignment: variableAssignmentList){
             if(variableAssignment.matches(variable.getDefinitionToken())){
                 found.add(variableAssignment);
             }
         }
+        if (!found.isEmpty()){
+            return found;
+        }
 
-        return found;
+        // 5. Check if library variable
+        Optional<LibraryVariable> inLibrary = libraryResources.findVariable(variable.getDefinitionToken());
+        if(inLibrary.isPresent()){
+            return Collections.singleton(inLibrary.get());
+        }
+
+        // Nothing was fond, return an empty set
+        return Collections.emptySet();
     }
 
     public void enterNode(Node node) {
@@ -191,6 +198,10 @@ public class DynamicScope {
 
     public void setReturnValues(List<Value> values) {
         returnValues = values;
+    }
+
+    public LibraryResources getLibraryResources() {
+        return libraryResources;
     }
 
     static class Block<T, U>{

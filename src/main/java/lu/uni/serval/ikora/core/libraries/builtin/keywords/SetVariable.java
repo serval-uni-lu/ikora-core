@@ -35,7 +35,7 @@ public class SetVariable extends LibraryKeyword {
     public void execute(Runtime runtime) {
         final List<Value> values = runtime.getArguments().stream()
                 .map(Resolved::getValue)
-                .map(v -> ValueParser.parseValue(Token.fromString(v)))
+                .map(v -> ValueParser.parseValue(Token.fromString(v.toString())))
                 .toList();
 
         runtime.setReturnValues(values);

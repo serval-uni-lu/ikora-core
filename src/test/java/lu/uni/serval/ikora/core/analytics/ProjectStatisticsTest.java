@@ -18,10 +18,10 @@ package lu.uni.serval.ikora.core.analytics;
 
 import lu.uni.serval.ikora.core.builder.BuildResult;
 import lu.uni.serval.ikora.core.builder.Builder;
-import lu.uni.serval.ikora.core.exception.InvalidTypeException;
 import lu.uni.serval.ikora.core.model.Project;
 import lu.uni.serval.ikora.core.model.TestCase;
 import lu.uni.serval.ikora.core.model.UserKeyword;
+import lu.uni.serval.ikora.core.runner.exception.InvalidTypeException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

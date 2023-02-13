@@ -18,12 +18,13 @@ package lu.uni.serval.ikora.core.libraries.builtin.keywords;
 
 import lu.uni.serval.ikora.core.libraries.LibraryKeyword;
 import lu.uni.serval.ikora.core.runner.Runtime;
+import lu.uni.serval.ikora.core.runner.exception.InvalidTypeException;
 import lu.uni.serval.ikora.core.types.NumberType;
 import lu.uni.serval.ikora.core.types.StringType;
 import org.apache.commons.lang3.NotImplementedException;
 
 public class ConvertToBinary extends LibraryKeyword {
-    public ConvertToBinary() {
+    public ConvertToBinary() throws InvalidTypeException {
         super(Type.SET,
                 new StringType("item"),
                 new NumberType("base", "None"),

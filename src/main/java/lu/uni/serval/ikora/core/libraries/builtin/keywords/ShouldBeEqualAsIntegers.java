@@ -18,18 +18,19 @@ package lu.uni.serval.ikora.core.libraries.builtin.keywords;
 
 import lu.uni.serval.ikora.core.libraries.LibraryKeyword;
 import lu.uni.serval.ikora.core.runner.Runtime;
+import lu.uni.serval.ikora.core.runner.exception.InvalidTypeException;
 import lu.uni.serval.ikora.core.types.BooleanType;
 import lu.uni.serval.ikora.core.types.NumberType;
 import lu.uni.serval.ikora.core.types.StringType;
 import org.apache.commons.lang3.NotImplementedException;
 
 public class ShouldBeEqualAsIntegers extends LibraryKeyword {
-    public ShouldBeEqualAsIntegers(){
+    public ShouldBeEqualAsIntegers() throws InvalidTypeException {
         super(Type.ASSERTION,
                 new NumberType("first"),
                 new NumberType("second"),
                 new StringType("message", "None"),
-                new BooleanType("values", "None"),
+                new BooleanType("values", false),
                 new NumberType("base", "None")
         );
     }

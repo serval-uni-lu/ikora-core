@@ -27,7 +27,7 @@ public class LogToConsole extends LibraryKeyword {
         super(Type.LOG,
                 new StringType("message"),
                 new StringType("stream", "STDOUT"),
-                new BooleanType("no_newline", BooleanType.FALSE)
+                new BooleanType("no_newline", false)
         );
     }
 

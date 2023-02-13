@@ -16,8 +16,8 @@
  */
 package lu.uni.serval.ikora.core.analytics;
 
-import lu.uni.serval.ikora.core.exception.InvalidTypeException;
 import lu.uni.serval.ikora.core.model.*;
+import lu.uni.serval.ikora.core.runner.exception.InvalidTypeException;
 
 import java.util.*;
 

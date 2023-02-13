@@ -16,32 +16,39 @@
  */
 package lu.uni.serval.ikora.core.types;
 
-import lu.uni.serval.ikora.core.runner.Resolved;
+import lu.uni.serval.ikora.core.runner.exception.InvalidTypeException;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 public abstract class BaseType {
     private final String name;
-    private final String defaultValue;
+    protected final boolean isOptional;
 
-    protected BaseType(String name, String defaultValue) {
+    protected BaseType(String name, boolean isOptional) {
         this.name = name;
-        this.defaultValue = defaultValue;
+        this.isOptional = isOptional;
     }
 
     public String getName() {
         return name;
     }
 
-    public Optional<String> getDefaultValue() {
-        return Optional.ofNullable(defaultValue);
+    public boolean isValid(BaseType other) {
+        if (other.getClass() == StringType.class) return true;
+        return other.getClass() == this.getClass();
     }
 
-    public boolean hasDefaultValue(){
-        return defaultValue != null;
+    public boolean isOptional() {
+        return isOptional;
     }
 
     public abstract boolean isSingleValue();
 
-    public abstract boolean isValid(Resolved resolved);
+    public abstract Optional<String> asString();
+
+    public abstract <T> T convert(List<BaseType> from, Class<T> to) throws InvalidTypeException;
+
+    public abstract <C extends Collection<T>, T> C convert(List<BaseType> from, Class<T> to, Class<C> container) throws InvalidTypeException;
 }

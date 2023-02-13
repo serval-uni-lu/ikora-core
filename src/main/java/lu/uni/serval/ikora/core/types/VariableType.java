@@ -1,10 +1,15 @@
 package lu.uni.serval.ikora.core.types;
 
-import lu.uni.serval.ikora.core.runner.Resolved;
+import lu.uni.serval.ikora.core.runner.exception.InvalidTypeException;
+import org.apache.commons.lang3.NotImplementedException;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 
 public class VariableType extends BaseType{
     public VariableType(String name) {
-        super(name, null);
+        super(name, false);
     }
 
     @Override
@@ -13,15 +18,17 @@ public class VariableType extends BaseType{
     }
 
     @Override
-    public boolean isValid(Resolved resolved) {
-        if(resolved.isResolved()){
-            return false;
-        }
+    public Optional<String> asString() {
+        throw new NotImplementedException();
+    }
 
-        if(resolved.getOrigin() == null){
-            return false;
-        }
+    @Override
+    public <T> T convert(List<BaseType> from, Class<T> to) throws InvalidTypeException {
+        throw new NotImplementedException();
+    }
 
-        return resolved.getOrigin().isVariable();
+    @Override
+    public <C extends Collection<T>, T> C convert(List<BaseType> from, Class<T> to, Class<C> container) throws InvalidTypeException {
+        throw new NotImplementedException();
     }
 }

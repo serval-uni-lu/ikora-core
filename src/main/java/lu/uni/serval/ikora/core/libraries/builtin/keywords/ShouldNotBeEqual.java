@@ -28,8 +28,8 @@ public class ShouldNotBeEqual extends LibraryKeyword {
                 new StringType("first"),
                 new StringType("second"),
                 new StringType("message", "None"),
-                new BooleanType("values", BooleanType.TRUE),
-                new BooleanType("ignore_case", BooleanType.FALSE)
+                new BooleanType("values", true),
+                new BooleanType("ignore_case", false)
         );
     }
 

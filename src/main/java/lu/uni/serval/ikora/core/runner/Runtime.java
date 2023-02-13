@@ -23,6 +23,7 @@ import lu.uni.serval.ikora.core.runner.exception.InternalException;
 import lu.uni.serval.ikora.core.runner.exception.RunnerException;
 import lu.uni.serval.ikora.core.runner.report.*;
 
+import java.io.File;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
@@ -32,20 +33,15 @@ public class Runtime {
     private final DynamicScope scope;
     private final ReportBuilder reportBuilder;
     private final ErrorManager errors;
-
     private final ExecutionFilter filter;
+    private final OutputStrategy outputStrategy;
 
-    private LibraryResources libraryResources;
-
-    public Runtime(DynamicScope scope, ErrorManager errorManager, ExecutionFilter filter){
+    public Runtime(DynamicScope scope, ErrorManager errorManager, ExecutionFilter filter, OutputStrategy outputStrategy){
         this.scope = scope;
         this.errors = errorManager;
         this.reportBuilder = new ReportBuilder(errorManager);
         this.filter = filter;
-    }
-
-    public void setLibraryResources(LibraryResources libraryResources) {
-        this.libraryResources = libraryResources;
+        this.outputStrategy = outputStrategy;
     }
 
     public void addArgumentToScope(List<Resolved> arguments) throws InternalException {
@@ -149,10 +145,6 @@ public class Runtime {
         return scope;
     }
 
-    public LibraryResources getLibraryResources(){
-        return libraryResources;
-    }
-
     public boolean isInError() {
         return !this.errors.isEmpty();
     }
@@ -180,5 +172,13 @@ public class Runtime {
 
     public List<TestCase> filter(List<TestCase> testCases) {
         return this.filter.filter(testCases);
+    }
+
+    public File getOutputDirectory() {
+        return outputStrategy.getDirectory();
+    }
+
+    public LibraryResources getLibraryResources() {
+        return scope.getLibraryResources();
     }
 }

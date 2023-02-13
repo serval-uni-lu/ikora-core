@@ -18,16 +18,17 @@ package lu.uni.serval.ikora.core.libraries.builtin.keywords;
 
 import lu.uni.serval.ikora.core.libraries.LibraryKeyword;
 import lu.uni.serval.ikora.core.runner.Runtime;
+import lu.uni.serval.ikora.core.runner.exception.InvalidTypeException;
 import lu.uni.serval.ikora.core.types.NumberType;
 import lu.uni.serval.ikora.core.types.StringType;
 import org.apache.commons.lang3.NotImplementedException;
 
 public class ConvertToOctal extends LibraryKeyword {
-    public ConvertToOctal() {
+    public ConvertToOctal() throws InvalidTypeException {
         super(Type.SET,
                 new StringType("item"),
                 new NumberType("base", "None"),
-                new StringType("prefix", "None"),
+                new StringType("prefix", null),
                 new NumberType("length", "None")
         );
     }

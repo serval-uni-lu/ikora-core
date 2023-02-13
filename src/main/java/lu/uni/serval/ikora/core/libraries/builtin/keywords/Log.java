@@ -30,10 +30,10 @@ public class Log extends LibraryKeyword {
     public Log(){
         super(Type.LOG,
                 new StringType("message"),
-                new LogLevelType("level", "INFO"),
-                new BooleanType("html", BooleanType.FALSE),
-                new BooleanType("console", BooleanType.FALSE),
-                new BooleanType("repr", BooleanType.FALSE),
+                new LogLevelType("level", LogLevel.INFO),
+                new BooleanType("html", false),
+                new BooleanType("console", false),
+                new BooleanType("repr", false),
                 new StringType("formatter", "str")
         );
     }

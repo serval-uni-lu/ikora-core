@@ -13,7 +13,16 @@ class RunnerTest {
     @Test
     void testSingleFile() throws RunnerException {
         final Project project = compileProject("projects/runner/simple-run");
-        final Runner runner = new Runner(project, new ExecutionFilter());
+        final Runner runner = new Runner(project, new ExecutionFilter(), new OutputStrategy());
+        final Report report = runner.execute();
+        assertEquals(StatusNode.Type.PASSED, report.getStatus().getType());
+        assertEquals(1, report.getNumberTests());
+    }
+
+    @Test
+    void testBuiltInVariable() throws RunnerException {
+        final Project project = compileProject("projects/runner/builtin-variable");
+        final Runner runner = new Runner(project, new ExecutionFilter(), new OutputStrategy());
         final Report report = runner.execute();
         assertEquals(StatusNode.Type.PASSED, report.getStatus().getType());
         assertEquals(1, report.getNumberTests());

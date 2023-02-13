@@ -29,8 +29,8 @@ public class ShouldNotBeEqualAsStrings extends LibraryKeyword {
                 new NumberType("first"),
                 new NumberType("second"),
                 new StringType("message", "None"),
-                new BooleanType("values", "None"),
-                new BooleanType("ignore_case", BooleanType.FALSE)
+                new BooleanType("values", false),
+                new BooleanType("ignore_case", false)
         );
     }
 

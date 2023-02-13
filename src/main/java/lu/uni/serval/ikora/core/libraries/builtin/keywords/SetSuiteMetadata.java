@@ -27,8 +27,8 @@ public class SetSuiteMetadata extends LibraryKeyword {
         super(Type.SET,
                 new StringType("name"),
                 new StringType("value"),
-                new BooleanType("append", BooleanType.FALSE),
-                new BooleanType("top", BooleanType.FALSE)
+                new BooleanType("append", false),
+                new BooleanType("top", false)
         );
     }
 

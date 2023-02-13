@@ -4,6 +4,8 @@ import lu.uni.serval.ikora.core.model.*;
 import lu.uni.serval.ikora.core.runner.Resolved;
 import lu.uni.serval.ikora.core.runner.Runtime;
 import lu.uni.serval.ikora.core.runner.exception.*;
+import lu.uni.serval.ikora.core.types.BaseType;
+import lu.uni.serval.ikora.core.types.StringType;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -42,7 +44,9 @@ public class ArgumentResolver {
         final List<Variable> variables = literal.getVariables();
 
         if(variables.isEmpty()){
-            return Collections.singletonList(Resolved.create(literal.getName(), argument));
+            final StringType literalType = new StringType("LITERAL");
+            literalType.setValue(literal.getName());
+            return Collections.singletonList(Resolved.create(literalType, argument));
         }
 
         String value = literal.getName();
@@ -54,10 +58,12 @@ public class ArgumentResolver {
                 throw new MalformedVariableException("Composite variable can only accept single value " + variable.getName() + " has " + resolvedVariables.size());
             }
 
-            value = value.replace(variable.getName(), resolvedVariables.get(0).getValue());
+            value = value.replace(variable.getName(), resolvedVariables.get(0).getValue().toString());
         }
 
-        return Collections.singletonList(Resolved.create(value, argument));
+        final StringType variableType = new StringType("VARIABLE");
+        variableType.setValue(value);
+        return Collections.singletonList(Resolved.create(variableType, argument));
     }
 
     private static List<Resolved> resolve(Runtime runtime, Argument argument, Variable variable) throws RunnerException {
@@ -75,6 +81,9 @@ public class ArgumentResolver {
                     resolved.add(Resolved.createUnresolved(argument));
                 }
             }
+        } else if (matching instanceof LibraryVariable libraryVariable) {
+            BaseType value = libraryVariable.execute(runtime);
+            resolved.add(Resolved.create(value, argument));
         }
 
         return resolved;
@@ -84,7 +93,7 @@ public class ArgumentResolver {
         final Resolved key = getUnique(runtime, argument, entry.getKey());
         final Resolved value = getUnique(runtime, argument, entry.getValue());
 
-        return Collections.singletonList(Resolved.create(key.getValue(), value.getValue(), argument));
+        return Collections.singletonList(Resolved.create(key.getKey(), value.getValue(), argument));
     }
 
     private static Node find(Runtime runtime, Variable variable) throws MultipleSymbolException, MissingSymbolException {

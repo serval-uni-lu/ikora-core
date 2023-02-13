@@ -18,20 +18,27 @@ package lu.uni.serval.ikora.core.libraries.builtin.variables;
 
 import lu.uni.serval.ikora.core.model.LibraryVariable;
 import lu.uni.serval.ikora.core.model.Token;
+import lu.uni.serval.ikora.core.runner.Runtime;
+import lu.uni.serval.ikora.core.types.BaseType;
 import lu.uni.serval.ikora.core.types.StringType;
+import org.apache.commons.lang3.NotImplementedException;
 
 import java.util.regex.Pattern;
 
 public class Space extends LibraryVariable {
-    private Pattern match;
+    private static final Pattern spacePattern = Pattern.compile("^\\$\\{SPACE(\\s*\\*\\s*\\d*)?}$", Pattern.CASE_INSENSITIVE);
 
     public Space(){
         super(new StringType("SPACE"), Format.SCALAR);
-        match = Pattern.compile("^\\$\\{SPACE(\\s*\\*\\s*\\d*)?}$", Pattern.CASE_INSENSITIVE);
     }
 
     @Override
     public boolean matches(Token name) {
-        return match.matcher(name.getText()).matches();
+        return spacePattern.matcher(name.getText()).matches();
+    }
+
+    @Override
+    public BaseType execute(Runtime runtime) {
+        throw new NotImplementedException();
     }
 }

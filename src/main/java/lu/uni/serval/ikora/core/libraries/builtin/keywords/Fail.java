@@ -26,7 +26,7 @@ public class Fail extends LibraryKeyword {
     public Fail(){
         super(Type.ERROR,
                 new StringType("message", "None"),
-                new ListType("tags", "None")
+                new ListType("tags", null)
         );
     }
 

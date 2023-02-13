@@ -1,0 +1,7 @@
+*** Test Cases ***
+Test 1
+    Say Something
+
+*** Keywords ***
+Say Something
+    Log    ${curdir}

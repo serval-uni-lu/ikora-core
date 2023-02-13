@@ -3,17 +3,16 @@ package lu.uni.serval.ikora.core.runner;
 import lu.uni.serval.ikora.core.model.*;
 import lu.uni.serval.ikora.core.parser.VariableParser;
 import lu.uni.serval.ikora.core.runner.exception.InternalException;
-import lu.uni.serval.ikora.core.utils.StringUtils;
-import org.apache.commons.lang3.tuple.Pair;
+import lu.uni.serval.ikora.core.types.BaseType;
 
 import java.util.Optional;
 
 public class Resolved {
     private final String key;
-    private final String value;
+    private final BaseType value;
     private final Argument origin;
 
-    private Resolved(String key, String value, Argument origin) {
+    private Resolved(String key, BaseType value, Argument origin) {
         this.key = key;
         this.value = value;
         this.origin = origin;
@@ -23,18 +22,16 @@ public class Resolved {
         return new Resolved(null, null, origin);
     }
 
-    public static Resolved create(String key, String value, Argument origin){
+    public static Resolved create(String key, BaseType value, Argument origin){
         return new Resolved(key, value, origin);
     }
 
-
-    public static Resolved create(String value, Argument origin){
-        final Pair<String,String> split = StringUtils.splitEqual(value);
-        return new Resolved(split.getKey(), split.getValue(), origin);
+    public static Resolved create(BaseType value, Argument origin){
+        return new Resolved(null, value, origin);
     }
 
-    public static Resolved create(String value) {
-        return new Resolved("", value, null);
+    public static Resolved create(BaseType value) {
+        return new Resolved(null, value, null);
     }
 
     public boolean isResolved(){
@@ -56,7 +53,7 @@ public class Resolved {
     public String getKey(){
         return key;
     }
-    public String getValue() {
+    public BaseType getValue() {
         return value;
     }
 
@@ -75,13 +72,13 @@ public class Resolved {
     public Value toValue() throws InternalException {
         if(hasKey()){
             final Literal entryKey = new Literal(Token.fromString(getKey()));
-            final Literal entryValue = new Literal(Token.fromString(getValue()));
+            final Literal entryValue = new Literal(Token.fromString(getValue().toString()));
 
             return new DictionaryEntry(entryKey, entryValue);
         }
 
         if(hasValue()){
-            return new Literal(Token.fromString(getValue()));
+            return new Literal(Token.fromString(getValue().toString()));
         }
 
         final Optional<Variable> variable = VariableParser.parse(Token.fromString(getOrigin().getName()));

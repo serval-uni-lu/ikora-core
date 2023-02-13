@@ -19,6 +19,7 @@ package lu.uni.serval.ikora.core.model;
 import lu.uni.serval.ikora.core.analytics.visitor.NodeVisitor;
 import lu.uni.serval.ikora.core.analytics.visitor.VisitorMemory;
 import lu.uni.serval.ikora.core.analytics.resolver.ValueResolver;
+import lu.uni.serval.ikora.core.runner.Runtime;
 import lu.uni.serval.ikora.core.types.BaseType;
 
 import java.util.HashSet;
@@ -48,6 +49,8 @@ public abstract class LibraryVariable implements Node, Dependable {
         this.pattern = Pattern.compile(patternString, Pattern.CASE_INSENSITIVE);
     }
 
+    public abstract BaseType execute(Runtime runtime);
+
     @Override
     public void accept(NodeVisitor visitor, VisitorMemory memory) {
         visitor.visit(this, memory);
@@ -55,13 +58,11 @@ public abstract class LibraryVariable implements Node, Dependable {
 
     @Override
     public String getName() {
-        String prefix = "$";
-
-        switch (this.format) {
-            case SCALAR: prefix = "$"; break;
-            case LIST: prefix = "@"; break;
-            case DICTIONARY: prefix = "&"; break;
-        }
+        final String prefix = switch (this.format) {
+            case SCALAR -> "$";
+            case LIST -> "@";
+            case DICTIONARY -> "&";
+        };
 
         return String.format("%s{%s}", prefix, this.type.getName());
     }

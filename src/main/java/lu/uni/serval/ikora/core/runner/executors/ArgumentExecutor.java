@@ -51,7 +51,7 @@ public class ArgumentExecutor extends NodeExecutor {
             if(resolvedIt.hasNext()){
                 validateArgument(resolvedIt, type);
             }
-            else if(!type.hasDefaultValue()){
+            else if(!type.isOptional()){
                 throw new RunnerException("Missing argument");
             }
         }
@@ -65,7 +65,7 @@ public class ArgumentExecutor extends NodeExecutor {
         do{
             final Resolved current = resolvedIt.next();
 
-            if(!type.isValid(current)){
+            if(!type.isValid(current.getValue())){
                 throw new RunnerException("Invalid argument for type " + type.getClass().getName() + ": " + current.getValue());
             }
 

@@ -28,8 +28,8 @@ public class ShouldNotMatch extends LibraryKeyword {
                 new StringType("string"),
                 new StringType("pattern"),
                 new StringType("message"),
-                new BooleanType("values", BooleanType.TRUE),
-                new BooleanType("ignore_case", BooleanType.FALSE)
+                new BooleanType("values", true),
+                new BooleanType("ignore_case", false)
         );
     }
 

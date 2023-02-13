@@ -17,13 +17,14 @@
 package lu.uni.serval.ikora.core.libraries.builtin.keywords;
 
 import lu.uni.serval.ikora.core.libraries.LibraryKeyword;
+import lu.uni.serval.ikora.core.model.LogLevel;
 import lu.uni.serval.ikora.core.runner.Runtime;
 import lu.uni.serval.ikora.core.types.LogLevelType;
 import org.apache.commons.lang3.NotImplementedException;
 
 public class LogVariables extends LibraryKeyword {
     public LogVariables(){
-        super(Type.LOG, new LogLevelType("level", "INFO"));
+        super(Type.LOG, new LogLevelType("level", LogLevel.INFO));
     }
 
     @Override
