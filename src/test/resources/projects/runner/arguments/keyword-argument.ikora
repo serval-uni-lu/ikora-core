@@ -1,6 +1,6 @@
 *** Test Cases ***
 Test 1
-    Print message    Test 1
+    Print message    Test 1 Argument
 
 *** Keywords ***
 Print message

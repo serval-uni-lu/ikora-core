@@ -16,6 +16,9 @@
  */
 package lu.uni.serval.ikora.core.types;
 
+import lu.uni.serval.ikora.core.model.Token;
+import lu.uni.serval.ikora.core.model.Value;
+import lu.uni.serval.ikora.core.parser.ValueParser;
 import lu.uni.serval.ikora.core.runner.exception.InvalidTypeException;
 import org.apache.commons.lang3.NotImplementedException;
 
@@ -61,16 +64,22 @@ public class StringType extends BaseType {
 
     @Override
     public <T> T convert(List<BaseType> from, Class<T> to) throws InvalidTypeException {
-        if(to != String.class){
+        if(to != String.class && to != Value.class){
             throw new InvalidTypeException(String.format("String type is used to generate strings but got: %s", to.getCanonicalName()));
         }
 
-        return (T)String.join(" ", from.stream()
+        final String concatenated = String.join(" ", from.stream()
                 .map(BaseType::asString)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.toSet())
         );
+
+        if(to == Value.class){
+            return (T)ValueParser.parseValue(Token.fromString(concatenated));
+        }
+
+        return (T)concatenated;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package lu.uni.serval.ikora.core.runner.executors;
 
+import lu.uni.serval.ikora.core.analytics.resolver.ValueResolver;
 import lu.uni.serval.ikora.core.model.Argument;
 import lu.uni.serval.ikora.core.model.NodeList;
 import lu.uni.serval.ikora.core.runner.Resolved;
@@ -8,10 +9,12 @@ import lu.uni.serval.ikora.core.runner.exception.InternalException;
 import lu.uni.serval.ikora.core.runner.exception.RunnerException;
 import lu.uni.serval.ikora.core.types.BaseType;
 import lu.uni.serval.ikora.core.types.BaseTypeList;
+import lu.uni.serval.ikora.core.types.VariableType;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 public class ArgumentExecutor extends NodeExecutor {
     private final BaseTypeList argumentTypes;
@@ -64,13 +67,44 @@ public class ArgumentExecutor extends NodeExecutor {
     private void validateArgument(Iterator<Resolved> resolvedIt, BaseType type) throws RunnerException {
         do{
             final Resolved current = resolvedIt.next();
-
-            if(!type.isValid(current.getValue())){
-                throw new RunnerException("Invalid argument for type " + type.getClass().getName() + ": " + current.getValue());
-            }
-
-            if(type.isSingleValue()) break;
+            if(validateVariableType(current, type)) continue;
+            validateType(current, type);
         }
-        while(resolvedIt.hasNext());
+        while(resolvedIt.hasNext() && !type.isSingleValue());
+    }
+
+    private void validateType(Resolved resolved, BaseType type) throws RunnerException {
+        if(!type.isValid(resolved.getValue())){
+            throw new RunnerException(String.format(
+                    "Invalid argument for type %s: %s" ,
+                    type.getClass().getName(),
+                    resolved.getValue()
+            ));
+        }
+    }
+
+    private boolean validateVariableType(Resolved resolved, BaseType type) throws RunnerException {
+        if(!(type instanceof VariableType)){
+            return false;
+        }
+
+        if(resolved.getValue() instanceof VariableType){
+            return true;
+        }
+
+        final Optional<String> variableName = resolved.getValue().asString();
+
+        if(variableName.isEmpty()){
+            throw new RunnerException("Variable assignment can not point to an empty value");
+        }
+
+        if(!ValueResolver.isVariable(variableName.get())){
+            throw new RunnerException(String.format(
+                    "Invalid variable name for assignment: %s",
+                    variableName.get()
+            ));
+        }
+
+        return true;
     }
 }

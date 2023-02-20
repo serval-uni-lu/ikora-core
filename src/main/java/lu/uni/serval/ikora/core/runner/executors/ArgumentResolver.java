@@ -6,11 +6,10 @@ import lu.uni.serval.ikora.core.runner.Runtime;
 import lu.uni.serval.ikora.core.runner.exception.*;
 import lu.uni.serval.ikora.core.types.BaseType;
 import lu.uni.serval.ikora.core.types.StringType;
+import lu.uni.serval.ikora.core.utils.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class ArgumentResolver {
     private ArgumentResolver() {}
@@ -44,9 +43,10 @@ public class ArgumentResolver {
         final List<Variable> variables = literal.getVariables();
 
         if(variables.isEmpty()){
-            final StringType literalType = new StringType("LITERAL");
-            literalType.setValue(literal.getName());
-            return Collections.singletonList(Resolved.create(literalType, argument));
+            final Pair<String,String> namedValue = StringUtils.splitEqual(literal.getName());
+            final StringType literalType = new StringType(namedValue.getKey());
+            literalType.setValue(namedValue.getValue());
+            return Collections.singletonList(Resolved.create(namedValue.getKey(), literalType, argument));
         }
 
         String value = literal.getName();
@@ -58,7 +58,17 @@ public class ArgumentResolver {
                 throw new MalformedVariableException("Composite variable can only accept single value " + variable.getName() + " has " + resolvedVariables.size());
             }
 
-            value = value.replace(variable.getName(), resolvedVariables.get(0).getValue().toString());
+            final Optional<String> composite = resolvedVariables.get(0).getValue().asString();
+            if(composite.isEmpty()){
+                throw new RunnerException(
+                        String.format("Failed to resolve composite variable '%s' in expression: %s",
+                                variable.getName(),
+                                value
+                        )
+                );
+            }
+
+            value = value.replace(variable.getName(), composite.get());
         }
 
         final StringType variableType = new StringType("VARIABLE");
@@ -90,10 +100,17 @@ public class ArgumentResolver {
     }
 
     private static List<Resolved> resolve(Runtime runtime, Argument argument, DictionaryEntry entry) throws RunnerException {
-        final Resolved key = getUnique(runtime, argument, entry.getKey());
+        final Optional<String> key = getUnique(runtime, argument, entry.getKey()).getValue().asString();
+
+        if(key.isEmpty()){
+            throw new RunnerException(String.format(
+                    "Failed to resolve key of Dictionary Entry: %s", entry.getKey().getName()
+            ));
+        }
+
         final Resolved value = getUnique(runtime, argument, entry.getValue());
 
-        return Collections.singletonList(Resolved.create(key.getKey(), value.getValue(), argument));
+        return Collections.singletonList(Resolved.create(key.get(), value.getValue(), argument));
     }
 
     private static Node find(Runtime runtime, Variable variable) throws MultipleSymbolException, MissingSymbolException {

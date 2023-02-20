@@ -1,11 +1,8 @@
 package lu.uni.serval.ikora.core.runner;
 
 import lu.uni.serval.ikora.core.model.*;
-import lu.uni.serval.ikora.core.parser.VariableParser;
-import lu.uni.serval.ikora.core.runner.exception.InternalException;
 import lu.uni.serval.ikora.core.types.BaseType;
-
-import java.util.Optional;
+import lu.uni.serval.ikora.core.types.VariableType;
 
 public class Resolved {
     private final String key;
@@ -19,7 +16,7 @@ public class Resolved {
     }
 
     public static Resolved createUnresolved(Argument origin){
-        return new Resolved(null, null, origin);
+        return new Resolved(null, new VariableType(origin.getName()), origin);
     }
 
     public static Resolved create(String key, BaseType value, Argument origin){
@@ -67,26 +64,5 @@ public class Resolved {
 
     public boolean hasValue() {
         return value != null;
-    }
-
-    public Value toValue() throws InternalException {
-        if(hasKey()){
-            final Literal entryKey = new Literal(Token.fromString(getKey()));
-            final Literal entryValue = new Literal(Token.fromString(getValue().toString()));
-
-            return new DictionaryEntry(entryKey, entryValue);
-        }
-
-        if(hasValue()){
-            return new Literal(Token.fromString(getValue().toString()));
-        }
-
-        final Optional<Variable> variable = VariableParser.parse(Token.fromString(getOrigin().getName()));
-
-        if(variable.isPresent()){
-            return variable.get();
-        }
-
-        throw new InternalException("Invalid resolution: " + getOrigin().getName() + " should be a variable name.");
     }
 }

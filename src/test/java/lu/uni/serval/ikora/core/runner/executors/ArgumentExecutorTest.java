@@ -36,7 +36,7 @@ class ArgumentExecutorTest {
 
     @ParameterizedTest
     @CsvSource(value = {
-            "keyword-argument:Test 1:0",
+            "keyword-argument:Test 1 Argument:0",
             "test-variable:Test 1:1",
             "test-named:Test 1:1"},
             delimiter = ':'

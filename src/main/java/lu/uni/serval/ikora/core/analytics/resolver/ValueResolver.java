@@ -53,7 +53,11 @@ public class ValueResolver {
     }
 
     public static boolean isVariable(Token token) {
-        Matcher matcher = getVariableMatcher(token.getText(), Matching.IS_VARIABLE);
+        return isVariable(token.getText());
+    }
+
+    public static boolean isVariable(String text) {
+        Matcher matcher = getVariableMatcher(text, Matching.IS_VARIABLE);
         return matcher.matches();
     }
 
@@ -87,24 +91,13 @@ public class ValueResolver {
     }
 
     private static Matcher getVariableMatcher(String name, Matching matching) {
-        Matcher matcher;
-
-        switch (matching) {
-            case IS_VARIABLE:
-                matcher = isVariablePattern.matcher(name);
-                break;
-            case HAS_VARIABLE:
-                matcher = hasVariablePattern.matcher(name);
-                break;
-            case FIND_VARIABLE:
-                matcher = findVariablePattern.matcher(name);
-                break;
-
-            default:
-                throw new InvalidParameterException(String.format("Matcher of type %s not supported", matching.name()));
-        }
-
-        return matcher;
+        return switch (matching) {
+            case IS_VARIABLE -> isVariablePattern.matcher(name);
+            case HAS_VARIABLE -> hasVariablePattern.matcher(name);
+            case FIND_VARIABLE -> findVariablePattern.matcher(name);
+            default ->
+                    throw new InvalidParameterException(String.format("Matcher of type %s not supported", matching.name()));
+        };
     }
 
     public static String escape(String s){

@@ -22,9 +22,11 @@ import lu.uni.serval.ikora.core.model.Value;
 import lu.uni.serval.ikora.core.parser.ValueParser;
 import lu.uni.serval.ikora.core.runner.Resolved;
 import lu.uni.serval.ikora.core.runner.Runtime;
+import lu.uni.serval.ikora.core.types.BaseType;
 import lu.uni.serval.ikora.core.types.ListType;
 
 import java.util.List;
+import java.util.Optional;
 
 public class SetVariable extends LibraryKeyword {
     public SetVariable(){
@@ -35,7 +37,9 @@ public class SetVariable extends LibraryKeyword {
     public void execute(Runtime runtime) {
         final List<Value> values = runtime.getArguments().stream()
                 .map(Resolved::getValue)
-                .map(v -> ValueParser.parseValue(Token.fromString(v.toString())))
+                .map(BaseType::asString)
+                .filter(Optional::isPresent)
+                .map(v -> ValueParser.parseValue(Token.fromString(v.get())))
                 .toList();
 
         runtime.setReturnValues(values);

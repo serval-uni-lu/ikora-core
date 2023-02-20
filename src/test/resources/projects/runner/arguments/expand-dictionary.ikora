@@ -3,4 +3,5 @@ Test 1
     Log    &{Variables}
     
 *** Variables ***
-&{Variables}    level=INFO    message=Test 1
+&{Variables}    ${Key}=INFO    message=Test 1
+${Key}    level

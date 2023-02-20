@@ -32,6 +32,9 @@ public class DictionaryEntry extends Value {
         addToken(key.getDefinitionToken());
         addToken(value.getDefinitionToken());
 
+        addAstChild(key);
+        addAstChild(value);
+
         this.key = key;
         this.value = value;
     }
