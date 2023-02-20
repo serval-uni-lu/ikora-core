@@ -39,8 +39,8 @@ public class SetSuiteVariable extends LibraryKeyword implements ScopeModifier {
 
     @Override
     public void execute(Runtime runtime) throws RunnerException {
-        final VariableAssignment variableAssignment = VariableSetter.fromArguments(runtime.getArguments(), argumentTypes);
-        runtime.addToSuiteScope(variableAssignment);
+        final VariableAssignment scopedVariable = VariableSetter.fromArguments(runtime.getArguments(), argumentTypes);
+        runtime.addToSuiteScope(scopedVariable);
     }
 
     @Override

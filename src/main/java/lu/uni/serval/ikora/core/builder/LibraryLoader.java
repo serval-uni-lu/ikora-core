@@ -195,9 +195,9 @@ public class LibraryLoader {
         try {
             final InputStream in = LibraryLoader.class.getResourceAsStream("/libraries.json");
             final ObjectMapper mapper = new ObjectMapper();
-            final List<LibraryInfo> libraryInfos = mapper.readValue(in, new TypeReference<List<LibraryInfo>>(){});
+            final List<LibraryInfo> libraryInfoList = mapper.readValue(in, new TypeReference<>(){});
 
-            libraries.addExternalLibraries(libraryInfos);
+            libraries.addExternalLibraries(libraryInfoList);
         } catch (IOException e) {
             errors.registerIOError(
                     new Source(new File("libraries.json")),

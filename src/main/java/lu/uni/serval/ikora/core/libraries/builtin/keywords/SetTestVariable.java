@@ -37,8 +37,8 @@ public class SetTestVariable extends LibraryKeyword implements ScopeModifier {
 
     @Override
     public void execute(Runtime runtime) throws RunnerException {
-        final VariableAssignment variableAssignment = VariableSetter.fromArguments(runtime.getArguments(), argumentTypes);
-        runtime.addToTestScope(variableAssignment);
+        final VariableAssignment scopedVariable = VariableSetter.fromArguments(runtime.getArguments(), argumentTypes);
+        runtime.addToTestScope(scopedVariable);
     }
     @Override
     public void modifyScope(ScopeManager manager, KeywordCall call, ErrorManager errorManager) {

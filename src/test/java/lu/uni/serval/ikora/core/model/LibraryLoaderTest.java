@@ -46,7 +46,7 @@ class LibraryLoaderTest {
 
         for(Class<? extends LibraryKeyword> keywordClass: builtInKeywords){
             final Token name = Token.fromString(LibraryKeyword.toKeyword(keywordClass));
-            if(!resources.findKeyword("", name).isPresent()){
+            if(resources.findKeyword("", name).isEmpty()){
                 fail(String.format("BuiltIn Keyword not properly registered: %s", keywordClass.getCanonicalName()));
             }
         }
@@ -59,7 +59,7 @@ class LibraryLoaderTest {
 
         for(Class<? extends LibraryVariable> variableClass: variableClasses){
             final Token name = Token.fromString(variableClass.getConstructor().newInstance().getName());
-            if(!resources.findVariable(name).isPresent()){
+            if(resources.findVariable(name).isEmpty()){
                 fail(String.format("BuiltIn Variable not properly registered: %s", variableClass.getCanonicalName()));
             }
         }

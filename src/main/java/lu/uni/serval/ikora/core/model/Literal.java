@@ -34,6 +34,10 @@ public class Literal extends Value {
         addToken(this.name);
     }
 
+    public Literal(String name){
+        this(Token.fromString(name));
+    }
+
     public Literal(Token name, NodeList<Variable> variables) {
         this.name = name;
         this.variables = variables;

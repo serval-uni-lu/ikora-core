@@ -62,7 +62,7 @@ public class NumberType extends BaseType {
 
     private static Number toNumber(String value) throws InvalidTypeException {
         try{
-            if (value.trim().equalsIgnoreCase("None")){
+            if (value == null || value.trim().equalsIgnoreCase("None")){
                 return null;
             }
 
