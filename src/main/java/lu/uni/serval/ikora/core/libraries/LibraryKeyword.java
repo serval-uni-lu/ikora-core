@@ -27,6 +27,8 @@ import lu.uni.serval.ikora.core.types.BaseTypeList;
 
 import java.util.*;
 
+import static lu.uni.serval.ikora.core.runner.ArgumentFetcher.fetch;
+
 public abstract class LibraryKeyword implements Keyword {
     protected final Type type;
     protected final BaseTypeList argumentTypes;
@@ -89,6 +91,10 @@ public abstract class LibraryKeyword implements Keyword {
         }
 
         return "";
+    }
+
+    protected <T> T getValue(String name, Runtime runtime, Class<T> type) throws RunnerException {
+        return fetch(runtime.getArguments(), name, argumentTypes, type);
     }
 
     @Override

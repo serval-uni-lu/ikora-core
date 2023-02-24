@@ -24,8 +24,6 @@ import lu.uni.serval.ikora.core.types.BooleanType;
 import lu.uni.serval.ikora.core.types.LogLevelType;
 import lu.uni.serval.ikora.core.types.StringType;
 
-import static lu.uni.serval.ikora.core.runner.ArgumentFetcher.fetch;
-
 public class Log extends LibraryKeyword {
     public Log(){
         super(Type.LOG,
@@ -40,8 +38,8 @@ public class Log extends LibraryKeyword {
 
     @Override
     public void execute(Runtime runtime) throws RunnerException {
-        final String message = fetch(runtime.getArguments(), "message", argumentTypes, String.class);
-        final LogLevel level = fetch(runtime.getArguments(), "level", argumentTypes, LogLevel.class);
+        final String message = getValue("message", runtime, String.class);
+        final LogLevel level = getValue("level", runtime, LogLevel.class);
 
         runtime.setMessage(level, message);
     }
